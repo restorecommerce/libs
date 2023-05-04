@@ -1,7 +1,7 @@
 /* eslint-disable */
-import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
 import * as Long from "long";
 import * as _m0 from "protobufjs/minimal";
+import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
 
 export const protobufPackage = "google.protobuf";
 
@@ -168,9 +168,7 @@ export enum FieldDescriptorProto_Type {
   UNRECOGNIZED = "UNRECOGNIZED",
 }
 
-export function fieldDescriptorProto_TypeFromJSON(
-  object: any
-): FieldDescriptorProto_Type {
+export function fieldDescriptorProto_TypeFromJSON(object: any): FieldDescriptorProto_Type {
   switch (object) {
     case 1:
     case "TYPE_DOUBLE":
@@ -233,9 +231,7 @@ export function fieldDescriptorProto_TypeFromJSON(
   }
 }
 
-export function fieldDescriptorProto_TypeToJSON(
-  object: FieldDescriptorProto_Type
-): string {
+export function fieldDescriptorProto_TypeToJSON(object: FieldDescriptorProto_Type): string {
   switch (object) {
     case FieldDescriptorProto_Type.TYPE_DOUBLE:
       return "TYPE_DOUBLE";
@@ -279,9 +275,7 @@ export function fieldDescriptorProto_TypeToJSON(
   }
 }
 
-export function fieldDescriptorProto_TypeToNumber(
-  object: FieldDescriptorProto_Type
-): number {
+export function fieldDescriptorProto_TypeToNumber(object: FieldDescriptorProto_Type): number {
   switch (object) {
     case FieldDescriptorProto_Type.TYPE_DOUBLE:
       return 1;
@@ -334,9 +328,7 @@ export enum FieldDescriptorProto_Label {
   UNRECOGNIZED = "UNRECOGNIZED",
 }
 
-export function fieldDescriptorProto_LabelFromJSON(
-  object: any
-): FieldDescriptorProto_Label {
+export function fieldDescriptorProto_LabelFromJSON(object: any): FieldDescriptorProto_Label {
   switch (object) {
     case 1:
     case "LABEL_OPTIONAL":
@@ -354,9 +346,7 @@ export function fieldDescriptorProto_LabelFromJSON(
   }
 }
 
-export function fieldDescriptorProto_LabelToJSON(
-  object: FieldDescriptorProto_Label
-): string {
+export function fieldDescriptorProto_LabelToJSON(object: FieldDescriptorProto_Label): string {
   switch (object) {
     case FieldDescriptorProto_Label.LABEL_OPTIONAL:
       return "LABEL_OPTIONAL";
@@ -370,9 +360,7 @@ export function fieldDescriptorProto_LabelToJSON(
   }
 }
 
-export function fieldDescriptorProto_LabelToNumber(
-  object: FieldDescriptorProto_Label
-): number {
+export function fieldDescriptorProto_LabelToNumber(object: FieldDescriptorProto_Label): number {
   switch (object) {
     case FieldDescriptorProto_Label.LABEL_OPTIONAL:
       return 1;
@@ -535,9 +523,7 @@ export enum FileOptions_OptimizeMode {
   UNRECOGNIZED = "UNRECOGNIZED",
 }
 
-export function fileOptions_OptimizeModeFromJSON(
-  object: any
-): FileOptions_OptimizeMode {
+export function fileOptions_OptimizeModeFromJSON(object: any): FileOptions_OptimizeMode {
   switch (object) {
     case 1:
     case "SPEED":
@@ -555,9 +541,7 @@ export function fileOptions_OptimizeModeFromJSON(
   }
 }
 
-export function fileOptions_OptimizeModeToJSON(
-  object: FileOptions_OptimizeMode
-): string {
+export function fileOptions_OptimizeModeToJSON(object: FileOptions_OptimizeMode): string {
   switch (object) {
     case FileOptions_OptimizeMode.SPEED:
       return "SPEED";
@@ -571,9 +555,7 @@ export function fileOptions_OptimizeModeToJSON(
   }
 }
 
-export function fileOptions_OptimizeModeToNumber(
-  object: FileOptions_OptimizeMode
-): number {
+export function fileOptions_OptimizeModeToNumber(object: FileOptions_OptimizeMode): number {
   switch (object) {
     case FileOptions_OptimizeMode.SPEED:
       return 1;
@@ -696,7 +678,6 @@ export interface FieldOptions {
    * / call from multiple threads concurrently, while non-const methods continue
    * / to require exclusive access.
    *
-   *
    * / Note that implementations may choose not to check required fields within
    * / a lazy sub-message.  That is, calling IsInitialized() on the outher message
    * / may return true even if the inner message has missing required fields.
@@ -818,9 +799,7 @@ export function fieldOptions_JSTypeToJSON(object: FieldOptions_JSType): string {
   }
 }
 
-export function fieldOptions_JSTypeToNumber(
-  object: FieldOptions_JSType
-): number {
+export function fieldOptions_JSTypeToNumber(object: FieldOptions_JSType): number {
   switch (object) {
     case FieldOptions_JSType.JS_NORMAL:
       return 0;
@@ -1102,10 +1081,7 @@ function createBaseFileDescriptorSet(): FileDescriptorSet {
 }
 
 export const FileDescriptorSet = {
-  encode(
-    message: FileDescriptorSet,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: FileDescriptorSet, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.file) {
       FileDescriptorProto.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -1120,9 +1096,7 @@ export const FileDescriptorSet = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.file.push(
-            FileDescriptorProto.decode(reader, reader.uint32())
-          );
+          message.file.push(FileDescriptorProto.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -1133,29 +1107,26 @@ export const FileDescriptorSet = {
   },
 
   fromJSON(object: any): FileDescriptorSet {
-    return {
-      file: Array.isArray(object?.file)
-        ? object.file.map((e: any) => FileDescriptorProto.fromJSON(e))
-        : [],
-    };
+    return { file: Array.isArray(object?.file) ? object.file.map((e: any) => FileDescriptorProto.fromJSON(e)) : [] };
   },
 
   toJSON(message: FileDescriptorSet): unknown {
     const obj: any = {};
     if (message.file) {
-      obj.file = message.file.map((e) =>
-        e ? FileDescriptorProto.toJSON(e) : undefined
-      );
+      obj.file = message.file.map((e) => e ? FileDescriptorProto.toJSON(e) : undefined);
     } else {
       obj.file = [];
     }
     return obj;
   },
 
+  create(base?: DeepPartial<FileDescriptorSet>): FileDescriptorSet {
+    return FileDescriptorSet.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<FileDescriptorSet>): FileDescriptorSet {
     const message = createBaseFileDescriptorSet();
-    message.file =
-      object.file?.map((e) => FileDescriptorProto.fromPartial(e)) || [];
+    message.file = object.file?.map((e) => FileDescriptorProto.fromPartial(e)) || [];
     return message;
   },
 };
@@ -1178,10 +1149,7 @@ function createBaseFileDescriptorProto(): FileDescriptorProto {
 }
 
 export const FileDescriptorProto = {
-  encode(
-    message: FileDescriptorProto,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: FileDescriptorProto, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
@@ -1217,10 +1185,7 @@ export const FileDescriptorProto = {
       FileOptions.encode(message.options, writer.uint32(66).fork()).ldelim();
     }
     if (message.sourceCodeInfo !== undefined) {
-      SourceCodeInfo.encode(
-        message.sourceCodeInfo,
-        writer.uint32(74).fork()
-      ).ldelim();
+      SourceCodeInfo.encode(message.sourceCodeInfo, writer.uint32(74).fork()).ldelim();
     }
     if (message.syntax !== "") {
       writer.uint32(98).string(message.syntax);
@@ -1265,33 +1230,22 @@ export const FileDescriptorProto = {
           }
           break;
         case 4:
-          message.messageType.push(
-            DescriptorProto.decode(reader, reader.uint32())
-          );
+          message.messageType.push(DescriptorProto.decode(reader, reader.uint32()));
           break;
         case 5:
-          message.enumType.push(
-            EnumDescriptorProto.decode(reader, reader.uint32())
-          );
+          message.enumType.push(EnumDescriptorProto.decode(reader, reader.uint32()));
           break;
         case 6:
-          message.service.push(
-            ServiceDescriptorProto.decode(reader, reader.uint32())
-          );
+          message.service.push(ServiceDescriptorProto.decode(reader, reader.uint32()));
           break;
         case 7:
-          message.extension.push(
-            FieldDescriptorProto.decode(reader, reader.uint32())
-          );
+          message.extension.push(FieldDescriptorProto.decode(reader, reader.uint32()));
           break;
         case 8:
           message.options = FileOptions.decode(reader, reader.uint32());
           break;
         case 9:
-          message.sourceCodeInfo = SourceCodeInfo.decode(
-            reader,
-            reader.uint32()
-          );
+          message.sourceCodeInfo = SourceCodeInfo.decode(reader, reader.uint32());
           break;
         case 12:
           message.syntax = reader.string();
@@ -1308,33 +1262,21 @@ export const FileDescriptorProto = {
     return {
       name: isSet(object.name) ? String(object.name) : "",
       package: isSet(object.package) ? String(object.package) : "",
-      dependency: Array.isArray(object?.dependency)
-        ? object.dependency.map((e: any) => String(e))
-        : [],
+      dependency: Array.isArray(object?.dependency) ? object.dependency.map((e: any) => String(e)) : [],
       publicDependency: Array.isArray(object?.publicDependency)
         ? object.publicDependency.map((e: any) => Number(e))
         : [],
-      weakDependency: Array.isArray(object?.weakDependency)
-        ? object.weakDependency.map((e: any) => Number(e))
-        : [],
+      weakDependency: Array.isArray(object?.weakDependency) ? object.weakDependency.map((e: any) => Number(e)) : [],
       messageType: Array.isArray(object?.messageType)
         ? object.messageType.map((e: any) => DescriptorProto.fromJSON(e))
         : [],
-      enumType: Array.isArray(object?.enumType)
-        ? object.enumType.map((e: any) => EnumDescriptorProto.fromJSON(e))
-        : [],
-      service: Array.isArray(object?.service)
-        ? object.service.map((e: any) => ServiceDescriptorProto.fromJSON(e))
-        : [],
+      enumType: Array.isArray(object?.enumType) ? object.enumType.map((e: any) => EnumDescriptorProto.fromJSON(e)) : [],
+      service: Array.isArray(object?.service) ? object.service.map((e: any) => ServiceDescriptorProto.fromJSON(e)) : [],
       extension: Array.isArray(object?.extension)
         ? object.extension.map((e: any) => FieldDescriptorProto.fromJSON(e))
         : [],
-      options: isSet(object.options)
-        ? FileOptions.fromJSON(object.options)
-        : undefined,
-      sourceCodeInfo: isSet(object.sourceCodeInfo)
-        ? SourceCodeInfo.fromJSON(object.sourceCodeInfo)
-        : undefined,
+      options: isSet(object.options) ? FileOptions.fromJSON(object.options) : undefined,
+      sourceCodeInfo: isSet(object.sourceCodeInfo) ? SourceCodeInfo.fromJSON(object.sourceCodeInfo) : undefined,
       syntax: isSet(object.syntax) ? String(object.syntax) : "",
     };
   },
@@ -1359,43 +1301,34 @@ export const FileDescriptorProto = {
       obj.weakDependency = [];
     }
     if (message.messageType) {
-      obj.messageType = message.messageType.map((e) =>
-        e ? DescriptorProto.toJSON(e) : undefined
-      );
+      obj.messageType = message.messageType.map((e) => e ? DescriptorProto.toJSON(e) : undefined);
     } else {
       obj.messageType = [];
     }
     if (message.enumType) {
-      obj.enumType = message.enumType.map((e) =>
-        e ? EnumDescriptorProto.toJSON(e) : undefined
-      );
+      obj.enumType = message.enumType.map((e) => e ? EnumDescriptorProto.toJSON(e) : undefined);
     } else {
       obj.enumType = [];
     }
     if (message.service) {
-      obj.service = message.service.map((e) =>
-        e ? ServiceDescriptorProto.toJSON(e) : undefined
-      );
+      obj.service = message.service.map((e) => e ? ServiceDescriptorProto.toJSON(e) : undefined);
     } else {
       obj.service = [];
     }
     if (message.extension) {
-      obj.extension = message.extension.map((e) =>
-        e ? FieldDescriptorProto.toJSON(e) : undefined
-      );
+      obj.extension = message.extension.map((e) => e ? FieldDescriptorProto.toJSON(e) : undefined);
     } else {
       obj.extension = [];
     }
-    message.options !== undefined &&
-      (obj.options = message.options
-        ? FileOptions.toJSON(message.options)
-        : undefined);
+    message.options !== undefined && (obj.options = message.options ? FileOptions.toJSON(message.options) : undefined);
     message.sourceCodeInfo !== undefined &&
-      (obj.sourceCodeInfo = message.sourceCodeInfo
-        ? SourceCodeInfo.toJSON(message.sourceCodeInfo)
-        : undefined);
+      (obj.sourceCodeInfo = message.sourceCodeInfo ? SourceCodeInfo.toJSON(message.sourceCodeInfo) : undefined);
     message.syntax !== undefined && (obj.syntax = message.syntax);
     return obj;
+  },
+
+  create(base?: DeepPartial<FileDescriptorProto>): FileDescriptorProto {
+    return FileDescriptorProto.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<FileDescriptorProto>): FileDescriptorProto {
@@ -1405,22 +1338,16 @@ export const FileDescriptorProto = {
     message.dependency = object.dependency?.map((e) => e) || [];
     message.publicDependency = object.publicDependency?.map((e) => e) || [];
     message.weakDependency = object.weakDependency?.map((e) => e) || [];
-    message.messageType =
-      object.messageType?.map((e) => DescriptorProto.fromPartial(e)) || [];
-    message.enumType =
-      object.enumType?.map((e) => EnumDescriptorProto.fromPartial(e)) || [];
-    message.service =
-      object.service?.map((e) => ServiceDescriptorProto.fromPartial(e)) || [];
-    message.extension =
-      object.extension?.map((e) => FieldDescriptorProto.fromPartial(e)) || [];
-    message.options =
-      object.options !== undefined && object.options !== null
-        ? FileOptions.fromPartial(object.options)
-        : undefined;
-    message.sourceCodeInfo =
-      object.sourceCodeInfo !== undefined && object.sourceCodeInfo !== null
-        ? SourceCodeInfo.fromPartial(object.sourceCodeInfo)
-        : undefined;
+    message.messageType = object.messageType?.map((e) => DescriptorProto.fromPartial(e)) || [];
+    message.enumType = object.enumType?.map((e) => EnumDescriptorProto.fromPartial(e)) || [];
+    message.service = object.service?.map((e) => ServiceDescriptorProto.fromPartial(e)) || [];
+    message.extension = object.extension?.map((e) => FieldDescriptorProto.fromPartial(e)) || [];
+    message.options = (object.options !== undefined && object.options !== null)
+      ? FileOptions.fromPartial(object.options)
+      : undefined;
+    message.sourceCodeInfo = (object.sourceCodeInfo !== undefined && object.sourceCodeInfo !== null)
+      ? SourceCodeInfo.fromPartial(object.sourceCodeInfo)
+      : undefined;
     message.syntax = object.syntax ?? "";
     return message;
   },
@@ -1442,10 +1369,7 @@ function createBaseDescriptorProto(): DescriptorProto {
 }
 
 export const DescriptorProto = {
-  encode(
-    message: DescriptorProto,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: DescriptorProto, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
@@ -1462,10 +1386,7 @@ export const DescriptorProto = {
       EnumDescriptorProto.encode(v!, writer.uint32(34).fork()).ldelim();
     }
     for (const v of message.extensionRange) {
-      DescriptorProto_ExtensionRange.encode(
-        v!,
-        writer.uint32(42).fork()
-      ).ldelim();
+      DescriptorProto_ExtensionRange.encode(v!, writer.uint32(42).fork()).ldelim();
     }
     for (const v of message.oneofDecl) {
       OneofDescriptorProto.encode(v!, writer.uint32(66).fork()).ldelim();
@@ -1474,10 +1395,7 @@ export const DescriptorProto = {
       MessageOptions.encode(message.options, writer.uint32(58).fork()).ldelim();
     }
     for (const v of message.reservedRange) {
-      DescriptorProto_ReservedRange.encode(
-        v!,
-        writer.uint32(74).fork()
-      ).ldelim();
+      DescriptorProto_ReservedRange.encode(v!, writer.uint32(74).fork()).ldelim();
     }
     for (const v of message.reservedName) {
       writer.uint32(82).string(v!);
@@ -1496,42 +1414,28 @@ export const DescriptorProto = {
           message.name = reader.string();
           break;
         case 2:
-          message.field.push(
-            FieldDescriptorProto.decode(reader, reader.uint32())
-          );
+          message.field.push(FieldDescriptorProto.decode(reader, reader.uint32()));
           break;
         case 6:
-          message.extension.push(
-            FieldDescriptorProto.decode(reader, reader.uint32())
-          );
+          message.extension.push(FieldDescriptorProto.decode(reader, reader.uint32()));
           break;
         case 3:
-          message.nestedType.push(
-            DescriptorProto.decode(reader, reader.uint32())
-          );
+          message.nestedType.push(DescriptorProto.decode(reader, reader.uint32()));
           break;
         case 4:
-          message.enumType.push(
-            EnumDescriptorProto.decode(reader, reader.uint32())
-          );
+          message.enumType.push(EnumDescriptorProto.decode(reader, reader.uint32()));
           break;
         case 5:
-          message.extensionRange.push(
-            DescriptorProto_ExtensionRange.decode(reader, reader.uint32())
-          );
+          message.extensionRange.push(DescriptorProto_ExtensionRange.decode(reader, reader.uint32()));
           break;
         case 8:
-          message.oneofDecl.push(
-            OneofDescriptorProto.decode(reader, reader.uint32())
-          );
+          message.oneofDecl.push(OneofDescriptorProto.decode(reader, reader.uint32()));
           break;
         case 7:
           message.options = MessageOptions.decode(reader, reader.uint32());
           break;
         case 9:
-          message.reservedRange.push(
-            DescriptorProto_ReservedRange.decode(reader, reader.uint32())
-          );
+          message.reservedRange.push(DescriptorProto_ReservedRange.decode(reader, reader.uint32()));
           break;
         case 10:
           message.reservedName.push(reader.string());
@@ -1547,37 +1451,25 @@ export const DescriptorProto = {
   fromJSON(object: any): DescriptorProto {
     return {
       name: isSet(object.name) ? String(object.name) : "",
-      field: Array.isArray(object?.field)
-        ? object.field.map((e: any) => FieldDescriptorProto.fromJSON(e))
-        : [],
+      field: Array.isArray(object?.field) ? object.field.map((e: any) => FieldDescriptorProto.fromJSON(e)) : [],
       extension: Array.isArray(object?.extension)
         ? object.extension.map((e: any) => FieldDescriptorProto.fromJSON(e))
         : [],
       nestedType: Array.isArray(object?.nestedType)
         ? object.nestedType.map((e: any) => DescriptorProto.fromJSON(e))
         : [],
-      enumType: Array.isArray(object?.enumType)
-        ? object.enumType.map((e: any) => EnumDescriptorProto.fromJSON(e))
-        : [],
+      enumType: Array.isArray(object?.enumType) ? object.enumType.map((e: any) => EnumDescriptorProto.fromJSON(e)) : [],
       extensionRange: Array.isArray(object?.extensionRange)
-        ? object.extensionRange.map((e: any) =>
-            DescriptorProto_ExtensionRange.fromJSON(e)
-          )
+        ? object.extensionRange.map((e: any) => DescriptorProto_ExtensionRange.fromJSON(e))
         : [],
       oneofDecl: Array.isArray(object?.oneofDecl)
         ? object.oneofDecl.map((e: any) => OneofDescriptorProto.fromJSON(e))
         : [],
-      options: isSet(object.options)
-        ? MessageOptions.fromJSON(object.options)
-        : undefined,
+      options: isSet(object.options) ? MessageOptions.fromJSON(object.options) : undefined,
       reservedRange: Array.isArray(object?.reservedRange)
-        ? object.reservedRange.map((e: any) =>
-            DescriptorProto_ReservedRange.fromJSON(e)
-          )
+        ? object.reservedRange.map((e: any) => DescriptorProto_ReservedRange.fromJSON(e))
         : [],
-      reservedName: Array.isArray(object?.reservedName)
-        ? object.reservedName.map((e: any) => String(e))
-        : [],
+      reservedName: Array.isArray(object?.reservedName) ? object.reservedName.map((e: any) => String(e)) : [],
     };
   },
 
@@ -1585,55 +1477,39 @@ export const DescriptorProto = {
     const obj: any = {};
     message.name !== undefined && (obj.name = message.name);
     if (message.field) {
-      obj.field = message.field.map((e) =>
-        e ? FieldDescriptorProto.toJSON(e) : undefined
-      );
+      obj.field = message.field.map((e) => e ? FieldDescriptorProto.toJSON(e) : undefined);
     } else {
       obj.field = [];
     }
     if (message.extension) {
-      obj.extension = message.extension.map((e) =>
-        e ? FieldDescriptorProto.toJSON(e) : undefined
-      );
+      obj.extension = message.extension.map((e) => e ? FieldDescriptorProto.toJSON(e) : undefined);
     } else {
       obj.extension = [];
     }
     if (message.nestedType) {
-      obj.nestedType = message.nestedType.map((e) =>
-        e ? DescriptorProto.toJSON(e) : undefined
-      );
+      obj.nestedType = message.nestedType.map((e) => e ? DescriptorProto.toJSON(e) : undefined);
     } else {
       obj.nestedType = [];
     }
     if (message.enumType) {
-      obj.enumType = message.enumType.map((e) =>
-        e ? EnumDescriptorProto.toJSON(e) : undefined
-      );
+      obj.enumType = message.enumType.map((e) => e ? EnumDescriptorProto.toJSON(e) : undefined);
     } else {
       obj.enumType = [];
     }
     if (message.extensionRange) {
-      obj.extensionRange = message.extensionRange.map((e) =>
-        e ? DescriptorProto_ExtensionRange.toJSON(e) : undefined
-      );
+      obj.extensionRange = message.extensionRange.map((e) => e ? DescriptorProto_ExtensionRange.toJSON(e) : undefined);
     } else {
       obj.extensionRange = [];
     }
     if (message.oneofDecl) {
-      obj.oneofDecl = message.oneofDecl.map((e) =>
-        e ? OneofDescriptorProto.toJSON(e) : undefined
-      );
+      obj.oneofDecl = message.oneofDecl.map((e) => e ? OneofDescriptorProto.toJSON(e) : undefined);
     } else {
       obj.oneofDecl = [];
     }
     message.options !== undefined &&
-      (obj.options = message.options
-        ? MessageOptions.toJSON(message.options)
-        : undefined);
+      (obj.options = message.options ? MessageOptions.toJSON(message.options) : undefined);
     if (message.reservedRange) {
-      obj.reservedRange = message.reservedRange.map((e) =>
-        e ? DescriptorProto_ReservedRange.toJSON(e) : undefined
-      );
+      obj.reservedRange = message.reservedRange.map((e) => e ? DescriptorProto_ReservedRange.toJSON(e) : undefined);
     } else {
       obj.reservedRange = [];
     }
@@ -1645,31 +1521,23 @@ export const DescriptorProto = {
     return obj;
   },
 
+  create(base?: DeepPartial<DescriptorProto>): DescriptorProto {
+    return DescriptorProto.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<DescriptorProto>): DescriptorProto {
     const message = createBaseDescriptorProto();
     message.name = object.name ?? "";
-    message.field =
-      object.field?.map((e) => FieldDescriptorProto.fromPartial(e)) || [];
-    message.extension =
-      object.extension?.map((e) => FieldDescriptorProto.fromPartial(e)) || [];
-    message.nestedType =
-      object.nestedType?.map((e) => DescriptorProto.fromPartial(e)) || [];
-    message.enumType =
-      object.enumType?.map((e) => EnumDescriptorProto.fromPartial(e)) || [];
-    message.extensionRange =
-      object.extensionRange?.map((e) =>
-        DescriptorProto_ExtensionRange.fromPartial(e)
-      ) || [];
-    message.oneofDecl =
-      object.oneofDecl?.map((e) => OneofDescriptorProto.fromPartial(e)) || [];
-    message.options =
-      object.options !== undefined && object.options !== null
-        ? MessageOptions.fromPartial(object.options)
-        : undefined;
-    message.reservedRange =
-      object.reservedRange?.map((e) =>
-        DescriptorProto_ReservedRange.fromPartial(e)
-      ) || [];
+    message.field = object.field?.map((e) => FieldDescriptorProto.fromPartial(e)) || [];
+    message.extension = object.extension?.map((e) => FieldDescriptorProto.fromPartial(e)) || [];
+    message.nestedType = object.nestedType?.map((e) => DescriptorProto.fromPartial(e)) || [];
+    message.enumType = object.enumType?.map((e) => EnumDescriptorProto.fromPartial(e)) || [];
+    message.extensionRange = object.extensionRange?.map((e) => DescriptorProto_ExtensionRange.fromPartial(e)) || [];
+    message.oneofDecl = object.oneofDecl?.map((e) => OneofDescriptorProto.fromPartial(e)) || [];
+    message.options = (object.options !== undefined && object.options !== null)
+      ? MessageOptions.fromPartial(object.options)
+      : undefined;
+    message.reservedRange = object.reservedRange?.map((e) => DescriptorProto_ReservedRange.fromPartial(e)) || [];
     message.reservedName = object.reservedName?.map((e) => e) || [];
     return message;
   },
@@ -1680,10 +1548,7 @@ function createBaseDescriptorProto_ExtensionRange(): DescriptorProto_ExtensionRa
 }
 
 export const DescriptorProto_ExtensionRange = {
-  encode(
-    message: DescriptorProto_ExtensionRange,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: DescriptorProto_ExtensionRange, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.start !== 0) {
       writer.uint32(8).int32(message.start);
     }
@@ -1693,10 +1558,7 @@ export const DescriptorProto_ExtensionRange = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): DescriptorProto_ExtensionRange {
+  decode(input: _m0.Reader | Uint8Array, length?: number): DescriptorProto_ExtensionRange {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDescriptorProto_ExtensionRange();
@@ -1718,10 +1580,7 @@ export const DescriptorProto_ExtensionRange = {
   },
 
   fromJSON(object: any): DescriptorProto_ExtensionRange {
-    return {
-      start: isSet(object.start) ? Number(object.start) : 0,
-      end: isSet(object.end) ? Number(object.end) : 0,
-    };
+    return { start: isSet(object.start) ? Number(object.start) : 0, end: isSet(object.end) ? Number(object.end) : 0 };
   },
 
   toJSON(message: DescriptorProto_ExtensionRange): unknown {
@@ -1731,9 +1590,11 @@ export const DescriptorProto_ExtensionRange = {
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<DescriptorProto_ExtensionRange>
-  ): DescriptorProto_ExtensionRange {
+  create(base?: DeepPartial<DescriptorProto_ExtensionRange>): DescriptorProto_ExtensionRange {
+    return DescriptorProto_ExtensionRange.fromPartial(base ?? {});
+  },
+
+  fromPartial(object: DeepPartial<DescriptorProto_ExtensionRange>): DescriptorProto_ExtensionRange {
     const message = createBaseDescriptorProto_ExtensionRange();
     message.start = object.start ?? 0;
     message.end = object.end ?? 0;
@@ -1746,10 +1607,7 @@ function createBaseDescriptorProto_ReservedRange(): DescriptorProto_ReservedRang
 }
 
 export const DescriptorProto_ReservedRange = {
-  encode(
-    message: DescriptorProto_ReservedRange,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: DescriptorProto_ReservedRange, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.start !== 0) {
       writer.uint32(8).int32(message.start);
     }
@@ -1759,10 +1617,7 @@ export const DescriptorProto_ReservedRange = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): DescriptorProto_ReservedRange {
+  decode(input: _m0.Reader | Uint8Array, length?: number): DescriptorProto_ReservedRange {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDescriptorProto_ReservedRange();
@@ -1784,10 +1639,7 @@ export const DescriptorProto_ReservedRange = {
   },
 
   fromJSON(object: any): DescriptorProto_ReservedRange {
-    return {
-      start: isSet(object.start) ? Number(object.start) : 0,
-      end: isSet(object.end) ? Number(object.end) : 0,
-    };
+    return { start: isSet(object.start) ? Number(object.start) : 0, end: isSet(object.end) ? Number(object.end) : 0 };
   },
 
   toJSON(message: DescriptorProto_ReservedRange): unknown {
@@ -1797,9 +1649,11 @@ export const DescriptorProto_ReservedRange = {
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<DescriptorProto_ReservedRange>
-  ): DescriptorProto_ReservedRange {
+  create(base?: DeepPartial<DescriptorProto_ReservedRange>): DescriptorProto_ReservedRange {
+    return DescriptorProto_ReservedRange.fromPartial(base ?? {});
+  },
+
+  fromPartial(object: DeepPartial<DescriptorProto_ReservedRange>): DescriptorProto_ReservedRange {
     const message = createBaseDescriptorProto_ReservedRange();
     message.start = object.start ?? 0;
     message.end = object.end ?? 0;
@@ -1823,10 +1677,7 @@ function createBaseFieldDescriptorProto(): FieldDescriptorProto {
 }
 
 export const FieldDescriptorProto = {
-  encode(
-    message: FieldDescriptorProto,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: FieldDescriptorProto, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
@@ -1834,9 +1685,7 @@ export const FieldDescriptorProto = {
       writer.uint32(24).int32(message.number);
     }
     if (message.label !== FieldDescriptorProto_Label.LABEL_OPTIONAL) {
-      writer
-        .uint32(32)
-        .int32(fieldDescriptorProto_LabelToNumber(message.label));
+      writer.uint32(32).int32(fieldDescriptorProto_LabelToNumber(message.label));
     }
     if (message.type !== FieldDescriptorProto_Type.TYPE_DOUBLE) {
       writer.uint32(40).int32(fieldDescriptorProto_TypeToNumber(message.type));
@@ -1862,10 +1711,7 @@ export const FieldDescriptorProto = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): FieldDescriptorProto {
+  decode(input: _m0.Reader | Uint8Array, length?: number): FieldDescriptorProto {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseFieldDescriptorProto();
@@ -1917,19 +1763,13 @@ export const FieldDescriptorProto = {
       label: isSet(object.label)
         ? fieldDescriptorProto_LabelFromJSON(object.label)
         : FieldDescriptorProto_Label.LABEL_OPTIONAL,
-      type: isSet(object.type)
-        ? fieldDescriptorProto_TypeFromJSON(object.type)
-        : FieldDescriptorProto_Type.TYPE_DOUBLE,
+      type: isSet(object.type) ? fieldDescriptorProto_TypeFromJSON(object.type) : FieldDescriptorProto_Type.TYPE_DOUBLE,
       typeName: isSet(object.typeName) ? String(object.typeName) : "",
       extendee: isSet(object.extendee) ? String(object.extendee) : "",
-      defaultValue: isSet(object.defaultValue)
-        ? String(object.defaultValue)
-        : "",
+      defaultValue: isSet(object.defaultValue) ? String(object.defaultValue) : "",
       oneofIndex: isSet(object.oneofIndex) ? Number(object.oneofIndex) : 0,
       jsonName: isSet(object.jsonName) ? String(object.jsonName) : "",
-      options: isSet(object.options)
-        ? FieldOptions.fromJSON(object.options)
-        : undefined,
+      options: isSet(object.options) ? FieldOptions.fromJSON(object.options) : undefined,
     };
   },
 
@@ -1937,22 +1777,19 @@ export const FieldDescriptorProto = {
     const obj: any = {};
     message.name !== undefined && (obj.name = message.name);
     message.number !== undefined && (obj.number = Math.round(message.number));
-    message.label !== undefined &&
-      (obj.label = fieldDescriptorProto_LabelToJSON(message.label));
-    message.type !== undefined &&
-      (obj.type = fieldDescriptorProto_TypeToJSON(message.type));
+    message.label !== undefined && (obj.label = fieldDescriptorProto_LabelToJSON(message.label));
+    message.type !== undefined && (obj.type = fieldDescriptorProto_TypeToJSON(message.type));
     message.typeName !== undefined && (obj.typeName = message.typeName);
     message.extendee !== undefined && (obj.extendee = message.extendee);
-    message.defaultValue !== undefined &&
-      (obj.defaultValue = message.defaultValue);
-    message.oneofIndex !== undefined &&
-      (obj.oneofIndex = Math.round(message.oneofIndex));
+    message.defaultValue !== undefined && (obj.defaultValue = message.defaultValue);
+    message.oneofIndex !== undefined && (obj.oneofIndex = Math.round(message.oneofIndex));
     message.jsonName !== undefined && (obj.jsonName = message.jsonName);
-    message.options !== undefined &&
-      (obj.options = message.options
-        ? FieldOptions.toJSON(message.options)
-        : undefined);
+    message.options !== undefined && (obj.options = message.options ? FieldOptions.toJSON(message.options) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<FieldDescriptorProto>): FieldDescriptorProto {
+    return FieldDescriptorProto.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<FieldDescriptorProto>): FieldDescriptorProto {
@@ -1966,10 +1803,9 @@ export const FieldDescriptorProto = {
     message.defaultValue = object.defaultValue ?? "";
     message.oneofIndex = object.oneofIndex ?? 0;
     message.jsonName = object.jsonName ?? "";
-    message.options =
-      object.options !== undefined && object.options !== null
-        ? FieldOptions.fromPartial(object.options)
-        : undefined;
+    message.options = (object.options !== undefined && object.options !== null)
+      ? FieldOptions.fromPartial(object.options)
+      : undefined;
     return message;
   },
 };
@@ -1979,20 +1815,14 @@ function createBaseOneofDescriptorProto(): OneofDescriptorProto {
 }
 
 export const OneofDescriptorProto = {
-  encode(
-    message: OneofDescriptorProto,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: OneofDescriptorProto, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): OneofDescriptorProto {
+  decode(input: _m0.Reader | Uint8Array, length?: number): OneofDescriptorProto {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseOneofDescriptorProto();
@@ -2011,15 +1841,17 @@ export const OneofDescriptorProto = {
   },
 
   fromJSON(object: any): OneofDescriptorProto {
-    return {
-      name: isSet(object.name) ? String(object.name) : "",
-    };
+    return { name: isSet(object.name) ? String(object.name) : "" };
   },
 
   toJSON(message: OneofDescriptorProto): unknown {
     const obj: any = {};
     message.name !== undefined && (obj.name = message.name);
     return obj;
+  },
+
+  create(base?: DeepPartial<OneofDescriptorProto>): OneofDescriptorProto {
+    return OneofDescriptorProto.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<OneofDescriptorProto>): OneofDescriptorProto {
@@ -2034,10 +1866,7 @@ function createBaseEnumDescriptorProto(): EnumDescriptorProto {
 }
 
 export const EnumDescriptorProto = {
-  encode(
-    message: EnumDescriptorProto,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: EnumDescriptorProto, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
@@ -2061,9 +1890,7 @@ export const EnumDescriptorProto = {
           message.name = reader.string();
           break;
         case 2:
-          message.value.push(
-            EnumValueDescriptorProto.decode(reader, reader.uint32())
-          );
+          message.value.push(EnumValueDescriptorProto.decode(reader, reader.uint32()));
           break;
         case 3:
           message.options = EnumOptions.decode(reader, reader.uint32());
@@ -2079,12 +1906,8 @@ export const EnumDescriptorProto = {
   fromJSON(object: any): EnumDescriptorProto {
     return {
       name: isSet(object.name) ? String(object.name) : "",
-      value: Array.isArray(object?.value)
-        ? object.value.map((e: any) => EnumValueDescriptorProto.fromJSON(e))
-        : [],
-      options: isSet(object.options)
-        ? EnumOptions.fromJSON(object.options)
-        : undefined,
+      value: Array.isArray(object?.value) ? object.value.map((e: any) => EnumValueDescriptorProto.fromJSON(e)) : [],
+      options: isSet(object.options) ? EnumOptions.fromJSON(object.options) : undefined,
     };
   },
 
@@ -2092,28 +1915,25 @@ export const EnumDescriptorProto = {
     const obj: any = {};
     message.name !== undefined && (obj.name = message.name);
     if (message.value) {
-      obj.value = message.value.map((e) =>
-        e ? EnumValueDescriptorProto.toJSON(e) : undefined
-      );
+      obj.value = message.value.map((e) => e ? EnumValueDescriptorProto.toJSON(e) : undefined);
     } else {
       obj.value = [];
     }
-    message.options !== undefined &&
-      (obj.options = message.options
-        ? EnumOptions.toJSON(message.options)
-        : undefined);
+    message.options !== undefined && (obj.options = message.options ? EnumOptions.toJSON(message.options) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<EnumDescriptorProto>): EnumDescriptorProto {
+    return EnumDescriptorProto.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<EnumDescriptorProto>): EnumDescriptorProto {
     const message = createBaseEnumDescriptorProto();
     message.name = object.name ?? "";
-    message.value =
-      object.value?.map((e) => EnumValueDescriptorProto.fromPartial(e)) || [];
-    message.options =
-      object.options !== undefined && object.options !== null
-        ? EnumOptions.fromPartial(object.options)
-        : undefined;
+    message.value = object.value?.map((e) => EnumValueDescriptorProto.fromPartial(e)) || [];
+    message.options = (object.options !== undefined && object.options !== null)
+      ? EnumOptions.fromPartial(object.options)
+      : undefined;
     return message;
   },
 };
@@ -2123,10 +1943,7 @@ function createBaseEnumValueDescriptorProto(): EnumValueDescriptorProto {
 }
 
 export const EnumValueDescriptorProto = {
-  encode(
-    message: EnumValueDescriptorProto,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: EnumValueDescriptorProto, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
@@ -2134,18 +1951,12 @@ export const EnumValueDescriptorProto = {
       writer.uint32(16).int32(message.number);
     }
     if (message.options !== undefined) {
-      EnumValueOptions.encode(
-        message.options,
-        writer.uint32(26).fork()
-      ).ldelim();
+      EnumValueOptions.encode(message.options, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): EnumValueDescriptorProto {
+  decode(input: _m0.Reader | Uint8Array, length?: number): EnumValueDescriptorProto {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEnumValueDescriptorProto();
@@ -2173,9 +1984,7 @@ export const EnumValueDescriptorProto = {
     return {
       name: isSet(object.name) ? String(object.name) : "",
       number: isSet(object.number) ? Number(object.number) : 0,
-      options: isSet(object.options)
-        ? EnumValueOptions.fromJSON(object.options)
-        : undefined,
+      options: isSet(object.options) ? EnumValueOptions.fromJSON(object.options) : undefined,
     };
   },
 
@@ -2184,22 +1993,21 @@ export const EnumValueDescriptorProto = {
     message.name !== undefined && (obj.name = message.name);
     message.number !== undefined && (obj.number = Math.round(message.number));
     message.options !== undefined &&
-      (obj.options = message.options
-        ? EnumValueOptions.toJSON(message.options)
-        : undefined);
+      (obj.options = message.options ? EnumValueOptions.toJSON(message.options) : undefined);
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<EnumValueDescriptorProto>
-  ): EnumValueDescriptorProto {
+  create(base?: DeepPartial<EnumValueDescriptorProto>): EnumValueDescriptorProto {
+    return EnumValueDescriptorProto.fromPartial(base ?? {});
+  },
+
+  fromPartial(object: DeepPartial<EnumValueDescriptorProto>): EnumValueDescriptorProto {
     const message = createBaseEnumValueDescriptorProto();
     message.name = object.name ?? "";
     message.number = object.number ?? 0;
-    message.options =
-      object.options !== undefined && object.options !== null
-        ? EnumValueOptions.fromPartial(object.options)
-        : undefined;
+    message.options = (object.options !== undefined && object.options !== null)
+      ? EnumValueOptions.fromPartial(object.options)
+      : undefined;
     return message;
   },
 };
@@ -2209,10 +2017,7 @@ function createBaseServiceDescriptorProto(): ServiceDescriptorProto {
 }
 
 export const ServiceDescriptorProto = {
-  encode(
-    message: ServiceDescriptorProto,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: ServiceDescriptorProto, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
@@ -2225,10 +2030,7 @@ export const ServiceDescriptorProto = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): ServiceDescriptorProto {
+  decode(input: _m0.Reader | Uint8Array, length?: number): ServiceDescriptorProto {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseServiceDescriptorProto();
@@ -2239,9 +2041,7 @@ export const ServiceDescriptorProto = {
           message.name = reader.string();
           break;
         case 2:
-          message.method.push(
-            MethodDescriptorProto.decode(reader, reader.uint32())
-          );
+          message.method.push(MethodDescriptorProto.decode(reader, reader.uint32()));
           break;
         case 3:
           message.options = ServiceOptions.decode(reader, reader.uint32());
@@ -2257,12 +2057,8 @@ export const ServiceDescriptorProto = {
   fromJSON(object: any): ServiceDescriptorProto {
     return {
       name: isSet(object.name) ? String(object.name) : "",
-      method: Array.isArray(object?.method)
-        ? object.method.map((e: any) => MethodDescriptorProto.fromJSON(e))
-        : [],
-      options: isSet(object.options)
-        ? ServiceOptions.fromJSON(object.options)
-        : undefined,
+      method: Array.isArray(object?.method) ? object.method.map((e: any) => MethodDescriptorProto.fromJSON(e)) : [],
+      options: isSet(object.options) ? ServiceOptions.fromJSON(object.options) : undefined,
     };
   },
 
@@ -2270,30 +2066,26 @@ export const ServiceDescriptorProto = {
     const obj: any = {};
     message.name !== undefined && (obj.name = message.name);
     if (message.method) {
-      obj.method = message.method.map((e) =>
-        e ? MethodDescriptorProto.toJSON(e) : undefined
-      );
+      obj.method = message.method.map((e) => e ? MethodDescriptorProto.toJSON(e) : undefined);
     } else {
       obj.method = [];
     }
     message.options !== undefined &&
-      (obj.options = message.options
-        ? ServiceOptions.toJSON(message.options)
-        : undefined);
+      (obj.options = message.options ? ServiceOptions.toJSON(message.options) : undefined);
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<ServiceDescriptorProto>
-  ): ServiceDescriptorProto {
+  create(base?: DeepPartial<ServiceDescriptorProto>): ServiceDescriptorProto {
+    return ServiceDescriptorProto.fromPartial(base ?? {});
+  },
+
+  fromPartial(object: DeepPartial<ServiceDescriptorProto>): ServiceDescriptorProto {
     const message = createBaseServiceDescriptorProto();
     message.name = object.name ?? "";
-    message.method =
-      object.method?.map((e) => MethodDescriptorProto.fromPartial(e)) || [];
-    message.options =
-      object.options !== undefined && object.options !== null
-        ? ServiceOptions.fromPartial(object.options)
-        : undefined;
+    message.method = object.method?.map((e) => MethodDescriptorProto.fromPartial(e)) || [];
+    message.options = (object.options !== undefined && object.options !== null)
+      ? ServiceOptions.fromPartial(object.options)
+      : undefined;
     return message;
   },
 };
@@ -2310,10 +2102,7 @@ function createBaseMethodDescriptorProto(): MethodDescriptorProto {
 }
 
 export const MethodDescriptorProto = {
-  encode(
-    message: MethodDescriptorProto,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MethodDescriptorProto, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.name !== "") {
       writer.uint32(10).string(message.name);
     }
@@ -2335,10 +2124,7 @@ export const MethodDescriptorProto = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): MethodDescriptorProto {
+  decode(input: _m0.Reader | Uint8Array, length?: number): MethodDescriptorProto {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseMethodDescriptorProto();
@@ -2376,15 +2162,9 @@ export const MethodDescriptorProto = {
       name: isSet(object.name) ? String(object.name) : "",
       inputType: isSet(object.inputType) ? String(object.inputType) : "",
       outputType: isSet(object.outputType) ? String(object.outputType) : "",
-      options: isSet(object.options)
-        ? MethodOptions.fromJSON(object.options)
-        : undefined,
-      clientStreaming: isSet(object.clientStreaming)
-        ? Boolean(object.clientStreaming)
-        : false,
-      serverStreaming: isSet(object.serverStreaming)
-        ? Boolean(object.serverStreaming)
-        : false,
+      options: isSet(object.options) ? MethodOptions.fromJSON(object.options) : undefined,
+      clientStreaming: isSet(object.clientStreaming) ? Boolean(object.clientStreaming) : false,
+      serverStreaming: isSet(object.serverStreaming) ? Boolean(object.serverStreaming) : false,
     };
   },
 
@@ -2394,27 +2174,24 @@ export const MethodDescriptorProto = {
     message.inputType !== undefined && (obj.inputType = message.inputType);
     message.outputType !== undefined && (obj.outputType = message.outputType);
     message.options !== undefined &&
-      (obj.options = message.options
-        ? MethodOptions.toJSON(message.options)
-        : undefined);
-    message.clientStreaming !== undefined &&
-      (obj.clientStreaming = message.clientStreaming);
-    message.serverStreaming !== undefined &&
-      (obj.serverStreaming = message.serverStreaming);
+      (obj.options = message.options ? MethodOptions.toJSON(message.options) : undefined);
+    message.clientStreaming !== undefined && (obj.clientStreaming = message.clientStreaming);
+    message.serverStreaming !== undefined && (obj.serverStreaming = message.serverStreaming);
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<MethodDescriptorProto>
-  ): MethodDescriptorProto {
+  create(base?: DeepPartial<MethodDescriptorProto>): MethodDescriptorProto {
+    return MethodDescriptorProto.fromPartial(base ?? {});
+  },
+
+  fromPartial(object: DeepPartial<MethodDescriptorProto>): MethodDescriptorProto {
     const message = createBaseMethodDescriptorProto();
     message.name = object.name ?? "";
     message.inputType = object.inputType ?? "";
     message.outputType = object.outputType ?? "";
-    message.options =
-      object.options !== undefined && object.options !== null
-        ? MethodOptions.fromPartial(object.options)
-        : undefined;
+    message.options = (object.options !== undefined && object.options !== null)
+      ? MethodOptions.fromPartial(object.options)
+      : undefined;
     message.clientStreaming = object.clientStreaming ?? false;
     message.serverStreaming = object.serverStreaming ?? false;
     return message;
@@ -2442,10 +2219,7 @@ function createBaseFileOptions(): FileOptions {
 }
 
 export const FileOptions = {
-  encode(
-    message: FileOptions,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: FileOptions, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.javaPackage !== "") {
       writer.uint32(10).string(message.javaPackage);
     }
@@ -2462,9 +2236,7 @@ export const FileOptions = {
       writer.uint32(216).bool(message.javaStringCheckUtf8);
     }
     if (message.optimizeFor !== FileOptions_OptimizeMode.SPEED) {
-      writer
-        .uint32(72)
-        .int32(fileOptions_OptimizeModeToNumber(message.optimizeFor));
+      writer.uint32(72).int32(fileOptions_OptimizeModeToNumber(message.optimizeFor));
     }
     if (message.goPackage !== "") {
       writer.uint32(90).string(message.goPackage);
@@ -2519,9 +2291,7 @@ export const FileOptions = {
           message.javaStringCheckUtf8 = reader.bool();
           break;
         case 9:
-          message.optimizeFor = fileOptions_OptimizeModeFromJSON(
-            reader.int32()
-          );
+          message.optimizeFor = fileOptions_OptimizeModeFromJSON(reader.int32());
           break;
         case 11:
           message.goPackage = reader.string();
@@ -2548,9 +2318,7 @@ export const FileOptions = {
           message.csharpNamespace = reader.string();
           break;
         case 999:
-          message.uninterpretedOption.push(
-            UninterpretedOption.decode(reader, reader.uint32())
-          );
+          message.uninterpretedOption.push(UninterpretedOption.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -2563,85 +2331,56 @@ export const FileOptions = {
   fromJSON(object: any): FileOptions {
     return {
       javaPackage: isSet(object.javaPackage) ? String(object.javaPackage) : "",
-      javaOuterClassname: isSet(object.javaOuterClassname)
-        ? String(object.javaOuterClassname)
-        : "",
-      javaMultipleFiles: isSet(object.javaMultipleFiles)
-        ? Boolean(object.javaMultipleFiles)
-        : false,
+      javaOuterClassname: isSet(object.javaOuterClassname) ? String(object.javaOuterClassname) : "",
+      javaMultipleFiles: isSet(object.javaMultipleFiles) ? Boolean(object.javaMultipleFiles) : false,
       javaGenerateEqualsAndHash: isSet(object.javaGenerateEqualsAndHash)
         ? Boolean(object.javaGenerateEqualsAndHash)
         : false,
-      javaStringCheckUtf8: isSet(object.javaStringCheckUtf8)
-        ? Boolean(object.javaStringCheckUtf8)
-        : false,
+      javaStringCheckUtf8: isSet(object.javaStringCheckUtf8) ? Boolean(object.javaStringCheckUtf8) : false,
       optimizeFor: isSet(object.optimizeFor)
         ? fileOptions_OptimizeModeFromJSON(object.optimizeFor)
         : FileOptions_OptimizeMode.SPEED,
       goPackage: isSet(object.goPackage) ? String(object.goPackage) : "",
-      ccGenericServices: isSet(object.ccGenericServices)
-        ? Boolean(object.ccGenericServices)
-        : false,
-      javaGenericServices: isSet(object.javaGenericServices)
-        ? Boolean(object.javaGenericServices)
-        : false,
-      pyGenericServices: isSet(object.pyGenericServices)
-        ? Boolean(object.pyGenericServices)
-        : false,
+      ccGenericServices: isSet(object.ccGenericServices) ? Boolean(object.ccGenericServices) : false,
+      javaGenericServices: isSet(object.javaGenericServices) ? Boolean(object.javaGenericServices) : false,
+      pyGenericServices: isSet(object.pyGenericServices) ? Boolean(object.pyGenericServices) : false,
       deprecated: isSet(object.deprecated) ? Boolean(object.deprecated) : false,
-      ccEnableArenas: isSet(object.ccEnableArenas)
-        ? Boolean(object.ccEnableArenas)
-        : false,
-      objcClassPrefix: isSet(object.objcClassPrefix)
-        ? String(object.objcClassPrefix)
-        : "",
-      csharpNamespace: isSet(object.csharpNamespace)
-        ? String(object.csharpNamespace)
-        : "",
+      ccEnableArenas: isSet(object.ccEnableArenas) ? Boolean(object.ccEnableArenas) : false,
+      objcClassPrefix: isSet(object.objcClassPrefix) ? String(object.objcClassPrefix) : "",
+      csharpNamespace: isSet(object.csharpNamespace) ? String(object.csharpNamespace) : "",
       uninterpretedOption: Array.isArray(object?.uninterpretedOption)
-        ? object.uninterpretedOption.map((e: any) =>
-            UninterpretedOption.fromJSON(e)
-          )
+        ? object.uninterpretedOption.map((e: any) => UninterpretedOption.fromJSON(e))
         : [],
     };
   },
 
   toJSON(message: FileOptions): unknown {
     const obj: any = {};
-    message.javaPackage !== undefined &&
-      (obj.javaPackage = message.javaPackage);
-    message.javaOuterClassname !== undefined &&
-      (obj.javaOuterClassname = message.javaOuterClassname);
-    message.javaMultipleFiles !== undefined &&
-      (obj.javaMultipleFiles = message.javaMultipleFiles);
+    message.javaPackage !== undefined && (obj.javaPackage = message.javaPackage);
+    message.javaOuterClassname !== undefined && (obj.javaOuterClassname = message.javaOuterClassname);
+    message.javaMultipleFiles !== undefined && (obj.javaMultipleFiles = message.javaMultipleFiles);
     message.javaGenerateEqualsAndHash !== undefined &&
       (obj.javaGenerateEqualsAndHash = message.javaGenerateEqualsAndHash);
-    message.javaStringCheckUtf8 !== undefined &&
-      (obj.javaStringCheckUtf8 = message.javaStringCheckUtf8);
-    message.optimizeFor !== undefined &&
-      (obj.optimizeFor = fileOptions_OptimizeModeToJSON(message.optimizeFor));
+    message.javaStringCheckUtf8 !== undefined && (obj.javaStringCheckUtf8 = message.javaStringCheckUtf8);
+    message.optimizeFor !== undefined && (obj.optimizeFor = fileOptions_OptimizeModeToJSON(message.optimizeFor));
     message.goPackage !== undefined && (obj.goPackage = message.goPackage);
-    message.ccGenericServices !== undefined &&
-      (obj.ccGenericServices = message.ccGenericServices);
-    message.javaGenericServices !== undefined &&
-      (obj.javaGenericServices = message.javaGenericServices);
-    message.pyGenericServices !== undefined &&
-      (obj.pyGenericServices = message.pyGenericServices);
+    message.ccGenericServices !== undefined && (obj.ccGenericServices = message.ccGenericServices);
+    message.javaGenericServices !== undefined && (obj.javaGenericServices = message.javaGenericServices);
+    message.pyGenericServices !== undefined && (obj.pyGenericServices = message.pyGenericServices);
     message.deprecated !== undefined && (obj.deprecated = message.deprecated);
-    message.ccEnableArenas !== undefined &&
-      (obj.ccEnableArenas = message.ccEnableArenas);
-    message.objcClassPrefix !== undefined &&
-      (obj.objcClassPrefix = message.objcClassPrefix);
-    message.csharpNamespace !== undefined &&
-      (obj.csharpNamespace = message.csharpNamespace);
+    message.ccEnableArenas !== undefined && (obj.ccEnableArenas = message.ccEnableArenas);
+    message.objcClassPrefix !== undefined && (obj.objcClassPrefix = message.objcClassPrefix);
+    message.csharpNamespace !== undefined && (obj.csharpNamespace = message.csharpNamespace);
     if (message.uninterpretedOption) {
-      obj.uninterpretedOption = message.uninterpretedOption.map((e) =>
-        e ? UninterpretedOption.toJSON(e) : undefined
-      );
+      obj.uninterpretedOption = message.uninterpretedOption.map((e) => e ? UninterpretedOption.toJSON(e) : undefined);
     } else {
       obj.uninterpretedOption = [];
     }
     return obj;
+  },
+
+  create(base?: DeepPartial<FileOptions>): FileOptions {
+    return FileOptions.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<FileOptions>): FileOptions {
@@ -2649,8 +2388,7 @@ export const FileOptions = {
     message.javaPackage = object.javaPackage ?? "";
     message.javaOuterClassname = object.javaOuterClassname ?? "";
     message.javaMultipleFiles = object.javaMultipleFiles ?? false;
-    message.javaGenerateEqualsAndHash =
-      object.javaGenerateEqualsAndHash ?? false;
+    message.javaGenerateEqualsAndHash = object.javaGenerateEqualsAndHash ?? false;
     message.javaStringCheckUtf8 = object.javaStringCheckUtf8 ?? false;
     message.optimizeFor = object.optimizeFor ?? FileOptions_OptimizeMode.SPEED;
     message.goPackage = object.goPackage ?? "";
@@ -2661,10 +2399,7 @@ export const FileOptions = {
     message.ccEnableArenas = object.ccEnableArenas ?? false;
     message.objcClassPrefix = object.objcClassPrefix ?? "";
     message.csharpNamespace = object.csharpNamespace ?? "";
-    message.uninterpretedOption =
-      object.uninterpretedOption?.map((e) =>
-        UninterpretedOption.fromPartial(e)
-      ) || [];
+    message.uninterpretedOption = object.uninterpretedOption?.map((e) => UninterpretedOption.fromPartial(e)) || [];
     return message;
   },
 };
@@ -2680,10 +2415,7 @@ function createBaseMessageOptions(): MessageOptions {
 }
 
 export const MessageOptions = {
-  encode(
-    message: MessageOptions,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MessageOptions, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.messageSetWireFormat === true) {
       writer.uint32(8).bool(message.messageSetWireFormat);
     }
@@ -2722,9 +2454,7 @@ export const MessageOptions = {
           message.mapEntry = reader.bool();
           break;
         case 999:
-          message.uninterpretedOption.push(
-            UninterpretedOption.decode(reader, reader.uint32())
-          );
+          message.uninterpretedOption.push(UninterpretedOption.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -2736,51 +2466,44 @@ export const MessageOptions = {
 
   fromJSON(object: any): MessageOptions {
     return {
-      messageSetWireFormat: isSet(object.messageSetWireFormat)
-        ? Boolean(object.messageSetWireFormat)
-        : false,
+      messageSetWireFormat: isSet(object.messageSetWireFormat) ? Boolean(object.messageSetWireFormat) : false,
       noStandardDescriptorAccessor: isSet(object.noStandardDescriptorAccessor)
         ? Boolean(object.noStandardDescriptorAccessor)
         : false,
       deprecated: isSet(object.deprecated) ? Boolean(object.deprecated) : false,
       mapEntry: isSet(object.mapEntry) ? Boolean(object.mapEntry) : false,
       uninterpretedOption: Array.isArray(object?.uninterpretedOption)
-        ? object.uninterpretedOption.map((e: any) =>
-            UninterpretedOption.fromJSON(e)
-          )
+        ? object.uninterpretedOption.map((e: any) => UninterpretedOption.fromJSON(e))
         : [],
     };
   },
 
   toJSON(message: MessageOptions): unknown {
     const obj: any = {};
-    message.messageSetWireFormat !== undefined &&
-      (obj.messageSetWireFormat = message.messageSetWireFormat);
+    message.messageSetWireFormat !== undefined && (obj.messageSetWireFormat = message.messageSetWireFormat);
     message.noStandardDescriptorAccessor !== undefined &&
       (obj.noStandardDescriptorAccessor = message.noStandardDescriptorAccessor);
     message.deprecated !== undefined && (obj.deprecated = message.deprecated);
     message.mapEntry !== undefined && (obj.mapEntry = message.mapEntry);
     if (message.uninterpretedOption) {
-      obj.uninterpretedOption = message.uninterpretedOption.map((e) =>
-        e ? UninterpretedOption.toJSON(e) : undefined
-      );
+      obj.uninterpretedOption = message.uninterpretedOption.map((e) => e ? UninterpretedOption.toJSON(e) : undefined);
     } else {
       obj.uninterpretedOption = [];
     }
     return obj;
   },
 
+  create(base?: DeepPartial<MessageOptions>): MessageOptions {
+    return MessageOptions.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<MessageOptions>): MessageOptions {
     const message = createBaseMessageOptions();
     message.messageSetWireFormat = object.messageSetWireFormat ?? false;
-    message.noStandardDescriptorAccessor =
-      object.noStandardDescriptorAccessor ?? false;
+    message.noStandardDescriptorAccessor = object.noStandardDescriptorAccessor ?? false;
     message.deprecated = object.deprecated ?? false;
     message.mapEntry = object.mapEntry ?? false;
-    message.uninterpretedOption =
-      object.uninterpretedOption?.map((e) =>
-        UninterpretedOption.fromPartial(e)
-      ) || [];
+    message.uninterpretedOption = object.uninterpretedOption?.map((e) => UninterpretedOption.fromPartial(e)) || [];
     return message;
   },
 };
@@ -2798,10 +2521,7 @@ function createBaseFieldOptions(): FieldOptions {
 }
 
 export const FieldOptions = {
-  encode(
-    message: FieldOptions,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: FieldOptions, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.ctype !== FieldOptions_CType.STRING) {
       writer.uint32(8).int32(fieldOptions_CTypeToNumber(message.ctype));
     }
@@ -2852,9 +2572,7 @@ export const FieldOptions = {
           message.weak = reader.bool();
           break;
         case 999:
-          message.uninterpretedOption.push(
-            UninterpretedOption.decode(reader, reader.uint32())
-          );
+          message.uninterpretedOption.push(UninterpretedOption.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -2866,42 +2584,36 @@ export const FieldOptions = {
 
   fromJSON(object: any): FieldOptions {
     return {
-      ctype: isSet(object.ctype)
-        ? fieldOptions_CTypeFromJSON(object.ctype)
-        : FieldOptions_CType.STRING,
+      ctype: isSet(object.ctype) ? fieldOptions_CTypeFromJSON(object.ctype) : FieldOptions_CType.STRING,
       packed: isSet(object.packed) ? Boolean(object.packed) : false,
-      jstype: isSet(object.jstype)
-        ? fieldOptions_JSTypeFromJSON(object.jstype)
-        : FieldOptions_JSType.JS_NORMAL,
+      jstype: isSet(object.jstype) ? fieldOptions_JSTypeFromJSON(object.jstype) : FieldOptions_JSType.JS_NORMAL,
       lazy: isSet(object.lazy) ? Boolean(object.lazy) : false,
       deprecated: isSet(object.deprecated) ? Boolean(object.deprecated) : false,
       weak: isSet(object.weak) ? Boolean(object.weak) : false,
       uninterpretedOption: Array.isArray(object?.uninterpretedOption)
-        ? object.uninterpretedOption.map((e: any) =>
-            UninterpretedOption.fromJSON(e)
-          )
+        ? object.uninterpretedOption.map((e: any) => UninterpretedOption.fromJSON(e))
         : [],
     };
   },
 
   toJSON(message: FieldOptions): unknown {
     const obj: any = {};
-    message.ctype !== undefined &&
-      (obj.ctype = fieldOptions_CTypeToJSON(message.ctype));
+    message.ctype !== undefined && (obj.ctype = fieldOptions_CTypeToJSON(message.ctype));
     message.packed !== undefined && (obj.packed = message.packed);
-    message.jstype !== undefined &&
-      (obj.jstype = fieldOptions_JSTypeToJSON(message.jstype));
+    message.jstype !== undefined && (obj.jstype = fieldOptions_JSTypeToJSON(message.jstype));
     message.lazy !== undefined && (obj.lazy = message.lazy);
     message.deprecated !== undefined && (obj.deprecated = message.deprecated);
     message.weak !== undefined && (obj.weak = message.weak);
     if (message.uninterpretedOption) {
-      obj.uninterpretedOption = message.uninterpretedOption.map((e) =>
-        e ? UninterpretedOption.toJSON(e) : undefined
-      );
+      obj.uninterpretedOption = message.uninterpretedOption.map((e) => e ? UninterpretedOption.toJSON(e) : undefined);
     } else {
       obj.uninterpretedOption = [];
     }
     return obj;
+  },
+
+  create(base?: DeepPartial<FieldOptions>): FieldOptions {
+    return FieldOptions.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<FieldOptions>): FieldOptions {
@@ -2912,10 +2624,7 @@ export const FieldOptions = {
     message.lazy = object.lazy ?? false;
     message.deprecated = object.deprecated ?? false;
     message.weak = object.weak ?? false;
-    message.uninterpretedOption =
-      object.uninterpretedOption?.map((e) =>
-        UninterpretedOption.fromPartial(e)
-      ) || [];
+    message.uninterpretedOption = object.uninterpretedOption?.map((e) => UninterpretedOption.fromPartial(e)) || [];
     return message;
   },
 };
@@ -2925,10 +2634,7 @@ function createBaseEnumOptions(): EnumOptions {
 }
 
 export const EnumOptions = {
-  encode(
-    message: EnumOptions,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: EnumOptions, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.allowAlias === true) {
       writer.uint32(16).bool(message.allowAlias);
     }
@@ -2955,9 +2661,7 @@ export const EnumOptions = {
           message.deprecated = reader.bool();
           break;
         case 999:
-          message.uninterpretedOption.push(
-            UninterpretedOption.decode(reader, reader.uint32())
-          );
+          message.uninterpretedOption.push(UninterpretedOption.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -2972,9 +2676,7 @@ export const EnumOptions = {
       allowAlias: isSet(object.allowAlias) ? Boolean(object.allowAlias) : false,
       deprecated: isSet(object.deprecated) ? Boolean(object.deprecated) : false,
       uninterpretedOption: Array.isArray(object?.uninterpretedOption)
-        ? object.uninterpretedOption.map((e: any) =>
-            UninterpretedOption.fromJSON(e)
-          )
+        ? object.uninterpretedOption.map((e: any) => UninterpretedOption.fromJSON(e))
         : [],
     };
   },
@@ -2984,23 +2686,22 @@ export const EnumOptions = {
     message.allowAlias !== undefined && (obj.allowAlias = message.allowAlias);
     message.deprecated !== undefined && (obj.deprecated = message.deprecated);
     if (message.uninterpretedOption) {
-      obj.uninterpretedOption = message.uninterpretedOption.map((e) =>
-        e ? UninterpretedOption.toJSON(e) : undefined
-      );
+      obj.uninterpretedOption = message.uninterpretedOption.map((e) => e ? UninterpretedOption.toJSON(e) : undefined);
     } else {
       obj.uninterpretedOption = [];
     }
     return obj;
   },
 
+  create(base?: DeepPartial<EnumOptions>): EnumOptions {
+    return EnumOptions.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<EnumOptions>): EnumOptions {
     const message = createBaseEnumOptions();
     message.allowAlias = object.allowAlias ?? false;
     message.deprecated = object.deprecated ?? false;
-    message.uninterpretedOption =
-      object.uninterpretedOption?.map((e) =>
-        UninterpretedOption.fromPartial(e)
-      ) || [];
+    message.uninterpretedOption = object.uninterpretedOption?.map((e) => UninterpretedOption.fromPartial(e)) || [];
     return message;
   },
 };
@@ -3010,10 +2711,7 @@ function createBaseEnumValueOptions(): EnumValueOptions {
 }
 
 export const EnumValueOptions = {
-  encode(
-    message: EnumValueOptions,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: EnumValueOptions, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.deprecated === true) {
       writer.uint32(8).bool(message.deprecated);
     }
@@ -3034,9 +2732,7 @@ export const EnumValueOptions = {
           message.deprecated = reader.bool();
           break;
         case 999:
-          message.uninterpretedOption.push(
-            UninterpretedOption.decode(reader, reader.uint32())
-          );
+          message.uninterpretedOption.push(UninterpretedOption.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -3050,9 +2746,7 @@ export const EnumValueOptions = {
     return {
       deprecated: isSet(object.deprecated) ? Boolean(object.deprecated) : false,
       uninterpretedOption: Array.isArray(object?.uninterpretedOption)
-        ? object.uninterpretedOption.map((e: any) =>
-            UninterpretedOption.fromJSON(e)
-          )
+        ? object.uninterpretedOption.map((e: any) => UninterpretedOption.fromJSON(e))
         : [],
     };
   },
@@ -3061,22 +2755,21 @@ export const EnumValueOptions = {
     const obj: any = {};
     message.deprecated !== undefined && (obj.deprecated = message.deprecated);
     if (message.uninterpretedOption) {
-      obj.uninterpretedOption = message.uninterpretedOption.map((e) =>
-        e ? UninterpretedOption.toJSON(e) : undefined
-      );
+      obj.uninterpretedOption = message.uninterpretedOption.map((e) => e ? UninterpretedOption.toJSON(e) : undefined);
     } else {
       obj.uninterpretedOption = [];
     }
     return obj;
   },
 
+  create(base?: DeepPartial<EnumValueOptions>): EnumValueOptions {
+    return EnumValueOptions.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<EnumValueOptions>): EnumValueOptions {
     const message = createBaseEnumValueOptions();
     message.deprecated = object.deprecated ?? false;
-    message.uninterpretedOption =
-      object.uninterpretedOption?.map((e) =>
-        UninterpretedOption.fromPartial(e)
-      ) || [];
+    message.uninterpretedOption = object.uninterpretedOption?.map((e) => UninterpretedOption.fromPartial(e)) || [];
     return message;
   },
 };
@@ -3086,10 +2779,7 @@ function createBaseServiceOptions(): ServiceOptions {
 }
 
 export const ServiceOptions = {
-  encode(
-    message: ServiceOptions,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: ServiceOptions, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.deprecated === true) {
       writer.uint32(264).bool(message.deprecated);
     }
@@ -3110,9 +2800,7 @@ export const ServiceOptions = {
           message.deprecated = reader.bool();
           break;
         case 999:
-          message.uninterpretedOption.push(
-            UninterpretedOption.decode(reader, reader.uint32())
-          );
+          message.uninterpretedOption.push(UninterpretedOption.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -3126,9 +2814,7 @@ export const ServiceOptions = {
     return {
       deprecated: isSet(object.deprecated) ? Boolean(object.deprecated) : false,
       uninterpretedOption: Array.isArray(object?.uninterpretedOption)
-        ? object.uninterpretedOption.map((e: any) =>
-            UninterpretedOption.fromJSON(e)
-          )
+        ? object.uninterpretedOption.map((e: any) => UninterpretedOption.fromJSON(e))
         : [],
     };
   },
@@ -3137,22 +2823,21 @@ export const ServiceOptions = {
     const obj: any = {};
     message.deprecated !== undefined && (obj.deprecated = message.deprecated);
     if (message.uninterpretedOption) {
-      obj.uninterpretedOption = message.uninterpretedOption.map((e) =>
-        e ? UninterpretedOption.toJSON(e) : undefined
-      );
+      obj.uninterpretedOption = message.uninterpretedOption.map((e) => e ? UninterpretedOption.toJSON(e) : undefined);
     } else {
       obj.uninterpretedOption = [];
     }
     return obj;
   },
 
+  create(base?: DeepPartial<ServiceOptions>): ServiceOptions {
+    return ServiceOptions.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<ServiceOptions>): ServiceOptions {
     const message = createBaseServiceOptions();
     message.deprecated = object.deprecated ?? false;
-    message.uninterpretedOption =
-      object.uninterpretedOption?.map((e) =>
-        UninterpretedOption.fromPartial(e)
-      ) || [];
+    message.uninterpretedOption = object.uninterpretedOption?.map((e) => UninterpretedOption.fromPartial(e)) || [];
     return message;
   },
 };
@@ -3162,10 +2847,7 @@ function createBaseMethodOptions(): MethodOptions {
 }
 
 export const MethodOptions = {
-  encode(
-    message: MethodOptions,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: MethodOptions, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.deprecated === true) {
       writer.uint32(264).bool(message.deprecated);
     }
@@ -3186,9 +2868,7 @@ export const MethodOptions = {
           message.deprecated = reader.bool();
           break;
         case 999:
-          message.uninterpretedOption.push(
-            UninterpretedOption.decode(reader, reader.uint32())
-          );
+          message.uninterpretedOption.push(UninterpretedOption.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -3202,9 +2882,7 @@ export const MethodOptions = {
     return {
       deprecated: isSet(object.deprecated) ? Boolean(object.deprecated) : false,
       uninterpretedOption: Array.isArray(object?.uninterpretedOption)
-        ? object.uninterpretedOption.map((e: any) =>
-            UninterpretedOption.fromJSON(e)
-          )
+        ? object.uninterpretedOption.map((e: any) => UninterpretedOption.fromJSON(e))
         : [],
     };
   },
@@ -3213,22 +2891,21 @@ export const MethodOptions = {
     const obj: any = {};
     message.deprecated !== undefined && (obj.deprecated = message.deprecated);
     if (message.uninterpretedOption) {
-      obj.uninterpretedOption = message.uninterpretedOption.map((e) =>
-        e ? UninterpretedOption.toJSON(e) : undefined
-      );
+      obj.uninterpretedOption = message.uninterpretedOption.map((e) => e ? UninterpretedOption.toJSON(e) : undefined);
     } else {
       obj.uninterpretedOption = [];
     }
     return obj;
   },
 
+  create(base?: DeepPartial<MethodOptions>): MethodOptions {
+    return MethodOptions.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<MethodOptions>): MethodOptions {
     const message = createBaseMethodOptions();
     message.deprecated = object.deprecated ?? false;
-    message.uninterpretedOption =
-      object.uninterpretedOption?.map((e) =>
-        UninterpretedOption.fromPartial(e)
-      ) || [];
+    message.uninterpretedOption = object.uninterpretedOption?.map((e) => UninterpretedOption.fromPartial(e)) || [];
     return message;
   },
 };
@@ -3246,15 +2923,9 @@ function createBaseUninterpretedOption(): UninterpretedOption {
 }
 
 export const UninterpretedOption = {
-  encode(
-    message: UninterpretedOption,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: UninterpretedOption, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.name) {
-      UninterpretedOption_NamePart.encode(
-        v!,
-        writer.uint32(18).fork()
-      ).ldelim();
+      UninterpretedOption_NamePart.encode(v!, writer.uint32(18).fork()).ldelim();
     }
     if (message.identifierValue !== "") {
       writer.uint32(26).string(message.identifierValue);
@@ -3285,9 +2956,7 @@ export const UninterpretedOption = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 2:
-          message.name.push(
-            UninterpretedOption_NamePart.decode(reader, reader.uint32())
-          );
+          message.name.push(UninterpretedOption_NamePart.decode(reader, reader.uint32()));
           break;
         case 3:
           message.identifierValue = reader.string();
@@ -3317,61 +2986,40 @@ export const UninterpretedOption = {
 
   fromJSON(object: any): UninterpretedOption {
     return {
-      name: Array.isArray(object?.name)
-        ? object.name.map((e: any) => UninterpretedOption_NamePart.fromJSON(e))
-        : [],
-      identifierValue: isSet(object.identifierValue)
-        ? String(object.identifierValue)
-        : "",
-      positiveIntValue: isSet(object.positiveIntValue)
-        ? Number(object.positiveIntValue)
-        : 0,
-      negativeIntValue: isSet(object.negativeIntValue)
-        ? Number(object.negativeIntValue)
-        : 0,
+      name: Array.isArray(object?.name) ? object.name.map((e: any) => UninterpretedOption_NamePart.fromJSON(e)) : [],
+      identifierValue: isSet(object.identifierValue) ? String(object.identifierValue) : "",
+      positiveIntValue: isSet(object.positiveIntValue) ? Number(object.positiveIntValue) : 0,
+      negativeIntValue: isSet(object.negativeIntValue) ? Number(object.negativeIntValue) : 0,
       doubleValue: isSet(object.doubleValue) ? Number(object.doubleValue) : 0,
-      stringValue: isSet(object.stringValue)
-        ? Buffer.from(bytesFromBase64(object.stringValue))
-        : Buffer.alloc(0),
-      aggregateValue: isSet(object.aggregateValue)
-        ? String(object.aggregateValue)
-        : "",
+      stringValue: isSet(object.stringValue) ? Buffer.from(bytesFromBase64(object.stringValue)) : Buffer.alloc(0),
+      aggregateValue: isSet(object.aggregateValue) ? String(object.aggregateValue) : "",
     };
   },
 
   toJSON(message: UninterpretedOption): unknown {
     const obj: any = {};
     if (message.name) {
-      obj.name = message.name.map((e) =>
-        e ? UninterpretedOption_NamePart.toJSON(e) : undefined
-      );
+      obj.name = message.name.map((e) => e ? UninterpretedOption_NamePart.toJSON(e) : undefined);
     } else {
       obj.name = [];
     }
-    message.identifierValue !== undefined &&
-      (obj.identifierValue = message.identifierValue);
-    message.positiveIntValue !== undefined &&
-      (obj.positiveIntValue = Math.round(message.positiveIntValue));
-    message.negativeIntValue !== undefined &&
-      (obj.negativeIntValue = Math.round(message.negativeIntValue));
-    message.doubleValue !== undefined &&
-      (obj.doubleValue = message.doubleValue);
+    message.identifierValue !== undefined && (obj.identifierValue = message.identifierValue);
+    message.positiveIntValue !== undefined && (obj.positiveIntValue = Math.round(message.positiveIntValue));
+    message.negativeIntValue !== undefined && (obj.negativeIntValue = Math.round(message.negativeIntValue));
+    message.doubleValue !== undefined && (obj.doubleValue = message.doubleValue);
     message.stringValue !== undefined &&
-      (obj.stringValue = base64FromBytes(
-        message.stringValue !== undefined
-          ? message.stringValue
-          : Buffer.alloc(0)
-      ));
-    message.aggregateValue !== undefined &&
-      (obj.aggregateValue = message.aggregateValue);
+      (obj.stringValue = base64FromBytes(message.stringValue !== undefined ? message.stringValue : Buffer.alloc(0)));
+    message.aggregateValue !== undefined && (obj.aggregateValue = message.aggregateValue);
     return obj;
+  },
+
+  create(base?: DeepPartial<UninterpretedOption>): UninterpretedOption {
+    return UninterpretedOption.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<UninterpretedOption>): UninterpretedOption {
     const message = createBaseUninterpretedOption();
-    message.name =
-      object.name?.map((e) => UninterpretedOption_NamePart.fromPartial(e)) ||
-      [];
+    message.name = object.name?.map((e) => UninterpretedOption_NamePart.fromPartial(e)) || [];
     message.identifierValue = object.identifierValue ?? "";
     message.positiveIntValue = object.positiveIntValue ?? 0;
     message.negativeIntValue = object.negativeIntValue ?? 0;
@@ -3387,10 +3035,7 @@ function createBaseUninterpretedOption_NamePart(): UninterpretedOption_NamePart 
 }
 
 export const UninterpretedOption_NamePart = {
-  encode(
-    message: UninterpretedOption_NamePart,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: UninterpretedOption_NamePart, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.namePart !== "") {
       writer.uint32(10).string(message.namePart);
     }
@@ -3400,10 +3045,7 @@ export const UninterpretedOption_NamePart = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): UninterpretedOption_NamePart {
+  decode(input: _m0.Reader | Uint8Array, length?: number): UninterpretedOption_NamePart {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseUninterpretedOption_NamePart();
@@ -3427,23 +3069,22 @@ export const UninterpretedOption_NamePart = {
   fromJSON(object: any): UninterpretedOption_NamePart {
     return {
       namePart: isSet(object.namePart) ? String(object.namePart) : "",
-      isExtension: isSet(object.isExtension)
-        ? Boolean(object.isExtension)
-        : false,
+      isExtension: isSet(object.isExtension) ? Boolean(object.isExtension) : false,
     };
   },
 
   toJSON(message: UninterpretedOption_NamePart): unknown {
     const obj: any = {};
     message.namePart !== undefined && (obj.namePart = message.namePart);
-    message.isExtension !== undefined &&
-      (obj.isExtension = message.isExtension);
+    message.isExtension !== undefined && (obj.isExtension = message.isExtension);
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<UninterpretedOption_NamePart>
-  ): UninterpretedOption_NamePart {
+  create(base?: DeepPartial<UninterpretedOption_NamePart>): UninterpretedOption_NamePart {
+    return UninterpretedOption_NamePart.fromPartial(base ?? {});
+  },
+
+  fromPartial(object: DeepPartial<UninterpretedOption_NamePart>): UninterpretedOption_NamePart {
     const message = createBaseUninterpretedOption_NamePart();
     message.namePart = object.namePart ?? "";
     message.isExtension = object.isExtension ?? false;
@@ -3456,10 +3097,7 @@ function createBaseSourceCodeInfo(): SourceCodeInfo {
 }
 
 export const SourceCodeInfo = {
-  encode(
-    message: SourceCodeInfo,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: SourceCodeInfo, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.location) {
       SourceCodeInfo_Location.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -3474,9 +3112,7 @@ export const SourceCodeInfo = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.location.push(
-            SourceCodeInfo_Location.decode(reader, reader.uint32())
-          );
+          message.location.push(SourceCodeInfo_Location.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -3497,38 +3133,30 @@ export const SourceCodeInfo = {
   toJSON(message: SourceCodeInfo): unknown {
     const obj: any = {};
     if (message.location) {
-      obj.location = message.location.map((e) =>
-        e ? SourceCodeInfo_Location.toJSON(e) : undefined
-      );
+      obj.location = message.location.map((e) => e ? SourceCodeInfo_Location.toJSON(e) : undefined);
     } else {
       obj.location = [];
     }
     return obj;
   },
 
+  create(base?: DeepPartial<SourceCodeInfo>): SourceCodeInfo {
+    return SourceCodeInfo.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<SourceCodeInfo>): SourceCodeInfo {
     const message = createBaseSourceCodeInfo();
-    message.location =
-      object.location?.map((e) => SourceCodeInfo_Location.fromPartial(e)) || [];
+    message.location = object.location?.map((e) => SourceCodeInfo_Location.fromPartial(e)) || [];
     return message;
   },
 };
 
 function createBaseSourceCodeInfo_Location(): SourceCodeInfo_Location {
-  return {
-    path: [],
-    span: [],
-    leadingComments: "",
-    trailingComments: "",
-    leadingDetachedComments: [],
-  };
+  return { path: [], span: [], leadingComments: "", trailingComments: "", leadingDetachedComments: [] };
 }
 
 export const SourceCodeInfo_Location = {
-  encode(
-    message: SourceCodeInfo_Location,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: SourceCodeInfo_Location, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     writer.uint32(10).fork();
     for (const v of message.path) {
       writer.int32(v);
@@ -3551,10 +3179,7 @@ export const SourceCodeInfo_Location = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): SourceCodeInfo_Location {
+  decode(input: _m0.Reader | Uint8Array, length?: number): SourceCodeInfo_Location {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseSourceCodeInfo_Location();
@@ -3600,18 +3225,10 @@ export const SourceCodeInfo_Location = {
 
   fromJSON(object: any): SourceCodeInfo_Location {
     return {
-      path: Array.isArray(object?.path)
-        ? object.path.map((e: any) => Number(e))
-        : [],
-      span: Array.isArray(object?.span)
-        ? object.span.map((e: any) => Number(e))
-        : [],
-      leadingComments: isSet(object.leadingComments)
-        ? String(object.leadingComments)
-        : "",
-      trailingComments: isSet(object.trailingComments)
-        ? String(object.trailingComments)
-        : "",
+      path: Array.isArray(object?.path) ? object.path.map((e: any) => Number(e)) : [],
+      span: Array.isArray(object?.span) ? object.span.map((e: any) => Number(e)) : [],
+      leadingComments: isSet(object.leadingComments) ? String(object.leadingComments) : "",
+      trailingComments: isSet(object.trailingComments) ? String(object.trailingComments) : "",
       leadingDetachedComments: Array.isArray(object?.leadingDetachedComments)
         ? object.leadingDetachedComments.map((e: any) => String(e))
         : [],
@@ -3630,30 +3247,27 @@ export const SourceCodeInfo_Location = {
     } else {
       obj.span = [];
     }
-    message.leadingComments !== undefined &&
-      (obj.leadingComments = message.leadingComments);
-    message.trailingComments !== undefined &&
-      (obj.trailingComments = message.trailingComments);
+    message.leadingComments !== undefined && (obj.leadingComments = message.leadingComments);
+    message.trailingComments !== undefined && (obj.trailingComments = message.trailingComments);
     if (message.leadingDetachedComments) {
-      obj.leadingDetachedComments = message.leadingDetachedComments.map(
-        (e) => e
-      );
+      obj.leadingDetachedComments = message.leadingDetachedComments.map((e) => e);
     } else {
       obj.leadingDetachedComments = [];
     }
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<SourceCodeInfo_Location>
-  ): SourceCodeInfo_Location {
+  create(base?: DeepPartial<SourceCodeInfo_Location>): SourceCodeInfo_Location {
+    return SourceCodeInfo_Location.fromPartial(base ?? {});
+  },
+
+  fromPartial(object: DeepPartial<SourceCodeInfo_Location>): SourceCodeInfo_Location {
     const message = createBaseSourceCodeInfo_Location();
     message.path = object.path?.map((e) => e) || [];
     message.span = object.span?.map((e) => e) || [];
     message.leadingComments = object.leadingComments ?? "";
     message.trailingComments = object.trailingComments ?? "";
-    message.leadingDetachedComments =
-      object.leadingDetachedComments?.map((e) => e) || [];
+    message.leadingDetachedComments = object.leadingDetachedComments?.map((e) => e) || [];
     return message;
   },
 };
@@ -3663,15 +3277,9 @@ function createBaseGeneratedCodeInfo(): GeneratedCodeInfo {
 }
 
 export const GeneratedCodeInfo = {
-  encode(
-    message: GeneratedCodeInfo,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: GeneratedCodeInfo, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.annotation) {
-      GeneratedCodeInfo_Annotation.encode(
-        v!,
-        writer.uint32(10).fork()
-      ).ldelim();
+      GeneratedCodeInfo_Annotation.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
@@ -3684,9 +3292,7 @@ export const GeneratedCodeInfo = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.annotation.push(
-            GeneratedCodeInfo_Annotation.decode(reader, reader.uint32())
-          );
+          message.annotation.push(GeneratedCodeInfo_Annotation.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -3699,9 +3305,7 @@ export const GeneratedCodeInfo = {
   fromJSON(object: any): GeneratedCodeInfo {
     return {
       annotation: Array.isArray(object?.annotation)
-        ? object.annotation.map((e: any) =>
-            GeneratedCodeInfo_Annotation.fromJSON(e)
-          )
+        ? object.annotation.map((e: any) => GeneratedCodeInfo_Annotation.fromJSON(e))
         : [],
     };
   },
@@ -3709,21 +3313,20 @@ export const GeneratedCodeInfo = {
   toJSON(message: GeneratedCodeInfo): unknown {
     const obj: any = {};
     if (message.annotation) {
-      obj.annotation = message.annotation.map((e) =>
-        e ? GeneratedCodeInfo_Annotation.toJSON(e) : undefined
-      );
+      obj.annotation = message.annotation.map((e) => e ? GeneratedCodeInfo_Annotation.toJSON(e) : undefined);
     } else {
       obj.annotation = [];
     }
     return obj;
   },
 
+  create(base?: DeepPartial<GeneratedCodeInfo>): GeneratedCodeInfo {
+    return GeneratedCodeInfo.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<GeneratedCodeInfo>): GeneratedCodeInfo {
     const message = createBaseGeneratedCodeInfo();
-    message.annotation =
-      object.annotation?.map((e) =>
-        GeneratedCodeInfo_Annotation.fromPartial(e)
-      ) || [];
+    message.annotation = object.annotation?.map((e) => GeneratedCodeInfo_Annotation.fromPartial(e)) || [];
     return message;
   },
 };
@@ -3733,10 +3336,7 @@ function createBaseGeneratedCodeInfo_Annotation(): GeneratedCodeInfo_Annotation 
 }
 
 export const GeneratedCodeInfo_Annotation = {
-  encode(
-    message: GeneratedCodeInfo_Annotation,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: GeneratedCodeInfo_Annotation, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     writer.uint32(10).fork();
     for (const v of message.path) {
       writer.int32(v);
@@ -3754,10 +3354,7 @@ export const GeneratedCodeInfo_Annotation = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): GeneratedCodeInfo_Annotation {
+  decode(input: _m0.Reader | Uint8Array, length?: number): GeneratedCodeInfo_Annotation {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseGeneratedCodeInfo_Annotation();
@@ -3793,9 +3390,7 @@ export const GeneratedCodeInfo_Annotation = {
 
   fromJSON(object: any): GeneratedCodeInfo_Annotation {
     return {
-      path: Array.isArray(object?.path)
-        ? object.path.map((e: any) => Number(e))
-        : [],
+      path: Array.isArray(object?.path) ? object.path.map((e: any) => Number(e)) : [],
       sourceFile: isSet(object.sourceFile) ? String(object.sourceFile) : "",
       begin: isSet(object.begin) ? Number(object.begin) : 0,
       end: isSet(object.end) ? Number(object.end) : 0,
@@ -3815,9 +3410,11 @@ export const GeneratedCodeInfo_Annotation = {
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<GeneratedCodeInfo_Annotation>
-  ): GeneratedCodeInfo_Annotation {
+  create(base?: DeepPartial<GeneratedCodeInfo_Annotation>): GeneratedCodeInfo_Annotation {
+    return GeneratedCodeInfo_Annotation.fromPartial(base ?? {});
+  },
+
+  fromPartial(object: DeepPartial<GeneratedCodeInfo_Annotation>): GeneratedCodeInfo_Annotation {
     const message = createBaseGeneratedCodeInfo_Annotation();
     message.path = object.path?.map((e) => e) || [];
     message.sourceFile = object.sourceFile ?? "";
@@ -3841,2706 +3438,2394 @@ export interface ProtoMetadata {
   options?: {
     options?: { [key: string]: any };
     services?: {
-      [key: string]: {
-        options?: { [key: string]: any };
-        methods?: { [key: string]: { [key: string]: any } };
-      };
+      [key: string]: { options?: { [key: string]: any }; methods?: { [key: string]: { [key: string]: any } } };
     };
-    messages?: {
-      [key: string]: ProtoMetaMessageOptions;
-    };
-    enums?: {
-      [key: string]: {
-        options?: { [key: string]: any };
-        values?: { [key: string]: { [key: string]: any } };
-      };
-    };
+    messages?: { [key: string]: ProtoMetaMessageOptions };
+    enums?: { [key: string]: { options?: { [key: string]: any }; values?: { [key: string]: { [key: string]: any } } } };
   };
 }
 
 export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto1.fromPartial({
-    name: "google/protobuf/descriptor.proto",
-    package: "google.protobuf",
-    dependency: [],
-    publicDependency: [],
-    weakDependency: [],
-    messageType: [
-      {
-        name: "FileDescriptorSet",
-        field: [
-          {
-            name: "file",
-            number: 1,
-            label: 3,
-            type: 11,
-            typeName: ".google.protobuf.FileDescriptorProto",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "file",
-            options: undefined,
-            proto3Optional: false,
-          },
+    "name": "google/protobuf/descriptor.proto",
+    "package": "google.protobuf",
+    "dependency": [],
+    "publicDependency": [],
+    "weakDependency": [],
+    "messageType": [{
+      "name": "FileDescriptorSet",
+      "field": [{
+        "name": "file",
+        "number": 1,
+        "label": 3,
+        "type": 11,
+        "typeName": ".google.protobuf.FileDescriptorProto",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "file",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "FileDescriptorProto",
+      "field": [{
+        "name": "name",
+        "number": 1,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "name",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "package",
+        "number": 2,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "package",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "dependency",
+        "number": 3,
+        "label": 3,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "dependency",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "public_dependency",
+        "number": 10,
+        "label": 3,
+        "type": 5,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "publicDependency",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "weak_dependency",
+        "number": 11,
+        "label": 3,
+        "type": 5,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "weakDependency",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "message_type",
+        "number": 4,
+        "label": 3,
+        "type": 11,
+        "typeName": ".google.protobuf.DescriptorProto",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "messageType",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "enum_type",
+        "number": 5,
+        "label": 3,
+        "type": 11,
+        "typeName": ".google.protobuf.EnumDescriptorProto",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "enumType",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "service",
+        "number": 6,
+        "label": 3,
+        "type": 11,
+        "typeName": ".google.protobuf.ServiceDescriptorProto",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "service",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "extension",
+        "number": 7,
+        "label": 3,
+        "type": 11,
+        "typeName": ".google.protobuf.FieldDescriptorProto",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "extension",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "options",
+        "number": 8,
+        "label": 1,
+        "type": 11,
+        "typeName": ".google.protobuf.FileOptions",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "options",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "source_code_info",
+        "number": 9,
+        "label": 1,
+        "type": 11,
+        "typeName": ".google.protobuf.SourceCodeInfo",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "sourceCodeInfo",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "syntax",
+        "number": 12,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "syntax",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "DescriptorProto",
+      "field": [{
+        "name": "name",
+        "number": 1,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "name",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "field",
+        "number": 2,
+        "label": 3,
+        "type": 11,
+        "typeName": ".google.protobuf.FieldDescriptorProto",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "field",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "extension",
+        "number": 6,
+        "label": 3,
+        "type": 11,
+        "typeName": ".google.protobuf.FieldDescriptorProto",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "extension",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "nested_type",
+        "number": 3,
+        "label": 3,
+        "type": 11,
+        "typeName": ".google.protobuf.DescriptorProto",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "nestedType",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "enum_type",
+        "number": 4,
+        "label": 3,
+        "type": 11,
+        "typeName": ".google.protobuf.EnumDescriptorProto",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "enumType",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "extension_range",
+        "number": 5,
+        "label": 3,
+        "type": 11,
+        "typeName": ".google.protobuf.DescriptorProto.ExtensionRange",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "extensionRange",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "oneof_decl",
+        "number": 8,
+        "label": 3,
+        "type": 11,
+        "typeName": ".google.protobuf.OneofDescriptorProto",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "oneofDecl",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "options",
+        "number": 7,
+        "label": 1,
+        "type": 11,
+        "typeName": ".google.protobuf.MessageOptions",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "options",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "reserved_range",
+        "number": 9,
+        "label": 3,
+        "type": 11,
+        "typeName": ".google.protobuf.DescriptorProto.ReservedRange",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "reservedRange",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "reserved_name",
+        "number": 10,
+        "label": 3,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "reservedName",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [{
+        "name": "ExtensionRange",
+        "field": [{
+          "name": "start",
+          "number": 1,
+          "label": 1,
+          "type": 5,
+          "typeName": "",
+          "extendee": "",
+          "defaultValue": "",
+          "oneofIndex": 0,
+          "jsonName": "start",
+          "options": undefined,
+          "proto3Optional": false,
+        }, {
+          "name": "end",
+          "number": 2,
+          "label": 1,
+          "type": 5,
+          "typeName": "",
+          "extendee": "",
+          "defaultValue": "",
+          "oneofIndex": 0,
+          "jsonName": "end",
+          "options": undefined,
+          "proto3Optional": false,
+        }],
+        "extension": [],
+        "nestedType": [],
+        "enumType": [],
+        "extensionRange": [],
+        "oneofDecl": [],
+        "options": undefined,
+        "reservedRange": [],
+        "reservedName": [],
+      }, {
+        "name": "ReservedRange",
+        "field": [{
+          "name": "start",
+          "number": 1,
+          "label": 1,
+          "type": 5,
+          "typeName": "",
+          "extendee": "",
+          "defaultValue": "",
+          "oneofIndex": 0,
+          "jsonName": "start",
+          "options": undefined,
+          "proto3Optional": false,
+        }, {
+          "name": "end",
+          "number": 2,
+          "label": 1,
+          "type": 5,
+          "typeName": "",
+          "extendee": "",
+          "defaultValue": "",
+          "oneofIndex": 0,
+          "jsonName": "end",
+          "options": undefined,
+          "proto3Optional": false,
+        }],
+        "extension": [],
+        "nestedType": [],
+        "enumType": [],
+        "extensionRange": [],
+        "oneofDecl": [],
+        "options": undefined,
+        "reservedRange": [],
+        "reservedName": [],
+      }],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "FieldDescriptorProto",
+      "field": [{
+        "name": "name",
+        "number": 1,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "name",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "number",
+        "number": 3,
+        "label": 1,
+        "type": 5,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "number",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "label",
+        "number": 4,
+        "label": 1,
+        "type": 14,
+        "typeName": ".google.protobuf.FieldDescriptorProto.Label",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "label",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "type",
+        "number": 5,
+        "label": 1,
+        "type": 14,
+        "typeName": ".google.protobuf.FieldDescriptorProto.Type",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "type",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "type_name",
+        "number": 6,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "typeName",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "extendee",
+        "number": 2,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "extendee",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "default_value",
+        "number": 7,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "defaultValue",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "oneof_index",
+        "number": 9,
+        "label": 1,
+        "type": 5,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "oneofIndex",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "json_name",
+        "number": 10,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "jsonName",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "options",
+        "number": 8,
+        "label": 1,
+        "type": 11,
+        "typeName": ".google.protobuf.FieldOptions",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "options",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [{
+        "name": "Type",
+        "value": [
+          { "name": "TYPE_DOUBLE", "number": 1, "options": undefined },
+          { "name": "TYPE_FLOAT", "number": 2, "options": undefined },
+          { "name": "TYPE_INT64", "number": 3, "options": undefined },
+          { "name": "TYPE_UINT64", "number": 4, "options": undefined },
+          { "name": "TYPE_INT32", "number": 5, "options": undefined },
+          { "name": "TYPE_FIXED64", "number": 6, "options": undefined },
+          { "name": "TYPE_FIXED32", "number": 7, "options": undefined },
+          { "name": "TYPE_BOOL", "number": 8, "options": undefined },
+          { "name": "TYPE_STRING", "number": 9, "options": undefined },
+          { "name": "TYPE_GROUP", "number": 10, "options": undefined },
+          { "name": "TYPE_MESSAGE", "number": 11, "options": undefined },
+          { "name": "TYPE_BYTES", "number": 12, "options": undefined },
+          { "name": "TYPE_UINT32", "number": 13, "options": undefined },
+          { "name": "TYPE_ENUM", "number": 14, "options": undefined },
+          { "name": "TYPE_SFIXED32", "number": 15, "options": undefined },
+          { "name": "TYPE_SFIXED64", "number": 16, "options": undefined },
+          { "name": "TYPE_SINT32", "number": 17, "options": undefined },
+          { "name": "TYPE_SINT64", "number": 18, "options": undefined },
         ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "FileDescriptorProto",
-        field: [
-          {
-            name: "name",
-            number: 1,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "name",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "package",
-            number: 2,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "package",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "dependency",
-            number: 3,
-            label: 3,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "dependency",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "public_dependency",
-            number: 10,
-            label: 3,
-            type: 5,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "publicDependency",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "weak_dependency",
-            number: 11,
-            label: 3,
-            type: 5,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "weakDependency",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "message_type",
-            number: 4,
-            label: 3,
-            type: 11,
-            typeName: ".google.protobuf.DescriptorProto",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "messageType",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "enum_type",
-            number: 5,
-            label: 3,
-            type: 11,
-            typeName: ".google.protobuf.EnumDescriptorProto",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "enumType",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "service",
-            number: 6,
-            label: 3,
-            type: 11,
-            typeName: ".google.protobuf.ServiceDescriptorProto",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "service",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "extension",
-            number: 7,
-            label: 3,
-            type: 11,
-            typeName: ".google.protobuf.FieldDescriptorProto",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "extension",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "options",
-            number: 8,
-            label: 1,
-            type: 11,
-            typeName: ".google.protobuf.FileOptions",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "options",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "source_code_info",
-            number: 9,
-            label: 1,
-            type: 11,
-            typeName: ".google.protobuf.SourceCodeInfo",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "sourceCodeInfo",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "syntax",
-            number: 12,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "syntax",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "DescriptorProto",
-        field: [
-          {
-            name: "name",
-            number: 1,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "name",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "field",
-            number: 2,
-            label: 3,
-            type: 11,
-            typeName: ".google.protobuf.FieldDescriptorProto",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "field",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "extension",
-            number: 6,
-            label: 3,
-            type: 11,
-            typeName: ".google.protobuf.FieldDescriptorProto",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "extension",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "nested_type",
-            number: 3,
-            label: 3,
-            type: 11,
-            typeName: ".google.protobuf.DescriptorProto",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "nestedType",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "enum_type",
-            number: 4,
-            label: 3,
-            type: 11,
-            typeName: ".google.protobuf.EnumDescriptorProto",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "enumType",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "extension_range",
-            number: 5,
-            label: 3,
-            type: 11,
-            typeName: ".google.protobuf.DescriptorProto.ExtensionRange",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "extensionRange",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "oneof_decl",
-            number: 8,
-            label: 3,
-            type: 11,
-            typeName: ".google.protobuf.OneofDescriptorProto",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "oneofDecl",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "options",
-            number: 7,
-            label: 1,
-            type: 11,
-            typeName: ".google.protobuf.MessageOptions",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "options",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "reserved_range",
-            number: 9,
-            label: 3,
-            type: 11,
-            typeName: ".google.protobuf.DescriptorProto.ReservedRange",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "reservedRange",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "reserved_name",
-            number: 10,
-            label: 3,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "reservedName",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [
-          {
-            name: "ExtensionRange",
-            field: [
-              {
-                name: "start",
-                number: 1,
-                label: 1,
-                type: 5,
-                typeName: "",
-                extendee: "",
-                defaultValue: "",
-                oneofIndex: 0,
-                jsonName: "start",
-                options: undefined,
-                proto3Optional: false,
-              },
-              {
-                name: "end",
-                number: 2,
-                label: 1,
-                type: 5,
-                typeName: "",
-                extendee: "",
-                defaultValue: "",
-                oneofIndex: 0,
-                jsonName: "end",
-                options: undefined,
-                proto3Optional: false,
-              },
-            ],
-            extension: [],
-            nestedType: [],
-            enumType: [],
-            extensionRange: [],
-            oneofDecl: [],
-            options: undefined,
-            reservedRange: [],
-            reservedName: [],
-          },
-          {
-            name: "ReservedRange",
-            field: [
-              {
-                name: "start",
-                number: 1,
-                label: 1,
-                type: 5,
-                typeName: "",
-                extendee: "",
-                defaultValue: "",
-                oneofIndex: 0,
-                jsonName: "start",
-                options: undefined,
-                proto3Optional: false,
-              },
-              {
-                name: "end",
-                number: 2,
-                label: 1,
-                type: 5,
-                typeName: "",
-                extendee: "",
-                defaultValue: "",
-                oneofIndex: 0,
-                jsonName: "end",
-                options: undefined,
-                proto3Optional: false,
-              },
-            ],
-            extension: [],
-            nestedType: [],
-            enumType: [],
-            extensionRange: [],
-            oneofDecl: [],
-            options: undefined,
-            reservedRange: [],
-            reservedName: [],
-          },
-        ],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "FieldDescriptorProto",
-        field: [
-          {
-            name: "name",
-            number: 1,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "name",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "number",
-            number: 3,
-            label: 1,
-            type: 5,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "number",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "label",
-            number: 4,
-            label: 1,
-            type: 14,
-            typeName: ".google.protobuf.FieldDescriptorProto.Label",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "label",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "type",
-            number: 5,
-            label: 1,
-            type: 14,
-            typeName: ".google.protobuf.FieldDescriptorProto.Type",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "type",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "type_name",
-            number: 6,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "typeName",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "extendee",
-            number: 2,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "extendee",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "default_value",
-            number: 7,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "defaultValue",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "oneof_index",
-            number: 9,
-            label: 1,
-            type: 5,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "oneofIndex",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "json_name",
-            number: 10,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "jsonName",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "options",
-            number: 8,
-            label: 1,
-            type: 11,
-            typeName: ".google.protobuf.FieldOptions",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "options",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [
-          {
-            name: "Type",
-            value: [
-              { name: "TYPE_DOUBLE", number: 1, options: undefined },
-              { name: "TYPE_FLOAT", number: 2, options: undefined },
-              { name: "TYPE_INT64", number: 3, options: undefined },
-              { name: "TYPE_UINT64", number: 4, options: undefined },
-              { name: "TYPE_INT32", number: 5, options: undefined },
-              { name: "TYPE_FIXED64", number: 6, options: undefined },
-              { name: "TYPE_FIXED32", number: 7, options: undefined },
-              { name: "TYPE_BOOL", number: 8, options: undefined },
-              { name: "TYPE_STRING", number: 9, options: undefined },
-              { name: "TYPE_GROUP", number: 10, options: undefined },
-              { name: "TYPE_MESSAGE", number: 11, options: undefined },
-              { name: "TYPE_BYTES", number: 12, options: undefined },
-              { name: "TYPE_UINT32", number: 13, options: undefined },
-              { name: "TYPE_ENUM", number: 14, options: undefined },
-              { name: "TYPE_SFIXED32", number: 15, options: undefined },
-              { name: "TYPE_SFIXED64", number: 16, options: undefined },
-              { name: "TYPE_SINT32", number: 17, options: undefined },
-              { name: "TYPE_SINT64", number: 18, options: undefined },
-            ],
-            options: undefined,
-            reservedRange: [],
-            reservedName: [],
-          },
-          {
-            name: "Label",
-            value: [
-              { name: "LABEL_OPTIONAL", number: 1, options: undefined },
-              { name: "LABEL_REQUIRED", number: 2, options: undefined },
-              { name: "LABEL_REPEATED", number: 3, options: undefined },
-            ],
-            options: undefined,
-            reservedRange: [],
-            reservedName: [],
-          },
-        ],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "OneofDescriptorProto",
-        field: [
-          {
-            name: "name",
-            number: 1,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "name",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "EnumDescriptorProto",
-        field: [
-          {
-            name: "name",
-            number: 1,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "name",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "value",
-            number: 2,
-            label: 3,
-            type: 11,
-            typeName: ".google.protobuf.EnumValueDescriptorProto",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "value",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "options",
-            number: 3,
-            label: 1,
-            type: 11,
-            typeName: ".google.protobuf.EnumOptions",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "options",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "EnumValueDescriptorProto",
-        field: [
-          {
-            name: "name",
-            number: 1,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "name",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "number",
-            number: 2,
-            label: 1,
-            type: 5,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "number",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "options",
-            number: 3,
-            label: 1,
-            type: 11,
-            typeName: ".google.protobuf.EnumValueOptions",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "options",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "ServiceDescriptorProto",
-        field: [
-          {
-            name: "name",
-            number: 1,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "name",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "method",
-            number: 2,
-            label: 3,
-            type: 11,
-            typeName: ".google.protobuf.MethodDescriptorProto",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "method",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "options",
-            number: 3,
-            label: 1,
-            type: 11,
-            typeName: ".google.protobuf.ServiceOptions",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "options",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "MethodDescriptorProto",
-        field: [
-          {
-            name: "name",
-            number: 1,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "name",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "input_type",
-            number: 2,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "inputType",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "output_type",
-            number: 3,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "outputType",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "options",
-            number: 4,
-            label: 1,
-            type: 11,
-            typeName: ".google.protobuf.MethodOptions",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "options",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "client_streaming",
-            number: 5,
-            label: 1,
-            type: 8,
-            typeName: "",
-            extendee: "",
-            defaultValue: "false",
-            oneofIndex: 0,
-            jsonName: "clientStreaming",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "server_streaming",
-            number: 6,
-            label: 1,
-            type: 8,
-            typeName: "",
-            extendee: "",
-            defaultValue: "false",
-            oneofIndex: 0,
-            jsonName: "serverStreaming",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "FileOptions",
-        field: [
-          {
-            name: "java_package",
-            number: 1,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "javaPackage",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "java_outer_classname",
-            number: 8,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "javaOuterClassname",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "java_multiple_files",
-            number: 10,
-            label: 1,
-            type: 8,
-            typeName: "",
-            extendee: "",
-            defaultValue: "false",
-            oneofIndex: 0,
-            jsonName: "javaMultipleFiles",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "java_generate_equals_and_hash",
-            number: 20,
-            label: 1,
-            type: 8,
-            typeName: "",
-            extendee: "",
-            defaultValue: "false",
-            oneofIndex: 0,
-            jsonName: "javaGenerateEqualsAndHash",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "java_string_check_utf8",
-            number: 27,
-            label: 1,
-            type: 8,
-            typeName: "",
-            extendee: "",
-            defaultValue: "false",
-            oneofIndex: 0,
-            jsonName: "javaStringCheckUtf8",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "optimize_for",
-            number: 9,
-            label: 1,
-            type: 14,
-            typeName: ".google.protobuf.FileOptions.OptimizeMode",
-            extendee: "",
-            defaultValue: "SPEED",
-            oneofIndex: 0,
-            jsonName: "optimizeFor",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "go_package",
-            number: 11,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "goPackage",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "cc_generic_services",
-            number: 16,
-            label: 1,
-            type: 8,
-            typeName: "",
-            extendee: "",
-            defaultValue: "false",
-            oneofIndex: 0,
-            jsonName: "ccGenericServices",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "java_generic_services",
-            number: 17,
-            label: 1,
-            type: 8,
-            typeName: "",
-            extendee: "",
-            defaultValue: "false",
-            oneofIndex: 0,
-            jsonName: "javaGenericServices",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "py_generic_services",
-            number: 18,
-            label: 1,
-            type: 8,
-            typeName: "",
-            extendee: "",
-            defaultValue: "false",
-            oneofIndex: 0,
-            jsonName: "pyGenericServices",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "deprecated",
-            number: 23,
-            label: 1,
-            type: 8,
-            typeName: "",
-            extendee: "",
-            defaultValue: "false",
-            oneofIndex: 0,
-            jsonName: "deprecated",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "cc_enable_arenas",
-            number: 31,
-            label: 1,
-            type: 8,
-            typeName: "",
-            extendee: "",
-            defaultValue: "false",
-            oneofIndex: 0,
-            jsonName: "ccEnableArenas",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "objc_class_prefix",
-            number: 36,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "objcClassPrefix",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "csharp_namespace",
-            number: 37,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "csharpNamespace",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "uninterpreted_option",
-            number: 999,
-            label: 3,
-            type: 11,
-            typeName: ".google.protobuf.UninterpretedOption",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "uninterpretedOption",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [
-          {
-            name: "OptimizeMode",
-            value: [
-              { name: "SPEED", number: 1, options: undefined },
-              { name: "CODE_SIZE", number: 2, options: undefined },
-              { name: "LITE_RUNTIME", number: 3, options: undefined },
-            ],
-            options: undefined,
-            reservedRange: [],
-            reservedName: [],
-          },
-        ],
-        extensionRange: [{ start: 1000, end: 536870912, options: undefined }],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [{ start: 38, end: 39 }],
-        reservedName: [],
-      },
-      {
-        name: "MessageOptions",
-        field: [
-          {
-            name: "message_set_wire_format",
-            number: 1,
-            label: 1,
-            type: 8,
-            typeName: "",
-            extendee: "",
-            defaultValue: "false",
-            oneofIndex: 0,
-            jsonName: "messageSetWireFormat",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "no_standard_descriptor_accessor",
-            number: 2,
-            label: 1,
-            type: 8,
-            typeName: "",
-            extendee: "",
-            defaultValue: "false",
-            oneofIndex: 0,
-            jsonName: "noStandardDescriptorAccessor",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "deprecated",
-            number: 3,
-            label: 1,
-            type: 8,
-            typeName: "",
-            extendee: "",
-            defaultValue: "false",
-            oneofIndex: 0,
-            jsonName: "deprecated",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "map_entry",
-            number: 7,
-            label: 1,
-            type: 8,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "mapEntry",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "uninterpreted_option",
-            number: 999,
-            label: 3,
-            type: 11,
-            typeName: ".google.protobuf.UninterpretedOption",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "uninterpretedOption",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [{ start: 1000, end: 536870912, options: undefined }],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "FieldOptions",
-        field: [
-          {
-            name: "ctype",
-            number: 1,
-            label: 1,
-            type: 14,
-            typeName: ".google.protobuf.FieldOptions.CType",
-            extendee: "",
-            defaultValue: "STRING",
-            oneofIndex: 0,
-            jsonName: "ctype",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "packed",
-            number: 2,
-            label: 1,
-            type: 8,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "packed",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "jstype",
-            number: 6,
-            label: 1,
-            type: 14,
-            typeName: ".google.protobuf.FieldOptions.JSType",
-            extendee: "",
-            defaultValue: "JS_NORMAL",
-            oneofIndex: 0,
-            jsonName: "jstype",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "lazy",
-            number: 5,
-            label: 1,
-            type: 8,
-            typeName: "",
-            extendee: "",
-            defaultValue: "false",
-            oneofIndex: 0,
-            jsonName: "lazy",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "deprecated",
-            number: 3,
-            label: 1,
-            type: 8,
-            typeName: "",
-            extendee: "",
-            defaultValue: "false",
-            oneofIndex: 0,
-            jsonName: "deprecated",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "weak",
-            number: 10,
-            label: 1,
-            type: 8,
-            typeName: "",
-            extendee: "",
-            defaultValue: "false",
-            oneofIndex: 0,
-            jsonName: "weak",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "uninterpreted_option",
-            number: 999,
-            label: 3,
-            type: 11,
-            typeName: ".google.protobuf.UninterpretedOption",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "uninterpretedOption",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [
-          {
-            name: "CType",
-            value: [
-              { name: "STRING", number: 0, options: undefined },
-              { name: "CORD", number: 1, options: undefined },
-              { name: "STRING_PIECE", number: 2, options: undefined },
-            ],
-            options: undefined,
-            reservedRange: [],
-            reservedName: [],
-          },
-          {
-            name: "JSType",
-            value: [
-              { name: "JS_NORMAL", number: 0, options: undefined },
-              { name: "JS_STRING", number: 1, options: undefined },
-              { name: "JS_NUMBER", number: 2, options: undefined },
-            ],
-            options: undefined,
-            reservedRange: [],
-            reservedName: [],
-          },
-        ],
-        extensionRange: [{ start: 1000, end: 536870912, options: undefined }],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "EnumOptions",
-        field: [
-          {
-            name: "allow_alias",
-            number: 2,
-            label: 1,
-            type: 8,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "allowAlias",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "deprecated",
-            number: 3,
-            label: 1,
-            type: 8,
-            typeName: "",
-            extendee: "",
-            defaultValue: "false",
-            oneofIndex: 0,
-            jsonName: "deprecated",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "uninterpreted_option",
-            number: 999,
-            label: 3,
-            type: 11,
-            typeName: ".google.protobuf.UninterpretedOption",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "uninterpretedOption",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [{ start: 1000, end: 536870912, options: undefined }],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "EnumValueOptions",
-        field: [
-          {
-            name: "deprecated",
-            number: 1,
-            label: 1,
-            type: 8,
-            typeName: "",
-            extendee: "",
-            defaultValue: "false",
-            oneofIndex: 0,
-            jsonName: "deprecated",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "uninterpreted_option",
-            number: 999,
-            label: 3,
-            type: 11,
-            typeName: ".google.protobuf.UninterpretedOption",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "uninterpretedOption",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [{ start: 1000, end: 536870912, options: undefined }],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "ServiceOptions",
-        field: [
-          {
-            name: "deprecated",
-            number: 33,
-            label: 1,
-            type: 8,
-            typeName: "",
-            extendee: "",
-            defaultValue: "false",
-            oneofIndex: 0,
-            jsonName: "deprecated",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "uninterpreted_option",
-            number: 999,
-            label: 3,
-            type: 11,
-            typeName: ".google.protobuf.UninterpretedOption",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "uninterpretedOption",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [{ start: 1000, end: 536870912, options: undefined }],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "MethodOptions",
-        field: [
-          {
-            name: "deprecated",
-            number: 33,
-            label: 1,
-            type: 8,
-            typeName: "",
-            extendee: "",
-            defaultValue: "false",
-            oneofIndex: 0,
-            jsonName: "deprecated",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "uninterpreted_option",
-            number: 999,
-            label: 3,
-            type: 11,
-            typeName: ".google.protobuf.UninterpretedOption",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "uninterpretedOption",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [{ start: 1000, end: 536870912, options: undefined }],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "UninterpretedOption",
-        field: [
-          {
-            name: "name",
-            number: 2,
-            label: 3,
-            type: 11,
-            typeName: ".google.protobuf.UninterpretedOption.NamePart",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "name",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "identifier_value",
-            number: 3,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "identifierValue",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "positive_int_value",
-            number: 4,
-            label: 1,
-            type: 4,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "positiveIntValue",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "negative_int_value",
-            number: 5,
-            label: 1,
-            type: 3,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "negativeIntValue",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "double_value",
-            number: 6,
-            label: 1,
-            type: 1,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "doubleValue",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "string_value",
-            number: 7,
-            label: 1,
-            type: 12,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "stringValue",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "aggregate_value",
-            number: 8,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "aggregateValue",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [
-          {
-            name: "NamePart",
-            field: [
-              {
-                name: "name_part",
-                number: 1,
-                label: 2,
-                type: 9,
-                typeName: "",
-                extendee: "",
-                defaultValue: "",
-                oneofIndex: 0,
-                jsonName: "namePart",
-                options: undefined,
-                proto3Optional: false,
-              },
-              {
-                name: "is_extension",
-                number: 2,
-                label: 2,
-                type: 8,
-                typeName: "",
-                extendee: "",
-                defaultValue: "",
-                oneofIndex: 0,
-                jsonName: "isExtension",
-                options: undefined,
-                proto3Optional: false,
-              },
-            ],
-            extension: [],
-            nestedType: [],
-            enumType: [],
-            extensionRange: [],
-            oneofDecl: [],
-            options: undefined,
-            reservedRange: [],
-            reservedName: [],
-          },
-        ],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "SourceCodeInfo",
-        field: [
-          {
-            name: "location",
-            number: 1,
-            label: 3,
-            type: 11,
-            typeName: ".google.protobuf.SourceCodeInfo.Location",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "location",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [
-          {
-            name: "Location",
-            field: [
-              {
-                name: "path",
-                number: 1,
-                label: 3,
-                type: 5,
-                typeName: "",
-                extendee: "",
-                defaultValue: "",
-                oneofIndex: 0,
-                jsonName: "path",
-                options: {
-                  ctype: 0,
-                  packed: true,
-                  jstype: 0,
-                  lazy: false,
-                  deprecated: false,
-                  weak: false,
-                  uninterpretedOption: [],
-                },
-                proto3Optional: false,
-              },
-              {
-                name: "span",
-                number: 2,
-                label: 3,
-                type: 5,
-                typeName: "",
-                extendee: "",
-                defaultValue: "",
-                oneofIndex: 0,
-                jsonName: "span",
-                options: {
-                  ctype: 0,
-                  packed: true,
-                  jstype: 0,
-                  lazy: false,
-                  deprecated: false,
-                  weak: false,
-                  uninterpretedOption: [],
-                },
-                proto3Optional: false,
-              },
-              {
-                name: "leading_comments",
-                number: 3,
-                label: 1,
-                type: 9,
-                typeName: "",
-                extendee: "",
-                defaultValue: "",
-                oneofIndex: 0,
-                jsonName: "leadingComments",
-                options: undefined,
-                proto3Optional: false,
-              },
-              {
-                name: "trailing_comments",
-                number: 4,
-                label: 1,
-                type: 9,
-                typeName: "",
-                extendee: "",
-                defaultValue: "",
-                oneofIndex: 0,
-                jsonName: "trailingComments",
-                options: undefined,
-                proto3Optional: false,
-              },
-              {
-                name: "leading_detached_comments",
-                number: 6,
-                label: 3,
-                type: 9,
-                typeName: "",
-                extendee: "",
-                defaultValue: "",
-                oneofIndex: 0,
-                jsonName: "leadingDetachedComments",
-                options: undefined,
-                proto3Optional: false,
-              },
-            ],
-            extension: [],
-            nestedType: [],
-            enumType: [],
-            extensionRange: [],
-            oneofDecl: [],
-            options: undefined,
-            reservedRange: [],
-            reservedName: [],
-          },
-        ],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "GeneratedCodeInfo",
-        field: [
-          {
-            name: "annotation",
-            number: 1,
-            label: 3,
-            type: 11,
-            typeName: ".google.protobuf.GeneratedCodeInfo.Annotation",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "annotation",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [
-          {
-            name: "Annotation",
-            field: [
-              {
-                name: "path",
-                number: 1,
-                label: 3,
-                type: 5,
-                typeName: "",
-                extendee: "",
-                defaultValue: "",
-                oneofIndex: 0,
-                jsonName: "path",
-                options: {
-                  ctype: 0,
-                  packed: true,
-                  jstype: 0,
-                  lazy: false,
-                  deprecated: false,
-                  weak: false,
-                  uninterpretedOption: [],
-                },
-                proto3Optional: false,
-              },
-              {
-                name: "source_file",
-                number: 2,
-                label: 1,
-                type: 9,
-                typeName: "",
-                extendee: "",
-                defaultValue: "",
-                oneofIndex: 0,
-                jsonName: "sourceFile",
-                options: undefined,
-                proto3Optional: false,
-              },
-              {
-                name: "begin",
-                number: 3,
-                label: 1,
-                type: 5,
-                typeName: "",
-                extendee: "",
-                defaultValue: "",
-                oneofIndex: 0,
-                jsonName: "begin",
-                options: undefined,
-                proto3Optional: false,
-              },
-              {
-                name: "end",
-                number: 4,
-                label: 1,
-                type: 5,
-                typeName: "",
-                extendee: "",
-                defaultValue: "",
-                oneofIndex: 0,
-                jsonName: "end",
-                options: undefined,
-                proto3Optional: false,
-              },
-            ],
-            extension: [],
-            nestedType: [],
-            enumType: [],
-            extensionRange: [],
-            oneofDecl: [],
-            options: undefined,
-            reservedRange: [],
-            reservedName: [],
-          },
-        ],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-    ],
-    enumType: [],
-    service: [],
-    extension: [],
-    options: {
-      javaPackage: "com.google.protobuf",
-      javaOuterClassname: "DescriptorProtos",
-      javaMultipleFiles: false,
-      javaGenerateEqualsAndHash: false,
-      javaStringCheckUtf8: false,
-      optimizeFor: 1,
-      goPackage: "descriptor",
-      ccGenericServices: false,
-      javaGenericServices: false,
-      pyGenericServices: false,
-      phpGenericServices: false,
-      deprecated: false,
-      ccEnableArenas: false,
-      objcClassPrefix: "GPB",
-      csharpNamespace: "Google.Protobuf.Reflection",
-      swiftPrefix: "",
-      phpClassPrefix: "",
-      phpNamespace: "",
-      phpMetadataNamespace: "",
-      rubyPackage: "",
-      uninterpretedOption: [],
+        "options": undefined,
+        "reservedRange": [],
+        "reservedName": [],
+      }, {
+        "name": "Label",
+        "value": [{ "name": "LABEL_OPTIONAL", "number": 1, "options": undefined }, {
+          "name": "LABEL_REQUIRED",
+          "number": 2,
+          "options": undefined,
+        }, { "name": "LABEL_REPEATED", "number": 3, "options": undefined }],
+        "options": undefined,
+        "reservedRange": [],
+        "reservedName": [],
+      }],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "OneofDescriptorProto",
+      "field": [{
+        "name": "name",
+        "number": 1,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "name",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "EnumDescriptorProto",
+      "field": [{
+        "name": "name",
+        "number": 1,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "name",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "value",
+        "number": 2,
+        "label": 3,
+        "type": 11,
+        "typeName": ".google.protobuf.EnumValueDescriptorProto",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "value",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "options",
+        "number": 3,
+        "label": 1,
+        "type": 11,
+        "typeName": ".google.protobuf.EnumOptions",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "options",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "EnumValueDescriptorProto",
+      "field": [{
+        "name": "name",
+        "number": 1,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "name",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "number",
+        "number": 2,
+        "label": 1,
+        "type": 5,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "number",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "options",
+        "number": 3,
+        "label": 1,
+        "type": 11,
+        "typeName": ".google.protobuf.EnumValueOptions",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "options",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "ServiceDescriptorProto",
+      "field": [{
+        "name": "name",
+        "number": 1,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "name",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "method",
+        "number": 2,
+        "label": 3,
+        "type": 11,
+        "typeName": ".google.protobuf.MethodDescriptorProto",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "method",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "options",
+        "number": 3,
+        "label": 1,
+        "type": 11,
+        "typeName": ".google.protobuf.ServiceOptions",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "options",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "MethodDescriptorProto",
+      "field": [{
+        "name": "name",
+        "number": 1,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "name",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "input_type",
+        "number": 2,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "inputType",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "output_type",
+        "number": 3,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "outputType",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "options",
+        "number": 4,
+        "label": 1,
+        "type": 11,
+        "typeName": ".google.protobuf.MethodOptions",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "options",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "client_streaming",
+        "number": 5,
+        "label": 1,
+        "type": 8,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "false",
+        "oneofIndex": 0,
+        "jsonName": "clientStreaming",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "server_streaming",
+        "number": 6,
+        "label": 1,
+        "type": 8,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "false",
+        "oneofIndex": 0,
+        "jsonName": "serverStreaming",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "FileOptions",
+      "field": [{
+        "name": "java_package",
+        "number": 1,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "javaPackage",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "java_outer_classname",
+        "number": 8,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "javaOuterClassname",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "java_multiple_files",
+        "number": 10,
+        "label": 1,
+        "type": 8,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "false",
+        "oneofIndex": 0,
+        "jsonName": "javaMultipleFiles",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "java_generate_equals_and_hash",
+        "number": 20,
+        "label": 1,
+        "type": 8,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "false",
+        "oneofIndex": 0,
+        "jsonName": "javaGenerateEqualsAndHash",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "java_string_check_utf8",
+        "number": 27,
+        "label": 1,
+        "type": 8,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "false",
+        "oneofIndex": 0,
+        "jsonName": "javaStringCheckUtf8",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "optimize_for",
+        "number": 9,
+        "label": 1,
+        "type": 14,
+        "typeName": ".google.protobuf.FileOptions.OptimizeMode",
+        "extendee": "",
+        "defaultValue": "SPEED",
+        "oneofIndex": 0,
+        "jsonName": "optimizeFor",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "go_package",
+        "number": 11,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "goPackage",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "cc_generic_services",
+        "number": 16,
+        "label": 1,
+        "type": 8,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "false",
+        "oneofIndex": 0,
+        "jsonName": "ccGenericServices",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "java_generic_services",
+        "number": 17,
+        "label": 1,
+        "type": 8,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "false",
+        "oneofIndex": 0,
+        "jsonName": "javaGenericServices",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "py_generic_services",
+        "number": 18,
+        "label": 1,
+        "type": 8,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "false",
+        "oneofIndex": 0,
+        "jsonName": "pyGenericServices",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "deprecated",
+        "number": 23,
+        "label": 1,
+        "type": 8,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "false",
+        "oneofIndex": 0,
+        "jsonName": "deprecated",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "cc_enable_arenas",
+        "number": 31,
+        "label": 1,
+        "type": 8,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "false",
+        "oneofIndex": 0,
+        "jsonName": "ccEnableArenas",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "objc_class_prefix",
+        "number": 36,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "objcClassPrefix",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "csharp_namespace",
+        "number": 37,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "csharpNamespace",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "uninterpreted_option",
+        "number": 999,
+        "label": 3,
+        "type": 11,
+        "typeName": ".google.protobuf.UninterpretedOption",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "uninterpretedOption",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [{
+        "name": "OptimizeMode",
+        "value": [{ "name": "SPEED", "number": 1, "options": undefined }, {
+          "name": "CODE_SIZE",
+          "number": 2,
+          "options": undefined,
+        }, { "name": "LITE_RUNTIME", "number": 3, "options": undefined }],
+        "options": undefined,
+        "reservedRange": [],
+        "reservedName": [],
+      }],
+      "extensionRange": [{ "start": 1000, "end": 536870912, "options": undefined }],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [{ "start": 38, "end": 39 }],
+      "reservedName": [],
+    }, {
+      "name": "MessageOptions",
+      "field": [{
+        "name": "message_set_wire_format",
+        "number": 1,
+        "label": 1,
+        "type": 8,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "false",
+        "oneofIndex": 0,
+        "jsonName": "messageSetWireFormat",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "no_standard_descriptor_accessor",
+        "number": 2,
+        "label": 1,
+        "type": 8,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "false",
+        "oneofIndex": 0,
+        "jsonName": "noStandardDescriptorAccessor",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "deprecated",
+        "number": 3,
+        "label": 1,
+        "type": 8,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "false",
+        "oneofIndex": 0,
+        "jsonName": "deprecated",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "map_entry",
+        "number": 7,
+        "label": 1,
+        "type": 8,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "mapEntry",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "uninterpreted_option",
+        "number": 999,
+        "label": 3,
+        "type": 11,
+        "typeName": ".google.protobuf.UninterpretedOption",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "uninterpretedOption",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [{ "start": 1000, "end": 536870912, "options": undefined }],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "FieldOptions",
+      "field": [{
+        "name": "ctype",
+        "number": 1,
+        "label": 1,
+        "type": 14,
+        "typeName": ".google.protobuf.FieldOptions.CType",
+        "extendee": "",
+        "defaultValue": "STRING",
+        "oneofIndex": 0,
+        "jsonName": "ctype",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "packed",
+        "number": 2,
+        "label": 1,
+        "type": 8,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "packed",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "jstype",
+        "number": 6,
+        "label": 1,
+        "type": 14,
+        "typeName": ".google.protobuf.FieldOptions.JSType",
+        "extendee": "",
+        "defaultValue": "JS_NORMAL",
+        "oneofIndex": 0,
+        "jsonName": "jstype",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "lazy",
+        "number": 5,
+        "label": 1,
+        "type": 8,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "false",
+        "oneofIndex": 0,
+        "jsonName": "lazy",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "deprecated",
+        "number": 3,
+        "label": 1,
+        "type": 8,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "false",
+        "oneofIndex": 0,
+        "jsonName": "deprecated",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "weak",
+        "number": 10,
+        "label": 1,
+        "type": 8,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "false",
+        "oneofIndex": 0,
+        "jsonName": "weak",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "uninterpreted_option",
+        "number": 999,
+        "label": 3,
+        "type": 11,
+        "typeName": ".google.protobuf.UninterpretedOption",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "uninterpretedOption",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [{
+        "name": "CType",
+        "value": [{ "name": "STRING", "number": 0, "options": undefined }, {
+          "name": "CORD",
+          "number": 1,
+          "options": undefined,
+        }, { "name": "STRING_PIECE", "number": 2, "options": undefined }],
+        "options": undefined,
+        "reservedRange": [],
+        "reservedName": [],
+      }, {
+        "name": "JSType",
+        "value": [{ "name": "JS_NORMAL", "number": 0, "options": undefined }, {
+          "name": "JS_STRING",
+          "number": 1,
+          "options": undefined,
+        }, { "name": "JS_NUMBER", "number": 2, "options": undefined }],
+        "options": undefined,
+        "reservedRange": [],
+        "reservedName": [],
+      }],
+      "extensionRange": [{ "start": 1000, "end": 536870912, "options": undefined }],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "EnumOptions",
+      "field": [{
+        "name": "allow_alias",
+        "number": 2,
+        "label": 1,
+        "type": 8,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "allowAlias",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "deprecated",
+        "number": 3,
+        "label": 1,
+        "type": 8,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "false",
+        "oneofIndex": 0,
+        "jsonName": "deprecated",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "uninterpreted_option",
+        "number": 999,
+        "label": 3,
+        "type": 11,
+        "typeName": ".google.protobuf.UninterpretedOption",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "uninterpretedOption",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [{ "start": 1000, "end": 536870912, "options": undefined }],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "EnumValueOptions",
+      "field": [{
+        "name": "deprecated",
+        "number": 1,
+        "label": 1,
+        "type": 8,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "false",
+        "oneofIndex": 0,
+        "jsonName": "deprecated",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "uninterpreted_option",
+        "number": 999,
+        "label": 3,
+        "type": 11,
+        "typeName": ".google.protobuf.UninterpretedOption",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "uninterpretedOption",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [{ "start": 1000, "end": 536870912, "options": undefined }],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "ServiceOptions",
+      "field": [{
+        "name": "deprecated",
+        "number": 33,
+        "label": 1,
+        "type": 8,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "false",
+        "oneofIndex": 0,
+        "jsonName": "deprecated",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "uninterpreted_option",
+        "number": 999,
+        "label": 3,
+        "type": 11,
+        "typeName": ".google.protobuf.UninterpretedOption",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "uninterpretedOption",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [{ "start": 1000, "end": 536870912, "options": undefined }],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "MethodOptions",
+      "field": [{
+        "name": "deprecated",
+        "number": 33,
+        "label": 1,
+        "type": 8,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "false",
+        "oneofIndex": 0,
+        "jsonName": "deprecated",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "uninterpreted_option",
+        "number": 999,
+        "label": 3,
+        "type": 11,
+        "typeName": ".google.protobuf.UninterpretedOption",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "uninterpretedOption",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [{ "start": 1000, "end": 536870912, "options": undefined }],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "UninterpretedOption",
+      "field": [{
+        "name": "name",
+        "number": 2,
+        "label": 3,
+        "type": 11,
+        "typeName": ".google.protobuf.UninterpretedOption.NamePart",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "name",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "identifier_value",
+        "number": 3,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "identifierValue",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "positive_int_value",
+        "number": 4,
+        "label": 1,
+        "type": 4,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "positiveIntValue",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "negative_int_value",
+        "number": 5,
+        "label": 1,
+        "type": 3,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "negativeIntValue",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "double_value",
+        "number": 6,
+        "label": 1,
+        "type": 1,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "doubleValue",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "string_value",
+        "number": 7,
+        "label": 1,
+        "type": 12,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "stringValue",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "aggregate_value",
+        "number": 8,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "aggregateValue",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [{
+        "name": "NamePart",
+        "field": [{
+          "name": "name_part",
+          "number": 1,
+          "label": 2,
+          "type": 9,
+          "typeName": "",
+          "extendee": "",
+          "defaultValue": "",
+          "oneofIndex": 0,
+          "jsonName": "namePart",
+          "options": undefined,
+          "proto3Optional": false,
+        }, {
+          "name": "is_extension",
+          "number": 2,
+          "label": 2,
+          "type": 8,
+          "typeName": "",
+          "extendee": "",
+          "defaultValue": "",
+          "oneofIndex": 0,
+          "jsonName": "isExtension",
+          "options": undefined,
+          "proto3Optional": false,
+        }],
+        "extension": [],
+        "nestedType": [],
+        "enumType": [],
+        "extensionRange": [],
+        "oneofDecl": [],
+        "options": undefined,
+        "reservedRange": [],
+        "reservedName": [],
+      }],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "SourceCodeInfo",
+      "field": [{
+        "name": "location",
+        "number": 1,
+        "label": 3,
+        "type": 11,
+        "typeName": ".google.protobuf.SourceCodeInfo.Location",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "location",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [{
+        "name": "Location",
+        "field": [{
+          "name": "path",
+          "number": 1,
+          "label": 3,
+          "type": 5,
+          "typeName": "",
+          "extendee": "",
+          "defaultValue": "",
+          "oneofIndex": 0,
+          "jsonName": "path",
+          "options": {
+            "ctype": 0,
+            "packed": true,
+            "jstype": 0,
+            "lazy": false,
+            "deprecated": false,
+            "weak": false,
+            "uninterpretedOption": [],
+          },
+          "proto3Optional": false,
+        }, {
+          "name": "span",
+          "number": 2,
+          "label": 3,
+          "type": 5,
+          "typeName": "",
+          "extendee": "",
+          "defaultValue": "",
+          "oneofIndex": 0,
+          "jsonName": "span",
+          "options": {
+            "ctype": 0,
+            "packed": true,
+            "jstype": 0,
+            "lazy": false,
+            "deprecated": false,
+            "weak": false,
+            "uninterpretedOption": [],
+          },
+          "proto3Optional": false,
+        }, {
+          "name": "leading_comments",
+          "number": 3,
+          "label": 1,
+          "type": 9,
+          "typeName": "",
+          "extendee": "",
+          "defaultValue": "",
+          "oneofIndex": 0,
+          "jsonName": "leadingComments",
+          "options": undefined,
+          "proto3Optional": false,
+        }, {
+          "name": "trailing_comments",
+          "number": 4,
+          "label": 1,
+          "type": 9,
+          "typeName": "",
+          "extendee": "",
+          "defaultValue": "",
+          "oneofIndex": 0,
+          "jsonName": "trailingComments",
+          "options": undefined,
+          "proto3Optional": false,
+        }, {
+          "name": "leading_detached_comments",
+          "number": 6,
+          "label": 3,
+          "type": 9,
+          "typeName": "",
+          "extendee": "",
+          "defaultValue": "",
+          "oneofIndex": 0,
+          "jsonName": "leadingDetachedComments",
+          "options": undefined,
+          "proto3Optional": false,
+        }],
+        "extension": [],
+        "nestedType": [],
+        "enumType": [],
+        "extensionRange": [],
+        "oneofDecl": [],
+        "options": undefined,
+        "reservedRange": [],
+        "reservedName": [],
+      }],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "GeneratedCodeInfo",
+      "field": [{
+        "name": "annotation",
+        "number": 1,
+        "label": 3,
+        "type": 11,
+        "typeName": ".google.protobuf.GeneratedCodeInfo.Annotation",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "annotation",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [{
+        "name": "Annotation",
+        "field": [{
+          "name": "path",
+          "number": 1,
+          "label": 3,
+          "type": 5,
+          "typeName": "",
+          "extendee": "",
+          "defaultValue": "",
+          "oneofIndex": 0,
+          "jsonName": "path",
+          "options": {
+            "ctype": 0,
+            "packed": true,
+            "jstype": 0,
+            "lazy": false,
+            "deprecated": false,
+            "weak": false,
+            "uninterpretedOption": [],
+          },
+          "proto3Optional": false,
+        }, {
+          "name": "source_file",
+          "number": 2,
+          "label": 1,
+          "type": 9,
+          "typeName": "",
+          "extendee": "",
+          "defaultValue": "",
+          "oneofIndex": 0,
+          "jsonName": "sourceFile",
+          "options": undefined,
+          "proto3Optional": false,
+        }, {
+          "name": "begin",
+          "number": 3,
+          "label": 1,
+          "type": 5,
+          "typeName": "",
+          "extendee": "",
+          "defaultValue": "",
+          "oneofIndex": 0,
+          "jsonName": "begin",
+          "options": undefined,
+          "proto3Optional": false,
+        }, {
+          "name": "end",
+          "number": 4,
+          "label": 1,
+          "type": 5,
+          "typeName": "",
+          "extendee": "",
+          "defaultValue": "",
+          "oneofIndex": 0,
+          "jsonName": "end",
+          "options": undefined,
+          "proto3Optional": false,
+        }],
+        "extension": [],
+        "nestedType": [],
+        "enumType": [],
+        "extensionRange": [],
+        "oneofDecl": [],
+        "options": undefined,
+        "reservedRange": [],
+        "reservedName": [],
+      }],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }],
+    "enumType": [],
+    "service": [],
+    "extension": [],
+    "options": {
+      "javaPackage": "com.google.protobuf",
+      "javaOuterClassname": "DescriptorProtos",
+      "javaMultipleFiles": false,
+      "javaGenerateEqualsAndHash": false,
+      "javaStringCheckUtf8": false,
+      "optimizeFor": 1,
+      "goPackage": "descriptor",
+      "ccGenericServices": false,
+      "javaGenericServices": false,
+      "pyGenericServices": false,
+      "phpGenericServices": false,
+      "deprecated": false,
+      "ccEnableArenas": false,
+      "objcClassPrefix": "GPB",
+      "csharpNamespace": "Google.Protobuf.Reflection",
+      "swiftPrefix": "",
+      "phpClassPrefix": "",
+      "phpNamespace": "",
+      "phpMetadataNamespace": "",
+      "rubyPackage": "",
+      "uninterpretedOption": [],
     },
-    sourceCodeInfo: {
-      location: [
-        {
-          path: [8, 9],
-          span: [51, 0, 28],
-          leadingComments:
-            "* descriptor.proto must be optimized for speed because reflection-based\n algorithms don't work during bootstrapping.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 0],
-          span: [56, 0, 58, 1],
-          leadingComments:
-            " The protocol compiler can output a FileDescriptorSet containing the .proto\n files it parses.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 1],
-          span: [61, 0, 90, 1],
-          leadingComments: "/ Describes a complete .proto file.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 1, 2, 0],
-          span: [62, 2, 27],
-          leadingComments: "",
-          trailingComments: "/ file name, relative to root of source tree\n",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 1, 2, 1],
-          span: [63, 2, 30],
-          leadingComments: "",
-          trailingComments: '/ e.g. "foo", "foo.bar", etc.\n',
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 1, 2, 2],
-          span: [66, 2, 33],
-          leadingComments: "/ Names of files imported by this file.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 1, 2, 3],
-          span: [68, 2, 40],
-          leadingComments:
-            "/ Indexes of the public imported files in the dependency list above.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 1, 2, 4],
-          span: [71, 2, 38],
-          leadingComments:
-            "/ Indexes of the weak imported files in the dependency list.\n/ For Google-internal migration only. Do not use.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 1, 2, 5],
-          span: [74, 2, 44],
-          leadingComments: "/ All top-level definitions in this file.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 1, 2, 10],
-          span: [85, 2, 47],
-          leadingComments:
-            "/ This field contains optional information about the original source code.\n/ You may safely remove this entire field without harming runtime\n/ functionality of the descriptors -- the information is needed only by\n/ development tools.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 1, 2, 11],
-          span: [89, 2, 30],
-          leadingComments:
-            '/ The syntax of the proto file.\n/ The supported values are "proto2" and "proto3".\n',
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 2],
-          span: [93, 0, 123, 1],
-          leadingComments: "/ Describes a message type.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 2, 3, 1],
-          span: [115, 2, 118, 3],
-          leadingComments:
-            "/ Range of reserved tag numbers. Reserved tag numbers may not be used by\n/ fields or extension ranges in the same message. Reserved ranges may\n/ not overlap.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 2, 3, 1, 2, 0],
-          span: [116, 4, 29],
-          leadingComments: "",
-          trailingComments: "/ Inclusive.\n",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 2, 3, 1, 2, 1],
-          span: [117, 4, 27],
-          leadingComments: "",
-          trailingComments: "/ Exclusive.\n",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 2, 2, 9],
-          span: [122, 2, 37],
-          leadingComments:
-            "/ Reserved field names, which may not be used by fields in the same message.\n/ A given name may only be reserved once.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 3],
-          span: [126, 0, 201, 1],
-          leadingComments: "/ Describes a field within a message.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 3, 4, 0, 2, 0],
-          span: [130, 4, 28],
-          leadingComments:
-            "/ 0 is reserved for errors.\n/ Order is weird for historical reasons.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 3, 4, 0, 2, 2],
-          span: [134, 4, 28],
-          leadingComments:
-            "/ Not ZigZag encoded.  Negative numbers take 10 bytes.  Use TYPE_SINT64 if\n/ negative values are likely.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 3, 4, 0, 2, 4],
-          span: [138, 4, 28],
-          leadingComments:
-            "/ Not ZigZag encoded.  Negative numbers take 10 bytes.  Use TYPE_SINT32 if\n/ negative values are likely.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 3, 4, 0, 2, 9],
-          span: [143, 4, 29],
-          leadingComments: "",
-          trailingComments: "/ Tag-delimited aggregate.\n",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 3, 4, 0, 2, 10],
-          span: [144, 4, 29],
-          leadingComments: "",
-          trailingComments: "/ Length-delimited aggregate.\n",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 3, 4, 0, 2, 11],
-          span: [147, 4, 29],
-          leadingComments: "/ New in version 2.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 3, 4, 0, 2, 16],
-          span: [152, 4, 29],
-          leadingComments: "",
-          trailingComments: "/ Uses ZigZag encoding.\n",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 3, 4, 0, 2, 17],
-          span: [153, 4, 29],
-          leadingComments: "",
-          trailingComments: "/ Uses ZigZag encoding.\n",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 3, 4, 1, 2, 0],
-          span: [158, 4, 28],
-          leadingComments: "/ 0 is reserved for errors\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 3, 4, 1, 2, 2],
-          span: [160, 4, 28],
-          leadingComments: "",
-          trailingComments: "/ TODO(sanjay): Should we add LABEL_MAP?\n",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 3, 2, 3],
-          span: [170, 2, 25],
-          leadingComments:
-            "/ If type_name is set, this need not be set.  If both this and type_name\n/ are set, this must be one of TYPE_ENUM, TYPE_MESSAGE or TYPE_GROUP.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 3, 2, 4],
-          span: [177, 2, 32],
-          leadingComments:
-            "/ For message and enum types, this is the name of the type.  If the name\n/ starts with a '.', it is fully-qualified.  Otherwise, C++-like scoping\n/ rules are used to find the type (i.e. first the nested types within this\n/ message are searched, then within the parent, on up to the root\n/ namespace).\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 3, 2, 5],
-          span: [181, 2, 31],
-          leadingComments:
-            "/ For extensions, this is the name of the type being extended.  It is\n/ resolved in the same manner as type_name.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 3, 2, 6],
-          span: [188, 2, 36],
-          leadingComments:
-            '/ For numeric types, contains the original text representation of the value.\n/ For booleans, "true" or "false".\n/ For strings, contains the default text contents (not escaped in any way).\n/ For bytes, contains the C escaped value.  All bytes >= 128 are escaped.\n/ TODO(kenton):  Base-64 encode?\n',
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 3, 2, 7],
-          span: [192, 2, 33],
-          leadingComments:
-            "/ If set, gives the index of a oneof in the containing type's oneof_decl\n/ list.  This field is a member of that oneof.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 3, 2, 8],
-          span: [198, 2, 33],
-          leadingComments:
-            "/ JSON name of this field. The value is set by protocol compiler. If the\n/ user has set a \"json_name\" option on this field, that option's value\n/ will be used. Otherwise, it's deduced from the field's name by converting\n/ it to camelCase.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 4],
-          span: [204, 0, 206, 1],
-          leadingComments: "/ Describes a oneof.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 5],
-          span: [209, 0, 215, 1],
-          leadingComments: "/ Describes an enum type.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 6],
-          span: [218, 0, 223, 1],
-          leadingComments: "/ Describes a value within an enum.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 7],
-          span: [226, 0, 231, 1],
-          leadingComments: "/ Describes a service.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 8],
-          span: [234, 0, 248, 1],
-          leadingComments: "/ Describes a method of a service.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 8, 2, 1],
-          span: [239, 2, 33],
-          leadingComments:
-            "/ Input and output type names.  These are resolved in the same way as\n/ FieldDescriptorProto.type_name, but must refer to a message type.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 8, 2, 4],
-          span: [245, 2, 53],
-          leadingComments:
-            "/ Identifies if client streams multiple client messages\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 8, 2, 5],
-          span: [247, 2, 53],
-          leadingComments:
-            "/ Identifies if server streams multiple server messages\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 9, 2, 0],
-          span: [290, 2, 35],
-          leadingComments:
-            "/ Sets the Java package where classes generated from this .proto will be\n/ placed.  By default, the proto package is used, but this is often\n/ inappropriate because proto packages do not normally start with backwards\n/ domain names.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 9, 2, 1],
-          span: [298, 2, 43],
-          leadingComments:
-            '/ If set, all the classes from the .proto file are wrapped in a single\n/ outer class with the given name.  This applies to both Proto1\n/ (equivalent to the old "--one_java_file" option) and Proto2 (where\n/ a .proto always translates to a single class, but you may want to\n/ explicitly choose the class name).\n',
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 9, 2, 2],
-          span: [306, 2, 57],
-          leadingComments:
-            "/ If set true, then the Java code generator will generate a separate .java\n/ file for each top-level message, enum, and service defined in the .proto\n/ file.  Thus, these types will *not* be nested inside the outer class\n/ named by java_outer_classname.  However, the outer class will still be\n/ generated to contain the file's getDescriptor() method as well as any\n/ top-level extensions defined in the file.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 9, 2, 3],
-          span: [320, 2, 67],
-          leadingComments:
-            "/ If set true, then the Java code generator will generate equals() and\n/ hashCode() methods for all messages defined in the .proto file.\n/ This increases generated code size, potentially substantially for large\n/ protos, which may harm a memory-constrained application.\n/ - In the full runtime this is a speed optimization, as the\n/ AbstractMessage base class includes reflection-based implementations of\n/ these methods.\n/ - In the lite runtime, setting this option changes the semantics of\n/ equals() and hashCode() to more closely match those of the full runtime;\n/ the generated methods compute their results based on field values rather\n/ than object identity. (Implementations should not assume that hashcodes\n/ will be consistent across runtimes or versions of the protocol compiler.)\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 9, 2, 4],
-          span: [328, 2, 60],
-          leadingComments:
-            "/ If set true, then the Java2 code generator will generate code that\n/ throws an exception whenever an attempt is made to assign a non-UTF-8\n/ byte sequence to a string field.\n/ Message reflection will do the same.\n/ However, an extension field still accepts non-UTF-8 byte sequences.\n/ This option has no effect on when used with the lite runtime.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 9, 4, 0],
-          span: [332, 2, 337, 3],
-          leadingComments:
-            "/ Generated classes can be optimized for speed or code size.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 9, 4, 0, 2, 0],
-          span: [333, 4, 14],
-          leadingComments: "",
-          trailingComments:
-            "/ Generate complete code for parsing, serialization,\n",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 9, 4, 0, 2, 1],
-          span: [335, 4, 18],
-          leadingComments: "/ etc.\n",
-          trailingComments: "/ Use ReflectionOps to implement these methods.\n",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 9, 4, 0, 2, 2],
-          span: [336, 4, 21],
-          leadingComments: "",
-          trailingComments:
-            "/ Generate code using MessageLite and the lite runtime.\n",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 9, 2, 6],
-          span: [345, 2, 34],
-          leadingComments:
-            "/ Sets the Go package where structs generated from this .proto will be\n/ placed. If omitted, the Go package will be derived from the following:\n/   - The basename of the package import path, if provided.\n/   - Otherwise, the package statement in the .proto file, if present.\n/   - Otherwise, the basename of the .proto file, without extension.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 9, 2, 7],
-          span: [359, 2, 57],
-          leadingComments:
-            '/ Should generic services be generated in each language?  "Generic" services\n/ are not specific to any particular RPC system.  They are generated by the\n/ main code generators in each language (without additional plugins).\n/ Generic services were the only kind of service generation supported by\n/ early versions of google.protobuf.\n\n/ Generic services are now considered deprecated in favor of using plugins\n/ that generate code specific to your particular RPC system.  Therefore,\n/ these default to false.  Old code which depends on generic services should\n/ explicitly set them to true.\n',
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 9, 2, 10],
-          span: [367, 2, 48],
-          leadingComments:
-            "/ Is this file deprecated?\n/ Depending on the target platform, this can emit Deprecated annotations\n/ for everything in the file, or it will be completely ignored; in the very\n/ least, this is a formalization for deprecating files.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 9, 2, 11],
-          span: [371, 2, 54],
-          leadingComments:
-            "/ Enables the use of arenas for the proto messages in this file. This applies\n/ only to generated classes for C++.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 9, 2, 12],
-          span: [376, 2, 41],
-          leadingComments:
-            "/ Sets the objective c class prefix which is prepended to all objective c\n/ generated classes from this .proto. There is no default.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 9, 2, 13],
-          span: [379, 2, 40],
-          leadingComments:
-            "/ Namespace for generated classes; defaults to the package.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 9, 2, 14],
-          span: [382, 2, 58],
-          leadingComments:
-            "/ The parser stores options it doesn't recognize here. See above.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 9, 5],
-          span: [385, 2, 25],
-          leadingComments:
-            "/ Clients can define custom options in extensions of this message. See above.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 10, 2, 0],
-          span: [409, 2, 60],
-          leadingComments:
-            "/ Set true to use the old proto1 MessageSet wire format for extensions.\n/ This is provided for backwards-compatibility with the MessageSet wire\n/ format.  You should not use this for any other reason:  It's less\n/ efficient, has fewer features, and is more complicated.\n\n/ The message must be defined exactly as follows:\n/   message Foo {\n/     option message_set_wire_format = true;\n/     extensions 4 to max;\n/   }\n/ Note that the message cannot have any defined fields; MessageSets only\n/ have extensions.\n\n/ All extensions of your type must be singular messages; e.g. they cannot\n/ be int32s, enums, or repeated messages.\n\n/ Because this is an option, the above two restrictions are not enforced by\n/ the protocol compiler.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 10, 2, 1],
-          span: [414, 2, 68],
-          leadingComments:
-            '/ Disables the generation of the standard "descriptor()" accessor, which can\n/ conflict with a field of the same name.  This is meant to make migration\n/ from proto1 easier; new code should avoid fields named "descriptor".\n',
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 10, 2, 2],
-          span: [420, 2, 47],
-          leadingComments:
-            "/ Is this message deprecated?\n/ Depending on the target platform, this can emit Deprecated annotations\n/ for the message, or it will be completely ignored; in the very least,\n/ this is a formalization for deprecating messages.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 10, 2, 3],
-          span: [443, 2, 30],
-          leadingComments:
-            "/ Whether the message is an automatically generated map entry type for the\n/ maps field.\n\n/ For maps fields:\n/     map<KeyType, ValueType> map_field = 1;\n/ The parsed descriptor looks like:\n/     message MapFieldEntry {\n/         option map_entry = true;\n/         optional KeyType key = 1;\n/         optional ValueType value = 2;\n/     }\n/     repeated MapFieldEntry map_field = 1;\n\n/ Implementations may choose not to generate the map_entry=true message, but\n/ use a native map in the target language to hold the keys and values.\n/ The reflection APIs in such implementions still need to work as\n/ if the field is a repeated message field.\n\n/ NOTE: Do not set the option in .proto files. Always use the maps syntax\n/ instead. The option should only be implicitly set by the proto compiler\n/ parser.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 10, 2, 4],
-          span: [446, 2, 58],
-          leadingComments:
-            "/ The parser stores options it doesn't recognize here. See above.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 10, 5],
-          span: [449, 2, 25],
-          leadingComments:
-            "/ Clients can define custom options in extensions of this message. See above.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 11, 2, 0],
-          span: [457, 2, 46],
-          leadingComments:
-            "/ The ctype option instructs the C++ code generator to use a different\n/ representation of the field than it normally would.  See the specific\n/ options below.  This option is not yet implemented in the open source\n/ release -- sorry, we'll try to include it in a future version!\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 11, 4, 0, 2, 0],
-          span: [460, 4, 15],
-          leadingComments: "/ Default mode.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 11, 2, 1],
-          span: [471, 2, 27],
-          leadingComments:
-            "/ The packed option can be enabled for repeated primitive fields to enable\n/ a more efficient representation on the wire. Rather than repeatedly\n/ writing the tag and type for each element, the entire array is encoded as\n/ a single length-delimited blob. In proto3, only explicit setting it to\n/ false will avoid using packed encoding.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 11, 2, 2],
-          span: [483, 2, 51],
-          leadingComments:
-            '/ The jstype option determines the JavaScript type used for values of the\n/ field.  The option is permitted only for 64 bit integral and fixed types\n/ (int64, uint64, sint64, fixed64, sfixed64).  By default these types are\n/ represented as JavaScript strings.  This avoids loss of precision that can\n/ happen when a large value is converted to a floating point JavaScript\n/ numbers.  Specifying JS_NUMBER for the jstype causes the generated\n/ JavaScript code to use the JavaScript "number" type instead of strings.\n/ This option is an enum to permit additional types to be added,\n/ e.g. goog.math.Integer.\n',
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 11, 4, 1, 2, 0],
-          span: [486, 4, 18],
-          leadingComments: "/ Use the default type.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 11, 4, 1, 2, 1],
-          span: [489, 4, 18],
-          leadingComments: "/ Use JavaScript strings.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 11, 4, 1, 2, 2],
-          span: [492, 4, 18],
-          leadingComments: "/ Use JavaScript numbers.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 11, 2, 3],
-          span: [523, 2, 41],
-          leadingComments:
-            "/ Should this field be parsed lazily?  Lazy applies only to message-type\n/ fields.  It means that when the outer message is initially parsed, the\n/ inner message's contents will not be parsed but instead stored in encoded\n/ form.  The inner message will actually be parsed when it is first accessed.\n\n/ This is only a hint.  Implementations are free to choose whether to use\n/ eager or lazy parsing regardless of the value of this option.  However,\n/ setting this option true suggests that the protocol author believes that\n/ using lazy parsing on this field is worth the additional bookkeeping\n/ overhead typically needed to implement it.\n\n/ This option does not affect the public interface of any generated code;\n/ all method signatures remain the same.  Furthermore, thread-safety of the\n/ interface is not affected by this option; const methods remain safe to\n/ call from multiple threads concurrently, while non-const methods continue\n/ to require exclusive access.\n\n\n/ Note that implementations may choose not to check required fields within\n/ a lazy sub-message.  That is, calling IsInitialized() on the outher message\n/ may return true even if the inner message has missing required fields.\n/ This is necessary because otherwise the inner message would have to be\n/ parsed in order to perform the check, defeating the purpose of lazy\n/ parsing.  An implementation which chooses not to check required fields\n/ must be consistent about it.  That is, for any particular sub-message, the\n/ implementation must either *always* check its required fields, or *never*\n/ check its required fields, regardless of whether or not the message has\n/ been parsed.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 11, 2, 4],
-          span: [529, 2, 47],
-          leadingComments:
-            "/ Is this field deprecated?\n/ Depending on the target platform, this can emit Deprecated annotations\n/ for accessors, or it will be completely ignored; in the very least, this\n/ is a formalization for deprecating fields.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 11, 2, 5],
-          span: [532, 2, 42],
-          leadingComments:
-            "/ For Google-internal migration only. Do not use.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 11, 2, 6],
-          span: [536, 2, 58],
-          leadingComments:
-            "/ The parser stores options it doesn't recognize here. See above.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 11, 5],
-          span: [539, 2, 25],
-          leadingComments:
-            "/ Clients can define custom options in extensions of this message. See above.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 12, 2, 0],
-          span: [546, 2, 32],
-          leadingComments:
-            "/ Set this option to true to allow mapping different tag names to the same\n/ value.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 12, 2, 1],
-          span: [552, 2, 47],
-          leadingComments:
-            "/ Is this enum deprecated?\n/ Depending on the target platform, this can emit Deprecated annotations\n/ for the enum, or it will be completely ignored; in the very least, this\n/ is a formalization for deprecating enums.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 12, 2, 2],
-          span: [555, 2, 58],
-          leadingComments:
-            "/ The parser stores options it doesn't recognize here. See above.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 12, 5],
-          span: [558, 2, 25],
-          leadingComments:
-            "/ Clients can define custom options in extensions of this message. See above.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 13, 2, 0],
-          span: [566, 2, 47],
-          leadingComments:
-            "/ Is this enum value deprecated?\n/ Depending on the target platform, this can emit Deprecated annotations\n/ for the enum value, or it will be completely ignored; in the very least,\n/ this is a formalization for deprecating enum values.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 13, 2, 1],
-          span: [569, 2, 58],
-          leadingComments:
-            "/ The parser stores options it doesn't recognize here. See above.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 13, 5],
-          span: [572, 2, 25],
-          leadingComments:
-            "/ Clients can define custom options in extensions of this message. See above.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 14, 2, 0],
-          span: [586, 2, 48],
-          leadingComments:
-            "/ Is this service deprecated?\n/ Depending on the target platform, this can emit Deprecated annotations\n/ for the service, or it will be completely ignored; in the very least,\n/ this is a formalization for deprecating services.\n",
-          trailingComments: "",
-          leadingDetachedComments: [
-            "/ Note:  Field numbers 1 through 32 are reserved for Google's internal RPC\n/   framework.  We apologize for hoarding these numbers to ourselves, but\n/   we were already using them long before we decided to release Protocol\n/   Buffers.\n",
-          ],
-        },
-        {
-          path: [4, 14, 2, 1],
-          span: [589, 2, 58],
-          leadingComments:
-            "/ The parser stores options it doesn't recognize here. See above.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 14, 5],
-          span: [592, 2, 25],
-          leadingComments:
-            "/ Clients can define custom options in extensions of this message. See above.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 15, 2, 0],
-          span: [606, 2, 48],
-          leadingComments:
-            "/ Is this method deprecated?\n/ Depending on the target platform, this can emit Deprecated annotations\n/ for the method, or it will be completely ignored; in the very least,\n/ this is a formalization for deprecating methods.\n",
-          trailingComments: "",
-          leadingDetachedComments: [
-            "/ Note:  Field numbers 1 through 32 are reserved for Google's internal RPC\n/   framework.  We apologize for hoarding these numbers to ourselves, but\n/   we were already using them long before we decided to release Protocol\n/   Buffers.\n",
-          ],
-        },
-        {
-          path: [4, 15, 2, 1],
-          span: [609, 2, 58],
-          leadingComments:
-            "/ The parser stores options it doesn't recognize here. See above.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 15, 5],
-          span: [612, 2, 25],
-          leadingComments:
-            "/ Clients can define custom options in extensions of this message. See above.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 16],
-          span: [622, 0, 642, 1],
-          leadingComments:
-            "/ A message representing a option the parser does not recognize. This only\n/ appears in options protos created by the compiler::Parser class.\n/ DescriptorPool resolves these when building Descriptor objects. Therefore,\n/ options protos in descriptor objects (e.g. returned by Descriptor::options(),\n/ or produced by Descriptor::CopyTo()) will never have UninterpretedOptions\n/ in them.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 16, 3, 0],
-          span: [628, 2, 631, 3],
-          leadingComments:
-            '/ The name of the uninterpreted option.  Each string represents a segment in\n/ a dot-separated name.  is_extension is true iff a segment represents an\n/ extension (denoted with parentheses in options specs in .proto files).\n/ E.g.,{ ["foo", false], ["bar.baz", true], ["qux", false] } represents\n/ "foo.(bar.baz).qux".\n',
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 16, 2, 1],
-          span: [636, 2, 39],
-          leadingComments:
-            "/ The value of the uninterpreted option, in whatever type the tokenizer\n/ identified it as during parsing. Exactly one of these should be set.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 17],
-          span: [649, 0, 778, 1],
-          leadingComments:
-            "/ Encapsulates information about the original source file from which a\n/ FileDescriptorProto was generated.\n",
-          trailingComments: "",
-          leadingDetachedComments: [
-            "/ ===================================================================\n/ Optional source code info\n",
-          ],
-        },
-        {
-          path: [4, 17, 2, 0],
-          span: [693, 2, 33],
-          leadingComments:
-            '/ A Location identifies a piece of source code in a .proto file which\n/ corresponds to a particular definition.  This information is intended\n/ to be useful to IDEs, code indexers, documentation generators, and similar\n/ tools.\n\n/ For example, say we have a file like:\n/   message Foo {\n/     optional string foo = 1;\n/   }\n/ Let\'s look at just the field definition:\n/   optional string foo = 1;\n/   ^       ^^     ^^  ^  ^^^\n/   a       bc     de  f  ghi\n/ We have the following locations:\n/   span   path               represents\n/   [a,i)  [ 4, 0, 2, 0 ]     The whole field definition.\n/   [a,b)  [ 4, 0, 2, 0, 4 ]  The label (optional).\n/   [c,d)  [ 4, 0, 2, 0, 5 ]  The type (string).\n/   [e,f)  [ 4, 0, 2, 0, 1 ]  The name (foo).\n/   [g,h)  [ 4, 0, 2, 0, 3 ]  The number (1).\n\n/ Notes:\n/ - A location may refer to a repeated field itself (i.e. not to any\n/   particular index within it).  This is used whenever a set of elements are\n/   logically enclosed in a single code segment.  For example, an entire\n/   extend block (possibly containing multiple extension definitions) will\n/   have an outer location whose path refers to the "extensions" repeated\n/   field without an index.\n/ - Multiple locations may have the same path.  This happens when a single\n/   logical declaration is spread out across multiple places.  The most\n/   obvious example is the "extend" block again -- there may be multiple\n/   extend blocks in the same scope, each of which will have the same path.\n/ - A location\'s span is not always a subset of its parent\'s span.  For\n/   example, the "extendee" of an extension declaration appears at the\n/   beginning of the "extend" block and is shared by all extensions within\n/   the block.\n/ - Just because a location\'s span is a subset of some other location\'s span\n/   does not mean that it is a descendent.  For example, a "group" defines\n/   both a type and a field in a single declaration.  Thus, the locations\n/   corresponding to the type and field and their components will overlap.\n/ - Code which tries to interpret locations should probably be designed to\n/   ignore those that it doesn\'t understand, as more types of locations could\n/   be recorded in the future.\n',
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 17, 3, 0, 2, 0],
-          span: [718, 4, 42],
-          leadingComments:
-            "/ Identifies which part of the FileDescriptorProto was defined at this\n/ location.\n\n/ Each element is a field number or an index.  They form a path from\n/ the root FileDescriptorProto to the place where the definition.  For\n/ example, this path:\n/   [ 4, 3, 2, 7, 1 ]\n/ refers to:\n/   file.message_type(3)  /// 4, 3\n/       .field(7)         /// 2, 7\n/       .name()           /// 1\n/ This is because FileDescriptorProto.message_type has field number 4:\n/   repeated DescriptorProto message_type = 4;\n/ and DescriptorProto.field has field number 2:\n/   repeated FieldDescriptorProto field = 2;\n/ and FieldDescriptorProto.name has field number 1:\n/   optional string name = 1;\n\n/ Thus, the above path gives the location of a field name.  If we removed\n/ the last element:\n/   [ 4, 3, 2, 7 ]\n/ this path refers to the whole field declaration (from the beginning\n/ of the label to the terminating semicolon).\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 17, 3, 0, 2, 1],
-          span: [725, 4, 42],
-          leadingComments:
-            "/ Always has exactly three or four elements: start line, start column,\n/ end line (optional, otherwise assumed same as start line), end column.\n/ These are packed into a single field for efficiency.  Note that line\n/ and column numbers are zero-based -- typically you will want to add\n/ 1 to each before displaying to a user.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 17, 3, 0, 2, 2],
-          span: [774, 4, 41],
-          leadingComments:
-            "/ If this SourceCodeInfo represents a complete declaration, these are any\n/ comments appearing before and after the declaration which appear to be\n/ attached to the declaration.\n\n/ A series of line comments appearing on consecutive lines, with no other\n/ tokens appearing on those lines, will be treated as a single comment.\n\n/ leading_detached_comments will keep paragraphs of comments that appear\n/ before (but not connected to) the current element. Each paragraph,\n/ separated by empty lines, will be one comment element in the repeated\n/ field.\n\n/ Only the comment content is provided; comment markers (e.g. //) are\n/ stripped out.  For block comments, leading whitespace and an asterisk\n/ will be stripped from the beginning of each line other than the first.\n/ Newlines are included in the output.\n\n/ Examples:\n\n/   optional int32 foo = 1;  /// Comment attached to foo.\n/   /// Comment attached to bar.\n/   optional int32 bar = 2;\n\n/   optional string baz = 3;\n/   /// Comment attached to baz.\n/   /// Another line attached to baz.\n\n/   /// Comment attached to qux.\n/   //\n/   /// Another line attached to qux.\n/   optional double qux = 4;\n\n/   /// Detached comment for corge. This is not leading or trailing comments\n/   /// to qux or corge because there are blank lines separating it from\n/   /// both.\n\n/   /// Detached comment for corge paragraph 2.\n\n/   optional string corge = 5;\n/   /* Block comment attached\n/    * to corge.  Leading asterisks\n/    * will be removed. */\n/   /* Block comment attached to\n/    * grault. */\n/   optional int32 grault = 6;\n\n/   /// ignored detached comments.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 18],
-          span: [783, 0, 804, 1],
-          leadingComments:
-            "/ Describes the relationship between generated code and its original source\n/ file. A GeneratedCodeInfo message is associated with only one generated\n/ source file, but may contain references to different source .proto files.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 18, 2, 0],
-          span: [786, 2, 37],
-          leadingComments:
-            "/ An Annotation connects some span of text in generated code to an element\n/ of its generating .proto file.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 18, 3, 0, 2, 0],
-          span: [790, 4, 42],
-          leadingComments:
-            "/ Identifies the element in the original source .proto file. This field\n/ is formatted the same as SourceCodeInfo.Location.path.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 18, 3, 0, 2, 1],
-          span: [793, 4, 36],
-          leadingComments:
-            "/ Identifies the filesystem path to the original source .proto.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 18, 3, 0, 2, 2],
-          span: [797, 4, 29],
-          leadingComments:
-            "/ Identifies the starting offset in bytes in the generated code\n/ that relates to the identified object.\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-        {
-          path: [4, 18, 3, 0, 2, 3],
-          span: [802, 4, 27],
-          leadingComments:
-            "/ Identifies the ending offset in bytes in the generated code that\n/ relates to the identified offset. The end offset should be one past\n/ the last relevant byte (so the length of the text = end - begin).\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
-      ],
+    "sourceCodeInfo": {
+      "location": [{
+        "path": [8, 9],
+        "span": [51, 0, 28],
+        "leadingComments":
+          "* descriptor.proto must be optimized for speed because reflection-based\n algorithms don't work during bootstrapping.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 0],
+        "span": [56, 0, 58, 1],
+        "leadingComments":
+          " The protocol compiler can output a FileDescriptorSet containing the .proto\n files it parses.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 1],
+        "span": [61, 0, 90, 1],
+        "leadingComments": "/ Describes a complete .proto file.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 1, 2, 0],
+        "span": [62, 2, 27],
+        "leadingComments": "",
+        "trailingComments": "/ file name, relative to root of source tree\n",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 1, 2, 1],
+        "span": [63, 2, 30],
+        "leadingComments": "",
+        "trailingComments": '/ e.g. "foo", "foo.bar", etc.\n',
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 1, 2, 2],
+        "span": [66, 2, 33],
+        "leadingComments": "/ Names of files imported by this file.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 1, 2, 3],
+        "span": [68, 2, 40],
+        "leadingComments": "/ Indexes of the public imported files in the dependency list above.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 1, 2, 4],
+        "span": [71, 2, 38],
+        "leadingComments":
+          "/ Indexes of the weak imported files in the dependency list.\n/ For Google-internal migration only. Do not use.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 1, 2, 5],
+        "span": [74, 2, 44],
+        "leadingComments": "/ All top-level definitions in this file.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 1, 2, 10],
+        "span": [85, 2, 47],
+        "leadingComments":
+          "/ This field contains optional information about the original source code.\n/ You may safely remove this entire field without harming runtime\n/ functionality of the descriptors -- the information is needed only by\n/ development tools.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 1, 2, 11],
+        "span": [89, 2, 30],
+        "leadingComments": '/ The syntax of the proto file.\n/ The supported values are "proto2" and "proto3".\n',
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 2],
+        "span": [93, 0, 123, 1],
+        "leadingComments": "/ Describes a message type.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 2, 3, 1],
+        "span": [115, 2, 118, 3],
+        "leadingComments":
+          "/ Range of reserved tag numbers. Reserved tag numbers may not be used by\n/ fields or extension ranges in the same message. Reserved ranges may\n/ not overlap.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 2, 3, 1, 2, 0],
+        "span": [116, 4, 29],
+        "leadingComments": "",
+        "trailingComments": "/ Inclusive.\n",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 2, 3, 1, 2, 1],
+        "span": [117, 4, 27],
+        "leadingComments": "",
+        "trailingComments": "/ Exclusive.\n",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 2, 2, 9],
+        "span": [122, 2, 37],
+        "leadingComments":
+          "/ Reserved field names, which may not be used by fields in the same message.\n/ A given name may only be reserved once.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 3],
+        "span": [126, 0, 201, 1],
+        "leadingComments": "/ Describes a field within a message.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 3, 4, 0, 2, 0],
+        "span": [130, 4, 28],
+        "leadingComments": "/ 0 is reserved for errors.\n/ Order is weird for historical reasons.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 3, 4, 0, 2, 2],
+        "span": [134, 4, 28],
+        "leadingComments":
+          "/ Not ZigZag encoded.  Negative numbers take 10 bytes.  Use TYPE_SINT64 if\n/ negative values are likely.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 3, 4, 0, 2, 4],
+        "span": [138, 4, 28],
+        "leadingComments":
+          "/ Not ZigZag encoded.  Negative numbers take 10 bytes.  Use TYPE_SINT32 if\n/ negative values are likely.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 3, 4, 0, 2, 9],
+        "span": [143, 4, 29],
+        "leadingComments": "",
+        "trailingComments": "/ Tag-delimited aggregate.\n",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 3, 4, 0, 2, 10],
+        "span": [144, 4, 29],
+        "leadingComments": "",
+        "trailingComments": "/ Length-delimited aggregate.\n",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 3, 4, 0, 2, 11],
+        "span": [147, 4, 29],
+        "leadingComments": "/ New in version 2.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 3, 4, 0, 2, 16],
+        "span": [152, 4, 29],
+        "leadingComments": "",
+        "trailingComments": "/ Uses ZigZag encoding.\n",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 3, 4, 0, 2, 17],
+        "span": [153, 4, 29],
+        "leadingComments": "",
+        "trailingComments": "/ Uses ZigZag encoding.\n",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 3, 4, 1, 2, 0],
+        "span": [158, 4, 28],
+        "leadingComments": "/ 0 is reserved for errors\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 3, 4, 1, 2, 2],
+        "span": [160, 4, 28],
+        "leadingComments": "",
+        "trailingComments": "/ TODO(sanjay): Should we add LABEL_MAP?\n",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 3, 2, 3],
+        "span": [170, 2, 25],
+        "leadingComments":
+          "/ If type_name is set, this need not be set.  If both this and type_name\n/ are set, this must be one of TYPE_ENUM, TYPE_MESSAGE or TYPE_GROUP.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 3, 2, 4],
+        "span": [177, 2, 32],
+        "leadingComments":
+          "/ For message and enum types, this is the name of the type.  If the name\n/ starts with a '.', it is fully-qualified.  Otherwise, C++-like scoping\n/ rules are used to find the type (i.e. first the nested types within this\n/ message are searched, then within the parent, on up to the root\n/ namespace).\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 3, 2, 5],
+        "span": [181, 2, 31],
+        "leadingComments":
+          "/ For extensions, this is the name of the type being extended.  It is\n/ resolved in the same manner as type_name.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 3, 2, 6],
+        "span": [188, 2, 36],
+        "leadingComments":
+          '/ For numeric types, contains the original text representation of the value.\n/ For booleans, "true" or "false".\n/ For strings, contains the default text contents (not escaped in any way).\n/ For bytes, contains the C escaped value.  All bytes >= 128 are escaped.\n/ TODO(kenton):  Base-64 encode?\n',
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 3, 2, 7],
+        "span": [192, 2, 33],
+        "leadingComments":
+          "/ If set, gives the index of a oneof in the containing type's oneof_decl\n/ list.  This field is a member of that oneof.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 3, 2, 8],
+        "span": [198, 2, 33],
+        "leadingComments":
+          "/ JSON name of this field. The value is set by protocol compiler. If the\n/ user has set a \"json_name\" option on this field, that option's value\n/ will be used. Otherwise, it's deduced from the field's name by converting\n/ it to camelCase.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 4],
+        "span": [204, 0, 206, 1],
+        "leadingComments": "/ Describes a oneof.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 5],
+        "span": [209, 0, 215, 1],
+        "leadingComments": "/ Describes an enum type.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 6],
+        "span": [218, 0, 223, 1],
+        "leadingComments": "/ Describes a value within an enum.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 7],
+        "span": [226, 0, 231, 1],
+        "leadingComments": "/ Describes a service.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 8],
+        "span": [234, 0, 248, 1],
+        "leadingComments": "/ Describes a method of a service.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 8, 2, 1],
+        "span": [239, 2, 33],
+        "leadingComments":
+          "/ Input and output type names.  These are resolved in the same way as\n/ FieldDescriptorProto.type_name, but must refer to a message type.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 8, 2, 4],
+        "span": [245, 2, 53],
+        "leadingComments": "/ Identifies if client streams multiple client messages\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 8, 2, 5],
+        "span": [247, 2, 53],
+        "leadingComments": "/ Identifies if server streams multiple server messages\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 9, 2, 0],
+        "span": [290, 2, 35],
+        "leadingComments":
+          "/ Sets the Java package where classes generated from this .proto will be\n/ placed.  By default, the proto package is used, but this is often\n/ inappropriate because proto packages do not normally start with backwards\n/ domain names.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 9, 2, 1],
+        "span": [298, 2, 43],
+        "leadingComments":
+          '/ If set, all the classes from the .proto file are wrapped in a single\n/ outer class with the given name.  This applies to both Proto1\n/ (equivalent to the old "--one_java_file" option) and Proto2 (where\n/ a .proto always translates to a single class, but you may want to\n/ explicitly choose the class name).\n',
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 9, 2, 2],
+        "span": [306, 2, 57],
+        "leadingComments":
+          "/ If set true, then the Java code generator will generate a separate .java\n/ file for each top-level message, enum, and service defined in the .proto\n/ file.  Thus, these types will *not* be nested inside the outer class\n/ named by java_outer_classname.  However, the outer class will still be\n/ generated to contain the file's getDescriptor() method as well as any\n/ top-level extensions defined in the file.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 9, 2, 3],
+        "span": [320, 2, 67],
+        "leadingComments":
+          "/ If set true, then the Java code generator will generate equals() and\n/ hashCode() methods for all messages defined in the .proto file.\n/ This increases generated code size, potentially substantially for large\n/ protos, which may harm a memory-constrained application.\n/ - In the full runtime this is a speed optimization, as the\n/ AbstractMessage base class includes reflection-based implementations of\n/ these methods.\n/ - In the lite runtime, setting this option changes the semantics of\n/ equals() and hashCode() to more closely match those of the full runtime;\n/ the generated methods compute their results based on field values rather\n/ than object identity. (Implementations should not assume that hashcodes\n/ will be consistent across runtimes or versions of the protocol compiler.)\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 9, 2, 4],
+        "span": [328, 2, 60],
+        "leadingComments":
+          "/ If set true, then the Java2 code generator will generate code that\n/ throws an exception whenever an attempt is made to assign a non-UTF-8\n/ byte sequence to a string field.\n/ Message reflection will do the same.\n/ However, an extension field still accepts non-UTF-8 byte sequences.\n/ This option has no effect on when used with the lite runtime.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 9, 4, 0],
+        "span": [332, 2, 337, 3],
+        "leadingComments": "/ Generated classes can be optimized for speed or code size.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 9, 4, 0, 2, 0],
+        "span": [333, 4, 14],
+        "leadingComments": "",
+        "trailingComments": "/ Generate complete code for parsing, serialization,\n",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 9, 4, 0, 2, 1],
+        "span": [335, 4, 18],
+        "leadingComments": "/ etc.\n",
+        "trailingComments": "/ Use ReflectionOps to implement these methods.\n",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 9, 4, 0, 2, 2],
+        "span": [336, 4, 21],
+        "leadingComments": "",
+        "trailingComments": "/ Generate code using MessageLite and the lite runtime.\n",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 9, 2, 6],
+        "span": [345, 2, 34],
+        "leadingComments":
+          "/ Sets the Go package where structs generated from this .proto will be\n/ placed. If omitted, the Go package will be derived from the following:\n/   - The basename of the package import path, if provided.\n/   - Otherwise, the package statement in the .proto file, if present.\n/   - Otherwise, the basename of the .proto file, without extension.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 9, 2, 7],
+        "span": [359, 2, 57],
+        "leadingComments":
+          '/ Should generic services be generated in each language?  "Generic" services\n/ are not specific to any particular RPC system.  They are generated by the\n/ main code generators in each language (without additional plugins).\n/ Generic services were the only kind of service generation supported by\n/ early versions of google.protobuf.\n\n/ Generic services are now considered deprecated in favor of using plugins\n/ that generate code specific to your particular RPC system.  Therefore,\n/ these default to false.  Old code which depends on generic services should\n/ explicitly set them to true.\n',
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 9, 2, 10],
+        "span": [367, 2, 48],
+        "leadingComments":
+          "/ Is this file deprecated?\n/ Depending on the target platform, this can emit Deprecated annotations\n/ for everything in the file, or it will be completely ignored; in the very\n/ least, this is a formalization for deprecating files.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 9, 2, 11],
+        "span": [371, 2, 54],
+        "leadingComments":
+          "/ Enables the use of arenas for the proto messages in this file. This applies\n/ only to generated classes for C++.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 9, 2, 12],
+        "span": [376, 2, 41],
+        "leadingComments":
+          "/ Sets the objective c class prefix which is prepended to all objective c\n/ generated classes from this .proto. There is no default.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 9, 2, 13],
+        "span": [379, 2, 40],
+        "leadingComments": "/ Namespace for generated classes; defaults to the package.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 9, 2, 14],
+        "span": [382, 2, 58],
+        "leadingComments": "/ The parser stores options it doesn't recognize here. See above.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 9, 5],
+        "span": [385, 2, 25],
+        "leadingComments": "/ Clients can define custom options in extensions of this message. See above.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 10, 2, 0],
+        "span": [409, 2, 60],
+        "leadingComments":
+          "/ Set true to use the old proto1 MessageSet wire format for extensions.\n/ This is provided for backwards-compatibility with the MessageSet wire\n/ format.  You should not use this for any other reason:  It's less\n/ efficient, has fewer features, and is more complicated.\n\n/ The message must be defined exactly as follows:\n/   message Foo {\n/     option message_set_wire_format = true;\n/     extensions 4 to max;\n/   }\n/ Note that the message cannot have any defined fields; MessageSets only\n/ have extensions.\n\n/ All extensions of your type must be singular messages; e.g. they cannot\n/ be int32s, enums, or repeated messages.\n\n/ Because this is an option, the above two restrictions are not enforced by\n/ the protocol compiler.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 10, 2, 1],
+        "span": [414, 2, 68],
+        "leadingComments":
+          '/ Disables the generation of the standard "descriptor()" accessor, which can\n/ conflict with a field of the same name.  This is meant to make migration\n/ from proto1 easier; new code should avoid fields named "descriptor".\n',
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 10, 2, 2],
+        "span": [420, 2, 47],
+        "leadingComments":
+          "/ Is this message deprecated?\n/ Depending on the target platform, this can emit Deprecated annotations\n/ for the message, or it will be completely ignored; in the very least,\n/ this is a formalization for deprecating messages.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 10, 2, 3],
+        "span": [443, 2, 30],
+        "leadingComments":
+          "/ Whether the message is an automatically generated map entry type for the\n/ maps field.\n\n/ For maps fields:\n/     map<KeyType, ValueType> map_field = 1;\n/ The parsed descriptor looks like:\n/     message MapFieldEntry {\n/         option map_entry = true;\n/         optional KeyType key = 1;\n/         optional ValueType value = 2;\n/     }\n/     repeated MapFieldEntry map_field = 1;\n\n/ Implementations may choose not to generate the map_entry=true message, but\n/ use a native map in the target language to hold the keys and values.\n/ The reflection APIs in such implementions still need to work as\n/ if the field is a repeated message field.\n\n/ NOTE: Do not set the option in .proto files. Always use the maps syntax\n/ instead. The option should only be implicitly set by the proto compiler\n/ parser.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 10, 2, 4],
+        "span": [446, 2, 58],
+        "leadingComments": "/ The parser stores options it doesn't recognize here. See above.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 10, 5],
+        "span": [449, 2, 25],
+        "leadingComments": "/ Clients can define custom options in extensions of this message. See above.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 11, 2, 0],
+        "span": [457, 2, 46],
+        "leadingComments":
+          "/ The ctype option instructs the C++ code generator to use a different\n/ representation of the field than it normally would.  See the specific\n/ options below.  This option is not yet implemented in the open source\n/ release -- sorry, we'll try to include it in a future version!\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 11, 4, 0, 2, 0],
+        "span": [460, 4, 15],
+        "leadingComments": "/ Default mode.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 11, 2, 1],
+        "span": [471, 2, 27],
+        "leadingComments":
+          "/ The packed option can be enabled for repeated primitive fields to enable\n/ a more efficient representation on the wire. Rather than repeatedly\n/ writing the tag and type for each element, the entire array is encoded as\n/ a single length-delimited blob. In proto3, only explicit setting it to\n/ false will avoid using packed encoding.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 11, 2, 2],
+        "span": [483, 2, 51],
+        "leadingComments":
+          '/ The jstype option determines the JavaScript type used for values of the\n/ field.  The option is permitted only for 64 bit integral and fixed types\n/ (int64, uint64, sint64, fixed64, sfixed64).  By default these types are\n/ represented as JavaScript strings.  This avoids loss of precision that can\n/ happen when a large value is converted to a floating point JavaScript\n/ numbers.  Specifying JS_NUMBER for the jstype causes the generated\n/ JavaScript code to use the JavaScript "number" type instead of strings.\n/ This option is an enum to permit additional types to be added,\n/ e.g. goog.math.Integer.\n',
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 11, 4, 1, 2, 0],
+        "span": [486, 4, 18],
+        "leadingComments": "/ Use the default type.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 11, 4, 1, 2, 1],
+        "span": [489, 4, 18],
+        "leadingComments": "/ Use JavaScript strings.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 11, 4, 1, 2, 2],
+        "span": [492, 4, 18],
+        "leadingComments": "/ Use JavaScript numbers.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 11, 2, 3],
+        "span": [523, 2, 41],
+        "leadingComments":
+          "/ Should this field be parsed lazily?  Lazy applies only to message-type\n/ fields.  It means that when the outer message is initially parsed, the\n/ inner message's contents will not be parsed but instead stored in encoded\n/ form.  The inner message will actually be parsed when it is first accessed.\n\n/ This is only a hint.  Implementations are free to choose whether to use\n/ eager or lazy parsing regardless of the value of this option.  However,\n/ setting this option true suggests that the protocol author believes that\n/ using lazy parsing on this field is worth the additional bookkeeping\n/ overhead typically needed to implement it.\n\n/ This option does not affect the public interface of any generated code;\n/ all method signatures remain the same.  Furthermore, thread-safety of the\n/ interface is not affected by this option; const methods remain safe to\n/ call from multiple threads concurrently, while non-const methods continue\n/ to require exclusive access.\n\n\n/ Note that implementations may choose not to check required fields within\n/ a lazy sub-message.  That is, calling IsInitialized() on the outher message\n/ may return true even if the inner message has missing required fields.\n/ This is necessary because otherwise the inner message would have to be\n/ parsed in order to perform the check, defeating the purpose of lazy\n/ parsing.  An implementation which chooses not to check required fields\n/ must be consistent about it.  That is, for any particular sub-message, the\n/ implementation must either *always* check its required fields, or *never*\n/ check its required fields, regardless of whether or not the message has\n/ been parsed.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 11, 2, 4],
+        "span": [529, 2, 47],
+        "leadingComments":
+          "/ Is this field deprecated?\n/ Depending on the target platform, this can emit Deprecated annotations\n/ for accessors, or it will be completely ignored; in the very least, this\n/ is a formalization for deprecating fields.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 11, 2, 5],
+        "span": [532, 2, 42],
+        "leadingComments": "/ For Google-internal migration only. Do not use.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 11, 2, 6],
+        "span": [536, 2, 58],
+        "leadingComments": "/ The parser stores options it doesn't recognize here. See above.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 11, 5],
+        "span": [539, 2, 25],
+        "leadingComments": "/ Clients can define custom options in extensions of this message. See above.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 12, 2, 0],
+        "span": [546, 2, 32],
+        "leadingComments": "/ Set this option to true to allow mapping different tag names to the same\n/ value.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 12, 2, 1],
+        "span": [552, 2, 47],
+        "leadingComments":
+          "/ Is this enum deprecated?\n/ Depending on the target platform, this can emit Deprecated annotations\n/ for the enum, or it will be completely ignored; in the very least, this\n/ is a formalization for deprecating enums.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 12, 2, 2],
+        "span": [555, 2, 58],
+        "leadingComments": "/ The parser stores options it doesn't recognize here. See above.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 12, 5],
+        "span": [558, 2, 25],
+        "leadingComments": "/ Clients can define custom options in extensions of this message. See above.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 13, 2, 0],
+        "span": [566, 2, 47],
+        "leadingComments":
+          "/ Is this enum value deprecated?\n/ Depending on the target platform, this can emit Deprecated annotations\n/ for the enum value, or it will be completely ignored; in the very least,\n/ this is a formalization for deprecating enum values.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 13, 2, 1],
+        "span": [569, 2, 58],
+        "leadingComments": "/ The parser stores options it doesn't recognize here. See above.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 13, 5],
+        "span": [572, 2, 25],
+        "leadingComments": "/ Clients can define custom options in extensions of this message. See above.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 14, 2, 0],
+        "span": [586, 2, 48],
+        "leadingComments":
+          "/ Is this service deprecated?\n/ Depending on the target platform, this can emit Deprecated annotations\n/ for the service, or it will be completely ignored; in the very least,\n/ this is a formalization for deprecating services.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [
+          "/ Note:  Field numbers 1 through 32 are reserved for Google's internal RPC\n/   framework.  We apologize for hoarding these numbers to ourselves, but\n/   we were already using them long before we decided to release Protocol\n/   Buffers.\n",
+        ],
+      }, {
+        "path": [4, 14, 2, 1],
+        "span": [589, 2, 58],
+        "leadingComments": "/ The parser stores options it doesn't recognize here. See above.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 14, 5],
+        "span": [592, 2, 25],
+        "leadingComments": "/ Clients can define custom options in extensions of this message. See above.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 15, 2, 0],
+        "span": [606, 2, 48],
+        "leadingComments":
+          "/ Is this method deprecated?\n/ Depending on the target platform, this can emit Deprecated annotations\n/ for the method, or it will be completely ignored; in the very least,\n/ this is a formalization for deprecating methods.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [
+          "/ Note:  Field numbers 1 through 32 are reserved for Google's internal RPC\n/   framework.  We apologize for hoarding these numbers to ourselves, but\n/   we were already using them long before we decided to release Protocol\n/   Buffers.\n",
+        ],
+      }, {
+        "path": [4, 15, 2, 1],
+        "span": [609, 2, 58],
+        "leadingComments": "/ The parser stores options it doesn't recognize here. See above.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 15, 5],
+        "span": [612, 2, 25],
+        "leadingComments": "/ Clients can define custom options in extensions of this message. See above.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 16],
+        "span": [622, 0, 642, 1],
+        "leadingComments":
+          "/ A message representing a option the parser does not recognize. This only\n/ appears in options protos created by the compiler::Parser class.\n/ DescriptorPool resolves these when building Descriptor objects. Therefore,\n/ options protos in descriptor objects (e.g. returned by Descriptor::options(),\n/ or produced by Descriptor::CopyTo()) will never have UninterpretedOptions\n/ in them.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 16, 3, 0],
+        "span": [628, 2, 631, 3],
+        "leadingComments":
+          '/ The name of the uninterpreted option.  Each string represents a segment in\n/ a dot-separated name.  is_extension is true iff a segment represents an\n/ extension (denoted with parentheses in options specs in .proto files).\n/ E.g.,{ ["foo", false], ["bar.baz", true], ["qux", false] } represents\n/ "foo.(bar.baz).qux".\n',
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 16, 2, 1],
+        "span": [636, 2, 39],
+        "leadingComments":
+          "/ The value of the uninterpreted option, in whatever type the tokenizer\n/ identified it as during parsing. Exactly one of these should be set.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 17],
+        "span": [649, 0, 778, 1],
+        "leadingComments":
+          "/ Encapsulates information about the original source file from which a\n/ FileDescriptorProto was generated.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [
+          "/ ===================================================================\n/ Optional source code info\n",
+        ],
+      }, {
+        "path": [4, 17, 2, 0],
+        "span": [693, 2, 33],
+        "leadingComments":
+          '/ A Location identifies a piece of source code in a .proto file which\n/ corresponds to a particular definition.  This information is intended\n/ to be useful to IDEs, code indexers, documentation generators, and similar\n/ tools.\n\n/ For example, say we have a file like:\n/   message Foo {\n/     optional string foo = 1;\n/   }\n/ Let\'s look at just the field definition:\n/   optional string foo = 1;\n/   ^       ^^     ^^  ^  ^^^\n/   a       bc     de  f  ghi\n/ We have the following locations:\n/   span   path               represents\n/   [a,i)  [ 4, 0, 2, 0 ]     The whole field definition.\n/   [a,b)  [ 4, 0, 2, 0, 4 ]  The label (optional).\n/   [c,d)  [ 4, 0, 2, 0, 5 ]  The type (string).\n/   [e,f)  [ 4, 0, 2, 0, 1 ]  The name (foo).\n/   [g,h)  [ 4, 0, 2, 0, 3 ]  The number (1).\n\n/ Notes:\n/ - A location may refer to a repeated field itself (i.e. not to any\n/   particular index within it).  This is used whenever a set of elements are\n/   logically enclosed in a single code segment.  For example, an entire\n/   extend block (possibly containing multiple extension definitions) will\n/   have an outer location whose path refers to the "extensions" repeated\n/   field without an index.\n/ - Multiple locations may have the same path.  This happens when a single\n/   logical declaration is spread out across multiple places.  The most\n/   obvious example is the "extend" block again -- there may be multiple\n/   extend blocks in the same scope, each of which will have the same path.\n/ - A location\'s span is not always a subset of its parent\'s span.  For\n/   example, the "extendee" of an extension declaration appears at the\n/   beginning of the "extend" block and is shared by all extensions within\n/   the block.\n/ - Just because a location\'s span is a subset of some other location\'s span\n/   does not mean that it is a descendent.  For example, a "group" defines\n/   both a type and a field in a single declaration.  Thus, the locations\n/   corresponding to the type and field and their components will overlap.\n/ - Code which tries to interpret locations should probably be designed to\n/   ignore those that it doesn\'t understand, as more types of locations could\n/   be recorded in the future.\n',
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 17, 3, 0, 2, 0],
+        "span": [718, 4, 42],
+        "leadingComments":
+          "/ Identifies which part of the FileDescriptorProto was defined at this\n/ location.\n\n/ Each element is a field number or an index.  They form a path from\n/ the root FileDescriptorProto to the place where the definition.  For\n/ example, this path:\n/   [ 4, 3, 2, 7, 1 ]\n/ refers to:\n/   file.message_type(3)  /// 4, 3\n/       .field(7)         /// 2, 7\n/       .name()           /// 1\n/ This is because FileDescriptorProto.message_type has field number 4:\n/   repeated DescriptorProto message_type = 4;\n/ and DescriptorProto.field has field number 2:\n/   repeated FieldDescriptorProto field = 2;\n/ and FieldDescriptorProto.name has field number 1:\n/   optional string name = 1;\n\n/ Thus, the above path gives the location of a field name.  If we removed\n/ the last element:\n/   [ 4, 3, 2, 7 ]\n/ this path refers to the whole field declaration (from the beginning\n/ of the label to the terminating semicolon).\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 17, 3, 0, 2, 1],
+        "span": [725, 4, 42],
+        "leadingComments":
+          "/ Always has exactly three or four elements: start line, start column,\n/ end line (optional, otherwise assumed same as start line), end column.\n/ These are packed into a single field for efficiency.  Note that line\n/ and column numbers are zero-based -- typically you will want to add\n/ 1 to each before displaying to a user.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 17, 3, 0, 2, 2],
+        "span": [774, 4, 41],
+        "leadingComments":
+          "/ If this SourceCodeInfo represents a complete declaration, these are any\n/ comments appearing before and after the declaration which appear to be\n/ attached to the declaration.\n\n/ A series of line comments appearing on consecutive lines, with no other\n/ tokens appearing on those lines, will be treated as a single comment.\n\n/ leading_detached_comments will keep paragraphs of comments that appear\n/ before (but not connected to) the current element. Each paragraph,\n/ separated by empty lines, will be one comment element in the repeated\n/ field.\n\n/ Only the comment content is provided; comment markers (e.g. //) are\n/ stripped out.  For block comments, leading whitespace and an asterisk\n/ will be stripped from the beginning of each line other than the first.\n/ Newlines are included in the output.\n\n/ Examples:\n\n/   optional int32 foo = 1;  /// Comment attached to foo.\n/   /// Comment attached to bar.\n/   optional int32 bar = 2;\n\n/   optional string baz = 3;\n/   /// Comment attached to baz.\n/   /// Another line attached to baz.\n\n/   /// Comment attached to qux.\n/   //\n/   /// Another line attached to qux.\n/   optional double qux = 4;\n\n/   /// Detached comment for corge. This is not leading or trailing comments\n/   /// to qux or corge because there are blank lines separating it from\n/   /// both.\n\n/   /// Detached comment for corge paragraph 2.\n\n/   optional string corge = 5;\n/   /* Block comment attached\n/    * to corge.  Leading asterisks\n/    * will be removed. */\n/   /* Block comment attached to\n/    * grault. */\n/   optional int32 grault = 6;\n\n/   /// ignored detached comments.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 18],
+        "span": [783, 0, 804, 1],
+        "leadingComments":
+          "/ Describes the relationship between generated code and its original source\n/ file. A GeneratedCodeInfo message is associated with only one generated\n/ source file, but may contain references to different source .proto files.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 18, 2, 0],
+        "span": [786, 2, 37],
+        "leadingComments":
+          "/ An Annotation connects some span of text in generated code to an element\n/ of its generating .proto file.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 18, 3, 0, 2, 0],
+        "span": [790, 4, 42],
+        "leadingComments":
+          "/ Identifies the element in the original source .proto file. This field\n/ is formatted the same as SourceCodeInfo.Location.path.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 18, 3, 0, 2, 1],
+        "span": [793, 4, 36],
+        "leadingComments": "/ Identifies the filesystem path to the original source .proto.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 18, 3, 0, 2, 2],
+        "span": [797, 4, 29],
+        "leadingComments":
+          "/ Identifies the starting offset in bytes in the generated code\n/ that relates to the identified object.\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 18, 3, 0, 2, 3],
+        "span": [802, 4, 27],
+        "leadingComments":
+          "/ Identifies the ending offset in bytes in the generated code that\n/ relates to the identified offset. The end offset should be one past\n/ the last relevant byte (so the length of the text = end - begin).\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }],
     },
-    syntax: "",
+    "syntax": "",
   }),
   references: {
     ".google.protobuf.FileDescriptorSet": FileDescriptorSet,
     ".google.protobuf.FileDescriptorProto": FileDescriptorProto,
     ".google.protobuf.DescriptorProto": DescriptorProto,
-    ".google.protobuf.DescriptorProto.ExtensionRange":
-      DescriptorProto_ExtensionRange,
-    ".google.protobuf.DescriptorProto.ReservedRange":
-      DescriptorProto_ReservedRange,
+    ".google.protobuf.DescriptorProto.ExtensionRange": DescriptorProto_ExtensionRange,
+    ".google.protobuf.DescriptorProto.ReservedRange": DescriptorProto_ReservedRange,
     ".google.protobuf.FieldDescriptorProto": FieldDescriptorProto,
     ".google.protobuf.FieldDescriptorProto.Type": FieldDescriptorProto_Type,
     ".google.protobuf.FieldDescriptorProto.Label": FieldDescriptorProto_Label,
@@ -6560,13 +5845,11 @@ export const protoMetadata: ProtoMetadata = {
     ".google.protobuf.ServiceOptions": ServiceOptions,
     ".google.protobuf.MethodOptions": MethodOptions,
     ".google.protobuf.UninterpretedOption": UninterpretedOption,
-    ".google.protobuf.UninterpretedOption.NamePart":
-      UninterpretedOption_NamePart,
+    ".google.protobuf.UninterpretedOption.NamePart": UninterpretedOption_NamePart,
     ".google.protobuf.SourceCodeInfo": SourceCodeInfo,
     ".google.protobuf.SourceCodeInfo.Location": SourceCodeInfo_Location,
     ".google.protobuf.GeneratedCodeInfo": GeneratedCodeInfo,
-    ".google.protobuf.GeneratedCodeInfo.Annotation":
-      GeneratedCodeInfo_Annotation,
+    ".google.protobuf.GeneratedCodeInfo.Annotation": GeneratedCodeInfo_Annotation,
   },
   dependencies: [],
 };
@@ -6574,59 +5857,57 @@ export const protoMetadata: ProtoMetadata = {
 declare var self: any | undefined;
 declare var window: any | undefined;
 declare var global: any | undefined;
-var globalThis: any = (() => {
-  if (typeof globalThis !== "undefined") return globalThis;
-  if (typeof self !== "undefined") return self;
-  if (typeof window !== "undefined") return window;
-  if (typeof global !== "undefined") return global;
+var tsProtoGlobalThis: any = (() => {
+  if (typeof globalThis !== "undefined") {
+    return globalThis;
+  }
+  if (typeof self !== "undefined") {
+    return self;
+  }
+  if (typeof window !== "undefined") {
+    return window;
+  }
+  if (typeof global !== "undefined") {
+    return global;
+  }
   throw "Unable to locate global object";
 })();
 
-const atob: (b64: string) => string =
-  globalThis.atob ||
-  ((b64) => globalThis.Buffer.from(b64, "base64").toString("binary"));
 function bytesFromBase64(b64: string): Uint8Array {
-  const bin = atob(b64);
-  const arr = new Uint8Array(bin.length);
-  for (let i = 0; i < bin.length; ++i) {
-    arr[i] = bin.charCodeAt(i);
+  if (tsProtoGlobalThis.Buffer) {
+    return Uint8Array.from(tsProtoGlobalThis.Buffer.from(b64, "base64"));
+  } else {
+    const bin = tsProtoGlobalThis.atob(b64);
+    const arr = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; ++i) {
+      arr[i] = bin.charCodeAt(i);
+    }
+    return arr;
   }
-  return arr;
 }
 
-const btoa: (bin: string) => string =
-  globalThis.btoa ||
-  ((bin) => globalThis.Buffer.from(bin, "binary").toString("base64"));
 function base64FromBytes(arr: Uint8Array): string {
-  const bin: string[] = [];
-  arr.forEach((byte) => {
-    bin.push(String.fromCharCode(byte));
-  });
-  return btoa(bin.join(""));
+  if (tsProtoGlobalThis.Buffer) {
+    return tsProtoGlobalThis.Buffer.from(arr).toString("base64");
+  } else {
+    const bin: string[] = [];
+    arr.forEach((byte) => {
+      bin.push(String.fromCharCode(byte));
+    });
+    return tsProtoGlobalThis.btoa(bin.join(""));
+  }
 }
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 function longToNumber(long: Long): number {
   if (long.gt(Number.MAX_SAFE_INTEGER)) {
-    throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
+    throw new tsProtoGlobalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
   }
   return long.toNumber();
 }

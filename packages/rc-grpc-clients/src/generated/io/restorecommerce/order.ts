@@ -1,28 +1,15 @@
 /* eslint-disable */
-import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import { Meta, protoMetadata as protoMetadata2 } from "./meta";
-import {
-  Address,
-  ContactPerson,
-  protoMetadata as protoMetadata6,
-} from "./address";
-import { Subject, protoMetadata as protoMetadata3 } from "./auth";
-import {
-  OperationStatus,
-  Status,
-  protoMetadata as protoMetadata4,
-} from "./status";
-import { CallContext, CallOptions } from "nice-grpc-common";
-import {
-  protoMetadata as protoMetadata1,
-  ReadRequest,
-  DeleteRequest,
-  DeleteResponse,
-} from "./resource_base";
-import { protoMetadata as protoMetadata5, KafkaSubscription } from "./options";
-import { protoMetadata as protoMetadata7, VAT } from "./product";
-import { protoMetadata as protoMetadata8, Parcel } from "./fulfillment";
+import type { CallContext, CallOptions } from "nice-grpc-common";
 import * as _m0 from "protobufjs/minimal";
+import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
+import { Address, ContactPerson, protoMetadata as protoMetadata6 } from "./address";
+import { protoMetadata as protoMetadata3, Subject } from "./auth";
+import { Parcel, protoMetadata as protoMetadata8 } from "./fulfillment";
+import { Meta, protoMetadata as protoMetadata2 } from "./meta";
+import { KafkaSubscription, protoMetadata as protoMetadata5 } from "./options";
+import { protoMetadata as protoMetadata7, VAT } from "./product";
+import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata1, ReadRequest } from "./resource_base";
+import { OperationStatus, protoMetadata as protoMetadata4, Status } from "./status";
 
 export const protobufPackage = "io.restorecommerce.order";
 
@@ -131,7 +118,7 @@ export interface Item {
   quantity: number;
   price: number;
   vats: VAT[];
-  quantityPrice: number;
+  unitPrice: number;
   itemType: string;
   taricCode: number;
   stockKeepingUnit: string;
@@ -148,7 +135,7 @@ export interface Order {
   items: Item[];
   totalPrice: number;
   totalVat: number;
-  totalWeightInKg: number;
+  /** double total_weight_in_kg = 10; */
   shippingAddress?: Address;
   billingAddress?: Address;
   billingEmail: string;
@@ -216,7 +203,7 @@ function createBaseItem(): Item {
     quantity: 0,
     price: 0,
     vats: [],
-    quantityPrice: 0,
+    unitPrice: 0,
     itemType: "",
     taricCode: 0,
     stockKeepingUnit: "",
@@ -258,8 +245,8 @@ export const Item = {
     for (const v of message.vats) {
       VAT.encode(v!, writer.uint32(90).fork()).ldelim();
     }
-    if (message.quantityPrice !== 0) {
-      writer.uint32(97).double(message.quantityPrice);
+    if (message.unitPrice !== 0) {
+      writer.uint32(97).double(message.unitPrice);
     }
     if (message.itemType !== "") {
       writer.uint32(106).string(message.itemType);
@@ -314,7 +301,7 @@ export const Item = {
           message.vats.push(VAT.decode(reader, reader.uint32()));
           break;
         case 12:
-          message.quantityPrice = reader.double();
+          message.unitPrice = reader.double();
           break;
         case 13:
           message.itemType = reader.string();
@@ -338,34 +325,18 @@ export const Item = {
       productId: isSet(object.productId) ? String(object.productId) : "",
       variantId: isSet(object.variantId) ? String(object.variantId) : "",
       productName: isSet(object.productName) ? String(object.productName) : "",
-      productDescription: isSet(object.productDescription)
-        ? String(object.productDescription)
-        : "",
-      manufacturerName: isSet(object.manufacturerName)
-        ? String(object.manufacturerName)
-        : "",
-      manufacturerDescription: isSet(object.manufacturerDescription)
-        ? String(object.manufacturerDescription)
-        : "",
-      prototypeName: isSet(object.prototypeName)
-        ? String(object.prototypeName)
-        : "",
-      prototypeDescription: isSet(object.prototypeDescription)
-        ? String(object.prototypeDescription)
-        : "",
+      productDescription: isSet(object.productDescription) ? String(object.productDescription) : "",
+      manufacturerName: isSet(object.manufacturerName) ? String(object.manufacturerName) : "",
+      manufacturerDescription: isSet(object.manufacturerDescription) ? String(object.manufacturerDescription) : "",
+      prototypeName: isSet(object.prototypeName) ? String(object.prototypeName) : "",
+      prototypeDescription: isSet(object.prototypeDescription) ? String(object.prototypeDescription) : "",
       quantity: isSet(object.quantity) ? Number(object.quantity) : 0,
       price: isSet(object.price) ? Number(object.price) : 0,
-      vats: Array.isArray(object?.vats)
-        ? object.vats.map((e: any) => VAT.fromJSON(e))
-        : [],
-      quantityPrice: isSet(object.quantityPrice)
-        ? Number(object.quantityPrice)
-        : 0,
+      vats: Array.isArray(object?.vats) ? object.vats.map((e: any) => VAT.fromJSON(e)) : [],
+      unitPrice: isSet(object.unitPrice) ? Number(object.unitPrice) : 0,
       itemType: isSet(object.itemType) ? String(object.itemType) : "",
       taricCode: isSet(object.taricCode) ? Number(object.taricCode) : 0,
-      stockKeepingUnit: isSet(object.stockKeepingUnit)
-        ? String(object.stockKeepingUnit)
-        : "",
+      stockKeepingUnit: isSet(object.stockKeepingUnit) ? String(object.stockKeepingUnit) : "",
     };
   },
 
@@ -373,33 +344,28 @@ export const Item = {
     const obj: any = {};
     message.productId !== undefined && (obj.productId = message.productId);
     message.variantId !== undefined && (obj.variantId = message.variantId);
-    message.productName !== undefined &&
-      (obj.productName = message.productName);
-    message.productDescription !== undefined &&
-      (obj.productDescription = message.productDescription);
-    message.manufacturerName !== undefined &&
-      (obj.manufacturerName = message.manufacturerName);
-    message.manufacturerDescription !== undefined &&
-      (obj.manufacturerDescription = message.manufacturerDescription);
-    message.prototypeName !== undefined &&
-      (obj.prototypeName = message.prototypeName);
-    message.prototypeDescription !== undefined &&
-      (obj.prototypeDescription = message.prototypeDescription);
-    message.quantity !== undefined &&
-      (obj.quantity = Math.round(message.quantity));
+    message.productName !== undefined && (obj.productName = message.productName);
+    message.productDescription !== undefined && (obj.productDescription = message.productDescription);
+    message.manufacturerName !== undefined && (obj.manufacturerName = message.manufacturerName);
+    message.manufacturerDescription !== undefined && (obj.manufacturerDescription = message.manufacturerDescription);
+    message.prototypeName !== undefined && (obj.prototypeName = message.prototypeName);
+    message.prototypeDescription !== undefined && (obj.prototypeDescription = message.prototypeDescription);
+    message.quantity !== undefined && (obj.quantity = Math.round(message.quantity));
     message.price !== undefined && (obj.price = message.price);
     if (message.vats) {
-      obj.vats = message.vats.map((e) => (e ? VAT.toJSON(e) : undefined));
+      obj.vats = message.vats.map((e) => e ? VAT.toJSON(e) : undefined);
     } else {
       obj.vats = [];
     }
-    message.quantityPrice !== undefined &&
-      (obj.quantityPrice = message.quantityPrice);
+    message.unitPrice !== undefined && (obj.unitPrice = message.unitPrice);
     message.itemType !== undefined && (obj.itemType = message.itemType);
     message.taricCode !== undefined && (obj.taricCode = message.taricCode);
-    message.stockKeepingUnit !== undefined &&
-      (obj.stockKeepingUnit = message.stockKeepingUnit);
+    message.stockKeepingUnit !== undefined && (obj.stockKeepingUnit = message.stockKeepingUnit);
     return obj;
+  },
+
+  create(base?: DeepPartial<Item>): Item {
+    return Item.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Item>): Item {
@@ -415,7 +381,7 @@ export const Item = {
     message.quantity = object.quantity ?? 0;
     message.price = object.price ?? 0;
     message.vats = object.vats?.map((e) => VAT.fromPartial(e)) || [];
-    message.quantityPrice = object.quantityPrice ?? 0;
+    message.unitPrice = object.unitPrice ?? 0;
     message.itemType = object.itemType ?? "";
     message.taricCode = object.taricCode ?? 0;
     message.stockKeepingUnit = object.stockKeepingUnit ?? "";
@@ -434,7 +400,6 @@ function createBaseOrder(): Order {
     items: [],
     totalPrice: 0,
     totalVat: 0,
-    totalWeightInKg: 0,
     shippingAddress: undefined,
     billingAddress: undefined,
     billingEmail: "",
@@ -473,29 +438,17 @@ export const Order = {
     if (message.totalVat !== 0) {
       writer.uint32(73).double(message.totalVat);
     }
-    if (message.totalWeightInKg !== 0) {
-      writer.uint32(81).double(message.totalWeightInKg);
-    }
     if (message.shippingAddress !== undefined) {
-      Address.encode(
-        message.shippingAddress,
-        writer.uint32(90).fork()
-      ).ldelim();
+      Address.encode(message.shippingAddress, writer.uint32(90).fork()).ldelim();
     }
     if (message.billingAddress !== undefined) {
-      Address.encode(
-        message.billingAddress,
-        writer.uint32(106).fork()
-      ).ldelim();
+      Address.encode(message.billingAddress, writer.uint32(106).fork()).ldelim();
     }
     if (message.billingEmail !== "") {
       writer.uint32(114).string(message.billingEmail);
     }
     if (message.contactPerson !== undefined) {
-      ContactPerson.encode(
-        message.contactPerson,
-        writer.uint32(122).fork()
-      ).ldelim();
+      ContactPerson.encode(message.contactPerson, writer.uint32(122).fork()).ldelim();
     }
     if (message.notificationEmail !== "") {
       writer.uint32(130).string(message.notificationEmail);
@@ -540,9 +493,6 @@ export const Order = {
         case 9:
           message.totalVat = reader.double();
           break;
-        case 10:
-          message.totalWeightInKg = reader.double();
-          break;
         case 11:
           message.shippingAddress = Address.decode(reader, reader.uint32());
           break;
@@ -575,77 +525,43 @@ export const Order = {
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
       name: isSet(object.name) ? String(object.name) : "",
       description: isSet(object.description) ? String(object.description) : "",
-      state: isSet(object.state)
-        ? stateFromJSON(object.state)
-        : State.Undefined,
-      customerReference: isSet(object.customerReference)
-        ? String(object.customerReference)
-        : "",
-      items: Array.isArray(object?.items)
-        ? object.items.map((e: any) => Item.fromJSON(e))
-        : [],
+      state: isSet(object.state) ? stateFromJSON(object.state) : State.Undefined,
+      customerReference: isSet(object.customerReference) ? String(object.customerReference) : "",
+      items: Array.isArray(object?.items) ? object.items.map((e: any) => Item.fromJSON(e)) : [],
       totalPrice: isSet(object.totalPrice) ? Number(object.totalPrice) : 0,
       totalVat: isSet(object.totalVat) ? Number(object.totalVat) : 0,
-      totalWeightInKg: isSet(object.totalWeightInKg)
-        ? Number(object.totalWeightInKg)
-        : 0,
-      shippingAddress: isSet(object.shippingAddress)
-        ? Address.fromJSON(object.shippingAddress)
-        : undefined,
-      billingAddress: isSet(object.billingAddress)
-        ? Address.fromJSON(object.billingAddress)
-        : undefined,
-      billingEmail: isSet(object.billingEmail)
-        ? String(object.billingEmail)
-        : "",
-      contactPerson: isSet(object.contactPerson)
-        ? ContactPerson.fromJSON(object.contactPerson)
-        : undefined,
-      notificationEmail: isSet(object.notificationEmail)
-        ? String(object.notificationEmail)
-        : "",
-      fulfillmentIds: Array.isArray(object?.fulfillmentIds)
-        ? object.fulfillmentIds.map((e: any) => String(e))
-        : [],
+      shippingAddress: isSet(object.shippingAddress) ? Address.fromJSON(object.shippingAddress) : undefined,
+      billingAddress: isSet(object.billingAddress) ? Address.fromJSON(object.billingAddress) : undefined,
+      billingEmail: isSet(object.billingEmail) ? String(object.billingEmail) : "",
+      contactPerson: isSet(object.contactPerson) ? ContactPerson.fromJSON(object.contactPerson) : undefined,
+      notificationEmail: isSet(object.notificationEmail) ? String(object.notificationEmail) : "",
+      fulfillmentIds: Array.isArray(object?.fulfillmentIds) ? object.fulfillmentIds.map((e: any) => String(e)) : [],
     };
   },
 
   toJSON(message: Order): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.meta !== undefined &&
-      (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.name !== undefined && (obj.name = message.name);
-    message.description !== undefined &&
-      (obj.description = message.description);
+    message.description !== undefined && (obj.description = message.description);
     message.state !== undefined && (obj.state = stateToJSON(message.state));
-    message.customerReference !== undefined &&
-      (obj.customerReference = message.customerReference);
+    message.customerReference !== undefined && (obj.customerReference = message.customerReference);
     if (message.items) {
-      obj.items = message.items.map((e) => (e ? Item.toJSON(e) : undefined));
+      obj.items = message.items.map((e) => e ? Item.toJSON(e) : undefined);
     } else {
       obj.items = [];
     }
     message.totalPrice !== undefined && (obj.totalPrice = message.totalPrice);
     message.totalVat !== undefined && (obj.totalVat = message.totalVat);
-    message.totalWeightInKg !== undefined &&
-      (obj.totalWeightInKg = message.totalWeightInKg);
     message.shippingAddress !== undefined &&
-      (obj.shippingAddress = message.shippingAddress
-        ? Address.toJSON(message.shippingAddress)
-        : undefined);
+      (obj.shippingAddress = message.shippingAddress ? Address.toJSON(message.shippingAddress) : undefined);
     message.billingAddress !== undefined &&
-      (obj.billingAddress = message.billingAddress
-        ? Address.toJSON(message.billingAddress)
-        : undefined);
-    message.billingEmail !== undefined &&
-      (obj.billingEmail = message.billingEmail);
+      (obj.billingAddress = message.billingAddress ? Address.toJSON(message.billingAddress) : undefined);
+    message.billingEmail !== undefined && (obj.billingEmail = message.billingEmail);
     message.contactPerson !== undefined &&
-      (obj.contactPerson = message.contactPerson
-        ? ContactPerson.toJSON(message.contactPerson)
-        : undefined);
-    message.notificationEmail !== undefined &&
-      (obj.notificationEmail = message.notificationEmail);
+      (obj.contactPerson = message.contactPerson ? ContactPerson.toJSON(message.contactPerson) : undefined);
+    message.notificationEmail !== undefined && (obj.notificationEmail = message.notificationEmail);
     if (message.fulfillmentIds) {
       obj.fulfillmentIds = message.fulfillmentIds.map((e) => e);
     } else {
@@ -654,13 +570,14 @@ export const Order = {
     return obj;
   },
 
+  create(base?: DeepPartial<Order>): Order {
+    return Order.fromPartial(base ?? {});
+  },
+
   fromPartial(object: DeepPartial<Order>): Order {
     const message = createBaseOrder();
     message.id = object.id ?? "";
-    message.meta =
-      object.meta !== undefined && object.meta !== null
-        ? Meta.fromPartial(object.meta)
-        : undefined;
+    message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
     message.name = object.name ?? "";
     message.description = object.description ?? "";
     message.state = object.state ?? State.Undefined;
@@ -668,20 +585,16 @@ export const Order = {
     message.items = object.items?.map((e) => Item.fromPartial(e)) || [];
     message.totalPrice = object.totalPrice ?? 0;
     message.totalVat = object.totalVat ?? 0;
-    message.totalWeightInKg = object.totalWeightInKg ?? 0;
-    message.shippingAddress =
-      object.shippingAddress !== undefined && object.shippingAddress !== null
-        ? Address.fromPartial(object.shippingAddress)
-        : undefined;
-    message.billingAddress =
-      object.billingAddress !== undefined && object.billingAddress !== null
-        ? Address.fromPartial(object.billingAddress)
-        : undefined;
+    message.shippingAddress = (object.shippingAddress !== undefined && object.shippingAddress !== null)
+      ? Address.fromPartial(object.shippingAddress)
+      : undefined;
+    message.billingAddress = (object.billingAddress !== undefined && object.billingAddress !== null)
+      ? Address.fromPartial(object.billingAddress)
+      : undefined;
     message.billingEmail = object.billingEmail ?? "";
-    message.contactPerson =
-      object.contactPerson !== undefined && object.contactPerson !== null
-        ? ContactPerson.fromPartial(object.contactPerson)
-        : undefined;
+    message.contactPerson = (object.contactPerson !== undefined && object.contactPerson !== null)
+      ? ContactPerson.fromPartial(object.contactPerson)
+      : undefined;
     message.notificationEmail = object.notificationEmail ?? "";
     message.fulfillmentIds = object.fulfillmentIds?.map((e) => e) || [];
     return message;
@@ -699,10 +612,7 @@ function createBaseShippingDetails(): ShippingDetails {
 }
 
 export const ShippingDetails = {
-  encode(
-    message: ShippingDetails,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: ShippingDetails, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.exportType !== "") {
       writer.uint32(10).string(message.exportType);
     }
@@ -716,10 +626,7 @@ export const ShippingDetails = {
       Address.encode(message.senderAddress, writer.uint32(42).fork()).ldelim();
     }
     if (message.contactPerson !== undefined) {
-      ContactPerson.encode(
-        message.contactPerson,
-        writer.uint32(122).fork()
-      ).ldelim();
+      ContactPerson.encode(message.contactPerson, writer.uint32(122).fork()).ldelim();
     }
     return writer;
   },
@@ -757,37 +664,27 @@ export const ShippingDetails = {
   fromJSON(object: any): ShippingDetails {
     return {
       exportType: isSet(object.exportType) ? String(object.exportType) : "",
-      exportDescription: isSet(object.exportDescription)
-        ? String(object.exportDescription)
-        : "",
-      invoiceNumber: isSet(object.invoiceNumber)
-        ? String(object.invoiceNumber)
-        : "",
-      senderAddress: isSet(object.senderAddress)
-        ? Address.fromJSON(object.senderAddress)
-        : undefined,
-      contactPerson: isSet(object.contactPerson)
-        ? ContactPerson.fromJSON(object.contactPerson)
-        : undefined,
+      exportDescription: isSet(object.exportDescription) ? String(object.exportDescription) : "",
+      invoiceNumber: isSet(object.invoiceNumber) ? String(object.invoiceNumber) : "",
+      senderAddress: isSet(object.senderAddress) ? Address.fromJSON(object.senderAddress) : undefined,
+      contactPerson: isSet(object.contactPerson) ? ContactPerson.fromJSON(object.contactPerson) : undefined,
     };
   },
 
   toJSON(message: ShippingDetails): unknown {
     const obj: any = {};
     message.exportType !== undefined && (obj.exportType = message.exportType);
-    message.exportDescription !== undefined &&
-      (obj.exportDescription = message.exportDescription);
-    message.invoiceNumber !== undefined &&
-      (obj.invoiceNumber = message.invoiceNumber);
+    message.exportDescription !== undefined && (obj.exportDescription = message.exportDescription);
+    message.invoiceNumber !== undefined && (obj.invoiceNumber = message.invoiceNumber);
     message.senderAddress !== undefined &&
-      (obj.senderAddress = message.senderAddress
-        ? Address.toJSON(message.senderAddress)
-        : undefined);
+      (obj.senderAddress = message.senderAddress ? Address.toJSON(message.senderAddress) : undefined);
     message.contactPerson !== undefined &&
-      (obj.contactPerson = message.contactPerson
-        ? ContactPerson.toJSON(message.contactPerson)
-        : undefined);
+      (obj.contactPerson = message.contactPerson ? ContactPerson.toJSON(message.contactPerson) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<ShippingDetails>): ShippingDetails {
+    return ShippingDetails.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<ShippingDetails>): ShippingDetails {
@@ -795,14 +692,12 @@ export const ShippingDetails = {
     message.exportType = object.exportType ?? "";
     message.exportDescription = object.exportDescription ?? "";
     message.invoiceNumber = object.invoiceNumber ?? "";
-    message.senderAddress =
-      object.senderAddress !== undefined && object.senderAddress !== null
-        ? Address.fromPartial(object.senderAddress)
-        : undefined;
-    message.contactPerson =
-      object.contactPerson !== undefined && object.contactPerson !== null
-        ? ContactPerson.fromPartial(object.contactPerson)
-        : undefined;
+    message.senderAddress = (object.senderAddress !== undefined && object.senderAddress !== null)
+      ? Address.fromPartial(object.senderAddress)
+      : undefined;
+    message.contactPerson = (object.contactPerson !== undefined && object.contactPerson !== null)
+      ? ContactPerson.fromPartial(object.contactPerson)
+      : undefined;
     return message;
   },
 };
@@ -812,18 +707,12 @@ function createBaseTriggerFulfillmentRequest(): TriggerFulfillmentRequest {
 }
 
 export const TriggerFulfillmentRequest = {
-  encode(
-    message: TriggerFulfillmentRequest,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: TriggerFulfillmentRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.order !== undefined) {
       Order.encode(message.order, writer.uint32(10).fork()).ldelim();
     }
     if (message.shippingDetails !== undefined) {
-      ShippingDetails.encode(
-        message.shippingDetails,
-        writer.uint32(18).fork()
-      ).ldelim();
+      ShippingDetails.encode(message.shippingDetails, writer.uint32(18).fork()).ldelim();
     }
     for (const v of message.parcels) {
       Parcel.encode(v!, writer.uint32(26).fork()).ldelim();
@@ -831,10 +720,7 @@ export const TriggerFulfillmentRequest = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): TriggerFulfillmentRequest {
+  decode(input: _m0.Reader | Uint8Array, length?: number): TriggerFulfillmentRequest {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTriggerFulfillmentRequest();
@@ -845,10 +731,7 @@ export const TriggerFulfillmentRequest = {
           message.order = Order.decode(reader, reader.uint32());
           break;
         case 2:
-          message.shippingDetails = ShippingDetails.decode(
-            reader,
-            reader.uint32()
-          );
+          message.shippingDetails = ShippingDetails.decode(reader, reader.uint32());
           break;
         case 3:
           message.parcels.push(Parcel.decode(reader, reader.uint32()));
@@ -864,45 +747,34 @@ export const TriggerFulfillmentRequest = {
   fromJSON(object: any): TriggerFulfillmentRequest {
     return {
       order: isSet(object.order) ? Order.fromJSON(object.order) : undefined,
-      shippingDetails: isSet(object.shippingDetails)
-        ? ShippingDetails.fromJSON(object.shippingDetails)
-        : undefined,
-      parcels: Array.isArray(object?.parcels)
-        ? object.parcels.map((e: any) => Parcel.fromJSON(e))
-        : [],
+      shippingDetails: isSet(object.shippingDetails) ? ShippingDetails.fromJSON(object.shippingDetails) : undefined,
+      parcels: Array.isArray(object?.parcels) ? object.parcels.map((e: any) => Parcel.fromJSON(e)) : [],
     };
   },
 
   toJSON(message: TriggerFulfillmentRequest): unknown {
     const obj: any = {};
-    message.order !== undefined &&
-      (obj.order = message.order ? Order.toJSON(message.order) : undefined);
+    message.order !== undefined && (obj.order = message.order ? Order.toJSON(message.order) : undefined);
     message.shippingDetails !== undefined &&
-      (obj.shippingDetails = message.shippingDetails
-        ? ShippingDetails.toJSON(message.shippingDetails)
-        : undefined);
+      (obj.shippingDetails = message.shippingDetails ? ShippingDetails.toJSON(message.shippingDetails) : undefined);
     if (message.parcels) {
-      obj.parcels = message.parcels.map((e) =>
-        e ? Parcel.toJSON(e) : undefined
-      );
+      obj.parcels = message.parcels.map((e) => e ? Parcel.toJSON(e) : undefined);
     } else {
       obj.parcels = [];
     }
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<TriggerFulfillmentRequest>
-  ): TriggerFulfillmentRequest {
+  create(base?: DeepPartial<TriggerFulfillmentRequest>): TriggerFulfillmentRequest {
+    return TriggerFulfillmentRequest.fromPartial(base ?? {});
+  },
+
+  fromPartial(object: DeepPartial<TriggerFulfillmentRequest>): TriggerFulfillmentRequest {
     const message = createBaseTriggerFulfillmentRequest();
-    message.order =
-      object.order !== undefined && object.order !== null
-        ? Order.fromPartial(object.order)
-        : undefined;
-    message.shippingDetails =
-      object.shippingDetails !== undefined && object.shippingDetails !== null
-        ? ShippingDetails.fromPartial(object.shippingDetails)
-        : undefined;
+    message.order = (object.order !== undefined && object.order !== null) ? Order.fromPartial(object.order) : undefined;
+    message.shippingDetails = (object.shippingDetails !== undefined && object.shippingDetails !== null)
+      ? ShippingDetails.fromPartial(object.shippingDetails)
+      : undefined;
     message.parcels = object.parcels?.map((e) => Parcel.fromPartial(e)) || [];
     return message;
   },
@@ -913,10 +785,7 @@ function createBaseTriggerFulfillmentRequestList(): TriggerFulfillmentRequestLis
 }
 
 export const TriggerFulfillmentRequestList = {
-  encode(
-    message: TriggerFulfillmentRequestList,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: TriggerFulfillmentRequestList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.items) {
       TriggerFulfillmentRequest.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -929,10 +798,7 @@ export const TriggerFulfillmentRequestList = {
     return writer;
   },
 
-  decode(
-    input: _m0.Reader | Uint8Array,
-    length?: number
-  ): TriggerFulfillmentRequestList {
+  decode(input: _m0.Reader | Uint8Array, length?: number): TriggerFulfillmentRequestList {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTriggerFulfillmentRequestList();
@@ -940,9 +806,7 @@ export const TriggerFulfillmentRequestList = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.items.push(
-            TriggerFulfillmentRequest.decode(reader, reader.uint32())
-          );
+          message.items.push(TriggerFulfillmentRequest.decode(reader, reader.uint32()));
           break;
         case 2:
           message.totalCount = reader.uint32();
@@ -960,45 +824,35 @@ export const TriggerFulfillmentRequestList = {
 
   fromJSON(object: any): TriggerFulfillmentRequestList {
     return {
-      items: Array.isArray(object?.items)
-        ? object.items.map((e: any) => TriggerFulfillmentRequest.fromJSON(e))
-        : [],
+      items: Array.isArray(object?.items) ? object.items.map((e: any) => TriggerFulfillmentRequest.fromJSON(e)) : [],
       totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
-      subject: isSet(object.subject)
-        ? Subject.fromJSON(object.subject)
-        : undefined,
+      subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
 
   toJSON(message: TriggerFulfillmentRequestList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) =>
-        e ? TriggerFulfillmentRequest.toJSON(e) : undefined
-      );
+      obj.items = message.items.map((e) => e ? TriggerFulfillmentRequest.toJSON(e) : undefined);
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined &&
-      (obj.totalCount = Math.round(message.totalCount));
-    message.subject !== undefined &&
-      (obj.subject = message.subject
-        ? Subject.toJSON(message.subject)
-        : undefined);
+    message.totalCount !== undefined && (obj.totalCount = Math.round(message.totalCount));
+    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
     return obj;
   },
 
-  fromPartial(
-    object: DeepPartial<TriggerFulfillmentRequestList>
-  ): TriggerFulfillmentRequestList {
+  create(base?: DeepPartial<TriggerFulfillmentRequestList>): TriggerFulfillmentRequestList {
+    return TriggerFulfillmentRequestList.fromPartial(base ?? {});
+  },
+
+  fromPartial(object: DeepPartial<TriggerFulfillmentRequestList>): TriggerFulfillmentRequestList {
     const message = createBaseTriggerFulfillmentRequestList();
-    message.items =
-      object.items?.map((e) => TriggerFulfillmentRequest.fromPartial(e)) || [];
+    message.items = object.items?.map((e) => TriggerFulfillmentRequest.fromPartial(e)) || [];
     message.totalCount = object.totalCount ?? 0;
-    message.subject =
-      object.subject !== undefined && object.subject !== null
-        ? Subject.fromPartial(object.subject)
-        : undefined;
+    message.subject = (object.subject !== undefined && object.subject !== null)
+      ? Subject.fromPartial(object.subject)
+      : undefined;
     return message;
   },
 };
@@ -1008,10 +862,7 @@ function createBaseCancelRequestList(): CancelRequestList {
 }
 
 export const CancelRequestList = {
-  encode(
-    message: CancelRequestList,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: CancelRequestList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.ids) {
       writer.uint32(10).string(v!);
     }
@@ -1044,12 +895,8 @@ export const CancelRequestList = {
 
   fromJSON(object: any): CancelRequestList {
     return {
-      ids: Array.isArray(object?.ids)
-        ? object.ids.map((e: any) => String(e))
-        : [],
-      subject: isSet(object.subject)
-        ? Subject.fromJSON(object.subject)
-        : undefined,
+      ids: Array.isArray(object?.ids) ? object.ids.map((e: any) => String(e)) : [],
+      subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
 
@@ -1060,20 +907,20 @@ export const CancelRequestList = {
     } else {
       obj.ids = [];
     }
-    message.subject !== undefined &&
-      (obj.subject = message.subject
-        ? Subject.toJSON(message.subject)
-        : undefined);
+    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<CancelRequestList>): CancelRequestList {
+    return CancelRequestList.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<CancelRequestList>): CancelRequestList {
     const message = createBaseCancelRequestList();
     message.ids = object.ids?.map((e) => e) || [];
-    message.subject =
-      object.subject !== undefined && object.subject !== null
-        ? Subject.fromPartial(object.subject)
-        : undefined;
+    message.subject = (object.subject !== undefined && object.subject !== null)
+      ? Subject.fromPartial(object.subject)
+      : undefined;
     return message;
   },
 };
@@ -1083,10 +930,7 @@ function createBaseOrderList(): OrderList {
 }
 
 export const OrderList = {
-  encode(
-    message: OrderList,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: OrderList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.items) {
       Order.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -1125,40 +969,35 @@ export const OrderList = {
 
   fromJSON(object: any): OrderList {
     return {
-      items: Array.isArray(object?.items)
-        ? object.items.map((e: any) => Order.fromJSON(e))
-        : [],
+      items: Array.isArray(object?.items) ? object.items.map((e: any) => Order.fromJSON(e)) : [],
       totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
-      subject: isSet(object.subject)
-        ? Subject.fromJSON(object.subject)
-        : undefined,
+      subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
 
   toJSON(message: OrderList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) => (e ? Order.toJSON(e) : undefined));
+      obj.items = message.items.map((e) => e ? Order.toJSON(e) : undefined);
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined &&
-      (obj.totalCount = Math.round(message.totalCount));
-    message.subject !== undefined &&
-      (obj.subject = message.subject
-        ? Subject.toJSON(message.subject)
-        : undefined);
+    message.totalCount !== undefined && (obj.totalCount = Math.round(message.totalCount));
+    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<OrderList>): OrderList {
+    return OrderList.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<OrderList>): OrderList {
     const message = createBaseOrderList();
     message.items = object.items?.map((e) => Order.fromPartial(e)) || [];
     message.totalCount = object.totalCount ?? 0;
-    message.subject =
-      object.subject !== undefined && object.subject !== null
-        ? Subject.fromPartial(object.subject)
-        : undefined;
+    message.subject = (object.subject !== undefined && object.subject !== null)
+      ? Subject.fromPartial(object.subject)
+      : undefined;
     return message;
   },
 };
@@ -1168,10 +1007,7 @@ function createBaseOrderListResponse(): OrderListResponse {
 }
 
 export const OrderListResponse = {
-  encode(
-    message: OrderListResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: OrderListResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.items) {
       OrderResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -1179,10 +1015,7 @@ export const OrderListResponse = {
       writer.uint32(16).uint32(message.totalCount);
     }
     if (message.operationStatus !== undefined) {
-      OperationStatus.encode(
-        message.operationStatus,
-        writer.uint32(26).fork()
-      ).ldelim();
+      OperationStatus.encode(message.operationStatus, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -1201,10 +1034,7 @@ export const OrderListResponse = {
           message.totalCount = reader.uint32();
           break;
         case 3:
-          message.operationStatus = OperationStatus.decode(
-            reader,
-            reader.uint32()
-          );
+          message.operationStatus = OperationStatus.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -1216,43 +1046,36 @@ export const OrderListResponse = {
 
   fromJSON(object: any): OrderListResponse {
     return {
-      items: Array.isArray(object?.items)
-        ? object.items.map((e: any) => OrderResponse.fromJSON(e))
-        : [],
+      items: Array.isArray(object?.items) ? object.items.map((e: any) => OrderResponse.fromJSON(e)) : [],
       totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
-      operationStatus: isSet(object.operationStatus)
-        ? OperationStatus.fromJSON(object.operationStatus)
-        : undefined,
+      operationStatus: isSet(object.operationStatus) ? OperationStatus.fromJSON(object.operationStatus) : undefined,
     };
   },
 
   toJSON(message: OrderListResponse): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) =>
-        e ? OrderResponse.toJSON(e) : undefined
-      );
+      obj.items = message.items.map((e) => e ? OrderResponse.toJSON(e) : undefined);
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined &&
-      (obj.totalCount = Math.round(message.totalCount));
+    message.totalCount !== undefined && (obj.totalCount = Math.round(message.totalCount));
     message.operationStatus !== undefined &&
-      (obj.operationStatus = message.operationStatus
-        ? OperationStatus.toJSON(message.operationStatus)
-        : undefined);
+      (obj.operationStatus = message.operationStatus ? OperationStatus.toJSON(message.operationStatus) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<OrderListResponse>): OrderListResponse {
+    return OrderListResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<OrderListResponse>): OrderListResponse {
     const message = createBaseOrderListResponse();
-    message.items =
-      object.items?.map((e) => OrderResponse.fromPartial(e)) || [];
+    message.items = object.items?.map((e) => OrderResponse.fromPartial(e)) || [];
     message.totalCount = object.totalCount ?? 0;
-    message.operationStatus =
-      object.operationStatus !== undefined && object.operationStatus !== null
-        ? OperationStatus.fromPartial(object.operationStatus)
-        : undefined;
+    message.operationStatus = (object.operationStatus !== undefined && object.operationStatus !== null)
+      ? OperationStatus.fromPartial(object.operationStatus)
+      : undefined;
     return message;
   },
 };
@@ -1262,10 +1085,7 @@ function createBaseOrderResponse(): OrderResponse {
 }
 
 export const OrderResponse = {
-  encode(
-    message: OrderResponse,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: OrderResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.payload !== undefined) {
       Order.encode(message.payload, writer.uint32(10).fork()).ldelim();
     }
@@ -1298,34 +1118,30 @@ export const OrderResponse = {
 
   fromJSON(object: any): OrderResponse {
     return {
-      payload: isSet(object.payload)
-        ? Order.fromJSON(object.payload)
-        : undefined,
+      payload: isSet(object.payload) ? Order.fromJSON(object.payload) : undefined,
       status: isSet(object.status) ? Status.fromJSON(object.status) : undefined,
     };
   },
 
   toJSON(message: OrderResponse): unknown {
     const obj: any = {};
-    message.payload !== undefined &&
-      (obj.payload = message.payload
-        ? Order.toJSON(message.payload)
-        : undefined);
-    message.status !== undefined &&
-      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    message.payload !== undefined && (obj.payload = message.payload ? Order.toJSON(message.payload) : undefined);
+    message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
+  },
+
+  create(base?: DeepPartial<OrderResponse>): OrderResponse {
+    return OrderResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<OrderResponse>): OrderResponse {
     const message = createBaseOrderResponse();
-    message.payload =
-      object.payload !== undefined && object.payload !== null
-        ? Order.fromPartial(object.payload)
-        : undefined;
-    message.status =
-      object.status !== undefined && object.status !== null
-        ? Status.fromPartial(object.status)
-        : undefined;
+    message.payload = (object.payload !== undefined && object.payload !== null)
+      ? Order.fromPartial(object.payload)
+      : undefined;
+    message.status = (object.status !== undefined && object.status !== null)
+      ? Status.fromPartial(object.status)
+      : undefined;
     return message;
   },
 };
@@ -1335,10 +1151,7 @@ function createBaseDeleted(): Deleted {
 }
 
 export const Deleted = {
-  encode(
-    message: Deleted,
-    writer: _m0.Writer = _m0.Writer.create()
-  ): _m0.Writer {
+  encode(message: Deleted, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -1364,15 +1177,17 @@ export const Deleted = {
   },
 
   fromJSON(object: any): Deleted {
-    return {
-      id: isSet(object.id) ? String(object.id) : "",
-    };
+    return { id: isSet(object.id) ? String(object.id) : "" };
   },
 
   toJSON(message: Deleted): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     return obj;
+  },
+
+  create(base?: DeepPartial<Deleted>): Deleted {
+    return Deleted.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Deleted>): Deleted {
@@ -1462,81 +1277,33 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceServiceImplementation<CallContextExt = {}> {
-  read(
-    request: ReadRequest,
-    context: CallContext & CallContextExt
-  ): Promise<DeepPartial<OrderListResponse>>;
-  create(
-    request: OrderList,
-    context: CallContext & CallContextExt
-  ): Promise<DeepPartial<OrderListResponse>>;
-  update(
-    request: OrderList,
-    context: CallContext & CallContextExt
-  ): Promise<DeepPartial<OrderListResponse>>;
-  upsert(
-    request: OrderList,
-    context: CallContext & CallContextExt
-  ): Promise<DeepPartial<OrderListResponse>>;
-  evaluate(
-    request: OrderList,
-    context: CallContext & CallContextExt
-  ): Promise<DeepPartial<OrderListResponse>>;
-  submit(
-    request: OrderList,
-    context: CallContext & CallContextExt
-  ): Promise<DeepPartial<OrderListResponse>>;
-  cancel(
-    request: CancelRequestList,
-    context: CallContext & CallContextExt
-  ): Promise<DeepPartial<OrderListResponse>>;
-  delete(
-    request: DeleteRequest,
-    context: CallContext & CallContextExt
-  ): Promise<DeepPartial<DeleteResponse>>;
+export interface ServiceImplementation<CallContextExt = {}> {
+  read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<OrderListResponse>>;
+  create(request: OrderList, context: CallContext & CallContextExt): Promise<DeepPartial<OrderListResponse>>;
+  update(request: OrderList, context: CallContext & CallContextExt): Promise<DeepPartial<OrderListResponse>>;
+  upsert(request: OrderList, context: CallContext & CallContextExt): Promise<DeepPartial<OrderListResponse>>;
+  evaluate(request: OrderList, context: CallContext & CallContextExt): Promise<DeepPartial<OrderListResponse>>;
+  submit(request: OrderList, context: CallContext & CallContextExt): Promise<DeepPartial<OrderListResponse>>;
+  cancel(request: CancelRequestList, context: CallContext & CallContextExt): Promise<DeepPartial<OrderListResponse>>;
+  delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;
   triggerFulfillment(
     request: TriggerFulfillmentRequestList,
-    context: CallContext & CallContextExt
+    context: CallContext & CallContextExt,
   ): Promise<DeepPartial<Status>>;
 }
 
 export interface ServiceClient<CallOptionsExt = {}> {
-  read(
-    request: DeepPartial<ReadRequest>,
-    options?: CallOptions & CallOptionsExt
-  ): Promise<OrderListResponse>;
-  create(
-    request: DeepPartial<OrderList>,
-    options?: CallOptions & CallOptionsExt
-  ): Promise<OrderListResponse>;
-  update(
-    request: DeepPartial<OrderList>,
-    options?: CallOptions & CallOptionsExt
-  ): Promise<OrderListResponse>;
-  upsert(
-    request: DeepPartial<OrderList>,
-    options?: CallOptions & CallOptionsExt
-  ): Promise<OrderListResponse>;
-  evaluate(
-    request: DeepPartial<OrderList>,
-    options?: CallOptions & CallOptionsExt
-  ): Promise<OrderListResponse>;
-  submit(
-    request: DeepPartial<OrderList>,
-    options?: CallOptions & CallOptionsExt
-  ): Promise<OrderListResponse>;
-  cancel(
-    request: DeepPartial<CancelRequestList>,
-    options?: CallOptions & CallOptionsExt
-  ): Promise<OrderListResponse>;
-  delete(
-    request: DeepPartial<DeleteRequest>,
-    options?: CallOptions & CallOptionsExt
-  ): Promise<DeleteResponse>;
+  read(request: DeepPartial<ReadRequest>, options?: CallOptions & CallOptionsExt): Promise<OrderListResponse>;
+  create(request: DeepPartial<OrderList>, options?: CallOptions & CallOptionsExt): Promise<OrderListResponse>;
+  update(request: DeepPartial<OrderList>, options?: CallOptions & CallOptionsExt): Promise<OrderListResponse>;
+  upsert(request: DeepPartial<OrderList>, options?: CallOptions & CallOptionsExt): Promise<OrderListResponse>;
+  evaluate(request: DeepPartial<OrderList>, options?: CallOptions & CallOptionsExt): Promise<OrderListResponse>;
+  submit(request: DeepPartial<OrderList>, options?: CallOptions & CallOptionsExt): Promise<OrderListResponse>;
+  cancel(request: DeepPartial<CancelRequestList>, options?: CallOptions & CallOptionsExt): Promise<OrderListResponse>;
+  delete(request: DeepPartial<DeleteRequest>, options?: CallOptions & CallOptionsExt): Promise<DeleteResponse>;
   triggerFulfillment(
     request: DeepPartial<TriggerFulfillmentRequestList>,
-    options?: CallOptions & CallOptionsExt
+    options?: CallOptions & CallOptionsExt,
   ): Promise<Status>;
 }
 
@@ -1554,28 +1321,18 @@ export interface ProtoMetadata {
   options?: {
     options?: { [key: string]: any };
     services?: {
-      [key: string]: {
-        options?: { [key: string]: any };
-        methods?: { [key: string]: { [key: string]: any } };
-      };
+      [key: string]: { options?: { [key: string]: any }; methods?: { [key: string]: { [key: string]: any } } };
     };
-    messages?: {
-      [key: string]: ProtoMetaMessageOptions;
-    };
-    enums?: {
-      [key: string]: {
-        options?: { [key: string]: any };
-        values?: { [key: string]: { [key: string]: any } };
-      };
-    };
+    messages?: { [key: string]: ProtoMetaMessageOptions };
+    enums?: { [key: string]: { options?: { [key: string]: any }; values?: { [key: string]: { [key: string]: any } } } };
   };
 }
 
 export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto1.fromPartial({
-    name: "io/restorecommerce/order.proto",
-    package: "io.restorecommerce.order",
-    dependency: [
+    "name": "io/restorecommerce/order.proto",
+    "package": "io.restorecommerce.order",
+    "dependency": [
       "io/restorecommerce/resource_base.proto",
       "io/restorecommerce/meta.proto",
       "io/restorecommerce/auth.proto",
@@ -1585,962 +1342,859 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/product.proto",
       "io/restorecommerce/fulfillment.proto",
     ],
-    publicDependency: [],
-    weakDependency: [],
-    messageType: [
-      {
-        name: "Item",
-        field: [
-          {
-            name: "product_id",
-            number: 1,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "productId",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "variant_id",
-            number: 2,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "variantId",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "product_name",
-            number: 3,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "productName",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "product_description",
-            number: 4,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "productDescription",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "manufacturer_name",
-            number: 5,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "manufacturerName",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "manufacturer_description",
-            number: 6,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "manufacturerDescription",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "prototype_name",
-            number: 7,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "prototypeName",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "prototype_description",
-            number: 8,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "prototypeDescription",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "quantity",
-            number: 9,
-            label: 1,
-            type: 5,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "quantity",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "price",
-            number: 10,
-            label: 1,
-            type: 1,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "price",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "vats",
-            number: 11,
-            label: 3,
-            type: 11,
-            typeName: ".io.restorecommerce.product.VAT",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "vats",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "quantity_price",
-            number: 12,
-            label: 1,
-            type: 1,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "quantityPrice",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "item_type",
-            number: 13,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "itemType",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "taric_code",
-            number: 14,
-            label: 1,
-            type: 1,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "taricCode",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "stock_keeping_unit",
-            number: 15,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "stockKeepingUnit",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
+    "publicDependency": [],
+    "weakDependency": [],
+    "messageType": [{
+      "name": "Item",
+      "field": [{
+        "name": "product_id",
+        "number": 1,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "productId",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "variant_id",
+        "number": 2,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "variantId",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "product_name",
+        "number": 3,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "productName",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "product_description",
+        "number": 4,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "productDescription",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "manufacturer_name",
+        "number": 5,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "manufacturerName",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "manufacturer_description",
+        "number": 6,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "manufacturerDescription",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "prototype_name",
+        "number": 7,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "prototypeName",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "prototype_description",
+        "number": 8,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "prototypeDescription",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "quantity",
+        "number": 9,
+        "label": 1,
+        "type": 5,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "quantity",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "price",
+        "number": 10,
+        "label": 1,
+        "type": 1,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "price",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "vats",
+        "number": 11,
+        "label": 3,
+        "type": 11,
+        "typeName": ".io.restorecommerce.product.VAT",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "vats",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "unit_price",
+        "number": 12,
+        "label": 1,
+        "type": 1,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "unitPrice",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "item_type",
+        "number": 13,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "itemType",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "taric_code",
+        "number": 14,
+        "label": 1,
+        "type": 1,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "taricCode",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "stock_keeping_unit",
+        "number": 15,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "stockKeepingUnit",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "Order",
+      "field": [{
+        "name": "id",
+        "number": 1,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "id",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "meta",
+        "number": 2,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.meta.Meta",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "meta",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "name",
+        "number": 3,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "name",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "description",
+        "number": 4,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "description",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "state",
+        "number": 5,
+        "label": 1,
+        "type": 14,
+        "typeName": ".io.restorecommerce.order.State",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "state",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "customer_reference",
+        "number": 6,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "customerReference",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "items",
+        "number": 7,
+        "label": 3,
+        "type": 11,
+        "typeName": ".io.restorecommerce.order.Item",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "items",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "total_price",
+        "number": 8,
+        "label": 1,
+        "type": 1,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "totalPrice",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "total_vat",
+        "number": 9,
+        "label": 1,
+        "type": 1,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "totalVat",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "shipping_address",
+        "number": 11,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.address.Address",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "shippingAddress",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "billing_address",
+        "number": 13,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.address.Address",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "billingAddress",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "billing_email",
+        "number": 14,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "billingEmail",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "contact_person",
+        "number": 15,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.address.ContactPerson",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "contactPerson",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "notification_email",
+        "number": 16,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "notificationEmail",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "fulfillment_ids",
+        "number": 17,
+        "label": 3,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "fulfillmentIds",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": {
+        "messageSetWireFormat": false,
+        "noStandardDescriptorAccessor": false,
+        "deprecated": false,
+        "mapEntry": false,
+        "uninterpretedOption": [],
       },
-      {
-        name: "Order",
-        field: [
-          {
-            name: "id",
-            number: 1,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "id",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "meta",
-            number: 2,
-            label: 1,
-            type: 11,
-            typeName: ".io.restorecommerce.meta.Meta",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "meta",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "name",
-            number: 3,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "name",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "description",
-            number: 4,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "description",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "state",
-            number: 5,
-            label: 1,
-            type: 14,
-            typeName: ".io.restorecommerce.order.State",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "state",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "customer_reference",
-            number: 6,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "customerReference",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "items",
-            number: 7,
-            label: 3,
-            type: 11,
-            typeName: ".io.restorecommerce.order.Item",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "items",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "total_price",
-            number: 8,
-            label: 1,
-            type: 1,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "totalPrice",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "total_vat",
-            number: 9,
-            label: 1,
-            type: 1,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "totalVat",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "total_weight_in_kg",
-            number: 10,
-            label: 1,
-            type: 1,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "totalWeightInKg",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "shipping_address",
-            number: 11,
-            label: 1,
-            type: 11,
-            typeName: ".io.restorecommerce.address.Address",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "shippingAddress",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "billing_address",
-            number: 13,
-            label: 1,
-            type: 11,
-            typeName: ".io.restorecommerce.address.Address",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "billingAddress",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "billing_email",
-            number: 14,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "billingEmail",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "contact_person",
-            number: 15,
-            label: 1,
-            type: 11,
-            typeName: ".io.restorecommerce.address.ContactPerson",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "contactPerson",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "notification_email",
-            number: 16,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "notificationEmail",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "fulfillment_ids",
-            number: 17,
-            label: 3,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "fulfillmentIds",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: {
-          messageSetWireFormat: false,
-          noStandardDescriptorAccessor: false,
-          deprecated: false,
-          mapEntry: false,
-          uninterpretedOption: [],
-        },
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "ShippingDetails",
-        field: [
-          {
-            name: "export_type",
-            number: 1,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "exportType",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "export_description",
-            number: 2,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "exportDescription",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "invoice_number",
-            number: 3,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "invoiceNumber",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "sender_address",
-            number: 5,
-            label: 1,
-            type: 11,
-            typeName: ".io.restorecommerce.address.Address",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "senderAddress",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "contact_person",
-            number: 15,
-            label: 1,
-            type: 11,
-            typeName: ".io.restorecommerce.address.ContactPerson",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "contactPerson",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "TriggerFulfillmentRequest",
-        field: [
-          {
-            name: "order",
-            number: 1,
-            label: 1,
-            type: 11,
-            typeName: ".io.restorecommerce.order.Order",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "order",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "shipping_details",
-            number: 2,
-            label: 1,
-            type: 11,
-            typeName: ".io.restorecommerce.order.ShippingDetails",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "shippingDetails",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "parcels",
-            number: 3,
-            label: 3,
-            type: 11,
-            typeName: ".io.restorecommerce.fulfillment.Parcel",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "parcels",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "TriggerFulfillmentRequestList",
-        field: [
-          {
-            name: "items",
-            number: 1,
-            label: 3,
-            type: 11,
-            typeName: ".io.restorecommerce.order.TriggerFulfillmentRequest",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "items",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "total_count",
-            number: 2,
-            label: 1,
-            type: 13,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "totalCount",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "subject",
-            number: 3,
-            label: 1,
-            type: 11,
-            typeName: ".io.restorecommerce.auth.Subject",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "subject",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "CancelRequestList",
-        field: [
-          {
-            name: "ids",
-            number: 1,
-            label: 3,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "ids",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "subject",
-            number: 2,
-            label: 1,
-            type: 11,
-            typeName: ".io.restorecommerce.auth.Subject",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "subject",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "OrderList",
-        field: [
-          {
-            name: "items",
-            number: 1,
-            label: 3,
-            type: 11,
-            typeName: ".io.restorecommerce.order.Order",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "items",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "total_count",
-            number: 2,
-            label: 1,
-            type: 13,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "totalCount",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "subject",
-            number: 3,
-            label: 1,
-            type: 11,
-            typeName: ".io.restorecommerce.auth.Subject",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "subject",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "OrderListResponse",
-        field: [
-          {
-            name: "items",
-            number: 1,
-            label: 3,
-            type: 11,
-            typeName: ".io.restorecommerce.order.OrderResponse",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "items",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "total_count",
-            number: 2,
-            label: 1,
-            type: 13,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "totalCount",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "operation_status",
-            number: 3,
-            label: 1,
-            type: 11,
-            typeName: ".io.restorecommerce.status.OperationStatus",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "operationStatus",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "OrderResponse",
-        field: [
-          {
-            name: "payload",
-            number: 1,
-            label: 1,
-            type: 11,
-            typeName: ".io.restorecommerce.order.Order",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "payload",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "status",
-            number: 2,
-            label: 1,
-            type: 11,
-            typeName: ".io.restorecommerce.status.Status",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "status",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-      {
-        name: "Deleted",
-        field: [
-          {
-            name: "id",
-            number: 1,
-            label: 1,
-            type: 9,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "id",
-            options: undefined,
-            proto3Optional: false,
-          },
-        ],
-        extension: [],
-        nestedType: [],
-        enumType: [],
-        extensionRange: [],
-        oneofDecl: [],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-    ],
-    enumType: [
-      {
-        name: "State",
-        value: [
-          { name: "Undefined", number: 0, options: undefined },
-          { name: "Invalid", number: 1, options: undefined },
-          { name: "Failed", number: 2, options: undefined },
-          { name: "Cancelled", number: 3, options: undefined },
-          { name: "Created", number: 4, options: undefined },
-          { name: "Submitted", number: 5, options: undefined },
-          { name: "Shipping", number: 6, options: undefined },
-          { name: "Done", number: 7, options: undefined },
-        ],
-        options: undefined,
-        reservedRange: [],
-        reservedName: [],
-      },
-    ],
-    service: [
-      {
-        name: "Service",
-        method: [
-          {
-            name: "Read",
-            inputType: ".io.restorecommerce.resourcebase.ReadRequest",
-            outputType: ".io.restorecommerce.order.OrderListResponse",
-            options: {
-              deprecated: false,
-              idempotencyLevel: 0,
-              uninterpretedOption: [],
-            },
-            clientStreaming: false,
-            serverStreaming: false,
-          },
-          {
-            name: "Create",
-            inputType: ".io.restorecommerce.order.OrderList",
-            outputType: ".io.restorecommerce.order.OrderListResponse",
-            options: undefined,
-            clientStreaming: false,
-            serverStreaming: false,
-          },
-          {
-            name: "Update",
-            inputType: ".io.restorecommerce.order.OrderList",
-            outputType: ".io.restorecommerce.order.OrderListResponse",
-            options: undefined,
-            clientStreaming: false,
-            serverStreaming: false,
-          },
-          {
-            name: "Upsert",
-            inputType: ".io.restorecommerce.order.OrderList",
-            outputType: ".io.restorecommerce.order.OrderListResponse",
-            options: undefined,
-            clientStreaming: false,
-            serverStreaming: false,
-          },
-          {
-            name: "Evaluate",
-            inputType: ".io.restorecommerce.order.OrderList",
-            outputType: ".io.restorecommerce.order.OrderListResponse",
-            options: undefined,
-            clientStreaming: false,
-            serverStreaming: false,
-          },
-          {
-            name: "Submit",
-            inputType: ".io.restorecommerce.order.OrderList",
-            outputType: ".io.restorecommerce.order.OrderListResponse",
-            options: undefined,
-            clientStreaming: false,
-            serverStreaming: false,
-          },
-          {
-            name: "Cancel",
-            inputType: ".io.restorecommerce.order.CancelRequestList",
-            outputType: ".io.restorecommerce.order.OrderListResponse",
-            options: undefined,
-            clientStreaming: false,
-            serverStreaming: false,
-          },
-          {
-            name: "Delete",
-            inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
-            outputType: ".io.restorecommerce.resourcebase.DeleteResponse",
-            options: undefined,
-            clientStreaming: false,
-            serverStreaming: false,
-          },
-          {
-            name: "TriggerFulfillment",
-            inputType:
-              ".io.restorecommerce.order.TriggerFulfillmentRequestList",
-            outputType: ".io.restorecommerce.status.Status",
-            options: undefined,
-            clientStreaming: false,
-            serverStreaming: false,
-          },
-        ],
-        options: { deprecated: false, uninterpretedOption: [] },
-      },
-    ],
-    extension: [],
-    options: undefined,
-    sourceCodeInfo: {
-      location: [
-        {
-          path: [4, 1],
-          span: [62, 0, 87, 1],
-          leadingComments: "*\nDatabase Entity\n",
-          trailingComments: "",
-          leadingDetachedComments: [],
-        },
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "ShippingDetails",
+      "field": [{
+        "name": "export_type",
+        "number": 1,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "exportType",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "export_description",
+        "number": 2,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "exportDescription",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "invoice_number",
+        "number": 3,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "invoiceNumber",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "sender_address",
+        "number": 5,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.address.Address",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "senderAddress",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "contact_person",
+        "number": 15,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.address.ContactPerson",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "contactPerson",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "TriggerFulfillmentRequest",
+      "field": [{
+        "name": "order",
+        "number": 1,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.order.Order",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "order",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "shipping_details",
+        "number": 2,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.order.ShippingDetails",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "shippingDetails",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "parcels",
+        "number": 3,
+        "label": 3,
+        "type": 11,
+        "typeName": ".io.restorecommerce.fulfillment.Parcel",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "parcels",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "TriggerFulfillmentRequestList",
+      "field": [{
+        "name": "items",
+        "number": 1,
+        "label": 3,
+        "type": 11,
+        "typeName": ".io.restorecommerce.order.TriggerFulfillmentRequest",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "items",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "total_count",
+        "number": 2,
+        "label": 1,
+        "type": 13,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "totalCount",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "subject",
+        "number": 3,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.auth.Subject",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "subject",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "CancelRequestList",
+      "field": [{
+        "name": "ids",
+        "number": 1,
+        "label": 3,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "ids",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "subject",
+        "number": 2,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.auth.Subject",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "subject",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "OrderList",
+      "field": [{
+        "name": "items",
+        "number": 1,
+        "label": 3,
+        "type": 11,
+        "typeName": ".io.restorecommerce.order.Order",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "items",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "total_count",
+        "number": 2,
+        "label": 1,
+        "type": 13,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "totalCount",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "subject",
+        "number": 3,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.auth.Subject",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "subject",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "OrderListResponse",
+      "field": [{
+        "name": "items",
+        "number": 1,
+        "label": 3,
+        "type": 11,
+        "typeName": ".io.restorecommerce.order.OrderResponse",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "items",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "total_count",
+        "number": 2,
+        "label": 1,
+        "type": 13,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "totalCount",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "operation_status",
+        "number": 3,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.status.OperationStatus",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "operationStatus",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "OrderResponse",
+      "field": [{
+        "name": "payload",
+        "number": 1,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.order.Order",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "payload",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "status",
+        "number": 2,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.status.Status",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "status",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "Deleted",
+      "field": [{
+        "name": "id",
+        "number": 1,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "id",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }],
+    "enumType": [{
+      "name": "State",
+      "value": [
+        { "name": "Undefined", "number": 0, "options": undefined },
+        { "name": "Invalid", "number": 1, "options": undefined },
+        { "name": "Failed", "number": 2, "options": undefined },
+        { "name": "Cancelled", "number": 3, "options": undefined },
+        { "name": "Created", "number": 4, "options": undefined },
+        { "name": "Submitted", "number": 5, "options": undefined },
+        { "name": "Shipping", "number": 6, "options": undefined },
+        { "name": "Done", "number": 7, "options": undefined },
       ],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }],
+    "service": [{
+      "name": "Service",
+      "method": [{
+        "name": "Read",
+        "inputType": ".io.restorecommerce.resourcebase.ReadRequest",
+        "outputType": ".io.restorecommerce.order.OrderListResponse",
+        "options": { "deprecated": false, "idempotencyLevel": 0, "uninterpretedOption": [] },
+        "clientStreaming": false,
+        "serverStreaming": false,
+      }, {
+        "name": "Create",
+        "inputType": ".io.restorecommerce.order.OrderList",
+        "outputType": ".io.restorecommerce.order.OrderListResponse",
+        "options": undefined,
+        "clientStreaming": false,
+        "serverStreaming": false,
+      }, {
+        "name": "Update",
+        "inputType": ".io.restorecommerce.order.OrderList",
+        "outputType": ".io.restorecommerce.order.OrderListResponse",
+        "options": undefined,
+        "clientStreaming": false,
+        "serverStreaming": false,
+      }, {
+        "name": "Upsert",
+        "inputType": ".io.restorecommerce.order.OrderList",
+        "outputType": ".io.restorecommerce.order.OrderListResponse",
+        "options": undefined,
+        "clientStreaming": false,
+        "serverStreaming": false,
+      }, {
+        "name": "Evaluate",
+        "inputType": ".io.restorecommerce.order.OrderList",
+        "outputType": ".io.restorecommerce.order.OrderListResponse",
+        "options": undefined,
+        "clientStreaming": false,
+        "serverStreaming": false,
+      }, {
+        "name": "Submit",
+        "inputType": ".io.restorecommerce.order.OrderList",
+        "outputType": ".io.restorecommerce.order.OrderListResponse",
+        "options": undefined,
+        "clientStreaming": false,
+        "serverStreaming": false,
+      }, {
+        "name": "Cancel",
+        "inputType": ".io.restorecommerce.order.CancelRequestList",
+        "outputType": ".io.restorecommerce.order.OrderListResponse",
+        "options": undefined,
+        "clientStreaming": false,
+        "serverStreaming": false,
+      }, {
+        "name": "Delete",
+        "inputType": ".io.restorecommerce.resourcebase.DeleteRequest",
+        "outputType": ".io.restorecommerce.resourcebase.DeleteResponse",
+        "options": undefined,
+        "clientStreaming": false,
+        "serverStreaming": false,
+      }, {
+        "name": "TriggerFulfillment",
+        "inputType": ".io.restorecommerce.order.TriggerFulfillmentRequestList",
+        "outputType": ".io.restorecommerce.status.Status",
+        "options": undefined,
+        "clientStreaming": false,
+        "serverStreaming": false,
+      }],
+      "options": { "deprecated": false, "uninterpretedOption": [] },
+    }],
+    "extension": [],
+    "options": undefined,
+    "sourceCodeInfo": {
+      "location": [{
+        "path": [4, 1],
+        "span": [62, 0, 87, 1],
+        "leadingComments": "*\nDatabase Entity\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 1, 2, 9],
+        "span": [81, 2, 59],
+        "leadingComments": "double total_weight_in_kg = 10;\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }],
     },
-    syntax: "proto3",
+    "syntax": "proto3",
   }),
   references: {
     ".io.restorecommerce.order.State": State,
     ".io.restorecommerce.order.Item": Item,
     ".io.restorecommerce.order.Order": Order,
     ".io.restorecommerce.order.ShippingDetails": ShippingDetails,
-    ".io.restorecommerce.order.TriggerFulfillmentRequest":
-      TriggerFulfillmentRequest,
-    ".io.restorecommerce.order.TriggerFulfillmentRequestList":
-      TriggerFulfillmentRequestList,
+    ".io.restorecommerce.order.TriggerFulfillmentRequest": TriggerFulfillmentRequest,
+    ".io.restorecommerce.order.TriggerFulfillmentRequestList": TriggerFulfillmentRequestList,
     ".io.restorecommerce.order.CancelRequestList": CancelRequestList,
     ".io.restorecommerce.order.OrderList": OrderList,
     ".io.restorecommerce.order.OrderListResponse": OrderListResponse,
@@ -2559,43 +2213,26 @@ export const protoMetadata: ProtoMetadata = {
   ],
   options: {
     messages: {
-      Order: {
+      "Order": {
         options: {
-          kafka_subscriber: KafkaSubscription.decode(
+          "kafka_subscriber": KafkaSubscription.decode(
             Buffer.from(
               "CgZvcmRlcnMSImlvLnJlc3RvcmVjb21tZXJjZS5vcmRlcnMucmVzb3VyY2UaDG9yZGVyQ3JlYXRlZCIMb3JkZXJVcGRhdGVkKgxvcmRlckRlbGV0ZWQ=",
-              "base64"
-            )
+              "base64",
+            ),
           ),
         },
       },
     },
-    services: {
-      Service: {
-        options: { service_name: "order" },
-        methods: { Read: { is_query: true } },
-      },
-    },
+    services: { "Service": { options: { "service_name": "order" }, methods: { "Read": { "is_query": true } } } },
   },
 };
 
-type Builtin =
-  | Date
-  | Function
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
+type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-  ? Array<DeepPartial<U>>
-  : T extends ReadonlyArray<infer U>
-  ? ReadonlyArray<DeepPartial<U>>
-  : T extends {}
-  ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin ? T
+  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
+  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 function isSet(value: any): boolean {

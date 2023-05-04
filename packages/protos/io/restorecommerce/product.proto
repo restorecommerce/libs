@@ -8,6 +8,7 @@ import "io/restorecommerce/image.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
 import "io/restorecommerce/attribute.proto";
+import "io/restorecommerce/geometry.proto";
 import "io/restorecommerce/options.proto";
 
 // Used by resolvers
@@ -23,13 +24,6 @@ service Service {
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
   rpc Update (ProductList) returns (ProductListResponse);
   rpc Upsert (ProductList) returns (ProductListResponse);
-}
-
-message Volume {
-  double width_in_cm = 1;
-  double height_in_cm = 2;
-  double length_in_cm = 3;
-  double weight_in_kg = 4;
 }
 
 // Product resource
@@ -110,8 +104,9 @@ message PhysicalVariant {
   repeated io.restorecommerce.image.Image image = 8;
   string stock_keeping_unit = 9;
   string template_variant = 10;
-  Volume packing_volume = 11;
-  repeated io.restorecommerce.attribute.Attribute attributes = 12;
+  io.restorecommerce.geometry.BoundingBox3D packing_size_in_cm = 11;
+  double packing_weight_in_kg = 12;
+  repeated io.restorecommerce.attribute.Attribute attributes = 13;
 }
 
 message VirtualVariant {
@@ -141,7 +136,7 @@ message BundleProduct {
   string product_id = 1;
   string variant_id = 2;
   uint32 quantity = 3;
-  double price_ratio = 4;
+  double tax_ratio = 4; //Discount in relation to the bundle price
 }
 
 message VAT {

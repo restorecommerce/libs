@@ -13,19 +13,21 @@ import { OperationStatus, protoMetadata as protoMetadata6, Status } from "./stat
 export const protobufPackage = "io.restorecommerce.policy_set";
 
 export interface PolicySet {
-  id: string;
-  meta?: Meta;
-  name: string;
-  description: string;
-  target?: Target;
-  combining_algorithm: string;
+  id?: string | undefined;
+  meta?: Meta | undefined;
+  name?: string | undefined;
+  description?: string | undefined;
+  target?: Target | undefined;
+  combining_algorithm?:
+    | string
+    | undefined;
   /** policy IDs */
   policies: string[];
 }
 
 export interface PolicySetList {
   items: PolicySet[];
-  total_count: number;
+  total_count?: number | undefined;
   subject?: Subject;
 }
 
@@ -50,34 +52,34 @@ export interface PolicySetRQ {
 
 function createBasePolicySet(): PolicySet {
   return {
-    id: "",
+    id: undefined,
     meta: undefined,
-    name: "",
-    description: "",
+    name: undefined,
+    description: undefined,
     target: undefined,
-    combining_algorithm: "",
+    combining_algorithm: undefined,
     policies: [],
   };
 }
 
 export const PolicySet = {
   encode(message: PolicySet, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
+    if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
-    if (message.name !== "") {
+    if (message.name !== undefined) {
       writer.uint32(26).string(message.name);
     }
-    if (message.description !== "") {
+    if (message.description !== undefined) {
       writer.uint32(34).string(message.description);
     }
     if (message.target !== undefined) {
       Target.encode(message.target, writer.uint32(42).fork()).ldelim();
     }
-    if (message.combining_algorithm !== "") {
+    if (message.combining_algorithm !== undefined) {
       writer.uint32(50).string(message.combining_algorithm);
     }
     for (const v of message.policies) {
@@ -124,12 +126,12 @@ export const PolicySet = {
 
   fromJSON(object: any): PolicySet {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
+      id: isSet(object.id) ? String(object.id) : undefined,
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
-      name: isSet(object.name) ? String(object.name) : "",
-      description: isSet(object.description) ? String(object.description) : "",
+      name: isSet(object.name) ? String(object.name) : undefined,
+      description: isSet(object.description) ? String(object.description) : undefined,
       target: isSet(object.target) ? Target.fromJSON(object.target) : undefined,
-      combining_algorithm: isSet(object.combining_algorithm) ? String(object.combining_algorithm) : "",
+      combining_algorithm: isSet(object.combining_algorithm) ? String(object.combining_algorithm) : undefined,
       policies: Array.isArray(object?.policies) ? object.policies.map((e: any) => String(e)) : [],
     };
   },
@@ -156,21 +158,21 @@ export const PolicySet = {
 
   fromPartial(object: DeepPartial<PolicySet>): PolicySet {
     const message = createBasePolicySet();
-    message.id = object.id ?? "";
+    message.id = object.id ?? undefined;
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
-    message.name = object.name ?? "";
-    message.description = object.description ?? "";
+    message.name = object.name ?? undefined;
+    message.description = object.description ?? undefined;
     message.target = (object.target !== undefined && object.target !== null)
       ? Target.fromPartial(object.target)
       : undefined;
-    message.combining_algorithm = object.combining_algorithm ?? "";
+    message.combining_algorithm = object.combining_algorithm ?? undefined;
     message.policies = object.policies?.map((e) => e) || [];
     return message;
   },
 };
 
 function createBasePolicySetList(): PolicySetList {
-  return { items: [], total_count: 0, subject: undefined };
+  return { items: [], total_count: undefined, subject: undefined };
 }
 
 export const PolicySetList = {
@@ -178,7 +180,7 @@ export const PolicySetList = {
     for (const v of message.items) {
       PolicySet.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.total_count !== 0) {
+    if (message.total_count !== undefined) {
       writer.uint32(16).uint32(message.total_count);
     }
     if (message.subject !== undefined) {
@@ -214,7 +216,7 @@ export const PolicySetList = {
   fromJSON(object: any): PolicySetList {
     return {
       items: Array.isArray(object?.items) ? object.items.map((e: any) => PolicySet.fromJSON(e)) : [],
-      total_count: isSet(object.total_count) ? Number(object.total_count) : 0,
+      total_count: isSet(object.total_count) ? Number(object.total_count) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
@@ -238,7 +240,7 @@ export const PolicySetList = {
   fromPartial(object: DeepPartial<PolicySetList>): PolicySetList {
     const message = createBasePolicySetList();
     message.items = object.items?.map((e) => PolicySet.fromPartial(e)) || [];
-    message.total_count = object.total_count ?? 0;
+    message.total_count = object.total_count ?? undefined;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
@@ -598,7 +600,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "meta",
         "number": 2,
@@ -607,10 +609,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.meta.Meta",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "meta",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "name",
         "number": 3,
@@ -619,10 +621,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "name",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "description",
         "number": 4,
@@ -631,10 +633,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "description",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "target",
         "number": 5,
@@ -643,10 +645,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.rule.Target",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 4,
         "jsonName": "target",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "combining_algorithm",
         "number": 6,
@@ -655,10 +657,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 5,
         "jsonName": "combiningAlgorithm",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "policies",
         "number": 7,
@@ -676,7 +678,14 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [
+        { "name": "_id", "options": undefined },
+        { "name": "_meta", "options": undefined },
+        { "name": "_name", "options": undefined },
+        { "name": "_description", "options": undefined },
+        { "name": "_target", "options": undefined },
+        { "name": "_combining_algorithm", "options": undefined },
+      ],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -705,7 +714,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "totalCount",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 3,
@@ -723,7 +732,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_total_count", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],

@@ -32,8 +32,8 @@ export interface CopyRequestItem {
   bucket: string;
   copySource: string;
   key: string;
-  meta?: Meta;
-  options?: Options;
+  meta?: Meta | undefined;
+  options?: Options | undefined;
 }
 
 export interface CopyResponseItem {
@@ -45,25 +45,25 @@ export interface CopyResponseItem {
 }
 
 export interface Options {
-  encoding: string;
-  content_type: string;
-  content_language: string;
-  content_disposition: string;
-  length: number;
-  version: string;
-  md5: string;
+  encoding?: string | undefined;
+  content_type?: string | undefined;
+  content_language?: string | undefined;
+  content_disposition?: string | undefined;
+  length?: number | undefined;
+  version?: string | undefined;
+  md5?: string | undefined;
   tags: Attribute[];
   /** optional meta data ex: from and to dates */
-  data?: Any;
+  data?: Any | undefined;
 }
 
 export interface Object {
   key: string;
   bucket: string;
-  object: Buffer;
-  meta?: Meta;
-  url: string;
-  options?: Options;
+  object?: Buffer | undefined;
+  meta?: Meta | undefined;
+  url?: string | undefined;
+  options?: Options | undefined;
   subject?: Subject;
 }
 
@@ -89,7 +89,7 @@ export interface ObjectResponsePayload {
 export interface GetRequest {
   key: string;
   bucket: string;
-  download: boolean;
+  download?: boolean | undefined;
   subject?: Subject;
 }
 
@@ -138,10 +138,10 @@ export interface Response {
 export interface ListRequest {
   bucket: string;
   /** / Filter based on fieldName|operation, value|list */
-  filters?: FilterOp;
+  filters?: FilterOp | undefined;
   subject?: Subject;
-  max_keys: number;
-  prefix: string;
+  max_keys?: number | undefined;
+  prefix?: string | undefined;
 }
 
 /**
@@ -167,8 +167,8 @@ export interface MoveRequestItem {
   sourceObject: string;
   /** destination key name */
   key: string;
-  meta?: Meta;
-  options?: Options;
+  meta?: Meta | undefined;
+  options?: Options | undefined;
 }
 
 export interface MoveResponseList {
@@ -579,13 +579,13 @@ export const CopyResponseItem = {
 
 function createBaseOptions(): Options {
   return {
-    encoding: "",
-    content_type: "",
-    content_language: "",
-    content_disposition: "",
-    length: 0,
-    version: "",
-    md5: "",
+    encoding: undefined,
+    content_type: undefined,
+    content_language: undefined,
+    content_disposition: undefined,
+    length: undefined,
+    version: undefined,
+    md5: undefined,
     tags: [],
     data: undefined,
   };
@@ -593,25 +593,25 @@ function createBaseOptions(): Options {
 
 export const Options = {
   encode(message: Options, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.encoding !== "") {
+    if (message.encoding !== undefined) {
       writer.uint32(10).string(message.encoding);
     }
-    if (message.content_type !== "") {
+    if (message.content_type !== undefined) {
       writer.uint32(18).string(message.content_type);
     }
-    if (message.content_language !== "") {
+    if (message.content_language !== undefined) {
       writer.uint32(26).string(message.content_language);
     }
-    if (message.content_disposition !== "") {
+    if (message.content_disposition !== undefined) {
       writer.uint32(34).string(message.content_disposition);
     }
-    if (message.length !== 0) {
+    if (message.length !== undefined) {
       writer.uint32(40).int32(message.length);
     }
-    if (message.version !== "") {
+    if (message.version !== undefined) {
       writer.uint32(50).string(message.version);
     }
-    if (message.md5 !== "") {
+    if (message.md5 !== undefined) {
       writer.uint32(58).string(message.md5);
     }
     for (const v of message.tags) {
@@ -667,13 +667,13 @@ export const Options = {
 
   fromJSON(object: any): Options {
     return {
-      encoding: isSet(object.encoding) ? String(object.encoding) : "",
-      content_type: isSet(object.content_type) ? String(object.content_type) : "",
-      content_language: isSet(object.content_language) ? String(object.content_language) : "",
-      content_disposition: isSet(object.content_disposition) ? String(object.content_disposition) : "",
-      length: isSet(object.length) ? Number(object.length) : 0,
-      version: isSet(object.version) ? String(object.version) : "",
-      md5: isSet(object.md5) ? String(object.md5) : "",
+      encoding: isSet(object.encoding) ? String(object.encoding) : undefined,
+      content_type: isSet(object.content_type) ? String(object.content_type) : undefined,
+      content_language: isSet(object.content_language) ? String(object.content_language) : undefined,
+      content_disposition: isSet(object.content_disposition) ? String(object.content_disposition) : undefined,
+      length: isSet(object.length) ? Number(object.length) : undefined,
+      version: isSet(object.version) ? String(object.version) : undefined,
+      md5: isSet(object.md5) ? String(object.md5) : undefined,
       tags: Array.isArray(object?.tags) ? object.tags.map((e: any) => Attribute.fromJSON(e)) : [],
       data: isSet(object.data) ? Any.fromJSON(object.data) : undefined,
     };
@@ -703,13 +703,13 @@ export const Options = {
 
   fromPartial(object: DeepPartial<Options>): Options {
     const message = createBaseOptions();
-    message.encoding = object.encoding ?? "";
-    message.content_type = object.content_type ?? "";
-    message.content_language = object.content_language ?? "";
-    message.content_disposition = object.content_disposition ?? "";
-    message.length = object.length ?? 0;
-    message.version = object.version ?? "";
-    message.md5 = object.md5 ?? "";
+    message.encoding = object.encoding ?? undefined;
+    message.content_type = object.content_type ?? undefined;
+    message.content_language = object.content_language ?? undefined;
+    message.content_disposition = object.content_disposition ?? undefined;
+    message.length = object.length ?? undefined;
+    message.version = object.version ?? undefined;
+    message.md5 = object.md5 ?? undefined;
     message.tags = object.tags?.map((e) => Attribute.fromPartial(e)) || [];
     message.data = (object.data !== undefined && object.data !== null) ? Any.fromPartial(object.data) : undefined;
     return message;
@@ -720,9 +720,9 @@ function createBaseObject(): Object {
   return {
     key: "",
     bucket: "",
-    object: Buffer.alloc(0),
+    object: undefined,
     meta: undefined,
-    url: "",
+    url: undefined,
     options: undefined,
     subject: undefined,
   };
@@ -736,13 +736,13 @@ export const Object = {
     if (message.bucket !== "") {
       writer.uint32(18).string(message.bucket);
     }
-    if (message.object.length !== 0) {
+    if (message.object !== undefined) {
       writer.uint32(26).bytes(message.object);
     }
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(34).fork()).ldelim();
     }
-    if (message.url !== "") {
+    if (message.url !== undefined) {
       writer.uint32(42).string(message.url);
     }
     if (message.options !== undefined) {
@@ -794,9 +794,9 @@ export const Object = {
     return {
       key: isSet(object.key) ? String(object.key) : "",
       bucket: isSet(object.bucket) ? String(object.bucket) : "",
-      object: isSet(object.object) ? Buffer.from(bytesFromBase64(object.object)) : Buffer.alloc(0),
+      object: isSet(object.object) ? Buffer.from(bytesFromBase64(object.object)) : undefined,
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
-      url: isSet(object.url) ? String(object.url) : "",
+      url: isSet(object.url) ? String(object.url) : undefined,
       options: isSet(object.options) ? Options.fromJSON(object.options) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
@@ -807,7 +807,7 @@ export const Object = {
     message.key !== undefined && (obj.key = message.key);
     message.bucket !== undefined && (obj.bucket = message.bucket);
     message.object !== undefined &&
-      (obj.object = base64FromBytes(message.object !== undefined ? message.object : Buffer.alloc(0)));
+      (obj.object = message.object !== undefined ? base64FromBytes(message.object) : undefined);
     message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.url !== undefined && (obj.url = message.url);
     message.options !== undefined && (obj.options = message.options ? Options.toJSON(message.options) : undefined);
@@ -823,9 +823,9 @@ export const Object = {
     const message = createBaseObject();
     message.key = object.key ?? "";
     message.bucket = object.bucket ?? "";
-    message.object = object.object ?? Buffer.alloc(0);
+    message.object = object.object ?? undefined;
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
-    message.url = object.url ?? "";
+    message.url = object.url ?? undefined;
     message.options = (object.options !== undefined && object.options !== null)
       ? Options.fromPartial(object.options)
       : undefined;
@@ -1073,7 +1073,7 @@ export const ObjectResponsePayload = {
 };
 
 function createBaseGetRequest(): GetRequest {
-  return { key: "", bucket: "", download: false, subject: undefined };
+  return { key: "", bucket: "", download: undefined, subject: undefined };
 }
 
 export const GetRequest = {
@@ -1084,7 +1084,7 @@ export const GetRequest = {
     if (message.bucket !== "") {
       writer.uint32(18).string(message.bucket);
     }
-    if (message.download === true) {
+    if (message.download !== undefined) {
       writer.uint32(24).bool(message.download);
     }
     if (message.subject !== undefined) {
@@ -1124,7 +1124,7 @@ export const GetRequest = {
     return {
       key: isSet(object.key) ? String(object.key) : "",
       bucket: isSet(object.bucket) ? String(object.bucket) : "",
-      download: isSet(object.download) ? Boolean(object.download) : false,
+      download: isSet(object.download) ? Boolean(object.download) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
@@ -1146,7 +1146,7 @@ export const GetRequest = {
     const message = createBaseGetRequest();
     message.key = object.key ?? "";
     message.bucket = object.bucket ?? "";
-    message.download = object.download ?? false;
+    message.download = object.download ?? undefined;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
@@ -1672,7 +1672,7 @@ export const Response = {
 };
 
 function createBaseListRequest(): ListRequest {
-  return { bucket: "", filters: undefined, subject: undefined, max_keys: 0, prefix: "" };
+  return { bucket: "", filters: undefined, subject: undefined, max_keys: undefined, prefix: undefined };
 }
 
 export const ListRequest = {
@@ -1686,10 +1686,10 @@ export const ListRequest = {
     if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
     }
-    if (message.max_keys !== 0) {
+    if (message.max_keys !== undefined) {
       writer.uint32(32).int32(message.max_keys);
     }
-    if (message.prefix !== "") {
+    if (message.prefix !== undefined) {
       writer.uint32(42).string(message.prefix);
     }
     return writer;
@@ -1730,8 +1730,8 @@ export const ListRequest = {
       bucket: isSet(object.bucket) ? String(object.bucket) : "",
       filters: isSet(object.filters) ? FilterOp.fromJSON(object.filters) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
-      max_keys: isSet(object.max_keys) ? Number(object.max_keys) : 0,
-      prefix: isSet(object.prefix) ? String(object.prefix) : "",
+      max_keys: isSet(object.max_keys) ? Number(object.max_keys) : undefined,
+      prefix: isSet(object.prefix) ? String(object.prefix) : undefined,
     };
   },
 
@@ -1758,8 +1758,8 @@ export const ListRequest = {
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
-    message.max_keys = object.max_keys ?? 0;
-    message.prefix = object.prefix ?? "";
+    message.max_keys = object.max_keys ?? undefined;
+    message.prefix = object.prefix ?? undefined;
     return message;
   },
 };
@@ -2504,7 +2504,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "meta",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "options",
         "number": 5,
@@ -2513,16 +2513,16 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.ostorage.Options",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "options",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_meta", "options": undefined }, { "name": "_options", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -2610,7 +2610,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "encoding",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "content_type",
         "number": 2,
@@ -2619,10 +2619,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "contentType",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "content_language",
         "number": 3,
@@ -2631,10 +2631,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "contentLanguage",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "content_disposition",
         "number": 4,
@@ -2643,10 +2643,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "contentDisposition",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "length",
         "number": 5,
@@ -2655,10 +2655,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 4,
         "jsonName": "length",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "version",
         "number": 6,
@@ -2667,10 +2667,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 5,
         "jsonName": "version",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "md5",
         "number": 7,
@@ -2679,10 +2679,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 6,
         "jsonName": "md5",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "tags",
         "number": 8,
@@ -2703,16 +2703,25 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".google.protobuf.Any",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 7,
         "jsonName": "data",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [
+        { "name": "_encoding", "options": undefined },
+        { "name": "_content_type", "options": undefined },
+        { "name": "_content_language", "options": undefined },
+        { "name": "_content_disposition", "options": undefined },
+        { "name": "_length", "options": undefined },
+        { "name": "_version", "options": undefined },
+        { "name": "_md5", "options": undefined },
+        { "name": "_data", "options": undefined },
+      ],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -2753,7 +2762,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "object",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "meta",
         "number": 4,
@@ -2762,10 +2771,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.meta.Meta",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "meta",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "url",
         "number": 5,
@@ -2774,10 +2783,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "url",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "options",
         "number": 6,
@@ -2786,10 +2795,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.ostorage.Options",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "options",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 7,
@@ -2807,7 +2816,10 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_object", "options": undefined }, { "name": "_meta", "options": undefined }, {
+        "name": "_url",
+        "options": undefined,
+      }, { "name": "_options", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -3001,7 +3013,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "download",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 4,
@@ -3019,7 +3031,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_download", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -3365,7 +3377,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "filters",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 3,
@@ -3386,10 +3398,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "maxKeys",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "prefix",
         "number": 5,
@@ -3398,16 +3410,19 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "prefix",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_filters", "options": undefined }, { "name": "_max_keys", "options": undefined }, {
+        "name": "_prefix",
+        "options": undefined,
+      }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -3554,7 +3569,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "meta",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "options",
         "number": 5,
@@ -3563,16 +3578,16 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.ostorage.Options",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "options",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_meta", "options": undefined }, { "name": "_options", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -3771,7 +3786,7 @@ export const protoMetadata: ProtoMetadata = {
     "sourceCodeInfo": {
       "location": [{
         "path": [4, 5, 2, 8],
-        "span": [68, 2, 31],
+        "span": [68, 2, 40],
         "leadingComments": "",
         "trailingComments": " optional meta data ex: from and to dates\n",
         "leadingDetachedComments": [],
@@ -3783,7 +3798,7 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 18, 2, 1],
-        "span": [150, 2, 49],
+        "span": [150, 2, 58],
         "leadingComments": "",
         "trailingComments": "/ Filter based on fieldName|operation, value|list\n",
         "leadingDetachedComments": [],

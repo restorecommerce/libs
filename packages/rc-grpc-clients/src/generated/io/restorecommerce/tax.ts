@@ -18,7 +18,7 @@ export interface Deleted {
 
 export interface TaxList {
   items: Tax[];
-  totalCount: number;
+  totalCount?: number | undefined;
   subject?: Subject;
 }
 
@@ -34,12 +34,12 @@ export interface TaxResponse {
 }
 
 export interface Tax {
-  id: string;
-  meta?: Meta;
-  countryId: string;
-  rate: number;
-  variant: string;
-  typeId: string;
+  id?: string | undefined;
+  meta?: Meta | undefined;
+  countryId?: string | undefined;
+  rate?: number | undefined;
+  variant?: string | undefined;
+  typeId?: string | undefined;
 }
 
 function createBaseDeleted(): Deleted {
@@ -94,7 +94,7 @@ export const Deleted = {
 };
 
 function createBaseTaxList(): TaxList {
-  return { items: [], totalCount: 0, subject: undefined };
+  return { items: [], totalCount: undefined, subject: undefined };
 }
 
 export const TaxList = {
@@ -102,7 +102,7 @@ export const TaxList = {
     for (const v of message.items) {
       Tax.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.totalCount !== 0) {
+    if (message.totalCount !== undefined) {
       writer.uint32(16).uint32(message.totalCount);
     }
     if (message.subject !== undefined) {
@@ -138,7 +138,7 @@ export const TaxList = {
   fromJSON(object: any): TaxList {
     return {
       items: Array.isArray(object?.items) ? object.items.map((e: any) => Tax.fromJSON(e)) : [],
-      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
+      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
@@ -162,7 +162,7 @@ export const TaxList = {
   fromPartial(object: DeepPartial<TaxList>): TaxList {
     const message = createBaseTaxList();
     message.items = object.items?.map((e) => Tax.fromPartial(e)) || [];
-    message.totalCount = object.totalCount ?? 0;
+    message.totalCount = object.totalCount ?? undefined;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
@@ -315,27 +315,34 @@ export const TaxResponse = {
 };
 
 function createBaseTax(): Tax {
-  return { id: "", meta: undefined, countryId: "", rate: 0, variant: "", typeId: "" };
+  return {
+    id: undefined,
+    meta: undefined,
+    countryId: undefined,
+    rate: undefined,
+    variant: undefined,
+    typeId: undefined,
+  };
 }
 
 export const Tax = {
   encode(message: Tax, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
+    if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
-    if (message.countryId !== "") {
+    if (message.countryId !== undefined) {
       writer.uint32(26).string(message.countryId);
     }
-    if (message.rate !== 0) {
+    if (message.rate !== undefined) {
       writer.uint32(33).double(message.rate);
     }
-    if (message.variant !== "") {
+    if (message.variant !== undefined) {
       writer.uint32(42).string(message.variant);
     }
-    if (message.typeId !== "") {
+    if (message.typeId !== undefined) {
       writer.uint32(50).string(message.typeId);
     }
     return writer;
@@ -376,12 +383,12 @@ export const Tax = {
 
   fromJSON(object: any): Tax {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
+      id: isSet(object.id) ? String(object.id) : undefined,
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
-      countryId: isSet(object.countryId) ? String(object.countryId) : "",
-      rate: isSet(object.rate) ? Number(object.rate) : 0,
-      variant: isSet(object.variant) ? String(object.variant) : "",
-      typeId: isSet(object.typeId) ? String(object.typeId) : "",
+      countryId: isSet(object.countryId) ? String(object.countryId) : undefined,
+      rate: isSet(object.rate) ? Number(object.rate) : undefined,
+      variant: isSet(object.variant) ? String(object.variant) : undefined,
+      typeId: isSet(object.typeId) ? String(object.typeId) : undefined,
     };
   },
 
@@ -402,12 +409,12 @@ export const Tax = {
 
   fromPartial(object: DeepPartial<Tax>): Tax {
     const message = createBaseTax();
-    message.id = object.id ?? "";
+    message.id = object.id ?? undefined;
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
-    message.countryId = object.countryId ?? "";
-    message.rate = object.rate ?? 0;
-    message.variant = object.variant ?? "";
-    message.typeId = object.typeId ?? "";
+    message.countryId = object.countryId ?? undefined;
+    message.rate = object.rate ?? undefined;
+    message.variant = object.variant ?? undefined;
+    message.typeId = object.typeId ?? undefined;
     return message;
   },
 };
@@ -561,7 +568,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "totalCount",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 3,
@@ -579,7 +586,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_total_count", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -678,7 +685,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "meta",
         "number": 2,
@@ -687,10 +694,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.meta.Meta",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "meta",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "country_id",
         "number": 3,
@@ -699,7 +706,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "countryId",
         "options": {
           "ctype": 0,
@@ -710,7 +717,7 @@ export const protoMetadata: ProtoMetadata = {
           "weak": false,
           "uninterpretedOption": [],
         },
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "rate",
         "number": 4,
@@ -719,10 +726,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "rate",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "variant",
         "number": 5,
@@ -731,10 +738,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 4,
         "jsonName": "variant",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "type_id",
         "number": 6,
@@ -743,7 +750,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 5,
         "jsonName": "typeId",
         "options": {
           "ctype": 0,
@@ -754,13 +761,20 @@ export const protoMetadata: ProtoMetadata = {
           "weak": false,
           "uninterpretedOption": [],
         },
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [
+        { "name": "_id", "options": undefined },
+        { "name": "_meta", "options": undefined },
+        { "name": "_country_id", "options": undefined },
+        { "name": "_rate", "options": undefined },
+        { "name": "_variant", "options": undefined },
+        { "name": "_type_id", "options": undefined },
+      ],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],

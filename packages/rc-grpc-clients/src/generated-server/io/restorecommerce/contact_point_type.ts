@@ -16,14 +16,14 @@ export interface Deleted {
 
 export interface ContactPointTypeList {
   items: ContactPointType[];
-  total_count: number;
+  total_count?: number | undefined;
   subject?: Subject;
 }
 
 export interface ContactPointType {
-  id: string;
-  meta?: Meta;
-  type: string;
+  id?: string | undefined;
+  meta?: Meta | undefined;
+  type?: string | undefined;
 }
 
 export interface ContactPointTypeListResponse {
@@ -89,7 +89,7 @@ export const Deleted = {
 };
 
 function createBaseContactPointTypeList(): ContactPointTypeList {
-  return { items: [], total_count: 0, subject: undefined };
+  return { items: [], total_count: undefined, subject: undefined };
 }
 
 export const ContactPointTypeList = {
@@ -97,7 +97,7 @@ export const ContactPointTypeList = {
     for (const v of message.items) {
       ContactPointType.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.total_count !== 0) {
+    if (message.total_count !== undefined) {
       writer.uint32(16).uint32(message.total_count);
     }
     if (message.subject !== undefined) {
@@ -133,7 +133,7 @@ export const ContactPointTypeList = {
   fromJSON(object: any): ContactPointTypeList {
     return {
       items: Array.isArray(object?.items) ? object.items.map((e: any) => ContactPointType.fromJSON(e)) : [],
-      total_count: isSet(object.total_count) ? Number(object.total_count) : 0,
+      total_count: isSet(object.total_count) ? Number(object.total_count) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
@@ -157,7 +157,7 @@ export const ContactPointTypeList = {
   fromPartial(object: DeepPartial<ContactPointTypeList>): ContactPointTypeList {
     const message = createBaseContactPointTypeList();
     message.items = object.items?.map((e) => ContactPointType.fromPartial(e)) || [];
-    message.total_count = object.total_count ?? 0;
+    message.total_count = object.total_count ?? undefined;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
@@ -166,18 +166,18 @@ export const ContactPointTypeList = {
 };
 
 function createBaseContactPointType(): ContactPointType {
-  return { id: "", meta: undefined, type: "" };
+  return { id: undefined, meta: undefined, type: undefined };
 }
 
 export const ContactPointType = {
   encode(message: ContactPointType, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
+    if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
-    if (message.type !== "") {
+    if (message.type !== undefined) {
       writer.uint32(26).string(message.type);
     }
     return writer;
@@ -209,9 +209,9 @@ export const ContactPointType = {
 
   fromJSON(object: any): ContactPointType {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
+      id: isSet(object.id) ? String(object.id) : undefined,
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
-      type: isSet(object.type) ? String(object.type) : "",
+      type: isSet(object.type) ? String(object.type) : undefined,
     };
   },
 
@@ -229,9 +229,9 @@ export const ContactPointType = {
 
   fromPartial(object: DeepPartial<ContactPointType>): ContactPointType {
     const message = createBaseContactPointType();
-    message.id = object.id ?? "";
+    message.id = object.id ?? undefined;
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
-    message.type = object.type ?? "";
+    message.type = object.type ?? undefined;
     return message;
   },
 };
@@ -549,7 +549,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "totalCount",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 3,
@@ -567,7 +567,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_total_count", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -584,7 +584,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "meta",
         "number": 2,
@@ -593,10 +593,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.meta.Meta",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "meta",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "type",
         "number": 3,
@@ -605,16 +605,19 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "type",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_id", "options": undefined }, { "name": "_meta", "options": undefined }, {
+        "name": "_type",
+        "options": undefined,
+      }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],

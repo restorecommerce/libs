@@ -6,19 +6,19 @@ export const protobufPackage = "io.restorecommerce.image";
 
 /** ProductCategory resource */
 export interface Image {
-  id: string;
-  caption: string;
-  filename: string;
-  content_type: string;
-  url: string;
-  width: number;
-  height: number;
-  length: number;
+  id?: string | undefined;
+  caption?: string | undefined;
+  filename?: string | undefined;
+  content_type?: string | undefined;
+  url?: string | undefined;
+  width?: number | undefined;
+  height?: number | undefined;
+  length?: number | undefined;
 }
 
 export interface ImageList {
   items: Image[];
-  total_count: number;
+  total_count?: number | undefined;
 }
 
 export interface Deleted {
@@ -26,33 +26,42 @@ export interface Deleted {
 }
 
 function createBaseImage(): Image {
-  return { id: "", caption: "", filename: "", content_type: "", url: "", width: 0, height: 0, length: 0 };
+  return {
+    id: undefined,
+    caption: undefined,
+    filename: undefined,
+    content_type: undefined,
+    url: undefined,
+    width: undefined,
+    height: undefined,
+    length: undefined,
+  };
 }
 
 export const Image = {
   encode(message: Image, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
+    if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
-    if (message.caption !== "") {
+    if (message.caption !== undefined) {
       writer.uint32(18).string(message.caption);
     }
-    if (message.filename !== "") {
+    if (message.filename !== undefined) {
       writer.uint32(26).string(message.filename);
     }
-    if (message.content_type !== "") {
+    if (message.content_type !== undefined) {
       writer.uint32(34).string(message.content_type);
     }
-    if (message.url !== "") {
+    if (message.url !== undefined) {
       writer.uint32(42).string(message.url);
     }
-    if (message.width !== 0) {
+    if (message.width !== undefined) {
       writer.uint32(49).double(message.width);
     }
-    if (message.height !== 0) {
+    if (message.height !== undefined) {
       writer.uint32(57).double(message.height);
     }
-    if (message.length !== 0) {
+    if (message.length !== undefined) {
       writer.uint32(65).double(message.length);
     }
     return writer;
@@ -99,14 +108,14 @@ export const Image = {
 
   fromJSON(object: any): Image {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
-      caption: isSet(object.caption) ? String(object.caption) : "",
-      filename: isSet(object.filename) ? String(object.filename) : "",
-      content_type: isSet(object.content_type) ? String(object.content_type) : "",
-      url: isSet(object.url) ? String(object.url) : "",
-      width: isSet(object.width) ? Number(object.width) : 0,
-      height: isSet(object.height) ? Number(object.height) : 0,
-      length: isSet(object.length) ? Number(object.length) : 0,
+      id: isSet(object.id) ? String(object.id) : undefined,
+      caption: isSet(object.caption) ? String(object.caption) : undefined,
+      filename: isSet(object.filename) ? String(object.filename) : undefined,
+      content_type: isSet(object.content_type) ? String(object.content_type) : undefined,
+      url: isSet(object.url) ? String(object.url) : undefined,
+      width: isSet(object.width) ? Number(object.width) : undefined,
+      height: isSet(object.height) ? Number(object.height) : undefined,
+      length: isSet(object.length) ? Number(object.length) : undefined,
     };
   },
 
@@ -129,20 +138,20 @@ export const Image = {
 
   fromPartial(object: DeepPartial<Image>): Image {
     const message = createBaseImage();
-    message.id = object.id ?? "";
-    message.caption = object.caption ?? "";
-    message.filename = object.filename ?? "";
-    message.content_type = object.content_type ?? "";
-    message.url = object.url ?? "";
-    message.width = object.width ?? 0;
-    message.height = object.height ?? 0;
-    message.length = object.length ?? 0;
+    message.id = object.id ?? undefined;
+    message.caption = object.caption ?? undefined;
+    message.filename = object.filename ?? undefined;
+    message.content_type = object.content_type ?? undefined;
+    message.url = object.url ?? undefined;
+    message.width = object.width ?? undefined;
+    message.height = object.height ?? undefined;
+    message.length = object.length ?? undefined;
     return message;
   },
 };
 
 function createBaseImageList(): ImageList {
-  return { items: [], total_count: 0 };
+  return { items: [], total_count: undefined };
 }
 
 export const ImageList = {
@@ -150,7 +159,7 @@ export const ImageList = {
     for (const v of message.items) {
       Image.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.total_count !== 0) {
+    if (message.total_count !== undefined) {
       writer.uint32(16).uint32(message.total_count);
     }
     return writer;
@@ -180,7 +189,7 @@ export const ImageList = {
   fromJSON(object: any): ImageList {
     return {
       items: Array.isArray(object?.items) ? object.items.map((e: any) => Image.fromJSON(e)) : [],
-      total_count: isSet(object.total_count) ? Number(object.total_count) : 0,
+      total_count: isSet(object.total_count) ? Number(object.total_count) : undefined,
     };
   },
 
@@ -202,7 +211,7 @@ export const ImageList = {
   fromPartial(object: DeepPartial<ImageList>): ImageList {
     const message = createBaseImageList();
     message.items = object.items?.map((e) => Image.fromPartial(e)) || [];
-    message.total_count = object.total_count ?? 0;
+    message.total_count = object.total_count ?? undefined;
     return message;
   },
 };
@@ -299,7 +308,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "caption",
         "number": 2,
@@ -308,10 +317,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "caption",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "filename",
         "number": 3,
@@ -320,10 +329,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "filename",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "content_type",
         "number": 4,
@@ -332,10 +341,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "contentType",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "url",
         "number": 5,
@@ -344,10 +353,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 4,
         "jsonName": "url",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "width",
         "number": 6,
@@ -356,10 +365,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 5,
         "jsonName": "width",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "height",
         "number": 7,
@@ -368,10 +377,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 6,
         "jsonName": "height",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "length",
         "number": 8,
@@ -380,16 +389,25 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 7,
         "jsonName": "length",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [
+        { "name": "_id", "options": undefined },
+        { "name": "_caption", "options": undefined },
+        { "name": "_filename", "options": undefined },
+        { "name": "_content_type", "options": undefined },
+        { "name": "_url", "options": undefined },
+        { "name": "_width", "options": undefined },
+        { "name": "_height", "options": undefined },
+        { "name": "_length", "options": undefined },
+      ],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -418,13 +436,13 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "totalCount",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_total_count", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],

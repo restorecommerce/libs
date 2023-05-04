@@ -12,25 +12,33 @@ export const protobufPackage = "io.restorecommerce.command";
 
 /** command resource */
 export interface Command {
-  id: string;
-  meta?: Meta;
+  id?: string | undefined;
+  meta?:
+    | Meta
+    | undefined;
   /** command name */
-  name: string;
+  name?:
+    | string
+    | undefined;
   /** all possible parameters */
   parameters: CommandParameter[];
   /** command description */
-  description: string;
+  description?: string | undefined;
 }
 
 export interface CommandParameter {
   /** field name */
-  field: string;
+  field?:
+    | string
+    | undefined;
   /** field description */
-  description: string;
+  description?:
+    | string
+    | undefined;
   /** field's type */
   type: CommandParameter_ParameterType;
   /** dump properties in case of `object_value`` */
-  properties: string;
+  properties?: string | undefined;
 }
 
 export enum CommandParameter_ParameterType {
@@ -86,7 +94,7 @@ export function commandParameter_ParameterTypeToJSON(object: CommandParameter_Pa
 
 export interface CommandList {
   items: Command[];
-  totalCount: number;
+  totalCount?: number | undefined;
   subject?: Subject;
 }
 
@@ -102,24 +110,24 @@ export interface CommandResponse {
 }
 
 function createBaseCommand(): Command {
-  return { id: "", meta: undefined, name: "", parameters: [], description: "" };
+  return { id: undefined, meta: undefined, name: undefined, parameters: [], description: undefined };
 }
 
 export const Command = {
   encode(message: Command, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
+    if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
-    if (message.name !== "") {
+    if (message.name !== undefined) {
       writer.uint32(26).string(message.name);
     }
     for (const v of message.parameters) {
       CommandParameter.encode(v!, writer.uint32(34).fork()).ldelim();
     }
-    if (message.description !== "") {
+    if (message.description !== undefined) {
       writer.uint32(42).string(message.description);
     }
     return writer;
@@ -157,13 +165,13 @@ export const Command = {
 
   fromJSON(object: any): Command {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
+      id: isSet(object.id) ? String(object.id) : undefined,
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
-      name: isSet(object.name) ? String(object.name) : "",
+      name: isSet(object.name) ? String(object.name) : undefined,
       parameters: Array.isArray(object?.parameters)
         ? object.parameters.map((e: any) => CommandParameter.fromJSON(e))
         : [],
-      description: isSet(object.description) ? String(object.description) : "",
+      description: isSet(object.description) ? String(object.description) : undefined,
     };
   },
 
@@ -187,31 +195,31 @@ export const Command = {
 
   fromPartial(object: DeepPartial<Command>): Command {
     const message = createBaseCommand();
-    message.id = object.id ?? "";
+    message.id = object.id ?? undefined;
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
-    message.name = object.name ?? "";
+    message.name = object.name ?? undefined;
     message.parameters = object.parameters?.map((e) => CommandParameter.fromPartial(e)) || [];
-    message.description = object.description ?? "";
+    message.description = object.description ?? undefined;
     return message;
   },
 };
 
 function createBaseCommandParameter(): CommandParameter {
-  return { field: "", description: "", type: 0, properties: "" };
+  return { field: undefined, description: undefined, type: 0, properties: undefined };
 }
 
 export const CommandParameter = {
   encode(message: CommandParameter, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.field !== "") {
+    if (message.field !== undefined) {
       writer.uint32(10).string(message.field);
     }
-    if (message.description !== "") {
+    if (message.description !== undefined) {
       writer.uint32(18).string(message.description);
     }
     if (message.type !== 0) {
       writer.uint32(24).int32(message.type);
     }
-    if (message.properties !== "") {
+    if (message.properties !== undefined) {
       writer.uint32(34).string(message.properties);
     }
     return writer;
@@ -246,10 +254,10 @@ export const CommandParameter = {
 
   fromJSON(object: any): CommandParameter {
     return {
-      field: isSet(object.field) ? String(object.field) : "",
-      description: isSet(object.description) ? String(object.description) : "",
+      field: isSet(object.field) ? String(object.field) : undefined,
+      description: isSet(object.description) ? String(object.description) : undefined,
       type: isSet(object.type) ? commandParameter_ParameterTypeFromJSON(object.type) : 0,
-      properties: isSet(object.properties) ? String(object.properties) : "",
+      properties: isSet(object.properties) ? String(object.properties) : undefined,
     };
   },
 
@@ -268,16 +276,16 @@ export const CommandParameter = {
 
   fromPartial(object: DeepPartial<CommandParameter>): CommandParameter {
     const message = createBaseCommandParameter();
-    message.field = object.field ?? "";
-    message.description = object.description ?? "";
+    message.field = object.field ?? undefined;
+    message.description = object.description ?? undefined;
     message.type = object.type ?? 0;
-    message.properties = object.properties ?? "";
+    message.properties = object.properties ?? undefined;
     return message;
   },
 };
 
 function createBaseCommandList(): CommandList {
-  return { items: [], totalCount: 0, subject: undefined };
+  return { items: [], totalCount: undefined, subject: undefined };
 }
 
 export const CommandList = {
@@ -285,7 +293,7 @@ export const CommandList = {
     for (const v of message.items) {
       Command.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.totalCount !== 0) {
+    if (message.totalCount !== undefined) {
       writer.uint32(16).uint32(message.totalCount);
     }
     if (message.subject !== undefined) {
@@ -321,7 +329,7 @@ export const CommandList = {
   fromJSON(object: any): CommandList {
     return {
       items: Array.isArray(object?.items) ? object.items.map((e: any) => Command.fromJSON(e)) : [],
-      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
+      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
@@ -345,7 +353,7 @@ export const CommandList = {
   fromPartial(object: DeepPartial<CommandList>): CommandList {
     const message = createBaseCommandList();
     message.items = object.items?.map((e) => Command.fromPartial(e)) || [];
-    message.totalCount = object.totalCount ?? 0;
+    message.totalCount = object.totalCount ?? undefined;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
@@ -608,7 +616,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "meta",
         "number": 2,
@@ -617,10 +625,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.meta.Meta",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "meta",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "name",
         "number": 3,
@@ -629,10 +637,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "name",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "parameters",
         "number": 4,
@@ -653,16 +661,19 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "description",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_id", "options": undefined }, { "name": "_meta", "options": undefined }, {
+        "name": "_name",
+        "options": undefined,
+      }, { "name": "_description", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -679,7 +690,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "field",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "description",
         "number": 2,
@@ -688,10 +699,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "description",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "type",
         "number": 3,
@@ -712,10 +723,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "properties",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
@@ -733,7 +744,10 @@ export const protoMetadata: ProtoMetadata = {
         "reservedName": [],
       }],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_field", "options": undefined }, { "name": "_description", "options": undefined }, {
+        "name": "_properties",
+        "options": undefined,
+      }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -762,7 +776,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "totalCount",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 3,
@@ -780,7 +794,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_total_count", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -919,7 +933,7 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 0, 2, 2],
-        "span": [14, 2, 18],
+        "span": [14, 2, 27],
         "leadingComments": "",
         "trailingComments": " command name\n",
         "leadingDetachedComments": [],
@@ -931,19 +945,19 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 0, 2, 4],
-        "span": [16, 2, 25],
+        "span": [16, 2, 34],
         "leadingComments": "",
         "trailingComments": " command description\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 0],
-        "span": [28, 2, 19],
+        "span": [28, 2, 28],
         "leadingComments": "",
         "trailingComments": "  field name\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 1],
-        "span": [29, 2, 25],
+        "span": [29, 2, 34],
         "leadingComments": "",
         "trailingComments": " field description\n",
         "leadingDetachedComments": [],
@@ -955,7 +969,7 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 3],
-        "span": [31, 2, 24],
+        "span": [31, 2, 33],
         "leadingComments": "",
         "trailingComments": " dump properties in case of `object_value``\n",
         "leadingDetachedComments": [],

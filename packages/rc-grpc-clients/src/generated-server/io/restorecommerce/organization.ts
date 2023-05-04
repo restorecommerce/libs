@@ -25,7 +25,7 @@ export interface DeleteOrgData {
 
 export interface OrganizationList {
   items: Organization[];
-  total_count: number;
+  total_count?: number | undefined;
   subject?: Subject;
 }
 
@@ -42,26 +42,34 @@ export interface OrganizationResponse {
 
 export interface Organization {
   /** / Organization ID, unique, key */
-  id: string;
-  meta?: Meta;
+  id?: string | undefined;
+  meta?:
+    | Meta
+    | undefined;
   /** / Address for the organization */
-  address_id: string;
+  address_id?:
+    | string
+    | undefined;
   /** Hierarchically superior organization; may be null */
-  parent_id: string;
+  parent_id?:
+    | string
+    | undefined;
   /** list of possible legal addresses of different types */
   contact_point_ids: string[];
-  website: string;
-  email: string;
+  website?: string | undefined;
+  email?:
+    | string
+    | undefined;
   /** base64; arangoDB does not support blob storage */
-  logo: string;
-  vat_id: string;
-  isic_v4: string;
-  registration: string;
-  registration_court: string;
-  name: string;
+  logo?: string | undefined;
+  vat_id?: string | undefined;
+  isic_v4?: string | undefined;
+  registration?: string | undefined;
+  registration_court?: string | undefined;
+  name?: string | undefined;
   payment_method_ids: string[];
   /** / additional data */
-  data?: Any;
+  data?: Any | undefined;
 }
 
 function createBaseDeleted(): Deleted {
@@ -197,7 +205,7 @@ export const DeleteOrgData = {
 };
 
 function createBaseOrganizationList(): OrganizationList {
-  return { items: [], total_count: 0, subject: undefined };
+  return { items: [], total_count: undefined, subject: undefined };
 }
 
 export const OrganizationList = {
@@ -205,7 +213,7 @@ export const OrganizationList = {
     for (const v of message.items) {
       Organization.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.total_count !== 0) {
+    if (message.total_count !== undefined) {
       writer.uint32(16).uint32(message.total_count);
     }
     if (message.subject !== undefined) {
@@ -241,7 +249,7 @@ export const OrganizationList = {
   fromJSON(object: any): OrganizationList {
     return {
       items: Array.isArray(object?.items) ? object.items.map((e: any) => Organization.fromJSON(e)) : [],
-      total_count: isSet(object.total_count) ? Number(object.total_count) : 0,
+      total_count: isSet(object.total_count) ? Number(object.total_count) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
@@ -265,7 +273,7 @@ export const OrganizationList = {
   fromPartial(object: DeepPartial<OrganizationList>): OrganizationList {
     const message = createBaseOrganizationList();
     message.items = object.items?.map((e) => Organization.fromPartial(e)) || [];
-    message.total_count = object.total_count ?? 0;
+    message.total_count = object.total_count ?? undefined;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
@@ -419,19 +427,19 @@ export const OrganizationResponse = {
 
 function createBaseOrganization(): Organization {
   return {
-    id: "",
+    id: undefined,
     meta: undefined,
-    address_id: "",
-    parent_id: "",
+    address_id: undefined,
+    parent_id: undefined,
     contact_point_ids: [],
-    website: "",
-    email: "",
-    logo: "",
-    vat_id: "",
-    isic_v4: "",
-    registration: "",
-    registration_court: "",
-    name: "",
+    website: undefined,
+    email: undefined,
+    logo: undefined,
+    vat_id: undefined,
+    isic_v4: undefined,
+    registration: undefined,
+    registration_court: undefined,
+    name: undefined,
     payment_method_ids: [],
     data: undefined,
   };
@@ -439,43 +447,43 @@ function createBaseOrganization(): Organization {
 
 export const Organization = {
   encode(message: Organization, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
+    if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
-    if (message.address_id !== "") {
+    if (message.address_id !== undefined) {
       writer.uint32(26).string(message.address_id);
     }
-    if (message.parent_id !== "") {
+    if (message.parent_id !== undefined) {
       writer.uint32(34).string(message.parent_id);
     }
     for (const v of message.contact_point_ids) {
       writer.uint32(50).string(v!);
     }
-    if (message.website !== "") {
+    if (message.website !== undefined) {
       writer.uint32(58).string(message.website);
     }
-    if (message.email !== "") {
+    if (message.email !== undefined) {
       writer.uint32(66).string(message.email);
     }
-    if (message.logo !== "") {
+    if (message.logo !== undefined) {
       writer.uint32(74).string(message.logo);
     }
-    if (message.vat_id !== "") {
+    if (message.vat_id !== undefined) {
       writer.uint32(82).string(message.vat_id);
     }
-    if (message.isic_v4 !== "") {
+    if (message.isic_v4 !== undefined) {
       writer.uint32(90).string(message.isic_v4);
     }
-    if (message.registration !== "") {
+    if (message.registration !== undefined) {
       writer.uint32(98).string(message.registration);
     }
-    if (message.registration_court !== "") {
+    if (message.registration_court !== undefined) {
       writer.uint32(106).string(message.registration_court);
     }
-    if (message.name !== "") {
+    if (message.name !== undefined) {
       writer.uint32(114).string(message.name);
     }
     for (const v of message.payment_method_ids) {
@@ -549,21 +557,21 @@ export const Organization = {
 
   fromJSON(object: any): Organization {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
+      id: isSet(object.id) ? String(object.id) : undefined,
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
-      address_id: isSet(object.address_id) ? String(object.address_id) : "",
-      parent_id: isSet(object.parent_id) ? String(object.parent_id) : "",
+      address_id: isSet(object.address_id) ? String(object.address_id) : undefined,
+      parent_id: isSet(object.parent_id) ? String(object.parent_id) : undefined,
       contact_point_ids: Array.isArray(object?.contact_point_ids)
         ? object.contact_point_ids.map((e: any) => String(e))
         : [],
-      website: isSet(object.website) ? String(object.website) : "",
-      email: isSet(object.email) ? String(object.email) : "",
-      logo: isSet(object.logo) ? String(object.logo) : "",
-      vat_id: isSet(object.vat_id) ? String(object.vat_id) : "",
-      isic_v4: isSet(object.isic_v4) ? String(object.isic_v4) : "",
-      registration: isSet(object.registration) ? String(object.registration) : "",
-      registration_court: isSet(object.registration_court) ? String(object.registration_court) : "",
-      name: isSet(object.name) ? String(object.name) : "",
+      website: isSet(object.website) ? String(object.website) : undefined,
+      email: isSet(object.email) ? String(object.email) : undefined,
+      logo: isSet(object.logo) ? String(object.logo) : undefined,
+      vat_id: isSet(object.vat_id) ? String(object.vat_id) : undefined,
+      isic_v4: isSet(object.isic_v4) ? String(object.isic_v4) : undefined,
+      registration: isSet(object.registration) ? String(object.registration) : undefined,
+      registration_court: isSet(object.registration_court) ? String(object.registration_court) : undefined,
+      name: isSet(object.name) ? String(object.name) : undefined,
       payment_method_ids: Array.isArray(object?.payment_method_ids)
         ? object.payment_method_ids.map((e: any) => String(e))
         : [],
@@ -605,19 +613,19 @@ export const Organization = {
 
   fromPartial(object: DeepPartial<Organization>): Organization {
     const message = createBaseOrganization();
-    message.id = object.id ?? "";
+    message.id = object.id ?? undefined;
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
-    message.address_id = object.address_id ?? "";
-    message.parent_id = object.parent_id ?? "";
+    message.address_id = object.address_id ?? undefined;
+    message.parent_id = object.parent_id ?? undefined;
     message.contact_point_ids = object.contact_point_ids?.map((e) => e) || [];
-    message.website = object.website ?? "";
-    message.email = object.email ?? "";
-    message.logo = object.logo ?? "";
-    message.vat_id = object.vat_id ?? "";
-    message.isic_v4 = object.isic_v4 ?? "";
-    message.registration = object.registration ?? "";
-    message.registration_court = object.registration_court ?? "";
-    message.name = object.name ?? "";
+    message.website = object.website ?? undefined;
+    message.email = object.email ?? undefined;
+    message.logo = object.logo ?? undefined;
+    message.vat_id = object.vat_id ?? undefined;
+    message.isic_v4 = object.isic_v4 ?? undefined;
+    message.registration = object.registration ?? undefined;
+    message.registration_court = object.registration_court ?? undefined;
+    message.name = object.name ?? undefined;
     message.payment_method_ids = object.payment_method_ids?.map((e) => e) || [];
     message.data = (object.data !== undefined && object.data !== null) ? Any.fromPartial(object.data) : undefined;
     return message;
@@ -838,7 +846,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "totalCount",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 3,
@@ -856,7 +864,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_total_count", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -955,7 +963,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "meta",
         "number": 2,
@@ -964,10 +972,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.meta.Meta",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "meta",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "address_id",
         "number": 3,
@@ -976,7 +984,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "addressId",
         "options": {
           "ctype": 0,
@@ -987,7 +995,7 @@ export const protoMetadata: ProtoMetadata = {
           "weak": false,
           "uninterpretedOption": [],
         },
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "parent_id",
         "number": 4,
@@ -996,7 +1004,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "parentId",
         "options": {
           "ctype": 0,
@@ -1007,7 +1015,7 @@ export const protoMetadata: ProtoMetadata = {
           "weak": false,
           "uninterpretedOption": [],
         },
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "contact_point_ids",
         "number": 6,
@@ -1036,10 +1044,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 4,
         "jsonName": "website",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "email",
         "number": 8,
@@ -1048,10 +1056,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 5,
         "jsonName": "email",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "logo",
         "number": 9,
@@ -1060,10 +1068,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 6,
         "jsonName": "logo",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "vat_id",
         "number": 10,
@@ -1072,10 +1080,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 7,
         "jsonName": "vatId",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "isic_v4",
         "number": 11,
@@ -1084,10 +1092,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 8,
         "jsonName": "isicV4",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "registration",
         "number": 12,
@@ -1096,10 +1104,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 9,
         "jsonName": "registration",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "registration_court",
         "number": 13,
@@ -1108,10 +1116,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 10,
         "jsonName": "registrationCourt",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "name",
         "number": 14,
@@ -1120,10 +1128,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 11,
         "jsonName": "name",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "payment_method_ids",
         "number": 15,
@@ -1144,16 +1152,30 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".google.protobuf.Any",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 12,
         "jsonName": "data",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [
+        { "name": "_id", "options": undefined },
+        { "name": "_meta", "options": undefined },
+        { "name": "_address_id", "options": undefined },
+        { "name": "_parent_id", "options": undefined },
+        { "name": "_website", "options": undefined },
+        { "name": "_email", "options": undefined },
+        { "name": "_logo", "options": undefined },
+        { "name": "_vat_id", "options": undefined },
+        { "name": "_isic_v4", "options": undefined },
+        { "name": "_registration", "options": undefined },
+        { "name": "_registration_court", "options": undefined },
+        { "name": "_name", "options": undefined },
+        { "name": "_data", "options": undefined },
+      ],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1210,7 +1232,7 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 5, 2, 0],
-        "span": [55, 2, 16],
+        "span": [55, 2, 25],
         "leadingComments": "",
         "trailingComments": "/ Organization ID, unique, key\n",
         "leadingDetachedComments": [],
@@ -1234,13 +1256,13 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 5, 2, 7],
-        "span": [86, 2, 18],
+        "span": [86, 2, 27],
         "leadingComments": "",
         "trailingComments": " base64; arangoDB does not support blob storage\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 5, 2, 14],
-        "span": [93, 2, 32],
+        "span": [93, 2, 41],
         "leadingComments": "",
         "trailingComments": "/ additional data\n",
         "leadingDetachedComments": [],

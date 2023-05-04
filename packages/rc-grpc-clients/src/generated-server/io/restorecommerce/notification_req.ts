@@ -8,29 +8,39 @@ export const protobufPackage = "io.restorecommerce.notification_req";
 
 /** mimics nodemailer properties for easy configuration */
 export interface Attachment {
-  filename: string;
+  filename?:
+    | string
+    | undefined;
   /** the "content" may be on of the following: */
-  text: string;
+  text?:
+    | string
+    | undefined;
   /** for binary data, eg.: images */
-  buffer: Buffer;
-  path: string;
-  content_type: string;
-  content_disposition: string;
-  cid: string;
-  encoding: string;
+  buffer?: Buffer | undefined;
+  path?: string | undefined;
+  content_type?: string | undefined;
+  content_disposition?: string | undefined;
+  cid?: string | undefined;
+  encoding?: string | undefined;
 }
 
 /** sendEmail NotificationReq event */
 export interface NotificationReq {
   email?: Email | undefined;
   log?: Log | undefined;
-  subject: string;
+  subject?:
+    | string
+    | undefined;
   /** text/HTML content */
-  body: string;
+  body?:
+    | string
+    | undefined;
   /** / 'email', 'log', ... default == 'log' */
-  transport: string;
+  transport?:
+    | string
+    | undefined;
   /** / specific transport provider, eg: 'console' for transport == 'log' */
-  provider: string;
+  provider?: string | undefined;
   attachments: Attachment[];
 }
 
@@ -42,50 +52,50 @@ export interface Email {
   /** array of bcc email list */
   bcc: string[];
   /** if set, the outgoing mail will have this replyTo header set */
-  replyto: string;
+  replyto?: string | undefined;
 }
 
 export interface Log {
-  level: string;
+  level?: string | undefined;
 }
 
 function createBaseAttachment(): Attachment {
   return {
-    filename: "",
-    text: "",
-    buffer: Buffer.alloc(0),
-    path: "",
-    content_type: "",
-    content_disposition: "",
-    cid: "",
-    encoding: "",
+    filename: undefined,
+    text: undefined,
+    buffer: undefined,
+    path: undefined,
+    content_type: undefined,
+    content_disposition: undefined,
+    cid: undefined,
+    encoding: undefined,
   };
 }
 
 export const Attachment = {
   encode(message: Attachment, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.filename !== "") {
+    if (message.filename !== undefined) {
       writer.uint32(10).string(message.filename);
     }
-    if (message.text !== "") {
+    if (message.text !== undefined) {
       writer.uint32(18).string(message.text);
     }
-    if (message.buffer.length !== 0) {
+    if (message.buffer !== undefined) {
       writer.uint32(26).bytes(message.buffer);
     }
-    if (message.path !== "") {
+    if (message.path !== undefined) {
       writer.uint32(34).string(message.path);
     }
-    if (message.content_type !== "") {
+    if (message.content_type !== undefined) {
       writer.uint32(42).string(message.content_type);
     }
-    if (message.content_disposition !== "") {
+    if (message.content_disposition !== undefined) {
       writer.uint32(50).string(message.content_disposition);
     }
-    if (message.cid !== "") {
+    if (message.cid !== undefined) {
       writer.uint32(58).string(message.cid);
     }
-    if (message.encoding !== "") {
+    if (message.encoding !== undefined) {
       writer.uint32(66).string(message.encoding);
     }
     return writer;
@@ -132,14 +142,14 @@ export const Attachment = {
 
   fromJSON(object: any): Attachment {
     return {
-      filename: isSet(object.filename) ? String(object.filename) : "",
-      text: isSet(object.text) ? String(object.text) : "",
-      buffer: isSet(object.buffer) ? Buffer.from(bytesFromBase64(object.buffer)) : Buffer.alloc(0),
-      path: isSet(object.path) ? String(object.path) : "",
-      content_type: isSet(object.content_type) ? String(object.content_type) : "",
-      content_disposition: isSet(object.content_disposition) ? String(object.content_disposition) : "",
-      cid: isSet(object.cid) ? String(object.cid) : "",
-      encoding: isSet(object.encoding) ? String(object.encoding) : "",
+      filename: isSet(object.filename) ? String(object.filename) : undefined,
+      text: isSet(object.text) ? String(object.text) : undefined,
+      buffer: isSet(object.buffer) ? Buffer.from(bytesFromBase64(object.buffer)) : undefined,
+      path: isSet(object.path) ? String(object.path) : undefined,
+      content_type: isSet(object.content_type) ? String(object.content_type) : undefined,
+      content_disposition: isSet(object.content_disposition) ? String(object.content_disposition) : undefined,
+      cid: isSet(object.cid) ? String(object.cid) : undefined,
+      encoding: isSet(object.encoding) ? String(object.encoding) : undefined,
     };
   },
 
@@ -148,7 +158,7 @@ export const Attachment = {
     message.filename !== undefined && (obj.filename = message.filename);
     message.text !== undefined && (obj.text = message.text);
     message.buffer !== undefined &&
-      (obj.buffer = base64FromBytes(message.buffer !== undefined ? message.buffer : Buffer.alloc(0)));
+      (obj.buffer = message.buffer !== undefined ? base64FromBytes(message.buffer) : undefined);
     message.path !== undefined && (obj.path = message.path);
     message.content_type !== undefined && (obj.content_type = message.content_type);
     message.content_disposition !== undefined && (obj.content_disposition = message.content_disposition);
@@ -163,20 +173,28 @@ export const Attachment = {
 
   fromPartial(object: DeepPartial<Attachment>): Attachment {
     const message = createBaseAttachment();
-    message.filename = object.filename ?? "";
-    message.text = object.text ?? "";
-    message.buffer = object.buffer ?? Buffer.alloc(0);
-    message.path = object.path ?? "";
-    message.content_type = object.content_type ?? "";
-    message.content_disposition = object.content_disposition ?? "";
-    message.cid = object.cid ?? "";
-    message.encoding = object.encoding ?? "";
+    message.filename = object.filename ?? undefined;
+    message.text = object.text ?? undefined;
+    message.buffer = object.buffer ?? undefined;
+    message.path = object.path ?? undefined;
+    message.content_type = object.content_type ?? undefined;
+    message.content_disposition = object.content_disposition ?? undefined;
+    message.cid = object.cid ?? undefined;
+    message.encoding = object.encoding ?? undefined;
     return message;
   },
 };
 
 function createBaseNotificationReq(): NotificationReq {
-  return { email: undefined, log: undefined, subject: "", body: "", transport: "", provider: "", attachments: [] };
+  return {
+    email: undefined,
+    log: undefined,
+    subject: undefined,
+    body: undefined,
+    transport: undefined,
+    provider: undefined,
+    attachments: [],
+  };
 }
 
 export const NotificationReq = {
@@ -187,16 +205,16 @@ export const NotificationReq = {
     if (message.log !== undefined) {
       Log.encode(message.log, writer.uint32(18).fork()).ldelim();
     }
-    if (message.subject !== "") {
+    if (message.subject !== undefined) {
       writer.uint32(26).string(message.subject);
     }
-    if (message.body !== "") {
+    if (message.body !== undefined) {
       writer.uint32(34).string(message.body);
     }
-    if (message.transport !== "") {
+    if (message.transport !== undefined) {
       writer.uint32(42).string(message.transport);
     }
-    if (message.provider !== "") {
+    if (message.provider !== undefined) {
       writer.uint32(50).string(message.provider);
     }
     for (const v of message.attachments) {
@@ -245,10 +263,10 @@ export const NotificationReq = {
     return {
       email: isSet(object.email) ? Email.fromJSON(object.email) : undefined,
       log: isSet(object.log) ? Log.fromJSON(object.log) : undefined,
-      subject: isSet(object.subject) ? String(object.subject) : "",
-      body: isSet(object.body) ? String(object.body) : "",
-      transport: isSet(object.transport) ? String(object.transport) : "",
-      provider: isSet(object.provider) ? String(object.provider) : "",
+      subject: isSet(object.subject) ? String(object.subject) : undefined,
+      body: isSet(object.body) ? String(object.body) : undefined,
+      transport: isSet(object.transport) ? String(object.transport) : undefined,
+      provider: isSet(object.provider) ? String(object.provider) : undefined,
       attachments: Array.isArray(object?.attachments) ? object.attachments.map((e: any) => Attachment.fromJSON(e)) : [],
     };
   },
@@ -277,17 +295,17 @@ export const NotificationReq = {
     const message = createBaseNotificationReq();
     message.email = (object.email !== undefined && object.email !== null) ? Email.fromPartial(object.email) : undefined;
     message.log = (object.log !== undefined && object.log !== null) ? Log.fromPartial(object.log) : undefined;
-    message.subject = object.subject ?? "";
-    message.body = object.body ?? "";
-    message.transport = object.transport ?? "";
-    message.provider = object.provider ?? "";
+    message.subject = object.subject ?? undefined;
+    message.body = object.body ?? undefined;
+    message.transport = object.transport ?? undefined;
+    message.provider = object.provider ?? undefined;
     message.attachments = object.attachments?.map((e) => Attachment.fromPartial(e)) || [];
     return message;
   },
 };
 
 function createBaseEmail(): Email {
-  return { to: [], cc: [], bcc: [], replyto: "" };
+  return { to: [], cc: [], bcc: [], replyto: undefined };
 }
 
 export const Email = {
@@ -301,7 +319,7 @@ export const Email = {
     for (const v of message.bcc) {
       writer.uint32(26).string(v!);
     }
-    if (message.replyto !== "") {
+    if (message.replyto !== undefined) {
       writer.uint32(34).string(message.replyto);
     }
     return writer;
@@ -339,7 +357,7 @@ export const Email = {
       to: Array.isArray(object?.to) ? object.to.map((e: any) => String(e)) : [],
       cc: Array.isArray(object?.cc) ? object.cc.map((e: any) => String(e)) : [],
       bcc: Array.isArray(object?.bcc) ? object.bcc.map((e: any) => String(e)) : [],
-      replyto: isSet(object.replyto) ? String(object.replyto) : "",
+      replyto: isSet(object.replyto) ? String(object.replyto) : undefined,
     };
   },
 
@@ -373,18 +391,18 @@ export const Email = {
     message.to = object.to?.map((e) => e) || [];
     message.cc = object.cc?.map((e) => e) || [];
     message.bcc = object.bcc?.map((e) => e) || [];
-    message.replyto = object.replyto ?? "";
+    message.replyto = object.replyto ?? undefined;
     return message;
   },
 };
 
 function createBaseLog(): Log {
-  return { level: "" };
+  return { level: undefined };
 }
 
 export const Log = {
   encode(message: Log, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.level !== "") {
+    if (message.level !== undefined) {
       writer.uint32(10).string(message.level);
     }
     return writer;
@@ -409,7 +427,7 @@ export const Log = {
   },
 
   fromJSON(object: any): Log {
-    return { level: isSet(object.level) ? String(object.level) : "" };
+    return { level: isSet(object.level) ? String(object.level) : undefined };
   },
 
   toJSON(message: Log): unknown {
@@ -424,7 +442,7 @@ export const Log = {
 
   fromPartial(object: DeepPartial<Log>): Log {
     const message = createBaseLog();
-    message.level = object.level ?? "";
+    message.level = object.level ?? undefined;
     return message;
   },
 };
@@ -497,7 +515,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "filename",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "text",
         "number": 2,
@@ -506,10 +524,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "text",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "buffer",
         "number": 3,
@@ -518,10 +536,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "buffer",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "path",
         "number": 4,
@@ -530,10 +548,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "path",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "content_type",
         "number": 5,
@@ -542,10 +560,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 4,
         "jsonName": "contentType",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "content_disposition",
         "number": 6,
@@ -554,10 +572,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 5,
         "jsonName": "contentDisposition",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "cid",
         "number": 7,
@@ -566,10 +584,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 6,
         "jsonName": "cid",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "encoding",
         "number": 8,
@@ -578,16 +596,25 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 7,
         "jsonName": "encoding",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [
+        { "name": "_filename", "options": undefined },
+        { "name": "_text", "options": undefined },
+        { "name": "_buffer", "options": undefined },
+        { "name": "_path", "options": undefined },
+        { "name": "_content_type", "options": undefined },
+        { "name": "_content_disposition", "options": undefined },
+        { "name": "_cid", "options": undefined },
+        { "name": "_encoding", "options": undefined },
+      ],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -625,10 +652,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "subject",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "body",
         "number": 4,
@@ -637,10 +664,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "body",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "transport",
         "number": 5,
@@ -649,10 +676,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "transport",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "provider",
         "number": 6,
@@ -661,10 +688,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 4,
         "jsonName": "provider",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "attachments",
         "number": 7,
@@ -682,7 +709,13 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [{ "name": "channel", "options": undefined }],
+      "oneofDecl": [
+        { "name": "channel", "options": undefined },
+        { "name": "_subject", "options": undefined },
+        { "name": "_body", "options": undefined },
+        { "name": "_transport", "options": undefined },
+        { "name": "_provider", "options": undefined },
+      ],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -735,13 +768,13 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "replyto",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_replyto", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -758,13 +791,13 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "level",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_level", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -799,13 +832,13 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 0, 2, 1],
-        "span": [16, 2, 18],
+        "span": [16, 2, 27],
         "leadingComments": ' the "content" may be on of the following:\n',
         "trailingComments": " for textual data\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 0, 2, 2],
-        "span": [17, 2, 19],
+        "span": [17, 2, 28],
         "leadingComments": "",
         "trailingComments": " for binary data, eg.: images\n",
         "leadingDetachedComments": [],
@@ -817,19 +850,19 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 3],
-        "span": [33, 2, 18],
+        "span": [33, 2, 27],
         "leadingComments": "",
         "trailingComments": " text/HTML content\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 4],
-        "span": [34, 2, 23],
+        "span": [34, 2, 32],
         "leadingComments": "",
         "trailingComments": "/ 'email', 'log', ... default == 'log'\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 5],
-        "span": [35, 2, 22],
+        "span": [35, 2, 31],
         "leadingComments": "",
         "trailingComments": "/ specific transport provider, eg: 'console' for transport == 'log'\n",
         "leadingDetachedComments": [],
@@ -853,7 +886,7 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 2, 2, 3],
-        "span": [43, 2, 21],
+        "span": [43, 2, 30],
         "leadingComments": "",
         "trailingComments": " if set, the outgoing mail will have this replyTo header set\n",
         "leadingDetachedComments": [],

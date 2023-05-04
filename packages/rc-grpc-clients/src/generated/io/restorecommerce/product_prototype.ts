@@ -12,17 +12,17 @@ export const protobufPackage = "io.restorecommerce.product_prototype";
 
 /** ProductPrototype resource */
 export interface ProductPrototype {
-  id: string;
-  meta?: Meta;
-  name: string;
-  version: string;
-  description: string;
-  categoryId: string;
+  id?: string | undefined;
+  meta?: Meta | undefined;
+  name?: string | undefined;
+  version?: string | undefined;
+  description?: string | undefined;
+  categoryId?: string | undefined;
 }
 
 export interface ProductPrototypeList {
   items: ProductPrototype[];
-  totalCount: number;
+  totalCount?: number | undefined;
   subject?: Subject;
 }
 
@@ -42,27 +42,34 @@ export interface Deleted {
 }
 
 function createBaseProductPrototype(): ProductPrototype {
-  return { id: "", meta: undefined, name: "", version: "", description: "", categoryId: "" };
+  return {
+    id: undefined,
+    meta: undefined,
+    name: undefined,
+    version: undefined,
+    description: undefined,
+    categoryId: undefined,
+  };
 }
 
 export const ProductPrototype = {
   encode(message: ProductPrototype, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
+    if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
-    if (message.name !== "") {
+    if (message.name !== undefined) {
       writer.uint32(26).string(message.name);
     }
-    if (message.version !== "") {
+    if (message.version !== undefined) {
       writer.uint32(34).string(message.version);
     }
-    if (message.description !== "") {
+    if (message.description !== undefined) {
       writer.uint32(42).string(message.description);
     }
-    if (message.categoryId !== "") {
+    if (message.categoryId !== undefined) {
       writer.uint32(50).string(message.categoryId);
     }
     return writer;
@@ -103,12 +110,12 @@ export const ProductPrototype = {
 
   fromJSON(object: any): ProductPrototype {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
+      id: isSet(object.id) ? String(object.id) : undefined,
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
-      name: isSet(object.name) ? String(object.name) : "",
-      version: isSet(object.version) ? String(object.version) : "",
-      description: isSet(object.description) ? String(object.description) : "",
-      categoryId: isSet(object.categoryId) ? String(object.categoryId) : "",
+      name: isSet(object.name) ? String(object.name) : undefined,
+      version: isSet(object.version) ? String(object.version) : undefined,
+      description: isSet(object.description) ? String(object.description) : undefined,
+      categoryId: isSet(object.categoryId) ? String(object.categoryId) : undefined,
     };
   },
 
@@ -129,18 +136,18 @@ export const ProductPrototype = {
 
   fromPartial(object: DeepPartial<ProductPrototype>): ProductPrototype {
     const message = createBaseProductPrototype();
-    message.id = object.id ?? "";
+    message.id = object.id ?? undefined;
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
-    message.name = object.name ?? "";
-    message.version = object.version ?? "";
-    message.description = object.description ?? "";
-    message.categoryId = object.categoryId ?? "";
+    message.name = object.name ?? undefined;
+    message.version = object.version ?? undefined;
+    message.description = object.description ?? undefined;
+    message.categoryId = object.categoryId ?? undefined;
     return message;
   },
 };
 
 function createBaseProductPrototypeList(): ProductPrototypeList {
-  return { items: [], totalCount: 0, subject: undefined };
+  return { items: [], totalCount: undefined, subject: undefined };
 }
 
 export const ProductPrototypeList = {
@@ -148,7 +155,7 @@ export const ProductPrototypeList = {
     for (const v of message.items) {
       ProductPrototype.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.totalCount !== 0) {
+    if (message.totalCount !== undefined) {
       writer.uint32(16).uint32(message.totalCount);
     }
     if (message.subject !== undefined) {
@@ -184,7 +191,7 @@ export const ProductPrototypeList = {
   fromJSON(object: any): ProductPrototypeList {
     return {
       items: Array.isArray(object?.items) ? object.items.map((e: any) => ProductPrototype.fromJSON(e)) : [],
-      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
+      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
@@ -208,7 +215,7 @@ export const ProductPrototypeList = {
   fromPartial(object: DeepPartial<ProductPrototypeList>): ProductPrototypeList {
     const message = createBaseProductPrototypeList();
     message.items = object.items?.map((e) => ProductPrototype.fromPartial(e)) || [];
-    message.totalCount = object.totalCount ?? 0;
+    message.totalCount = object.totalCount ?? undefined;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
@@ -544,7 +551,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "meta",
         "number": 2,
@@ -553,10 +560,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.meta.Meta",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "meta",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "name",
         "number": 3,
@@ -565,10 +572,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "name",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "version",
         "number": 4,
@@ -577,10 +584,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "version",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "description",
         "number": 5,
@@ -589,10 +596,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 4,
         "jsonName": "description",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "category_id",
         "number": 6,
@@ -601,16 +608,23 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 5,
         "jsonName": "categoryId",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [
+        { "name": "_id", "options": undefined },
+        { "name": "_meta", "options": undefined },
+        { "name": "_name", "options": undefined },
+        { "name": "_version", "options": undefined },
+        { "name": "_description", "options": undefined },
+        { "name": "_category_id", "options": undefined },
+      ],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -639,7 +653,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "totalCount",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 3,
@@ -657,7 +671,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_total_count", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],

@@ -17,7 +17,7 @@ export interface Deleted {
 
 export interface AddressList {
   items: Address[];
-  totalCount: number;
+  totalCount?: number | undefined;
   subject?: Subject;
 }
 
@@ -33,13 +33,13 @@ export interface AddressResponse {
 }
 
 export interface GeoPoint {
-  latitude: number;
-  longitude: number;
+  latitude?: number | undefined;
+  longitude?: number | undefined;
 }
 
 export interface AddressAddition {
-  field1: string;
-  field2: string;
+  field1?: string | undefined;
+  field2?: string | undefined;
 }
 
 export interface BusinessAddress {
@@ -67,17 +67,17 @@ export interface ContactPerson {
 }
 
 export interface Address {
-  id: string;
-  meta?: Meta;
-  postcode: string;
-  countryId: string;
-  locality: string;
-  street: string;
-  region: string;
-  geoCoordinates?: GeoPoint;
-  altitude: number;
-  buildingNumber: string;
-  addressAddition?: AddressAddition;
+  id?: string | undefined;
+  meta?: Meta | undefined;
+  postcode?: string | undefined;
+  countryId?: string | undefined;
+  locality?: string | undefined;
+  street?: string | undefined;
+  region?: string | undefined;
+  geoCoordinates?: GeoPoint | undefined;
+  altitude?: number | undefined;
+  buildingNumber?: string | undefined;
+  addressAddition?: AddressAddition | undefined;
   businessAddress?: BusinessAddress | undefined;
   residentialAddress?: ResidentialAddress | undefined;
   packStation?: PackStation | undefined;
@@ -135,7 +135,7 @@ export const Deleted = {
 };
 
 function createBaseAddressList(): AddressList {
-  return { items: [], totalCount: 0, subject: undefined };
+  return { items: [], totalCount: undefined, subject: undefined };
 }
 
 export const AddressList = {
@@ -143,7 +143,7 @@ export const AddressList = {
     for (const v of message.items) {
       Address.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.totalCount !== 0) {
+    if (message.totalCount !== undefined) {
       writer.uint32(16).uint32(message.totalCount);
     }
     if (message.subject !== undefined) {
@@ -179,7 +179,7 @@ export const AddressList = {
   fromJSON(object: any): AddressList {
     return {
       items: Array.isArray(object?.items) ? object.items.map((e: any) => Address.fromJSON(e)) : [],
-      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
+      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
@@ -203,7 +203,7 @@ export const AddressList = {
   fromPartial(object: DeepPartial<AddressList>): AddressList {
     const message = createBaseAddressList();
     message.items = object.items?.map((e) => Address.fromPartial(e)) || [];
-    message.totalCount = object.totalCount ?? 0;
+    message.totalCount = object.totalCount ?? undefined;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
@@ -356,15 +356,15 @@ export const AddressResponse = {
 };
 
 function createBaseGeoPoint(): GeoPoint {
-  return { latitude: 0, longitude: 0 };
+  return { latitude: undefined, longitude: undefined };
 }
 
 export const GeoPoint = {
   encode(message: GeoPoint, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.latitude !== 0) {
+    if (message.latitude !== undefined) {
       writer.uint32(9).double(message.latitude);
     }
-    if (message.longitude !== 0) {
+    if (message.longitude !== undefined) {
       writer.uint32(17).double(message.longitude);
     }
     return writer;
@@ -393,8 +393,8 @@ export const GeoPoint = {
 
   fromJSON(object: any): GeoPoint {
     return {
-      latitude: isSet(object.latitude) ? Number(object.latitude) : 0,
-      longitude: isSet(object.longitude) ? Number(object.longitude) : 0,
+      latitude: isSet(object.latitude) ? Number(object.latitude) : undefined,
+      longitude: isSet(object.longitude) ? Number(object.longitude) : undefined,
     };
   },
 
@@ -411,22 +411,22 @@ export const GeoPoint = {
 
   fromPartial(object: DeepPartial<GeoPoint>): GeoPoint {
     const message = createBaseGeoPoint();
-    message.latitude = object.latitude ?? 0;
-    message.longitude = object.longitude ?? 0;
+    message.latitude = object.latitude ?? undefined;
+    message.longitude = object.longitude ?? undefined;
     return message;
   },
 };
 
 function createBaseAddressAddition(): AddressAddition {
-  return { field1: "", field2: "" };
+  return { field1: undefined, field2: undefined };
 }
 
 export const AddressAddition = {
   encode(message: AddressAddition, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.field1 !== "") {
+    if (message.field1 !== undefined) {
       writer.uint32(10).string(message.field1);
     }
-    if (message.field2 !== "") {
+    if (message.field2 !== undefined) {
       writer.uint32(18).string(message.field2);
     }
     return writer;
@@ -455,8 +455,8 @@ export const AddressAddition = {
 
   fromJSON(object: any): AddressAddition {
     return {
-      field1: isSet(object.field1) ? String(object.field1) : "",
-      field2: isSet(object.field2) ? String(object.field2) : "",
+      field1: isSet(object.field1) ? String(object.field1) : undefined,
+      field2: isSet(object.field2) ? String(object.field2) : undefined,
     };
   },
 
@@ -473,8 +473,8 @@ export const AddressAddition = {
 
   fromPartial(object: DeepPartial<AddressAddition>): AddressAddition {
     const message = createBaseAddressAddition();
-    message.field1 = object.field1 ?? "";
-    message.field2 = object.field2 ?? "";
+    message.field1 = object.field1 ?? undefined;
+    message.field2 = object.field2 ?? undefined;
     return message;
   },
 };
@@ -754,16 +754,16 @@ export const ContactPerson = {
 
 function createBaseAddress(): Address {
   return {
-    id: "",
+    id: undefined,
     meta: undefined,
-    postcode: "",
-    countryId: "",
-    locality: "",
-    street: "",
-    region: "",
+    postcode: undefined,
+    countryId: undefined,
+    locality: undefined,
+    street: undefined,
+    region: undefined,
     geoCoordinates: undefined,
-    altitude: 0,
-    buildingNumber: "",
+    altitude: undefined,
+    buildingNumber: undefined,
     addressAddition: undefined,
     businessAddress: undefined,
     residentialAddress: undefined,
@@ -773,34 +773,34 @@ function createBaseAddress(): Address {
 
 export const Address = {
   encode(message: Address, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
+    if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
-    if (message.postcode !== "") {
+    if (message.postcode !== undefined) {
       writer.uint32(26).string(message.postcode);
     }
-    if (message.countryId !== "") {
+    if (message.countryId !== undefined) {
       writer.uint32(34).string(message.countryId);
     }
-    if (message.locality !== "") {
+    if (message.locality !== undefined) {
       writer.uint32(50).string(message.locality);
     }
-    if (message.street !== "") {
+    if (message.street !== undefined) {
       writer.uint32(58).string(message.street);
     }
-    if (message.region !== "") {
+    if (message.region !== undefined) {
       writer.uint32(66).string(message.region);
     }
     if (message.geoCoordinates !== undefined) {
       GeoPoint.encode(message.geoCoordinates, writer.uint32(74).fork()).ldelim();
     }
-    if (message.altitude !== 0) {
+    if (message.altitude !== undefined) {
       writer.uint32(81).double(message.altitude);
     }
-    if (message.buildingNumber !== "") {
+    if (message.buildingNumber !== undefined) {
       writer.uint32(90).string(message.buildingNumber);
     }
     if (message.addressAddition !== undefined) {
@@ -877,16 +877,16 @@ export const Address = {
 
   fromJSON(object: any): Address {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
+      id: isSet(object.id) ? String(object.id) : undefined,
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
-      postcode: isSet(object.postcode) ? String(object.postcode) : "",
-      countryId: isSet(object.countryId) ? String(object.countryId) : "",
-      locality: isSet(object.locality) ? String(object.locality) : "",
-      street: isSet(object.street) ? String(object.street) : "",
-      region: isSet(object.region) ? String(object.region) : "",
+      postcode: isSet(object.postcode) ? String(object.postcode) : undefined,
+      countryId: isSet(object.countryId) ? String(object.countryId) : undefined,
+      locality: isSet(object.locality) ? String(object.locality) : undefined,
+      street: isSet(object.street) ? String(object.street) : undefined,
+      region: isSet(object.region) ? String(object.region) : undefined,
       geoCoordinates: isSet(object.geoCoordinates) ? GeoPoint.fromJSON(object.geoCoordinates) : undefined,
-      altitude: isSet(object.altitude) ? Number(object.altitude) : 0,
-      buildingNumber: isSet(object.buildingNumber) ? String(object.buildingNumber) : "",
+      altitude: isSet(object.altitude) ? Number(object.altitude) : undefined,
+      buildingNumber: isSet(object.buildingNumber) ? String(object.buildingNumber) : undefined,
       addressAddition: isSet(object.addressAddition) ? AddressAddition.fromJSON(object.addressAddition) : undefined,
       businessAddress: isSet(object.businessAddress) ? BusinessAddress.fromJSON(object.businessAddress) : undefined,
       residentialAddress: isSet(object.residentialAddress)
@@ -927,18 +927,18 @@ export const Address = {
 
   fromPartial(object: DeepPartial<Address>): Address {
     const message = createBaseAddress();
-    message.id = object.id ?? "";
+    message.id = object.id ?? undefined;
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
-    message.postcode = object.postcode ?? "";
-    message.countryId = object.countryId ?? "";
-    message.locality = object.locality ?? "";
-    message.street = object.street ?? "";
-    message.region = object.region ?? "";
+    message.postcode = object.postcode ?? undefined;
+    message.countryId = object.countryId ?? undefined;
+    message.locality = object.locality ?? undefined;
+    message.street = object.street ?? undefined;
+    message.region = object.region ?? undefined;
     message.geoCoordinates = (object.geoCoordinates !== undefined && object.geoCoordinates !== null)
       ? GeoPoint.fromPartial(object.geoCoordinates)
       : undefined;
-    message.altitude = object.altitude ?? 0;
-    message.buildingNumber = object.buildingNumber ?? "";
+    message.altitude = object.altitude ?? undefined;
+    message.buildingNumber = object.buildingNumber ?? undefined;
     message.addressAddition = (object.addressAddition !== undefined && object.addressAddition !== null)
       ? AddressAddition.fromPartial(object.addressAddition)
       : undefined;
@@ -1103,7 +1103,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "totalCount",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 3,
@@ -1121,7 +1121,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_total_count", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1220,7 +1220,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "latitude",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "longitude",
         "number": 2,
@@ -1229,16 +1229,16 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "longitude",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_latitude", "options": undefined }, { "name": "_longitude", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1255,7 +1255,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "field1",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "field2",
         "number": 2,
@@ -1264,16 +1264,16 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "field2",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_field1", "options": undefined }, { "name": "_field2", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1463,10 +1463,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "meta",
         "number": 2,
@@ -1475,10 +1475,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.meta.Meta",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "meta",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "postcode",
         "number": 3,
@@ -1487,10 +1487,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "postcode",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "country_id",
         "number": 4,
@@ -1499,7 +1499,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 4,
         "jsonName": "countryId",
         "options": {
           "ctype": 0,
@@ -1510,7 +1510,7 @@ export const protoMetadata: ProtoMetadata = {
           "weak": false,
           "uninterpretedOption": [],
         },
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "locality",
         "number": 6,
@@ -1519,10 +1519,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 5,
         "jsonName": "locality",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "street",
         "number": 7,
@@ -1531,10 +1531,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 6,
         "jsonName": "street",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "region",
         "number": 8,
@@ -1543,10 +1543,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 7,
         "jsonName": "region",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "geo_coordinates",
         "number": 9,
@@ -1555,10 +1555,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.address.GeoPoint",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 8,
         "jsonName": "geoCoordinates",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "altitude",
         "number": 10,
@@ -1567,10 +1567,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 9,
         "jsonName": "altitude",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "building_number",
         "number": 11,
@@ -1579,10 +1579,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 10,
         "jsonName": "buildingNumber",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "address_addition",
         "number": 12,
@@ -1591,10 +1591,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.address.AddressAddition",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 11,
         "jsonName": "addressAddition",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "business_address",
         "number": 13,
@@ -1636,7 +1636,20 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [{ "name": "type", "options": undefined }],
+      "oneofDecl": [
+        { "name": "type", "options": undefined },
+        { "name": "_id", "options": undefined },
+        { "name": "_meta", "options": undefined },
+        { "name": "_postcode", "options": undefined },
+        { "name": "_country_id", "options": undefined },
+        { "name": "_locality", "options": undefined },
+        { "name": "_street", "options": undefined },
+        { "name": "_region", "options": undefined },
+        { "name": "_geo_coordinates", "options": undefined },
+        { "name": "_altitude", "options": undefined },
+        { "name": "_building_number", "options": undefined },
+        { "name": "_address_addition", "options": undefined },
+      ],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],

@@ -19,7 +19,7 @@ export interface Deleted {
 
 export interface LocationList {
   items: Location[];
-  total_count: number;
+  total_count?: number | undefined;
   subject?: Subject;
 }
 
@@ -36,20 +36,30 @@ export interface LocationResponse {
 
 export interface Location {
   /** Location ID, unique, key */
-  id: string;
-  meta?: Meta;
+  id?: string | undefined;
+  meta?:
+    | Meta
+    | undefined;
   /** Location name */
-  name: string;
-  description: string;
+  name?: string | undefined;
+  description?:
+    | string
+    | undefined;
   /** Organization to which this location is linked */
-  organization_id: string;
+  organization_id?:
+    | string
+    | undefined;
   /** Location which may contain this location; may be null */
-  parent_id: string;
-  address_id: string;
+  parent_id?: string | undefined;
+  address_id?:
+    | string
+    | undefined;
   /** / additional data */
-  data?: Any;
+  data?:
+    | Any
+    | undefined;
   /** location type */
-  type: string;
+  type?: string | undefined;
 }
 
 function createBaseDeleted(): Deleted {
@@ -104,7 +114,7 @@ export const Deleted = {
 };
 
 function createBaseLocationList(): LocationList {
-  return { items: [], total_count: 0, subject: undefined };
+  return { items: [], total_count: undefined, subject: undefined };
 }
 
 export const LocationList = {
@@ -112,7 +122,7 @@ export const LocationList = {
     for (const v of message.items) {
       Location.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.total_count !== 0) {
+    if (message.total_count !== undefined) {
       writer.uint32(16).uint32(message.total_count);
     }
     if (message.subject !== undefined) {
@@ -148,7 +158,7 @@ export const LocationList = {
   fromJSON(object: any): LocationList {
     return {
       items: Array.isArray(object?.items) ? object.items.map((e: any) => Location.fromJSON(e)) : [],
-      total_count: isSet(object.total_count) ? Number(object.total_count) : 0,
+      total_count: isSet(object.total_count) ? Number(object.total_count) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
@@ -172,7 +182,7 @@ export const LocationList = {
   fromPartial(object: DeepPartial<LocationList>): LocationList {
     const message = createBaseLocationList();
     message.items = object.items?.map((e) => Location.fromPartial(e)) || [];
-    message.total_count = object.total_count ?? 0;
+    message.total_count = object.total_count ?? undefined;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
@@ -326,45 +336,45 @@ export const LocationResponse = {
 
 function createBaseLocation(): Location {
   return {
-    id: "",
+    id: undefined,
     meta: undefined,
-    name: "",
-    description: "",
-    organization_id: "",
-    parent_id: "",
-    address_id: "",
+    name: undefined,
+    description: undefined,
+    organization_id: undefined,
+    parent_id: undefined,
+    address_id: undefined,
     data: undefined,
-    type: "",
+    type: undefined,
   };
 }
 
 export const Location = {
   encode(message: Location, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
+    if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
-    if (message.name !== "") {
+    if (message.name !== undefined) {
       writer.uint32(26).string(message.name);
     }
-    if (message.description !== "") {
+    if (message.description !== undefined) {
       writer.uint32(34).string(message.description);
     }
-    if (message.organization_id !== "") {
+    if (message.organization_id !== undefined) {
       writer.uint32(42).string(message.organization_id);
     }
-    if (message.parent_id !== "") {
+    if (message.parent_id !== undefined) {
       writer.uint32(50).string(message.parent_id);
     }
-    if (message.address_id !== "") {
+    if (message.address_id !== undefined) {
       writer.uint32(66).string(message.address_id);
     }
     if (message.data !== undefined) {
       Any.encode(message.data, writer.uint32(74).fork()).ldelim();
     }
-    if (message.type !== "") {
+    if (message.type !== undefined) {
       writer.uint32(82).string(message.type);
     }
     return writer;
@@ -414,15 +424,15 @@ export const Location = {
 
   fromJSON(object: any): Location {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
+      id: isSet(object.id) ? String(object.id) : undefined,
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
-      name: isSet(object.name) ? String(object.name) : "",
-      description: isSet(object.description) ? String(object.description) : "",
-      organization_id: isSet(object.organization_id) ? String(object.organization_id) : "",
-      parent_id: isSet(object.parent_id) ? String(object.parent_id) : "",
-      address_id: isSet(object.address_id) ? String(object.address_id) : "",
+      name: isSet(object.name) ? String(object.name) : undefined,
+      description: isSet(object.description) ? String(object.description) : undefined,
+      organization_id: isSet(object.organization_id) ? String(object.organization_id) : undefined,
+      parent_id: isSet(object.parent_id) ? String(object.parent_id) : undefined,
+      address_id: isSet(object.address_id) ? String(object.address_id) : undefined,
       data: isSet(object.data) ? Any.fromJSON(object.data) : undefined,
-      type: isSet(object.type) ? String(object.type) : "",
+      type: isSet(object.type) ? String(object.type) : undefined,
     };
   },
 
@@ -446,15 +456,15 @@ export const Location = {
 
   fromPartial(object: DeepPartial<Location>): Location {
     const message = createBaseLocation();
-    message.id = object.id ?? "";
+    message.id = object.id ?? undefined;
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
-    message.name = object.name ?? "";
-    message.description = object.description ?? "";
-    message.organization_id = object.organization_id ?? "";
-    message.parent_id = object.parent_id ?? "";
-    message.address_id = object.address_id ?? "";
+    message.name = object.name ?? undefined;
+    message.description = object.description ?? undefined;
+    message.organization_id = object.organization_id ?? undefined;
+    message.parent_id = object.parent_id ?? undefined;
+    message.address_id = object.address_id ?? undefined;
     message.data = (object.data !== undefined && object.data !== null) ? Any.fromPartial(object.data) : undefined;
-    message.type = object.type ?? "";
+    message.type = object.type ?? undefined;
     return message;
   },
 };
@@ -609,7 +619,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "totalCount",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 3,
@@ -627,7 +637,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_total_count", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -726,7 +736,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "meta",
         "number": 2,
@@ -735,10 +745,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.meta.Meta",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "meta",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "name",
         "number": 3,
@@ -747,10 +757,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "name",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "description",
         "number": 4,
@@ -759,10 +769,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "description",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "organization_id",
         "number": 5,
@@ -771,7 +781,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 4,
         "jsonName": "organizationId",
         "options": {
           "ctype": 0,
@@ -782,7 +792,7 @@ export const protoMetadata: ProtoMetadata = {
           "weak": false,
           "uninterpretedOption": [],
         },
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "parent_id",
         "number": 6,
@@ -791,7 +801,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 5,
         "jsonName": "parentId",
         "options": {
           "ctype": 0,
@@ -802,7 +812,7 @@ export const protoMetadata: ProtoMetadata = {
           "weak": false,
           "uninterpretedOption": [],
         },
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "address_id",
         "number": 8,
@@ -811,7 +821,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 6,
         "jsonName": "addressId",
         "options": {
           "ctype": 0,
@@ -822,7 +832,7 @@ export const protoMetadata: ProtoMetadata = {
           "weak": false,
           "uninterpretedOption": [],
         },
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "data",
         "number": 9,
@@ -831,10 +841,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".google.protobuf.Any",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 7,
         "jsonName": "data",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "type",
         "number": 10,
@@ -843,16 +853,26 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 8,
         "jsonName": "type",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [
+        { "name": "_id", "options": undefined },
+        { "name": "_meta", "options": undefined },
+        { "name": "_name", "options": undefined },
+        { "name": "_description", "options": undefined },
+        { "name": "_organization_id", "options": undefined },
+        { "name": "_parent_id", "options": undefined },
+        { "name": "_address_id", "options": undefined },
+        { "name": "_data", "options": undefined },
+        { "name": "_type", "options": undefined },
+      ],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -915,13 +935,13 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 4, 2, 0],
-        "span": [52, 2, 16],
+        "span": [52, 2, 25],
         "leadingComments": "",
         "trailingComments": " Location ID, unique, key\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 4, 2, 2],
-        "span": [54, 2, 18],
+        "span": [54, 2, 27],
         "leadingComments": "",
         "trailingComments": " Location name\n",
         "leadingDetachedComments": [],
@@ -939,13 +959,13 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 4, 2, 7],
-        "span": [83, 2, 31],
+        "span": [83, 2, 40],
         "leadingComments": "",
         "trailingComments": "/ additional data\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 4, 2, 8],
-        "span": [84, 2, 19],
+        "span": [84, 2, 28],
         "leadingComments": "",
         "trailingComments": " location type\n",
         "leadingDetachedComments": [],

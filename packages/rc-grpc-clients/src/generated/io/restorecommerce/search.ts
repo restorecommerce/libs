@@ -9,8 +9,8 @@ import { protoMetadata as protoMetadata3 } from "./options";
 export const protobufPackage = "io.restorecommerce.search";
 
 export interface SearchRequest {
-  collection: string;
-  text: string;
+  collection?: string | undefined;
+  text?: string | undefined;
   acl: string[];
   subject?: Subject;
 }
@@ -20,15 +20,15 @@ export interface SearchResponse {
 }
 
 function createBaseSearchRequest(): SearchRequest {
-  return { collection: "", text: "", acl: [], subject: undefined };
+  return { collection: undefined, text: undefined, acl: [], subject: undefined };
 }
 
 export const SearchRequest = {
   encode(message: SearchRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.collection !== "") {
+    if (message.collection !== undefined) {
       writer.uint32(10).string(message.collection);
     }
-    if (message.text !== "") {
+    if (message.text !== undefined) {
       writer.uint32(18).string(message.text);
     }
     for (const v of message.acl) {
@@ -69,8 +69,8 @@ export const SearchRequest = {
 
   fromJSON(object: any): SearchRequest {
     return {
-      collection: isSet(object.collection) ? String(object.collection) : "",
-      text: isSet(object.text) ? String(object.text) : "",
+      collection: isSet(object.collection) ? String(object.collection) : undefined,
+      text: isSet(object.text) ? String(object.text) : undefined,
       acl: Array.isArray(object?.acl) ? object.acl.map((e: any) => String(e)) : [],
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
@@ -95,8 +95,8 @@ export const SearchRequest = {
 
   fromPartial(object: DeepPartial<SearchRequest>): SearchRequest {
     const message = createBaseSearchRequest();
-    message.collection = object.collection ?? "";
-    message.text = object.text ?? "";
+    message.collection = object.collection ?? undefined;
+    message.text = object.text ?? undefined;
     message.acl = object.acl?.map((e) => e) || [];
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
@@ -226,7 +226,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "collection",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "text",
         "number": 2,
@@ -235,10 +235,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "text",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "acl",
         "number": 3,
@@ -268,7 +268,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_collection", "options": undefined }, { "name": "_text", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],

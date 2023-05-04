@@ -16,7 +16,7 @@ export interface Deleted {
 
 export interface LocaleList {
   items: Locale[];
-  totalCount: number;
+  totalCount?: number | undefined;
   subject?: Subject;
 }
 
@@ -32,10 +32,10 @@ export interface LocaleResponse {
 }
 
 export interface Locale {
-  id: string;
-  meta?: Meta;
-  value: string;
-  description: string;
+  id?: string | undefined;
+  meta?: Meta | undefined;
+  value?: string | undefined;
+  description?: string | undefined;
 }
 
 function createBaseDeleted(): Deleted {
@@ -90,7 +90,7 @@ export const Deleted = {
 };
 
 function createBaseLocaleList(): LocaleList {
-  return { items: [], totalCount: 0, subject: undefined };
+  return { items: [], totalCount: undefined, subject: undefined };
 }
 
 export const LocaleList = {
@@ -98,7 +98,7 @@ export const LocaleList = {
     for (const v of message.items) {
       Locale.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.totalCount !== 0) {
+    if (message.totalCount !== undefined) {
       writer.uint32(16).uint32(message.totalCount);
     }
     if (message.subject !== undefined) {
@@ -134,7 +134,7 @@ export const LocaleList = {
   fromJSON(object: any): LocaleList {
     return {
       items: Array.isArray(object?.items) ? object.items.map((e: any) => Locale.fromJSON(e)) : [],
-      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
+      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
@@ -158,7 +158,7 @@ export const LocaleList = {
   fromPartial(object: DeepPartial<LocaleList>): LocaleList {
     const message = createBaseLocaleList();
     message.items = object.items?.map((e) => Locale.fromPartial(e)) || [];
-    message.totalCount = object.totalCount ?? 0;
+    message.totalCount = object.totalCount ?? undefined;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
@@ -311,21 +311,21 @@ export const LocaleResponse = {
 };
 
 function createBaseLocale(): Locale {
-  return { id: "", meta: undefined, value: "", description: "" };
+  return { id: undefined, meta: undefined, value: undefined, description: undefined };
 }
 
 export const Locale = {
   encode(message: Locale, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
+    if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
-    if (message.value !== "") {
+    if (message.value !== undefined) {
       writer.uint32(26).string(message.value);
     }
-    if (message.description !== "") {
+    if (message.description !== undefined) {
       writer.uint32(34).string(message.description);
     }
     return writer;
@@ -360,10 +360,10 @@ export const Locale = {
 
   fromJSON(object: any): Locale {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
+      id: isSet(object.id) ? String(object.id) : undefined,
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
-      value: isSet(object.value) ? String(object.value) : "",
-      description: isSet(object.description) ? String(object.description) : "",
+      value: isSet(object.value) ? String(object.value) : undefined,
+      description: isSet(object.description) ? String(object.description) : undefined,
     };
   },
 
@@ -382,10 +382,10 @@ export const Locale = {
 
   fromPartial(object: DeepPartial<Locale>): Locale {
     const message = createBaseLocale();
-    message.id = object.id ?? "";
+    message.id = object.id ?? undefined;
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
-    message.value = object.value ?? "";
-    message.description = object.description ?? "";
+    message.value = object.value ?? undefined;
+    message.description = object.description ?? undefined;
     return message;
   },
 };
@@ -537,7 +537,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "totalCount",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 3,
@@ -555,7 +555,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_total_count", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -654,7 +654,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "meta",
         "number": 2,
@@ -663,10 +663,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.meta.Meta",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "meta",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "value",
         "number": 3,
@@ -675,10 +675,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "value",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "description",
         "number": 4,
@@ -687,16 +687,19 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "description",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_id", "options": undefined }, { "name": "_meta", "options": undefined }, {
+        "name": "_value",
+        "options": undefined,
+      }, { "name": "_description", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],

@@ -11,9 +11,11 @@ export const protobufPackage = "io.restorecommerce.commandinterface";
 /** used to send requests through Kafka or gRPC */
 export interface CommandRequest {
   /** command identifier (used to demultiplex operation in the command implementation) */
-  name: string;
+  name?:
+    | string
+    | undefined;
   /** variable payload */
-  payload?: Any;
+  payload?: Any | undefined;
   subject?: Subject;
 }
 
@@ -30,12 +32,12 @@ export interface CommandResponse {
 }
 
 function createBaseCommandRequest(): CommandRequest {
-  return { name: "", payload: undefined, subject: undefined };
+  return { name: undefined, payload: undefined, subject: undefined };
 }
 
 export const CommandRequest = {
   encode(message: CommandRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.name !== "") {
+    if (message.name !== undefined) {
       writer.uint32(10).string(message.name);
     }
     if (message.payload !== undefined) {
@@ -73,7 +75,7 @@ export const CommandRequest = {
 
   fromJSON(object: any): CommandRequest {
     return {
-      name: isSet(object.name) ? String(object.name) : "",
+      name: isSet(object.name) ? String(object.name) : undefined,
       payload: isSet(object.payload) ? Any.fromJSON(object.payload) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
@@ -93,7 +95,7 @@ export const CommandRequest = {
 
   fromPartial(object: DeepPartial<CommandRequest>): CommandRequest {
     const message = createBaseCommandRequest();
-    message.name = object.name ?? "";
+    message.name = object.name ?? undefined;
     message.payload = (object.payload !== undefined && object.payload !== null)
       ? Any.fromPartial(object.payload)
       : undefined;
@@ -238,7 +240,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "name",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "payload",
         "number": 2,
@@ -247,10 +249,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".google.protobuf.Any",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "payload",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 3,
@@ -268,7 +270,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_name", "options": undefined }, { "name": "_payload", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -332,13 +334,13 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 0, 2, 0],
-        "span": [11, 2, 18],
+        "span": [11, 2, 27],
         "leadingComments": "  command identifier (used to demultiplex operation in the command implementation)\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 0, 2, 1],
-        "span": [12, 2, 34],
+        "span": [12, 2, 43],
         "leadingComments": "",
         "trailingComments": " variable payload\n",
         "leadingDetachedComments": [],

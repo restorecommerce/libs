@@ -9,11 +9,11 @@ import { protoMetadata as protoMetadata3 } from "./options";
 export const protobufPackage = "io.restorecommerce.token";
 
 export interface TokenData {
-  id: string;
-  payload?: Any;
-  expiresIn: number;
-  type: string;
-  subject?: Subject;
+  id?: string | undefined;
+  payload?: Any | undefined;
+  expiresIn?: number | undefined;
+  type?: string | undefined;
+  subject?: Subject | undefined;
 }
 
 export interface Identifier {
@@ -28,21 +28,21 @@ export interface GrantId {
 }
 
 function createBaseTokenData(): TokenData {
-  return { id: "", payload: undefined, expiresIn: 0, type: "", subject: undefined };
+  return { id: undefined, payload: undefined, expiresIn: undefined, type: undefined, subject: undefined };
 }
 
 export const TokenData = {
   encode(message: TokenData, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
+    if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
     if (message.payload !== undefined) {
       Any.encode(message.payload, writer.uint32(18).fork()).ldelim();
     }
-    if (message.expiresIn !== 0) {
+    if (message.expiresIn !== undefined) {
       writer.uint32(25).double(message.expiresIn);
     }
-    if (message.type !== "") {
+    if (message.type !== undefined) {
       writer.uint32(34).string(message.type);
     }
     if (message.subject !== undefined) {
@@ -83,10 +83,10 @@ export const TokenData = {
 
   fromJSON(object: any): TokenData {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
+      id: isSet(object.id) ? String(object.id) : undefined,
       payload: isSet(object.payload) ? Any.fromJSON(object.payload) : undefined,
-      expiresIn: isSet(object.expiresIn) ? Number(object.expiresIn) : 0,
-      type: isSet(object.type) ? String(object.type) : "",
+      expiresIn: isSet(object.expiresIn) ? Number(object.expiresIn) : undefined,
+      type: isSet(object.type) ? String(object.type) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
@@ -107,12 +107,12 @@ export const TokenData = {
 
   fromPartial(object: DeepPartial<TokenData>): TokenData {
     const message = createBaseTokenData();
-    message.id = object.id ?? "";
+    message.id = object.id ?? undefined;
     message.payload = (object.payload !== undefined && object.payload !== null)
       ? Any.fromPartial(object.payload)
       : undefined;
-    message.expiresIn = object.expiresIn ?? 0;
-    message.type = object.type ?? "";
+    message.expiresIn = object.expiresIn ?? undefined;
+    message.type = object.type ?? undefined;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
@@ -375,7 +375,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "payload",
         "number": 2,
@@ -384,10 +384,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".google.protobuf.Any",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "payload",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "expires_in",
         "number": 3,
@@ -396,10 +396,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "expiresIn",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "type",
         "number": 4,
@@ -408,10 +408,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "type",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 5,
@@ -420,16 +420,22 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.auth.Subject",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 4,
         "jsonName": "subject",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [
+        { "name": "_id", "options": undefined },
+        { "name": "_payload", "options": undefined },
+        { "name": "_expires_in", "options": undefined },
+        { "name": "_type", "options": undefined },
+        { "name": "_subject", "options": undefined },
+      ],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],

@@ -12,7 +12,7 @@ export const protobufPackage = "io.restorecommerce.authentication_log";
 
 export interface AuthenticationLogList {
   items: AuthenticationLog[];
-  total_count: number;
+  total_count?: number | undefined;
   subject?: Subject;
 }
 
@@ -30,21 +30,31 @@ export interface AuthenticationLogResponse {
 /** Authentication Log */
 export interface AuthenticationLog {
   /** log id */
-  id: string;
-  ipv4_address: string;
-  ipv6_address: string;
-  operating_system: string;
-  user_agent: string;
+  id?: string | undefined;
+  ipv4_address?: string | undefined;
+  ipv6_address?: string | undefined;
+  operating_system?: string | undefined;
+  user_agent?:
+    | string
+    | undefined;
   /** time stamp of login, logout or token update */
-  date: number;
+  date?:
+    | number
+    | undefined;
   /** login, logout */
-  activity: string;
+  activity?:
+    | string
+    | undefined;
   /** meta info */
-  meta?: Meta;
+  meta?:
+    | Meta
+    | undefined;
   /** subject id */
-  subject_id: string;
+  subject_id?:
+    | string
+    | undefined;
   /** token name associated with io.restorecommerce.auth.Token.token_name */
-  token_name: string;
+  token_name?: string | undefined;
 }
 
 export interface Deleted {
@@ -52,7 +62,7 @@ export interface Deleted {
 }
 
 function createBaseAuthenticationLogList(): AuthenticationLogList {
-  return { items: [], total_count: 0, subject: undefined };
+  return { items: [], total_count: undefined, subject: undefined };
 }
 
 export const AuthenticationLogList = {
@@ -60,7 +70,7 @@ export const AuthenticationLogList = {
     for (const v of message.items) {
       AuthenticationLog.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.total_count !== 0) {
+    if (message.total_count !== undefined) {
       writer.uint32(16).uint32(message.total_count);
     }
     if (message.subject !== undefined) {
@@ -96,7 +106,7 @@ export const AuthenticationLogList = {
   fromJSON(object: any): AuthenticationLogList {
     return {
       items: Array.isArray(object?.items) ? object.items.map((e: any) => AuthenticationLog.fromJSON(e)) : [],
-      total_count: isSet(object.total_count) ? Number(object.total_count) : 0,
+      total_count: isSet(object.total_count) ? Number(object.total_count) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
@@ -120,7 +130,7 @@ export const AuthenticationLogList = {
   fromPartial(object: DeepPartial<AuthenticationLogList>): AuthenticationLogList {
     const message = createBaseAuthenticationLogList();
     message.items = object.items?.map((e) => AuthenticationLog.fromPartial(e)) || [];
-    message.total_count = object.total_count ?? 0;
+    message.total_count = object.total_count ?? undefined;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
@@ -275,49 +285,49 @@ export const AuthenticationLogResponse = {
 
 function createBaseAuthenticationLog(): AuthenticationLog {
   return {
-    id: "",
-    ipv4_address: "",
-    ipv6_address: "",
-    operating_system: "",
-    user_agent: "",
-    date: 0,
-    activity: "",
+    id: undefined,
+    ipv4_address: undefined,
+    ipv6_address: undefined,
+    operating_system: undefined,
+    user_agent: undefined,
+    date: undefined,
+    activity: undefined,
     meta: undefined,
-    subject_id: "",
-    token_name: "",
+    subject_id: undefined,
+    token_name: undefined,
   };
 }
 
 export const AuthenticationLog = {
   encode(message: AuthenticationLog, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
+    if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
-    if (message.ipv4_address !== "") {
+    if (message.ipv4_address !== undefined) {
       writer.uint32(18).string(message.ipv4_address);
     }
-    if (message.ipv6_address !== "") {
+    if (message.ipv6_address !== undefined) {
       writer.uint32(26).string(message.ipv6_address);
     }
-    if (message.operating_system !== "") {
+    if (message.operating_system !== undefined) {
       writer.uint32(34).string(message.operating_system);
     }
-    if (message.user_agent !== "") {
+    if (message.user_agent !== undefined) {
       writer.uint32(42).string(message.user_agent);
     }
-    if (message.date !== 0) {
+    if (message.date !== undefined) {
       writer.uint32(49).double(message.date);
     }
-    if (message.activity !== "") {
+    if (message.activity !== undefined) {
       writer.uint32(58).string(message.activity);
     }
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(66).fork()).ldelim();
     }
-    if (message.subject_id !== "") {
+    if (message.subject_id !== undefined) {
       writer.uint32(74).string(message.subject_id);
     }
-    if (message.token_name !== "") {
+    if (message.token_name !== undefined) {
       writer.uint32(82).string(message.token_name);
     }
     return writer;
@@ -370,16 +380,16 @@ export const AuthenticationLog = {
 
   fromJSON(object: any): AuthenticationLog {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
-      ipv4_address: isSet(object.ipv4_address) ? String(object.ipv4_address) : "",
-      ipv6_address: isSet(object.ipv6_address) ? String(object.ipv6_address) : "",
-      operating_system: isSet(object.operating_system) ? String(object.operating_system) : "",
-      user_agent: isSet(object.user_agent) ? String(object.user_agent) : "",
-      date: isSet(object.date) ? Number(object.date) : 0,
-      activity: isSet(object.activity) ? String(object.activity) : "",
+      id: isSet(object.id) ? String(object.id) : undefined,
+      ipv4_address: isSet(object.ipv4_address) ? String(object.ipv4_address) : undefined,
+      ipv6_address: isSet(object.ipv6_address) ? String(object.ipv6_address) : undefined,
+      operating_system: isSet(object.operating_system) ? String(object.operating_system) : undefined,
+      user_agent: isSet(object.user_agent) ? String(object.user_agent) : undefined,
+      date: isSet(object.date) ? Number(object.date) : undefined,
+      activity: isSet(object.activity) ? String(object.activity) : undefined,
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
-      subject_id: isSet(object.subject_id) ? String(object.subject_id) : "",
-      token_name: isSet(object.token_name) ? String(object.token_name) : "",
+      subject_id: isSet(object.subject_id) ? String(object.subject_id) : undefined,
+      token_name: isSet(object.token_name) ? String(object.token_name) : undefined,
     };
   },
 
@@ -404,16 +414,16 @@ export const AuthenticationLog = {
 
   fromPartial(object: DeepPartial<AuthenticationLog>): AuthenticationLog {
     const message = createBaseAuthenticationLog();
-    message.id = object.id ?? "";
-    message.ipv4_address = object.ipv4_address ?? "";
-    message.ipv6_address = object.ipv6_address ?? "";
-    message.operating_system = object.operating_system ?? "";
-    message.user_agent = object.user_agent ?? "";
-    message.date = object.date ?? 0;
-    message.activity = object.activity ?? "";
+    message.id = object.id ?? undefined;
+    message.ipv4_address = object.ipv4_address ?? undefined;
+    message.ipv6_address = object.ipv6_address ?? undefined;
+    message.operating_system = object.operating_system ?? undefined;
+    message.user_agent = object.user_agent ?? undefined;
+    message.date = object.date ?? undefined;
+    message.activity = object.activity ?? undefined;
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
-    message.subject_id = object.subject_id ?? "";
-    message.token_name = object.token_name ?? "";
+    message.subject_id = object.subject_id ?? undefined;
+    message.token_name = object.token_name ?? undefined;
     return message;
   },
 };
@@ -617,7 +627,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "totalCount",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 3,
@@ -635,7 +645,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_total_count", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -734,7 +744,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "ipv4_address",
         "number": 2,
@@ -743,10 +753,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "ipv4Address",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "ipv6_address",
         "number": 3,
@@ -755,10 +765,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "ipv6Address",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "operating_system",
         "number": 4,
@@ -767,10 +777,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "operatingSystem",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "user_agent",
         "number": 5,
@@ -779,10 +789,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 4,
         "jsonName": "userAgent",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "date",
         "number": 6,
@@ -791,10 +801,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 5,
         "jsonName": "date",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "activity",
         "number": 7,
@@ -803,10 +813,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 6,
         "jsonName": "activity",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "meta",
         "number": 8,
@@ -815,10 +825,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.meta.Meta",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 7,
         "jsonName": "meta",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject_id",
         "number": 9,
@@ -827,10 +837,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 8,
         "jsonName": "subjectId",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "token_name",
         "number": 10,
@@ -839,16 +849,27 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 9,
         "jsonName": "tokenName",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [
+        { "name": "_id", "options": undefined },
+        { "name": "_ipv4_address", "options": undefined },
+        { "name": "_ipv6_address", "options": undefined },
+        { "name": "_operating_system", "options": undefined },
+        { "name": "_user_agent", "options": undefined },
+        { "name": "_date", "options": undefined },
+        { "name": "_activity", "options": undefined },
+        { "name": "_meta", "options": undefined },
+        { "name": "_subject_id", "options": undefined },
+        { "name": "_token_name", "options": undefined },
+      ],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -934,37 +955,37 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 3, 2, 0],
-        "span": [46, 2, 16],
+        "span": [46, 2, 25],
         "leadingComments": "",
         "trailingComments": " log id\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 3, 2, 5],
-        "span": [51, 2, 18],
+        "span": [51, 2, 27],
         "leadingComments": "",
         "trailingComments": " time stamp of login, logout or token update\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 3, 2, 6],
-        "span": [52, 2, 22],
+        "span": [52, 2, 31],
         "leadingComments": "",
         "trailingComments": " login, logout\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 3, 2, 7],
-        "span": [53, 2, 40],
+        "span": [53, 2, 49],
         "leadingComments": "",
         "trailingComments": " meta info\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 3, 2, 8],
-        "span": [54, 2, 24],
+        "span": [54, 2, 33],
         "leadingComments": "",
         "trailingComments": " subject id\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 3, 2, 9],
-        "span": [55, 2, 25],
+        "span": [55, 2, 34],
         "leadingComments": "",
         "trailingComments": " token name associated with io.restorecommerce.auth.Token.token_name\n",
         "leadingDetachedComments": [],

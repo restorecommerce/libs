@@ -20,7 +20,7 @@ export interface Deleted {
 
 export interface ContactPointList {
   items: ContactPoint[];
-  total_count: number;
+  total_count?: number | undefined;
   subject?: Subject;
 }
 
@@ -36,15 +36,15 @@ export interface ContactPointResponse {
 }
 
 export interface ContactPoint {
-  id: string;
-  meta?: Meta;
-  physical_address_id: string;
-  website: string;
-  email: string;
-  contact_point_type_id: string;
-  telephone: string;
-  timezone_id: string;
-  locale_id: string;
+  id?: string | undefined;
+  meta?: Meta | undefined;
+  physical_address_id?: string | undefined;
+  website?: string | undefined;
+  email?: string | undefined;
+  contact_point_type_id?: string | undefined;
+  telephone?: string | undefined;
+  timezone_id?: string | undefined;
+  locale_id?: string | undefined;
 }
 
 function createBaseDeleted(): Deleted {
@@ -99,7 +99,7 @@ export const Deleted = {
 };
 
 function createBaseContactPointList(): ContactPointList {
-  return { items: [], total_count: 0, subject: undefined };
+  return { items: [], total_count: undefined, subject: undefined };
 }
 
 export const ContactPointList = {
@@ -107,7 +107,7 @@ export const ContactPointList = {
     for (const v of message.items) {
       ContactPoint.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.total_count !== 0) {
+    if (message.total_count !== undefined) {
       writer.uint32(16).uint32(message.total_count);
     }
     if (message.subject !== undefined) {
@@ -143,7 +143,7 @@ export const ContactPointList = {
   fromJSON(object: any): ContactPointList {
     return {
       items: Array.isArray(object?.items) ? object.items.map((e: any) => ContactPoint.fromJSON(e)) : [],
-      total_count: isSet(object.total_count) ? Number(object.total_count) : 0,
+      total_count: isSet(object.total_count) ? Number(object.total_count) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
@@ -167,7 +167,7 @@ export const ContactPointList = {
   fromPartial(object: DeepPartial<ContactPointList>): ContactPointList {
     const message = createBaseContactPointList();
     message.items = object.items?.map((e) => ContactPoint.fromPartial(e)) || [];
-    message.total_count = object.total_count ?? 0;
+    message.total_count = object.total_count ?? undefined;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
@@ -321,45 +321,45 @@ export const ContactPointResponse = {
 
 function createBaseContactPoint(): ContactPoint {
   return {
-    id: "",
+    id: undefined,
     meta: undefined,
-    physical_address_id: "",
-    website: "",
-    email: "",
-    contact_point_type_id: "",
-    telephone: "",
-    timezone_id: "",
-    locale_id: "",
+    physical_address_id: undefined,
+    website: undefined,
+    email: undefined,
+    contact_point_type_id: undefined,
+    telephone: undefined,
+    timezone_id: undefined,
+    locale_id: undefined,
   };
 }
 
 export const ContactPoint = {
   encode(message: ContactPoint, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
+    if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
-    if (message.physical_address_id !== "") {
+    if (message.physical_address_id !== undefined) {
       writer.uint32(26).string(message.physical_address_id);
     }
-    if (message.website !== "") {
+    if (message.website !== undefined) {
       writer.uint32(42).string(message.website);
     }
-    if (message.email !== "") {
+    if (message.email !== undefined) {
       writer.uint32(50).string(message.email);
     }
-    if (message.contact_point_type_id !== "") {
+    if (message.contact_point_type_id !== undefined) {
       writer.uint32(58).string(message.contact_point_type_id);
     }
-    if (message.telephone !== "") {
+    if (message.telephone !== undefined) {
       writer.uint32(66).string(message.telephone);
     }
-    if (message.timezone_id !== "") {
+    if (message.timezone_id !== undefined) {
       writer.uint32(74).string(message.timezone_id);
     }
-    if (message.locale_id !== "") {
+    if (message.locale_id !== undefined) {
       writer.uint32(82).string(message.locale_id);
     }
     return writer;
@@ -409,15 +409,15 @@ export const ContactPoint = {
 
   fromJSON(object: any): ContactPoint {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
+      id: isSet(object.id) ? String(object.id) : undefined,
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
-      physical_address_id: isSet(object.physical_address_id) ? String(object.physical_address_id) : "",
-      website: isSet(object.website) ? String(object.website) : "",
-      email: isSet(object.email) ? String(object.email) : "",
-      contact_point_type_id: isSet(object.contact_point_type_id) ? String(object.contact_point_type_id) : "",
-      telephone: isSet(object.telephone) ? String(object.telephone) : "",
-      timezone_id: isSet(object.timezone_id) ? String(object.timezone_id) : "",
-      locale_id: isSet(object.locale_id) ? String(object.locale_id) : "",
+      physical_address_id: isSet(object.physical_address_id) ? String(object.physical_address_id) : undefined,
+      website: isSet(object.website) ? String(object.website) : undefined,
+      email: isSet(object.email) ? String(object.email) : undefined,
+      contact_point_type_id: isSet(object.contact_point_type_id) ? String(object.contact_point_type_id) : undefined,
+      telephone: isSet(object.telephone) ? String(object.telephone) : undefined,
+      timezone_id: isSet(object.timezone_id) ? String(object.timezone_id) : undefined,
+      locale_id: isSet(object.locale_id) ? String(object.locale_id) : undefined,
     };
   },
 
@@ -441,15 +441,15 @@ export const ContactPoint = {
 
   fromPartial(object: DeepPartial<ContactPoint>): ContactPoint {
     const message = createBaseContactPoint();
-    message.id = object.id ?? "";
+    message.id = object.id ?? undefined;
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
-    message.physical_address_id = object.physical_address_id ?? "";
-    message.website = object.website ?? "";
-    message.email = object.email ?? "";
-    message.contact_point_type_id = object.contact_point_type_id ?? "";
-    message.telephone = object.telephone ?? "";
-    message.timezone_id = object.timezone_id ?? "";
-    message.locale_id = object.locale_id ?? "";
+    message.physical_address_id = object.physical_address_id ?? undefined;
+    message.website = object.website ?? undefined;
+    message.email = object.email ?? undefined;
+    message.contact_point_type_id = object.contact_point_type_id ?? undefined;
+    message.telephone = object.telephone ?? undefined;
+    message.timezone_id = object.timezone_id ?? undefined;
+    message.locale_id = object.locale_id ?? undefined;
     return message;
   },
 };
@@ -622,7 +622,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "totalCount",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 3,
@@ -640,7 +640,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_total_count", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -739,7 +739,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "meta",
         "number": 2,
@@ -748,10 +748,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.meta.Meta",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "meta",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "physical_address_id",
         "number": 3,
@@ -760,7 +760,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "physicalAddressId",
         "options": {
           "ctype": 0,
@@ -771,7 +771,7 @@ export const protoMetadata: ProtoMetadata = {
           "weak": false,
           "uninterpretedOption": [],
         },
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "website",
         "number": 5,
@@ -780,10 +780,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "website",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "email",
         "number": 6,
@@ -792,10 +792,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 4,
         "jsonName": "email",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "contact_point_type_id",
         "number": 7,
@@ -804,7 +804,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 5,
         "jsonName": "contactPointTypeId",
         "options": {
           "ctype": 0,
@@ -815,7 +815,7 @@ export const protoMetadata: ProtoMetadata = {
           "weak": false,
           "uninterpretedOption": [],
         },
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "telephone",
         "number": 8,
@@ -824,10 +824,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 6,
         "jsonName": "telephone",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "timezone_id",
         "number": 9,
@@ -836,7 +836,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 7,
         "jsonName": "timezoneId",
         "options": {
           "ctype": 0,
@@ -847,7 +847,7 @@ export const protoMetadata: ProtoMetadata = {
           "weak": false,
           "uninterpretedOption": [],
         },
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "locale_id",
         "number": 10,
@@ -856,7 +856,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 8,
         "jsonName": "localeId",
         "options": {
           "ctype": 0,
@@ -867,13 +867,23 @@ export const protoMetadata: ProtoMetadata = {
           "weak": false,
           "uninterpretedOption": [],
         },
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [
+        { "name": "_id", "options": undefined },
+        { "name": "_meta", "options": undefined },
+        { "name": "_physical_address_id", "options": undefined },
+        { "name": "_website", "options": undefined },
+        { "name": "_email", "options": undefined },
+        { "name": "_contact_point_type_id", "options": undefined },
+        { "name": "_telephone", "options": undefined },
+        { "name": "_timezone_id", "options": undefined },
+        { "name": "_locale_id", "options": undefined },
+      ],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],

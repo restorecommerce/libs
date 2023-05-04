@@ -12,15 +12,15 @@ export const protobufPackage = "io.restorecommerce.manufacturer";
 
 /** Manufacturer resource */
 export interface Manufacturer {
-  id: string;
-  meta?: Meta;
-  name: string;
-  description: string;
+  id?: string | undefined;
+  meta?: Meta | undefined;
+  name?: string | undefined;
+  description?: string | undefined;
 }
 
 export interface ManufacturerList {
   items: Manufacturer[];
-  totalCount: number;
+  totalCount?: number | undefined;
   subject?: Subject;
 }
 
@@ -40,21 +40,21 @@ export interface Deleted {
 }
 
 function createBaseManufacturer(): Manufacturer {
-  return { id: "", meta: undefined, name: "", description: "" };
+  return { id: undefined, meta: undefined, name: undefined, description: undefined };
 }
 
 export const Manufacturer = {
   encode(message: Manufacturer, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
+    if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
-    if (message.name !== "") {
+    if (message.name !== undefined) {
       writer.uint32(26).string(message.name);
     }
-    if (message.description !== "") {
+    if (message.description !== undefined) {
       writer.uint32(34).string(message.description);
     }
     return writer;
@@ -89,10 +89,10 @@ export const Manufacturer = {
 
   fromJSON(object: any): Manufacturer {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
+      id: isSet(object.id) ? String(object.id) : undefined,
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
-      name: isSet(object.name) ? String(object.name) : "",
-      description: isSet(object.description) ? String(object.description) : "",
+      name: isSet(object.name) ? String(object.name) : undefined,
+      description: isSet(object.description) ? String(object.description) : undefined,
     };
   },
 
@@ -111,16 +111,16 @@ export const Manufacturer = {
 
   fromPartial(object: DeepPartial<Manufacturer>): Manufacturer {
     const message = createBaseManufacturer();
-    message.id = object.id ?? "";
+    message.id = object.id ?? undefined;
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
-    message.name = object.name ?? "";
-    message.description = object.description ?? "";
+    message.name = object.name ?? undefined;
+    message.description = object.description ?? undefined;
     return message;
   },
 };
 
 function createBaseManufacturerList(): ManufacturerList {
-  return { items: [], totalCount: 0, subject: undefined };
+  return { items: [], totalCount: undefined, subject: undefined };
 }
 
 export const ManufacturerList = {
@@ -128,7 +128,7 @@ export const ManufacturerList = {
     for (const v of message.items) {
       Manufacturer.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.totalCount !== 0) {
+    if (message.totalCount !== undefined) {
       writer.uint32(16).uint32(message.totalCount);
     }
     if (message.subject !== undefined) {
@@ -164,7 +164,7 @@ export const ManufacturerList = {
   fromJSON(object: any): ManufacturerList {
     return {
       items: Array.isArray(object?.items) ? object.items.map((e: any) => Manufacturer.fromJSON(e)) : [],
-      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
+      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
@@ -188,7 +188,7 @@ export const ManufacturerList = {
   fromPartial(object: DeepPartial<ManufacturerList>): ManufacturerList {
     const message = createBaseManufacturerList();
     message.items = object.items?.map((e) => Manufacturer.fromPartial(e)) || [];
-    message.totalCount = object.totalCount ?? 0;
+    message.totalCount = object.totalCount ?? undefined;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
@@ -520,7 +520,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "meta",
         "number": 2,
@@ -529,10 +529,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.meta.Meta",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "meta",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "name",
         "number": 3,
@@ -541,10 +541,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "name",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "description",
         "number": 4,
@@ -553,16 +553,19 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "description",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_id", "options": undefined }, { "name": "_meta", "options": undefined }, {
+        "name": "_name",
+        "options": undefined,
+      }, { "name": "_description", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -591,7 +594,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "totalCount",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 3,
@@ -609,7 +612,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_total_count", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],

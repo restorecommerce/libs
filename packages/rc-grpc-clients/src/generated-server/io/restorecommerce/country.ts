@@ -16,7 +16,7 @@ export interface Deleted {
 
 export interface CountryList {
   items: Country[];
-  total_count: number;
+  total_count?: number | undefined;
   subject?: Subject;
 }
 
@@ -32,11 +32,11 @@ export interface CountryResponse {
 }
 
 export interface Country {
-  id: string;
-  meta?: Meta;
-  name: string;
-  country_code: string;
-  geographical_name: string;
+  id?: string | undefined;
+  meta?: Meta | undefined;
+  name?: string | undefined;
+  country_code?: string | undefined;
+  geographical_name?: string | undefined;
   economic_areas: string[];
 }
 
@@ -92,7 +92,7 @@ export const Deleted = {
 };
 
 function createBaseCountryList(): CountryList {
-  return { items: [], total_count: 0, subject: undefined };
+  return { items: [], total_count: undefined, subject: undefined };
 }
 
 export const CountryList = {
@@ -100,7 +100,7 @@ export const CountryList = {
     for (const v of message.items) {
       Country.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.total_count !== 0) {
+    if (message.total_count !== undefined) {
       writer.uint32(16).uint32(message.total_count);
     }
     if (message.subject !== undefined) {
@@ -136,7 +136,7 @@ export const CountryList = {
   fromJSON(object: any): CountryList {
     return {
       items: Array.isArray(object?.items) ? object.items.map((e: any) => Country.fromJSON(e)) : [],
-      total_count: isSet(object.total_count) ? Number(object.total_count) : 0,
+      total_count: isSet(object.total_count) ? Number(object.total_count) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
@@ -160,7 +160,7 @@ export const CountryList = {
   fromPartial(object: DeepPartial<CountryList>): CountryList {
     const message = createBaseCountryList();
     message.items = object.items?.map((e) => Country.fromPartial(e)) || [];
-    message.total_count = object.total_count ?? 0;
+    message.total_count = object.total_count ?? undefined;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
@@ -313,24 +313,31 @@ export const CountryResponse = {
 };
 
 function createBaseCountry(): Country {
-  return { id: "", meta: undefined, name: "", country_code: "", geographical_name: "", economic_areas: [] };
+  return {
+    id: undefined,
+    meta: undefined,
+    name: undefined,
+    country_code: undefined,
+    geographical_name: undefined,
+    economic_areas: [],
+  };
 }
 
 export const Country = {
   encode(message: Country, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
+    if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
-    if (message.name !== "") {
+    if (message.name !== undefined) {
       writer.uint32(26).string(message.name);
     }
-    if (message.country_code !== "") {
+    if (message.country_code !== undefined) {
       writer.uint32(34).string(message.country_code);
     }
-    if (message.geographical_name !== "") {
+    if (message.geographical_name !== undefined) {
       writer.uint32(42).string(message.geographical_name);
     }
     for (const v of message.economic_areas) {
@@ -374,11 +381,11 @@ export const Country = {
 
   fromJSON(object: any): Country {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
+      id: isSet(object.id) ? String(object.id) : undefined,
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
-      name: isSet(object.name) ? String(object.name) : "",
-      country_code: isSet(object.country_code) ? String(object.country_code) : "",
-      geographical_name: isSet(object.geographical_name) ? String(object.geographical_name) : "",
+      name: isSet(object.name) ? String(object.name) : undefined,
+      country_code: isSet(object.country_code) ? String(object.country_code) : undefined,
+      geographical_name: isSet(object.geographical_name) ? String(object.geographical_name) : undefined,
       economic_areas: Array.isArray(object?.economic_areas) ? object.economic_areas.map((e: any) => String(e)) : [],
     };
   },
@@ -404,11 +411,11 @@ export const Country = {
 
   fromPartial(object: DeepPartial<Country>): Country {
     const message = createBaseCountry();
-    message.id = object.id ?? "";
+    message.id = object.id ?? undefined;
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
-    message.name = object.name ?? "";
-    message.country_code = object.country_code ?? "";
-    message.geographical_name = object.geographical_name ?? "";
+    message.name = object.name ?? undefined;
+    message.country_code = object.country_code ?? undefined;
+    message.geographical_name = object.geographical_name ?? undefined;
     message.economic_areas = object.economic_areas?.map((e) => e) || [];
     return message;
   },
@@ -561,7 +568,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "totalCount",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 3,
@@ -579,7 +586,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_total_count", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -678,7 +685,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "meta",
         "number": 2,
@@ -687,10 +694,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.meta.Meta",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "meta",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "name",
         "number": 3,
@@ -699,10 +706,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "name",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "country_code",
         "number": 4,
@@ -711,10 +718,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "countryCode",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "geographical_name",
         "number": 5,
@@ -723,10 +730,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 4,
         "jsonName": "geographicalName",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "economic_areas",
         "number": 6,
@@ -744,7 +751,13 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [
+        { "name": "_id", "options": undefined },
+        { "name": "_meta", "options": undefined },
+        { "name": "_name", "options": undefined },
+        { "name": "_country_code", "options": undefined },
+        { "name": "_geographical_name", "options": undefined },
+      ],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],

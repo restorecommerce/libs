@@ -21,17 +21,19 @@ export const protobufPackage = "io.restorecommerce.policy";
 
 /** A Policy is defined by a set of Rules. */
 export interface Policy {
-  id: string;
-  meta?: Meta;
-  name: string;
-  description: string;
+  id?: string | undefined;
+  meta?: Meta | undefined;
+  name?: string | undefined;
+  description?:
+    | string
+    | undefined;
   /** rule IDs */
   rules: string[];
   /** general policy target */
-  target?: Target;
-  effect: Effect;
-  combining_algorithm: string;
-  evaluation_cacheable: boolean;
+  target?: Target | undefined;
+  effect?: Effect | undefined;
+  combining_algorithm?: string | undefined;
+  evaluation_cacheable?: boolean | undefined;
 }
 
 export interface PolicyRQ {
@@ -46,7 +48,7 @@ export interface PolicyRQ {
 
 export interface PolicyList {
   items: Policy[];
-  total_count: number;
+  total_count?: number | undefined;
   subject?: Subject;
 }
 
@@ -63,30 +65,30 @@ export interface PolicyResponse {
 
 function createBasePolicy(): Policy {
   return {
-    id: "",
+    id: undefined,
     meta: undefined,
-    name: "",
-    description: "",
+    name: undefined,
+    description: undefined,
     rules: [],
     target: undefined,
-    effect: Effect.PERMIT,
-    combining_algorithm: "",
-    evaluation_cacheable: false,
+    effect: undefined,
+    combining_algorithm: undefined,
+    evaluation_cacheable: undefined,
   };
 }
 
 export const Policy = {
   encode(message: Policy, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
+    if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
-    if (message.name !== "") {
+    if (message.name !== undefined) {
       writer.uint32(26).string(message.name);
     }
-    if (message.description !== "") {
+    if (message.description !== undefined) {
       writer.uint32(34).string(message.description);
     }
     for (const v of message.rules) {
@@ -95,13 +97,13 @@ export const Policy = {
     if (message.target !== undefined) {
       Target.encode(message.target, writer.uint32(50).fork()).ldelim();
     }
-    if (message.effect !== Effect.PERMIT) {
+    if (message.effect !== undefined) {
       writer.uint32(56).int32(effectToNumber(message.effect));
     }
-    if (message.combining_algorithm !== "") {
+    if (message.combining_algorithm !== undefined) {
       writer.uint32(66).string(message.combining_algorithm);
     }
-    if (message.evaluation_cacheable === true) {
+    if (message.evaluation_cacheable !== undefined) {
       writer.uint32(72).bool(message.evaluation_cacheable);
     }
     return writer;
@@ -151,15 +153,15 @@ export const Policy = {
 
   fromJSON(object: any): Policy {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
+      id: isSet(object.id) ? String(object.id) : undefined,
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
-      name: isSet(object.name) ? String(object.name) : "",
-      description: isSet(object.description) ? String(object.description) : "",
+      name: isSet(object.name) ? String(object.name) : undefined,
+      description: isSet(object.description) ? String(object.description) : undefined,
       rules: Array.isArray(object?.rules) ? object.rules.map((e: any) => String(e)) : [],
       target: isSet(object.target) ? Target.fromJSON(object.target) : undefined,
-      effect: isSet(object.effect) ? effectFromJSON(object.effect) : Effect.PERMIT,
-      combining_algorithm: isSet(object.combining_algorithm) ? String(object.combining_algorithm) : "",
-      evaluation_cacheable: isSet(object.evaluation_cacheable) ? Boolean(object.evaluation_cacheable) : false,
+      effect: isSet(object.effect) ? effectFromJSON(object.effect) : undefined,
+      combining_algorithm: isSet(object.combining_algorithm) ? String(object.combining_algorithm) : undefined,
+      evaluation_cacheable: isSet(object.evaluation_cacheable) ? Boolean(object.evaluation_cacheable) : undefined,
     };
   },
 
@@ -175,7 +177,8 @@ export const Policy = {
       obj.rules = [];
     }
     message.target !== undefined && (obj.target = message.target ? Target.toJSON(message.target) : undefined);
-    message.effect !== undefined && (obj.effect = effectToJSON(message.effect));
+    message.effect !== undefined &&
+      (obj.effect = message.effect !== undefined ? effectToJSON(message.effect) : undefined);
     message.combining_algorithm !== undefined && (obj.combining_algorithm = message.combining_algorithm);
     message.evaluation_cacheable !== undefined && (obj.evaluation_cacheable = message.evaluation_cacheable);
     return obj;
@@ -187,17 +190,17 @@ export const Policy = {
 
   fromPartial(object: DeepPartial<Policy>): Policy {
     const message = createBasePolicy();
-    message.id = object.id ?? "";
+    message.id = object.id ?? undefined;
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
-    message.name = object.name ?? "";
-    message.description = object.description ?? "";
+    message.name = object.name ?? undefined;
+    message.description = object.description ?? undefined;
     message.rules = object.rules?.map((e) => e) || [];
     message.target = (object.target !== undefined && object.target !== null)
       ? Target.fromPartial(object.target)
       : undefined;
-    message.effect = object.effect ?? Effect.PERMIT;
-    message.combining_algorithm = object.combining_algorithm ?? "";
-    message.evaluation_cacheable = object.evaluation_cacheable ?? false;
+    message.effect = object.effect ?? undefined;
+    message.combining_algorithm = object.combining_algorithm ?? undefined;
+    message.evaluation_cacheable = object.evaluation_cacheable ?? undefined;
     return message;
   },
 };
@@ -324,7 +327,7 @@ export const PolicyRQ = {
 };
 
 function createBasePolicyList(): PolicyList {
-  return { items: [], total_count: 0, subject: undefined };
+  return { items: [], total_count: undefined, subject: undefined };
 }
 
 export const PolicyList = {
@@ -332,7 +335,7 @@ export const PolicyList = {
     for (const v of message.items) {
       Policy.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.total_count !== 0) {
+    if (message.total_count !== undefined) {
       writer.uint32(16).uint32(message.total_count);
     }
     if (message.subject !== undefined) {
@@ -368,7 +371,7 @@ export const PolicyList = {
   fromJSON(object: any): PolicyList {
     return {
       items: Array.isArray(object?.items) ? object.items.map((e: any) => Policy.fromJSON(e)) : [],
-      total_count: isSet(object.total_count) ? Number(object.total_count) : 0,
+      total_count: isSet(object.total_count) ? Number(object.total_count) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
@@ -392,7 +395,7 @@ export const PolicyList = {
   fromPartial(object: DeepPartial<PolicyList>): PolicyList {
     const message = createBasePolicyList();
     message.items = object.items?.map((e) => Policy.fromPartial(e)) || [];
-    message.total_count = object.total_count ?? 0;
+    message.total_count = object.total_count ?? undefined;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
@@ -656,7 +659,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "meta",
         "number": 2,
@@ -665,10 +668,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.meta.Meta",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "meta",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "name",
         "number": 3,
@@ -677,10 +680,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "name",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "description",
         "number": 4,
@@ -689,10 +692,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "description",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "rules",
         "number": 5,
@@ -713,10 +716,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.rule.Target",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 4,
         "jsonName": "target",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "effect",
         "number": 7,
@@ -725,10 +728,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.rule.Effect",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 5,
         "jsonName": "effect",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "combining_algorithm",
         "number": 8,
@@ -737,10 +740,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 6,
         "jsonName": "combiningAlgorithm",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "evaluation_cacheable",
         "number": 9,
@@ -749,16 +752,25 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 7,
         "jsonName": "evaluationCacheable",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [
+        { "name": "_id", "options": undefined },
+        { "name": "_meta", "options": undefined },
+        { "name": "_name", "options": undefined },
+        { "name": "_description", "options": undefined },
+        { "name": "_target", "options": undefined },
+        { "name": "_effect", "options": undefined },
+        { "name": "_combining_algorithm", "options": undefined },
+        { "name": "_evaluation_cacheable", "options": undefined },
+      ],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -882,7 +894,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "totalCount",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 3,
@@ -900,7 +912,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_total_count", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1045,7 +1057,7 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 0, 2, 5],
-        "span": [20, 2, 44],
+        "span": [20, 2, 53],
         "leadingComments": "",
         "trailingComments": " general policy target\n",
         "leadingDetachedComments": [],

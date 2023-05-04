@@ -7,28 +7,32 @@ export const protobufPackage = "io.restorecommerce.meta";
 
 export interface Meta {
   /** timestamp */
-  created: number;
+  created?:
+    | number
+    | undefined;
   /** timestamp */
-  modified: number;
+  modified?:
+    | number
+    | undefined;
   /** ID from last User who modified it */
-  modified_by: string;
+  modified_by?: string | undefined;
   owner: Attribute[];
   acl: AttributeObj[];
 }
 
 function createBaseMeta(): Meta {
-  return { created: 0, modified: 0, modified_by: "", owner: [], acl: [] };
+  return { created: undefined, modified: undefined, modified_by: undefined, owner: [], acl: [] };
 }
 
 export const Meta = {
   encode(message: Meta, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.created !== 0) {
+    if (message.created !== undefined) {
       writer.uint32(9).double(message.created);
     }
-    if (message.modified !== 0) {
+    if (message.modified !== undefined) {
       writer.uint32(17).double(message.modified);
     }
-    if (message.modified_by !== "") {
+    if (message.modified_by !== undefined) {
       writer.uint32(26).string(message.modified_by);
     }
     for (const v of message.owner) {
@@ -72,9 +76,9 @@ export const Meta = {
 
   fromJSON(object: any): Meta {
     return {
-      created: isSet(object.created) ? Number(object.created) : 0,
-      modified: isSet(object.modified) ? Number(object.modified) : 0,
-      modified_by: isSet(object.modified_by) ? String(object.modified_by) : "",
+      created: isSet(object.created) ? Number(object.created) : undefined,
+      modified: isSet(object.modified) ? Number(object.modified) : undefined,
+      modified_by: isSet(object.modified_by) ? String(object.modified_by) : undefined,
       owner: Array.isArray(object?.owner) ? object.owner.map((e: any) => Attribute.fromJSON(e)) : [],
       acl: Array.isArray(object?.acl) ? object.acl.map((e: any) => AttributeObj.fromJSON(e)) : [],
     };
@@ -104,9 +108,9 @@ export const Meta = {
 
   fromPartial(object: DeepPartial<Meta>): Meta {
     const message = createBaseMeta();
-    message.created = object.created ?? 0;
-    message.modified = object.modified ?? 0;
-    message.modified_by = object.modified_by ?? "";
+    message.created = object.created ?? undefined;
+    message.modified = object.modified ?? undefined;
+    message.modified_by = object.modified_by ?? undefined;
     message.owner = object.owner?.map((e) => Attribute.fromPartial(e)) || [];
     message.acl = object.acl?.map((e) => AttributeObj.fromPartial(e)) || [];
     return message;
@@ -154,7 +158,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "created",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "modified",
         "number": 2,
@@ -163,10 +167,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "modified",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "modified_by",
         "number": 3,
@@ -175,10 +179,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "modifiedBy",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "owner",
         "number": 4,
@@ -208,7 +212,10 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_created", "options": undefined }, { "name": "_modified", "options": undefined }, {
+        "name": "_modified_by",
+        "options": undefined,
+      }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -220,19 +227,19 @@ export const protoMetadata: ProtoMetadata = {
     "sourceCodeInfo": {
       "location": [{
         "path": [4, 0, 2, 0],
-        "span": [9, 4, 23],
+        "span": [9, 4, 32],
         "leadingComments": "",
         "trailingComments": " timestamp\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 0, 2, 1],
-        "span": [10, 4, 24],
+        "span": [10, 4, 33],
         "leadingComments": "",
         "trailingComments": " timestamp\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 0, 2, 2],
-        "span": [11, 4, 27],
+        "span": [11, 4, 36],
         "leadingComments": "",
         "trailingComments": " ID from last User who modified it\n",
         "leadingDetachedComments": [],

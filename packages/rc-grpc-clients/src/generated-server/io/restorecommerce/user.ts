@@ -85,8 +85,8 @@ export interface LoginRequest {
   /** User name or email */
   identifier: string;
   /** Raw password */
-  password: string;
-  token: string;
+  password?: string | undefined;
+  token?: string | undefined;
 }
 
 export interface OrgIDRequest {
@@ -112,20 +112,22 @@ export interface FindByTokenRequest {
 }
 
 export interface RegisterRequest {
-  id: string;
-  guest: boolean;
-  meta?: Meta;
-  name: string;
-  first_name: string;
-  last_name: string;
-  email: string;
-  password: string;
-  timezone_id: string;
-  locale_id: string;
+  id?: string | undefined;
+  guest?: boolean | undefined;
+  meta?: Meta | undefined;
+  name?: string | undefined;
+  first_name?: string | undefined;
+  last_name?: string | undefined;
+  email?: string | undefined;
+  password?: string | undefined;
+  timezone_id?: string | undefined;
+  locale_id?:
+    | string
+    | undefined;
   /** default hierarchical scope */
-  default_scope: string;
-  user_type: UserType;
-  captcha_code: string;
+  default_scope?: string | undefined;
+  user_type?: UserType | undefined;
+  captcha_code?: string | undefined;
 }
 
 export interface ActivateRequest {
@@ -413,7 +415,7 @@ export interface UserRole {
 }
 
 function createBaseLoginRequest(): LoginRequest {
-  return { identifier: "", password: "", token: "" };
+  return { identifier: "", password: undefined, token: undefined };
 }
 
 export const LoginRequest = {
@@ -421,10 +423,10 @@ export const LoginRequest = {
     if (message.identifier !== "") {
       writer.uint32(10).string(message.identifier);
     }
-    if (message.password !== "") {
+    if (message.password !== undefined) {
       writer.uint32(18).string(message.password);
     }
-    if (message.token !== "") {
+    if (message.token !== undefined) {
       writer.uint32(26).string(message.token);
     }
     return writer;
@@ -457,8 +459,8 @@ export const LoginRequest = {
   fromJSON(object: any): LoginRequest {
     return {
       identifier: isSet(object.identifier) ? String(object.identifier) : "",
-      password: isSet(object.password) ? String(object.password) : "",
-      token: isSet(object.token) ? String(object.token) : "",
+      password: isSet(object.password) ? String(object.password) : undefined,
+      token: isSet(object.token) ? String(object.token) : undefined,
     };
   },
 
@@ -477,8 +479,8 @@ export const LoginRequest = {
   fromPartial(object: DeepPartial<LoginRequest>): LoginRequest {
     const message = createBaseLoginRequest();
     message.identifier = object.identifier ?? "";
-    message.password = object.password ?? "";
-    message.token = object.token ?? "";
+    message.password = object.password ?? undefined;
+    message.token = object.token ?? undefined;
     return message;
   },
 };
@@ -755,61 +757,61 @@ export const FindByTokenRequest = {
 
 function createBaseRegisterRequest(): RegisterRequest {
   return {
-    id: "",
-    guest: false,
+    id: undefined,
+    guest: undefined,
     meta: undefined,
-    name: "",
-    first_name: "",
-    last_name: "",
-    email: "",
-    password: "",
-    timezone_id: "",
-    locale_id: "",
-    default_scope: "",
-    user_type: UserType.ORG_USER,
-    captcha_code: "",
+    name: undefined,
+    first_name: undefined,
+    last_name: undefined,
+    email: undefined,
+    password: undefined,
+    timezone_id: undefined,
+    locale_id: undefined,
+    default_scope: undefined,
+    user_type: undefined,
+    captcha_code: undefined,
   };
 }
 
 export const RegisterRequest = {
   encode(message: RegisterRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
+    if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
-    if (message.guest === true) {
+    if (message.guest !== undefined) {
       writer.uint32(16).bool(message.guest);
     }
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(26).fork()).ldelim();
     }
-    if (message.name !== "") {
+    if (message.name !== undefined) {
       writer.uint32(34).string(message.name);
     }
-    if (message.first_name !== "") {
+    if (message.first_name !== undefined) {
       writer.uint32(42).string(message.first_name);
     }
-    if (message.last_name !== "") {
+    if (message.last_name !== undefined) {
       writer.uint32(50).string(message.last_name);
     }
-    if (message.email !== "") {
+    if (message.email !== undefined) {
       writer.uint32(58).string(message.email);
     }
-    if (message.password !== "") {
+    if (message.password !== undefined) {
       writer.uint32(66).string(message.password);
     }
-    if (message.timezone_id !== "") {
+    if (message.timezone_id !== undefined) {
       writer.uint32(74).string(message.timezone_id);
     }
-    if (message.locale_id !== "") {
+    if (message.locale_id !== undefined) {
       writer.uint32(82).string(message.locale_id);
     }
-    if (message.default_scope !== "") {
+    if (message.default_scope !== undefined) {
       writer.uint32(90).string(message.default_scope);
     }
-    if (message.user_type !== UserType.ORG_USER) {
+    if (message.user_type !== undefined) {
       writer.uint32(96).int32(userTypeToNumber(message.user_type));
     }
-    if (message.captcha_code !== "") {
+    if (message.captcha_code !== undefined) {
       writer.uint32(106).string(message.captcha_code);
     }
     return writer;
@@ -871,19 +873,19 @@ export const RegisterRequest = {
 
   fromJSON(object: any): RegisterRequest {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
-      guest: isSet(object.guest) ? Boolean(object.guest) : false,
+      id: isSet(object.id) ? String(object.id) : undefined,
+      guest: isSet(object.guest) ? Boolean(object.guest) : undefined,
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
-      name: isSet(object.name) ? String(object.name) : "",
-      first_name: isSet(object.first_name) ? String(object.first_name) : "",
-      last_name: isSet(object.last_name) ? String(object.last_name) : "",
-      email: isSet(object.email) ? String(object.email) : "",
-      password: isSet(object.password) ? String(object.password) : "",
-      timezone_id: isSet(object.timezone_id) ? String(object.timezone_id) : "",
-      locale_id: isSet(object.locale_id) ? String(object.locale_id) : "",
-      default_scope: isSet(object.default_scope) ? String(object.default_scope) : "",
-      user_type: isSet(object.user_type) ? userTypeFromJSON(object.user_type) : UserType.ORG_USER,
-      captcha_code: isSet(object.captcha_code) ? String(object.captcha_code) : "",
+      name: isSet(object.name) ? String(object.name) : undefined,
+      first_name: isSet(object.first_name) ? String(object.first_name) : undefined,
+      last_name: isSet(object.last_name) ? String(object.last_name) : undefined,
+      email: isSet(object.email) ? String(object.email) : undefined,
+      password: isSet(object.password) ? String(object.password) : undefined,
+      timezone_id: isSet(object.timezone_id) ? String(object.timezone_id) : undefined,
+      locale_id: isSet(object.locale_id) ? String(object.locale_id) : undefined,
+      default_scope: isSet(object.default_scope) ? String(object.default_scope) : undefined,
+      user_type: isSet(object.user_type) ? userTypeFromJSON(object.user_type) : undefined,
+      captcha_code: isSet(object.captcha_code) ? String(object.captcha_code) : undefined,
     };
   },
 
@@ -900,7 +902,8 @@ export const RegisterRequest = {
     message.timezone_id !== undefined && (obj.timezone_id = message.timezone_id);
     message.locale_id !== undefined && (obj.locale_id = message.locale_id);
     message.default_scope !== undefined && (obj.default_scope = message.default_scope);
-    message.user_type !== undefined && (obj.user_type = userTypeToJSON(message.user_type));
+    message.user_type !== undefined &&
+      (obj.user_type = message.user_type !== undefined ? userTypeToJSON(message.user_type) : undefined);
     message.captcha_code !== undefined && (obj.captcha_code = message.captcha_code);
     return obj;
   },
@@ -911,19 +914,19 @@ export const RegisterRequest = {
 
   fromPartial(object: DeepPartial<RegisterRequest>): RegisterRequest {
     const message = createBaseRegisterRequest();
-    message.id = object.id ?? "";
-    message.guest = object.guest ?? false;
+    message.id = object.id ?? undefined;
+    message.guest = object.guest ?? undefined;
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
-    message.name = object.name ?? "";
-    message.first_name = object.first_name ?? "";
-    message.last_name = object.last_name ?? "";
-    message.email = object.email ?? "";
-    message.password = object.password ?? "";
-    message.timezone_id = object.timezone_id ?? "";
-    message.locale_id = object.locale_id ?? "";
-    message.default_scope = object.default_scope ?? "";
-    message.user_type = object.user_type ?? UserType.ORG_USER;
-    message.captcha_code = object.captcha_code ?? "";
+    message.name = object.name ?? undefined;
+    message.first_name = object.first_name ?? undefined;
+    message.last_name = object.last_name ?? undefined;
+    message.email = object.email ?? undefined;
+    message.password = object.password ?? undefined;
+    message.timezone_id = object.timezone_id ?? undefined;
+    message.locale_id = object.locale_id ?? undefined;
+    message.default_scope = object.default_scope ?? undefined;
+    message.user_type = object.user_type ?? undefined;
+    message.captcha_code = object.captcha_code ?? undefined;
     return message;
   },
 };
@@ -3449,7 +3452,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "password",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "token",
         "number": 3,
@@ -3458,16 +3461,16 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "token",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_password", "options": undefined }, { "name": "_token", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -3636,7 +3639,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "guest",
         "number": 2,
@@ -3645,10 +3648,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "guest",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "meta",
         "number": 3,
@@ -3657,10 +3660,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.meta.Meta",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "meta",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "name",
         "number": 4,
@@ -3669,10 +3672,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "name",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "first_name",
         "number": 5,
@@ -3681,10 +3684,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 4,
         "jsonName": "firstName",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "last_name",
         "number": 6,
@@ -3693,10 +3696,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 5,
         "jsonName": "lastName",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "email",
         "number": 7,
@@ -3705,10 +3708,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 6,
         "jsonName": "email",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "password",
         "number": 8,
@@ -3717,10 +3720,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 7,
         "jsonName": "password",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "timezone_id",
         "number": 9,
@@ -3729,10 +3732,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 8,
         "jsonName": "timezoneId",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "locale_id",
         "number": 10,
@@ -3741,10 +3744,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 9,
         "jsonName": "localeId",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "default_scope",
         "number": 11,
@@ -3753,10 +3756,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 10,
         "jsonName": "defaultScope",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "user_type",
         "number": 12,
@@ -3765,10 +3768,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.user.UserType",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 11,
         "jsonName": "userType",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "captcha_code",
         "number": 13,
@@ -3777,16 +3780,30 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 12,
         "jsonName": "captchaCode",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [
+        { "name": "_id", "options": undefined },
+        { "name": "_guest", "options": undefined },
+        { "name": "_meta", "options": undefined },
+        { "name": "_name", "options": undefined },
+        { "name": "_first_name", "options": undefined },
+        { "name": "_last_name", "options": undefined },
+        { "name": "_email", "options": undefined },
+        { "name": "_password", "options": undefined },
+        { "name": "_timezone_id", "options": undefined },
+        { "name": "_locale_id", "options": undefined },
+        { "name": "_default_scope", "options": undefined },
+        { "name": "_user_type", "options": undefined },
+        { "name": "_captcha_code", "options": undefined },
+      ],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -5608,7 +5625,7 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 0, 2, 1],
-        "span": [62, 2, 22],
+        "span": [62, 2, 31],
         "leadingComments": "",
         "trailingComments": " Raw password\n",
         "leadingDetachedComments": [],
@@ -5620,7 +5637,7 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 5, 2, 10],
-        "span": [106, 2, 28],
+        "span": [106, 2, 37],
         "leadingComments": "",
         "trailingComments": " default hierarchical scope\n",
         "leadingDetachedComments": [],

@@ -16,7 +16,7 @@ export const protobufPackage = "io.restorecommerce.customer";
 
 export interface CustomerList {
   items: Customer[];
-  total_count: number;
+  total_count?: number | undefined;
   subject?: Subject;
 }
 
@@ -32,32 +32,32 @@ export interface CustomerResponse {
 }
 
 export interface Customer {
-  id: string;
-  meta?: Meta;
+  id?: string | undefined;
+  meta?: Meta | undefined;
   individual_user?: IndividualUser | undefined;
   org_user?: OrgUser | undefined;
   guest?: Guest | undefined;
 }
 
 export interface IndividualUser {
-  user_id: string;
-  address_id: string;
+  user_id?: string | undefined;
+  address_id?: string | undefined;
   contact_point_ids: string[];
 }
 
 export interface OrgUser {
-  user_id: string;
-  organization_id: string;
+  user_id?: string | undefined;
+  organization_id?: string | undefined;
 }
 
 export interface Guest {
   guest: boolean;
-  address_id: string;
+  address_id?: string | undefined;
   contact_point_ids: string[];
 }
 
 function createBaseCustomerList(): CustomerList {
-  return { items: [], total_count: 0, subject: undefined };
+  return { items: [], total_count: undefined, subject: undefined };
 }
 
 export const CustomerList = {
@@ -65,7 +65,7 @@ export const CustomerList = {
     for (const v of message.items) {
       Customer.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.total_count !== 0) {
+    if (message.total_count !== undefined) {
       writer.uint32(16).uint32(message.total_count);
     }
     if (message.subject !== undefined) {
@@ -101,7 +101,7 @@ export const CustomerList = {
   fromJSON(object: any): CustomerList {
     return {
       items: Array.isArray(object?.items) ? object.items.map((e: any) => Customer.fromJSON(e)) : [],
-      total_count: isSet(object.total_count) ? Number(object.total_count) : 0,
+      total_count: isSet(object.total_count) ? Number(object.total_count) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
@@ -125,7 +125,7 @@ export const CustomerList = {
   fromPartial(object: DeepPartial<CustomerList>): CustomerList {
     const message = createBaseCustomerList();
     message.items = object.items?.map((e) => Customer.fromPartial(e)) || [];
-    message.total_count = object.total_count ?? 0;
+    message.total_count = object.total_count ?? undefined;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
@@ -278,12 +278,12 @@ export const CustomerResponse = {
 };
 
 function createBaseCustomer(): Customer {
-  return { id: "", meta: undefined, individual_user: undefined, org_user: undefined, guest: undefined };
+  return { id: undefined, meta: undefined, individual_user: undefined, org_user: undefined, guest: undefined };
 }
 
 export const Customer = {
   encode(message: Customer, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
+    if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
     if (message.meta !== undefined) {
@@ -333,7 +333,7 @@ export const Customer = {
 
   fromJSON(object: any): Customer {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
+      id: isSet(object.id) ? String(object.id) : undefined,
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
       individual_user: isSet(object.individual_user) ? IndividualUser.fromJSON(object.individual_user) : undefined,
       org_user: isSet(object.org_user) ? OrgUser.fromJSON(object.org_user) : undefined,
@@ -358,7 +358,7 @@ export const Customer = {
 
   fromPartial(object: DeepPartial<Customer>): Customer {
     const message = createBaseCustomer();
-    message.id = object.id ?? "";
+    message.id = object.id ?? undefined;
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
     message.individual_user = (object.individual_user !== undefined && object.individual_user !== null)
       ? IndividualUser.fromPartial(object.individual_user)
@@ -372,15 +372,15 @@ export const Customer = {
 };
 
 function createBaseIndividualUser(): IndividualUser {
-  return { user_id: "", address_id: "", contact_point_ids: [] };
+  return { user_id: undefined, address_id: undefined, contact_point_ids: [] };
 }
 
 export const IndividualUser = {
   encode(message: IndividualUser, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.user_id !== "") {
+    if (message.user_id !== undefined) {
       writer.uint32(10).string(message.user_id);
     }
-    if (message.address_id !== "") {
+    if (message.address_id !== undefined) {
       writer.uint32(18).string(message.address_id);
     }
     for (const v of message.contact_point_ids) {
@@ -415,8 +415,8 @@ export const IndividualUser = {
 
   fromJSON(object: any): IndividualUser {
     return {
-      user_id: isSet(object.user_id) ? String(object.user_id) : "",
-      address_id: isSet(object.address_id) ? String(object.address_id) : "",
+      user_id: isSet(object.user_id) ? String(object.user_id) : undefined,
+      address_id: isSet(object.address_id) ? String(object.address_id) : undefined,
       contact_point_ids: Array.isArray(object?.contact_point_ids)
         ? object.contact_point_ids.map((e: any) => String(e))
         : [],
@@ -441,23 +441,23 @@ export const IndividualUser = {
 
   fromPartial(object: DeepPartial<IndividualUser>): IndividualUser {
     const message = createBaseIndividualUser();
-    message.user_id = object.user_id ?? "";
-    message.address_id = object.address_id ?? "";
+    message.user_id = object.user_id ?? undefined;
+    message.address_id = object.address_id ?? undefined;
     message.contact_point_ids = object.contact_point_ids?.map((e) => e) || [];
     return message;
   },
 };
 
 function createBaseOrgUser(): OrgUser {
-  return { user_id: "", organization_id: "" };
+  return { user_id: undefined, organization_id: undefined };
 }
 
 export const OrgUser = {
   encode(message: OrgUser, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.user_id !== "") {
+    if (message.user_id !== undefined) {
       writer.uint32(10).string(message.user_id);
     }
-    if (message.organization_id !== "") {
+    if (message.organization_id !== undefined) {
       writer.uint32(18).string(message.organization_id);
     }
     return writer;
@@ -486,8 +486,8 @@ export const OrgUser = {
 
   fromJSON(object: any): OrgUser {
     return {
-      user_id: isSet(object.user_id) ? String(object.user_id) : "",
-      organization_id: isSet(object.organization_id) ? String(object.organization_id) : "",
+      user_id: isSet(object.user_id) ? String(object.user_id) : undefined,
+      organization_id: isSet(object.organization_id) ? String(object.organization_id) : undefined,
     };
   },
 
@@ -504,14 +504,14 @@ export const OrgUser = {
 
   fromPartial(object: DeepPartial<OrgUser>): OrgUser {
     const message = createBaseOrgUser();
-    message.user_id = object.user_id ?? "";
-    message.organization_id = object.organization_id ?? "";
+    message.user_id = object.user_id ?? undefined;
+    message.organization_id = object.organization_id ?? undefined;
     return message;
   },
 };
 
 function createBaseGuest(): Guest {
-  return { guest: false, address_id: "", contact_point_ids: [] };
+  return { guest: false, address_id: undefined, contact_point_ids: [] };
 }
 
 export const Guest = {
@@ -519,7 +519,7 @@ export const Guest = {
     if (message.guest === true) {
       writer.uint32(8).bool(message.guest);
     }
-    if (message.address_id !== "") {
+    if (message.address_id !== undefined) {
       writer.uint32(18).string(message.address_id);
     }
     for (const v of message.contact_point_ids) {
@@ -555,7 +555,7 @@ export const Guest = {
   fromJSON(object: any): Guest {
     return {
       guest: isSet(object.guest) ? Boolean(object.guest) : false,
-      address_id: isSet(object.address_id) ? String(object.address_id) : "",
+      address_id: isSet(object.address_id) ? String(object.address_id) : undefined,
       contact_point_ids: Array.isArray(object?.contact_point_ids)
         ? object.contact_point_ids.map((e: any) => String(e))
         : [],
@@ -581,7 +581,7 @@ export const Guest = {
   fromPartial(object: DeepPartial<Guest>): Guest {
     const message = createBaseGuest();
     message.guest = object.guest ?? false;
-    message.address_id = object.address_id ?? "";
+    message.address_id = object.address_id ?? undefined;
     message.contact_point_ids = object.contact_point_ids?.map((e) => e) || [];
     return message;
   },
@@ -715,7 +715,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "totalCount",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 3,
@@ -733,7 +733,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_total_count", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -829,10 +829,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "meta",
         "number": 2,
@@ -841,10 +841,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.meta.Meta",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "meta",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "individual_user",
         "number": 3,
@@ -886,7 +886,10 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [{ "name": "customer", "options": undefined }],
+      "oneofDecl": [{ "name": "customer", "options": undefined }, { "name": "_id", "options": undefined }, {
+        "name": "_meta",
+        "options": undefined,
+      }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -911,7 +914,7 @@ export const protoMetadata: ProtoMetadata = {
           "weak": false,
           "uninterpretedOption": [],
         },
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "address_id",
         "number": 2,
@@ -920,7 +923,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "addressId",
         "options": {
           "ctype": 0,
@@ -931,7 +934,7 @@ export const protoMetadata: ProtoMetadata = {
           "weak": false,
           "uninterpretedOption": [],
         },
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "contact_point_ids",
         "number": 3,
@@ -957,7 +960,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_user_id", "options": undefined }, { "name": "_address_id", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -982,7 +985,7 @@ export const protoMetadata: ProtoMetadata = {
           "weak": false,
           "uninterpretedOption": [],
         },
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "organization_id",
         "number": 2,
@@ -991,7 +994,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "organizationId",
         "options": {
           "ctype": 0,
@@ -1002,13 +1005,13 @@ export const protoMetadata: ProtoMetadata = {
           "weak": false,
           "uninterpretedOption": [],
         },
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_user_id", "options": undefined }, { "name": "_organization_id", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1045,7 +1048,7 @@ export const protoMetadata: ProtoMetadata = {
           "weak": false,
           "uninterpretedOption": [],
         },
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "contact_point_ids",
         "number": 3,
@@ -1071,7 +1074,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_address_id", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],

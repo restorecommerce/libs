@@ -16,7 +16,7 @@ export interface Deleted {
 
 export interface CredentialList {
   items: Credential[];
-  totalCount: number;
+  totalCount?: number | undefined;
   subject?: Subject;
 }
 
@@ -32,14 +32,16 @@ export interface CredentialResponse {
 }
 
 export interface Credential {
-  id: string;
-  meta?: Meta;
-  name: string;
-  description: string;
-  user: string;
-  pass: string;
+  id?: string | undefined;
+  meta?: Meta | undefined;
+  name?: string | undefined;
+  description?: string | undefined;
+  user?: string | undefined;
+  pass?:
+    | string
+    | undefined;
   /** / additional credentials as auth key or certificates etc */
-  credentials?: Any;
+  credentials?: Any | undefined;
 }
 
 function createBaseDeleted(): Deleted {
@@ -94,7 +96,7 @@ export const Deleted = {
 };
 
 function createBaseCredentialList(): CredentialList {
-  return { items: [], totalCount: 0, subject: undefined };
+  return { items: [], totalCount: undefined, subject: undefined };
 }
 
 export const CredentialList = {
@@ -102,7 +104,7 @@ export const CredentialList = {
     for (const v of message.items) {
       Credential.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.totalCount !== 0) {
+    if (message.totalCount !== undefined) {
       writer.uint32(16).uint32(message.totalCount);
     }
     if (message.subject !== undefined) {
@@ -138,7 +140,7 @@ export const CredentialList = {
   fromJSON(object: any): CredentialList {
     return {
       items: Array.isArray(object?.items) ? object.items.map((e: any) => Credential.fromJSON(e)) : [],
-      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
+      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
@@ -162,7 +164,7 @@ export const CredentialList = {
   fromPartial(object: DeepPartial<CredentialList>): CredentialList {
     const message = createBaseCredentialList();
     message.items = object.items?.map((e) => Credential.fromPartial(e)) || [];
-    message.totalCount = object.totalCount ?? 0;
+    message.totalCount = object.totalCount ?? undefined;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
@@ -315,27 +317,35 @@ export const CredentialResponse = {
 };
 
 function createBaseCredential(): Credential {
-  return { id: "", meta: undefined, name: "", description: "", user: "", pass: "", credentials: undefined };
+  return {
+    id: undefined,
+    meta: undefined,
+    name: undefined,
+    description: undefined,
+    user: undefined,
+    pass: undefined,
+    credentials: undefined,
+  };
 }
 
 export const Credential = {
   encode(message: Credential, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
+    if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
-    if (message.name !== "") {
+    if (message.name !== undefined) {
       writer.uint32(26).string(message.name);
     }
-    if (message.description !== "") {
+    if (message.description !== undefined) {
       writer.uint32(34).string(message.description);
     }
-    if (message.user !== "") {
+    if (message.user !== undefined) {
       writer.uint32(42).string(message.user);
     }
-    if (message.pass !== "") {
+    if (message.pass !== undefined) {
       writer.uint32(50).string(message.pass);
     }
     if (message.credentials !== undefined) {
@@ -382,12 +392,12 @@ export const Credential = {
 
   fromJSON(object: any): Credential {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
+      id: isSet(object.id) ? String(object.id) : undefined,
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
-      name: isSet(object.name) ? String(object.name) : "",
-      description: isSet(object.description) ? String(object.description) : "",
-      user: isSet(object.user) ? String(object.user) : "",
-      pass: isSet(object.pass) ? String(object.pass) : "",
+      name: isSet(object.name) ? String(object.name) : undefined,
+      description: isSet(object.description) ? String(object.description) : undefined,
+      user: isSet(object.user) ? String(object.user) : undefined,
+      pass: isSet(object.pass) ? String(object.pass) : undefined,
       credentials: isSet(object.credentials) ? Any.fromJSON(object.credentials) : undefined,
     };
   },
@@ -411,12 +421,12 @@ export const Credential = {
 
   fromPartial(object: DeepPartial<Credential>): Credential {
     const message = createBaseCredential();
-    message.id = object.id ?? "";
+    message.id = object.id ?? undefined;
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
-    message.name = object.name ?? "";
-    message.description = object.description ?? "";
-    message.user = object.user ?? "";
-    message.pass = object.pass ?? "";
+    message.name = object.name ?? undefined;
+    message.description = object.description ?? undefined;
+    message.user = object.user ?? undefined;
+    message.pass = object.pass ?? undefined;
     message.credentials = (object.credentials !== undefined && object.credentials !== null)
       ? Any.fromPartial(object.credentials)
       : undefined;
@@ -571,7 +581,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "totalCount",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 3,
@@ -589,7 +599,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_total_count", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -688,7 +698,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "meta",
         "number": 2,
@@ -697,10 +707,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.meta.Meta",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "meta",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "name",
         "number": 3,
@@ -709,10 +719,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "name",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "description",
         "number": 4,
@@ -721,10 +731,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "description",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "user",
         "number": 5,
@@ -733,10 +743,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 4,
         "jsonName": "user",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "pass",
         "number": 6,
@@ -745,10 +755,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 5,
         "jsonName": "pass",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "credentials",
         "number": 7,
@@ -757,16 +767,24 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".google.protobuf.Any",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 6,
         "jsonName": "credentials",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [
+        { "name": "_id", "options": undefined },
+        { "name": "_meta", "options": undefined },
+        { "name": "_name", "options": undefined },
+        { "name": "_description", "options": undefined },
+        { "name": "_user", "options": undefined },
+        { "name": "_pass", "options": undefined },
+        { "name": "_credentials", "options": undefined },
+      ],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -823,7 +841,7 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 4, 2, 6],
-        "span": [49, 2, 38],
+        "span": [49, 2, 47],
         "leadingComments": "",
         "trailingComments": "/ additional credentials as auth key or certificates etc\n",
         "leadingDetachedComments": [],

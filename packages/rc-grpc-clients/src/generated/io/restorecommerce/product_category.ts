@@ -14,18 +14,18 @@ export const protobufPackage = "io.restorecommerce.product_category";
 
 /** ProductCategory resource */
 export interface ProductCategory {
-  id: string;
-  meta?: Meta;
-  name: string;
-  description: string;
-  priceGroupId: string;
-  image?: Image;
-  parent?: Parent;
+  id?: string | undefined;
+  meta?: Meta | undefined;
+  name?: string | undefined;
+  description?: string | undefined;
+  priceGroupId?: string | undefined;
+  image?: Image | undefined;
+  parent?: Parent | undefined;
 }
 
 export interface ProductCategoryList {
   items: ProductCategory[];
-  totalCount: number;
+  totalCount?: number | undefined;
   subject?: Subject;
 }
 
@@ -45,28 +45,36 @@ export interface Deleted {
 }
 
 export interface Parent {
-  parentId: string;
+  parentId?: string | undefined;
 }
 
 function createBaseProductCategory(): ProductCategory {
-  return { id: "", meta: undefined, name: "", description: "", priceGroupId: "", image: undefined, parent: undefined };
+  return {
+    id: undefined,
+    meta: undefined,
+    name: undefined,
+    description: undefined,
+    priceGroupId: undefined,
+    image: undefined,
+    parent: undefined,
+  };
 }
 
 export const ProductCategory = {
   encode(message: ProductCategory, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
+    if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
-    if (message.name !== "") {
+    if (message.name !== undefined) {
       writer.uint32(26).string(message.name);
     }
-    if (message.description !== "") {
+    if (message.description !== undefined) {
       writer.uint32(34).string(message.description);
     }
-    if (message.priceGroupId !== "") {
+    if (message.priceGroupId !== undefined) {
       writer.uint32(42).string(message.priceGroupId);
     }
     if (message.image !== undefined) {
@@ -116,11 +124,11 @@ export const ProductCategory = {
 
   fromJSON(object: any): ProductCategory {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
+      id: isSet(object.id) ? String(object.id) : undefined,
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
-      name: isSet(object.name) ? String(object.name) : "",
-      description: isSet(object.description) ? String(object.description) : "",
-      priceGroupId: isSet(object.priceGroupId) ? String(object.priceGroupId) : "",
+      name: isSet(object.name) ? String(object.name) : undefined,
+      description: isSet(object.description) ? String(object.description) : undefined,
+      priceGroupId: isSet(object.priceGroupId) ? String(object.priceGroupId) : undefined,
       image: isSet(object.image) ? Image.fromJSON(object.image) : undefined,
       parent: isSet(object.parent) ? Parent.fromJSON(object.parent) : undefined,
     };
@@ -144,11 +152,11 @@ export const ProductCategory = {
 
   fromPartial(object: DeepPartial<ProductCategory>): ProductCategory {
     const message = createBaseProductCategory();
-    message.id = object.id ?? "";
+    message.id = object.id ?? undefined;
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
-    message.name = object.name ?? "";
-    message.description = object.description ?? "";
-    message.priceGroupId = object.priceGroupId ?? "";
+    message.name = object.name ?? undefined;
+    message.description = object.description ?? undefined;
+    message.priceGroupId = object.priceGroupId ?? undefined;
     message.image = (object.image !== undefined && object.image !== null) ? Image.fromPartial(object.image) : undefined;
     message.parent = (object.parent !== undefined && object.parent !== null)
       ? Parent.fromPartial(object.parent)
@@ -158,7 +166,7 @@ export const ProductCategory = {
 };
 
 function createBaseProductCategoryList(): ProductCategoryList {
-  return { items: [], totalCount: 0, subject: undefined };
+  return { items: [], totalCount: undefined, subject: undefined };
 }
 
 export const ProductCategoryList = {
@@ -166,7 +174,7 @@ export const ProductCategoryList = {
     for (const v of message.items) {
       ProductCategory.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.totalCount !== 0) {
+    if (message.totalCount !== undefined) {
       writer.uint32(16).uint32(message.totalCount);
     }
     if (message.subject !== undefined) {
@@ -202,7 +210,7 @@ export const ProductCategoryList = {
   fromJSON(object: any): ProductCategoryList {
     return {
       items: Array.isArray(object?.items) ? object.items.map((e: any) => ProductCategory.fromJSON(e)) : [],
-      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
+      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
@@ -226,7 +234,7 @@ export const ProductCategoryList = {
   fromPartial(object: DeepPartial<ProductCategoryList>): ProductCategoryList {
     const message = createBaseProductCategoryList();
     message.items = object.items?.map((e) => ProductCategory.fromPartial(e)) || [];
-    message.totalCount = object.totalCount ?? 0;
+    message.totalCount = object.totalCount ?? undefined;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
@@ -431,12 +439,12 @@ export const Deleted = {
 };
 
 function createBaseParent(): Parent {
-  return { parentId: "" };
+  return { parentId: undefined };
 }
 
 export const Parent = {
   encode(message: Parent, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.parentId !== "") {
+    if (message.parentId !== undefined) {
       writer.uint32(10).string(message.parentId);
     }
     return writer;
@@ -461,7 +469,7 @@ export const Parent = {
   },
 
   fromJSON(object: any): Parent {
-    return { parentId: isSet(object.parentId) ? String(object.parentId) : "" };
+    return { parentId: isSet(object.parentId) ? String(object.parentId) : undefined };
   },
 
   toJSON(message: Parent): unknown {
@@ -476,7 +484,7 @@ export const Parent = {
 
   fromPartial(object: DeepPartial<Parent>): Parent {
     const message = createBaseParent();
-    message.parentId = object.parentId ?? "";
+    message.parentId = object.parentId ?? undefined;
     return message;
   },
 };
@@ -612,7 +620,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "meta",
         "number": 2,
@@ -621,10 +629,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.meta.Meta",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "meta",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "name",
         "number": 3,
@@ -633,10 +641,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "name",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "description",
         "number": 4,
@@ -645,10 +653,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "description",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "price_group_id",
         "number": 5,
@@ -657,7 +665,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 4,
         "jsonName": "priceGroupId",
         "options": {
           "ctype": 0,
@@ -668,7 +676,7 @@ export const protoMetadata: ProtoMetadata = {
           "weak": false,
           "uninterpretedOption": [],
         },
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "image",
         "number": 6,
@@ -677,10 +685,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.image.Image",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 5,
         "jsonName": "image",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "parent",
         "number": 7,
@@ -689,16 +697,24 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.product_category.Parent",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 6,
         "jsonName": "parent",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [
+        { "name": "_id", "options": undefined },
+        { "name": "_meta", "options": undefined },
+        { "name": "_name", "options": undefined },
+        { "name": "_description", "options": undefined },
+        { "name": "_price_group_id", "options": undefined },
+        { "name": "_image", "options": undefined },
+        { "name": "_parent", "options": undefined },
+      ],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -727,7 +743,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "totalCount",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 3,
@@ -745,7 +761,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_total_count", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -867,13 +883,13 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "parentId",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_parent_id", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],

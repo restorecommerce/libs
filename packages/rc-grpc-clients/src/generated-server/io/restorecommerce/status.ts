@@ -5,9 +5,9 @@ import { FileDescriptorProto } from "ts-proto-descriptors";
 export const protobufPackage = "io.restorecommerce.status";
 
 export interface Status {
-  id: string;
-  code: number;
-  message: string;
+  id?: string | undefined;
+  code?: number | undefined;
+  message?: string | undefined;
 }
 
 export interface StatusArray {
@@ -15,31 +15,31 @@ export interface StatusArray {
 }
 
 export interface StatusObj {
-  status?: Status;
+  status?: Status | undefined;
 }
 
 export interface OperationStatusObj {
-  operation_status?: OperationStatus;
+  operation_status?: OperationStatus | undefined;
 }
 
 export interface OperationStatus {
-  code: number;
-  message: string;
+  code?: number | undefined;
+  message?: string | undefined;
 }
 
 function createBaseStatus(): Status {
-  return { id: "", code: 0, message: "" };
+  return { id: undefined, code: undefined, message: undefined };
 }
 
 export const Status = {
   encode(message: Status, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
+    if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
-    if (message.code !== 0) {
+    if (message.code !== undefined) {
       writer.uint32(16).uint32(message.code);
     }
-    if (message.message !== "") {
+    if (message.message !== undefined) {
       writer.uint32(26).string(message.message);
     }
     return writer;
@@ -71,9 +71,9 @@ export const Status = {
 
   fromJSON(object: any): Status {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
-      code: isSet(object.code) ? Number(object.code) : 0,
-      message: isSet(object.message) ? String(object.message) : "",
+      id: isSet(object.id) ? String(object.id) : undefined,
+      code: isSet(object.code) ? Number(object.code) : undefined,
+      message: isSet(object.message) ? String(object.message) : undefined,
     };
   },
 
@@ -91,9 +91,9 @@ export const Status = {
 
   fromPartial(object: DeepPartial<Status>): Status {
     const message = createBaseStatus();
-    message.id = object.id ?? "";
-    message.code = object.code ?? 0;
-    message.message = object.message ?? "";
+    message.id = object.id ?? undefined;
+    message.code = object.code ?? undefined;
+    message.message = object.message ?? undefined;
     return message;
   },
 };
@@ -263,15 +263,15 @@ export const OperationStatusObj = {
 };
 
 function createBaseOperationStatus(): OperationStatus {
-  return { code: 0, message: "" };
+  return { code: undefined, message: undefined };
 }
 
 export const OperationStatus = {
   encode(message: OperationStatus, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.code !== 0) {
+    if (message.code !== undefined) {
       writer.uint32(8).uint32(message.code);
     }
-    if (message.message !== "") {
+    if (message.message !== undefined) {
       writer.uint32(18).string(message.message);
     }
     return writer;
@@ -300,8 +300,8 @@ export const OperationStatus = {
 
   fromJSON(object: any): OperationStatus {
     return {
-      code: isSet(object.code) ? Number(object.code) : 0,
-      message: isSet(object.message) ? String(object.message) : "",
+      code: isSet(object.code) ? Number(object.code) : undefined,
+      message: isSet(object.message) ? String(object.message) : undefined,
     };
   },
 
@@ -318,8 +318,8 @@ export const OperationStatus = {
 
   fromPartial(object: DeepPartial<OperationStatus>): OperationStatus {
     const message = createBaseOperationStatus();
-    message.code = object.code ?? 0;
-    message.message = object.message ?? "";
+    message.code = object.code ?? undefined;
+    message.message = object.message ?? undefined;
     return message;
   },
 };
@@ -365,7 +365,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "code",
         "number": 2,
@@ -374,10 +374,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "code",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "message",
         "number": 3,
@@ -386,16 +386,19 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "message",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_id", "options": undefined }, { "name": "_code", "options": undefined }, {
+        "name": "_message",
+        "options": undefined,
+      }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -435,13 +438,13 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "status",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_status", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -458,13 +461,13 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "operationStatus",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_operation_status", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -481,7 +484,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "code",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "message",
         "number": 2,
@@ -490,16 +493,16 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "message",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_code", "options": undefined }, { "name": "_message", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],

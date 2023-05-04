@@ -8,12 +8,16 @@ export const protobufPackage = "io.restorecommerce.auth";
 /** Subject of creating User */
 export interface Subject {
   /** user id */
-  id: string;
+  id?:
+    | string
+    | undefined;
   /** target scope (ID of the target scoping entity) */
-  scope: string;
+  scope?:
+    | string
+    | undefined;
   /** for unauthenticated context */
-  unauthenticated: boolean;
-  token: string;
+  unauthenticated?: boolean | undefined;
+  token?: string | undefined;
 }
 
 export interface Tokens {
@@ -39,11 +43,13 @@ export interface Tokens {
 
 export interface HierarchicalScope {
   /** root node */
-  id: string;
+  id?:
+    | string
+    | undefined;
   /** children nodes */
   children: HierarchicalScope[];
   /** role identifier associated with root node scope */
-  role: string;
+  role?: string | undefined;
 }
 
 export interface RoleAssociation {
@@ -72,21 +78,21 @@ export interface HierarchicalScopesResponse {
 }
 
 function createBaseSubject(): Subject {
-  return { id: "", scope: "", unauthenticated: false, token: "" };
+  return { id: undefined, scope: undefined, unauthenticated: undefined, token: undefined };
 }
 
 export const Subject = {
   encode(message: Subject, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
+    if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
-    if (message.scope !== "") {
+    if (message.scope !== undefined) {
       writer.uint32(18).string(message.scope);
     }
-    if (message.unauthenticated === true) {
+    if (message.unauthenticated !== undefined) {
       writer.uint32(24).bool(message.unauthenticated);
     }
-    if (message.token !== "") {
+    if (message.token !== undefined) {
       writer.uint32(34).string(message.token);
     }
     return writer;
@@ -121,10 +127,10 @@ export const Subject = {
 
   fromJSON(object: any): Subject {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
-      scope: isSet(object.scope) ? String(object.scope) : "",
-      unauthenticated: isSet(object.unauthenticated) ? Boolean(object.unauthenticated) : false,
-      token: isSet(object.token) ? String(object.token) : "",
+      id: isSet(object.id) ? String(object.id) : undefined,
+      scope: isSet(object.scope) ? String(object.scope) : undefined,
+      unauthenticated: isSet(object.unauthenticated) ? Boolean(object.unauthenticated) : undefined,
+      token: isSet(object.token) ? String(object.token) : undefined,
     };
   },
 
@@ -143,10 +149,10 @@ export const Subject = {
 
   fromPartial(object: DeepPartial<Subject>): Subject {
     const message = createBaseSubject();
-    message.id = object.id ?? "";
-    message.scope = object.scope ?? "";
-    message.unauthenticated = object.unauthenticated ?? false;
-    message.token = object.token ?? "";
+    message.id = object.id ?? undefined;
+    message.scope = object.scope ?? undefined;
+    message.unauthenticated = object.unauthenticated ?? undefined;
+    message.token = object.token ?? undefined;
     return message;
   },
 };
@@ -271,18 +277,18 @@ export const Tokens = {
 };
 
 function createBaseHierarchicalScope(): HierarchicalScope {
-  return { id: "", children: [], role: "" };
+  return { id: undefined, children: [], role: undefined };
 }
 
 export const HierarchicalScope = {
   encode(message: HierarchicalScope, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
+    if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
     for (const v of message.children) {
       HierarchicalScope.encode(v!, writer.uint32(18).fork()).ldelim();
     }
-    if (message.role !== "") {
+    if (message.role !== undefined) {
       writer.uint32(26).string(message.role);
     }
     return writer;
@@ -314,9 +320,9 @@ export const HierarchicalScope = {
 
   fromJSON(object: any): HierarchicalScope {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
+      id: isSet(object.id) ? String(object.id) : undefined,
       children: Array.isArray(object?.children) ? object.children.map((e: any) => HierarchicalScope.fromJSON(e)) : [],
-      role: isSet(object.role) ? String(object.role) : "",
+      role: isSet(object.role) ? String(object.role) : undefined,
     };
   },
 
@@ -338,9 +344,9 @@ export const HierarchicalScope = {
 
   fromPartial(object: DeepPartial<HierarchicalScope>): HierarchicalScope {
     const message = createBaseHierarchicalScope();
-    message.id = object.id ?? "";
+    message.id = object.id ?? undefined;
     message.children = object.children?.map((e) => HierarchicalScope.fromPartial(e)) || [];
-    message.role = object.role ?? "";
+    message.role = object.role ?? undefined;
     return message;
   },
 };
@@ -598,7 +604,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "scope",
         "number": 2,
@@ -607,10 +613,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "scope",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "unauthenticated",
         "number": 3,
@@ -619,10 +625,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "unauthenticated",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "token",
         "number": 4,
@@ -631,16 +637,19 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "token",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_id", "options": undefined }, { "name": "_scope", "options": undefined }, {
+        "name": "_unauthenticated",
+        "options": undefined,
+      }, { "name": "_token", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -759,7 +768,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "children",
         "number": 2,
@@ -780,16 +789,16 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "role",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_id", "options": undefined }, { "name": "_role", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -939,19 +948,19 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 0, 2, 0],
-        "span": [9, 2, 16],
+        "span": [9, 2, 25],
         "leadingComments": "",
         "trailingComments": " user id\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 0, 2, 1],
-        "span": [10, 2, 19],
+        "span": [10, 2, 28],
         "leadingComments": "",
         "trailingComments": " target scope (ID of the target scoping entity)\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 0, 2, 2],
-        "span": [11, 2, 27],
+        "span": [11, 2, 36],
         "leadingComments": "",
         "trailingComments": " for unauthenticated context\n",
         "leadingDetachedComments": [],
@@ -987,7 +996,7 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 2, 2, 0],
-        "span": [26, 2, 16],
+        "span": [26, 2, 25],
         "leadingComments": "",
         "trailingComments": " root node\n",
         "leadingDetachedComments": [],
@@ -999,7 +1008,7 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 2, 2, 2],
-        "span": [28, 2, 18],
+        "span": [28, 2, 27],
         "leadingComments": "",
         "trailingComments": " role identifier associated with root node scope\n",
         "leadingDetachedComments": [],

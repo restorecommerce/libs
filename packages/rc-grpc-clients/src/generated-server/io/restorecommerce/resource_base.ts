@@ -17,7 +17,7 @@ export interface FieldFilter {
 
 export interface Sort {
   field: string;
-  order: Sort_SortOrder;
+  order?: Sort_SortOrder | undefined;
 }
 
 export enum Sort_SortOrder {
@@ -313,8 +313,8 @@ export interface Search {
 }
 
 export interface ReadRequest {
-  offset: number;
-  limit: number;
+  offset?: number | undefined;
+  limit?: number | undefined;
   sort: Sort[];
   /** / Filter based on fieldName|operation, value|list */
   filters: FilterOp[];
@@ -330,14 +330,16 @@ export interface ReadRequest {
    */
   locales_limiter: string[];
   custom_queries: string[];
-  custom_arguments?: Any;
+  custom_arguments?: Any | undefined;
   subject?: Subject;
-  search?: Search;
+  search?: Search | undefined;
 }
 
 export interface DeleteRequest {
   /** / Request to purge the whole collection */
-  collection: boolean;
+  collection?:
+    | boolean
+    | undefined;
   /** / Delete specified documents */
   ids: string[];
   subject?: Subject;
@@ -355,7 +357,7 @@ export interface DeleteResponse {
 /** / List of resources */
 export interface ResourceList {
   items: Resource[];
-  total_count: number;
+  total_count?: number | undefined;
   subject?: Subject;
 }
 
@@ -374,8 +376,8 @@ export interface ResourceResponse {
 
 /** / Example resource */
 export interface Resource {
-  id: string;
-  meta?: Meta;
+  id?: string | undefined;
+  meta?: Meta | undefined;
 }
 
 function createBaseFieldFilter(): FieldFilter {
@@ -441,7 +443,7 @@ export const FieldFilter = {
 };
 
 function createBaseSort(): Sort {
-  return { field: "", order: Sort_SortOrder.UNSORTED };
+  return { field: "", order: undefined };
 }
 
 export const Sort = {
@@ -449,7 +451,7 @@ export const Sort = {
     if (message.field !== "") {
       writer.uint32(10).string(message.field);
     }
-    if (message.order !== Sort_SortOrder.UNSORTED) {
+    if (message.order !== undefined) {
       writer.uint32(16).int32(sort_SortOrderToNumber(message.order));
     }
     return writer;
@@ -479,14 +481,15 @@ export const Sort = {
   fromJSON(object: any): Sort {
     return {
       field: isSet(object.field) ? String(object.field) : "",
-      order: isSet(object.order) ? sort_SortOrderFromJSON(object.order) : Sort_SortOrder.UNSORTED,
+      order: isSet(object.order) ? sort_SortOrderFromJSON(object.order) : undefined,
     };
   },
 
   toJSON(message: Sort): unknown {
     const obj: any = {};
     message.field !== undefined && (obj.field = message.field);
-    message.order !== undefined && (obj.order = sort_SortOrderToJSON(message.order));
+    message.order !== undefined &&
+      (obj.order = message.order !== undefined ? sort_SortOrderToJSON(message.order) : undefined);
     return obj;
   },
 
@@ -497,7 +500,7 @@ export const Sort = {
   fromPartial(object: DeepPartial<Sort>): Sort {
     const message = createBaseSort();
     message.field = object.field ?? "";
-    message.order = object.order ?? Sort_SortOrder.UNSORTED;
+    message.order = object.order ?? undefined;
     return message;
   },
 };
@@ -738,8 +741,8 @@ export const Search = {
 
 function createBaseReadRequest(): ReadRequest {
   return {
-    offset: 0,
-    limit: 0,
+    offset: undefined,
+    limit: undefined,
     sort: [],
     filters: [],
     field: [],
@@ -753,10 +756,10 @@ function createBaseReadRequest(): ReadRequest {
 
 export const ReadRequest = {
   encode(message: ReadRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.offset !== 0) {
+    if (message.offset !== undefined) {
       writer.uint32(8).uint32(message.offset);
     }
-    if (message.limit !== 0) {
+    if (message.limit !== undefined) {
       writer.uint32(16).uint32(message.limit);
     }
     for (const v of message.sort) {
@@ -833,8 +836,8 @@ export const ReadRequest = {
 
   fromJSON(object: any): ReadRequest {
     return {
-      offset: isSet(object.offset) ? Number(object.offset) : 0,
-      limit: isSet(object.limit) ? Number(object.limit) : 0,
+      offset: isSet(object.offset) ? Number(object.offset) : undefined,
+      limit: isSet(object.limit) ? Number(object.limit) : undefined,
       sort: Array.isArray(object?.sort) ? object.sort.map((e: any) => Sort.fromJSON(e)) : [],
       filters: Array.isArray(object?.filters) ? object.filters.map((e: any) => FilterOp.fromJSON(e)) : [],
       field: Array.isArray(object?.field) ? object.field.map((e: any) => FieldFilter.fromJSON(e)) : [],
@@ -888,8 +891,8 @@ export const ReadRequest = {
 
   fromPartial(object: DeepPartial<ReadRequest>): ReadRequest {
     const message = createBaseReadRequest();
-    message.offset = object.offset ?? 0;
-    message.limit = object.limit ?? 0;
+    message.offset = object.offset ?? undefined;
+    message.limit = object.limit ?? undefined;
     message.sort = object.sort?.map((e) => Sort.fromPartial(e)) || [];
     message.filters = object.filters?.map((e) => FilterOp.fromPartial(e)) || [];
     message.field = object.field?.map((e) => FieldFilter.fromPartial(e)) || [];
@@ -909,12 +912,12 @@ export const ReadRequest = {
 };
 
 function createBaseDeleteRequest(): DeleteRequest {
-  return { collection: false, ids: [], subject: undefined, view: [], analyzer: [] };
+  return { collection: undefined, ids: [], subject: undefined, view: [], analyzer: [] };
 }
 
 export const DeleteRequest = {
   encode(message: DeleteRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.collection === true) {
+    if (message.collection !== undefined) {
       writer.uint32(8).bool(message.collection);
     }
     for (const v of message.ids) {
@@ -964,7 +967,7 @@ export const DeleteRequest = {
 
   fromJSON(object: any): DeleteRequest {
     return {
-      collection: isSet(object.collection) ? Boolean(object.collection) : false,
+      collection: isSet(object.collection) ? Boolean(object.collection) : undefined,
       ids: Array.isArray(object?.ids) ? object.ids.map((e: any) => String(e)) : [],
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
       view: Array.isArray(object?.view) ? object.view.map((e: any) => String(e)) : [],
@@ -1000,7 +1003,7 @@ export const DeleteRequest = {
 
   fromPartial(object: DeepPartial<DeleteRequest>): DeleteRequest {
     const message = createBaseDeleteRequest();
-    message.collection = object.collection ?? false;
+    message.collection = object.collection ?? undefined;
     message.ids = object.ids?.map((e) => e) || [];
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
@@ -1081,7 +1084,7 @@ export const DeleteResponse = {
 };
 
 function createBaseResourceList(): ResourceList {
-  return { items: [], total_count: 0, subject: undefined };
+  return { items: [], total_count: undefined, subject: undefined };
 }
 
 export const ResourceList = {
@@ -1089,7 +1092,7 @@ export const ResourceList = {
     for (const v of message.items) {
       Resource.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.total_count !== 0) {
+    if (message.total_count !== undefined) {
       writer.uint32(16).uint32(message.total_count);
     }
     if (message.subject !== undefined) {
@@ -1125,7 +1128,7 @@ export const ResourceList = {
   fromJSON(object: any): ResourceList {
     return {
       items: Array.isArray(object?.items) ? object.items.map((e: any) => Resource.fromJSON(e)) : [],
-      total_count: isSet(object.total_count) ? Number(object.total_count) : 0,
+      total_count: isSet(object.total_count) ? Number(object.total_count) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
@@ -1149,7 +1152,7 @@ export const ResourceList = {
   fromPartial(object: DeepPartial<ResourceList>): ResourceList {
     const message = createBaseResourceList();
     message.items = object.items?.map((e) => Resource.fromPartial(e)) || [];
-    message.total_count = object.total_count ?? 0;
+    message.total_count = object.total_count ?? undefined;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
@@ -1302,12 +1305,12 @@ export const ResourceResponse = {
 };
 
 function createBaseResource(): Resource {
-  return { id: "", meta: undefined };
+  return { id: undefined, meta: undefined };
 }
 
 export const Resource = {
   encode(message: Resource, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
+    if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
     if (message.meta !== undefined) {
@@ -1339,7 +1342,7 @@ export const Resource = {
 
   fromJSON(object: any): Resource {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
+      id: isSet(object.id) ? String(object.id) : undefined,
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
     };
   },
@@ -1357,7 +1360,7 @@ export const Resource = {
 
   fromPartial(object: DeepPartial<Resource>): Resource {
     const message = createBaseResource();
-    message.id = object.id ?? "";
+    message.id = object.id ?? undefined;
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
     return message;
   },
@@ -1522,7 +1525,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "order",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
@@ -1538,7 +1541,7 @@ export const protoMetadata: ProtoMetadata = {
         "reservedName": [],
       }],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_order", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1746,7 +1749,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "offset",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "limit",
         "number": 2,
@@ -1755,10 +1758,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "limit",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "sort",
         "number": 3,
@@ -1827,10 +1830,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".google.protobuf.Any",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "customArguments",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 10,
@@ -1851,16 +1854,19 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.resourcebase.Search",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "search",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_offset", "options": undefined }, { "name": "_limit", "options": undefined }, {
+        "name": "_custom_arguments",
+        "options": undefined,
+      }, { "name": "_search", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1877,7 +1883,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "collection",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "ids",
         "number": 2,
@@ -1931,7 +1937,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_collection", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1995,7 +2001,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "totalCount",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 3,
@@ -2013,7 +2019,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_total_count", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -2112,7 +2118,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "meta",
         "number": 2,
@@ -2121,16 +2127,16 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.meta.Meta",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "meta",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_id", "options": undefined }, { "name": "_meta", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -2237,7 +2243,7 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 6, 2, 0],
-        "span": [102, 2, 22],
+        "span": [102, 2, 31],
         "leadingComments": "/ Request to purge the whole collection\n",
         "trailingComments": "",
         "leadingDetachedComments": [],

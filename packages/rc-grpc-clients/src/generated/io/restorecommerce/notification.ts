@@ -16,7 +16,7 @@ export interface Deleted {
 
 export interface NotificationList {
   items: Notification[];
-  totalCount: number;
+  totalCount?: number | undefined;
   subject?: Subject;
 }
 
@@ -32,15 +32,15 @@ export interface NotificationResponse {
 }
 
 export interface Notification {
-  id: string;
-  meta?: Meta;
-  name: string;
-  description: string;
+  id?: string | undefined;
+  meta?: Meta | undefined;
+  name?: string | undefined;
+  description?: string | undefined;
   notificationChannelIds: string[];
   email?: string | undefined;
   telephoneNumber?: string | undefined;
-  subjectTemplate: string;
-  bodyTemplate: string;
+  subjectTemplate?: string | undefined;
+  bodyTemplate?: string | undefined;
 }
 
 function createBaseDeleted(): Deleted {
@@ -95,7 +95,7 @@ export const Deleted = {
 };
 
 function createBaseNotificationList(): NotificationList {
-  return { items: [], totalCount: 0, subject: undefined };
+  return { items: [], totalCount: undefined, subject: undefined };
 }
 
 export const NotificationList = {
@@ -103,7 +103,7 @@ export const NotificationList = {
     for (const v of message.items) {
       Notification.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.totalCount !== 0) {
+    if (message.totalCount !== undefined) {
       writer.uint32(16).uint32(message.totalCount);
     }
     if (message.subject !== undefined) {
@@ -139,7 +139,7 @@ export const NotificationList = {
   fromJSON(object: any): NotificationList {
     return {
       items: Array.isArray(object?.items) ? object.items.map((e: any) => Notification.fromJSON(e)) : [],
-      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
+      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
@@ -163,7 +163,7 @@ export const NotificationList = {
   fromPartial(object: DeepPartial<NotificationList>): NotificationList {
     const message = createBaseNotificationList();
     message.items = object.items?.map((e) => Notification.fromPartial(e)) || [];
-    message.totalCount = object.totalCount ?? 0;
+    message.totalCount = object.totalCount ?? undefined;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
@@ -317,30 +317,30 @@ export const NotificationResponse = {
 
 function createBaseNotification(): Notification {
   return {
-    id: "",
+    id: undefined,
     meta: undefined,
-    name: "",
-    description: "",
+    name: undefined,
+    description: undefined,
     notificationChannelIds: [],
     email: undefined,
     telephoneNumber: undefined,
-    subjectTemplate: "",
-    bodyTemplate: "",
+    subjectTemplate: undefined,
+    bodyTemplate: undefined,
   };
 }
 
 export const Notification = {
   encode(message: Notification, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
+    if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
-    if (message.name !== "") {
+    if (message.name !== undefined) {
       writer.uint32(26).string(message.name);
     }
-    if (message.description !== "") {
+    if (message.description !== undefined) {
       writer.uint32(34).string(message.description);
     }
     for (const v of message.notificationChannelIds) {
@@ -352,10 +352,10 @@ export const Notification = {
     if (message.telephoneNumber !== undefined) {
       writer.uint32(58).string(message.telephoneNumber);
     }
-    if (message.subjectTemplate !== "") {
+    if (message.subjectTemplate !== undefined) {
       writer.uint32(66).string(message.subjectTemplate);
     }
-    if (message.bodyTemplate !== "") {
+    if (message.bodyTemplate !== undefined) {
       writer.uint32(74).string(message.bodyTemplate);
     }
     return writer;
@@ -405,17 +405,17 @@ export const Notification = {
 
   fromJSON(object: any): Notification {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
+      id: isSet(object.id) ? String(object.id) : undefined,
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
-      name: isSet(object.name) ? String(object.name) : "",
-      description: isSet(object.description) ? String(object.description) : "",
+      name: isSet(object.name) ? String(object.name) : undefined,
+      description: isSet(object.description) ? String(object.description) : undefined,
       notificationChannelIds: Array.isArray(object?.notificationChannelIds)
         ? object.notificationChannelIds.map((e: any) => String(e))
         : [],
       email: isSet(object.email) ? String(object.email) : undefined,
       telephoneNumber: isSet(object.telephoneNumber) ? String(object.telephoneNumber) : undefined,
-      subjectTemplate: isSet(object.subjectTemplate) ? String(object.subjectTemplate) : "",
-      bodyTemplate: isSet(object.bodyTemplate) ? String(object.bodyTemplate) : "",
+      subjectTemplate: isSet(object.subjectTemplate) ? String(object.subjectTemplate) : undefined,
+      bodyTemplate: isSet(object.bodyTemplate) ? String(object.bodyTemplate) : undefined,
     };
   },
 
@@ -443,15 +443,15 @@ export const Notification = {
 
   fromPartial(object: DeepPartial<Notification>): Notification {
     const message = createBaseNotification();
-    message.id = object.id ?? "";
+    message.id = object.id ?? undefined;
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
-    message.name = object.name ?? "";
-    message.description = object.description ?? "";
+    message.name = object.name ?? undefined;
+    message.description = object.description ?? undefined;
     message.notificationChannelIds = object.notificationChannelIds?.map((e) => e) || [];
     message.email = object.email ?? undefined;
     message.telephoneNumber = object.telephoneNumber ?? undefined;
-    message.subjectTemplate = object.subjectTemplate ?? "";
-    message.bodyTemplate = object.bodyTemplate ?? "";
+    message.subjectTemplate = object.subjectTemplate ?? undefined;
+    message.bodyTemplate = object.bodyTemplate ?? undefined;
     return message;
   },
 };
@@ -621,7 +621,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "totalCount",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 3,
@@ -639,7 +639,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_total_count", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -735,10 +735,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "meta",
         "number": 2,
@@ -747,10 +747,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.meta.Meta",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "meta",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "name",
         "number": 3,
@@ -759,10 +759,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "name",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "description",
         "number": 4,
@@ -771,10 +771,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 4,
         "jsonName": "description",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "notification_channel_ids",
         "number": 5,
@@ -819,10 +819,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 5,
         "jsonName": "subjectTemplate",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "body_template",
         "number": 9,
@@ -831,16 +831,24 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 6,
         "jsonName": "bodyTemplate",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [{ "name": "address_type", "options": undefined }],
+      "oneofDecl": [
+        { "name": "address_type", "options": undefined },
+        { "name": "_id", "options": undefined },
+        { "name": "_meta", "options": undefined },
+        { "name": "_name", "options": undefined },
+        { "name": "_description", "options": undefined },
+        { "name": "_subject_template", "options": undefined },
+        { "name": "_body_template", "options": undefined },
+      ],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],

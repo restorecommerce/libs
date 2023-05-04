@@ -11,7 +11,7 @@ export interface Attribute {
 }
 
 export interface AttributeObj {
-  attribute?: Attribute;
+  attribute?: Attribute | undefined;
 }
 
 function createBaseAttribute(): Attribute {
@@ -231,13 +231,13 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "attribute",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_attribute", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],

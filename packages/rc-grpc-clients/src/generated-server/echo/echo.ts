@@ -70,10 +70,6 @@ export const EchoRequest = {
     return obj;
   },
 
-  create(base?: DeepPartial<EchoRequest>): EchoRequest {
-    return EchoRequest.fromPartial(base ?? {});
-  },
-
   fromPartial(object: DeepPartial<EchoRequest>): EchoRequest {
     const message = createBaseEchoRequest();
     message.message = object.message ?? "";
@@ -139,10 +135,6 @@ export const EchoResponse = {
     return obj;
   },
 
-  create(base?: DeepPartial<EchoResponse>): EchoResponse {
-    return EchoResponse.fromPartial(base ?? {});
-  },
-
   fromPartial(object: DeepPartial<EchoResponse>): EchoResponse {
     const message = createBaseEchoResponse();
     message.message = object.message ?? "";
@@ -196,7 +188,7 @@ export const EchoServiceDefinition = {
   },
 } as const;
 
-export interface EchoServiceImplementation<CallContextExt = {}> {
+export interface EchoServiceServiceImplementation<CallContextExt = {}> {
   /** Sends a greeting */
   echoUnary(
     request: EchoRequest,

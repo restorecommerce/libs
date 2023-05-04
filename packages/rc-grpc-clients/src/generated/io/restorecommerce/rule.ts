@@ -1,14 +1,23 @@
 /* eslint-disable */
-import type { CallContext, CallOptions } from "nice-grpc-common";
-import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import { Attribute, protoMetadata as protoMetadata4 } from "./attribute";
-import { protoMetadata as protoMetadata3, Subject } from "./auth";
-import { FilterOp, protoMetadata as protoMetadata6 } from "./filter";
 import { Meta, protoMetadata as protoMetadata2 } from "./meta";
+import { Subject, protoMetadata as protoMetadata3 } from "./auth";
+import {
+  OperationStatus,
+  Status,
+  protoMetadata as protoMetadata5,
+} from "./status";
+import { CallContext, CallOptions } from "nice-grpc-common";
+import {
+  protoMetadata as protoMetadata1,
+  ReadRequest,
+  DeleteRequest,
+  DeleteResponse,
+} from "./resource_base";
+import { protoMetadata as protoMetadata4, Attribute } from "./attribute";
+import { protoMetadata as protoMetadata6, FilterOp } from "./filter";
 import { protoMetadata as protoMetadata7 } from "./options";
-import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata1, ReadRequest } from "./resource_base";
-import { OperationStatus, protoMetadata as protoMetadata5, Status } from "./status";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.rule";
 
@@ -108,7 +117,10 @@ function createBaseTarget(): Target {
 }
 
 export const Target = {
-  encode(message: Target, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Target,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.subject) {
       Attribute.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -147,40 +159,50 @@ export const Target = {
 
   fromJSON(object: any): Target {
     return {
-      subject: Array.isArray(object?.subject) ? object.subject.map((e: any) => Attribute.fromJSON(e)) : [],
-      resources: Array.isArray(object?.resources) ? object.resources.map((e: any) => Attribute.fromJSON(e)) : [],
-      action: Array.isArray(object?.action) ? object.action.map((e: any) => Attribute.fromJSON(e)) : [],
+      subject: Array.isArray(object?.subject)
+        ? object.subject.map((e: any) => Attribute.fromJSON(e))
+        : [],
+      resources: Array.isArray(object?.resources)
+        ? object.resources.map((e: any) => Attribute.fromJSON(e))
+        : [],
+      action: Array.isArray(object?.action)
+        ? object.action.map((e: any) => Attribute.fromJSON(e))
+        : [],
     };
   },
 
   toJSON(message: Target): unknown {
     const obj: any = {};
     if (message.subject) {
-      obj.subject = message.subject.map((e) => e ? Attribute.toJSON(e) : undefined);
+      obj.subject = message.subject.map((e) =>
+        e ? Attribute.toJSON(e) : undefined
+      );
     } else {
       obj.subject = [];
     }
     if (message.resources) {
-      obj.resources = message.resources.map((e) => e ? Attribute.toJSON(e) : undefined);
+      obj.resources = message.resources.map((e) =>
+        e ? Attribute.toJSON(e) : undefined
+      );
     } else {
       obj.resources = [];
     }
     if (message.action) {
-      obj.action = message.action.map((e) => e ? Attribute.toJSON(e) : undefined);
+      obj.action = message.action.map((e) =>
+        e ? Attribute.toJSON(e) : undefined
+      );
     } else {
       obj.action = [];
     }
     return obj;
   },
 
-  create(base?: DeepPartial<Target>): Target {
-    return Target.fromPartial(base ?? {});
-  },
-
   fromPartial(object: DeepPartial<Target>): Target {
     const message = createBaseTarget();
-    message.subject = object.subject?.map((e) => Attribute.fromPartial(e)) || [];
-    message.resources = object.resources?.map((e) => Attribute.fromPartial(e)) || [];
+    message.subject =
+      object.subject?.map((e) => Attribute.fromPartial(e)) || [];
+    message.resources =
+      object.resources?.map((e) => Attribute.fromPartial(e)) || [];
     message.action = object.action?.map((e) => Attribute.fromPartial(e)) || [];
     return message;
   },
@@ -218,7 +240,10 @@ export const Rule = {
       Target.encode(message.target, writer.uint32(42).fork()).ldelim();
     }
     if (message.contextQuery !== undefined) {
-      ContextQuery.encode(message.contextQuery, writer.uint32(50).fork()).ldelim();
+      ContextQuery.encode(
+        message.contextQuery,
+        writer.uint32(50).fork()
+      ).ldelim();
     }
     if (message.condition !== "") {
       writer.uint32(58).string(message.condition);
@@ -281,44 +306,55 @@ export const Rule = {
       name: isSet(object.name) ? String(object.name) : "",
       description: isSet(object.description) ? String(object.description) : "",
       target: isSet(object.target) ? Target.fromJSON(object.target) : undefined,
-      contextQuery: isSet(object.contextQuery) ? ContextQuery.fromJSON(object.contextQuery) : undefined,
+      contextQuery: isSet(object.contextQuery)
+        ? ContextQuery.fromJSON(object.contextQuery)
+        : undefined,
       condition: isSet(object.condition) ? String(object.condition) : "",
       effect: isSet(object.effect) ? effectFromJSON(object.effect) : 0,
-      evaluationCacheable: isSet(object.evaluationCacheable) ? Boolean(object.evaluationCacheable) : false,
+      evaluationCacheable: isSet(object.evaluationCacheable)
+        ? Boolean(object.evaluationCacheable)
+        : false,
     };
   },
 
   toJSON(message: Rule): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.meta !== undefined &&
+      (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.name !== undefined && (obj.name = message.name);
-    message.description !== undefined && (obj.description = message.description);
-    message.target !== undefined && (obj.target = message.target ? Target.toJSON(message.target) : undefined);
+    message.description !== undefined &&
+      (obj.description = message.description);
+    message.target !== undefined &&
+      (obj.target = message.target ? Target.toJSON(message.target) : undefined);
     message.contextQuery !== undefined &&
-      (obj.contextQuery = message.contextQuery ? ContextQuery.toJSON(message.contextQuery) : undefined);
+      (obj.contextQuery = message.contextQuery
+        ? ContextQuery.toJSON(message.contextQuery)
+        : undefined);
     message.condition !== undefined && (obj.condition = message.condition);
     message.effect !== undefined && (obj.effect = effectToJSON(message.effect));
-    message.evaluationCacheable !== undefined && (obj.evaluationCacheable = message.evaluationCacheable);
+    message.evaluationCacheable !== undefined &&
+      (obj.evaluationCacheable = message.evaluationCacheable);
     return obj;
-  },
-
-  create(base?: DeepPartial<Rule>): Rule {
-    return Rule.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Rule>): Rule {
     const message = createBaseRule();
     message.id = object.id ?? "";
-    message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
+    message.meta =
+      object.meta !== undefined && object.meta !== null
+        ? Meta.fromPartial(object.meta)
+        : undefined;
     message.name = object.name ?? "";
     message.description = object.description ?? "";
-    message.target = (object.target !== undefined && object.target !== null)
-      ? Target.fromPartial(object.target)
-      : undefined;
-    message.contextQuery = (object.contextQuery !== undefined && object.contextQuery !== null)
-      ? ContextQuery.fromPartial(object.contextQuery)
-      : undefined;
+    message.target =
+      object.target !== undefined && object.target !== null
+        ? Target.fromPartial(object.target)
+        : undefined;
+    message.contextQuery =
+      object.contextQuery !== undefined && object.contextQuery !== null
+        ? ContextQuery.fromPartial(object.contextQuery)
+        : undefined;
     message.condition = object.condition ?? "";
     message.effect = object.effect ?? 0;
     message.evaluationCacheable = object.evaluationCacheable ?? false;
@@ -327,11 +363,21 @@ export const Rule = {
 };
 
 function createBaseRuleRQ(): RuleRQ {
-  return { id: "", target: undefined, effect: 0, condition: "", contextQuery: undefined, evaluationCacheable: false };
+  return {
+    id: "",
+    target: undefined,
+    effect: 0,
+    condition: "",
+    contextQuery: undefined,
+    evaluationCacheable: false,
+  };
 }
 
 export const RuleRQ = {
-  encode(message: RuleRQ, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: RuleRQ,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -345,7 +391,10 @@ export const RuleRQ = {
       writer.uint32(34).string(message.condition);
     }
     if (message.contextQuery !== undefined) {
-      ContextQuery.encode(message.contextQuery, writer.uint32(42).fork()).ldelim();
+      ContextQuery.encode(
+        message.contextQuery,
+        writer.uint32(42).fork()
+      ).ldelim();
     }
     if (message.evaluationCacheable === true) {
       writer.uint32(48).bool(message.evaluationCacheable);
@@ -392,38 +441,44 @@ export const RuleRQ = {
       target: isSet(object.target) ? Target.fromJSON(object.target) : undefined,
       effect: isSet(object.effect) ? effectFromJSON(object.effect) : 0,
       condition: isSet(object.condition) ? String(object.condition) : "",
-      contextQuery: isSet(object.contextQuery) ? ContextQuery.fromJSON(object.contextQuery) : undefined,
-      evaluationCacheable: isSet(object.evaluationCacheable) ? Boolean(object.evaluationCacheable) : false,
+      contextQuery: isSet(object.contextQuery)
+        ? ContextQuery.fromJSON(object.contextQuery)
+        : undefined,
+      evaluationCacheable: isSet(object.evaluationCacheable)
+        ? Boolean(object.evaluationCacheable)
+        : false,
     };
   },
 
   toJSON(message: RuleRQ): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.target !== undefined && (obj.target = message.target ? Target.toJSON(message.target) : undefined);
+    message.target !== undefined &&
+      (obj.target = message.target ? Target.toJSON(message.target) : undefined);
     message.effect !== undefined && (obj.effect = effectToJSON(message.effect));
     message.condition !== undefined && (obj.condition = message.condition);
     message.contextQuery !== undefined &&
-      (obj.contextQuery = message.contextQuery ? ContextQuery.toJSON(message.contextQuery) : undefined);
-    message.evaluationCacheable !== undefined && (obj.evaluationCacheable = message.evaluationCacheable);
+      (obj.contextQuery = message.contextQuery
+        ? ContextQuery.toJSON(message.contextQuery)
+        : undefined);
+    message.evaluationCacheable !== undefined &&
+      (obj.evaluationCacheable = message.evaluationCacheable);
     return obj;
-  },
-
-  create(base?: DeepPartial<RuleRQ>): RuleRQ {
-    return RuleRQ.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<RuleRQ>): RuleRQ {
     const message = createBaseRuleRQ();
     message.id = object.id ?? "";
-    message.target = (object.target !== undefined && object.target !== null)
-      ? Target.fromPartial(object.target)
-      : undefined;
+    message.target =
+      object.target !== undefined && object.target !== null
+        ? Target.fromPartial(object.target)
+        : undefined;
     message.effect = object.effect ?? 0;
     message.condition = object.condition ?? "";
-    message.contextQuery = (object.contextQuery !== undefined && object.contextQuery !== null)
-      ? ContextQuery.fromPartial(object.contextQuery)
-      : undefined;
+    message.contextQuery =
+      object.contextQuery !== undefined && object.contextQuery !== null
+        ? ContextQuery.fromPartial(object.contextQuery)
+        : undefined;
     message.evaluationCacheable = object.evaluationCacheable ?? false;
     return message;
   },
@@ -434,7 +489,10 @@ function createBaseRuleList(): RuleList {
 }
 
 export const RuleList = {
-  encode(message: RuleList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: RuleList,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.items) {
       Rule.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -473,35 +531,40 @@ export const RuleList = {
 
   fromJSON(object: any): RuleList {
     return {
-      items: Array.isArray(object?.items) ? object.items.map((e: any) => Rule.fromJSON(e)) : [],
+      items: Array.isArray(object?.items)
+        ? object.items.map((e: any) => Rule.fromJSON(e))
+        : [],
       totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
-      subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
+      subject: isSet(object.subject)
+        ? Subject.fromJSON(object.subject)
+        : undefined,
     };
   },
 
   toJSON(message: RuleList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) => e ? Rule.toJSON(e) : undefined);
+      obj.items = message.items.map((e) => (e ? Rule.toJSON(e) : undefined));
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = Math.round(message.totalCount));
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.totalCount !== undefined &&
+      (obj.totalCount = Math.round(message.totalCount));
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
-  },
-
-  create(base?: DeepPartial<RuleList>): RuleList {
-    return RuleList.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<RuleList>): RuleList {
     const message = createBaseRuleList();
     message.items = object.items?.map((e) => Rule.fromPartial(e)) || [];
     message.totalCount = object.totalCount ?? 0;
-    message.subject = (object.subject !== undefined && object.subject !== null)
-      ? Subject.fromPartial(object.subject)
-      : undefined;
+    message.subject =
+      object.subject !== undefined && object.subject !== null
+        ? Subject.fromPartial(object.subject)
+        : undefined;
     return message;
   },
 };
@@ -511,7 +574,10 @@ function createBaseRuleListResponse(): RuleListResponse {
 }
 
 export const RuleListResponse = {
-  encode(message: RuleListResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: RuleListResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.items) {
       RuleResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -519,7 +585,10 @@ export const RuleListResponse = {
       writer.uint32(16).uint32(message.totalCount);
     }
     if (message.operationStatus !== undefined) {
-      OperationStatus.encode(message.operationStatus, writer.uint32(26).fork()).ldelim();
+      OperationStatus.encode(
+        message.operationStatus,
+        writer.uint32(26).fork()
+      ).ldelim();
     }
     return writer;
   },
@@ -538,7 +607,10 @@ export const RuleListResponse = {
           message.totalCount = reader.uint32();
           break;
         case 3:
-          message.operationStatus = OperationStatus.decode(reader, reader.uint32());
+          message.operationStatus = OperationStatus.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -550,36 +622,42 @@ export const RuleListResponse = {
 
   fromJSON(object: any): RuleListResponse {
     return {
-      items: Array.isArray(object?.items) ? object.items.map((e: any) => RuleResponse.fromJSON(e)) : [],
+      items: Array.isArray(object?.items)
+        ? object.items.map((e: any) => RuleResponse.fromJSON(e))
+        : [],
       totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
-      operationStatus: isSet(object.operationStatus) ? OperationStatus.fromJSON(object.operationStatus) : undefined,
+      operationStatus: isSet(object.operationStatus)
+        ? OperationStatus.fromJSON(object.operationStatus)
+        : undefined,
     };
   },
 
   toJSON(message: RuleListResponse): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) => e ? RuleResponse.toJSON(e) : undefined);
+      obj.items = message.items.map((e) =>
+        e ? RuleResponse.toJSON(e) : undefined
+      );
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = Math.round(message.totalCount));
+    message.totalCount !== undefined &&
+      (obj.totalCount = Math.round(message.totalCount));
     message.operationStatus !== undefined &&
-      (obj.operationStatus = message.operationStatus ? OperationStatus.toJSON(message.operationStatus) : undefined);
+      (obj.operationStatus = message.operationStatus
+        ? OperationStatus.toJSON(message.operationStatus)
+        : undefined);
     return obj;
-  },
-
-  create(base?: DeepPartial<RuleListResponse>): RuleListResponse {
-    return RuleListResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<RuleListResponse>): RuleListResponse {
     const message = createBaseRuleListResponse();
     message.items = object.items?.map((e) => RuleResponse.fromPartial(e)) || [];
     message.totalCount = object.totalCount ?? 0;
-    message.operationStatus = (object.operationStatus !== undefined && object.operationStatus !== null)
-      ? OperationStatus.fromPartial(object.operationStatus)
-      : undefined;
+    message.operationStatus =
+      object.operationStatus !== undefined && object.operationStatus !== null
+        ? OperationStatus.fromPartial(object.operationStatus)
+        : undefined;
     return message;
   },
 };
@@ -589,7 +667,10 @@ function createBaseRuleResponse(): RuleResponse {
 }
 
 export const RuleResponse = {
-  encode(message: RuleResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: RuleResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.payload !== undefined) {
       Rule.encode(message.payload, writer.uint32(10).fork()).ldelim();
     }
@@ -622,30 +703,34 @@ export const RuleResponse = {
 
   fromJSON(object: any): RuleResponse {
     return {
-      payload: isSet(object.payload) ? Rule.fromJSON(object.payload) : undefined,
+      payload: isSet(object.payload)
+        ? Rule.fromJSON(object.payload)
+        : undefined,
       status: isSet(object.status) ? Status.fromJSON(object.status) : undefined,
     };
   },
 
   toJSON(message: RuleResponse): unknown {
     const obj: any = {};
-    message.payload !== undefined && (obj.payload = message.payload ? Rule.toJSON(message.payload) : undefined);
-    message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    message.payload !== undefined &&
+      (obj.payload = message.payload
+        ? Rule.toJSON(message.payload)
+        : undefined);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
-  },
-
-  create(base?: DeepPartial<RuleResponse>): RuleResponse {
-    return RuleResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<RuleResponse>): RuleResponse {
     const message = createBaseRuleResponse();
-    message.payload = (object.payload !== undefined && object.payload !== null)
-      ? Rule.fromPartial(object.payload)
-      : undefined;
-    message.status = (object.status !== undefined && object.status !== null)
-      ? Status.fromPartial(object.status)
-      : undefined;
+    message.payload =
+      object.payload !== undefined && object.payload !== null
+        ? Rule.fromPartial(object.payload)
+        : undefined;
+    message.status =
+      object.status !== undefined && object.status !== null
+        ? Status.fromPartial(object.status)
+        : undefined;
     return message;
   },
 };
@@ -655,7 +740,10 @@ function createBaseContextQuery(): ContextQuery {
 }
 
 export const ContextQuery = {
-  encode(message: ContextQuery, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: ContextQuery,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.filters) {
       FilterOp.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -688,7 +776,9 @@ export const ContextQuery = {
 
   fromJSON(object: any): ContextQuery {
     return {
-      filters: Array.isArray(object?.filters) ? object.filters.map((e: any) => FilterOp.fromJSON(e)) : [],
+      filters: Array.isArray(object?.filters)
+        ? object.filters.map((e: any) => FilterOp.fromJSON(e))
+        : [],
       query: isSet(object.query) ? String(object.query) : "",
     };
   },
@@ -696,16 +786,14 @@ export const ContextQuery = {
   toJSON(message: ContextQuery): unknown {
     const obj: any = {};
     if (message.filters) {
-      obj.filters = message.filters.map((e) => e ? FilterOp.toJSON(e) : undefined);
+      obj.filters = message.filters.map((e) =>
+        e ? FilterOp.toJSON(e) : undefined
+      );
     } else {
       obj.filters = [];
     }
     message.query !== undefined && (obj.query = message.query);
     return obj;
-  },
-
-  create(base?: DeepPartial<ContextQuery>): ContextQuery {
-    return ContextQuery.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<ContextQuery>): ContextQuery {
@@ -764,20 +852,50 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
-  read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<RuleListResponse>>;
-  create(request: RuleList, context: CallContext & CallContextExt): Promise<DeepPartial<RuleListResponse>>;
-  delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;
-  update(request: RuleList, context: CallContext & CallContextExt): Promise<DeepPartial<RuleListResponse>>;
-  upsert(request: RuleList, context: CallContext & CallContextExt): Promise<DeepPartial<RuleListResponse>>;
+export interface ServiceServiceImplementation<CallContextExt = {}> {
+  read(
+    request: ReadRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<RuleListResponse>>;
+  create(
+    request: RuleList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<RuleListResponse>>;
+  delete(
+    request: DeleteRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<DeleteResponse>>;
+  update(
+    request: RuleList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<RuleListResponse>>;
+  upsert(
+    request: RuleList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<RuleListResponse>>;
 }
 
 export interface ServiceClient<CallOptionsExt = {}> {
-  read(request: DeepPartial<ReadRequest>, options?: CallOptions & CallOptionsExt): Promise<RuleListResponse>;
-  create(request: DeepPartial<RuleList>, options?: CallOptions & CallOptionsExt): Promise<RuleListResponse>;
-  delete(request: DeepPartial<DeleteRequest>, options?: CallOptions & CallOptionsExt): Promise<DeleteResponse>;
-  update(request: DeepPartial<RuleList>, options?: CallOptions & CallOptionsExt): Promise<RuleListResponse>;
-  upsert(request: DeepPartial<RuleList>, options?: CallOptions & CallOptionsExt): Promise<RuleListResponse>;
+  read(
+    request: DeepPartial<ReadRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<RuleListResponse>;
+  create(
+    request: DeepPartial<RuleList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<RuleListResponse>;
+  delete(
+    request: DeepPartial<DeleteRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<DeleteResponse>;
+  update(
+    request: DeepPartial<RuleList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<RuleListResponse>;
+  upsert(
+    request: DeepPartial<RuleList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<RuleListResponse>;
 }
 
 type ProtoMetaMessageOptions = {
@@ -794,18 +912,28 @@ export interface ProtoMetadata {
   options?: {
     options?: { [key: string]: any };
     services?: {
-      [key: string]: { options?: { [key: string]: any }; methods?: { [key: string]: { [key: string]: any } } };
+      [key: string]: {
+        options?: { [key: string]: any };
+        methods?: { [key: string]: { [key: string]: any } };
+      };
     };
-    messages?: { [key: string]: ProtoMetaMessageOptions };
-    enums?: { [key: string]: { options?: { [key: string]: any }; values?: { [key: string]: { [key: string]: any } } } };
+    messages?: {
+      [key: string]: ProtoMetaMessageOptions;
+    };
+    enums?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        values?: { [key: string]: { [key: string]: any } };
+      };
+    };
   };
 }
 
 export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto1.fromPartial({
-    "name": "io/restorecommerce/rule.proto",
-    "package": "io.restorecommerce.rule",
-    "dependency": [
+    name: "io/restorecommerce/rule.proto",
+    package: "io.restorecommerce.rule",
+    dependency: [
       "io/restorecommerce/resource_base.proto",
       "io/restorecommerce/meta.proto",
       "io/restorecommerce/auth.proto",
@@ -814,510 +942,572 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/filter.proto",
       "io/restorecommerce/options.proto",
     ],
-    "publicDependency": [],
-    "weakDependency": [],
-    "messageType": [{
-      "name": "Target",
-      "field": [{
-        "name": "subject",
-        "number": 1,
-        "label": 3,
-        "type": 11,
-        "typeName": ".io.restorecommerce.attribute.Attribute",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "subject",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "resources",
-        "number": 2,
-        "label": 3,
-        "type": 11,
-        "typeName": ".io.restorecommerce.attribute.Attribute",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "resources",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "action",
-        "number": 3,
-        "label": 3,
-        "type": 11,
-        "typeName": ".io.restorecommerce.attribute.Attribute",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "action",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "Rule",
-      "field": [{
-        "name": "id",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "id",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "meta",
-        "number": 2,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.meta.Meta",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "meta",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "name",
-        "number": 3,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "name",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "description",
-        "number": 4,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "description",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "target",
-        "number": 5,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.rule.Target",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "target",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "context_query",
-        "number": 6,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.rule.ContextQuery",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "contextQuery",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "condition",
-        "number": 7,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "condition",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "effect",
-        "number": 8,
-        "label": 1,
-        "type": 14,
-        "typeName": ".io.restorecommerce.rule.Effect",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "effect",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "evaluation_cacheable",
-        "number": 9,
-        "label": 1,
-        "type": 8,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "evaluationCacheable",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "RuleRQ",
-      "field": [{
-        "name": "id",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "id",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "target",
-        "number": 2,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.rule.Target",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "target",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "effect",
-        "number": 3,
-        "label": 1,
-        "type": 14,
-        "typeName": ".io.restorecommerce.rule.Effect",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "effect",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "condition",
-        "number": 4,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "condition",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "context_query",
-        "number": 5,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.rule.ContextQuery",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "contextQuery",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "evaluation_cacheable",
-        "number": 6,
-        "label": 1,
-        "type": 8,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "evaluationCacheable",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "RuleList",
-      "field": [{
-        "name": "items",
-        "number": 1,
-        "label": 3,
-        "type": 11,
-        "typeName": ".io.restorecommerce.rule.Rule",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "items",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "total_count",
-        "number": 2,
-        "label": 1,
-        "type": 13,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "totalCount",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "subject",
-        "number": 3,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.auth.Subject",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "subject",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "RuleListResponse",
-      "field": [{
-        "name": "items",
-        "number": 1,
-        "label": 3,
-        "type": 11,
-        "typeName": ".io.restorecommerce.rule.RuleResponse",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "items",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "total_count",
-        "number": 2,
-        "label": 1,
-        "type": 13,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "totalCount",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "operation_status",
-        "number": 3,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.status.OperationStatus",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "operationStatus",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "RuleResponse",
-      "field": [{
-        "name": "payload",
-        "number": 1,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.rule.Rule",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "payload",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "status",
-        "number": 2,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.status.Status",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "status",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "ContextQuery",
-      "field": [{
-        "name": "filters",
-        "number": 1,
-        "label": 3,
-        "type": 11,
-        "typeName": ".io.restorecommerce.filter.FilterOp",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "filters",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "query",
-        "number": 2,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "query",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }],
-    "enumType": [{
-      "name": "Effect",
-      "value": [{ "name": "PERMIT", "number": 0, "options": undefined }, {
-        "name": "DENY",
-        "number": 1,
-        "options": undefined,
-      }],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }],
-    "service": [{
-      "name": "Service",
-      "method": [{
-        "name": "Read",
-        "inputType": ".io.restorecommerce.resourcebase.ReadRequest",
-        "outputType": ".io.restorecommerce.rule.RuleListResponse",
-        "options": { "deprecated": false, "idempotencyLevel": 0, "uninterpretedOption": [] },
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }, {
-        "name": "Create",
-        "inputType": ".io.restorecommerce.rule.RuleList",
-        "outputType": ".io.restorecommerce.rule.RuleListResponse",
-        "options": undefined,
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }, {
-        "name": "Delete",
-        "inputType": ".io.restorecommerce.resourcebase.DeleteRequest",
-        "outputType": ".io.restorecommerce.resourcebase.DeleteResponse",
-        "options": undefined,
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }, {
-        "name": "Update",
-        "inputType": ".io.restorecommerce.rule.RuleList",
-        "outputType": ".io.restorecommerce.rule.RuleListResponse",
-        "options": undefined,
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }, {
-        "name": "Upsert",
-        "inputType": ".io.restorecommerce.rule.RuleList",
-        "outputType": ".io.restorecommerce.rule.RuleListResponse",
-        "options": undefined,
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }],
-      "options": { "deprecated": false, "uninterpretedOption": [] },
-    }],
-    "extension": [],
-    "options": undefined,
-    "sourceCodeInfo": {
-      "location": [{
-        "path": [4, 0],
-        "span": [15, 0, 19, 1],
-        "leadingComments": "*\n Target specified by a Rule or a Request.\n",
-        "trailingComments": "",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [5, 0],
-        "span": [24, 0, 27, 1],
-        "leadingComments": "*\n Resulting effect from a Policy or Rule.\n",
-        "trailingComments": "",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 1, 2, 6],
-        "span": [36, 2, 23],
-        "leadingComments": "",
-        "trailingComments": " JS code\n",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 2],
-        "span": [41, 0, 48, 1],
-        "leadingComments": "",
-        "trailingComments": " used for `whatIsAllowed` / reverse queries\n",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 6],
-        "span": [70, 0, 73, 1],
-        "leadingComments":
-          " Query to pull resources from an external service\n  and append them to the request's context.\n The retrieved data can then be passed onto the request's context\n",
-        "trailingComments": "",
-        "leadingDetachedComments": [],
-      }],
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "Target",
+        field: [
+          {
+            name: "subject",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.attribute.Attribute",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "subject",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "resources",
+            number: 2,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.attribute.Attribute",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "resources",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "action",
+            number: 3,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.attribute.Attribute",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "action",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "Rule",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "meta",
+            number: 2,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.meta.Meta",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "meta",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "name",
+            number: 3,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "name",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "description",
+            number: 4,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "description",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "target",
+            number: 5,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.rule.Target",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "target",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "context_query",
+            number: 6,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.rule.ContextQuery",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "contextQuery",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "condition",
+            number: 7,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "condition",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "effect",
+            number: 8,
+            label: 1,
+            type: 14,
+            typeName: ".io.restorecommerce.rule.Effect",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "effect",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "evaluation_cacheable",
+            number: 9,
+            label: 1,
+            type: 8,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "evaluationCacheable",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "RuleRQ",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "target",
+            number: 2,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.rule.Target",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "target",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "effect",
+            number: 3,
+            label: 1,
+            type: 14,
+            typeName: ".io.restorecommerce.rule.Effect",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "effect",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "condition",
+            number: 4,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "condition",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "context_query",
+            number: 5,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.rule.ContextQuery",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "contextQuery",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "evaluation_cacheable",
+            number: 6,
+            label: 1,
+            type: 8,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "evaluationCacheable",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "RuleList",
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.rule.Rule",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "items",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: 1,
+            type: 13,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "totalCount",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "subject",
+            number: 3,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.auth.Subject",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "subject",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "RuleListResponse",
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.rule.RuleResponse",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "items",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: 1,
+            type: 13,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "totalCount",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "operation_status",
+            number: 3,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.OperationStatus",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "operationStatus",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "RuleResponse",
+        field: [
+          {
+            name: "payload",
+            number: 1,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.rule.Rule",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "payload",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "status",
+            number: 2,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "status",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "ContextQuery",
+        field: [
+          {
+            name: "filters",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.filter.FilterOp",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "filters",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "query",
+            number: 2,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "query",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+    ],
+    enumType: [
+      {
+        name: "Effect",
+        value: [
+          { name: "PERMIT", number: 0, options: undefined },
+          { name: "DENY", number: 1, options: undefined },
+        ],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+    ],
+    service: [
+      {
+        name: "Service",
+        method: [
+          {
+            name: "Read",
+            inputType: ".io.restorecommerce.resourcebase.ReadRequest",
+            outputType: ".io.restorecommerce.rule.RuleListResponse",
+            options: {
+              deprecated: false,
+              idempotencyLevel: 0,
+              uninterpretedOption: [],
+            },
+            clientStreaming: false,
+            serverStreaming: false,
+          },
+          {
+            name: "Create",
+            inputType: ".io.restorecommerce.rule.RuleList",
+            outputType: ".io.restorecommerce.rule.RuleListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
+          },
+          {
+            name: "Delete",
+            inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
+            outputType: ".io.restorecommerce.resourcebase.DeleteResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
+          },
+          {
+            name: "Update",
+            inputType: ".io.restorecommerce.rule.RuleList",
+            outputType: ".io.restorecommerce.rule.RuleListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
+          },
+          {
+            name: "Upsert",
+            inputType: ".io.restorecommerce.rule.RuleList",
+            outputType: ".io.restorecommerce.rule.RuleListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
+          },
+        ],
+        options: { deprecated: false, uninterpretedOption: [] },
+      },
+    ],
+    extension: [],
+    options: undefined,
+    sourceCodeInfo: {
+      location: [
+        {
+          path: [4, 0],
+          span: [15, 0, 19, 1],
+          leadingComments: "*\n Target specified by a Rule or a Request.\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
+        },
+        {
+          path: [5, 0],
+          span: [24, 0, 27, 1],
+          leadingComments: "*\n Resulting effect from a Policy or Rule.\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
+        },
+        {
+          path: [4, 1, 2, 6],
+          span: [36, 2, 23],
+          leadingComments: "",
+          trailingComments: " JS code\n",
+          leadingDetachedComments: [],
+        },
+        {
+          path: [4, 2],
+          span: [41, 0, 48, 1],
+          leadingComments: "",
+          trailingComments: " used for `whatIsAllowed` / reverse queries\n",
+          leadingDetachedComments: [],
+        },
+        {
+          path: [4, 6],
+          span: [70, 0, 73, 1],
+          leadingComments:
+            " Query to pull resources from an external service\n  and append them to the request's context.\n The retrieved data can then be passed onto the request's context\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
+        },
+      ],
     },
-    "syntax": "proto3",
+    syntax: "proto3",
   }),
   references: {
     ".io.restorecommerce.rule.Effect": Effect,
@@ -1339,15 +1529,32 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata7,
   ],
   options: {
-    services: { "Service": { options: { "service_name": "rule" }, methods: { "Read": { "is_query": true } } } },
+    services: {
+      Service: {
+        options: { service_name: "rule" },
+        methods: { Read: { is_query: true } },
+      },
+    },
   },
 };
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 function isSet(value: any): boolean {

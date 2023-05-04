@@ -117,10 +117,6 @@ export const HealthCheckRequest = {
     return obj;
   },
 
-  create(base?: DeepPartial<HealthCheckRequest>): HealthCheckRequest {
-    return HealthCheckRequest.fromPartial(base ?? {});
-  },
-
   fromPartial(object: DeepPartial<HealthCheckRequest>): HealthCheckRequest {
     const message = createBaseHealthCheckRequest();
     message.service = object.service ?? "";
@@ -178,10 +174,6 @@ export const HealthCheckResponse = {
     message.status !== undefined &&
       (obj.status = healthCheckResponse_ServingStatusToJSON(message.status));
     return obj;
-  },
-
-  create(base?: DeepPartial<HealthCheckResponse>): HealthCheckResponse {
-    return HealthCheckResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<HealthCheckResponse>): HealthCheckResponse {

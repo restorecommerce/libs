@@ -1,7 +1,11 @@
 /* eslint-disable */
-import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto } from "ts-proto-descriptors";
-import { Attribute, AttributeObj, protoMetadata as protoMetadata1 } from "./attribute";
+import {
+  protoMetadata as protoMetadata1,
+  Attribute,
+  AttributeObj,
+} from "./attribute";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.meta";
 
@@ -75,8 +79,12 @@ export const Meta = {
       created: isSet(object.created) ? Number(object.created) : 0,
       modified: isSet(object.modified) ? Number(object.modified) : 0,
       modifiedBy: isSet(object.modifiedBy) ? String(object.modifiedBy) : "",
-      owner: Array.isArray(object?.owner) ? object.owner.map((e: any) => Attribute.fromJSON(e)) : [],
-      acl: Array.isArray(object?.acl) ? object.acl.map((e: any) => AttributeObj.fromJSON(e)) : [],
+      owner: Array.isArray(object?.owner)
+        ? object.owner.map((e: any) => Attribute.fromJSON(e))
+        : [],
+      acl: Array.isArray(object?.acl)
+        ? object.acl.map((e: any) => AttributeObj.fromJSON(e))
+        : [],
     };
   },
 
@@ -86,20 +94,20 @@ export const Meta = {
     message.modified !== undefined && (obj.modified = message.modified);
     message.modifiedBy !== undefined && (obj.modifiedBy = message.modifiedBy);
     if (message.owner) {
-      obj.owner = message.owner.map((e) => e ? Attribute.toJSON(e) : undefined);
+      obj.owner = message.owner.map((e) =>
+        e ? Attribute.toJSON(e) : undefined
+      );
     } else {
       obj.owner = [];
     }
     if (message.acl) {
-      obj.acl = message.acl.map((e) => e ? AttributeObj.toJSON(e) : undefined);
+      obj.acl = message.acl.map((e) =>
+        e ? AttributeObj.toJSON(e) : undefined
+      );
     } else {
       obj.acl = [];
     }
     return obj;
-  },
-
-  create(base?: DeepPartial<Meta>): Meta {
-    return Meta.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Meta>): Meta {
@@ -127,128 +135,162 @@ export interface ProtoMetadata {
   options?: {
     options?: { [key: string]: any };
     services?: {
-      [key: string]: { options?: { [key: string]: any }; methods?: { [key: string]: { [key: string]: any } } };
+      [key: string]: {
+        options?: { [key: string]: any };
+        methods?: { [key: string]: { [key: string]: any } };
+      };
     };
-    messages?: { [key: string]: ProtoMetaMessageOptions };
-    enums?: { [key: string]: { options?: { [key: string]: any }; values?: { [key: string]: { [key: string]: any } } } };
+    messages?: {
+      [key: string]: ProtoMetaMessageOptions;
+    };
+    enums?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        values?: { [key: string]: { [key: string]: any } };
+      };
+    };
   };
 }
 
 export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto.fromPartial({
-    "name": "io/restorecommerce/meta.proto",
-    "package": "io.restorecommerce.meta",
-    "dependency": ["io/restorecommerce/attribute.proto"],
-    "publicDependency": [],
-    "weakDependency": [],
-    "messageType": [{
-      "name": "Meta",
-      "field": [{
-        "name": "created",
-        "number": 1,
-        "label": 1,
-        "type": 1,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "created",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "modified",
-        "number": 2,
-        "label": 1,
-        "type": 1,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "modified",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "modified_by",
-        "number": 3,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "modifiedBy",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "owner",
-        "number": 4,
-        "label": 3,
-        "type": 11,
-        "typeName": ".io.restorecommerce.attribute.Attribute",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "owner",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "acl",
-        "number": 5,
-        "label": 3,
-        "type": 11,
-        "typeName": ".io.restorecommerce.attribute.AttributeObj",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "acl",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }],
-    "enumType": [],
-    "service": [],
-    "extension": [],
-    "options": undefined,
-    "sourceCodeInfo": {
-      "location": [{
-        "path": [4, 0, 2, 0],
-        "span": [9, 4, 23],
-        "leadingComments": "",
-        "trailingComments": " timestamp\n",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 0, 2, 1],
-        "span": [10, 4, 24],
-        "leadingComments": "",
-        "trailingComments": " timestamp\n",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 0, 2, 2],
-        "span": [11, 4, 27],
-        "leadingComments": "",
-        "trailingComments": " ID from last User who modified it\n",
-        "leadingDetachedComments": [],
-      }],
+    name: "io/restorecommerce/meta.proto",
+    package: "io.restorecommerce.meta",
+    dependency: ["io/restorecommerce/attribute.proto"],
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "Meta",
+        field: [
+          {
+            name: "created",
+            number: 1,
+            label: 1,
+            type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "created",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "modified",
+            number: 2,
+            label: 1,
+            type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "modified",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "modified_by",
+            number: 3,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "modifiedBy",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "owner",
+            number: 4,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.attribute.Attribute",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "owner",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "acl",
+            number: 5,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.attribute.AttributeObj",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "acl",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+    ],
+    enumType: [],
+    service: [],
+    extension: [],
+    options: undefined,
+    sourceCodeInfo: {
+      location: [
+        {
+          path: [4, 0, 2, 0],
+          span: [9, 4, 23],
+          leadingComments: "",
+          trailingComments: " timestamp\n",
+          leadingDetachedComments: [],
+        },
+        {
+          path: [4, 0, 2, 1],
+          span: [10, 4, 24],
+          leadingComments: "",
+          trailingComments: " timestamp\n",
+          leadingDetachedComments: [],
+        },
+        {
+          path: [4, 0, 2, 2],
+          span: [11, 4, 27],
+          leadingComments: "",
+          trailingComments: " ID from last User who modified it\n",
+          leadingDetachedComments: [],
+        },
+      ],
     },
-    "syntax": "proto3",
+    syntax: "proto3",
   }),
   references: { ".io.restorecommerce.meta.Meta": Meta },
   dependencies: [protoMetadata1],
 };
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 function isSet(value: any): boolean {

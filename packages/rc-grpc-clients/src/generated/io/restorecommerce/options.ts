@@ -1,7 +1,7 @@
 /* eslint-disable */
-import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
 import { protoMetadata as protoMetadata1 } from "../../google/protobuf/descriptor";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.options";
 
@@ -22,11 +22,20 @@ export interface KafkaSubscription {
 }
 
 function createBaseResolver(): Resolver {
-  return { targetType: "", targetService: "", targetSubService: "", targetMethod: "", fieldName: "" };
+  return {
+    targetType: "",
+    targetService: "",
+    targetSubService: "",
+    targetMethod: "",
+    fieldName: "",
+  };
 }
 
 export const Resolver = {
-  encode(message: Resolver, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Resolver,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.targetType !== "") {
       writer.uint32(10).string(message.targetType);
     }
@@ -78,9 +87,15 @@ export const Resolver = {
   fromJSON(object: any): Resolver {
     return {
       targetType: isSet(object.targetType) ? String(object.targetType) : "",
-      targetService: isSet(object.targetService) ? String(object.targetService) : "",
-      targetSubService: isSet(object.targetSubService) ? String(object.targetSubService) : "",
-      targetMethod: isSet(object.targetMethod) ? String(object.targetMethod) : "",
+      targetService: isSet(object.targetService)
+        ? String(object.targetService)
+        : "",
+      targetSubService: isSet(object.targetSubService)
+        ? String(object.targetSubService)
+        : "",
+      targetMethod: isSet(object.targetMethod)
+        ? String(object.targetMethod)
+        : "",
       fieldName: isSet(object.fieldName) ? String(object.fieldName) : "",
     };
   },
@@ -88,15 +103,14 @@ export const Resolver = {
   toJSON(message: Resolver): unknown {
     const obj: any = {};
     message.targetType !== undefined && (obj.targetType = message.targetType);
-    message.targetService !== undefined && (obj.targetService = message.targetService);
-    message.targetSubService !== undefined && (obj.targetSubService = message.targetSubService);
-    message.targetMethod !== undefined && (obj.targetMethod = message.targetMethod);
+    message.targetService !== undefined &&
+      (obj.targetService = message.targetService);
+    message.targetSubService !== undefined &&
+      (obj.targetSubService = message.targetSubService);
+    message.targetMethod !== undefined &&
+      (obj.targetMethod = message.targetMethod);
     message.fieldName !== undefined && (obj.fieldName = message.fieldName);
     return obj;
-  },
-
-  create(base?: DeepPartial<Resolver>): Resolver {
-    return Resolver.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Resolver>): Resolver {
@@ -115,7 +129,10 @@ function createBaseKafkaSubscription(): KafkaSubscription {
 }
 
 export const KafkaSubscription = {
-  encode(message: KafkaSubscription, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: KafkaSubscription,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.plural !== "") {
       writer.uint32(10).string(message.plural);
     }
@@ -184,10 +201,6 @@ export const KafkaSubscription = {
     return obj;
   },
 
-  create(base?: DeepPartial<KafkaSubscription>): KafkaSubscription {
-    return KafkaSubscription.fromPartial(base ?? {});
-  },
-
   fromPartial(object: DeepPartial<KafkaSubscription>): KafkaSubscription {
     const message = createBaseKafkaSubscription();
     message.plural = object.plural ?? "";
@@ -213,217 +226,247 @@ export interface ProtoMetadata {
   options?: {
     options?: { [key: string]: any };
     services?: {
-      [key: string]: { options?: { [key: string]: any }; methods?: { [key: string]: { [key: string]: any } } };
+      [key: string]: {
+        options?: { [key: string]: any };
+        methods?: { [key: string]: { [key: string]: any } };
+      };
     };
-    messages?: { [key: string]: ProtoMetaMessageOptions };
-    enums?: { [key: string]: { options?: { [key: string]: any }; values?: { [key: string]: { [key: string]: any } } } };
+    messages?: {
+      [key: string]: ProtoMetaMessageOptions;
+    };
+    enums?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        values?: { [key: string]: { [key: string]: any } };
+      };
+    };
   };
 }
 
 export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto1.fromPartial({
-    "name": "io/restorecommerce/options.proto",
-    "package": "io.restorecommerce.options",
-    "dependency": ["google/protobuf/descriptor.proto"],
-    "publicDependency": [],
-    "weakDependency": [],
-    "messageType": [{
-      "name": "Resolver",
-      "field": [{
-        "name": "target_type",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "targetType",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "target_service",
-        "number": 2,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "targetService",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "target_sub_service",
-        "number": 3,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "targetSubService",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "target_method",
-        "number": 4,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "targetMethod",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "field_name",
-        "number": 5,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "fieldName",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "KafkaSubscription",
-      "field": [{
-        "name": "plural",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "plural",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "topic",
-        "number": 2,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "topic",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "created",
-        "number": 3,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "created",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "updated",
-        "number": 4,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "updated",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "deleted",
-        "number": 5,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "deleted",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }],
-    "enumType": [],
-    "service": [],
-    "extension": [{
-      "name": "resolver",
-      "number": 31000,
-      "label": 1,
-      "type": 11,
-      "typeName": ".io.restorecommerce.options.Resolver",
-      "extendee": ".google.protobuf.FieldOptions",
-      "defaultValue": "",
-      "oneofIndex": 0,
-      "jsonName": "resolver",
-      "options": undefined,
-      "proto3Optional": false,
-    }, {
-      "name": "is_query",
-      "number": 31001,
-      "label": 1,
-      "type": 8,
-      "typeName": "",
-      "extendee": ".google.protobuf.MethodOptions",
-      "defaultValue": "",
-      "oneofIndex": 0,
-      "jsonName": "isQuery",
-      "options": undefined,
-      "proto3Optional": false,
-    }, {
-      "name": "service_name",
-      "number": 31002,
-      "label": 1,
-      "type": 9,
-      "typeName": "",
-      "extendee": ".google.protobuf.ServiceOptions",
-      "defaultValue": "",
-      "oneofIndex": 0,
-      "jsonName": "serviceName",
-      "options": undefined,
-      "proto3Optional": false,
-    }, {
-      "name": "kafka_subscriber",
-      "number": 31003,
-      "label": 1,
-      "type": 11,
-      "typeName": ".io.restorecommerce.options.KafkaSubscription",
-      "extendee": ".google.protobuf.MessageOptions",
-      "defaultValue": "",
-      "oneofIndex": 0,
-      "jsonName": "kafkaSubscriber",
-      "options": undefined,
-      "proto3Optional": false,
-    }],
-    "options": undefined,
-    "sourceCodeInfo": { "location": [] },
-    "syntax": "proto3",
+    name: "io/restorecommerce/options.proto",
+    package: "io.restorecommerce.options",
+    dependency: ["google/protobuf/descriptor.proto"],
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "Resolver",
+        field: [
+          {
+            name: "target_type",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "targetType",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "target_service",
+            number: 2,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "targetService",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "target_sub_service",
+            number: 3,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "targetSubService",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "target_method",
+            number: 4,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "targetMethod",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "field_name",
+            number: 5,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "fieldName",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "KafkaSubscription",
+        field: [
+          {
+            name: "plural",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "plural",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "topic",
+            number: 2,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "topic",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "created",
+            number: 3,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "created",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "updated",
+            number: 4,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "updated",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "deleted",
+            number: 5,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "deleted",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+    ],
+    enumType: [],
+    service: [],
+    extension: [
+      {
+        name: "resolver",
+        number: 31000,
+        label: 1,
+        type: 11,
+        typeName: ".io.restorecommerce.options.Resolver",
+        extendee: ".google.protobuf.FieldOptions",
+        defaultValue: "",
+        oneofIndex: 0,
+        jsonName: "resolver",
+        options: undefined,
+        proto3Optional: false,
+      },
+      {
+        name: "is_query",
+        number: 31001,
+        label: 1,
+        type: 8,
+        typeName: "",
+        extendee: ".google.protobuf.MethodOptions",
+        defaultValue: "",
+        oneofIndex: 0,
+        jsonName: "isQuery",
+        options: undefined,
+        proto3Optional: false,
+      },
+      {
+        name: "service_name",
+        number: 31002,
+        label: 1,
+        type: 9,
+        typeName: "",
+        extendee: ".google.protobuf.ServiceOptions",
+        defaultValue: "",
+        oneofIndex: 0,
+        jsonName: "serviceName",
+        options: undefined,
+        proto3Optional: false,
+      },
+      {
+        name: "kafka_subscriber",
+        number: 31003,
+        label: 1,
+        type: 11,
+        typeName: ".io.restorecommerce.options.KafkaSubscription",
+        extendee: ".google.protobuf.MessageOptions",
+        defaultValue: "",
+        oneofIndex: 0,
+        jsonName: "kafkaSubscriber",
+        options: undefined,
+        proto3Optional: false,
+      },
+    ],
+    options: undefined,
+    sourceCodeInfo: { location: [] },
+    syntax: "proto3",
   }),
   references: {
     ".io.restorecommerce.options.Resolver": Resolver,
@@ -432,11 +475,23 @@ export const protoMetadata: ProtoMetadata = {
   dependencies: [protoMetadata1],
 };
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 function isSet(value: any): boolean {

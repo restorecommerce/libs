@@ -129,6 +129,8 @@ export interface Order {
   customer_reference: string;
   items: Item[];
   total_price: number;
+  total_vat: number;
+  total_weight_in_kg: number;
   shipping_address?: Address;
   billing_address?: Address;
   billing_email: string;
@@ -193,6 +195,8 @@ function createBaseOrder(): Order {
     customer_reference: "",
     items: [],
     total_price: 0,
+    total_vat: 0,
+    total_weight_in_kg: 0,
     shipping_address: undefined,
     billing_address: undefined,
     billing_email: "",
@@ -227,6 +231,12 @@ export const Order = {
     }
     if (message.total_price !== 0) {
       writer.uint32(65).double(message.total_price);
+    }
+    if (message.total_vat !== 0) {
+      writer.uint32(73).double(message.total_vat);
+    }
+    if (message.total_weight_in_kg !== 0) {
+      writer.uint32(81).double(message.total_weight_in_kg);
     }
     if (message.shipping_address !== undefined) {
       Address.encode(
@@ -289,6 +299,12 @@ export const Order = {
         case 8:
           message.total_price = reader.double();
           break;
+        case 9:
+          message.total_vat = reader.double();
+          break;
+        case 10:
+          message.total_weight_in_kg = reader.double();
+          break;
         case 11:
           message.shipping_address = Address.decode(reader, reader.uint32());
           break;
@@ -334,6 +350,10 @@ export const Order = {
         ? object.items.map((e: any) => Item.fromJSON(e))
         : [],
       total_price: isSet(object.total_price) ? Number(object.total_price) : 0,
+      total_vat: isSet(object.total_vat) ? Number(object.total_vat) : 0,
+      total_weight_in_kg: isSet(object.total_weight_in_kg)
+        ? Number(object.total_weight_in_kg)
+        : 0,
       shipping_address: isSet(object.shipping_address)
         ? Address.fromJSON(object.shipping_address)
         : undefined,
@@ -373,6 +393,9 @@ export const Order = {
     }
     message.total_price !== undefined &&
       (obj.total_price = message.total_price);
+    message.total_vat !== undefined && (obj.total_vat = message.total_vat);
+    message.total_weight_in_kg !== undefined &&
+      (obj.total_weight_in_kg = message.total_weight_in_kg);
     message.shipping_address !== undefined &&
       (obj.shipping_address = message.shipping_address
         ? Address.toJSON(message.shipping_address)
@@ -410,6 +433,8 @@ export const Order = {
     message.customer_reference = object.customer_reference ?? "";
     message.items = object.items?.map((e) => Item.fromPartial(e)) || [];
     message.total_price = object.total_price ?? 0;
+    message.total_vat = object.total_vat ?? 0;
+    message.total_weight_in_kg = object.total_weight_in_kg ?? 0;
     message.shipping_address =
       object.shipping_address !== undefined && object.shipping_address !== null
         ? Address.fromPartial(object.shipping_address)
@@ -1164,6 +1189,14 @@ export const ServiceDefinition = {
       responseStream: false,
       options: {},
     },
+    validate: {
+      name: "Validate",
+      requestType: OrderList,
+      requestStream: false,
+      responseType: OrderListResponse,
+      responseStream: false,
+      options: {},
+    },
     submit: {
       name: "Submit",
       requestType: OrderList,
@@ -1216,6 +1249,10 @@ export interface ServiceServiceImplementation<CallContextExt = {}> {
     request: OrderList,
     context: CallContext & CallContextExt
   ): Promise<DeepPartial<OrderListResponse>>;
+  validate(
+    request: OrderList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<OrderListResponse>>;
   submit(
     request: OrderList,
     context: CallContext & CallContextExt
@@ -1248,6 +1285,10 @@ export interface ServiceClient<CallOptionsExt = {}> {
     options?: CallOptions & CallOptionsExt
   ): Promise<OrderListResponse>;
   upsert(
+    request: DeepPartial<OrderList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<OrderListResponse>;
+  validate(
     request: DeepPartial<OrderList>,
     options?: CallOptions & CallOptionsExt
   ): Promise<OrderListResponse>;
@@ -1421,6 +1462,32 @@ export const protoMetadata: ProtoMetadata = {
             defaultValue: "",
             oneofIndex: 0,
             jsonName: "totalPrice",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "total_vat",
+            number: 9,
+            label: 1,
+            type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "totalVat",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "total_weight_in_kg",
+            number: 10,
+            label: 1,
+            type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "totalWeightInKg",
             options: undefined,
             proto3Optional: false,
           },
@@ -1968,6 +2035,14 @@ export const protoMetadata: ProtoMetadata = {
             serverStreaming: false,
           },
           {
+            name: "Validate",
+            inputType: ".io.restorecommerce.order.OrderList",
+            outputType: ".io.restorecommerce.order.OrderListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
+          },
+          {
             name: "Submit",
             inputType: ".io.restorecommerce.order.OrderList",
             outputType: ".io.restorecommerce.order.OrderListResponse",
@@ -2010,7 +2085,7 @@ export const protoMetadata: ProtoMetadata = {
       location: [
         {
           path: [4, 0],
-          span: [43, 0, 66, 1],
+          span: [44, 0, 69, 1],
           leadingComments: "*\nDatabase Entity\n",
           trailingComments: "",
           leadingDetachedComments: [],

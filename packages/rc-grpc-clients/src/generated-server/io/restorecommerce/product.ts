@@ -39,7 +39,7 @@ export interface Product {
   taric_code: string;
   prototype?: Identifier | undefined;
   category?: Identifier | undefined;
-  tax_id: string[];
+  tax_ids: string[];
   variants: Variant[];
   gtin: string;
 }
@@ -84,19 +84,27 @@ export interface Bundle {
   name: string;
   description: string;
   image: Image[];
-  product: BundleProduct[];
+  products: BundleProduct[];
   price: number;
 }
 
 export interface BundleProduct {
   product_id: string;
+  variant_id: string;
   quantity: number;
+  price_ratio: number;
+}
+
+export interface VAT {
+  tax_id: string;
+  vat: number;
 }
 
 /** Used by Fulfillment-Srv and Order-Srv */
 export interface Item {
   /** below identifier is id of product, variant or bundle */
-  product_variant_bundle_id: string;
+  product_id: string;
+  variant_id: string;
   product_name: string;
   product_description: string;
   manufacturer_name: string;
@@ -104,16 +112,12 @@ export interface Item {
   prototype_name: string;
   prototype_description: string;
   quantity: number;
-  vat: number;
   price: number;
+  vats: VAT[];
   quantity_price: number;
   item_type: string;
   taric_code: number;
   stock_keeping_unit: string;
-  weight_in_kg: number;
-  length_in_cm: number;
-  width_in_cm: number;
-  height_in_cm: number;
 }
 
 export interface Deleted {
@@ -239,7 +243,7 @@ function createBaseProduct(): Product {
     taric_code: "",
     prototype: undefined,
     category: undefined,
-    tax_id: [],
+    tax_ids: [],
     variants: [],
     gtin: "",
   };
@@ -271,7 +275,7 @@ export const Product = {
     if (message.category !== undefined) {
       Identifier.encode(message.category, writer.uint32(58).fork()).ldelim();
     }
-    for (const v of message.tax_id) {
+    for (const v of message.tax_ids) {
       writer.uint32(66).string(v!);
     }
     for (const v of message.variants) {
@@ -312,7 +316,7 @@ export const Product = {
           message.category = Identifier.decode(reader, reader.uint32());
           break;
         case 8:
-          message.tax_id.push(reader.string());
+          message.tax_ids.push(reader.string());
           break;
         case 9:
           message.variants.push(Variant.decode(reader, reader.uint32()));
@@ -343,8 +347,8 @@ export const Product = {
       category: isSet(object.category)
         ? Identifier.fromJSON(object.category)
         : undefined,
-      tax_id: Array.isArray(object?.tax_id)
-        ? object.tax_id.map((e: any) => String(e))
+      tax_ids: Array.isArray(object?.tax_ids)
+        ? object.tax_ids.map((e: any) => String(e))
         : [],
       variants: Array.isArray(object?.variants)
         ? object.variants.map((e: any) => Variant.fromJSON(e))
@@ -370,10 +374,10 @@ export const Product = {
       (obj.category = message.category
         ? Identifier.toJSON(message.category)
         : undefined);
-    if (message.tax_id) {
-      obj.tax_id = message.tax_id.map((e) => e);
+    if (message.tax_ids) {
+      obj.tax_ids = message.tax_ids.map((e) => e);
     } else {
-      obj.tax_id = [];
+      obj.tax_ids = [];
     }
     if (message.variants) {
       obj.variants = message.variants.map((e) =>
@@ -401,7 +405,7 @@ export const Product = {
       object.category !== undefined && object.category !== null
         ? Identifier.fromPartial(object.category)
         : undefined;
-    message.tax_id = object.tax_id?.map((e) => e) || [];
+    message.tax_ids = object.tax_ids?.map((e) => e) || [];
     message.variants =
       object.variants?.map((e) => Variant.fromPartial(e)) || [];
     message.gtin = object.gtin ?? "";
@@ -898,7 +902,7 @@ function createBaseBundle(): Bundle {
     name: "",
     description: "",
     image: [],
-    product: [],
+    products: [],
     price: 0,
   };
 }
@@ -920,7 +924,7 @@ export const Bundle = {
     for (const v of message.image) {
       Image.encode(v!, writer.uint32(42).fork()).ldelim();
     }
-    for (const v of message.product) {
+    for (const v of message.products) {
       BundleProduct.encode(v!, writer.uint32(50).fork()).ldelim();
     }
     if (message.price !== 0) {
@@ -949,7 +953,7 @@ export const Bundle = {
           message.image.push(Image.decode(reader, reader.uint32()));
           break;
         case 6:
-          message.product.push(BundleProduct.decode(reader, reader.uint32()));
+          message.products.push(BundleProduct.decode(reader, reader.uint32()));
           break;
         case 7:
           message.price = reader.double();
@@ -970,8 +974,8 @@ export const Bundle = {
       image: Array.isArray(object?.image)
         ? object.image.map((e: any) => Image.fromJSON(e))
         : [],
-      product: Array.isArray(object?.product)
-        ? object.product.map((e: any) => BundleProduct.fromJSON(e))
+      products: Array.isArray(object?.products)
+        ? object.products.map((e: any) => BundleProduct.fromJSON(e))
         : [],
       price: isSet(object.price) ? Number(object.price) : 0,
     };
@@ -988,12 +992,12 @@ export const Bundle = {
     } else {
       obj.image = [];
     }
-    if (message.product) {
-      obj.product = message.product.map((e) =>
+    if (message.products) {
+      obj.products = message.products.map((e) =>
         e ? BundleProduct.toJSON(e) : undefined
       );
     } else {
-      obj.product = [];
+      obj.products = [];
     }
     message.price !== undefined && (obj.price = message.price);
     return obj;
@@ -1005,15 +1009,15 @@ export const Bundle = {
     message.name = object.name ?? "";
     message.description = object.description ?? "";
     message.image = object.image?.map((e) => Image.fromPartial(e)) || [];
-    message.product =
-      object.product?.map((e) => BundleProduct.fromPartial(e)) || [];
+    message.products =
+      object.products?.map((e) => BundleProduct.fromPartial(e)) || [];
     message.price = object.price ?? 0;
     return message;
   },
 };
 
 function createBaseBundleProduct(): BundleProduct {
-  return { product_id: "", quantity: 0 };
+  return { product_id: "", variant_id: "", quantity: 0, price_ratio: 0 };
 }
 
 export const BundleProduct = {
@@ -1024,8 +1028,14 @@ export const BundleProduct = {
     if (message.product_id !== "") {
       writer.uint32(10).string(message.product_id);
     }
+    if (message.variant_id !== "") {
+      writer.uint32(18).string(message.variant_id);
+    }
     if (message.quantity !== 0) {
-      writer.uint32(16).uint32(message.quantity);
+      writer.uint32(24).uint32(message.quantity);
+    }
+    if (message.price_ratio !== 0) {
+      writer.uint32(33).double(message.price_ratio);
     }
     return writer;
   },
@@ -1041,7 +1051,13 @@ export const BundleProduct = {
           message.product_id = reader.string();
           break;
         case 2:
+          message.variant_id = reader.string();
+          break;
+        case 3:
           message.quantity = reader.uint32();
+          break;
+        case 4:
+          message.price_ratio = reader.double();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1054,29 +1070,95 @@ export const BundleProduct = {
   fromJSON(object: any): BundleProduct {
     return {
       product_id: isSet(object.product_id) ? String(object.product_id) : "",
+      variant_id: isSet(object.variant_id) ? String(object.variant_id) : "",
       quantity: isSet(object.quantity) ? Number(object.quantity) : 0,
+      price_ratio: isSet(object.price_ratio) ? Number(object.price_ratio) : 0,
     };
   },
 
   toJSON(message: BundleProduct): unknown {
     const obj: any = {};
     message.product_id !== undefined && (obj.product_id = message.product_id);
+    message.variant_id !== undefined && (obj.variant_id = message.variant_id);
     message.quantity !== undefined &&
       (obj.quantity = Math.round(message.quantity));
+    message.price_ratio !== undefined &&
+      (obj.price_ratio = message.price_ratio);
     return obj;
   },
 
   fromPartial(object: DeepPartial<BundleProduct>): BundleProduct {
     const message = createBaseBundleProduct();
     message.product_id = object.product_id ?? "";
+    message.variant_id = object.variant_id ?? "";
     message.quantity = object.quantity ?? 0;
+    message.price_ratio = object.price_ratio ?? 0;
+    return message;
+  },
+};
+
+function createBaseVAT(): VAT {
+  return { tax_id: "", vat: 0 };
+}
+
+export const VAT = {
+  encode(message: VAT, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.tax_id !== "") {
+      writer.uint32(10).string(message.tax_id);
+    }
+    if (message.vat !== 0) {
+      writer.uint32(17).double(message.vat);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): VAT {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseVAT();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.tax_id = reader.string();
+          break;
+        case 2:
+          message.vat = reader.double();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): VAT {
+    return {
+      tax_id: isSet(object.tax_id) ? String(object.tax_id) : "",
+      vat: isSet(object.vat) ? Number(object.vat) : 0,
+    };
+  },
+
+  toJSON(message: VAT): unknown {
+    const obj: any = {};
+    message.tax_id !== undefined && (obj.tax_id = message.tax_id);
+    message.vat !== undefined && (obj.vat = message.vat);
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<VAT>): VAT {
+    const message = createBaseVAT();
+    message.tax_id = object.tax_id ?? "";
+    message.vat = object.vat ?? 0;
     return message;
   },
 };
 
 function createBaseItem(): Item {
   return {
-    product_variant_bundle_id: "",
+    product_id: "",
+    variant_id: "",
     product_name: "",
     product_description: "",
     manufacturer_name: "",
@@ -1084,74 +1166,61 @@ function createBaseItem(): Item {
     prototype_name: "",
     prototype_description: "",
     quantity: 0,
-    vat: 0,
     price: 0,
+    vats: [],
     quantity_price: 0,
     item_type: "",
     taric_code: 0,
     stock_keeping_unit: "",
-    weight_in_kg: 0,
-    length_in_cm: 0,
-    width_in_cm: 0,
-    height_in_cm: 0,
   };
 }
 
 export const Item = {
   encode(message: Item, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.product_variant_bundle_id !== "") {
-      writer.uint32(10).string(message.product_variant_bundle_id);
+    if (message.product_id !== "") {
+      writer.uint32(10).string(message.product_id);
+    }
+    if (message.variant_id !== "") {
+      writer.uint32(18).string(message.variant_id);
     }
     if (message.product_name !== "") {
-      writer.uint32(18).string(message.product_name);
+      writer.uint32(26).string(message.product_name);
     }
     if (message.product_description !== "") {
-      writer.uint32(26).string(message.product_description);
+      writer.uint32(34).string(message.product_description);
     }
     if (message.manufacturer_name !== "") {
-      writer.uint32(34).string(message.manufacturer_name);
+      writer.uint32(42).string(message.manufacturer_name);
     }
     if (message.manufacturer_description !== "") {
-      writer.uint32(42).string(message.manufacturer_description);
+      writer.uint32(50).string(message.manufacturer_description);
     }
     if (message.prototype_name !== "") {
-      writer.uint32(50).string(message.prototype_name);
+      writer.uint32(58).string(message.prototype_name);
     }
     if (message.prototype_description !== "") {
-      writer.uint32(58).string(message.prototype_description);
+      writer.uint32(66).string(message.prototype_description);
     }
     if (message.quantity !== 0) {
-      writer.uint32(64).int32(message.quantity);
-    }
-    if (message.vat !== 0) {
-      writer.uint32(72).int32(message.vat);
+      writer.uint32(72).int32(message.quantity);
     }
     if (message.price !== 0) {
       writer.uint32(81).double(message.price);
     }
+    for (const v of message.vats) {
+      VAT.encode(v!, writer.uint32(90).fork()).ldelim();
+    }
     if (message.quantity_price !== 0) {
-      writer.uint32(89).double(message.quantity_price);
+      writer.uint32(97).double(message.quantity_price);
     }
     if (message.item_type !== "") {
-      writer.uint32(98).string(message.item_type);
+      writer.uint32(106).string(message.item_type);
     }
     if (message.taric_code !== 0) {
-      writer.uint32(105).double(message.taric_code);
+      writer.uint32(113).double(message.taric_code);
     }
     if (message.stock_keeping_unit !== "") {
-      writer.uint32(114).string(message.stock_keeping_unit);
-    }
-    if (message.weight_in_kg !== 0) {
-      writer.uint32(121).double(message.weight_in_kg);
-    }
-    if (message.length_in_cm !== 0) {
-      writer.uint32(128).int32(message.length_in_cm);
-    }
-    if (message.width_in_cm !== 0) {
-      writer.uint32(136).int32(message.width_in_cm);
-    }
-    if (message.height_in_cm !== 0) {
-      writer.uint32(144).int32(message.height_in_cm);
+      writer.uint32(122).string(message.stock_keeping_unit);
     }
     return writer;
   },
@@ -1164,58 +1233,49 @@ export const Item = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.product_variant_bundle_id = reader.string();
+          message.product_id = reader.string();
           break;
         case 2:
-          message.product_name = reader.string();
+          message.variant_id = reader.string();
           break;
         case 3:
-          message.product_description = reader.string();
+          message.product_name = reader.string();
           break;
         case 4:
-          message.manufacturer_name = reader.string();
+          message.product_description = reader.string();
           break;
         case 5:
-          message.manufacturer_description = reader.string();
+          message.manufacturer_name = reader.string();
           break;
         case 6:
-          message.prototype_name = reader.string();
+          message.manufacturer_description = reader.string();
           break;
         case 7:
-          message.prototype_description = reader.string();
+          message.prototype_name = reader.string();
           break;
         case 8:
-          message.quantity = reader.int32();
+          message.prototype_description = reader.string();
           break;
         case 9:
-          message.vat = reader.int32();
+          message.quantity = reader.int32();
           break;
         case 10:
           message.price = reader.double();
           break;
         case 11:
-          message.quantity_price = reader.double();
+          message.vats.push(VAT.decode(reader, reader.uint32()));
           break;
         case 12:
-          message.item_type = reader.string();
+          message.quantity_price = reader.double();
           break;
         case 13:
-          message.taric_code = reader.double();
+          message.item_type = reader.string();
           break;
         case 14:
-          message.stock_keeping_unit = reader.string();
+          message.taric_code = reader.double();
           break;
         case 15:
-          message.weight_in_kg = reader.double();
-          break;
-        case 16:
-          message.length_in_cm = reader.int32();
-          break;
-        case 17:
-          message.width_in_cm = reader.int32();
-          break;
-        case 18:
-          message.height_in_cm = reader.int32();
+          message.stock_keeping_unit = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1227,9 +1287,8 @@ export const Item = {
 
   fromJSON(object: any): Item {
     return {
-      product_variant_bundle_id: isSet(object.product_variant_bundle_id)
-        ? String(object.product_variant_bundle_id)
-        : "",
+      product_id: isSet(object.product_id) ? String(object.product_id) : "",
+      variant_id: isSet(object.variant_id) ? String(object.variant_id) : "",
       product_name: isSet(object.product_name)
         ? String(object.product_name)
         : "",
@@ -1249,8 +1308,10 @@ export const Item = {
         ? String(object.prototype_description)
         : "",
       quantity: isSet(object.quantity) ? Number(object.quantity) : 0,
-      vat: isSet(object.vat) ? Number(object.vat) : 0,
       price: isSet(object.price) ? Number(object.price) : 0,
+      vats: Array.isArray(object?.vats)
+        ? object.vats.map((e: any) => VAT.fromJSON(e))
+        : [],
       quantity_price: isSet(object.quantity_price)
         ? Number(object.quantity_price)
         : 0,
@@ -1259,23 +1320,13 @@ export const Item = {
       stock_keeping_unit: isSet(object.stock_keeping_unit)
         ? String(object.stock_keeping_unit)
         : "",
-      weight_in_kg: isSet(object.weight_in_kg)
-        ? Number(object.weight_in_kg)
-        : 0,
-      length_in_cm: isSet(object.length_in_cm)
-        ? Number(object.length_in_cm)
-        : 0,
-      width_in_cm: isSet(object.width_in_cm) ? Number(object.width_in_cm) : 0,
-      height_in_cm: isSet(object.height_in_cm)
-        ? Number(object.height_in_cm)
-        : 0,
     };
   },
 
   toJSON(message: Item): unknown {
     const obj: any = {};
-    message.product_variant_bundle_id !== undefined &&
-      (obj.product_variant_bundle_id = message.product_variant_bundle_id);
+    message.product_id !== undefined && (obj.product_id = message.product_id);
+    message.variant_id !== undefined && (obj.variant_id = message.variant_id);
     message.product_name !== undefined &&
       (obj.product_name = message.product_name);
     message.product_description !== undefined &&
@@ -1290,28 +1341,25 @@ export const Item = {
       (obj.prototype_description = message.prototype_description);
     message.quantity !== undefined &&
       (obj.quantity = Math.round(message.quantity));
-    message.vat !== undefined && (obj.vat = Math.round(message.vat));
     message.price !== undefined && (obj.price = message.price);
+    if (message.vats) {
+      obj.vats = message.vats.map((e) => (e ? VAT.toJSON(e) : undefined));
+    } else {
+      obj.vats = [];
+    }
     message.quantity_price !== undefined &&
       (obj.quantity_price = message.quantity_price);
     message.item_type !== undefined && (obj.item_type = message.item_type);
     message.taric_code !== undefined && (obj.taric_code = message.taric_code);
     message.stock_keeping_unit !== undefined &&
       (obj.stock_keeping_unit = message.stock_keeping_unit);
-    message.weight_in_kg !== undefined &&
-      (obj.weight_in_kg = message.weight_in_kg);
-    message.length_in_cm !== undefined &&
-      (obj.length_in_cm = Math.round(message.length_in_cm));
-    message.width_in_cm !== undefined &&
-      (obj.width_in_cm = Math.round(message.width_in_cm));
-    message.height_in_cm !== undefined &&
-      (obj.height_in_cm = Math.round(message.height_in_cm));
     return obj;
   },
 
   fromPartial(object: DeepPartial<Item>): Item {
     const message = createBaseItem();
-    message.product_variant_bundle_id = object.product_variant_bundle_id ?? "";
+    message.product_id = object.product_id ?? "";
+    message.variant_id = object.variant_id ?? "";
     message.product_name = object.product_name ?? "";
     message.product_description = object.product_description ?? "";
     message.manufacturer_name = object.manufacturer_name ?? "";
@@ -1319,16 +1367,12 @@ export const Item = {
     message.prototype_name = object.prototype_name ?? "";
     message.prototype_description = object.prototype_description ?? "";
     message.quantity = object.quantity ?? 0;
-    message.vat = object.vat ?? 0;
     message.price = object.price ?? 0;
+    message.vats = object.vats?.map((e) => VAT.fromPartial(e)) || [];
     message.quantity_price = object.quantity_price ?? 0;
     message.item_type = object.item_type ?? "";
     message.taric_code = object.taric_code ?? 0;
     message.stock_keeping_unit = object.stock_keeping_unit ?? "";
-    message.weight_in_kg = object.weight_in_kg ?? 0;
-    message.length_in_cm = object.length_in_cm ?? 0;
-    message.width_in_cm = object.width_in_cm ?? 0;
-    message.height_in_cm = object.height_in_cm ?? 0;
     return message;
   },
 };
@@ -1708,7 +1752,7 @@ export const protoMetadata: ProtoMetadata = {
             proto3Optional: false,
           },
           {
-            name: "tax_id",
+            name: "tax_ids",
             number: 8,
             label: 3,
             type: 9,
@@ -1716,7 +1760,7 @@ export const protoMetadata: ProtoMetadata = {
             extendee: "",
             defaultValue: "",
             oneofIndex: 0,
-            jsonName: "taxId",
+            jsonName: "taxIds",
             options: undefined,
             proto3Optional: false,
           },
@@ -2137,7 +2181,7 @@ export const protoMetadata: ProtoMetadata = {
             proto3Optional: false,
           },
           {
-            name: "product",
+            name: "products",
             number: 6,
             label: 3,
             type: 11,
@@ -2145,7 +2189,7 @@ export const protoMetadata: ProtoMetadata = {
             extendee: "",
             defaultValue: "",
             oneofIndex: 0,
-            jsonName: "product",
+            jsonName: "products",
             options: undefined,
             proto3Optional: false,
           },
@@ -2189,8 +2233,21 @@ export const protoMetadata: ProtoMetadata = {
             proto3Optional: false,
           },
           {
-            name: "quantity",
+            name: "variant_id",
             number: 2,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "variantId",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "quantity",
+            number: 3,
             label: 1,
             type: 13,
             typeName: "",
@@ -2198,6 +2255,58 @@ export const protoMetadata: ProtoMetadata = {
             defaultValue: "",
             oneofIndex: 0,
             jsonName: "quantity",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "price_ratio",
+            number: 4,
+            label: 1,
+            type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "priceRatio",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "VAT",
+        field: [
+          {
+            name: "tax_id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "taxId",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "vat",
+            number: 2,
+            label: 1,
+            type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "vat",
             options: undefined,
             proto3Optional: false,
           },
@@ -2215,7 +2324,7 @@ export const protoMetadata: ProtoMetadata = {
         name: "Item",
         field: [
           {
-            name: "product_variant_bundle_id",
+            name: "product_id",
             number: 1,
             label: 1,
             type: 9,
@@ -2223,13 +2332,26 @@ export const protoMetadata: ProtoMetadata = {
             extendee: "",
             defaultValue: "",
             oneofIndex: 0,
-            jsonName: "productVariantBundleId",
+            jsonName: "productId",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "variant_id",
+            number: 2,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "variantId",
             options: undefined,
             proto3Optional: false,
           },
           {
             name: "product_name",
-            number: 2,
+            number: 3,
             label: 1,
             type: 9,
             typeName: "",
@@ -2242,7 +2364,7 @@ export const protoMetadata: ProtoMetadata = {
           },
           {
             name: "product_description",
-            number: 3,
+            number: 4,
             label: 1,
             type: 9,
             typeName: "",
@@ -2255,7 +2377,7 @@ export const protoMetadata: ProtoMetadata = {
           },
           {
             name: "manufacturer_name",
-            number: 4,
+            number: 5,
             label: 1,
             type: 9,
             typeName: "",
@@ -2268,7 +2390,7 @@ export const protoMetadata: ProtoMetadata = {
           },
           {
             name: "manufacturer_description",
-            number: 5,
+            number: 6,
             label: 1,
             type: 9,
             typeName: "",
@@ -2281,7 +2403,7 @@ export const protoMetadata: ProtoMetadata = {
           },
           {
             name: "prototype_name",
-            number: 6,
+            number: 7,
             label: 1,
             type: 9,
             typeName: "",
@@ -2294,7 +2416,7 @@ export const protoMetadata: ProtoMetadata = {
           },
           {
             name: "prototype_description",
-            number: 7,
+            number: 8,
             label: 1,
             type: 9,
             typeName: "",
@@ -2307,19 +2429,6 @@ export const protoMetadata: ProtoMetadata = {
           },
           {
             name: "quantity",
-            number: 8,
-            label: 1,
-            type: 5,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "quantity",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "vat",
             number: 9,
             label: 1,
             type: 5,
@@ -2327,7 +2436,7 @@ export const protoMetadata: ProtoMetadata = {
             extendee: "",
             defaultValue: "",
             oneofIndex: 0,
-            jsonName: "vat",
+            jsonName: "quantity",
             options: undefined,
             proto3Optional: false,
           },
@@ -2345,8 +2454,21 @@ export const protoMetadata: ProtoMetadata = {
             proto3Optional: false,
           },
           {
-            name: "quantity_price",
+            name: "vats",
             number: 11,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.product.VAT",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "vats",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "quantity_price",
+            number: 12,
             label: 1,
             type: 1,
             typeName: "",
@@ -2359,7 +2481,7 @@ export const protoMetadata: ProtoMetadata = {
           },
           {
             name: "item_type",
-            number: 12,
+            number: 13,
             label: 1,
             type: 9,
             typeName: "",
@@ -2372,7 +2494,7 @@ export const protoMetadata: ProtoMetadata = {
           },
           {
             name: "taric_code",
-            number: 13,
+            number: 14,
             label: 1,
             type: 1,
             typeName: "",
@@ -2385,7 +2507,7 @@ export const protoMetadata: ProtoMetadata = {
           },
           {
             name: "stock_keeping_unit",
-            number: 14,
+            number: 15,
             label: 1,
             type: 9,
             typeName: "",
@@ -2393,58 +2515,6 @@ export const protoMetadata: ProtoMetadata = {
             defaultValue: "",
             oneofIndex: 0,
             jsonName: "stockKeepingUnit",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "weight_in_kg",
-            number: 15,
-            label: 1,
-            type: 1,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "weightInKg",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "length_in_cm",
-            number: 16,
-            label: 1,
-            type: 5,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "lengthInCm",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "width_in_cm",
-            number: 17,
-            label: 1,
-            type: 5,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "widthInCm",
-            options: undefined,
-            proto3Optional: false,
-          },
-          {
-            name: "height_in_cm",
-            number: 18,
-            label: 1,
-            type: 5,
-            typeName: "",
-            extendee: "",
-            defaultValue: "",
-            oneofIndex: 0,
-            jsonName: "heightInCm",
             options: undefined,
             proto3Optional: false,
           },
@@ -2557,15 +2627,15 @@ export const protoMetadata: ProtoMetadata = {
           leadingDetachedComments: [],
         },
         {
-          path: [4, 9],
-          span: [113, 0, 133, 1],
+          path: [4, 10],
+          span: [120, 0, 137, 1],
           leadingComments: "*\nUsed by Fulfillment-Srv and Order-Srv\n",
           trailingComments: "",
           leadingDetachedComments: [],
         },
         {
-          path: [4, 9, 2, 0],
-          span: [115, 2, 39],
+          path: [4, 10, 2, 0],
+          span: [122, 2, 24],
           leadingComments:
             " below identifier is id of product, variant or bundle\n",
           trailingComments: "",
@@ -2585,6 +2655,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.product.Variant": Variant,
     ".io.restorecommerce.product.Bundle": Bundle,
     ".io.restorecommerce.product.BundleProduct": BundleProduct,
+    ".io.restorecommerce.product.VAT": VAT,
     ".io.restorecommerce.product.Item": Item,
     ".io.restorecommerce.product.Deleted": Deleted,
   },

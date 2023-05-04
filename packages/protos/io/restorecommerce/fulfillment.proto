@@ -46,17 +46,17 @@ service Service {
   /**
   Updates fulfillment orders unless Status is beyond Ordered
   */
-  rpc Update (FulfillmentRequestList) returns (FulfillmentResponseList);
+  rpc Update (FulfillmentList) returns (FulfillmentResponseList);
 
   /**
   Creates or Updates fulfillment orders unless Status is beyond Ordered
   */
-  rpc Upsert (FulfillmentRequestList) returns (FulfillmentResponseList);
+  rpc Upsert (FulfillmentList) returns (FulfillmentResponseList);
 
   /**
   Creates, Executes and Updates fulfillment orders against API
   */
-  rpc Submit (FulfillmentRequestList) returns (FulfillmentResponseList);
+  rpc Submit (FulfillmentList) returns (FulfillmentResponseList);
 
   /**
   Track a batch of fulfillment orders

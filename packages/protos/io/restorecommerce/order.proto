@@ -8,6 +8,7 @@ import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
 import "io/restorecommerce/options.proto";
 import "io/restorecommerce/address.proto";
+import "io/restorecommerce/product.proto";
 import "io/restorecommerce/fulfillment.proto";
 
 
@@ -37,28 +38,6 @@ enum State {
   Done = 7;
 }
 
-message Item {
-  // below identifier is id of product, variant or bundle
-  string product_variant_bundle_id = 1;
-  string product_name = 2;
-  string product_description = 3;
-  string manufacturer_name = 4;
-  string manufacturer_description = 5;
-  string prototype_name = 6;
-  string prototype_description = 7;
-  int32 quantity = 8;
-  int32 vat = 9;
-  double price = 10;
-  double quantity_price = 11;
-  string item_type = 12;
-  double taric_code = 13;
-  string stock_keeping_unit = 14;
-  double weight_in_kg = 15;
-  int32 length_in_cm = 16;
-  int32 width_in_cm = 17;
-  int32 height_in_cm = 18;
-}
-
 /**
   Database Entity
 */
@@ -77,7 +56,7 @@ message Order {
   string description = 4;
   State state = 5;
   string customer_reference = 6;
-  repeated Item items = 7;
+  repeated io.restorecommerce.product.Item items = 7;
   double total_price = 8;
   io.restorecommerce.address.Address shipping_address = 11;
   io.restorecommerce.address.Address billing_address = 13;

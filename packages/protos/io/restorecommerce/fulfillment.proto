@@ -8,6 +8,8 @@ import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/address.proto";
+import "io/restorecommerce/country.proto";
+import "io/restorecommerce/product.proto";
 import "io/restorecommerce/options.proto";
 
 /**
@@ -19,56 +21,39 @@ service Service {
   /**
    Returns a list of shipment IDs.
    */
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (FulfillmentResponseList) {
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (FulfillmentListResponse) {
     option (io.restorecommerce.options.is_query) = true;
   };
 
   /**
   Creates fulfillment orders
   */
-  rpc Create (FulfillmentList) returns (FulfillmentResponseList);
+  rpc Create (FulfillmentList) returns (FulfillmentListResponse);
 
   /**
-  Updates fulfillment orders unless Status is beyond Ordered
+  Updates fulfillment orders unless Status is beyond Submit
   */
-  rpc Update (FulfillmentList) returns (FulfillmentResponseList);
+  rpc Update (FulfillmentList) returns (FulfillmentListResponse);
 
   /**
-  Creates or Updates fulfillment orders unless Status is beyond Ordered
+  Creates or Updates fulfillment orders unless Status is beyond Submit
   */
-  rpc Upsert (FulfillmentList) returns (FulfillmentResponseList);
+  rpc Upsert (FulfillmentList) returns (FulfillmentListResponse);
 
   /**
-  Creates, Executes and Updates fulfillment orders against API
+  Creates, Submits and Updates fulfillment orders against API
   */
-  rpc Submit (FulfillmentList) returns (FulfillmentResponseList);
+  rpc Submit (FulfillmentList) returns (FulfillmentListResponse);
 
   /**
-  Updates fulfillment orders unless Status is beyond Ordered
+  Track a batch of fulfillments
   */
-  rpc Update (FulfillmentList) returns (FulfillmentResponseList);
+  rpc Track (FulfillmentIdList) returns (FulfillmentListResponse);
 
   /**
-  Creates or Updates fulfillment orders unless Status is beyond Ordered
+  Cancel a batch of fulfillments
   */
-  rpc Upsert (FulfillmentList) returns (FulfillmentResponseList);
-
-  /**
-  Creates, Executes and Updates fulfillment orders against API
-  */
-  rpc Submit (FulfillmentList) returns (FulfillmentResponseList);
-
-  /**
-  Track a batch of fulfillment orders
-  */
-  rpc Track (TrackingRequestList) returns (TrackingResultList) {
-    option (io.restorecommerce.options.is_query) = true;
-  };
-
-  /**
-  Cancel a batch of fulfillment orders
-  */
-  rpc Cancel (CancelRequestList) returns (FulfillmentResponseList);
+  rpc Cancel (FulfillmentIdList) returns (FulfillmentListResponse);
 
   /**
   Delete a batch of fulfillments from the database
@@ -80,29 +65,22 @@ enum State {
   Undefined = 0;
   Invalid = 1;
   Failed = 2;
-  Cancelled = 3;
-  Created = 4;
-  Submitted = 5;
-  Shipping = 6;
-  Done = 7;
+  Created = 3;
+  Submitted = 4;
+  Shipping = 5;
+  Fulfilled = 6;
+  Cancelled = 7;
 }
 
-message ShippingAddress {
+message FulfillmentAddress {
   io.restorecommerce.address.Address address = 1;
-  io.restorecommerce.address.ContactPerson contact_person = 2;
-}
-
-message Item {
-  //Catalog item!
-  string item_id = 1;
-  string name = 2;
-  string description = 3;
-  string taric_code = 4;
-  int32 quantity = 5;
+  io.restorecommerce.country.Country country = 2;
+  io.restorecommerce.address.ContactPerson contact_person = 3;
 }
 
 message Parcel {
-  string product_id = 1 [
+  string id = 1;
+  string product_id = 2 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.fulfillment_product.FulfillmentProduct",
       target_service: "resource",
@@ -111,12 +89,12 @@ message Parcel {
       field_name: "product",
     }
   ];
-  string product_variant_id = 2;
-  repeated Item items = 3;
-  float weight_in_kg = 4;
-  float height_in_cm = 5;
-  float width_in_cm = 6;
-  float length_in_cm = 7;
+  string product_variant_id = 3;
+  repeated io.restorecommerce.product.Item items = 4;
+  float weight_in_kg = 5;
+  float height_in_cm = 6;
+  float width_in_cm = 7;
+  float length_in_cm = 8;
 }
 
 message Label {
@@ -125,64 +103,18 @@ message Label {
     string pdf = 2;
     string png = 3;
   }
-  string shipment_number = 4; //filled on Order
-  State state = 5; //update by Track
-  io.restorecommerce.status.Status status = 6; //API status
+  string parcel_id = 4;
+  string shipment_number = 5; //filled on Order
+  State state = 6; //update by Track
+  io.restorecommerce.status.Status status = 7; //API status
 }
 
 message Order {
   string reference_id = 1;
   repeated Parcel parcels = 2;
-  ShippingAddress sender = 3;
-  ShippingAddress receiver = 4;
+  FulfillmentAddress sender = 3;
+  FulfillmentAddress receiver = 4;
   string notify = 5;
-}
-
-/**
-This is the message how it get stored to the database
-*/
-message Fulfillment {
-  option (restorecommerce.options.kafka_subscriber) = {
-    plural: "fulfillment"
-    topic: "io.restorecommerce.fulfillment.resource"
-    created: "fulfillmentCreated"
-    updated: "fulfillmentUpdated"
-    deleted: "fulfillmentDeleted"
-  };
-
-  string id = 1;
-  Order order = 2;
-  io.restorecommerce.meta.Meta meta = 3;
-  repeated Label labels = 4; //filled by service
-  State state = 5;
-}
-
-message FulfillmentList {
-  repeated Fulfillment items = 1;
-  uint32 total_count = 2;
-  io.restorecommerce.auth.Subject subject = 3;
-}
-
-message FulfillmentResponse {
-  Fulfillment payload = 1;
-  io.restorecommerce.status.Status status = 2;
-}
-
-message FulfillmentResponseList {
-  repeated FulfillmentResponse items = 1;
-  uint32 total_count = 2;
-  io.restorecommerce.status.OperationStatus operation_status = 3;
-}
-
-message TrackingRequest {
-  string fulfillment_id = 1;
-  repeated string shipment_numbers = 2; //optional
-  google.protobuf.Any options = 3;
-}
-
-message TrackingRequestList {
-  repeated TrackingRequest items = 1;
-  io.restorecommerce.auth.Subject subject = 2;
 }
 
 message Event {
@@ -199,28 +131,54 @@ message Tracking {
   io.restorecommerce.status.Status status = 5;
 }
 
-message TrackingResult {
-  Fulfillment fulfillment = 1 [
-    (io.restorecommerce.options.resolver) = {
-      target_type: ".io.restorecommerce.fulfillment.Fulfillment",
-      target_service: "resource",
-      target_sub_service: "fulfillment",
-      target_method: "Read",
-      field_name: "fulfillment",
-    }
-  ];
-  repeated Tracking tracks = 2;
-  io.restorecommerce.status.Status status = 3;
+/**
+This is the message of how it get stored to the database
+*/
+message Fulfillment {
+  option (restorecommerce.options.kafka_subscriber) = {
+    plural: "fulfillments"
+    topic: "io.restorecommerce.fulfillment.resource"
+    created: "fulfillmentCreated"
+    updated: "fulfillmentUpdated"
+    deleted: "fulfillmentDeleted"
+  };
+
+  string id = 1;
+  Order order = 2; //filled by user
+  io.restorecommerce.meta.Meta meta = 3;
+  repeated Label labels = 4; //filled by service
+  repeated Tracking tracking = 5; //filled by service
+  State state = 6; //filled by service
 }
 
-message TrackingResultList {
-  repeated TrackingResult items = 1;
-  io.restorecommerce.status.OperationStatus operation_status = 2;
+message FulfillmentList {
+  repeated Fulfillment items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.auth.Subject subject = 3;
 }
 
-message CancelRequestList {
-  repeated string ids = 1;
-  io.restorecommerce.auth.Subject subject = 2;
+message FulfillmentResponse {
+  Fulfillment payload = 1;
+  io.restorecommerce.status.Status status = 2;
+}
+
+message FulfillmentListResponse {
+  repeated FulfillmentResponse items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.status.OperationStatus operation_status = 3;
+}
+
+message FulfillmentId {
+  string id = 1;
+  repeated string shipment_numbers = 2; //optional
+  google.protobuf.Any options = 3;
+  io.restorecommerce.auth.Subject subject = 4;
+}
+
+message FulfillmentIdList {
+  repeated FulfillmentId items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.auth.Subject subject = 3;
 }
 
 message Deleted {

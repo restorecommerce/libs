@@ -1,15 +1,24 @@
 /* eslint-disable */
-import type { CallContext, CallOptions } from "nice-grpc-common";
-import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import { Attribute, protoMetadata as protoMetadata6 } from "./attribute";
-import { protoMetadata as protoMetadata4, Subject } from "./auth";
-import { Image, protoMetadata as protoMetadata3 } from "./image";
-import { protoMetadata as protoMetadata8 } from "./manufacturer";
 import { Meta, protoMetadata as protoMetadata2 } from "./meta";
+import { Subject, protoMetadata as protoMetadata4 } from "./auth";
+import {
+  OperationStatus,
+  Status,
+  protoMetadata as protoMetadata5,
+} from "./status";
+import { CallContext, CallOptions } from "nice-grpc-common";
+import {
+  protoMetadata as protoMetadata1,
+  ReadRequest,
+  DeleteRequest,
+  DeleteResponse,
+} from "./resource_base";
+import { protoMetadata as protoMetadata3, Image } from "./image";
+import { protoMetadata as protoMetadata6, Attribute } from "./attribute";
 import { protoMetadata as protoMetadata7, Resolver } from "./options";
-import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata1, ReadRequest } from "./resource_base";
-import { OperationStatus, protoMetadata as protoMetadata5, Status } from "./status";
+import { protoMetadata as protoMetadata8 } from "./manufacturer";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.product";
 
@@ -84,16 +93,48 @@ export interface BundleProduct {
   quantity: number;
 }
 
+/** Used by Fulfillment-Srv and Order-Srv */
+export interface Item {
+  /** below identifier is id of product, variant or bundle */
+  product_variant_bundle_id: string;
+  product_name: string;
+  product_description: string;
+  manufacturer_name: string;
+  manufacturer_description: string;
+  prototype_name: string;
+  prototype_description: string;
+  quantity: number;
+  vat: number;
+  price: number;
+  quantity_price: number;
+  item_type: string;
+  taric_code: number;
+  stock_keeping_unit: string;
+  weight_in_kg: number;
+  length_in_cm: number;
+  width_in_cm: number;
+  height_in_cm: number;
+}
+
 export interface Deleted {
   id: string;
 }
 
 function createBaseMainProduct(): MainProduct {
-  return { id: "", product: undefined, bundle: undefined, active: false, meta: undefined };
+  return {
+    id: "",
+    product: undefined,
+    bundle: undefined,
+    active: false,
+    meta: undefined,
+  };
 }
 
 export const MainProduct = {
-  encode(message: MainProduct, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: MainProduct,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -145,7 +186,9 @@ export const MainProduct = {
   fromJSON(object: any): MainProduct {
     return {
       id: isSet(object.id) ? String(object.id) : "",
-      product: isSet(object.product) ? Product.fromJSON(object.product) : undefined,
+      product: isSet(object.product)
+        ? Product.fromJSON(object.product)
+        : undefined,
       bundle: isSet(object.bundle) ? Bundle.fromJSON(object.bundle) : undefined,
       active: isSet(object.active) ? Boolean(object.active) : false,
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
@@ -155,28 +198,34 @@ export const MainProduct = {
   toJSON(message: MainProduct): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.product !== undefined && (obj.product = message.product ? Product.toJSON(message.product) : undefined);
-    message.bundle !== undefined && (obj.bundle = message.bundle ? Bundle.toJSON(message.bundle) : undefined);
+    message.product !== undefined &&
+      (obj.product = message.product
+        ? Product.toJSON(message.product)
+        : undefined);
+    message.bundle !== undefined &&
+      (obj.bundle = message.bundle ? Bundle.toJSON(message.bundle) : undefined);
     message.active !== undefined && (obj.active = message.active);
-    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.meta !== undefined &&
+      (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     return obj;
-  },
-
-  create(base?: DeepPartial<MainProduct>): MainProduct {
-    return MainProduct.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<MainProduct>): MainProduct {
     const message = createBaseMainProduct();
     message.id = object.id ?? "";
-    message.product = (object.product !== undefined && object.product !== null)
-      ? Product.fromPartial(object.product)
-      : undefined;
-    message.bundle = (object.bundle !== undefined && object.bundle !== null)
-      ? Bundle.fromPartial(object.bundle)
-      : undefined;
+    message.product =
+      object.product !== undefined && object.product !== null
+        ? Product.fromPartial(object.product)
+        : undefined;
+    message.bundle =
+      object.bundle !== undefined && object.bundle !== null
+        ? Bundle.fromPartial(object.bundle)
+        : undefined;
     message.active = object.active ?? false;
-    message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
+    message.meta =
+      object.meta !== undefined && object.meta !== null
+        ? Meta.fromPartial(object.meta)
+        : undefined;
     return message;
   },
 };
@@ -197,7 +246,10 @@ function createBaseProduct(): Product {
 }
 
 export const Product = {
-  encode(message: Product, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Product,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -281,12 +333,22 @@ export const Product = {
       id: isSet(object.id) ? String(object.id) : "",
       name: isSet(object.name) ? String(object.name) : "",
       description: isSet(object.description) ? String(object.description) : "",
-      manufacturer_id: isSet(object.manufacturer_id) ? String(object.manufacturer_id) : "",
+      manufacturer_id: isSet(object.manufacturer_id)
+        ? String(object.manufacturer_id)
+        : "",
       taric_code: isSet(object.taric_code) ? String(object.taric_code) : "",
-      prototype: isSet(object.prototype) ? Identifier.fromJSON(object.prototype) : undefined,
-      category: isSet(object.category) ? Identifier.fromJSON(object.category) : undefined,
-      tax_id: Array.isArray(object?.tax_id) ? object.tax_id.map((e: any) => String(e)) : [],
-      variants: Array.isArray(object?.variants) ? object.variants.map((e: any) => Variant.fromJSON(e)) : [],
+      prototype: isSet(object.prototype)
+        ? Identifier.fromJSON(object.prototype)
+        : undefined,
+      category: isSet(object.category)
+        ? Identifier.fromJSON(object.category)
+        : undefined,
+      tax_id: Array.isArray(object?.tax_id)
+        ? object.tax_id.map((e: any) => String(e))
+        : [],
+      variants: Array.isArray(object?.variants)
+        ? object.variants.map((e: any) => Variant.fromJSON(e))
+        : [],
       gtin: isSet(object.gtin) ? String(object.gtin) : "",
     };
   },
@@ -295,29 +357,33 @@ export const Product = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.name !== undefined && (obj.name = message.name);
-    message.description !== undefined && (obj.description = message.description);
-    message.manufacturer_id !== undefined && (obj.manufacturer_id = message.manufacturer_id);
+    message.description !== undefined &&
+      (obj.description = message.description);
+    message.manufacturer_id !== undefined &&
+      (obj.manufacturer_id = message.manufacturer_id);
     message.taric_code !== undefined && (obj.taric_code = message.taric_code);
     message.prototype !== undefined &&
-      (obj.prototype = message.prototype ? Identifier.toJSON(message.prototype) : undefined);
+      (obj.prototype = message.prototype
+        ? Identifier.toJSON(message.prototype)
+        : undefined);
     message.category !== undefined &&
-      (obj.category = message.category ? Identifier.toJSON(message.category) : undefined);
+      (obj.category = message.category
+        ? Identifier.toJSON(message.category)
+        : undefined);
     if (message.tax_id) {
       obj.tax_id = message.tax_id.map((e) => e);
     } else {
       obj.tax_id = [];
     }
     if (message.variants) {
-      obj.variants = message.variants.map((e) => e ? Variant.toJSON(e) : undefined);
+      obj.variants = message.variants.map((e) =>
+        e ? Variant.toJSON(e) : undefined
+      );
     } else {
       obj.variants = [];
     }
     message.gtin !== undefined && (obj.gtin = message.gtin);
     return obj;
-  },
-
-  create(base?: DeepPartial<Product>): Product {
-    return Product.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Product>): Product {
@@ -327,14 +393,17 @@ export const Product = {
     message.description = object.description ?? "";
     message.manufacturer_id = object.manufacturer_id ?? "";
     message.taric_code = object.taric_code ?? "";
-    message.prototype = (object.prototype !== undefined && object.prototype !== null)
-      ? Identifier.fromPartial(object.prototype)
-      : undefined;
-    message.category = (object.category !== undefined && object.category !== null)
-      ? Identifier.fromPartial(object.category)
-      : undefined;
+    message.prototype =
+      object.prototype !== undefined && object.prototype !== null
+        ? Identifier.fromPartial(object.prototype)
+        : undefined;
+    message.category =
+      object.category !== undefined && object.category !== null
+        ? Identifier.fromPartial(object.category)
+        : undefined;
     message.tax_id = object.tax_id?.map((e) => e) || [];
-    message.variants = object.variants?.map((e) => Variant.fromPartial(e)) || [];
+    message.variants =
+      object.variants?.map((e) => Variant.fromPartial(e)) || [];
     message.gtin = object.gtin ?? "";
     return message;
   },
@@ -345,7 +414,10 @@ function createBaseIdentifier(): Identifier {
 }
 
 export const Identifier = {
-  encode(message: Identifier, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Identifier,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -371,17 +443,15 @@ export const Identifier = {
   },
 
   fromJSON(object: any): Identifier {
-    return { id: isSet(object.id) ? String(object.id) : "" };
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+    };
   },
 
   toJSON(message: Identifier): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     return obj;
-  },
-
-  create(base?: DeepPartial<Identifier>): Identifier {
-    return Identifier.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Identifier>): Identifier {
@@ -396,7 +466,10 @@ function createBaseProductList(): ProductList {
 }
 
 export const ProductList = {
-  encode(message: ProductList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: ProductList,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.items) {
       MainProduct.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -435,35 +508,42 @@ export const ProductList = {
 
   fromJSON(object: any): ProductList {
     return {
-      items: Array.isArray(object?.items) ? object.items.map((e: any) => MainProduct.fromJSON(e)) : [],
+      items: Array.isArray(object?.items)
+        ? object.items.map((e: any) => MainProduct.fromJSON(e))
+        : [],
       total_count: isSet(object.total_count) ? Number(object.total_count) : 0,
-      subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
+      subject: isSet(object.subject)
+        ? Subject.fromJSON(object.subject)
+        : undefined,
     };
   },
 
   toJSON(message: ProductList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) => e ? MainProduct.toJSON(e) : undefined);
+      obj.items = message.items.map((e) =>
+        e ? MainProduct.toJSON(e) : undefined
+      );
     } else {
       obj.items = [];
     }
-    message.total_count !== undefined && (obj.total_count = Math.round(message.total_count));
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.total_count !== undefined &&
+      (obj.total_count = Math.round(message.total_count));
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
-  },
-
-  create(base?: DeepPartial<ProductList>): ProductList {
-    return ProductList.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<ProductList>): ProductList {
     const message = createBaseProductList();
     message.items = object.items?.map((e) => MainProduct.fromPartial(e)) || [];
     message.total_count = object.total_count ?? 0;
-    message.subject = (object.subject !== undefined && object.subject !== null)
-      ? Subject.fromPartial(object.subject)
-      : undefined;
+    message.subject =
+      object.subject !== undefined && object.subject !== null
+        ? Subject.fromPartial(object.subject)
+        : undefined;
     return message;
   },
 };
@@ -473,7 +553,10 @@ function createBaseProductListResponse(): ProductListResponse {
 }
 
 export const ProductListResponse = {
-  encode(message: ProductListResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: ProductListResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.items) {
       ProductResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -481,7 +564,10 @@ export const ProductListResponse = {
       writer.uint32(16).uint32(message.total_count);
     }
     if (message.operation_status !== undefined) {
-      OperationStatus.encode(message.operation_status, writer.uint32(26).fork()).ldelim();
+      OperationStatus.encode(
+        message.operation_status,
+        writer.uint32(26).fork()
+      ).ldelim();
     }
     return writer;
   },
@@ -500,7 +586,10 @@ export const ProductListResponse = {
           message.total_count = reader.uint32();
           break;
         case 3:
-          message.operation_status = OperationStatus.decode(reader, reader.uint32());
+          message.operation_status = OperationStatus.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -512,36 +601,43 @@ export const ProductListResponse = {
 
   fromJSON(object: any): ProductListResponse {
     return {
-      items: Array.isArray(object?.items) ? object.items.map((e: any) => ProductResponse.fromJSON(e)) : [],
+      items: Array.isArray(object?.items)
+        ? object.items.map((e: any) => ProductResponse.fromJSON(e))
+        : [],
       total_count: isSet(object.total_count) ? Number(object.total_count) : 0,
-      operation_status: isSet(object.operation_status) ? OperationStatus.fromJSON(object.operation_status) : undefined,
+      operation_status: isSet(object.operation_status)
+        ? OperationStatus.fromJSON(object.operation_status)
+        : undefined,
     };
   },
 
   toJSON(message: ProductListResponse): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) => e ? ProductResponse.toJSON(e) : undefined);
+      obj.items = message.items.map((e) =>
+        e ? ProductResponse.toJSON(e) : undefined
+      );
     } else {
       obj.items = [];
     }
-    message.total_count !== undefined && (obj.total_count = Math.round(message.total_count));
+    message.total_count !== undefined &&
+      (obj.total_count = Math.round(message.total_count));
     message.operation_status !== undefined &&
-      (obj.operation_status = message.operation_status ? OperationStatus.toJSON(message.operation_status) : undefined);
+      (obj.operation_status = message.operation_status
+        ? OperationStatus.toJSON(message.operation_status)
+        : undefined);
     return obj;
-  },
-
-  create(base?: DeepPartial<ProductListResponse>): ProductListResponse {
-    return ProductListResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<ProductListResponse>): ProductListResponse {
     const message = createBaseProductListResponse();
-    message.items = object.items?.map((e) => ProductResponse.fromPartial(e)) || [];
+    message.items =
+      object.items?.map((e) => ProductResponse.fromPartial(e)) || [];
     message.total_count = object.total_count ?? 0;
-    message.operation_status = (object.operation_status !== undefined && object.operation_status !== null)
-      ? OperationStatus.fromPartial(object.operation_status)
-      : undefined;
+    message.operation_status =
+      object.operation_status !== undefined && object.operation_status !== null
+        ? OperationStatus.fromPartial(object.operation_status)
+        : undefined;
     return message;
   },
 };
@@ -551,7 +647,10 @@ function createBaseProductResponse(): ProductResponse {
 }
 
 export const ProductResponse = {
-  encode(message: ProductResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: ProductResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.payload !== undefined) {
       MainProduct.encode(message.payload, writer.uint32(10).fork()).ldelim();
     }
@@ -584,30 +683,34 @@ export const ProductResponse = {
 
   fromJSON(object: any): ProductResponse {
     return {
-      payload: isSet(object.payload) ? MainProduct.fromJSON(object.payload) : undefined,
+      payload: isSet(object.payload)
+        ? MainProduct.fromJSON(object.payload)
+        : undefined,
       status: isSet(object.status) ? Status.fromJSON(object.status) : undefined,
     };
   },
 
   toJSON(message: ProductResponse): unknown {
     const obj: any = {};
-    message.payload !== undefined && (obj.payload = message.payload ? MainProduct.toJSON(message.payload) : undefined);
-    message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    message.payload !== undefined &&
+      (obj.payload = message.payload
+        ? MainProduct.toJSON(message.payload)
+        : undefined);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
-  },
-
-  create(base?: DeepPartial<ProductResponse>): ProductResponse {
-    return ProductResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<ProductResponse>): ProductResponse {
     const message = createBaseProductResponse();
-    message.payload = (object.payload !== undefined && object.payload !== null)
-      ? MainProduct.fromPartial(object.payload)
-      : undefined;
-    message.status = (object.status !== undefined && object.status !== null)
-      ? Status.fromPartial(object.status)
-      : undefined;
+    message.payload =
+      object.payload !== undefined && object.payload !== null
+        ? MainProduct.fromPartial(object.payload)
+        : undefined;
+    message.status =
+      object.status !== undefined && object.status !== null
+        ? Status.fromPartial(object.status)
+        : undefined;
     return message;
   },
 };
@@ -629,7 +732,10 @@ function createBaseVariant(): Variant {
 }
 
 export const Variant = {
-  encode(message: Variant, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Variant,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -723,10 +829,18 @@ export const Variant = {
       price: isSet(object.price) ? Number(object.price) : 0,
       sale: isSet(object.sale) ? Boolean(object.sale) : false,
       sale_price: isSet(object.sale_price) ? Number(object.sale_price) : 0,
-      image: Array.isArray(object?.image) ? object.image.map((e: any) => Image.fromJSON(e)) : [],
-      stock_keeping_unit: isSet(object.stock_keeping_unit) ? String(object.stock_keeping_unit) : "",
-      template_variant: isSet(object.template_variant) ? String(object.template_variant) : "",
-      attributes: Array.isArray(object?.attributes) ? object.attributes.map((e: any) => Attribute.fromJSON(e)) : [],
+      image: Array.isArray(object?.image)
+        ? object.image.map((e: any) => Image.fromJSON(e))
+        : [],
+      stock_keeping_unit: isSet(object.stock_keeping_unit)
+        ? String(object.stock_keeping_unit)
+        : "",
+      template_variant: isSet(object.template_variant)
+        ? String(object.template_variant)
+        : "",
+      attributes: Array.isArray(object?.attributes)
+        ? object.attributes.map((e: any) => Attribute.fromJSON(e))
+        : [],
     };
   },
 
@@ -734,28 +848,30 @@ export const Variant = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.name !== undefined && (obj.name = message.name);
-    message.description !== undefined && (obj.description = message.description);
-    message.stock_level !== undefined && (obj.stock_level = Math.round(message.stock_level));
+    message.description !== undefined &&
+      (obj.description = message.description);
+    message.stock_level !== undefined &&
+      (obj.stock_level = Math.round(message.stock_level));
     message.price !== undefined && (obj.price = message.price);
     message.sale !== undefined && (obj.sale = message.sale);
     message.sale_price !== undefined && (obj.sale_price = message.sale_price);
     if (message.image) {
-      obj.image = message.image.map((e) => e ? Image.toJSON(e) : undefined);
+      obj.image = message.image.map((e) => (e ? Image.toJSON(e) : undefined));
     } else {
       obj.image = [];
     }
-    message.stock_keeping_unit !== undefined && (obj.stock_keeping_unit = message.stock_keeping_unit);
-    message.template_variant !== undefined && (obj.template_variant = message.template_variant);
+    message.stock_keeping_unit !== undefined &&
+      (obj.stock_keeping_unit = message.stock_keeping_unit);
+    message.template_variant !== undefined &&
+      (obj.template_variant = message.template_variant);
     if (message.attributes) {
-      obj.attributes = message.attributes.map((e) => e ? Attribute.toJSON(e) : undefined);
+      obj.attributes = message.attributes.map((e) =>
+        e ? Attribute.toJSON(e) : undefined
+      );
     } else {
       obj.attributes = [];
     }
     return obj;
-  },
-
-  create(base?: DeepPartial<Variant>): Variant {
-    return Variant.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Variant>): Variant {
@@ -770,17 +886,28 @@ export const Variant = {
     message.image = object.image?.map((e) => Image.fromPartial(e)) || [];
     message.stock_keeping_unit = object.stock_keeping_unit ?? "";
     message.template_variant = object.template_variant ?? "";
-    message.attributes = object.attributes?.map((e) => Attribute.fromPartial(e)) || [];
+    message.attributes =
+      object.attributes?.map((e) => Attribute.fromPartial(e)) || [];
     return message;
   },
 };
 
 function createBaseBundle(): Bundle {
-  return { id: "", name: "", description: "", image: [], product: [], price: 0 };
+  return {
+    id: "",
+    name: "",
+    description: "",
+    image: [],
+    product: [],
+    price: 0,
+  };
 }
 
 export const Bundle = {
-  encode(message: Bundle, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Bundle,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -840,8 +967,12 @@ export const Bundle = {
       id: isSet(object.id) ? String(object.id) : "",
       name: isSet(object.name) ? String(object.name) : "",
       description: isSet(object.description) ? String(object.description) : "",
-      image: Array.isArray(object?.image) ? object.image.map((e: any) => Image.fromJSON(e)) : [],
-      product: Array.isArray(object?.product) ? object.product.map((e: any) => BundleProduct.fromJSON(e)) : [],
+      image: Array.isArray(object?.image)
+        ? object.image.map((e: any) => Image.fromJSON(e))
+        : [],
+      product: Array.isArray(object?.product)
+        ? object.product.map((e: any) => BundleProduct.fromJSON(e))
+        : [],
       price: isSet(object.price) ? Number(object.price) : 0,
     };
   },
@@ -850,23 +981,22 @@ export const Bundle = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.name !== undefined && (obj.name = message.name);
-    message.description !== undefined && (obj.description = message.description);
+    message.description !== undefined &&
+      (obj.description = message.description);
     if (message.image) {
-      obj.image = message.image.map((e) => e ? Image.toJSON(e) : undefined);
+      obj.image = message.image.map((e) => (e ? Image.toJSON(e) : undefined));
     } else {
       obj.image = [];
     }
     if (message.product) {
-      obj.product = message.product.map((e) => e ? BundleProduct.toJSON(e) : undefined);
+      obj.product = message.product.map((e) =>
+        e ? BundleProduct.toJSON(e) : undefined
+      );
     } else {
       obj.product = [];
     }
     message.price !== undefined && (obj.price = message.price);
     return obj;
-  },
-
-  create(base?: DeepPartial<Bundle>): Bundle {
-    return Bundle.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Bundle>): Bundle {
@@ -875,7 +1005,8 @@ export const Bundle = {
     message.name = object.name ?? "";
     message.description = object.description ?? "";
     message.image = object.image?.map((e) => Image.fromPartial(e)) || [];
-    message.product = object.product?.map((e) => BundleProduct.fromPartial(e)) || [];
+    message.product =
+      object.product?.map((e) => BundleProduct.fromPartial(e)) || [];
     message.price = object.price ?? 0;
     return message;
   },
@@ -886,7 +1017,10 @@ function createBaseBundleProduct(): BundleProduct {
 }
 
 export const BundleProduct = {
-  encode(message: BundleProduct, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: BundleProduct,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.product_id !== "") {
       writer.uint32(10).string(message.product_id);
     }
@@ -927,12 +1061,9 @@ export const BundleProduct = {
   toJSON(message: BundleProduct): unknown {
     const obj: any = {};
     message.product_id !== undefined && (obj.product_id = message.product_id);
-    message.quantity !== undefined && (obj.quantity = Math.round(message.quantity));
+    message.quantity !== undefined &&
+      (obj.quantity = Math.round(message.quantity));
     return obj;
-  },
-
-  create(base?: DeepPartial<BundleProduct>): BundleProduct {
-    return BundleProduct.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<BundleProduct>): BundleProduct {
@@ -943,12 +1074,274 @@ export const BundleProduct = {
   },
 };
 
+function createBaseItem(): Item {
+  return {
+    product_variant_bundle_id: "",
+    product_name: "",
+    product_description: "",
+    manufacturer_name: "",
+    manufacturer_description: "",
+    prototype_name: "",
+    prototype_description: "",
+    quantity: 0,
+    vat: 0,
+    price: 0,
+    quantity_price: 0,
+    item_type: "",
+    taric_code: 0,
+    stock_keeping_unit: "",
+    weight_in_kg: 0,
+    length_in_cm: 0,
+    width_in_cm: 0,
+    height_in_cm: 0,
+  };
+}
+
+export const Item = {
+  encode(message: Item, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.product_variant_bundle_id !== "") {
+      writer.uint32(10).string(message.product_variant_bundle_id);
+    }
+    if (message.product_name !== "") {
+      writer.uint32(18).string(message.product_name);
+    }
+    if (message.product_description !== "") {
+      writer.uint32(26).string(message.product_description);
+    }
+    if (message.manufacturer_name !== "") {
+      writer.uint32(34).string(message.manufacturer_name);
+    }
+    if (message.manufacturer_description !== "") {
+      writer.uint32(42).string(message.manufacturer_description);
+    }
+    if (message.prototype_name !== "") {
+      writer.uint32(50).string(message.prototype_name);
+    }
+    if (message.prototype_description !== "") {
+      writer.uint32(58).string(message.prototype_description);
+    }
+    if (message.quantity !== 0) {
+      writer.uint32(64).int32(message.quantity);
+    }
+    if (message.vat !== 0) {
+      writer.uint32(72).int32(message.vat);
+    }
+    if (message.price !== 0) {
+      writer.uint32(81).double(message.price);
+    }
+    if (message.quantity_price !== 0) {
+      writer.uint32(89).double(message.quantity_price);
+    }
+    if (message.item_type !== "") {
+      writer.uint32(98).string(message.item_type);
+    }
+    if (message.taric_code !== 0) {
+      writer.uint32(105).double(message.taric_code);
+    }
+    if (message.stock_keeping_unit !== "") {
+      writer.uint32(114).string(message.stock_keeping_unit);
+    }
+    if (message.weight_in_kg !== 0) {
+      writer.uint32(121).double(message.weight_in_kg);
+    }
+    if (message.length_in_cm !== 0) {
+      writer.uint32(128).int32(message.length_in_cm);
+    }
+    if (message.width_in_cm !== 0) {
+      writer.uint32(136).int32(message.width_in_cm);
+    }
+    if (message.height_in_cm !== 0) {
+      writer.uint32(144).int32(message.height_in_cm);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): Item {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseItem();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.product_variant_bundle_id = reader.string();
+          break;
+        case 2:
+          message.product_name = reader.string();
+          break;
+        case 3:
+          message.product_description = reader.string();
+          break;
+        case 4:
+          message.manufacturer_name = reader.string();
+          break;
+        case 5:
+          message.manufacturer_description = reader.string();
+          break;
+        case 6:
+          message.prototype_name = reader.string();
+          break;
+        case 7:
+          message.prototype_description = reader.string();
+          break;
+        case 8:
+          message.quantity = reader.int32();
+          break;
+        case 9:
+          message.vat = reader.int32();
+          break;
+        case 10:
+          message.price = reader.double();
+          break;
+        case 11:
+          message.quantity_price = reader.double();
+          break;
+        case 12:
+          message.item_type = reader.string();
+          break;
+        case 13:
+          message.taric_code = reader.double();
+          break;
+        case 14:
+          message.stock_keeping_unit = reader.string();
+          break;
+        case 15:
+          message.weight_in_kg = reader.double();
+          break;
+        case 16:
+          message.length_in_cm = reader.int32();
+          break;
+        case 17:
+          message.width_in_cm = reader.int32();
+          break;
+        case 18:
+          message.height_in_cm = reader.int32();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): Item {
+    return {
+      product_variant_bundle_id: isSet(object.product_variant_bundle_id)
+        ? String(object.product_variant_bundle_id)
+        : "",
+      product_name: isSet(object.product_name)
+        ? String(object.product_name)
+        : "",
+      product_description: isSet(object.product_description)
+        ? String(object.product_description)
+        : "",
+      manufacturer_name: isSet(object.manufacturer_name)
+        ? String(object.manufacturer_name)
+        : "",
+      manufacturer_description: isSet(object.manufacturer_description)
+        ? String(object.manufacturer_description)
+        : "",
+      prototype_name: isSet(object.prototype_name)
+        ? String(object.prototype_name)
+        : "",
+      prototype_description: isSet(object.prototype_description)
+        ? String(object.prototype_description)
+        : "",
+      quantity: isSet(object.quantity) ? Number(object.quantity) : 0,
+      vat: isSet(object.vat) ? Number(object.vat) : 0,
+      price: isSet(object.price) ? Number(object.price) : 0,
+      quantity_price: isSet(object.quantity_price)
+        ? Number(object.quantity_price)
+        : 0,
+      item_type: isSet(object.item_type) ? String(object.item_type) : "",
+      taric_code: isSet(object.taric_code) ? Number(object.taric_code) : 0,
+      stock_keeping_unit: isSet(object.stock_keeping_unit)
+        ? String(object.stock_keeping_unit)
+        : "",
+      weight_in_kg: isSet(object.weight_in_kg)
+        ? Number(object.weight_in_kg)
+        : 0,
+      length_in_cm: isSet(object.length_in_cm)
+        ? Number(object.length_in_cm)
+        : 0,
+      width_in_cm: isSet(object.width_in_cm) ? Number(object.width_in_cm) : 0,
+      height_in_cm: isSet(object.height_in_cm)
+        ? Number(object.height_in_cm)
+        : 0,
+    };
+  },
+
+  toJSON(message: Item): unknown {
+    const obj: any = {};
+    message.product_variant_bundle_id !== undefined &&
+      (obj.product_variant_bundle_id = message.product_variant_bundle_id);
+    message.product_name !== undefined &&
+      (obj.product_name = message.product_name);
+    message.product_description !== undefined &&
+      (obj.product_description = message.product_description);
+    message.manufacturer_name !== undefined &&
+      (obj.manufacturer_name = message.manufacturer_name);
+    message.manufacturer_description !== undefined &&
+      (obj.manufacturer_description = message.manufacturer_description);
+    message.prototype_name !== undefined &&
+      (obj.prototype_name = message.prototype_name);
+    message.prototype_description !== undefined &&
+      (obj.prototype_description = message.prototype_description);
+    message.quantity !== undefined &&
+      (obj.quantity = Math.round(message.quantity));
+    message.vat !== undefined && (obj.vat = Math.round(message.vat));
+    message.price !== undefined && (obj.price = message.price);
+    message.quantity_price !== undefined &&
+      (obj.quantity_price = message.quantity_price);
+    message.item_type !== undefined && (obj.item_type = message.item_type);
+    message.taric_code !== undefined && (obj.taric_code = message.taric_code);
+    message.stock_keeping_unit !== undefined &&
+      (obj.stock_keeping_unit = message.stock_keeping_unit);
+    message.weight_in_kg !== undefined &&
+      (obj.weight_in_kg = message.weight_in_kg);
+    message.length_in_cm !== undefined &&
+      (obj.length_in_cm = Math.round(message.length_in_cm));
+    message.width_in_cm !== undefined &&
+      (obj.width_in_cm = Math.round(message.width_in_cm));
+    message.height_in_cm !== undefined &&
+      (obj.height_in_cm = Math.round(message.height_in_cm));
+    return obj;
+  },
+
+  fromPartial(object: DeepPartial<Item>): Item {
+    const message = createBaseItem();
+    message.product_variant_bundle_id = object.product_variant_bundle_id ?? "";
+    message.product_name = object.product_name ?? "";
+    message.product_description = object.product_description ?? "";
+    message.manufacturer_name = object.manufacturer_name ?? "";
+    message.manufacturer_description = object.manufacturer_description ?? "";
+    message.prototype_name = object.prototype_name ?? "";
+    message.prototype_description = object.prototype_description ?? "";
+    message.quantity = object.quantity ?? 0;
+    message.vat = object.vat ?? 0;
+    message.price = object.price ?? 0;
+    message.quantity_price = object.quantity_price ?? 0;
+    message.item_type = object.item_type ?? "";
+    message.taric_code = object.taric_code ?? 0;
+    message.stock_keeping_unit = object.stock_keeping_unit ?? "";
+    message.weight_in_kg = object.weight_in_kg ?? 0;
+    message.length_in_cm = object.length_in_cm ?? 0;
+    message.width_in_cm = object.width_in_cm ?? 0;
+    message.height_in_cm = object.height_in_cm ?? 0;
+    return message;
+  },
+};
+
 function createBaseDeleted(): Deleted {
   return { id: "" };
 }
 
 export const Deleted = {
-  encode(message: Deleted, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Deleted,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -974,17 +1367,15 @@ export const Deleted = {
   },
 
   fromJSON(object: any): Deleted {
-    return { id: isSet(object.id) ? String(object.id) : "" };
+    return {
+      id: isSet(object.id) ? String(object.id) : "",
+    };
   },
 
   toJSON(message: Deleted): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     return obj;
-  },
-
-  create(base?: DeepPartial<Deleted>): Deleted {
-    return Deleted.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Deleted>): Deleted {
@@ -1042,20 +1433,50 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
-  read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<ProductListResponse>>;
-  create(request: ProductList, context: CallContext & CallContextExt): Promise<DeepPartial<ProductListResponse>>;
-  delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;
-  update(request: ProductList, context: CallContext & CallContextExt): Promise<DeepPartial<ProductListResponse>>;
-  upsert(request: ProductList, context: CallContext & CallContextExt): Promise<DeepPartial<ProductListResponse>>;
+export interface ServiceServiceImplementation<CallContextExt = {}> {
+  read(
+    request: ReadRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<ProductListResponse>>;
+  create(
+    request: ProductList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<ProductListResponse>>;
+  delete(
+    request: DeleteRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<DeleteResponse>>;
+  update(
+    request: ProductList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<ProductListResponse>>;
+  upsert(
+    request: ProductList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<ProductListResponse>>;
 }
 
 export interface ServiceClient<CallOptionsExt = {}> {
-  read(request: DeepPartial<ReadRequest>, options?: CallOptions & CallOptionsExt): Promise<ProductListResponse>;
-  create(request: DeepPartial<ProductList>, options?: CallOptions & CallOptionsExt): Promise<ProductListResponse>;
-  delete(request: DeepPartial<DeleteRequest>, options?: CallOptions & CallOptionsExt): Promise<DeleteResponse>;
-  update(request: DeepPartial<ProductList>, options?: CallOptions & CallOptionsExt): Promise<ProductListResponse>;
-  upsert(request: DeepPartial<ProductList>, options?: CallOptions & CallOptionsExt): Promise<ProductListResponse>;
+  read(
+    request: DeepPartial<ReadRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<ProductListResponse>;
+  create(
+    request: DeepPartial<ProductList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<ProductListResponse>;
+  delete(
+    request: DeepPartial<DeleteRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<DeleteResponse>;
+  update(
+    request: DeepPartial<ProductList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<ProductListResponse>;
+  upsert(
+    request: DeepPartial<ProductList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<ProductListResponse>;
 }
 
 type ProtoMetaMessageOptions = {
@@ -1072,18 +1493,28 @@ export interface ProtoMetadata {
   options?: {
     options?: { [key: string]: any };
     services?: {
-      [key: string]: { options?: { [key: string]: any }; methods?: { [key: string]: { [key: string]: any } } };
+      [key: string]: {
+        options?: { [key: string]: any };
+        methods?: { [key: string]: { [key: string]: any } };
+      };
     };
-    messages?: { [key: string]: ProtoMetaMessageOptions };
-    enums?: { [key: string]: { options?: { [key: string]: any }; values?: { [key: string]: { [key: string]: any } } } };
+    messages?: {
+      [key: string]: ProtoMetaMessageOptions;
+    };
+    enums?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        values?: { [key: string]: { [key: string]: any } };
+      };
+    };
   };
 }
 
 export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto1.fromPartial({
-    "name": "io/restorecommerce/product.proto",
-    "package": "io.restorecommerce.product",
-    "dependency": [
+    name: "io/restorecommerce/product.proto",
+    package: "io.restorecommerce.product",
+    dependency: [
       "io/restorecommerce/resource_base.proto",
       "io/restorecommerce/meta.proto",
       "io/restorecommerce/image.proto",
@@ -1093,714 +1524,1056 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/options.proto",
       "io/restorecommerce/manufacturer.proto",
     ],
-    "publicDependency": [],
-    "weakDependency": [],
-    "messageType": [{
-      "name": "MainProduct",
-      "field": [{
-        "name": "id",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "id",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "product",
-        "number": 2,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.product.Product",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "product",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "bundle",
-        "number": 3,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.product.Bundle",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "bundle",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "active",
-        "number": 4,
-        "label": 1,
-        "type": 8,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "active",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "meta",
-        "number": 5,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.meta.Meta",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "meta",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [{ "name": "product_type", "options": undefined }],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "Product",
-      "field": [{
-        "name": "id",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "id",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "name",
-        "number": 2,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "name",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "description",
-        "number": 3,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "description",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "manufacturer_id",
-        "number": 4,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "manufacturerId",
-        "options": {
-          "ctype": 0,
-          "packed": false,
-          "jstype": 0,
-          "lazy": false,
-          "deprecated": false,
-          "weak": false,
-          "uninterpretedOption": [],
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "MainProduct",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "product",
+            number: 2,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.product.Product",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "product",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "bundle",
+            number: 3,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.product.Bundle",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "bundle",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "active",
+            number: 4,
+            label: 1,
+            type: 8,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "active",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "meta",
+            number: 5,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.meta.Meta",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "meta",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [{ name: "product_type", options: undefined }],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "Product",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "name",
+            number: 2,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "name",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "description",
+            number: 3,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "description",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "manufacturer_id",
+            number: 4,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "manufacturerId",
+            options: {
+              ctype: 0,
+              packed: false,
+              jstype: 0,
+              lazy: false,
+              deprecated: false,
+              weak: false,
+              uninterpretedOption: [],
+            },
+            proto3Optional: false,
+          },
+          {
+            name: "taric_code",
+            number: 5,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "taricCode",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "prototype",
+            number: 6,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.product.Identifier",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "prototype",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "category",
+            number: 7,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.product.Identifier",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "category",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "tax_id",
+            number: 8,
+            label: 3,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "taxId",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "variants",
+            number: 9,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.product.Variant",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "variants",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "gtin",
+            number: 10,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "gtin",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [{ name: "classification", options: undefined }],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "Identifier",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "ProductList",
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.product.MainProduct",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "items",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: 1,
+            type: 13,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "totalCount",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "subject",
+            number: 3,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.auth.Subject",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "subject",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "ProductListResponse",
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.product.ProductResponse",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "items",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: 1,
+            type: 13,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "totalCount",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "operation_status",
+            number: 3,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.OperationStatus",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "operationStatus",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "ProductResponse",
+        field: [
+          {
+            name: "payload",
+            number: 1,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.product.MainProduct",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "payload",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "status",
+            number: 3,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "status",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "Variant",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "name",
+            number: 2,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "name",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "description",
+            number: 3,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "description",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "stock_level",
+            number: 4,
+            label: 1,
+            type: 5,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "stockLevel",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "price",
+            number: 5,
+            label: 1,
+            type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "price",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "sale",
+            number: 6,
+            label: 1,
+            type: 8,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "sale",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "sale_price",
+            number: 7,
+            label: 1,
+            type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "salePrice",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "image",
+            number: 8,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.image.Image",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "image",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "stock_keeping_unit",
+            number: 9,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "stockKeepingUnit",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "template_variant",
+            number: 10,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "templateVariant",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "attributes",
+            number: 11,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.attribute.Attribute",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "attributes",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "Bundle",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "name",
+            number: 3,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "name",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "description",
+            number: 4,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "description",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "image",
+            number: 5,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.image.Image",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "image",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "product",
+            number: 6,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.product.BundleProduct",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "product",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "price",
+            number: 7,
+            label: 1,
+            type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "price",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "BundleProduct",
+        field: [
+          {
+            name: "product_id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "productId",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "quantity",
+            number: 2,
+            label: 1,
+            type: 13,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "quantity",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "Item",
+        field: [
+          {
+            name: "product_variant_bundle_id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "productVariantBundleId",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "product_name",
+            number: 2,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "productName",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "product_description",
+            number: 3,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "productDescription",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "manufacturer_name",
+            number: 4,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "manufacturerName",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "manufacturer_description",
+            number: 5,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "manufacturerDescription",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "prototype_name",
+            number: 6,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "prototypeName",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "prototype_description",
+            number: 7,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "prototypeDescription",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "quantity",
+            number: 8,
+            label: 1,
+            type: 5,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "quantity",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "vat",
+            number: 9,
+            label: 1,
+            type: 5,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "vat",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "price",
+            number: 10,
+            label: 1,
+            type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "price",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "quantity_price",
+            number: 11,
+            label: 1,
+            type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "quantityPrice",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "item_type",
+            number: 12,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "itemType",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "taric_code",
+            number: 13,
+            label: 1,
+            type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "taricCode",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "stock_keeping_unit",
+            number: 14,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "stockKeepingUnit",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "weight_in_kg",
+            number: 15,
+            label: 1,
+            type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "weightInKg",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "length_in_cm",
+            number: 16,
+            label: 1,
+            type: 5,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "lengthInCm",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "width_in_cm",
+            number: 17,
+            label: 1,
+            type: 5,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "widthInCm",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "height_in_cm",
+            number: 18,
+            label: 1,
+            type: 5,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "heightInCm",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "Deleted",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+    ],
+    enumType: [],
+    service: [
+      {
+        name: "Service",
+        method: [
+          {
+            name: "Read",
+            inputType: ".io.restorecommerce.resourcebase.ReadRequest",
+            outputType: ".io.restorecommerce.product.ProductListResponse",
+            options: {
+              deprecated: false,
+              idempotencyLevel: 0,
+              uninterpretedOption: [],
+            },
+            clientStreaming: false,
+            serverStreaming: false,
+          },
+          {
+            name: "Create",
+            inputType: ".io.restorecommerce.product.ProductList",
+            outputType: ".io.restorecommerce.product.ProductListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
+          },
+          {
+            name: "Delete",
+            inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
+            outputType: ".io.restorecommerce.resourcebase.DeleteResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
+          },
+          {
+            name: "Update",
+            inputType: ".io.restorecommerce.product.ProductList",
+            outputType: ".io.restorecommerce.product.ProductListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
+          },
+          {
+            name: "Upsert",
+            inputType: ".io.restorecommerce.product.ProductList",
+            outputType: ".io.restorecommerce.product.ProductListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
+          },
+        ],
+        options: { deprecated: false, uninterpretedOption: [] },
+      },
+    ],
+    extension: [],
+    options: undefined,
+    sourceCodeInfo: {
+      location: [
+        {
+          path: [3, 7],
+          span: [13, 0, 47],
+          leadingComments: " Used by resolvers\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
         },
-        "proto3Optional": false,
-      }, {
-        "name": "taric_code",
-        "number": 5,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "taricCode",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "prototype",
-        "number": 6,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.product.Identifier",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "prototype",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "category",
-        "number": 7,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.product.Identifier",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "category",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "tax_id",
-        "number": 8,
-        "label": 3,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "taxId",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "variants",
-        "number": 9,
-        "label": 3,
-        "type": 11,
-        "typeName": ".io.restorecommerce.product.Variant",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "variants",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "gtin",
-        "number": 10,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "gtin",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [{ "name": "classification", "options": undefined }],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "Identifier",
-      "field": [{
-        "name": "id",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "id",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "ProductList",
-      "field": [{
-        "name": "items",
-        "number": 1,
-        "label": 3,
-        "type": 11,
-        "typeName": ".io.restorecommerce.product.MainProduct",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "items",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "total_count",
-        "number": 2,
-        "label": 1,
-        "type": 13,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "totalCount",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "subject",
-        "number": 3,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.auth.Subject",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "subject",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "ProductListResponse",
-      "field": [{
-        "name": "items",
-        "number": 1,
-        "label": 3,
-        "type": 11,
-        "typeName": ".io.restorecommerce.product.ProductResponse",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "items",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "total_count",
-        "number": 2,
-        "label": 1,
-        "type": 13,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "totalCount",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "operation_status",
-        "number": 3,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.status.OperationStatus",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "operationStatus",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "ProductResponse",
-      "field": [{
-        "name": "payload",
-        "number": 1,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.product.MainProduct",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "payload",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "status",
-        "number": 3,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.status.Status",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "status",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "Variant",
-      "field": [{
-        "name": "id",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "id",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "name",
-        "number": 2,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "name",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "description",
-        "number": 3,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "description",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "stock_level",
-        "number": 4,
-        "label": 1,
-        "type": 5,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "stockLevel",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "price",
-        "number": 5,
-        "label": 1,
-        "type": 1,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "price",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "sale",
-        "number": 6,
-        "label": 1,
-        "type": 8,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "sale",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "sale_price",
-        "number": 7,
-        "label": 1,
-        "type": 1,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "salePrice",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "image",
-        "number": 8,
-        "label": 3,
-        "type": 11,
-        "typeName": ".io.restorecommerce.image.Image",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "image",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "stock_keeping_unit",
-        "number": 9,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "stockKeepingUnit",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "template_variant",
-        "number": 10,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "templateVariant",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "attributes",
-        "number": 11,
-        "label": 3,
-        "type": 11,
-        "typeName": ".io.restorecommerce.attribute.Attribute",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "attributes",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "Bundle",
-      "field": [{
-        "name": "id",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "id",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "name",
-        "number": 3,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "name",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "description",
-        "number": 4,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "description",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "image",
-        "number": 5,
-        "label": 3,
-        "type": 11,
-        "typeName": ".io.restorecommerce.image.Image",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "image",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "product",
-        "number": 6,
-        "label": 3,
-        "type": 11,
-        "typeName": ".io.restorecommerce.product.BundleProduct",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "product",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "price",
-        "number": 7,
-        "label": 1,
-        "type": 1,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "price",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "BundleProduct",
-      "field": [{
-        "name": "product_id",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "productId",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "quantity",
-        "number": 2,
-        "label": 1,
-        "type": 13,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "quantity",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "Deleted",
-      "field": [{
-        "name": "id",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "id",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }],
-    "enumType": [],
-    "service": [{
-      "name": "Service",
-      "method": [{
-        "name": "Read",
-        "inputType": ".io.restorecommerce.resourcebase.ReadRequest",
-        "outputType": ".io.restorecommerce.product.ProductListResponse",
-        "options": { "deprecated": false, "idempotencyLevel": 0, "uninterpretedOption": [] },
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }, {
-        "name": "Create",
-        "inputType": ".io.restorecommerce.product.ProductList",
-        "outputType": ".io.restorecommerce.product.ProductListResponse",
-        "options": undefined,
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }, {
-        "name": "Delete",
-        "inputType": ".io.restorecommerce.resourcebase.DeleteRequest",
-        "outputType": ".io.restorecommerce.resourcebase.DeleteResponse",
-        "options": undefined,
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }, {
-        "name": "Update",
-        "inputType": ".io.restorecommerce.product.ProductList",
-        "outputType": ".io.restorecommerce.product.ProductListResponse",
-        "options": undefined,
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }, {
-        "name": "Upsert",
-        "inputType": ".io.restorecommerce.product.ProductList",
-        "outputType": ".io.restorecommerce.product.ProductListResponse",
-        "options": undefined,
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }],
-      "options": { "deprecated": false, "uninterpretedOption": [] },
-    }],
-    "extension": [],
-    "options": undefined,
-    "sourceCodeInfo": {
-      "location": [{
-        "path": [3, 7],
-        "span": [13, 0, 47],
-        "leadingComments": " Used by resolvers\n",
-        "trailingComments": "",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 0],
-        "span": [28, 0, 36, 1],
-        "leadingComments": " Product resource\n",
-        "trailingComments": "",
-        "leadingDetachedComments": [],
-      }],
+        {
+          path: [4, 0],
+          span: [28, 0, 36, 1],
+          leadingComments: " Product resource\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
+        },
+        {
+          path: [4, 9],
+          span: [113, 0, 133, 1],
+          leadingComments: "*\nUsed by Fulfillment-Srv and Order-Srv\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
+        },
+        {
+          path: [4, 9, 2, 0],
+          span: [115, 2, 39],
+          leadingComments:
+            " below identifier is id of product, variant or bundle\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
+        },
+      ],
     },
-    "syntax": "proto3",
+    syntax: "proto3",
   }),
   references: {
     ".io.restorecommerce.product.MainProduct": MainProduct,
@@ -1812,6 +2585,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.product.Variant": Variant,
     ".io.restorecommerce.product.Bundle": Bundle,
     ".io.restorecommerce.product.BundleProduct": BundleProduct,
+    ".io.restorecommerce.product.Item": Item,
     ".io.restorecommerce.product.Deleted": Deleted,
   },
   dependencies: [
@@ -1826,28 +2600,45 @@ export const protoMetadata: ProtoMetadata = {
   ],
   options: {
     messages: {
-      "Product": {
+      Product: {
         fields: {
-          "manufacturer_id": {
-            "resolver": Resolver.decode(
+          manufacturer_id: {
+            resolver: Resolver.decode(
               Buffer.from(
                 "Ci0uaW8ucmVzdG9yZWNvbW1lcmNlLm1hbnVmYWN0dXJlci5NYW51ZmFjdHVyZXISB2NhdGFsb2caDG1hbnVmYWN0dXJlciIEUmVhZCoMbWFudWZhY3R1cmVy",
-                "base64",
-              ),
+                "base64"
+              )
             ),
           },
         },
       },
     },
-    services: { "Service": { options: { "service_name": "product" }, methods: { "Read": { "is_query": true } } } },
+    services: {
+      Service: {
+        options: { service_name: "product" },
+        methods: { Read: { is_query: true } },
+      },
+    },
   },
 };
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 function isSet(value: any): boolean {

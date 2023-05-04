@@ -1,17 +1,27 @@
 /* eslint-disable */
-import type { CallContext, CallOptions } from "nice-grpc-common";
-import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import { Any, protoMetadata as protoMetadata1 } from "../google/protobuf/any";
-import { protoMetadata as protoMetadata5, Subject } from "../io/restorecommerce/auth";
-import { Meta, protoMetadata as protoMetadata3 } from "../io/restorecommerce/meta";
 import {
-  DeleteRequest,
-  DeleteResponse,
+  Status,
+  OperationStatus,
+  protoMetadata as protoMetadata4,
+} from "../io/restorecommerce/status";
+import {
+  Meta,
+  protoMetadata as protoMetadata3,
+} from "../io/restorecommerce/meta";
+import { Any, protoMetadata as protoMetadata1 } from "../google/protobuf/any";
+import {
+  Subject,
+  protoMetadata as protoMetadata5,
+} from "../io/restorecommerce/auth";
+import { CallContext, CallOptions } from "nice-grpc-common";
+import {
   protoMetadata as protoMetadata2,
   ReadRequest,
+  DeleteRequest,
+  DeleteResponse,
 } from "../io/restorecommerce/resource_base";
-import { OperationStatus, protoMetadata as protoMetadata4, Status } from "../io/restorecommerce/status";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "test";
 
@@ -95,7 +105,10 @@ function createBaseTestRequest(): TestRequest {
 }
 
 export const TestRequest = {
-  encode(message: TestRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: TestRequest,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.value !== "") {
       writer.uint32(10).string(message.value);
     }
@@ -121,17 +134,15 @@ export const TestRequest = {
   },
 
   fromJSON(object: any): TestRequest {
-    return { value: isSet(object.value) ? String(object.value) : "" };
+    return {
+      value: isSet(object.value) ? String(object.value) : "",
+    };
   },
 
   toJSON(message: TestRequest): unknown {
     const obj: any = {};
     message.value !== undefined && (obj.value = message.value);
     return obj;
-  },
-
-  create(base?: DeepPartial<TestRequest>): TestRequest {
-    return TestRequest.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<TestRequest>): TestRequest {
@@ -146,7 +157,10 @@ function createBaseStreamTestResponse(): StreamTestResponse {
 }
 
 export const StreamTestResponse = {
-  encode(message: StreamTestResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: StreamTestResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.result !== "") {
       writer.uint32(10).string(message.result);
     }
@@ -172,17 +186,15 @@ export const StreamTestResponse = {
   },
 
   fromJSON(object: any): StreamTestResponse {
-    return { result: isSet(object.result) ? String(object.result) : "" };
+    return {
+      result: isSet(object.result) ? String(object.result) : "",
+    };
   },
 
   toJSON(message: StreamTestResponse): unknown {
     const obj: any = {};
     message.result !== undefined && (obj.result = message.result);
     return obj;
-  },
-
-  create(base?: DeepPartial<StreamTestResponse>): StreamTestResponse {
-    return StreamTestResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<StreamTestResponse>): StreamTestResponse {
@@ -197,7 +209,10 @@ function createBaseTestResponse(): TestResponse {
 }
 
 export const TestResponse = {
-  encode(message: TestResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: TestResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.result !== "") {
       writer.uint32(10).string(message.result);
     }
@@ -238,20 +253,18 @@ export const TestResponse = {
   toJSON(message: TestResponse): unknown {
     const obj: any = {};
     message.result !== undefined && (obj.result = message.result);
-    message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
-  },
-
-  create(base?: DeepPartial<TestResponse>): TestResponse {
-    return TestResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<TestResponse>): TestResponse {
     const message = createBaseTestResponse();
     message.result = object.result ?? "";
-    message.status = (object.status !== undefined && object.status !== null)
-      ? Status.fromPartial(object.status)
-      : undefined;
+    message.status =
+      object.status !== undefined && object.status !== null
+        ? Status.fromPartial(object.status)
+        : undefined;
     return message;
   },
 };
@@ -261,7 +274,10 @@ function createBaseTestEvent(): TestEvent {
 }
 
 export const TestEvent = {
-  encode(message: TestEvent, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: TestEvent,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.value !== "") {
       writer.uint32(10).string(message.value);
     }
@@ -306,10 +322,6 @@ export const TestEvent = {
     return obj;
   },
 
-  create(base?: DeepPartial<TestEvent>): TestEvent {
-    return TestEvent.fromPartial(base ?? {});
-  },
-
   fromPartial(object: DeepPartial<TestEvent>): TestEvent {
     const message = createBaseTestEvent();
     message.value = object.value ?? "";
@@ -323,7 +335,10 @@ function createBaseTestBufferedData(): TestBufferedData {
 }
 
 export const TestBufferedData = {
-  encode(message: TestBufferedData, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: TestBufferedData,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -385,24 +400,28 @@ export const TestBufferedData = {
   toJSON(message: TestBufferedData): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.meta !== undefined &&
+      (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.value !== undefined && (obj.value = message.value);
     message.count !== undefined && (obj.count = Math.round(message.count));
-    message.data !== undefined && (obj.data = message.data ? Any.toJSON(message.data) : undefined);
+    message.data !== undefined &&
+      (obj.data = message.data ? Any.toJSON(message.data) : undefined);
     return obj;
-  },
-
-  create(base?: DeepPartial<TestBufferedData>): TestBufferedData {
-    return TestBufferedData.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<TestBufferedData>): TestBufferedData {
     const message = createBaseTestBufferedData();
     message.id = object.id ?? "";
-    message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
+    message.meta =
+      object.meta !== undefined && object.meta !== null
+        ? Meta.fromPartial(object.meta)
+        : undefined;
     message.value = object.value ?? "";
     message.count = object.count ?? 0;
-    message.data = (object.data !== undefined && object.data !== null) ? Any.fromPartial(object.data) : undefined;
+    message.data =
+      object.data !== undefined && object.data !== null
+        ? Any.fromPartial(object.data)
+        : undefined;
     return message;
   },
 };
@@ -412,7 +431,10 @@ function createBaseTestBufferedDataList(): TestBufferedDataList {
 }
 
 export const TestBufferedDataList = {
-  encode(message: TestBufferedDataList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: TestBufferedDataList,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.items) {
       TestBufferedData.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -422,7 +444,10 @@ export const TestBufferedDataList = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): TestBufferedDataList {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): TestBufferedDataList {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTestBufferedDataList();
@@ -445,7 +470,9 @@ export const TestBufferedDataList = {
 
   fromJSON(object: any): TestBufferedDataList {
     return {
-      items: Array.isArray(object?.items) ? object.items.map((e: any) => TestBufferedData.fromJSON(e)) : [],
+      items: Array.isArray(object?.items)
+        ? object.items.map((e: any) => TestBufferedData.fromJSON(e))
+        : [],
       totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
     };
   },
@@ -453,21 +480,21 @@ export const TestBufferedDataList = {
   toJSON(message: TestBufferedDataList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) => e ? TestBufferedData.toJSON(e) : undefined);
+      obj.items = message.items.map((e) =>
+        e ? TestBufferedData.toJSON(e) : undefined
+      );
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = Math.round(message.totalCount));
+    message.totalCount !== undefined &&
+      (obj.totalCount = Math.round(message.totalCount));
     return obj;
-  },
-
-  create(base?: DeepPartial<TestBufferedDataList>): TestBufferedDataList {
-    return TestBufferedDataList.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<TestBufferedDataList>): TestBufferedDataList {
     const message = createBaseTestBufferedDataList();
-    message.items = object.items?.map((e) => TestBufferedData.fromPartial(e)) || [];
+    message.items =
+      object.items?.map((e) => TestBufferedData.fromPartial(e)) || [];
     message.totalCount = object.totalCount ?? 0;
     return message;
   },
@@ -478,9 +505,15 @@ function createBaseTestBufferedDataResponse(): TestBufferedDataResponse {
 }
 
 export const TestBufferedDataResponse = {
-  encode(message: TestBufferedDataResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: TestBufferedDataResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.payload !== undefined) {
-      TestBufferedData.encode(message.payload, writer.uint32(10).fork()).ldelim();
+      TestBufferedData.encode(
+        message.payload,
+        writer.uint32(10).fork()
+      ).ldelim();
     }
     if (message.status !== undefined) {
       Status.encode(message.status, writer.uint32(18).fork()).ldelim();
@@ -488,7 +521,10 @@ export const TestBufferedDataResponse = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): TestBufferedDataResponse {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): TestBufferedDataResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTestBufferedDataResponse();
@@ -511,7 +547,9 @@ export const TestBufferedDataResponse = {
 
   fromJSON(object: any): TestBufferedDataResponse {
     return {
-      payload: isSet(object.payload) ? TestBufferedData.fromJSON(object.payload) : undefined,
+      payload: isSet(object.payload)
+        ? TestBufferedData.fromJSON(object.payload)
+        : undefined,
       status: isSet(object.status) ? Status.fromJSON(object.status) : undefined,
     };
   },
@@ -519,23 +557,26 @@ export const TestBufferedDataResponse = {
   toJSON(message: TestBufferedDataResponse): unknown {
     const obj: any = {};
     message.payload !== undefined &&
-      (obj.payload = message.payload ? TestBufferedData.toJSON(message.payload) : undefined);
-    message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+      (obj.payload = message.payload
+        ? TestBufferedData.toJSON(message.payload)
+        : undefined);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
   },
 
-  create(base?: DeepPartial<TestBufferedDataResponse>): TestBufferedDataResponse {
-    return TestBufferedDataResponse.fromPartial(base ?? {});
-  },
-
-  fromPartial(object: DeepPartial<TestBufferedDataResponse>): TestBufferedDataResponse {
+  fromPartial(
+    object: DeepPartial<TestBufferedDataResponse>
+  ): TestBufferedDataResponse {
     const message = createBaseTestBufferedDataResponse();
-    message.payload = (object.payload !== undefined && object.payload !== null)
-      ? TestBufferedData.fromPartial(object.payload)
-      : undefined;
-    message.status = (object.status !== undefined && object.status !== null)
-      ? Status.fromPartial(object.status)
-      : undefined;
+    message.payload =
+      object.payload !== undefined && object.payload !== null
+        ? TestBufferedData.fromPartial(object.payload)
+        : undefined;
+    message.status =
+      object.status !== undefined && object.status !== null
+        ? Status.fromPartial(object.status)
+        : undefined;
     return message;
   },
 };
@@ -545,7 +586,10 @@ function createBaseTestBufferedDataListResponse(): TestBufferedDataListResponse 
 }
 
 export const TestBufferedDataListResponse = {
-  encode(message: TestBufferedDataListResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: TestBufferedDataListResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.items) {
       TestBufferedDataResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -553,12 +597,18 @@ export const TestBufferedDataListResponse = {
       writer.uint32(16).uint32(message.totalCount);
     }
     if (message.operationStatus !== undefined) {
-      OperationStatus.encode(message.operationStatus, writer.uint32(26).fork()).ldelim();
+      OperationStatus.encode(
+        message.operationStatus,
+        writer.uint32(26).fork()
+      ).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): TestBufferedDataListResponse {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): TestBufferedDataListResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTestBufferedDataListResponse();
@@ -566,13 +616,18 @@ export const TestBufferedDataListResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.items.push(TestBufferedDataResponse.decode(reader, reader.uint32()));
+          message.items.push(
+            TestBufferedDataResponse.decode(reader, reader.uint32())
+          );
           break;
         case 2:
           message.totalCount = reader.uint32();
           break;
         case 3:
-          message.operationStatus = OperationStatus.decode(reader, reader.uint32());
+          message.operationStatus = OperationStatus.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -584,36 +639,45 @@ export const TestBufferedDataListResponse = {
 
   fromJSON(object: any): TestBufferedDataListResponse {
     return {
-      items: Array.isArray(object?.items) ? object.items.map((e: any) => TestBufferedDataResponse.fromJSON(e)) : [],
+      items: Array.isArray(object?.items)
+        ? object.items.map((e: any) => TestBufferedDataResponse.fromJSON(e))
+        : [],
       totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
-      operationStatus: isSet(object.operationStatus) ? OperationStatus.fromJSON(object.operationStatus) : undefined,
+      operationStatus: isSet(object.operationStatus)
+        ? OperationStatus.fromJSON(object.operationStatus)
+        : undefined,
     };
   },
 
   toJSON(message: TestBufferedDataListResponse): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) => e ? TestBufferedDataResponse.toJSON(e) : undefined);
+      obj.items = message.items.map((e) =>
+        e ? TestBufferedDataResponse.toJSON(e) : undefined
+      );
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = Math.round(message.totalCount));
+    message.totalCount !== undefined &&
+      (obj.totalCount = Math.round(message.totalCount));
     message.operationStatus !== undefined &&
-      (obj.operationStatus = message.operationStatus ? OperationStatus.toJSON(message.operationStatus) : undefined);
+      (obj.operationStatus = message.operationStatus
+        ? OperationStatus.toJSON(message.operationStatus)
+        : undefined);
     return obj;
   },
 
-  create(base?: DeepPartial<TestBufferedDataListResponse>): TestBufferedDataListResponse {
-    return TestBufferedDataListResponse.fromPartial(base ?? {});
-  },
-
-  fromPartial(object: DeepPartial<TestBufferedDataListResponse>): TestBufferedDataListResponse {
+  fromPartial(
+    object: DeepPartial<TestBufferedDataListResponse>
+  ): TestBufferedDataListResponse {
     const message = createBaseTestBufferedDataListResponse();
-    message.items = object.items?.map((e) => TestBufferedDataResponse.fromPartial(e)) || [];
+    message.items =
+      object.items?.map((e) => TestBufferedDataResponse.fromPartial(e)) || [];
     message.totalCount = object.totalCount ?? 0;
-    message.operationStatus = (object.operationStatus !== undefined && object.operationStatus !== null)
-      ? OperationStatus.fromPartial(object.operationStatus)
-      : undefined;
+    message.operationStatus =
+      object.operationStatus !== undefined && object.operationStatus !== null
+        ? OperationStatus.fromPartial(object.operationStatus)
+        : undefined;
     return message;
   },
 };
@@ -623,7 +687,10 @@ function createBaseExtendMe(): ExtendMe {
 }
 
 export const ExtendMe = {
-  encode(message: ExtendMe, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: ExtendMe,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.bar !== 0) {
       writer.uint32(1008).int32(message.bar);
     }
@@ -649,17 +716,15 @@ export const ExtendMe = {
   },
 
   fromJSON(object: any): ExtendMe {
-    return { bar: isSet(object.bar) ? Number(object.bar) : 0 };
+    return {
+      bar: isSet(object.bar) ? Number(object.bar) : 0,
+    };
   },
 
   toJSON(message: ExtendMe): unknown {
     const obj: any = {};
     message.bar !== undefined && (obj.bar = Math.round(message.bar));
     return obj;
-  },
-
-  create(base?: DeepPartial<ExtendMe>): ExtendMe {
-    return ExtendMe.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<ExtendMe>): ExtendMe {
@@ -674,7 +739,10 @@ function createBaseResourceList(): ResourceList {
 }
 
 export const ResourceList = {
-  encode(message: ResourceList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: ResourceList,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.items) {
       Resource.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -713,35 +781,42 @@ export const ResourceList = {
 
   fromJSON(object: any): ResourceList {
     return {
-      items: Array.isArray(object?.items) ? object.items.map((e: any) => Resource.fromJSON(e)) : [],
+      items: Array.isArray(object?.items)
+        ? object.items.map((e: any) => Resource.fromJSON(e))
+        : [],
       totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
-      subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
+      subject: isSet(object.subject)
+        ? Subject.fromJSON(object.subject)
+        : undefined,
     };
   },
 
   toJSON(message: ResourceList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) => e ? Resource.toJSON(e) : undefined);
+      obj.items = message.items.map((e) =>
+        e ? Resource.toJSON(e) : undefined
+      );
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = Math.round(message.totalCount));
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.totalCount !== undefined &&
+      (obj.totalCount = Math.round(message.totalCount));
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
-  },
-
-  create(base?: DeepPartial<ResourceList>): ResourceList {
-    return ResourceList.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<ResourceList>): ResourceList {
     const message = createBaseResourceList();
     message.items = object.items?.map((e) => Resource.fromPartial(e)) || [];
     message.totalCount = object.totalCount ?? 0;
-    message.subject = (object.subject !== undefined && object.subject !== null)
-      ? Subject.fromPartial(object.subject)
-      : undefined;
+    message.subject =
+      object.subject !== undefined && object.subject !== null
+        ? Subject.fromPartial(object.subject)
+        : undefined;
     return message;
   },
 };
@@ -751,7 +826,10 @@ function createBaseResourceListResponse(): ResourceListResponse {
 }
 
 export const ResourceListResponse = {
-  encode(message: ResourceListResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: ResourceListResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.items) {
       ResourceResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -759,12 +837,18 @@ export const ResourceListResponse = {
       writer.uint32(16).uint32(message.totalCount);
     }
     if (message.operationStatus !== undefined) {
-      OperationStatus.encode(message.operationStatus, writer.uint32(26).fork()).ldelim();
+      OperationStatus.encode(
+        message.operationStatus,
+        writer.uint32(26).fork()
+      ).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): ResourceListResponse {
+  decode(
+    input: _m0.Reader | Uint8Array,
+    length?: number
+  ): ResourceListResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseResourceListResponse();
@@ -778,7 +862,10 @@ export const ResourceListResponse = {
           message.totalCount = reader.uint32();
           break;
         case 3:
-          message.operationStatus = OperationStatus.decode(reader, reader.uint32());
+          message.operationStatus = OperationStatus.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -790,36 +877,43 @@ export const ResourceListResponse = {
 
   fromJSON(object: any): ResourceListResponse {
     return {
-      items: Array.isArray(object?.items) ? object.items.map((e: any) => ResourceResponse.fromJSON(e)) : [],
+      items: Array.isArray(object?.items)
+        ? object.items.map((e: any) => ResourceResponse.fromJSON(e))
+        : [],
       totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
-      operationStatus: isSet(object.operationStatus) ? OperationStatus.fromJSON(object.operationStatus) : undefined,
+      operationStatus: isSet(object.operationStatus)
+        ? OperationStatus.fromJSON(object.operationStatus)
+        : undefined,
     };
   },
 
   toJSON(message: ResourceListResponse): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) => e ? ResourceResponse.toJSON(e) : undefined);
+      obj.items = message.items.map((e) =>
+        e ? ResourceResponse.toJSON(e) : undefined
+      );
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = Math.round(message.totalCount));
+    message.totalCount !== undefined &&
+      (obj.totalCount = Math.round(message.totalCount));
     message.operationStatus !== undefined &&
-      (obj.operationStatus = message.operationStatus ? OperationStatus.toJSON(message.operationStatus) : undefined);
+      (obj.operationStatus = message.operationStatus
+        ? OperationStatus.toJSON(message.operationStatus)
+        : undefined);
     return obj;
-  },
-
-  create(base?: DeepPartial<ResourceListResponse>): ResourceListResponse {
-    return ResourceListResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<ResourceListResponse>): ResourceListResponse {
     const message = createBaseResourceListResponse();
-    message.items = object.items?.map((e) => ResourceResponse.fromPartial(e)) || [];
+    message.items =
+      object.items?.map((e) => ResourceResponse.fromPartial(e)) || [];
     message.totalCount = object.totalCount ?? 0;
-    message.operationStatus = (object.operationStatus !== undefined && object.operationStatus !== null)
-      ? OperationStatus.fromPartial(object.operationStatus)
-      : undefined;
+    message.operationStatus =
+      object.operationStatus !== undefined && object.operationStatus !== null
+        ? OperationStatus.fromPartial(object.operationStatus)
+        : undefined;
     return message;
   },
 };
@@ -829,7 +923,10 @@ function createBaseResourceResponse(): ResourceResponse {
 }
 
 export const ResourceResponse = {
-  encode(message: ResourceResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: ResourceResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.payload !== undefined) {
       Resource.encode(message.payload, writer.uint32(10).fork()).ldelim();
     }
@@ -862,40 +959,56 @@ export const ResourceResponse = {
 
   fromJSON(object: any): ResourceResponse {
     return {
-      payload: isSet(object.payload) ? Resource.fromJSON(object.payload) : undefined,
+      payload: isSet(object.payload)
+        ? Resource.fromJSON(object.payload)
+        : undefined,
       status: isSet(object.status) ? Status.fromJSON(object.status) : undefined,
     };
   },
 
   toJSON(message: ResourceResponse): unknown {
     const obj: any = {};
-    message.payload !== undefined && (obj.payload = message.payload ? Resource.toJSON(message.payload) : undefined);
-    message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
+    message.payload !== undefined &&
+      (obj.payload = message.payload
+        ? Resource.toJSON(message.payload)
+        : undefined);
+    message.status !== undefined &&
+      (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
-  },
-
-  create(base?: DeepPartial<ResourceResponse>): ResourceResponse {
-    return ResourceResponse.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<ResourceResponse>): ResourceResponse {
     const message = createBaseResourceResponse();
-    message.payload = (object.payload !== undefined && object.payload !== null)
-      ? Resource.fromPartial(object.payload)
-      : undefined;
-    message.status = (object.status !== undefined && object.status !== null)
-      ? Status.fromPartial(object.status)
-      : undefined;
+    message.payload =
+      object.payload !== undefined && object.payload !== null
+        ? Resource.fromPartial(object.payload)
+        : undefined;
+    message.status =
+      object.status !== undefined && object.status !== null
+        ? Status.fromPartial(object.status)
+        : undefined;
     return message;
   },
 };
 
 function createBaseResource(): Resource {
-  return { id: "", meta: undefined, value: 0, text: "", active: false, created: 0, status: "", data: undefined };
+  return {
+    id: "",
+    meta: undefined,
+    value: 0,
+    text: "",
+    active: false,
+    created: 0,
+    status: "",
+    data: undefined,
+  };
 }
 
 export const Resource = {
-  encode(message: Resource, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Resource,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -978,30 +1091,34 @@ export const Resource = {
   toJSON(message: Resource): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.meta !== undefined &&
+      (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.value !== undefined && (obj.value = Math.round(message.value));
     message.text !== undefined && (obj.text = message.text);
     message.active !== undefined && (obj.active = message.active);
     message.created !== undefined && (obj.created = message.created);
     message.status !== undefined && (obj.status = message.status);
-    message.data !== undefined && (obj.data = message.data ? Any.toJSON(message.data) : undefined);
+    message.data !== undefined &&
+      (obj.data = message.data ? Any.toJSON(message.data) : undefined);
     return obj;
-  },
-
-  create(base?: DeepPartial<Resource>): Resource {
-    return Resource.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<Resource>): Resource {
     const message = createBaseResource();
     message.id = object.id ?? "";
-    message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
+    message.meta =
+      object.meta !== undefined && object.meta !== null
+        ? Meta.fromPartial(object.meta)
+        : undefined;
     message.value = object.value ?? 0;
     message.text = object.text ?? "";
     message.active = object.active ?? false;
     message.created = object.created ?? 0;
     message.status = object.status ?? "";
-    message.data = (object.data !== undefined && object.data !== null) ? Any.fromPartial(object.data) : undefined;
+    message.data =
+      object.data !== undefined && object.data !== null
+        ? Any.fromPartial(object.data)
+        : undefined;
     return message;
   },
 };
@@ -1063,29 +1180,56 @@ export const TestDefinition = {
 } as const;
 
 export interface TestServiceImplementation<CallContextExt = {}> {
-  test(request: TestRequest, context: CallContext & CallContextExt): Promise<DeepPartial<TestResponse>>;
-  throw(request: TestRequest, context: CallContext & CallContextExt): Promise<DeepPartial<TestResponse>>;
-  notImplemented(request: TestRequest, context: CallContext & CallContextExt): Promise<DeepPartial<TestResponse>>;
-  notFound(request: TestRequest, context: CallContext & CallContextExt): Promise<DeepPartial<TestResponse>>;
+  test(
+    request: TestRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<TestResponse>>;
+  throw(
+    request: TestRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<TestResponse>>;
+  notImplemented(
+    request: TestRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<TestResponse>>;
+  notFound(
+    request: TestRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<TestResponse>>;
   create(
     request: TestBufferedDataList,
-    context: CallContext & CallContextExt,
+    context: CallContext & CallContextExt
   ): Promise<DeepPartial<TestBufferedDataListResponse>>;
-  read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<TestBufferedDataListResponse>>;
+  read(
+    request: ReadRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<TestBufferedDataListResponse>>;
 }
 
 export interface TestClient<CallOptionsExt = {}> {
-  test(request: DeepPartial<TestRequest>, options?: CallOptions & CallOptionsExt): Promise<TestResponse>;
-  throw(request: DeepPartial<TestRequest>, options?: CallOptions & CallOptionsExt): Promise<TestResponse>;
-  notImplemented(request: DeepPartial<TestRequest>, options?: CallOptions & CallOptionsExt): Promise<TestResponse>;
-  notFound(request: DeepPartial<TestRequest>, options?: CallOptions & CallOptionsExt): Promise<TestResponse>;
+  test(
+    request: DeepPartial<TestRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<TestResponse>;
+  throw(
+    request: DeepPartial<TestRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<TestResponse>;
+  notImplemented(
+    request: DeepPartial<TestRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<TestResponse>;
+  notFound(
+    request: DeepPartial<TestRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<TestResponse>;
   create(
     request: DeepPartial<TestBufferedDataList>,
-    options?: CallOptions & CallOptionsExt,
+    options?: CallOptions & CallOptionsExt
   ): Promise<TestBufferedDataListResponse>;
   read(
     request: DeepPartial<ReadRequest>,
-    options?: CallOptions & CallOptionsExt,
+    options?: CallOptions & CallOptionsExt
   ): Promise<TestBufferedDataListResponse>;
 }
 
@@ -1125,30 +1269,30 @@ export const StreamDefinition = {
 export interface StreamServiceImplementation<CallContextExt = {}> {
   biStream(
     request: AsyncIterable<TestRequest>,
-    context: CallContext & CallContextExt,
+    context: CallContext & CallContextExt
   ): ServerStreamingMethodResult<DeepPartial<StreamTestResponse>>;
   responseStream(
     request: TestRequest,
-    context: CallContext & CallContextExt,
+    context: CallContext & CallContextExt
   ): ServerStreamingMethodResult<DeepPartial<StreamTestResponse>>;
   requestStream(
     request: AsyncIterable<TestRequest>,
-    context: CallContext & CallContextExt,
+    context: CallContext & CallContextExt
   ): Promise<DeepPartial<TestResponse>>;
 }
 
 export interface StreamClient<CallOptionsExt = {}> {
   biStream(
     request: AsyncIterable<DeepPartial<TestRequest>>,
-    options?: CallOptions & CallOptionsExt,
+    options?: CallOptions & CallOptionsExt
   ): AsyncIterable<StreamTestResponse>;
   responseStream(
     request: DeepPartial<TestRequest>,
-    options?: CallOptions & CallOptionsExt,
+    options?: CallOptions & CallOptionsExt
   ): AsyncIterable<StreamTestResponse>;
   requestStream(
     request: AsyncIterable<DeepPartial<TestRequest>>,
-    options?: CallOptions & CallOptionsExt,
+    options?: CallOptions & CallOptionsExt
   ): Promise<TestResponse>;
 }
 
@@ -1201,19 +1345,49 @@ export const CRUDDefinition = {
 } as const;
 
 export interface CRUDServiceImplementation<CallContextExt = {}> {
-  read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<ResourceListResponse>>;
-  create(request: ResourceList, context: CallContext & CallContextExt): Promise<DeepPartial<ResourceListResponse>>;
-  delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;
-  update(request: ResourceList, context: CallContext & CallContextExt): Promise<DeepPartial<ResourceListResponse>>;
-  upsert(request: ResourceList, context: CallContext & CallContextExt): Promise<DeepPartial<ResourceListResponse>>;
+  read(
+    request: ReadRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<ResourceListResponse>>;
+  create(
+    request: ResourceList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<ResourceListResponse>>;
+  delete(
+    request: DeleteRequest,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<DeleteResponse>>;
+  update(
+    request: ResourceList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<ResourceListResponse>>;
+  upsert(
+    request: ResourceList,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<ResourceListResponse>>;
 }
 
 export interface CRUDClient<CallOptionsExt = {}> {
-  read(request: DeepPartial<ReadRequest>, options?: CallOptions & CallOptionsExt): Promise<ResourceListResponse>;
-  create(request: DeepPartial<ResourceList>, options?: CallOptions & CallOptionsExt): Promise<ResourceListResponse>;
-  delete(request: DeepPartial<DeleteRequest>, options?: CallOptions & CallOptionsExt): Promise<DeleteResponse>;
-  update(request: DeepPartial<ResourceList>, options?: CallOptions & CallOptionsExt): Promise<ResourceListResponse>;
-  upsert(request: DeepPartial<ResourceList>, options?: CallOptions & CallOptionsExt): Promise<ResourceListResponse>;
+  read(
+    request: DeepPartial<ReadRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<ResourceListResponse>;
+  create(
+    request: DeepPartial<ResourceList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<ResourceListResponse>;
+  delete(
+    request: DeepPartial<DeleteRequest>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<DeleteResponse>;
+  update(
+    request: DeepPartial<ResourceList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<ResourceListResponse>;
+  upsert(
+    request: DeepPartial<ResourceList>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<ResourceListResponse>;
 }
 
 type ProtoMetaMessageOptions = {
@@ -1230,720 +1404,816 @@ export interface ProtoMetadata {
   options?: {
     options?: { [key: string]: any };
     services?: {
-      [key: string]: { options?: { [key: string]: any }; methods?: { [key: string]: { [key: string]: any } } };
+      [key: string]: {
+        options?: { [key: string]: any };
+        methods?: { [key: string]: { [key: string]: any } };
+      };
     };
-    messages?: { [key: string]: ProtoMetaMessageOptions };
-    enums?: { [key: string]: { options?: { [key: string]: any }; values?: { [key: string]: { [key: string]: any } } } };
+    messages?: {
+      [key: string]: ProtoMetaMessageOptions;
+    };
+    enums?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        values?: { [key: string]: { [key: string]: any } };
+      };
+    };
   };
 }
 
 export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto1.fromPartial({
-    "name": "test/test.proto",
-    "package": "test",
-    "dependency": [
+    name: "test/test.proto",
+    package: "test",
+    dependency: [
       "google/protobuf/any.proto",
       "io/restorecommerce/resource_base.proto",
       "io/restorecommerce/meta.proto",
       "io/restorecommerce/status.proto",
       "io/restorecommerce/auth.proto",
     ],
-    "publicDependency": [],
-    "weakDependency": [],
-    "messageType": [{
-      "name": "TestRequest",
-      "field": [{
-        "name": "value",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "value",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "StreamTestResponse",
-      "field": [{
-        "name": "result",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "result",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "TestResponse",
-      "field": [{
-        "name": "result",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "result",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "status",
-        "number": 4,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.status.Status",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "status",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "TestEvent",
-      "field": [{
-        "name": "value",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "value",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "count",
-        "number": 2,
-        "label": 1,
-        "type": 5,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "count",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "TestBufferedData",
-      "field": [{
-        "name": "id",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "id",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "meta",
-        "number": 2,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.meta.Meta",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "meta",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "value",
-        "number": 3,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "value",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "count",
-        "number": 4,
-        "label": 1,
-        "type": 5,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "count",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "data",
-        "number": 5,
-        "label": 1,
-        "type": 11,
-        "typeName": ".google.protobuf.Any",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "data",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "TestBufferedDataList",
-      "field": [{
-        "name": "items",
-        "number": 1,
-        "label": 3,
-        "type": 11,
-        "typeName": ".test.TestBufferedData",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "items",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "total_count",
-        "number": 2,
-        "label": 1,
-        "type": 13,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "totalCount",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "TestBufferedDataResponse",
-      "field": [{
-        "name": "payload",
-        "number": 1,
-        "label": 1,
-        "type": 11,
-        "typeName": ".test.TestBufferedData",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "payload",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "status",
-        "number": 2,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.status.Status",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "status",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "TestBufferedDataListResponse",
-      "field": [{
-        "name": "items",
-        "number": 1,
-        "label": 3,
-        "type": 11,
-        "typeName": ".test.TestBufferedDataResponse",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "items",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "total_count",
-        "number": 2,
-        "label": 1,
-        "type": 13,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "totalCount",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "operation_status",
-        "number": 3,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.status.OperationStatus",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "operationStatus",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "ExtendMe",
-      "field": [{
-        "name": "bar",
-        "number": 126,
-        "label": 1,
-        "type": 5,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "bar",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "ResourceList",
-      "field": [{
-        "name": "items",
-        "number": 1,
-        "label": 3,
-        "type": 11,
-        "typeName": ".test.Resource",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "items",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "total_count",
-        "number": 2,
-        "label": 1,
-        "type": 13,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "totalCount",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "subject",
-        "number": 3,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.auth.Subject",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "subject",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "ResourceListResponse",
-      "field": [{
-        "name": "items",
-        "number": 1,
-        "label": 3,
-        "type": 11,
-        "typeName": ".test.ResourceResponse",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "items",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "total_count",
-        "number": 2,
-        "label": 1,
-        "type": 13,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "totalCount",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "operation_status",
-        "number": 3,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.status.OperationStatus",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "operationStatus",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "ResourceResponse",
-      "field": [{
-        "name": "payload",
-        "number": 1,
-        "label": 1,
-        "type": 11,
-        "typeName": ".test.Resource",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "payload",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "status",
-        "number": 2,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.status.Status",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "status",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "Resource",
-      "field": [{
-        "name": "id",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "id",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "meta",
-        "number": 2,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.meta.Meta",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "meta",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "value",
-        "number": 3,
-        "label": 1,
-        "type": 5,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "value",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "text",
-        "number": 4,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "text",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "active",
-        "number": 5,
-        "label": 1,
-        "type": 8,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "active",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "created",
-        "number": 6,
-        "label": 1,
-        "type": 1,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "created",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "status",
-        "number": 7,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "status",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "data",
-        "number": 8,
-        "label": 1,
-        "type": 11,
-        "typeName": ".google.protobuf.Any",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "data",
-        "options": undefined,
-        "proto3Optional": true,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [{ "name": "_data", "options": undefined }],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }],
-    "enumType": [],
-    "service": [{
-      "name": "Test",
-      "method": [{
-        "name": "Test",
-        "inputType": ".test.TestRequest",
-        "outputType": ".test.TestResponse",
-        "options": undefined,
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }, {
-        "name": "Throw",
-        "inputType": ".test.TestRequest",
-        "outputType": ".test.TestResponse",
-        "options": undefined,
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }, {
-        "name": "NotImplemented",
-        "inputType": ".test.TestRequest",
-        "outputType": ".test.TestResponse",
-        "options": undefined,
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }, {
-        "name": "NotFound",
-        "inputType": ".test.TestRequest",
-        "outputType": ".test.TestResponse",
-        "options": undefined,
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }, {
-        "name": "Create",
-        "inputType": ".test.TestBufferedDataList",
-        "outputType": ".test.TestBufferedDataListResponse",
-        "options": undefined,
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }, {
-        "name": "Read",
-        "inputType": ".io.restorecommerce.resourcebase.ReadRequest",
-        "outputType": ".test.TestBufferedDataListResponse",
-        "options": undefined,
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }],
-      "options": undefined,
-    }, {
-      "name": "Stream",
-      "method": [{
-        "name": "BiStream",
-        "inputType": ".test.TestRequest",
-        "outputType": ".test.StreamTestResponse",
-        "options": undefined,
-        "clientStreaming": true,
-        "serverStreaming": true,
-      }, {
-        "name": "ResponseStream",
-        "inputType": ".test.TestRequest",
-        "outputType": ".test.StreamTestResponse",
-        "options": undefined,
-        "clientStreaming": false,
-        "serverStreaming": true,
-      }, {
-        "name": "RequestStream",
-        "inputType": ".test.TestRequest",
-        "outputType": ".test.TestResponse",
-        "options": undefined,
-        "clientStreaming": true,
-        "serverStreaming": false,
-      }],
-      "options": undefined,
-    }, {
-      "name": "CRUD",
-      "method": [{
-        "name": "Read",
-        "inputType": ".io.restorecommerce.resourcebase.ReadRequest",
-        "outputType": ".test.ResourceListResponse",
-        "options": undefined,
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }, {
-        "name": "Create",
-        "inputType": ".test.ResourceList",
-        "outputType": ".test.ResourceListResponse",
-        "options": undefined,
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }, {
-        "name": "Delete",
-        "inputType": ".io.restorecommerce.resourcebase.DeleteRequest",
-        "outputType": ".io.restorecommerce.resourcebase.DeleteResponse",
-        "options": undefined,
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }, {
-        "name": "Update",
-        "inputType": ".test.ResourceList",
-        "outputType": ".test.ResourceListResponse",
-        "options": undefined,
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }, {
-        "name": "Upsert",
-        "inputType": ".test.ResourceList",
-        "outputType": ".test.ResourceListResponse",
-        "options": undefined,
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }],
-      "options": undefined,
-    }],
-    "extension": [],
-    "options": undefined,
-    "sourceCodeInfo": {
-      "location": [{
-        "path": [6, 1],
-        "span": [21, 0, 25, 1],
-        "leadingComments": "*\n Stream test service\n",
-        "trailingComments": "",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 12],
-        "span": [99, 0, 108, 1],
-        "leadingComments": "/ Example resource\n",
-        "trailingComments": "",
-        "leadingDetachedComments": [],
-      }],
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "TestRequest",
+        field: [
+          {
+            name: "value",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "value",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "StreamTestResponse",
+        field: [
+          {
+            name: "result",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "result",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "TestResponse",
+        field: [
+          {
+            name: "result",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "result",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "status",
+            number: 4,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "status",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "TestEvent",
+        field: [
+          {
+            name: "value",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "value",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "count",
+            number: 2,
+            label: 1,
+            type: 5,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "count",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "TestBufferedData",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "meta",
+            number: 2,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.meta.Meta",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "meta",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "value",
+            number: 3,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "value",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "count",
+            number: 4,
+            label: 1,
+            type: 5,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "count",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "data",
+            number: 5,
+            label: 1,
+            type: 11,
+            typeName: ".google.protobuf.Any",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "data",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "TestBufferedDataList",
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName: ".test.TestBufferedData",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "items",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: 1,
+            type: 13,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "totalCount",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "TestBufferedDataResponse",
+        field: [
+          {
+            name: "payload",
+            number: 1,
+            label: 1,
+            type: 11,
+            typeName: ".test.TestBufferedData",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "payload",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "status",
+            number: 2,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "status",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "TestBufferedDataListResponse",
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName: ".test.TestBufferedDataResponse",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "items",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: 1,
+            type: 13,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "totalCount",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "operation_status",
+            number: 3,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.OperationStatus",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "operationStatus",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "ExtendMe",
+        field: [
+          {
+            name: "bar",
+            number: 126,
+            label: 1,
+            type: 5,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "bar",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "ResourceList",
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName: ".test.Resource",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "items",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: 1,
+            type: 13,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "totalCount",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "subject",
+            number: 3,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.auth.Subject",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "subject",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "ResourceListResponse",
+        field: [
+          {
+            name: "items",
+            number: 1,
+            label: 3,
+            type: 11,
+            typeName: ".test.ResourceResponse",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "items",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "total_count",
+            number: 2,
+            label: 1,
+            type: 13,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "totalCount",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "operation_status",
+            number: 3,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.OperationStatus",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "operationStatus",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "ResourceResponse",
+        field: [
+          {
+            name: "payload",
+            number: 1,
+            label: 1,
+            type: 11,
+            typeName: ".test.Resource",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "payload",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "status",
+            number: 2,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.Status",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "status",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "Resource",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "meta",
+            number: 2,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.meta.Meta",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "meta",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "value",
+            number: 3,
+            label: 1,
+            type: 5,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "value",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "text",
+            number: 4,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "text",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "active",
+            number: 5,
+            label: 1,
+            type: 8,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "active",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "created",
+            number: 6,
+            label: 1,
+            type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "created",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "status",
+            number: 7,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "status",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "data",
+            number: 8,
+            label: 1,
+            type: 11,
+            typeName: ".google.protobuf.Any",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "data",
+            options: undefined,
+            proto3Optional: true,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [{ name: "_data", options: undefined }],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+    ],
+    enumType: [],
+    service: [
+      {
+        name: "Test",
+        method: [
+          {
+            name: "Test",
+            inputType: ".test.TestRequest",
+            outputType: ".test.TestResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
+          },
+          {
+            name: "Throw",
+            inputType: ".test.TestRequest",
+            outputType: ".test.TestResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
+          },
+          {
+            name: "NotImplemented",
+            inputType: ".test.TestRequest",
+            outputType: ".test.TestResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
+          },
+          {
+            name: "NotFound",
+            inputType: ".test.TestRequest",
+            outputType: ".test.TestResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
+          },
+          {
+            name: "Create",
+            inputType: ".test.TestBufferedDataList",
+            outputType: ".test.TestBufferedDataListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
+          },
+          {
+            name: "Read",
+            inputType: ".io.restorecommerce.resourcebase.ReadRequest",
+            outputType: ".test.TestBufferedDataListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
+          },
+        ],
+        options: undefined,
+      },
+      {
+        name: "Stream",
+        method: [
+          {
+            name: "BiStream",
+            inputType: ".test.TestRequest",
+            outputType: ".test.StreamTestResponse",
+            options: undefined,
+            clientStreaming: true,
+            serverStreaming: true,
+          },
+          {
+            name: "ResponseStream",
+            inputType: ".test.TestRequest",
+            outputType: ".test.StreamTestResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: true,
+          },
+          {
+            name: "RequestStream",
+            inputType: ".test.TestRequest",
+            outputType: ".test.TestResponse",
+            options: undefined,
+            clientStreaming: true,
+            serverStreaming: false,
+          },
+        ],
+        options: undefined,
+      },
+      {
+        name: "CRUD",
+        method: [
+          {
+            name: "Read",
+            inputType: ".io.restorecommerce.resourcebase.ReadRequest",
+            outputType: ".test.ResourceListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
+          },
+          {
+            name: "Create",
+            inputType: ".test.ResourceList",
+            outputType: ".test.ResourceListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
+          },
+          {
+            name: "Delete",
+            inputType: ".io.restorecommerce.resourcebase.DeleteRequest",
+            outputType: ".io.restorecommerce.resourcebase.DeleteResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
+          },
+          {
+            name: "Update",
+            inputType: ".test.ResourceList",
+            outputType: ".test.ResourceListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
+          },
+          {
+            name: "Upsert",
+            inputType: ".test.ResourceList",
+            outputType: ".test.ResourceListResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
+          },
+        ],
+        options: undefined,
+      },
+    ],
+    extension: [],
+    options: undefined,
+    sourceCodeInfo: {
+      location: [
+        {
+          path: [6, 1],
+          span: [21, 0, 25, 1],
+          leadingComments: "*\n Stream test service\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
+        },
+        {
+          path: [4, 12],
+          span: [99, 0, 108, 1],
+          leadingComments: "/ Example resource\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
+        },
+      ],
     },
-    "syntax": "proto3",
+    syntax: "proto3",
   }),
   references: {
     ".test.TestRequest": TestRequest,
@@ -1960,18 +2230,38 @@ export const protoMetadata: ProtoMetadata = {
     ".test.ResourceResponse": ResourceResponse,
     ".test.Resource": Resource,
   },
-  dependencies: [protoMetadata1, protoMetadata2, protoMetadata3, protoMetadata4, protoMetadata5],
+  dependencies: [
+    protoMetadata1,
+    protoMetadata2,
+    protoMetadata3,
+    protoMetadata4,
+    protoMetadata5,
+  ],
 };
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;
 }
 
-export type ServerStreamingMethodResult<Response> = { [Symbol.asyncIterator](): AsyncIterator<Response, void> };
+export type ServerStreamingMethodResult<Response> = {
+  [Symbol.asyncIterator](): AsyncIterator<Response, void>;
+};

@@ -90,10 +90,6 @@ export const Status = {
     return obj;
   },
 
-  create(base?: DeepPartial<Status>): Status {
-    return Status.fromPartial(base ?? {});
-  },
-
   fromPartial(object: DeepPartial<Status>): Status {
     const message = createBaseStatus();
     message.id = object.id ?? "";
@@ -147,10 +143,6 @@ export const StatusArray = {
     return obj;
   },
 
-  create(base?: DeepPartial<StatusArray>): StatusArray {
-    return StatusArray.fromPartial(base ?? {});
-  },
-
   fromPartial(object: DeepPartial<StatusArray>): StatusArray {
     const message = createBaseStatusArray();
     message.status = object.status?.map((e) => Status.fromPartial(e)) || [];
@@ -196,10 +188,6 @@ export const StatusObj = {
     const obj: any = {};
     message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
-  },
-
-  create(base?: DeepPartial<StatusObj>): StatusObj {
-    return StatusObj.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<StatusObj>): StatusObj {
@@ -252,10 +240,6 @@ export const OperationStatusObj = {
     message.operation_status !== undefined &&
       (obj.operation_status = message.operation_status ? OperationStatus.toJSON(message.operation_status) : undefined);
     return obj;
-  },
-
-  create(base?: DeepPartial<OperationStatusObj>): OperationStatusObj {
-    return OperationStatusObj.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<OperationStatusObj>): OperationStatusObj {
@@ -315,10 +299,6 @@ export const OperationStatus = {
     message.code !== undefined && (obj.code = Math.round(message.code));
     message.message !== undefined && (obj.message = message.message);
     return obj;
-  },
-
-  create(base?: DeepPartial<OperationStatus>): OperationStatus {
-    return OperationStatus.fromPartial(base ?? {});
   },
 
   fromPartial(object: DeepPartial<OperationStatus>): OperationStatus {

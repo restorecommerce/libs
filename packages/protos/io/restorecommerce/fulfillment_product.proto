@@ -9,7 +9,6 @@ import "io/restorecommerce/status.proto";
 import "io/restorecommerce/attribute.proto";
 import "io/restorecommerce/fulfillment_courier.proto";
 import "io/restorecommerce/fulfillment.proto";
-import "io/restorecommerce/options.proto";
 
 /**
 Microservice defination
@@ -66,8 +65,8 @@ message FulfillmentProduct {
   string courier_id = 4 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.fulfillment_courier.FulfillmentCourier",
-      target_service: "resource",
-      target_sub_service: "fulfillment_courier",
+      target_service: "fulfillment_courier",
+      //target_sub_service: "fulfillment_courier",
       target_method: "Read",
       field_name: "courier",
     }

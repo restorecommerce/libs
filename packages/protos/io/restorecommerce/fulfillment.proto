@@ -84,8 +84,8 @@ message Parcel {
   string product_id = 2 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.fulfillment_product.FulfillmentProduct",
-      target_service: "fulfillment_product",
-      //target_sub_service: "fulfillment_product",
+      target_service: "resource",
+      target_sub_service: "fulfillment_product",
       target_method: "Read",
       field_name: "product",
     }

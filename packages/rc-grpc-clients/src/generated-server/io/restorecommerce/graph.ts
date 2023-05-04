@@ -1,11 +1,14 @@
 /* eslint-disable */
-import type { CallContext, CallOptions } from "nice-grpc-common";
-import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import { Any, protoMetadata as protoMetadata1 } from "../../google/protobuf/any";
-import { protoMetadata as protoMetadata2, Subject } from "./auth";
-import { protoMetadata as protoMetadata4, Sort } from "./resource_base";
+import { Subject, protoMetadata as protoMetadata2 } from "./auth";
+import {
+  Any,
+  protoMetadata as protoMetadata1,
+} from "../../google/protobuf/any";
 import { OperationStatus, protoMetadata as protoMetadata3 } from "./status";
+import { CallContext, CallOptions } from "nice-grpc-common";
+import { protoMetadata as protoMetadata4, Sort } from "./resource_base";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.graph";
 
@@ -330,11 +333,21 @@ export interface TraversalResponse {
 }
 
 function createBaseTraversalRequest(): TraversalRequest {
-  return { vertices: undefined, collection: undefined, opts: undefined, path: false, subject: undefined, filters: [] };
+  return {
+    vertices: undefined,
+    collection: undefined,
+    opts: undefined,
+    path: false,
+    subject: undefined,
+    filters: [],
+  };
 }
 
 export const TraversalRequest = {
-  encode(message: TraversalRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: TraversalRequest,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.vertices !== undefined) {
       Vertices.encode(message.vertices, writer.uint32(10).fork()).ldelim();
     }
@@ -391,25 +404,44 @@ export const TraversalRequest = {
 
   fromJSON(object: any): TraversalRequest {
     return {
-      vertices: isSet(object.vertices) ? Vertices.fromJSON(object.vertices) : undefined,
-      collection: isSet(object.collection) ? Collection.fromJSON(object.collection) : undefined,
+      vertices: isSet(object.vertices)
+        ? Vertices.fromJSON(object.vertices)
+        : undefined,
+      collection: isSet(object.collection)
+        ? Collection.fromJSON(object.collection)
+        : undefined,
       opts: isSet(object.opts) ? Options.fromJSON(object.opts) : undefined,
       path: isSet(object.path) ? Boolean(object.path) : false,
-      subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
-      filters: Array.isArray(object?.filters) ? object.filters.map((e: any) => Filters.fromJSON(e)) : [],
+      subject: isSet(object.subject)
+        ? Subject.fromJSON(object.subject)
+        : undefined,
+      filters: Array.isArray(object?.filters)
+        ? object.filters.map((e: any) => Filters.fromJSON(e))
+        : [],
     };
   },
 
   toJSON(message: TraversalRequest): unknown {
     const obj: any = {};
-    message.vertices !== undefined && (obj.vertices = message.vertices ? Vertices.toJSON(message.vertices) : undefined);
+    message.vertices !== undefined &&
+      (obj.vertices = message.vertices
+        ? Vertices.toJSON(message.vertices)
+        : undefined);
     message.collection !== undefined &&
-      (obj.collection = message.collection ? Collection.toJSON(message.collection) : undefined);
-    message.opts !== undefined && (obj.opts = message.opts ? Options.toJSON(message.opts) : undefined);
+      (obj.collection = message.collection
+        ? Collection.toJSON(message.collection)
+        : undefined);
+    message.opts !== undefined &&
+      (obj.opts = message.opts ? Options.toJSON(message.opts) : undefined);
     message.path !== undefined && (obj.path = message.path);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     if (message.filters) {
-      obj.filters = message.filters.map((e) => e ? Filters.toJSON(e) : undefined);
+      obj.filters = message.filters.map((e) =>
+        e ? Filters.toJSON(e) : undefined
+      );
     } else {
       obj.filters = [];
     }
@@ -422,17 +454,23 @@ export const TraversalRequest = {
 
   fromPartial(object: DeepPartial<TraversalRequest>): TraversalRequest {
     const message = createBaseTraversalRequest();
-    message.vertices = (object.vertices !== undefined && object.vertices !== null)
-      ? Vertices.fromPartial(object.vertices)
-      : undefined;
-    message.collection = (object.collection !== undefined && object.collection !== null)
-      ? Collection.fromPartial(object.collection)
-      : undefined;
-    message.opts = (object.opts !== undefined && object.opts !== null) ? Options.fromPartial(object.opts) : undefined;
+    message.vertices =
+      object.vertices !== undefined && object.vertices !== null
+        ? Vertices.fromPartial(object.vertices)
+        : undefined;
+    message.collection =
+      object.collection !== undefined && object.collection !== null
+        ? Collection.fromPartial(object.collection)
+        : undefined;
+    message.opts =
+      object.opts !== undefined && object.opts !== null
+        ? Options.fromPartial(object.opts)
+        : undefined;
     message.path = object.path ?? false;
-    message.subject = (object.subject !== undefined && object.subject !== null)
-      ? Subject.fromPartial(object.subject)
-      : undefined;
+    message.subject =
+      object.subject !== undefined && object.subject !== null
+        ? Subject.fromPartial(object.subject)
+        : undefined;
     message.filters = object.filters?.map((e) => Filters.fromPartial(e)) || [];
     return message;
   },
@@ -443,7 +481,10 @@ function createBaseVertices(): Vertices {
 }
 
 export const Vertices = {
-  encode(message: Vertices, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Vertices,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.collection_name !== "") {
       writer.uint32(10).string(message.collection_name);
     }
@@ -476,14 +517,19 @@ export const Vertices = {
 
   fromJSON(object: any): Vertices {
     return {
-      collection_name: isSet(object.collection_name) ? String(object.collection_name) : "",
-      start_vertex_id: Array.isArray(object?.start_vertex_id) ? object.start_vertex_id.map((e: any) => String(e)) : [],
+      collection_name: isSet(object.collection_name)
+        ? String(object.collection_name)
+        : "",
+      start_vertex_id: Array.isArray(object?.start_vertex_id)
+        ? object.start_vertex_id.map((e: any) => String(e))
+        : [],
     };
   },
 
   toJSON(message: Vertices): unknown {
     const obj: any = {};
-    message.collection_name !== undefined && (obj.collection_name = message.collection_name);
+    message.collection_name !== undefined &&
+      (obj.collection_name = message.collection_name);
     if (message.start_vertex_id) {
       obj.start_vertex_id = message.start_vertex_id.map((e) => e);
     } else {
@@ -509,7 +555,10 @@ function createBaseCollection(): Collection {
 }
 
 export const Collection = {
-  encode(message: Collection, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Collection,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.collection_name !== "") {
       writer.uint32(10).string(message.collection_name);
     }
@@ -554,20 +603,25 @@ export const Collection = {
 
   fromJSON(object: any): Collection {
     return {
-      collection_name: isSet(object.collection_name) ? String(object.collection_name) : "",
+      collection_name: isSet(object.collection_name)
+        ? String(object.collection_name)
+        : "",
       limit: isSet(object.limit) ? Number(object.limit) : 0,
       offset: isSet(object.offset) ? Number(object.offset) : 0,
-      sort: Array.isArray(object?.sort) ? object.sort.map((e: any) => Sort.fromJSON(e)) : [],
+      sort: Array.isArray(object?.sort)
+        ? object.sort.map((e: any) => Sort.fromJSON(e))
+        : [],
     };
   },
 
   toJSON(message: Collection): unknown {
     const obj: any = {};
-    message.collection_name !== undefined && (obj.collection_name = message.collection_name);
+    message.collection_name !== undefined &&
+      (obj.collection_name = message.collection_name);
     message.limit !== undefined && (obj.limit = Math.round(message.limit));
     message.offset !== undefined && (obj.offset = Math.round(message.offset));
     if (message.sort) {
-      obj.sort = message.sort.map((e) => e ? Sort.toJSON(e) : undefined);
+      obj.sort = message.sort.map((e) => (e ? Sort.toJSON(e) : undefined));
     } else {
       obj.sort = [];
     }
@@ -599,7 +653,10 @@ function createBaseOptions(): Options {
 }
 
 export const Options = {
-  encode(message: Options, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Options,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     for (const v of message.include_vertex) {
       writer.uint32(10).string(v!);
     }
@@ -650,11 +707,21 @@ export const Options = {
 
   fromJSON(object: any): Options {
     return {
-      include_vertex: Array.isArray(object?.include_vertex) ? object.include_vertex.map((e: any) => String(e)) : [],
-      exclude_vertex: Array.isArray(object?.exclude_vertex) ? object.exclude_vertex.map((e: any) => String(e)) : [],
-      include_edge: Array.isArray(object?.include_edge) ? object.include_edge.map((e: any) => String(e)) : [],
-      exclude_edge: Array.isArray(object?.exclude_edge) ? object.exclude_edge.map((e: any) => String(e)) : [],
-      direction: isSet(object.direction) ? options_DirectionFromJSON(object.direction) : Options_Direction.OUTBOUND,
+      include_vertex: Array.isArray(object?.include_vertex)
+        ? object.include_vertex.map((e: any) => String(e))
+        : [],
+      exclude_vertex: Array.isArray(object?.exclude_vertex)
+        ? object.exclude_vertex.map((e: any) => String(e))
+        : [],
+      include_edge: Array.isArray(object?.include_edge)
+        ? object.include_edge.map((e: any) => String(e))
+        : [],
+      exclude_edge: Array.isArray(object?.exclude_edge)
+        ? object.exclude_edge.map((e: any) => String(e))
+        : [],
+      direction: isSet(object.direction)
+        ? options_DirectionFromJSON(object.direction)
+        : Options_Direction.OUTBOUND,
     };
   },
 
@@ -680,7 +747,8 @@ export const Options = {
     } else {
       obj.exclude_edge = [];
     }
-    message.direction !== undefined && (obj.direction = options_DirectionToJSON(message.direction));
+    message.direction !== undefined &&
+      (obj.direction = options_DirectionToJSON(message.direction));
     return obj;
   },
 
@@ -704,7 +772,10 @@ function createBaseFilters(): Filters {
 }
 
 export const Filters = {
-  encode(message: Filters, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Filters,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.entity !== "") {
       writer.uint32(10).string(message.entity);
     }
@@ -751,8 +822,12 @@ export const Filters = {
     return {
       entity: isSet(object.entity) ? String(object.entity) : "",
       edge: isSet(object.edge) ? String(object.edge) : "",
-      filter: Array.isArray(object?.filter) ? object.filter.map((e: any) => Filter.fromJSON(e)) : [],
-      operator: isSet(object.operator) ? filters_OperatorFromJSON(object.operator) : Filters_Operator.and,
+      filter: Array.isArray(object?.filter)
+        ? object.filter.map((e: any) => Filter.fromJSON(e))
+        : [],
+      operator: isSet(object.operator)
+        ? filters_OperatorFromJSON(object.operator)
+        : Filters_Operator.and,
     };
   },
 
@@ -761,11 +836,14 @@ export const Filters = {
     message.entity !== undefined && (obj.entity = message.entity);
     message.edge !== undefined && (obj.edge = message.edge);
     if (message.filter) {
-      obj.filter = message.filter.map((e) => e ? Filter.toJSON(e) : undefined);
+      obj.filter = message.filter.map((e) =>
+        e ? Filter.toJSON(e) : undefined
+      );
     } else {
       obj.filter = [];
     }
-    message.operator !== undefined && (obj.operator = filters_OperatorToJSON(message.operator));
+    message.operator !== undefined &&
+      (obj.operator = filters_OperatorToJSON(message.operator));
     return obj;
   },
 
@@ -784,11 +862,20 @@ export const Filters = {
 };
 
 function createBaseFilter(): Filter {
-  return { field: "", operation: Filter_Operation.eq, value: "", type: Filter_ValueType.STRING, filters: [] };
+  return {
+    field: "",
+    operation: Filter_Operation.eq,
+    value: "",
+    type: Filter_ValueType.STRING,
+    filters: [],
+  };
 }
 
 export const Filter = {
-  encode(message: Filter, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Filter,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.field !== "") {
       writer.uint32(10).string(message.field);
     }
@@ -840,21 +927,31 @@ export const Filter = {
   fromJSON(object: any): Filter {
     return {
       field: isSet(object.field) ? String(object.field) : "",
-      operation: isSet(object.operation) ? filter_OperationFromJSON(object.operation) : Filter_Operation.eq,
+      operation: isSet(object.operation)
+        ? filter_OperationFromJSON(object.operation)
+        : Filter_Operation.eq,
       value: isSet(object.value) ? String(object.value) : "",
-      type: isSet(object.type) ? filter_ValueTypeFromJSON(object.type) : Filter_ValueType.STRING,
-      filters: Array.isArray(object?.filters) ? object.filters.map((e: any) => Filters.fromJSON(e)) : [],
+      type: isSet(object.type)
+        ? filter_ValueTypeFromJSON(object.type)
+        : Filter_ValueType.STRING,
+      filters: Array.isArray(object?.filters)
+        ? object.filters.map((e: any) => Filters.fromJSON(e))
+        : [],
     };
   },
 
   toJSON(message: Filter): unknown {
     const obj: any = {};
     message.field !== undefined && (obj.field = message.field);
-    message.operation !== undefined && (obj.operation = filter_OperationToJSON(message.operation));
+    message.operation !== undefined &&
+      (obj.operation = filter_OperationToJSON(message.operation));
     message.value !== undefined && (obj.value = message.value);
-    message.type !== undefined && (obj.type = filter_ValueTypeToJSON(message.type));
+    message.type !== undefined &&
+      (obj.type = filter_ValueTypeToJSON(message.type));
     if (message.filters) {
-      obj.filters = message.filters.map((e) => e ? Filters.toJSON(e) : undefined);
+      obj.filters = message.filters.map((e) =>
+        e ? Filters.toJSON(e) : undefined
+      );
     } else {
       obj.filters = [];
     }
@@ -881,7 +978,10 @@ function createBaseTraversalResponse(): TraversalResponse {
 }
 
 export const TraversalResponse = {
-  encode(message: TraversalResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: TraversalResponse,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.data !== undefined) {
       Any.encode(message.data, writer.uint32(10).fork()).ldelim();
     }
@@ -889,7 +989,10 @@ export const TraversalResponse = {
       Any.encode(message.paths, writer.uint32(18).fork()).ldelim();
     }
     if (message.operation_status !== undefined) {
-      OperationStatus.encode(message.operation_status, writer.uint32(26).fork()).ldelim();
+      OperationStatus.encode(
+        message.operation_status,
+        writer.uint32(26).fork()
+      ).ldelim();
     }
     return writer;
   },
@@ -908,7 +1011,10 @@ export const TraversalResponse = {
           message.paths = Any.decode(reader, reader.uint32());
           break;
         case 3:
-          message.operation_status = OperationStatus.decode(reader, reader.uint32());
+          message.operation_status = OperationStatus.decode(
+            reader,
+            reader.uint32()
+          );
           break;
         default:
           reader.skipType(tag & 7);
@@ -922,16 +1028,22 @@ export const TraversalResponse = {
     return {
       data: isSet(object.data) ? Any.fromJSON(object.data) : undefined,
       paths: isSet(object.paths) ? Any.fromJSON(object.paths) : undefined,
-      operation_status: isSet(object.operation_status) ? OperationStatus.fromJSON(object.operation_status) : undefined,
+      operation_status: isSet(object.operation_status)
+        ? OperationStatus.fromJSON(object.operation_status)
+        : undefined,
     };
   },
 
   toJSON(message: TraversalResponse): unknown {
     const obj: any = {};
-    message.data !== undefined && (obj.data = message.data ? Any.toJSON(message.data) : undefined);
-    message.paths !== undefined && (obj.paths = message.paths ? Any.toJSON(message.paths) : undefined);
+    message.data !== undefined &&
+      (obj.data = message.data ? Any.toJSON(message.data) : undefined);
+    message.paths !== undefined &&
+      (obj.paths = message.paths ? Any.toJSON(message.paths) : undefined);
     message.operation_status !== undefined &&
-      (obj.operation_status = message.operation_status ? OperationStatus.toJSON(message.operation_status) : undefined);
+      (obj.operation_status = message.operation_status
+        ? OperationStatus.toJSON(message.operation_status)
+        : undefined);
     return obj;
   },
 
@@ -941,11 +1053,18 @@ export const TraversalResponse = {
 
   fromPartial(object: DeepPartial<TraversalResponse>): TraversalResponse {
     const message = createBaseTraversalResponse();
-    message.data = (object.data !== undefined && object.data !== null) ? Any.fromPartial(object.data) : undefined;
-    message.paths = (object.paths !== undefined && object.paths !== null) ? Any.fromPartial(object.paths) : undefined;
-    message.operation_status = (object.operation_status !== undefined && object.operation_status !== null)
-      ? OperationStatus.fromPartial(object.operation_status)
-      : undefined;
+    message.data =
+      object.data !== undefined && object.data !== null
+        ? Any.fromPartial(object.data)
+        : undefined;
+    message.paths =
+      object.paths !== undefined && object.paths !== null
+        ? Any.fromPartial(object.paths)
+        : undefined;
+    message.operation_status =
+      object.operation_status !== undefined && object.operation_status !== null
+        ? OperationStatus.fromPartial(object.operation_status)
+        : undefined;
     return message;
   },
 };
@@ -970,14 +1089,14 @@ export const ServiceDefinition = {
 export interface ServiceImplementation<CallContextExt = {}> {
   traversal(
     request: TraversalRequest,
-    context: CallContext & CallContextExt,
+    context: CallContext & CallContextExt
   ): ServerStreamingMethodResult<DeepPartial<TraversalResponse>>;
 }
 
 export interface ServiceClient<CallOptionsExt = {}> {
   traversal(
     request: DeepPartial<TraversalRequest>,
-    options?: CallOptions & CallOptionsExt,
+    options?: CallOptions & CallOptionsExt
   ): AsyncIterable<TraversalResponse>;
 }
 
@@ -995,591 +1114,668 @@ export interface ProtoMetadata {
   options?: {
     options?: { [key: string]: any };
     services?: {
-      [key: string]: { options?: { [key: string]: any }; methods?: { [key: string]: { [key: string]: any } } };
+      [key: string]: {
+        options?: { [key: string]: any };
+        methods?: { [key: string]: { [key: string]: any } };
+      };
     };
-    messages?: { [key: string]: ProtoMetaMessageOptions };
-    enums?: { [key: string]: { options?: { [key: string]: any }; values?: { [key: string]: { [key: string]: any } } } };
+    messages?: {
+      [key: string]: ProtoMetaMessageOptions;
+    };
+    enums?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        values?: { [key: string]: { [key: string]: any } };
+      };
+    };
   };
 }
 
 export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto1.fromPartial({
-    "name": "io/restorecommerce/graph.proto",
-    "package": "io.restorecommerce.graph",
-    "dependency": [
+    name: "io/restorecommerce/graph.proto",
+    package: "io.restorecommerce.graph",
+    dependency: [
       "google/protobuf/any.proto",
       "io/restorecommerce/auth.proto",
       "io/restorecommerce/status.proto",
       "io/restorecommerce/resource_base.proto",
     ],
-    "publicDependency": [],
-    "weakDependency": [],
-    "messageType": [{
-      "name": "TraversalRequest",
-      "field": [{
-        "name": "vertices",
-        "number": 1,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.graph.Vertices",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "vertices",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "collection",
-        "number": 2,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.graph.Collection",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "collection",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "opts",
-        "number": 3,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.graph.Options",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "opts",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "path",
-        "number": 4,
-        "label": 1,
-        "type": 8,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "path",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "subject",
-        "number": 5,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.auth.Subject",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "subject",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "filters",
-        "number": 6,
-        "label": 3,
-        "type": 11,
-        "typeName": ".io.restorecommerce.graph.Filters",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "filters",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [{ "name": "vertex", "options": undefined }],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "Vertices",
-      "field": [{
-        "name": "collection_name",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "collectionName",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "start_vertex_id",
-        "number": 2,
-        "label": 3,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "startVertexId",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "Collection",
-      "field": [{
-        "name": "collection_name",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "collectionName",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "limit",
-        "number": 2,
-        "label": 1,
-        "type": 13,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "limit",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "offset",
-        "number": 3,
-        "label": 1,
-        "type": 13,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "offset",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "sort",
-        "number": 4,
-        "label": 3,
-        "type": 11,
-        "typeName": ".io.restorecommerce.resourcebase.Sort",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "sort",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "Options",
-      "field": [{
-        "name": "include_vertex",
-        "number": 1,
-        "label": 3,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "includeVertex",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "exclude_vertex",
-        "number": 2,
-        "label": 3,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "excludeVertex",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "include_edge",
-        "number": 3,
-        "label": 3,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "includeEdge",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "exclude_edge",
-        "number": 4,
-        "label": 3,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "excludeEdge",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "direction",
-        "number": 5,
-        "label": 1,
-        "type": 14,
-        "typeName": ".io.restorecommerce.graph.Options.Direction",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "direction",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [{
-        "name": "Direction",
-        "value": [{ "name": "OUTBOUND", "number": 0, "options": undefined }, {
-          "name": "INBOUND",
-          "number": 1,
-          "options": undefined,
-        }],
-        "options": undefined,
-        "reservedRange": [],
-        "reservedName": [],
-      }],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "Filters",
-      "field": [{
-        "name": "entity",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "entity",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "edge",
-        "number": 2,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "edge",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "filter",
-        "number": 3,
-        "label": 3,
-        "type": 11,
-        "typeName": ".io.restorecommerce.graph.Filter",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "filter",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "operator",
-        "number": 4,
-        "label": 1,
-        "type": 14,
-        "typeName": ".io.restorecommerce.graph.Filters.Operator",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "operator",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [{
-        "name": "Operator",
-        "value": [{ "name": "and", "number": 0, "options": undefined }, {
-          "name": "or",
-          "number": 1,
-          "options": undefined,
-        }],
-        "options": undefined,
-        "reservedRange": [],
-        "reservedName": [],
-      }],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "Filter",
-      "field": [{
-        "name": "field",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "field",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "operation",
-        "number": 2,
-        "label": 1,
-        "type": 14,
-        "typeName": ".io.restorecommerce.graph.Filter.Operation",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "operation",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "value",
-        "number": 3,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "value",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "type",
-        "number": 4,
-        "label": 1,
-        "type": 14,
-        "typeName": ".io.restorecommerce.graph.Filter.ValueType",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "type",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "filters",
-        "number": 5,
-        "label": 3,
-        "type": 11,
-        "typeName": ".io.restorecommerce.graph.Filters",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "filters",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [{
-        "name": "Operation",
-        "value": [
-          { "name": "eq", "number": 0, "options": undefined },
-          { "name": "lt", "number": 1, "options": undefined },
-          { "name": "lte", "number": 2, "options": undefined },
-          { "name": "gt", "number": 3, "options": undefined },
-          { "name": "gte", "number": 4, "options": undefined },
-          { "name": "isEmpty", "number": 5, "options": undefined },
-          { "name": "iLike", "number": 6, "options": undefined },
-          { "name": "in", "number": 7, "options": undefined },
-          { "name": "neq", "number": 8, "options": undefined },
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "TraversalRequest",
+        field: [
+          {
+            name: "vertices",
+            number: 1,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.graph.Vertices",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "vertices",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "collection",
+            number: 2,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.graph.Collection",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "collection",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "opts",
+            number: 3,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.graph.Options",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "opts",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "path",
+            number: 4,
+            label: 1,
+            type: 8,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "path",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "subject",
+            number: 5,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.auth.Subject",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "subject",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "filters",
+            number: 6,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.graph.Filters",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "filters",
+            options: undefined,
+            proto3Optional: false,
+          },
         ],
-        "options": undefined,
-        "reservedRange": [],
-        "reservedName": [],
-      }, {
-        "name": "ValueType",
-        "value": [
-          { "name": "STRING", "number": 0, "options": undefined },
-          { "name": "NUMBER", "number": 1, "options": undefined },
-          { "name": "BOOLEAN", "number": 2, "options": undefined },
-          { "name": "DATE", "number": 3, "options": undefined },
-          { "name": "ARRAY", "number": 4, "options": undefined },
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [{ name: "vertex", options: undefined }],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "Vertices",
+        field: [
+          {
+            name: "collection_name",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "collectionName",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "start_vertex_id",
+            number: 2,
+            label: 3,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "startVertexId",
+            options: undefined,
+            proto3Optional: false,
+          },
         ],
-        "options": undefined,
-        "reservedRange": [],
-        "reservedName": [],
-      }],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "TraversalResponse",
-      "field": [{
-        "name": "data",
-        "number": 1,
-        "label": 1,
-        "type": 11,
-        "typeName": ".google.protobuf.Any",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "data",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "paths",
-        "number": 2,
-        "label": 1,
-        "type": 11,
-        "typeName": ".google.protobuf.Any",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "paths",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "operation_status",
-        "number": 3,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.status.OperationStatus",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "operationStatus",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }],
-    "enumType": [],
-    "service": [{
-      "name": "Service",
-      "method": [{
-        "name": "Traversal",
-        "inputType": ".io.restorecommerce.graph.TraversalRequest",
-        "outputType": ".io.restorecommerce.graph.TraversalResponse",
-        "options": undefined,
-        "clientStreaming": false,
-        "serverStreaming": true,
-      }],
-      "options": undefined,
-    }],
-    "extension": [],
-    "options": undefined,
-    "sourceCodeInfo": {
-      "location": [{
-        "path": [6, 0],
-        "span": [9, 0, 11, 1],
-        "leadingComments": " Service provides the CRUD operations\n",
-        "trailingComments": "",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 0, 8, 0],
-        "span": [15, 2, 18, 3],
-        "leadingComments": " Document handle either _id or _key value\n",
-        "trailingComments": "",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 3, 2, 0],
-        "span": [38, 1, 36],
-        "leadingComments": "",
-        "trailingComments": " to include vertices\n",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 3, 2, 1],
-        "span": [39, 1, 36],
-        "leadingComments": "",
-        "trailingComments": " to exclude vertices\n",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 3, 2, 2],
-        "span": [40, 1, 34],
-        "leadingComments": "",
-        "trailingComments": " to include vertices\n",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 3, 2, 3],
-        "span": [41, 1, 34],
-        "leadingComments": "",
-        "trailingComments": " to exclude vertices\n",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 3, 2, 4],
-        "span": [42, 1, 25],
-        "leadingComments": "",
-        "trailingComments": " either inbound or outbound, defaults to outbound direction\n",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 4, 2, 0],
-        "span": [51, 2, 20],
-        "leadingComments": "",
-        "trailingComments": " entity on which the filters are applied\n",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 4, 2, 1],
-        "span": [52, 2, 18],
-        "leadingComments": "",
-        "trailingComments":
-          " if edge is specified depending on the direction filter are applied only for those entities\n",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 5, 4, 1, 2, 0],
-        "span": [77, 4, 15],
-        "leadingComments": "",
-        "trailingComments": " default value type if not specified\n",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 6, 2, 0],
-        "span": [88, 2, 31],
-        "leadingComments": "",
-        "trailingComments": " vertices\n",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 6, 2, 1],
-        "span": [89, 2, 32],
-        "leadingComments": "",
-        "trailingComments": " traversed vertices paths\n",
-        "leadingDetachedComments": [],
-      }],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "Collection",
+        field: [
+          {
+            name: "collection_name",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "collectionName",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "limit",
+            number: 2,
+            label: 1,
+            type: 13,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "limit",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "offset",
+            number: 3,
+            label: 1,
+            type: 13,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "offset",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "sort",
+            number: 4,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.resourcebase.Sort",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "sort",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "Options",
+        field: [
+          {
+            name: "include_vertex",
+            number: 1,
+            label: 3,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "includeVertex",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "exclude_vertex",
+            number: 2,
+            label: 3,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "excludeVertex",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "include_edge",
+            number: 3,
+            label: 3,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "includeEdge",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "exclude_edge",
+            number: 4,
+            label: 3,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "excludeEdge",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "direction",
+            number: 5,
+            label: 1,
+            type: 14,
+            typeName: ".io.restorecommerce.graph.Options.Direction",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "direction",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [
+          {
+            name: "Direction",
+            value: [
+              { name: "OUTBOUND", number: 0, options: undefined },
+              { name: "INBOUND", number: 1, options: undefined },
+            ],
+            options: undefined,
+            reservedRange: [],
+            reservedName: [],
+          },
+        ],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "Filters",
+        field: [
+          {
+            name: "entity",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "entity",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "edge",
+            number: 2,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "edge",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "filter",
+            number: 3,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.graph.Filter",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "filter",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "operator",
+            number: 4,
+            label: 1,
+            type: 14,
+            typeName: ".io.restorecommerce.graph.Filters.Operator",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "operator",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [
+          {
+            name: "Operator",
+            value: [
+              { name: "and", number: 0, options: undefined },
+              { name: "or", number: 1, options: undefined },
+            ],
+            options: undefined,
+            reservedRange: [],
+            reservedName: [],
+          },
+        ],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "Filter",
+        field: [
+          {
+            name: "field",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "field",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "operation",
+            number: 2,
+            label: 1,
+            type: 14,
+            typeName: ".io.restorecommerce.graph.Filter.Operation",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "operation",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "value",
+            number: 3,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "value",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "type",
+            number: 4,
+            label: 1,
+            type: 14,
+            typeName: ".io.restorecommerce.graph.Filter.ValueType",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "type",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "filters",
+            number: 5,
+            label: 3,
+            type: 11,
+            typeName: ".io.restorecommerce.graph.Filters",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "filters",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [
+          {
+            name: "Operation",
+            value: [
+              { name: "eq", number: 0, options: undefined },
+              { name: "lt", number: 1, options: undefined },
+              { name: "lte", number: 2, options: undefined },
+              { name: "gt", number: 3, options: undefined },
+              { name: "gte", number: 4, options: undefined },
+              { name: "isEmpty", number: 5, options: undefined },
+              { name: "iLike", number: 6, options: undefined },
+              { name: "in", number: 7, options: undefined },
+              { name: "neq", number: 8, options: undefined },
+            ],
+            options: undefined,
+            reservedRange: [],
+            reservedName: [],
+          },
+          {
+            name: "ValueType",
+            value: [
+              { name: "STRING", number: 0, options: undefined },
+              { name: "NUMBER", number: 1, options: undefined },
+              { name: "BOOLEAN", number: 2, options: undefined },
+              { name: "DATE", number: 3, options: undefined },
+              { name: "ARRAY", number: 4, options: undefined },
+            ],
+            options: undefined,
+            reservedRange: [],
+            reservedName: [],
+          },
+        ],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "TraversalResponse",
+        field: [
+          {
+            name: "data",
+            number: 1,
+            label: 1,
+            type: 11,
+            typeName: ".google.protobuf.Any",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "data",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "paths",
+            number: 2,
+            label: 1,
+            type: 11,
+            typeName: ".google.protobuf.Any",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "paths",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "operation_status",
+            number: 3,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.status.OperationStatus",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "operationStatus",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+    ],
+    enumType: [],
+    service: [
+      {
+        name: "Service",
+        method: [
+          {
+            name: "Traversal",
+            inputType: ".io.restorecommerce.graph.TraversalRequest",
+            outputType: ".io.restorecommerce.graph.TraversalResponse",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: true,
+          },
+        ],
+        options: undefined,
+      },
+    ],
+    extension: [],
+    options: undefined,
+    sourceCodeInfo: {
+      location: [
+        {
+          path: [6, 0],
+          span: [9, 0, 11, 1],
+          leadingComments: " Service provides the CRUD operations\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
+        },
+        {
+          path: [4, 0, 8, 0],
+          span: [15, 2, 18, 3],
+          leadingComments: " Document handle either _id or _key value\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
+        },
+        {
+          path: [4, 3, 2, 0],
+          span: [38, 1, 36],
+          leadingComments: "",
+          trailingComments: " to include vertices\n",
+          leadingDetachedComments: [],
+        },
+        {
+          path: [4, 3, 2, 1],
+          span: [39, 1, 36],
+          leadingComments: "",
+          trailingComments: " to exclude vertices\n",
+          leadingDetachedComments: [],
+        },
+        {
+          path: [4, 3, 2, 2],
+          span: [40, 1, 34],
+          leadingComments: "",
+          trailingComments: " to include vertices\n",
+          leadingDetachedComments: [],
+        },
+        {
+          path: [4, 3, 2, 3],
+          span: [41, 1, 34],
+          leadingComments: "",
+          trailingComments: " to exclude vertices\n",
+          leadingDetachedComments: [],
+        },
+        {
+          path: [4, 3, 2, 4],
+          span: [42, 1, 25],
+          leadingComments: "",
+          trailingComments:
+            " either inbound or outbound, defaults to outbound direction\n",
+          leadingDetachedComments: [],
+        },
+        {
+          path: [4, 4, 2, 0],
+          span: [51, 2, 20],
+          leadingComments: "",
+          trailingComments: " entity on which the filters are applied\n",
+          leadingDetachedComments: [],
+        },
+        {
+          path: [4, 4, 2, 1],
+          span: [52, 2, 18],
+          leadingComments: "",
+          trailingComments:
+            " if edge is specified depending on the direction filter are applied only for those entities\n",
+          leadingDetachedComments: [],
+        },
+        {
+          path: [4, 5, 4, 1, 2, 0],
+          span: [77, 4, 15],
+          leadingComments: "",
+          trailingComments: " default value type if not specified\n",
+          leadingDetachedComments: [],
+        },
+        {
+          path: [4, 6, 2, 0],
+          span: [88, 2, 31],
+          leadingComments: "",
+          trailingComments: " vertices\n",
+          leadingDetachedComments: [],
+        },
+        {
+          path: [4, 6, 2, 1],
+          span: [89, 2, 32],
+          leadingComments: "",
+          trailingComments: " traversed vertices paths\n",
+          leadingDetachedComments: [],
+        },
+      ],
     },
-    "syntax": "proto3",
+    syntax: "proto3",
   }),
   references: {
     ".io.restorecommerce.graph.TraversalRequest": TraversalRequest,
@@ -1594,18 +1790,37 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.graph.Filter.ValueType": Filter_ValueType,
     ".io.restorecommerce.graph.TraversalResponse": TraversalResponse,
   },
-  dependencies: [protoMetadata1, protoMetadata2, protoMetadata3, protoMetadata4],
+  dependencies: [
+    protoMetadata1,
+    protoMetadata2,
+    protoMetadata3,
+    protoMetadata4,
+  ],
 };
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;
 }
 
-export type ServerStreamingMethodResult<Response> = { [Symbol.asyncIterator](): AsyncIterator<Response, void> };
+export type ServerStreamingMethodResult<Response> = {
+  [Symbol.asyncIterator](): AsyncIterator<Response, void>;
+};

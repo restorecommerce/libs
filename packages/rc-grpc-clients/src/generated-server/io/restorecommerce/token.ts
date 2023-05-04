@@ -1,10 +1,13 @@
 /* eslint-disable */
-import type { CallContext, CallOptions } from "nice-grpc-common";
-import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import { Any, protoMetadata as protoMetadata2 } from "../../google/protobuf/any";
-import { protoMetadata as protoMetadata1, Subject } from "./auth";
+import {
+  Any,
+  protoMetadata as protoMetadata2,
+} from "../../google/protobuf/any";
+import { Subject, protoMetadata as protoMetadata1 } from "./auth";
+import { CallContext, CallOptions } from "nice-grpc-common";
 import { protoMetadata as protoMetadata3 } from "./options";
+import * as _m0 from "protobufjs/minimal";
 
 export const protobufPackage = "io.restorecommerce.token";
 
@@ -28,11 +31,20 @@ export interface GrantId {
 }
 
 function createBaseTokenData(): TokenData {
-  return { id: "", payload: undefined, expires_in: 0, type: "", subject: undefined };
+  return {
+    id: "",
+    payload: undefined,
+    expires_in: 0,
+    type: "",
+    subject: undefined,
+  };
 }
 
 export const TokenData = {
-  encode(message: TokenData, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: TokenData,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -87,17 +99,23 @@ export const TokenData = {
       payload: isSet(object.payload) ? Any.fromJSON(object.payload) : undefined,
       expires_in: isSet(object.expires_in) ? Number(object.expires_in) : 0,
       type: isSet(object.type) ? String(object.type) : "",
-      subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
+      subject: isSet(object.subject)
+        ? Subject.fromJSON(object.subject)
+        : undefined,
     };
   },
 
   toJSON(message: TokenData): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.payload !== undefined && (obj.payload = message.payload ? Any.toJSON(message.payload) : undefined);
+    message.payload !== undefined &&
+      (obj.payload = message.payload ? Any.toJSON(message.payload) : undefined);
     message.expires_in !== undefined && (obj.expires_in = message.expires_in);
     message.type !== undefined && (obj.type = message.type);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 
@@ -108,14 +126,16 @@ export const TokenData = {
   fromPartial(object: DeepPartial<TokenData>): TokenData {
     const message = createBaseTokenData();
     message.id = object.id ?? "";
-    message.payload = (object.payload !== undefined && object.payload !== null)
-      ? Any.fromPartial(object.payload)
-      : undefined;
+    message.payload =
+      object.payload !== undefined && object.payload !== null
+        ? Any.fromPartial(object.payload)
+        : undefined;
     message.expires_in = object.expires_in ?? 0;
     message.type = object.type ?? "";
-    message.subject = (object.subject !== undefined && object.subject !== null)
-      ? Subject.fromPartial(object.subject)
-      : undefined;
+    message.subject =
+      object.subject !== undefined && object.subject !== null
+        ? Subject.fromPartial(object.subject)
+        : undefined;
     return message;
   },
 };
@@ -125,7 +145,10 @@ function createBaseIdentifier(): Identifier {
 }
 
 export const Identifier = {
-  encode(message: Identifier, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: Identifier,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
@@ -166,7 +189,9 @@ export const Identifier = {
     return {
       id: isSet(object.id) ? String(object.id) : "",
       type: isSet(object.type) ? String(object.type) : "",
-      subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
+      subject: isSet(object.subject)
+        ? Subject.fromJSON(object.subject)
+        : undefined,
     };
   },
 
@@ -174,7 +199,10 @@ export const Identifier = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.type !== undefined && (obj.type = message.type);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 
@@ -186,9 +214,10 @@ export const Identifier = {
     const message = createBaseIdentifier();
     message.id = object.id ?? "";
     message.type = object.type ?? "";
-    message.subject = (object.subject !== undefined && object.subject !== null)
-      ? Subject.fromPartial(object.subject)
-      : undefined;
+    message.subject =
+      object.subject !== undefined && object.subject !== null
+        ? Subject.fromPartial(object.subject)
+        : undefined;
     return message;
   },
 };
@@ -198,7 +227,10 @@ function createBaseGrantId(): GrantId {
 }
 
 export const GrantId = {
-  encode(message: GrantId, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+  encode(
+    message: GrantId,
+    writer: _m0.Writer = _m0.Writer.create()
+  ): _m0.Writer {
     if (message.grant_id !== "") {
       writer.uint32(10).string(message.grant_id);
     }
@@ -232,14 +264,19 @@ export const GrantId = {
   fromJSON(object: any): GrantId {
     return {
       grant_id: isSet(object.grant_id) ? String(object.grant_id) : "",
-      subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
+      subject: isSet(object.subject)
+        ? Subject.fromJSON(object.subject)
+        : undefined,
     };
   },
 
   toJSON(message: GrantId): unknown {
     const obj: any = {};
     message.grant_id !== undefined && (obj.grant_id = message.grant_id);
-    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    message.subject !== undefined &&
+      (obj.subject = message.subject
+        ? Subject.toJSON(message.subject)
+        : undefined);
     return obj;
   },
 
@@ -250,9 +287,10 @@ export const GrantId = {
   fromPartial(object: DeepPartial<GrantId>): GrantId {
     const message = createBaseGrantId();
     message.grant_id = object.grant_id ?? "";
-    message.subject = (object.subject !== undefined && object.subject !== null)
-      ? Subject.fromPartial(object.subject)
-      : undefined;
+    message.subject =
+      object.subject !== undefined && object.subject !== null
+        ? Subject.fromPartial(object.subject)
+        : undefined;
     return message;
   },
 };
@@ -312,26 +350,56 @@ export const ServiceDefinition = {
 
 export interface ServiceImplementation<CallContextExt = {}> {
   /** creates or upserts ID_token to `Redis` and returns sucess or failure message */
-  upsert(request: TokenData, context: CallContext & CallContextExt): Promise<DeepPartial<Any>>;
-  find(request: Identifier, context: CallContext & CallContextExt): Promise<DeepPartial<Any>>;
+  upsert(
+    request: TokenData,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<Any>>;
+  find(
+    request: Identifier,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<Any>>;
   /** removes the id_token from redis */
-  destroy(request: Identifier, context: CallContext & CallContextExt): Promise<DeepPartial<Any>>;
+  destroy(
+    request: Identifier,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<Any>>;
   /** Destroy/Drop/Remove a stored id_token by its grantId property reference. */
-  revokeByGrantId(request: GrantId, context: CallContext & CallContextExt): Promise<DeepPartial<Any>>;
+  revokeByGrantId(
+    request: GrantId,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<Any>>;
   /** Mark a stored id_token as consumed (not yet expired though!). Future finds for this id should be fulfilled with an object containing additional property named "consumed" with a truthy value (timestamp, date, boolean, etc). */
-  consume(request: Identifier, context: CallContext & CallContextExt): Promise<DeepPartial<Any>>;
+  consume(
+    request: Identifier,
+    context: CallContext & CallContextExt
+  ): Promise<DeepPartial<Any>>;
 }
 
 export interface ServiceClient<CallOptionsExt = {}> {
   /** creates or upserts ID_token to `Redis` and returns sucess or failure message */
-  upsert(request: DeepPartial<TokenData>, options?: CallOptions & CallOptionsExt): Promise<Any>;
-  find(request: DeepPartial<Identifier>, options?: CallOptions & CallOptionsExt): Promise<Any>;
+  upsert(
+    request: DeepPartial<TokenData>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<Any>;
+  find(
+    request: DeepPartial<Identifier>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<Any>;
   /** removes the id_token from redis */
-  destroy(request: DeepPartial<Identifier>, options?: CallOptions & CallOptionsExt): Promise<Any>;
+  destroy(
+    request: DeepPartial<Identifier>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<Any>;
   /** Destroy/Drop/Remove a stored id_token by its grantId property reference. */
-  revokeByGrantId(request: DeepPartial<GrantId>, options?: CallOptions & CallOptionsExt): Promise<Any>;
+  revokeByGrantId(
+    request: DeepPartial<GrantId>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<Any>;
   /** Mark a stored id_token as consumed (not yet expired though!). Future finds for this id should be fulfilled with an object containing additional property named "consumed" with a truthy value (timestamp, date, boolean, etc). */
-  consume(request: DeepPartial<Identifier>, options?: CallOptions & CallOptionsExt): Promise<Any>;
+  consume(
+    request: DeepPartial<Identifier>,
+    options?: CallOptions & CallOptionsExt
+  ): Promise<Any>;
 }
 
 type ProtoMetaMessageOptions = {
@@ -348,252 +416,303 @@ export interface ProtoMetadata {
   options?: {
     options?: { [key: string]: any };
     services?: {
-      [key: string]: { options?: { [key: string]: any }; methods?: { [key: string]: { [key: string]: any } } };
+      [key: string]: {
+        options?: { [key: string]: any };
+        methods?: { [key: string]: { [key: string]: any } };
+      };
     };
-    messages?: { [key: string]: ProtoMetaMessageOptions };
-    enums?: { [key: string]: { options?: { [key: string]: any }; values?: { [key: string]: { [key: string]: any } } } };
+    messages?: {
+      [key: string]: ProtoMetaMessageOptions;
+    };
+    enums?: {
+      [key: string]: {
+        options?: { [key: string]: any };
+        values?: { [key: string]: { [key: string]: any } };
+      };
+    };
   };
 }
 
 export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto1.fromPartial({
-    "name": "io/restorecommerce/token.proto",
-    "package": "io.restorecommerce.token",
-    "dependency": ["io/restorecommerce/auth.proto", "google/protobuf/any.proto", "io/restorecommerce/options.proto"],
-    "publicDependency": [],
-    "weakDependency": [],
-    "messageType": [{
-      "name": "TokenData",
-      "field": [{
-        "name": "id",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "id",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "payload",
-        "number": 2,
-        "label": 1,
-        "type": 11,
-        "typeName": ".google.protobuf.Any",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "payload",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "expires_in",
-        "number": 3,
-        "label": 1,
-        "type": 1,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "expiresIn",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "type",
-        "number": 4,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "type",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "subject",
-        "number": 5,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.auth.Subject",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "subject",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "Identifier",
-      "field": [{
-        "name": "id",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "id",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "type",
-        "number": 2,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "type",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "subject",
-        "number": 3,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.auth.Subject",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "subject",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "GrantId",
-      "field": [{
-        "name": "grant_id",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "grantId",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "subject",
-        "number": 2,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.auth.Subject",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "subject",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }],
-    "enumType": [],
-    "service": [{
-      "name": "Service",
-      "method": [{
-        "name": "upsert",
-        "inputType": ".io.restorecommerce.token.TokenData",
-        "outputType": ".google.protobuf.Any",
-        "options": undefined,
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }, {
-        "name": "find",
-        "inputType": ".io.restorecommerce.token.Identifier",
-        "outputType": ".google.protobuf.Any",
-        "options": { "deprecated": false, "idempotencyLevel": 0, "uninterpretedOption": [] },
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }, {
-        "name": "destroy",
-        "inputType": ".io.restorecommerce.token.Identifier",
-        "outputType": ".google.protobuf.Any",
-        "options": undefined,
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }, {
-        "name": "revokeByGrantId",
-        "inputType": ".io.restorecommerce.token.GrantId",
-        "outputType": ".google.protobuf.Any",
-        "options": undefined,
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }, {
-        "name": "consume",
-        "inputType": ".io.restorecommerce.token.Identifier",
-        "outputType": ".google.protobuf.Any",
-        "options": undefined,
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }],
-      "options": { "deprecated": false, "uninterpretedOption": [] },
-    }],
-    "extension": [],
-    "options": undefined,
-    "sourceCodeInfo": {
-      "location": [{
-        "path": [6, 0],
-        "span": [11, 0, 21, 1],
-        "leadingComments": "\n Microservice definition.\n",
-        "trailingComments": "",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [6, 0, 2, 0],
-        "span": [14, 2, 55],
-        "leadingComments": "",
-        "trailingComments": " creates or upserts ID_token to `Redis` and returns sucess or failure message\n",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [6, 0, 2, 2],
-        "span": [18, 2, 57],
-        "leadingComments": "",
-        "trailingComments": " removes the id_token from redis\n",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [6, 0, 2, 3],
-        "span": [19, 2, 62],
-        "leadingComments": "",
-        "trailingComments": " Destroy/Drop/Remove a stored id_token by its grantId property reference.\n",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [6, 0, 2, 4],
-        "span": [20, 2, 57],
-        "leadingComments": "",
-        "trailingComments":
-          ' Mark a stored id_token as consumed (not yet expired though!). Future finds for this id should be fulfilled with an object containing additional property named "consumed" with a truthy value (timestamp, date, boolean, etc).\n',
-        "leadingDetachedComments": [],
-      }],
+    name: "io/restorecommerce/token.proto",
+    package: "io.restorecommerce.token",
+    dependency: [
+      "io/restorecommerce/auth.proto",
+      "google/protobuf/any.proto",
+      "io/restorecommerce/options.proto",
+    ],
+    publicDependency: [],
+    weakDependency: [],
+    messageType: [
+      {
+        name: "TokenData",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "payload",
+            number: 2,
+            label: 1,
+            type: 11,
+            typeName: ".google.protobuf.Any",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "payload",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "expires_in",
+            number: 3,
+            label: 1,
+            type: 1,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "expiresIn",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "type",
+            number: 4,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "type",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "subject",
+            number: 5,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.auth.Subject",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "subject",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "Identifier",
+        field: [
+          {
+            name: "id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "id",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "type",
+            number: 2,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "type",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "subject",
+            number: 3,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.auth.Subject",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "subject",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+      {
+        name: "GrantId",
+        field: [
+          {
+            name: "grant_id",
+            number: 1,
+            label: 1,
+            type: 9,
+            typeName: "",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "grantId",
+            options: undefined,
+            proto3Optional: false,
+          },
+          {
+            name: "subject",
+            number: 2,
+            label: 1,
+            type: 11,
+            typeName: ".io.restorecommerce.auth.Subject",
+            extendee: "",
+            defaultValue: "",
+            oneofIndex: 0,
+            jsonName: "subject",
+            options: undefined,
+            proto3Optional: false,
+          },
+        ],
+        extension: [],
+        nestedType: [],
+        enumType: [],
+        extensionRange: [],
+        oneofDecl: [],
+        options: undefined,
+        reservedRange: [],
+        reservedName: [],
+      },
+    ],
+    enumType: [],
+    service: [
+      {
+        name: "Service",
+        method: [
+          {
+            name: "upsert",
+            inputType: ".io.restorecommerce.token.TokenData",
+            outputType: ".google.protobuf.Any",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
+          },
+          {
+            name: "find",
+            inputType: ".io.restorecommerce.token.Identifier",
+            outputType: ".google.protobuf.Any",
+            options: {
+              deprecated: false,
+              idempotencyLevel: 0,
+              uninterpretedOption: [],
+            },
+            clientStreaming: false,
+            serverStreaming: false,
+          },
+          {
+            name: "destroy",
+            inputType: ".io.restorecommerce.token.Identifier",
+            outputType: ".google.protobuf.Any",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
+          },
+          {
+            name: "revokeByGrantId",
+            inputType: ".io.restorecommerce.token.GrantId",
+            outputType: ".google.protobuf.Any",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
+          },
+          {
+            name: "consume",
+            inputType: ".io.restorecommerce.token.Identifier",
+            outputType: ".google.protobuf.Any",
+            options: undefined,
+            clientStreaming: false,
+            serverStreaming: false,
+          },
+        ],
+        options: { deprecated: false, uninterpretedOption: [] },
+      },
+    ],
+    extension: [],
+    options: undefined,
+    sourceCodeInfo: {
+      location: [
+        {
+          path: [6, 0],
+          span: [11, 0, 21, 1],
+          leadingComments: "\n Microservice definition.\n",
+          trailingComments: "",
+          leadingDetachedComments: [],
+        },
+        {
+          path: [6, 0, 2, 0],
+          span: [14, 2, 55],
+          leadingComments: "",
+          trailingComments:
+            " creates or upserts ID_token to `Redis` and returns sucess or failure message\n",
+          leadingDetachedComments: [],
+        },
+        {
+          path: [6, 0, 2, 2],
+          span: [18, 2, 57],
+          leadingComments: "",
+          trailingComments: " removes the id_token from redis\n",
+          leadingDetachedComments: [],
+        },
+        {
+          path: [6, 0, 2, 3],
+          span: [19, 2, 62],
+          leadingComments: "",
+          trailingComments:
+            " Destroy/Drop/Remove a stored id_token by its grantId property reference.\n",
+          leadingDetachedComments: [],
+        },
+        {
+          path: [6, 0, 2, 4],
+          span: [20, 2, 57],
+          leadingComments: "",
+          trailingComments:
+            ' Mark a stored id_token as consumed (not yet expired though!). Future finds for this id should be fulfilled with an object containing additional property named "consumed" with a truthy value (timestamp, date, boolean, etc).\n',
+          leadingDetachedComments: [],
+        },
+      ],
     },
-    "syntax": "proto3",
+    syntax: "proto3",
   }),
   references: {
     ".io.restorecommerce.token.TokenData": TokenData,
@@ -602,15 +721,32 @@ export const protoMetadata: ProtoMetadata = {
   },
   dependencies: [protoMetadata1, protoMetadata2, protoMetadata3],
   options: {
-    services: { "Service": { options: { "service_name": "token" }, methods: { "find": { "is_query": true } } } },
+    services: {
+      Service: {
+        options: { service_name: "token" },
+        methods: { find: { is_query: true } },
+      },
+    },
   },
 };
 
-type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
+type Builtin =
+  | Date
+  | Function
+  | Uint8Array
+  | string
+  | number
+  | boolean
+  | undefined;
 
-export type DeepPartial<T> = T extends Builtin ? T
-  : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
-  : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
+export type DeepPartial<T> = T extends Builtin
+  ? T
+  : T extends Array<infer U>
+  ? Array<DeepPartial<U>>
+  : T extends ReadonlyArray<infer U>
+  ? ReadonlyArray<DeepPartial<U>>
+  : T extends {}
+  ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
 function isSet(value: any): boolean {

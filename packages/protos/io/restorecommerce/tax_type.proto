@@ -23,13 +23,18 @@ service Service {
   rpc Upsert (TaxTypeList) returns (TaxTypeListResponse);
 }
 
+enum Behavior {
+  NONE = 0;
+  ADDITIVE_ON_GROSS = 1;
+}
+
 message Deleted {
   string id = 1;
 }
 
 message TaxTypeList {
   repeated TaxType items = 1;
-  optional uint32 total_count = 2;
+  uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
 }
 
@@ -45,8 +50,9 @@ message TaxTypeResponse {
 }
 
 message TaxType {
-  optional string id = 1;
-  optional io.restorecommerce.meta.Meta meta = 2;
-  optional string type = 3;
-  optional string description = 4;
+  string id = 1;
+  io.restorecommerce.meta.Meta meta = 2;
+  string type = 3;
+  string description = 4;
+  Behavior behavior = 5;
 }

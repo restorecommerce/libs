@@ -17,14 +17,14 @@ export interface FieldFilter {
 
 export interface Sort {
   field: string;
-  order?: Sort_SortOrder | undefined;
+  order: Sort_SortOrder;
 }
 
 export enum Sort_SortOrder {
-  UNSORTED = 0,
-  ASCENDING = 1,
-  DESCENDING = 2,
-  UNRECOGNIZED = -1,
+  UNSORTED = "UNSORTED",
+  ASCENDING = "ASCENDING",
+  DESCENDING = "DESCENDING",
+  UNRECOGNIZED = "UNRECOGNIZED",
 }
 
 export function sort_SortOrderFromJSON(object: any): Sort_SortOrder {
@@ -59,6 +59,20 @@ export function sort_SortOrderToJSON(object: Sort_SortOrder): string {
   }
 }
 
+export function sort_SortOrderToNumber(object: Sort_SortOrder): number {
+  switch (object) {
+    case Sort_SortOrder.UNSORTED:
+      return 0;
+    case Sort_SortOrder.ASCENDING:
+      return 1;
+    case Sort_SortOrder.DESCENDING:
+      return 2;
+    case Sort_SortOrder.UNRECOGNIZED:
+    default:
+      return -1;
+  }
+}
+
 export interface Filter {
   field: string;
   operation: Filter_Operation;
@@ -69,16 +83,16 @@ export interface Filter {
 }
 
 export enum Filter_Operation {
-  eq = 0,
-  lt = 1,
-  lte = 2,
-  gt = 3,
-  gte = 4,
-  isEmpty = 5,
-  iLike = 6,
-  in = 7,
-  neq = 8,
-  UNRECOGNIZED = -1,
+  eq = "eq",
+  lt = "lt",
+  lte = "lte",
+  gt = "gt",
+  gte = "gte",
+  isEmpty = "isEmpty",
+  iLike = "iLike",
+  in = "in",
+  neq = "neq",
+  UNRECOGNIZED = "UNRECOGNIZED",
 }
 
 export function filter_OperationFromJSON(object: any): Filter_Operation {
@@ -143,14 +157,40 @@ export function filter_OperationToJSON(object: Filter_Operation): string {
   }
 }
 
+export function filter_OperationToNumber(object: Filter_Operation): number {
+  switch (object) {
+    case Filter_Operation.eq:
+      return 0;
+    case Filter_Operation.lt:
+      return 1;
+    case Filter_Operation.lte:
+      return 2;
+    case Filter_Operation.gt:
+      return 3;
+    case Filter_Operation.gte:
+      return 4;
+    case Filter_Operation.isEmpty:
+      return 5;
+    case Filter_Operation.iLike:
+      return 6;
+    case Filter_Operation.in:
+      return 7;
+    case Filter_Operation.neq:
+      return 8;
+    case Filter_Operation.UNRECOGNIZED:
+    default:
+      return -1;
+  }
+}
+
 export enum Filter_ValueType {
   /** STRING - default value type if not specified */
-  STRING = 0,
-  NUMBER = 1,
-  BOOLEAN = 2,
-  DATE = 3,
-  ARRAY = 4,
-  UNRECOGNIZED = -1,
+  STRING = "STRING",
+  NUMBER = "NUMBER",
+  BOOLEAN = "BOOLEAN",
+  DATE = "DATE",
+  ARRAY = "ARRAY",
+  UNRECOGNIZED = "UNRECOGNIZED",
 }
 
 export function filter_ValueTypeFromJSON(object: any): Filter_ValueType {
@@ -195,15 +235,33 @@ export function filter_ValueTypeToJSON(object: Filter_ValueType): string {
   }
 }
 
+export function filter_ValueTypeToNumber(object: Filter_ValueType): number {
+  switch (object) {
+    case Filter_ValueType.STRING:
+      return 0;
+    case Filter_ValueType.NUMBER:
+      return 1;
+    case Filter_ValueType.BOOLEAN:
+      return 2;
+    case Filter_ValueType.DATE:
+      return 3;
+    case Filter_ValueType.ARRAY:
+      return 4;
+    case Filter_ValueType.UNRECOGNIZED:
+    default:
+      return -1;
+  }
+}
+
 export interface FilterOp {
   filter: Filter[];
   operator: FilterOp_Operator;
 }
 
 export enum FilterOp_Operator {
-  and = 0,
-  or = 1,
-  UNRECOGNIZED = -1,
+  and = "and",
+  or = "or",
+  UNRECOGNIZED = "UNRECOGNIZED",
 }
 
 export function filterOp_OperatorFromJSON(object: any): FilterOp_Operator {
@@ -233,6 +291,18 @@ export function filterOp_OperatorToJSON(object: FilterOp_Operator): string {
   }
 }
 
+export function filterOp_OperatorToNumber(object: FilterOp_Operator): number {
+  switch (object) {
+    case FilterOp_Operator.and:
+      return 0;
+    case FilterOp_Operator.or:
+      return 1;
+    case FilterOp_Operator.UNRECOGNIZED:
+    default:
+      return -1;
+  }
+}
+
 export interface Search {
   /** search string */
   search: string;
@@ -243,8 +313,8 @@ export interface Search {
 }
 
 export interface ReadRequest {
-  offset?: number | undefined;
-  limit?: number | undefined;
+  offset: number;
+  limit: number;
   sort: Sort[];
   /** / Filter based on fieldName|operation, value|list */
   filters: FilterOp[];
@@ -260,16 +330,14 @@ export interface ReadRequest {
    */
   localesLimiter: string[];
   customQueries: string[];
-  customArguments?: Any | undefined;
+  customArguments?: Any;
   subject?: Subject;
-  search?: Search | undefined;
+  search?: Search;
 }
 
 export interface DeleteRequest {
   /** / Request to purge the whole collection */
-  collection?:
-    | boolean
-    | undefined;
+  collection: boolean;
   /** / Delete specified documents */
   ids: string[];
   subject?: Subject;
@@ -287,7 +355,7 @@ export interface DeleteResponse {
 /** / List of resources */
 export interface ResourceList {
   items: Resource[];
-  totalCount?: number | undefined;
+  totalCount: number;
   subject?: Subject;
 }
 
@@ -306,8 +374,8 @@ export interface ResourceResponse {
 
 /** / Example resource */
 export interface Resource {
-  id?: string | undefined;
-  meta?: Meta | undefined;
+  id: string;
+  meta?: Meta;
 }
 
 function createBaseFieldFilter(): FieldFilter {
@@ -373,7 +441,7 @@ export const FieldFilter = {
 };
 
 function createBaseSort(): Sort {
-  return { field: "", order: undefined };
+  return { field: "", order: Sort_SortOrder.UNSORTED };
 }
 
 export const Sort = {
@@ -381,8 +449,8 @@ export const Sort = {
     if (message.field !== "") {
       writer.uint32(10).string(message.field);
     }
-    if (message.order !== undefined) {
-      writer.uint32(16).int32(message.order);
+    if (message.order !== Sort_SortOrder.UNSORTED) {
+      writer.uint32(16).int32(sort_SortOrderToNumber(message.order));
     }
     return writer;
   },
@@ -398,7 +466,7 @@ export const Sort = {
           message.field = reader.string();
           break;
         case 2:
-          message.order = reader.int32() as any;
+          message.order = sort_SortOrderFromJSON(reader.int32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -411,15 +479,14 @@ export const Sort = {
   fromJSON(object: any): Sort {
     return {
       field: isSet(object.field) ? String(object.field) : "",
-      order: isSet(object.order) ? sort_SortOrderFromJSON(object.order) : undefined,
+      order: isSet(object.order) ? sort_SortOrderFromJSON(object.order) : Sort_SortOrder.UNSORTED,
     };
   },
 
   toJSON(message: Sort): unknown {
     const obj: any = {};
     message.field !== undefined && (obj.field = message.field);
-    message.order !== undefined &&
-      (obj.order = message.order !== undefined ? sort_SortOrderToJSON(message.order) : undefined);
+    message.order !== undefined && (obj.order = sort_SortOrderToJSON(message.order));
     return obj;
   },
 
@@ -430,13 +497,13 @@ export const Sort = {
   fromPartial(object: DeepPartial<Sort>): Sort {
     const message = createBaseSort();
     message.field = object.field ?? "";
-    message.order = object.order ?? undefined;
+    message.order = object.order ?? Sort_SortOrder.UNSORTED;
     return message;
   },
 };
 
 function createBaseFilter(): Filter {
-  return { field: "", operation: 0, value: "", type: 0, filters: [] };
+  return { field: "", operation: Filter_Operation.eq, value: "", type: Filter_ValueType.STRING, filters: [] };
 }
 
 export const Filter = {
@@ -444,14 +511,14 @@ export const Filter = {
     if (message.field !== "") {
       writer.uint32(10).string(message.field);
     }
-    if (message.operation !== 0) {
-      writer.uint32(16).int32(message.operation);
+    if (message.operation !== Filter_Operation.eq) {
+      writer.uint32(16).int32(filter_OperationToNumber(message.operation));
     }
     if (message.value !== "") {
       writer.uint32(26).string(message.value);
     }
-    if (message.type !== 0) {
-      writer.uint32(32).int32(message.type);
+    if (message.type !== Filter_ValueType.STRING) {
+      writer.uint32(32).int32(filter_ValueTypeToNumber(message.type));
     }
     for (const v of message.filters) {
       FilterOp6.encode(v!, writer.uint32(42).fork()).ldelim();
@@ -470,13 +537,13 @@ export const Filter = {
           message.field = reader.string();
           break;
         case 2:
-          message.operation = reader.int32() as any;
+          message.operation = filter_OperationFromJSON(reader.int32());
           break;
         case 3:
           message.value = reader.string();
           break;
         case 4:
-          message.type = reader.int32() as any;
+          message.type = filter_ValueTypeFromJSON(reader.int32());
           break;
         case 5:
           message.filters.push(FilterOp6.decode(reader, reader.uint32()));
@@ -492,9 +559,9 @@ export const Filter = {
   fromJSON(object: any): Filter {
     return {
       field: isSet(object.field) ? String(object.field) : "",
-      operation: isSet(object.operation) ? filter_OperationFromJSON(object.operation) : 0,
+      operation: isSet(object.operation) ? filter_OperationFromJSON(object.operation) : Filter_Operation.eq,
       value: isSet(object.value) ? String(object.value) : "",
-      type: isSet(object.type) ? filter_ValueTypeFromJSON(object.type) : 0,
+      type: isSet(object.type) ? filter_ValueTypeFromJSON(object.type) : Filter_ValueType.STRING,
       filters: Array.isArray(object?.filters) ? object.filters.map((e: any) => FilterOp.fromJSON(e)) : [],
     };
   },
@@ -520,16 +587,16 @@ export const Filter = {
   fromPartial(object: DeepPartial<Filter>): Filter {
     const message = createBaseFilter();
     message.field = object.field ?? "";
-    message.operation = object.operation ?? 0;
+    message.operation = object.operation ?? Filter_Operation.eq;
     message.value = object.value ?? "";
-    message.type = object.type ?? 0;
+    message.type = object.type ?? Filter_ValueType.STRING;
     message.filters = object.filters?.map((e) => FilterOp6.fromPartial(e)) || [];
     return message;
   },
 };
 
 function createBaseFilterOp(): FilterOp {
-  return { filter: [], operator: 0 };
+  return { filter: [], operator: FilterOp_Operator.and };
 }
 
 export const FilterOp = {
@@ -537,8 +604,8 @@ export const FilterOp = {
     for (const v of message.filter) {
       Filter.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.operator !== 0) {
-      writer.uint32(16).int32(message.operator);
+    if (message.operator !== FilterOp_Operator.and) {
+      writer.uint32(16).int32(filterOp_OperatorToNumber(message.operator));
     }
     return writer;
   },
@@ -554,7 +621,7 @@ export const FilterOp = {
           message.filter.push(Filter.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.operator = reader.int32() as any;
+          message.operator = filterOp_OperatorFromJSON(reader.int32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -567,7 +634,7 @@ export const FilterOp = {
   fromJSON(object: any): FilterOp {
     return {
       filter: Array.isArray(object?.filter) ? object.filter.map((e: any) => Filter.fromJSON(e)) : [],
-      operator: isSet(object.operator) ? filterOp_OperatorFromJSON(object.operator) : 0,
+      operator: isSet(object.operator) ? filterOp_OperatorFromJSON(object.operator) : FilterOp_Operator.and,
     };
   },
 
@@ -589,7 +656,7 @@ export const FilterOp = {
   fromPartial(object: DeepPartial<FilterOp>): FilterOp {
     const message = createBaseFilterOp();
     message.filter = object.filter?.map((e) => Filter.fromPartial(e)) || [];
-    message.operator = object.operator ?? 0;
+    message.operator = object.operator ?? FilterOp_Operator.and;
     return message;
   },
 };
@@ -671,8 +738,8 @@ export const Search = {
 
 function createBaseReadRequest(): ReadRequest {
   return {
-    offset: undefined,
-    limit: undefined,
+    offset: 0,
+    limit: 0,
     sort: [],
     filters: [],
     field: [],
@@ -686,10 +753,10 @@ function createBaseReadRequest(): ReadRequest {
 
 export const ReadRequest = {
   encode(message: ReadRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.offset !== undefined) {
+    if (message.offset !== 0) {
       writer.uint32(8).uint32(message.offset);
     }
-    if (message.limit !== undefined) {
+    if (message.limit !== 0) {
       writer.uint32(16).uint32(message.limit);
     }
     for (const v of message.sort) {
@@ -766,8 +833,8 @@ export const ReadRequest = {
 
   fromJSON(object: any): ReadRequest {
     return {
-      offset: isSet(object.offset) ? Number(object.offset) : undefined,
-      limit: isSet(object.limit) ? Number(object.limit) : undefined,
+      offset: isSet(object.offset) ? Number(object.offset) : 0,
+      limit: isSet(object.limit) ? Number(object.limit) : 0,
       sort: Array.isArray(object?.sort) ? object.sort.map((e: any) => Sort.fromJSON(e)) : [],
       filters: Array.isArray(object?.filters) ? object.filters.map((e: any) => FilterOp.fromJSON(e)) : [],
       field: Array.isArray(object?.field) ? object.field.map((e: any) => FieldFilter.fromJSON(e)) : [],
@@ -821,8 +888,8 @@ export const ReadRequest = {
 
   fromPartial(object: DeepPartial<ReadRequest>): ReadRequest {
     const message = createBaseReadRequest();
-    message.offset = object.offset ?? undefined;
-    message.limit = object.limit ?? undefined;
+    message.offset = object.offset ?? 0;
+    message.limit = object.limit ?? 0;
     message.sort = object.sort?.map((e) => Sort.fromPartial(e)) || [];
     message.filters = object.filters?.map((e) => FilterOp.fromPartial(e)) || [];
     message.field = object.field?.map((e) => FieldFilter.fromPartial(e)) || [];
@@ -842,12 +909,12 @@ export const ReadRequest = {
 };
 
 function createBaseDeleteRequest(): DeleteRequest {
-  return { collection: undefined, ids: [], subject: undefined, view: [], analyzer: [] };
+  return { collection: false, ids: [], subject: undefined, view: [], analyzer: [] };
 }
 
 export const DeleteRequest = {
   encode(message: DeleteRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.collection !== undefined) {
+    if (message.collection === true) {
       writer.uint32(8).bool(message.collection);
     }
     for (const v of message.ids) {
@@ -897,7 +964,7 @@ export const DeleteRequest = {
 
   fromJSON(object: any): DeleteRequest {
     return {
-      collection: isSet(object.collection) ? Boolean(object.collection) : undefined,
+      collection: isSet(object.collection) ? Boolean(object.collection) : false,
       ids: Array.isArray(object?.ids) ? object.ids.map((e: any) => String(e)) : [],
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
       view: Array.isArray(object?.view) ? object.view.map((e: any) => String(e)) : [],
@@ -933,7 +1000,7 @@ export const DeleteRequest = {
 
   fromPartial(object: DeepPartial<DeleteRequest>): DeleteRequest {
     const message = createBaseDeleteRequest();
-    message.collection = object.collection ?? undefined;
+    message.collection = object.collection ?? false;
     message.ids = object.ids?.map((e) => e) || [];
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
@@ -1014,7 +1081,7 @@ export const DeleteResponse = {
 };
 
 function createBaseResourceList(): ResourceList {
-  return { items: [], totalCount: undefined, subject: undefined };
+  return { items: [], totalCount: 0, subject: undefined };
 }
 
 export const ResourceList = {
@@ -1022,7 +1089,7 @@ export const ResourceList = {
     for (const v of message.items) {
       Resource.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.totalCount !== undefined) {
+    if (message.totalCount !== 0) {
       writer.uint32(16).uint32(message.totalCount);
     }
     if (message.subject !== undefined) {
@@ -1058,7 +1125,7 @@ export const ResourceList = {
   fromJSON(object: any): ResourceList {
     return {
       items: Array.isArray(object?.items) ? object.items.map((e: any) => Resource.fromJSON(e)) : [],
-      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : undefined,
+      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
@@ -1082,7 +1149,7 @@ export const ResourceList = {
   fromPartial(object: DeepPartial<ResourceList>): ResourceList {
     const message = createBaseResourceList();
     message.items = object.items?.map((e) => Resource.fromPartial(e)) || [];
-    message.totalCount = object.totalCount ?? undefined;
+    message.totalCount = object.totalCount ?? 0;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
@@ -1235,12 +1302,12 @@ export const ResourceResponse = {
 };
 
 function createBaseResource(): Resource {
-  return { id: undefined, meta: undefined };
+  return { id: "", meta: undefined };
 }
 
 export const Resource = {
   encode(message: Resource, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== undefined) {
+    if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
     if (message.meta !== undefined) {
@@ -1272,7 +1339,7 @@ export const Resource = {
 
   fromJSON(object: any): Resource {
     return {
-      id: isSet(object.id) ? String(object.id) : undefined,
+      id: isSet(object.id) ? String(object.id) : "",
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
     };
   },
@@ -1290,7 +1357,7 @@ export const Resource = {
 
   fromPartial(object: DeepPartial<Resource>): Resource {
     const message = createBaseResource();
-    message.id = object.id ?? undefined;
+    message.id = object.id ?? "";
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
     return message;
   },
@@ -1455,7 +1522,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "order",
         "options": undefined,
-        "proto3Optional": true,
+        "proto3Optional": false,
       }],
       "extension": [],
       "nestedType": [],
@@ -1471,7 +1538,7 @@ export const protoMetadata: ProtoMetadata = {
         "reservedName": [],
       }],
       "extensionRange": [],
-      "oneofDecl": [{ "name": "_order", "options": undefined }],
+      "oneofDecl": [],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1679,7 +1746,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "offset",
         "options": undefined,
-        "proto3Optional": true,
+        "proto3Optional": false,
       }, {
         "name": "limit",
         "number": 2,
@@ -1688,10 +1755,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 1,
+        "oneofIndex": 0,
         "jsonName": "limit",
         "options": undefined,
-        "proto3Optional": true,
+        "proto3Optional": false,
       }, {
         "name": "sort",
         "number": 3,
@@ -1760,10 +1827,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".google.protobuf.Any",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 2,
+        "oneofIndex": 0,
         "jsonName": "customArguments",
         "options": undefined,
-        "proto3Optional": true,
+        "proto3Optional": false,
       }, {
         "name": "subject",
         "number": 10,
@@ -1784,19 +1851,16 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.resourcebase.Search",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 3,
+        "oneofIndex": 0,
         "jsonName": "search",
         "options": undefined,
-        "proto3Optional": true,
+        "proto3Optional": false,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [{ "name": "_offset", "options": undefined }, { "name": "_limit", "options": undefined }, {
-        "name": "_custom_arguments",
-        "options": undefined,
-      }, { "name": "_search", "options": undefined }],
+      "oneofDecl": [],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1813,7 +1877,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "collection",
         "options": undefined,
-        "proto3Optional": true,
+        "proto3Optional": false,
       }, {
         "name": "ids",
         "number": 2,
@@ -1867,7 +1931,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [{ "name": "_collection", "options": undefined }],
+      "oneofDecl": [],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1931,7 +1995,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "totalCount",
         "options": undefined,
-        "proto3Optional": true,
+        "proto3Optional": false,
       }, {
         "name": "subject",
         "number": 3,
@@ -1949,7 +2013,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [{ "name": "_total_count", "options": undefined }],
+      "oneofDecl": [],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -2048,7 +2112,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": true,
+        "proto3Optional": false,
       }, {
         "name": "meta",
         "number": 2,
@@ -2057,16 +2121,16 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.meta.Meta",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 1,
+        "oneofIndex": 0,
         "jsonName": "meta",
         "options": undefined,
-        "proto3Optional": true,
+        "proto3Optional": false,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [{ "name": "_id", "options": undefined }, { "name": "_meta", "options": undefined }],
+      "oneofDecl": [],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -2173,7 +2237,7 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 6, 2, 0],
-        "span": [102, 2, 31],
+        "span": [102, 2, 22],
         "leadingComments": "/ Request to purge the whole collection\n",
         "trailingComments": "",
         "leadingDetachedComments": [],

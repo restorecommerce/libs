@@ -11,10 +11,10 @@ import { OperationStatus, protoMetadata as protoMetadata5, Status } from "./stat
 export const protobufPackage = "io.restorecommerce.payment_method";
 
 export enum PaymentMethodEnum {
-  WIRE_TRANSFER = 0,
-  DIRECT_DEBIT = 1,
-  PAYPAL = 2,
-  UNRECOGNIZED = -1,
+  WIRE_TRANSFER = "WIRE_TRANSFER",
+  DIRECT_DEBIT = "DIRECT_DEBIT",
+  PAYPAL = "PAYPAL",
+  UNRECOGNIZED = "UNRECOGNIZED",
 }
 
 export function paymentMethodEnumFromJSON(object: any): PaymentMethodEnum {
@@ -49,11 +49,25 @@ export function paymentMethodEnumToJSON(object: PaymentMethodEnum): string {
   }
 }
 
+export function paymentMethodEnumToNumber(object: PaymentMethodEnum): number {
+  switch (object) {
+    case PaymentMethodEnum.WIRE_TRANSFER:
+      return 0;
+    case PaymentMethodEnum.DIRECT_DEBIT:
+      return 1;
+    case PaymentMethodEnum.PAYPAL:
+      return 2;
+    case PaymentMethodEnum.UNRECOGNIZED:
+    default:
+      return -1;
+  }
+}
+
 export enum TransferTypeEnum {
-  RECEIVE = 0,
-  SEND = 1,
-  BOTH = 2,
-  UNRECOGNIZED = -1,
+  RECEIVE = "RECEIVE",
+  SEND = "SEND",
+  BOTH = "BOTH",
+  UNRECOGNIZED = "UNRECOGNIZED",
 }
 
 export function transferTypeEnumFromJSON(object: any): TransferTypeEnum {
@@ -88,13 +102,27 @@ export function transferTypeEnumToJSON(object: TransferTypeEnum): string {
   }
 }
 
+export function transferTypeEnumToNumber(object: TransferTypeEnum): number {
+  switch (object) {
+    case TransferTypeEnum.RECEIVE:
+      return 0;
+    case TransferTypeEnum.SEND:
+      return 1;
+    case TransferTypeEnum.BOTH:
+      return 2;
+    case TransferTypeEnum.UNRECOGNIZED:
+    default:
+      return -1;
+  }
+}
+
 export interface Deleted {
   id: string;
 }
 
 export interface PaymentMethodList {
   items: PaymentMethod[];
-  totalCount?: number | undefined;
+  totalCount: number;
   subject?: Subject;
 }
 
@@ -110,11 +138,11 @@ export interface PaymentMethodResponse {
 }
 
 export interface PaymentMethod {
-  id?: string | undefined;
-  meta?: Meta | undefined;
-  paymentMethod?: PaymentMethodEnum | undefined;
-  transferType?: TransferTypeEnum | undefined;
-  data?: Any | undefined;
+  id: string;
+  meta?: Meta;
+  paymentMethod: PaymentMethodEnum;
+  transferType: TransferTypeEnum;
+  data?: Any;
 }
 
 function createBaseDeleted(): Deleted {
@@ -169,7 +197,7 @@ export const Deleted = {
 };
 
 function createBasePaymentMethodList(): PaymentMethodList {
-  return { items: [], totalCount: undefined, subject: undefined };
+  return { items: [], totalCount: 0, subject: undefined };
 }
 
 export const PaymentMethodList = {
@@ -177,7 +205,7 @@ export const PaymentMethodList = {
     for (const v of message.items) {
       PaymentMethod.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.totalCount !== undefined) {
+    if (message.totalCount !== 0) {
       writer.uint32(16).uint32(message.totalCount);
     }
     if (message.subject !== undefined) {
@@ -213,7 +241,7 @@ export const PaymentMethodList = {
   fromJSON(object: any): PaymentMethodList {
     return {
       items: Array.isArray(object?.items) ? object.items.map((e: any) => PaymentMethod.fromJSON(e)) : [],
-      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : undefined,
+      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
@@ -237,7 +265,7 @@ export const PaymentMethodList = {
   fromPartial(object: DeepPartial<PaymentMethodList>): PaymentMethodList {
     const message = createBasePaymentMethodList();
     message.items = object.items?.map((e) => PaymentMethod.fromPartial(e)) || [];
-    message.totalCount = object.totalCount ?? undefined;
+    message.totalCount = object.totalCount ?? 0;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
@@ -391,22 +419,28 @@ export const PaymentMethodResponse = {
 };
 
 function createBasePaymentMethod(): PaymentMethod {
-  return { id: undefined, meta: undefined, paymentMethod: undefined, transferType: undefined, data: undefined };
+  return {
+    id: "",
+    meta: undefined,
+    paymentMethod: PaymentMethodEnum.WIRE_TRANSFER,
+    transferType: TransferTypeEnum.RECEIVE,
+    data: undefined,
+  };
 }
 
 export const PaymentMethod = {
   encode(message: PaymentMethod, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== undefined) {
+    if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
-    if (message.paymentMethod !== undefined) {
-      writer.uint32(24).int32(message.paymentMethod);
+    if (message.paymentMethod !== PaymentMethodEnum.WIRE_TRANSFER) {
+      writer.uint32(24).int32(paymentMethodEnumToNumber(message.paymentMethod));
     }
-    if (message.transferType !== undefined) {
-      writer.uint32(32).int32(message.transferType);
+    if (message.transferType !== TransferTypeEnum.RECEIVE) {
+      writer.uint32(32).int32(transferTypeEnumToNumber(message.transferType));
     }
     if (message.data !== undefined) {
       Any.encode(message.data, writer.uint32(42).fork()).ldelim();
@@ -428,10 +462,10 @@ export const PaymentMethod = {
           message.meta = Meta.decode(reader, reader.uint32());
           break;
         case 3:
-          message.paymentMethod = reader.int32() as any;
+          message.paymentMethod = paymentMethodEnumFromJSON(reader.int32());
           break;
         case 4:
-          message.transferType = reader.int32() as any;
+          message.transferType = transferTypeEnumFromJSON(reader.int32());
           break;
         case 5:
           message.data = Any.decode(reader, reader.uint32());
@@ -446,10 +480,14 @@ export const PaymentMethod = {
 
   fromJSON(object: any): PaymentMethod {
     return {
-      id: isSet(object.id) ? String(object.id) : undefined,
+      id: isSet(object.id) ? String(object.id) : "",
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
-      paymentMethod: isSet(object.paymentMethod) ? paymentMethodEnumFromJSON(object.paymentMethod) : undefined,
-      transferType: isSet(object.transferType) ? transferTypeEnumFromJSON(object.transferType) : undefined,
+      paymentMethod: isSet(object.paymentMethod)
+        ? paymentMethodEnumFromJSON(object.paymentMethod)
+        : PaymentMethodEnum.WIRE_TRANSFER,
+      transferType: isSet(object.transferType)
+        ? transferTypeEnumFromJSON(object.transferType)
+        : TransferTypeEnum.RECEIVE,
       data: isSet(object.data) ? Any.fromJSON(object.data) : undefined,
     };
   },
@@ -458,13 +496,8 @@ export const PaymentMethod = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
-    message.paymentMethod !== undefined && (obj.paymentMethod = message.paymentMethod !== undefined
-      ? paymentMethodEnumToJSON(message.paymentMethod)
-      : undefined);
-    message.transferType !== undefined &&
-      (obj.transferType = message.transferType !== undefined
-        ? transferTypeEnumToJSON(message.transferType)
-        : undefined);
+    message.paymentMethod !== undefined && (obj.paymentMethod = paymentMethodEnumToJSON(message.paymentMethod));
+    message.transferType !== undefined && (obj.transferType = transferTypeEnumToJSON(message.transferType));
     message.data !== undefined && (obj.data = message.data ? Any.toJSON(message.data) : undefined);
     return obj;
   },
@@ -475,10 +508,10 @@ export const PaymentMethod = {
 
   fromPartial(object: DeepPartial<PaymentMethod>): PaymentMethod {
     const message = createBasePaymentMethod();
-    message.id = object.id ?? undefined;
+    message.id = object.id ?? "";
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
-    message.paymentMethod = object.paymentMethod ?? undefined;
-    message.transferType = object.transferType ?? undefined;
+    message.paymentMethod = object.paymentMethod ?? PaymentMethodEnum.WIRE_TRANSFER;
+    message.transferType = object.transferType ?? TransferTypeEnum.RECEIVE;
     message.data = (object.data !== undefined && object.data !== null) ? Any.fromPartial(object.data) : undefined;
     return message;
   },
@@ -649,7 +682,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "totalCount",
         "options": undefined,
-        "proto3Optional": true,
+        "proto3Optional": false,
       }, {
         "name": "subject",
         "number": 3,
@@ -667,7 +700,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [{ "name": "_total_count", "options": undefined }],
+      "oneofDecl": [],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -766,7 +799,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": true,
+        "proto3Optional": false,
       }, {
         "name": "meta",
         "number": 2,
@@ -775,10 +808,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.meta.Meta",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 1,
+        "oneofIndex": 0,
         "jsonName": "meta",
         "options": undefined,
-        "proto3Optional": true,
+        "proto3Optional": false,
       }, {
         "name": "payment_method",
         "number": 3,
@@ -787,10 +820,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.payment_method.PaymentMethodEnum",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 2,
+        "oneofIndex": 0,
         "jsonName": "paymentMethod",
         "options": undefined,
-        "proto3Optional": true,
+        "proto3Optional": false,
       }, {
         "name": "transfer_type",
         "number": 4,
@@ -799,10 +832,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.payment_method.TransferTypeEnum",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 3,
+        "oneofIndex": 0,
         "jsonName": "transferType",
         "options": undefined,
-        "proto3Optional": true,
+        "proto3Optional": false,
       }, {
         "name": "data",
         "number": 5,
@@ -811,22 +844,16 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".google.protobuf.Any",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 4,
+        "oneofIndex": 0,
         "jsonName": "data",
         "options": undefined,
-        "proto3Optional": true,
+        "proto3Optional": false,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [
-        { "name": "_id", "options": undefined },
-        { "name": "_meta", "options": undefined },
-        { "name": "_payment_method", "options": undefined },
-        { "name": "_transfer_type", "options": undefined },
-        { "name": "_data", "options": undefined },
-      ],
+      "oneofDecl": [],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],

@@ -27,6 +27,11 @@ export interface OperationStatus {
   message?: string | undefined;
 }
 
+export interface StatusListResponse {
+  status: Status[];
+  operation_status?: OperationStatus;
+}
+
 function createBaseStatus(): Status {
   return { id: undefined, code: undefined, message: undefined };
 }
@@ -324,6 +329,75 @@ export const OperationStatus = {
   },
 };
 
+function createBaseStatusListResponse(): StatusListResponse {
+  return { status: [], operation_status: undefined };
+}
+
+export const StatusListResponse = {
+  encode(message: StatusListResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    for (const v of message.status) {
+      Status.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.operation_status !== undefined) {
+      OperationStatus.encode(message.operation_status, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): StatusListResponse {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseStatusListResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.status.push(Status.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.operation_status = OperationStatus.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): StatusListResponse {
+    return {
+      status: Array.isArray(object?.status) ? object.status.map((e: any) => Status.fromJSON(e)) : [],
+      operation_status: isSet(object.operation_status) ? OperationStatus.fromJSON(object.operation_status) : undefined,
+    };
+  },
+
+  toJSON(message: StatusListResponse): unknown {
+    const obj: any = {};
+    if (message.status) {
+      obj.status = message.status.map((e) => e ? Status.toJSON(e) : undefined);
+    } else {
+      obj.status = [];
+    }
+    message.operation_status !== undefined &&
+      (obj.operation_status = message.operation_status ? OperationStatus.toJSON(message.operation_status) : undefined);
+    return obj;
+  },
+
+  create(base?: DeepPartial<StatusListResponse>): StatusListResponse {
+    return StatusListResponse.fromPartial(base ?? {});
+  },
+
+  fromPartial(object: DeepPartial<StatusListResponse>): StatusListResponse {
+    const message = createBaseStatusListResponse();
+    message.status = object.status?.map((e) => Status.fromPartial(e)) || [];
+    message.operation_status = (object.operation_status !== undefined && object.operation_status !== null)
+      ? OperationStatus.fromPartial(object.operation_status)
+      : undefined;
+    return message;
+  },
+};
+
 type ProtoMetaMessageOptions = {
   options?: { [key: string]: any };
   fields?: { [key: string]: { [key: string]: any } };
@@ -506,6 +580,41 @@ export const protoMetadata: ProtoMetadata = {
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
+    }, {
+      "name": "StatusListResponse",
+      "field": [{
+        "name": "status",
+        "number": 1,
+        "label": 3,
+        "type": 11,
+        "typeName": ".io.restorecommerce.status.Status",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "status",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "operation_status",
+        "number": 2,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.status.OperationStatus",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "operationStatus",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
     }],
     "enumType": [],
     "service": [],
@@ -520,6 +629,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.status.StatusObj": StatusObj,
     ".io.restorecommerce.status.OperationStatusObj": OperationStatusObj,
     ".io.restorecommerce.status.OperationStatus": OperationStatus,
+    ".io.restorecommerce.status.StatusListResponse": StatusListResponse,
   },
   dependencies: [],
 };

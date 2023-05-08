@@ -25,9 +25,9 @@ export interface Payload {
 
 /** style-applying 'strategy' */
 export enum Payload_Strategy {
-  INLINE = 0,
-  COPY = 1,
-  UNRECOGNIZED = -1,
+  INLINE = "INLINE",
+  COPY = "COPY",
+  UNRECOGNIZED = "UNRECOGNIZED",
 }
 
 export function payload_StrategyFromJSON(object: any): Payload_Strategy {
@@ -57,6 +57,18 @@ export function payload_StrategyToJSON(object: Payload_Strategy): string {
   }
 }
 
+export function payload_StrategyToNumber(object: Payload_Strategy): number {
+  switch (object) {
+    case Payload_Strategy.INLINE:
+      return 0;
+    case Payload_Strategy.COPY:
+      return 1;
+    case Payload_Strategy.UNRECOGNIZED:
+    default:
+      return -1;
+  }
+}
+
 export interface RenderRequest {
   /** identifies the render request payload */
   id: string;
@@ -71,7 +83,14 @@ export interface RenderResponse {
 }
 
 function createBasePayload(): Payload {
-  return { templates: undefined, data: undefined, styleUrl: "", strategy: 0, options: undefined, contentType: "" };
+  return {
+    templates: undefined,
+    data: undefined,
+    styleUrl: "",
+    strategy: Payload_Strategy.INLINE,
+    options: undefined,
+    contentType: "",
+  };
 }
 
 export const Payload = {
@@ -85,8 +104,8 @@ export const Payload = {
     if (message.styleUrl !== "") {
       writer.uint32(26).string(message.styleUrl);
     }
-    if (message.strategy !== 0) {
-      writer.uint32(32).int32(message.strategy);
+    if (message.strategy !== Payload_Strategy.INLINE) {
+      writer.uint32(32).int32(payload_StrategyToNumber(message.strategy));
     }
     if (message.options !== undefined) {
       Any.encode(message.options, writer.uint32(42).fork()).ldelim();
@@ -114,7 +133,7 @@ export const Payload = {
           message.styleUrl = reader.string();
           break;
         case 4:
-          message.strategy = reader.int32() as any;
+          message.strategy = payload_StrategyFromJSON(reader.int32());
           break;
         case 5:
           message.options = Any.decode(reader, reader.uint32());
@@ -135,7 +154,7 @@ export const Payload = {
       templates: isSet(object.templates) ? Any.fromJSON(object.templates) : undefined,
       data: isSet(object.data) ? Any.fromJSON(object.data) : undefined,
       styleUrl: isSet(object.styleUrl) ? String(object.styleUrl) : "",
-      strategy: isSet(object.strategy) ? payload_StrategyFromJSON(object.strategy) : 0,
+      strategy: isSet(object.strategy) ? payload_StrategyFromJSON(object.strategy) : Payload_Strategy.INLINE,
       options: isSet(object.options) ? Any.fromJSON(object.options) : undefined,
       contentType: isSet(object.contentType) ? String(object.contentType) : "",
     };
@@ -163,7 +182,7 @@ export const Payload = {
       : undefined;
     message.data = (object.data !== undefined && object.data !== null) ? Any.fromPartial(object.data) : undefined;
     message.styleUrl = object.styleUrl ?? "";
-    message.strategy = object.strategy ?? 0;
+    message.strategy = object.strategy ?? Payload_Strategy.INLINE;
     message.options = (object.options !== undefined && object.options !== null)
       ? Any.fromPartial(object.options)
       : undefined;

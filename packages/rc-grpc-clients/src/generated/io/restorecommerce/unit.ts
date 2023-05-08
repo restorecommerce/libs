@@ -4,149 +4,226 @@ import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
 import { protoMetadata as protoMetadata3, Subject } from "./auth";
 import { Meta, protoMetadata as protoMetadata2 } from "./meta";
-import { protoMetadata as protoMetadata5 } from "./options";
+import { protoMetadata as protoMetadata5, Resolver } from "./options";
 import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata1, ReadRequest } from "./resource_base";
 import { OperationStatus, protoMetadata as protoMetadata4, Status } from "./status";
 
-export const protobufPackage = "io.restorecommerce.command";
+export const protobufPackage = "io.restorecommerce.unit";
 
-/** command resource */
-export interface Command {
-  id: string;
-  meta?: Meta;
-  /** command name */
-  name: string;
-  /** all possible parameters */
-  parameters: CommandParameter[];
-  /** command description */
-  description: string;
-}
-
-export interface CommandParameter {
-  /** field name */
-  field: string;
-  /** field description */
-  description: string;
-  /** field's type */
-  type: CommandParameter_ParameterType;
-  /** dump properties in case of `object_value`` */
-  properties: string;
-}
-
-export enum CommandParameter_ParameterType {
-  boolean_value = "boolean_value",
-  object_value = "object_value",
-  array_value = "array_value",
-  number_value = "number_value",
-  string_value = "string_value",
+export enum UnitType {
+  UnitTypeUndefined = "UnitTypeUndefined",
+  Length = "Length",
+  Weight = "Weight",
+  Speed = "Speed",
+  /** Force - ... */
+  Force = "Force",
   UNRECOGNIZED = "UNRECOGNIZED",
 }
 
-export function commandParameter_ParameterTypeFromJSON(object: any): CommandParameter_ParameterType {
+export function unitTypeFromJSON(object: any): UnitType {
   switch (object) {
     case 0:
-    case "boolean_value":
-      return CommandParameter_ParameterType.boolean_value;
+    case "UnitTypeUndefined":
+      return UnitType.UnitTypeUndefined;
     case 1:
-    case "object_value":
-      return CommandParameter_ParameterType.object_value;
+    case "Length":
+      return UnitType.Length;
     case 2:
-    case "array_value":
-      return CommandParameter_ParameterType.array_value;
+    case "Weight":
+      return UnitType.Weight;
     case 3:
-    case "number_value":
-      return CommandParameter_ParameterType.number_value;
+    case "Speed":
+      return UnitType.Speed;
     case 4:
-    case "string_value":
-      return CommandParameter_ParameterType.string_value;
+    case "Force":
+      return UnitType.Force;
     case -1:
     case "UNRECOGNIZED":
     default:
-      return CommandParameter_ParameterType.UNRECOGNIZED;
+      return UnitType.UNRECOGNIZED;
   }
 }
 
-export function commandParameter_ParameterTypeToJSON(object: CommandParameter_ParameterType): string {
+export function unitTypeToJSON(object: UnitType): string {
   switch (object) {
-    case CommandParameter_ParameterType.boolean_value:
-      return "boolean_value";
-    case CommandParameter_ParameterType.object_value:
-      return "object_value";
-    case CommandParameter_ParameterType.array_value:
-      return "array_value";
-    case CommandParameter_ParameterType.number_value:
-      return "number_value";
-    case CommandParameter_ParameterType.string_value:
-      return "string_value";
-    case CommandParameter_ParameterType.UNRECOGNIZED:
+    case UnitType.UnitTypeUndefined:
+      return "UnitTypeUndefined";
+    case UnitType.Length:
+      return "Length";
+    case UnitType.Weight:
+      return "Weight";
+    case UnitType.Speed:
+      return "Speed";
+    case UnitType.Force:
+      return "Force";
+    case UnitType.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
   }
 }
 
-export function commandParameter_ParameterTypeToNumber(object: CommandParameter_ParameterType): number {
+export function unitTypeToNumber(object: UnitType): number {
   switch (object) {
-    case CommandParameter_ParameterType.boolean_value:
+    case UnitType.UnitTypeUndefined:
       return 0;
-    case CommandParameter_ParameterType.object_value:
+    case UnitType.Length:
       return 1;
-    case CommandParameter_ParameterType.array_value:
+    case UnitType.Weight:
       return 2;
-    case CommandParameter_ParameterType.number_value:
+    case UnitType.Speed:
       return 3;
-    case CommandParameter_ParameterType.string_value:
+    case UnitType.Force:
       return 4;
-    case CommandParameter_ParameterType.UNRECOGNIZED:
+    case UnitType.UNRECOGNIZED:
     default:
       return -1;
   }
 }
 
-export interface CommandList {
-  items: Command[];
+export enum UnitSystem {
+  UnitSystemUndefined = "UnitSystemUndefined",
+  Metric = "Metric",
+  Imperial = "Imperial",
+  UNRECOGNIZED = "UNRECOGNIZED",
+}
+
+export function unitSystemFromJSON(object: any): UnitSystem {
+  switch (object) {
+    case 0:
+    case "UnitSystemUndefined":
+      return UnitSystem.UnitSystemUndefined;
+    case 1:
+    case "Metric":
+      return UnitSystem.Metric;
+    case 2:
+    case "Imperial":
+      return UnitSystem.Imperial;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return UnitSystem.UNRECOGNIZED;
+  }
+}
+
+export function unitSystemToJSON(object: UnitSystem): string {
+  switch (object) {
+    case UnitSystem.UnitSystemUndefined:
+      return "UnitSystemUndefined";
+    case UnitSystem.Metric:
+      return "Metric";
+    case UnitSystem.Imperial:
+      return "Imperial";
+    case UnitSystem.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
+
+export function unitSystemToNumber(object: UnitSystem): number {
+  switch (object) {
+    case UnitSystem.UnitSystemUndefined:
+      return 0;
+    case UnitSystem.Metric:
+      return 1;
+    case UnitSystem.Imperial:
+      return 2;
+    case UnitSystem.UNRECOGNIZED:
+    default:
+      return -1;
+  }
+}
+
+export interface Unit {
+  id: string;
+  meta?: Meta;
+  parentId: string;
+  name: string;
+  symbol: string;
+  standardType?: UnitType | undefined;
+  customType?: string | undefined;
+  standardSystem?: UnitSystem | undefined;
+  customSystem?:
+    | string
+    | undefined;
+  /** convert factor to standard unit */
+  factor: number;
+}
+
+export interface UnitList {
+  items: Unit[];
   totalCount: number;
   subject?: Subject;
 }
 
-export interface CommandListResponse {
-  items: CommandResponse[];
+export interface UnitListResponse {
+  items: UnitResponse[];
   totalCount: number;
   operationStatus?: OperationStatus;
 }
 
-export interface CommandResponse {
-  payload?: Command;
+export interface UnitResponse {
+  payload?: Unit;
   status?: Status;
 }
 
-function createBaseCommand(): Command {
-  return { id: "", meta: undefined, name: "", parameters: [], description: "" };
+export interface Deleted {
+  id: string;
 }
 
-export const Command = {
-  encode(message: Command, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+function createBaseUnit(): Unit {
+  return {
+    id: "",
+    meta: undefined,
+    parentId: "",
+    name: "",
+    symbol: "",
+    standardType: undefined,
+    customType: undefined,
+    standardSystem: undefined,
+    customSystem: undefined,
+    factor: 0,
+  };
+}
+
+export const Unit = {
+  encode(message: Unit, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
+    if (message.parentId !== "") {
+      writer.uint32(26).string(message.parentId);
+    }
     if (message.name !== "") {
-      writer.uint32(26).string(message.name);
+      writer.uint32(34).string(message.name);
     }
-    for (const v of message.parameters) {
-      CommandParameter.encode(v!, writer.uint32(34).fork()).ldelim();
+    if (message.symbol !== "") {
+      writer.uint32(42).string(message.symbol);
     }
-    if (message.description !== "") {
-      writer.uint32(42).string(message.description);
+    if (message.standardType !== undefined) {
+      writer.uint32(48).int32(unitTypeToNumber(message.standardType));
+    }
+    if (message.customType !== undefined) {
+      writer.uint32(58).string(message.customType);
+    }
+    if (message.standardSystem !== undefined) {
+      writer.uint32(64).int32(unitSystemToNumber(message.standardSystem));
+    }
+    if (message.customSystem !== undefined) {
+      writer.uint32(74).string(message.customSystem);
+    }
+    if (message.factor !== 0) {
+      writer.uint32(81).double(message.factor);
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): Command {
+  decode(input: _m0.Reader | Uint8Array, length?: number): Unit {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseCommand();
+    const message = createBaseUnit();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -157,13 +234,28 @@ export const Command = {
           message.meta = Meta.decode(reader, reader.uint32());
           break;
         case 3:
-          message.name = reader.string();
+          message.parentId = reader.string();
           break;
         case 4:
-          message.parameters.push(CommandParameter.decode(reader, reader.uint32()));
+          message.name = reader.string();
           break;
         case 5:
-          message.description = reader.string();
+          message.symbol = reader.string();
+          break;
+        case 6:
+          message.standardType = unitTypeFromJSON(reader.int32());
+          break;
+        case 7:
+          message.customType = reader.string();
+          break;
+        case 8:
+          message.standardSystem = unitSystemFromJSON(reader.int32());
+          break;
+        case 9:
+          message.customSystem = reader.string();
+          break;
+        case 10:
+          message.factor = reader.double();
           break;
         default:
           reader.skipType(tag & 7);
@@ -173,137 +265,68 @@ export const Command = {
     return message;
   },
 
-  fromJSON(object: any): Command {
+  fromJSON(object: any): Unit {
     return {
       id: isSet(object.id) ? String(object.id) : "",
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
+      parentId: isSet(object.parentId) ? String(object.parentId) : "",
       name: isSet(object.name) ? String(object.name) : "",
-      parameters: Array.isArray(object?.parameters)
-        ? object.parameters.map((e: any) => CommandParameter.fromJSON(e))
-        : [],
-      description: isSet(object.description) ? String(object.description) : "",
+      symbol: isSet(object.symbol) ? String(object.symbol) : "",
+      standardType: isSet(object.standardType) ? unitTypeFromJSON(object.standardType) : undefined,
+      customType: isSet(object.customType) ? String(object.customType) : undefined,
+      standardSystem: isSet(object.standardSystem) ? unitSystemFromJSON(object.standardSystem) : undefined,
+      customSystem: isSet(object.customSystem) ? String(object.customSystem) : undefined,
+      factor: isSet(object.factor) ? Number(object.factor) : 0,
     };
   },
 
-  toJSON(message: Command): unknown {
+  toJSON(message: Unit): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    message.parentId !== undefined && (obj.parentId = message.parentId);
     message.name !== undefined && (obj.name = message.name);
-    if (message.parameters) {
-      obj.parameters = message.parameters.map((e) => e ? CommandParameter.toJSON(e) : undefined);
-    } else {
-      obj.parameters = [];
-    }
-    message.description !== undefined && (obj.description = message.description);
+    message.symbol !== undefined && (obj.symbol = message.symbol);
+    message.standardType !== undefined &&
+      (obj.standardType = message.standardType !== undefined ? unitTypeToJSON(message.standardType) : undefined);
+    message.customType !== undefined && (obj.customType = message.customType);
+    message.standardSystem !== undefined &&
+      (obj.standardSystem = message.standardSystem !== undefined
+        ? unitSystemToJSON(message.standardSystem)
+        : undefined);
+    message.customSystem !== undefined && (obj.customSystem = message.customSystem);
+    message.factor !== undefined && (obj.factor = message.factor);
     return obj;
   },
 
-  create(base?: DeepPartial<Command>): Command {
-    return Command.fromPartial(base ?? {});
+  create(base?: DeepPartial<Unit>): Unit {
+    return Unit.fromPartial(base ?? {});
   },
 
-  fromPartial(object: DeepPartial<Command>): Command {
-    const message = createBaseCommand();
+  fromPartial(object: DeepPartial<Unit>): Unit {
+    const message = createBaseUnit();
     message.id = object.id ?? "";
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
+    message.parentId = object.parentId ?? "";
     message.name = object.name ?? "";
-    message.parameters = object.parameters?.map((e) => CommandParameter.fromPartial(e)) || [];
-    message.description = object.description ?? "";
+    message.symbol = object.symbol ?? "";
+    message.standardType = object.standardType ?? undefined;
+    message.customType = object.customType ?? undefined;
+    message.standardSystem = object.standardSystem ?? undefined;
+    message.customSystem = object.customSystem ?? undefined;
+    message.factor = object.factor ?? 0;
     return message;
   },
 };
 
-function createBaseCommandParameter(): CommandParameter {
-  return { field: "", description: "", type: CommandParameter_ParameterType.boolean_value, properties: "" };
-}
-
-export const CommandParameter = {
-  encode(message: CommandParameter, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.field !== "") {
-      writer.uint32(10).string(message.field);
-    }
-    if (message.description !== "") {
-      writer.uint32(18).string(message.description);
-    }
-    if (message.type !== CommandParameter_ParameterType.boolean_value) {
-      writer.uint32(24).int32(commandParameter_ParameterTypeToNumber(message.type));
-    }
-    if (message.properties !== "") {
-      writer.uint32(34).string(message.properties);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): CommandParameter {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseCommandParameter();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.field = reader.string();
-          break;
-        case 2:
-          message.description = reader.string();
-          break;
-        case 3:
-          message.type = commandParameter_ParameterTypeFromJSON(reader.int32());
-          break;
-        case 4:
-          message.properties = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): CommandParameter {
-    return {
-      field: isSet(object.field) ? String(object.field) : "",
-      description: isSet(object.description) ? String(object.description) : "",
-      type: isSet(object.type)
-        ? commandParameter_ParameterTypeFromJSON(object.type)
-        : CommandParameter_ParameterType.boolean_value,
-      properties: isSet(object.properties) ? String(object.properties) : "",
-    };
-  },
-
-  toJSON(message: CommandParameter): unknown {
-    const obj: any = {};
-    message.field !== undefined && (obj.field = message.field);
-    message.description !== undefined && (obj.description = message.description);
-    message.type !== undefined && (obj.type = commandParameter_ParameterTypeToJSON(message.type));
-    message.properties !== undefined && (obj.properties = message.properties);
-    return obj;
-  },
-
-  create(base?: DeepPartial<CommandParameter>): CommandParameter {
-    return CommandParameter.fromPartial(base ?? {});
-  },
-
-  fromPartial(object: DeepPartial<CommandParameter>): CommandParameter {
-    const message = createBaseCommandParameter();
-    message.field = object.field ?? "";
-    message.description = object.description ?? "";
-    message.type = object.type ?? CommandParameter_ParameterType.boolean_value;
-    message.properties = object.properties ?? "";
-    return message;
-  },
-};
-
-function createBaseCommandList(): CommandList {
+function createBaseUnitList(): UnitList {
   return { items: [], totalCount: 0, subject: undefined };
 }
 
-export const CommandList = {
-  encode(message: CommandList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const UnitList = {
+  encode(message: UnitList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.items) {
-      Command.encode(v!, writer.uint32(10).fork()).ldelim();
+      Unit.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.totalCount !== 0) {
       writer.uint32(16).uint32(message.totalCount);
@@ -314,15 +337,15 @@ export const CommandList = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): CommandList {
+  decode(input: _m0.Reader | Uint8Array, length?: number): UnitList {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseCommandList();
+    const message = createBaseUnitList();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.items.push(Command.decode(reader, reader.uint32()));
+          message.items.push(Unit.decode(reader, reader.uint32()));
           break;
         case 2:
           message.totalCount = reader.uint32();
@@ -338,18 +361,18 @@ export const CommandList = {
     return message;
   },
 
-  fromJSON(object: any): CommandList {
+  fromJSON(object: any): UnitList {
     return {
-      items: Array.isArray(object?.items) ? object.items.map((e: any) => Command.fromJSON(e)) : [],
+      items: Array.isArray(object?.items) ? object.items.map((e: any) => Unit.fromJSON(e)) : [],
       totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
 
-  toJSON(message: CommandList): unknown {
+  toJSON(message: UnitList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) => e ? Command.toJSON(e) : undefined);
+      obj.items = message.items.map((e) => e ? Unit.toJSON(e) : undefined);
     } else {
       obj.items = [];
     }
@@ -358,13 +381,13 @@ export const CommandList = {
     return obj;
   },
 
-  create(base?: DeepPartial<CommandList>): CommandList {
-    return CommandList.fromPartial(base ?? {});
+  create(base?: DeepPartial<UnitList>): UnitList {
+    return UnitList.fromPartial(base ?? {});
   },
 
-  fromPartial(object: DeepPartial<CommandList>): CommandList {
-    const message = createBaseCommandList();
-    message.items = object.items?.map((e) => Command.fromPartial(e)) || [];
+  fromPartial(object: DeepPartial<UnitList>): UnitList {
+    const message = createBaseUnitList();
+    message.items = object.items?.map((e) => Unit.fromPartial(e)) || [];
     message.totalCount = object.totalCount ?? 0;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
@@ -373,14 +396,14 @@ export const CommandList = {
   },
 };
 
-function createBaseCommandListResponse(): CommandListResponse {
+function createBaseUnitListResponse(): UnitListResponse {
   return { items: [], totalCount: 0, operationStatus: undefined };
 }
 
-export const CommandListResponse = {
-  encode(message: CommandListResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const UnitListResponse = {
+  encode(message: UnitListResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.items) {
-      CommandResponse.encode(v!, writer.uint32(10).fork()).ldelim();
+      UnitResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.totalCount !== 0) {
       writer.uint32(16).uint32(message.totalCount);
@@ -391,15 +414,15 @@ export const CommandListResponse = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): CommandListResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): UnitListResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseCommandListResponse();
+    const message = createBaseUnitListResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.items.push(CommandResponse.decode(reader, reader.uint32()));
+          message.items.push(UnitResponse.decode(reader, reader.uint32()));
           break;
         case 2:
           message.totalCount = reader.uint32();
@@ -415,18 +438,18 @@ export const CommandListResponse = {
     return message;
   },
 
-  fromJSON(object: any): CommandListResponse {
+  fromJSON(object: any): UnitListResponse {
     return {
-      items: Array.isArray(object?.items) ? object.items.map((e: any) => CommandResponse.fromJSON(e)) : [],
+      items: Array.isArray(object?.items) ? object.items.map((e: any) => UnitResponse.fromJSON(e)) : [],
       totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
       operationStatus: isSet(object.operationStatus) ? OperationStatus.fromJSON(object.operationStatus) : undefined,
     };
   },
 
-  toJSON(message: CommandListResponse): unknown {
+  toJSON(message: UnitListResponse): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) => e ? CommandResponse.toJSON(e) : undefined);
+      obj.items = message.items.map((e) => e ? UnitResponse.toJSON(e) : undefined);
     } else {
       obj.items = [];
     }
@@ -436,13 +459,13 @@ export const CommandListResponse = {
     return obj;
   },
 
-  create(base?: DeepPartial<CommandListResponse>): CommandListResponse {
-    return CommandListResponse.fromPartial(base ?? {});
+  create(base?: DeepPartial<UnitListResponse>): UnitListResponse {
+    return UnitListResponse.fromPartial(base ?? {});
   },
 
-  fromPartial(object: DeepPartial<CommandListResponse>): CommandListResponse {
-    const message = createBaseCommandListResponse();
-    message.items = object.items?.map((e) => CommandResponse.fromPartial(e)) || [];
+  fromPartial(object: DeepPartial<UnitListResponse>): UnitListResponse {
+    const message = createBaseUnitListResponse();
+    message.items = object.items?.map((e) => UnitResponse.fromPartial(e)) || [];
     message.totalCount = object.totalCount ?? 0;
     message.operationStatus = (object.operationStatus !== undefined && object.operationStatus !== null)
       ? OperationStatus.fromPartial(object.operationStatus)
@@ -451,14 +474,14 @@ export const CommandListResponse = {
   },
 };
 
-function createBaseCommandResponse(): CommandResponse {
+function createBaseUnitResponse(): UnitResponse {
   return { payload: undefined, status: undefined };
 }
 
-export const CommandResponse = {
-  encode(message: CommandResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const UnitResponse = {
+  encode(message: UnitResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.payload !== undefined) {
-      Command.encode(message.payload, writer.uint32(10).fork()).ldelim();
+      Unit.encode(message.payload, writer.uint32(10).fork()).ldelim();
     }
     if (message.status !== undefined) {
       Status.encode(message.status, writer.uint32(18).fork()).ldelim();
@@ -466,15 +489,15 @@ export const CommandResponse = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): CommandResponse {
+  decode(input: _m0.Reader | Uint8Array, length?: number): UnitResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseCommandResponse();
+    const message = createBaseUnitResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.payload = Command.decode(reader, reader.uint32());
+          message.payload = Unit.decode(reader, reader.uint32());
           break;
         case 2:
           message.status = Status.decode(reader, reader.uint32());
@@ -487,28 +510,28 @@ export const CommandResponse = {
     return message;
   },
 
-  fromJSON(object: any): CommandResponse {
+  fromJSON(object: any): UnitResponse {
     return {
-      payload: isSet(object.payload) ? Command.fromJSON(object.payload) : undefined,
+      payload: isSet(object.payload) ? Unit.fromJSON(object.payload) : undefined,
       status: isSet(object.status) ? Status.fromJSON(object.status) : undefined,
     };
   },
 
-  toJSON(message: CommandResponse): unknown {
+  toJSON(message: UnitResponse): unknown {
     const obj: any = {};
-    message.payload !== undefined && (obj.payload = message.payload ? Command.toJSON(message.payload) : undefined);
+    message.payload !== undefined && (obj.payload = message.payload ? Unit.toJSON(message.payload) : undefined);
     message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
   },
 
-  create(base?: DeepPartial<CommandResponse>): CommandResponse {
-    return CommandResponse.fromPartial(base ?? {});
+  create(base?: DeepPartial<UnitResponse>): UnitResponse {
+    return UnitResponse.fromPartial(base ?? {});
   },
 
-  fromPartial(object: DeepPartial<CommandResponse>): CommandResponse {
-    const message = createBaseCommandResponse();
+  fromPartial(object: DeepPartial<UnitResponse>): UnitResponse {
+    const message = createBaseUnitResponse();
     message.payload = (object.payload !== undefined && object.payload !== null)
-      ? Command.fromPartial(object.payload)
+      ? Unit.fromPartial(object.payload)
       : undefined;
     message.status = (object.status !== undefined && object.status !== null)
       ? Status.fromPartial(object.status)
@@ -517,24 +540,76 @@ export const CommandResponse = {
   },
 };
 
+function createBaseDeleted(): Deleted {
+  return { id: "" };
+}
+
+export const Deleted = {
+  encode(message: Deleted, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): Deleted {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseDeleted();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.id = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): Deleted {
+    return { id: isSet(object.id) ? String(object.id) : "" };
+  },
+
+  toJSON(message: Deleted): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    return obj;
+  },
+
+  create(base?: DeepPartial<Deleted>): Deleted {
+    return Deleted.fromPartial(base ?? {});
+  },
+
+  fromPartial(object: DeepPartial<Deleted>): Deleted {
+    const message = createBaseDeleted();
+    message.id = object.id ?? "";
+    return message;
+  },
+};
+
+/** Microservice definition. */
 export type ServiceDefinition = typeof ServiceDefinition;
 export const ServiceDefinition = {
   name: "Service",
-  fullName: "io.restorecommerce.command.Service",
+  fullName: "io.restorecommerce.unit.Service",
   methods: {
     read: {
       name: "Read",
       requestType: ReadRequest,
       requestStream: false,
-      responseType: CommandListResponse,
+      responseType: UnitListResponse,
       responseStream: false,
       options: {},
     },
     create: {
       name: "Create",
-      requestType: CommandList,
+      requestType: UnitList,
       requestStream: false,
-      responseType: CommandListResponse,
+      responseType: UnitListResponse,
       responseStream: false,
       options: {},
     },
@@ -548,17 +623,17 @@ export const ServiceDefinition = {
     },
     update: {
       name: "Update",
-      requestType: CommandList,
+      requestType: UnitList,
       requestStream: false,
-      responseType: CommandListResponse,
+      responseType: UnitListResponse,
       responseStream: false,
       options: {},
     },
     upsert: {
       name: "Upsert",
-      requestType: CommandList,
+      requestType: UnitList,
       requestStream: false,
-      responseType: CommandListResponse,
+      responseType: UnitListResponse,
       responseStream: false,
       options: {},
     },
@@ -566,19 +641,19 @@ export const ServiceDefinition = {
 } as const;
 
 export interface ServiceImplementation<CallContextExt = {}> {
-  read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<CommandListResponse>>;
-  create(request: CommandList, context: CallContext & CallContextExt): Promise<DeepPartial<CommandListResponse>>;
+  read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<UnitListResponse>>;
+  create(request: UnitList, context: CallContext & CallContextExt): Promise<DeepPartial<UnitListResponse>>;
   delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;
-  update(request: CommandList, context: CallContext & CallContextExt): Promise<DeepPartial<CommandListResponse>>;
-  upsert(request: CommandList, context: CallContext & CallContextExt): Promise<DeepPartial<CommandListResponse>>;
+  update(request: UnitList, context: CallContext & CallContextExt): Promise<DeepPartial<UnitListResponse>>;
+  upsert(request: UnitList, context: CallContext & CallContextExt): Promise<DeepPartial<UnitListResponse>>;
 }
 
 export interface ServiceClient<CallOptionsExt = {}> {
-  read(request: DeepPartial<ReadRequest>, options?: CallOptions & CallOptionsExt): Promise<CommandListResponse>;
-  create(request: DeepPartial<CommandList>, options?: CallOptions & CallOptionsExt): Promise<CommandListResponse>;
+  read(request: DeepPartial<ReadRequest>, options?: CallOptions & CallOptionsExt): Promise<UnitListResponse>;
+  create(request: DeepPartial<UnitList>, options?: CallOptions & CallOptionsExt): Promise<UnitListResponse>;
   delete(request: DeepPartial<DeleteRequest>, options?: CallOptions & CallOptionsExt): Promise<DeleteResponse>;
-  update(request: DeepPartial<CommandList>, options?: CallOptions & CallOptionsExt): Promise<CommandListResponse>;
-  upsert(request: DeepPartial<CommandList>, options?: CallOptions & CallOptionsExt): Promise<CommandListResponse>;
+  update(request: DeepPartial<UnitList>, options?: CallOptions & CallOptionsExt): Promise<UnitListResponse>;
+  upsert(request: DeepPartial<UnitList>, options?: CallOptions & CallOptionsExt): Promise<UnitListResponse>;
 }
 
 type ProtoMetaMessageOptions = {
@@ -604,8 +679,8 @@ export interface ProtoMetadata {
 
 export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto1.fromPartial({
-    "name": "io/restorecommerce/command.proto",
-    "package": "io.restorecommerce.command",
+    "name": "io/restorecommerce/unit.proto",
+    "package": "io.restorecommerce.unit",
     "dependency": [
       "io/restorecommerce/resource_base.proto",
       "io/restorecommerce/meta.proto",
@@ -616,7 +691,7 @@ export const protoMetadata: ProtoMetadata = {
     "publicDependency": [],
     "weakDependency": [],
     "messageType": [{
-      "name": "Command",
+      "name": "Unit",
       "field": [{
         "name": "id",
         "number": 1,
@@ -642,8 +717,28 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "name",
+        "name": "parent_id",
         "number": 3,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "parentId",
+        "options": {
+          "ctype": 0,
+          "packed": false,
+          "jstype": 0,
+          "lazy": false,
+          "deprecated": false,
+          "weak": false,
+          "uninterpretedOption": [],
+        },
+        "proto3Optional": false,
+      }, {
+        "name": "name",
+        "number": 4,
         "label": 1,
         "type": 9,
         "typeName": "",
@@ -654,19 +749,7 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "parameters",
-        "number": 4,
-        "label": 3,
-        "type": 11,
-        "typeName": ".io.restorecommerce.command.CommandParameter",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "parameters",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "description",
+        "name": "symbol",
         "number": 5,
         "label": 1,
         "type": 9,
@@ -674,7 +757,67 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "description",
+        "jsonName": "symbol",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "standard_type",
+        "number": 6,
+        "label": 1,
+        "type": 14,
+        "typeName": ".io.restorecommerce.unit.UnitType",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "standardType",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "custom_type",
+        "number": 7,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "customType",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "standard_system",
+        "number": 8,
+        "label": 1,
+        "type": 14,
+        "typeName": ".io.restorecommerce.unit.UnitSystem",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 1,
+        "jsonName": "standardSystem",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "custom_system",
+        "number": 9,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 1,
+        "jsonName": "customSystem",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "factor",
+        "number": 10,
+        "label": 1,
+        "type": 1,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "factor",
         "options": undefined,
         "proto3Optional": false,
       }],
@@ -682,89 +825,18 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "type", "options": undefined }, { "name": "system", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
     }, {
-      "name": "CommandParameter",
-      "field": [{
-        "name": "field",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "field",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "description",
-        "number": 2,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "description",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "type",
-        "number": 3,
-        "label": 1,
-        "type": 14,
-        "typeName": ".io.restorecommerce.command.CommandParameter.ParameterType",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "type",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "properties",
-        "number": 4,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "properties",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [{
-        "name": "ParameterType",
-        "value": [
-          { "name": "boolean_value", "number": 0, "options": undefined },
-          { "name": "object_value", "number": 1, "options": undefined },
-          { "name": "array_value", "number": 2, "options": undefined },
-          { "name": "number_value", "number": 3, "options": undefined },
-          { "name": "string_value", "number": 4, "options": undefined },
-        ],
-        "options": undefined,
-        "reservedRange": [],
-        "reservedName": [],
-      }],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "CommandList",
+      "name": "UnitList",
       "field": [{
         "name": "items",
         "number": 1,
         "label": 3,
         "type": 11,
-        "typeName": ".io.restorecommerce.command.Command",
+        "typeName": ".io.restorecommerce.unit.Unit",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
@@ -805,13 +877,13 @@ export const protoMetadata: ProtoMetadata = {
       "reservedRange": [],
       "reservedName": [],
     }, {
-      "name": "CommandListResponse",
+      "name": "UnitListResponse",
       "field": [{
         "name": "items",
         "number": 1,
         "label": 3,
         "type": 11,
-        "typeName": ".io.restorecommerce.command.CommandResponse",
+        "typeName": ".io.restorecommerce.unit.UnitResponse",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
@@ -852,13 +924,13 @@ export const protoMetadata: ProtoMetadata = {
       "reservedRange": [],
       "reservedName": [],
     }, {
-      "name": "CommandResponse",
+      "name": "UnitResponse",
       "field": [{
         "name": "payload",
         "number": 1,
         "label": 1,
         "type": 11,
-        "typeName": ".io.restorecommerce.command.Command",
+        "typeName": ".io.restorecommerce.unit.Unit",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
@@ -886,21 +958,66 @@ export const protoMetadata: ProtoMetadata = {
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
+    }, {
+      "name": "Deleted",
+      "field": [{
+        "name": "id",
+        "number": 1,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "id",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
     }],
-    "enumType": [],
+    "enumType": [{
+      "name": "UnitType",
+      "value": [
+        { "name": "UnitTypeUndefined", "number": 0, "options": undefined },
+        { "name": "Length", "number": 1, "options": undefined },
+        { "name": "Weight", "number": 2, "options": undefined },
+        { "name": "Speed", "number": 3, "options": undefined },
+        { "name": "Force", "number": 4, "options": undefined },
+      ],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "UnitSystem",
+      "value": [{ "name": "UnitSystemUndefined", "number": 0, "options": undefined }, {
+        "name": "Metric",
+        "number": 1,
+        "options": undefined,
+      }, { "name": "Imperial", "number": 2, "options": undefined }],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }],
     "service": [{
       "name": "Service",
       "method": [{
         "name": "Read",
         "inputType": ".io.restorecommerce.resourcebase.ReadRequest",
-        "outputType": ".io.restorecommerce.command.CommandListResponse",
+        "outputType": ".io.restorecommerce.unit.UnitListResponse",
         "options": { "deprecated": false, "idempotencyLevel": 0, "uninterpretedOption": [] },
         "clientStreaming": false,
         "serverStreaming": false,
       }, {
         "name": "Create",
-        "inputType": ".io.restorecommerce.command.CommandList",
-        "outputType": ".io.restorecommerce.command.CommandListResponse",
+        "inputType": ".io.restorecommerce.unit.UnitList",
+        "outputType": ".io.restorecommerce.unit.UnitListResponse",
         "options": undefined,
         "clientStreaming": false,
         "serverStreaming": false,
@@ -913,15 +1030,15 @@ export const protoMetadata: ProtoMetadata = {
         "serverStreaming": false,
       }, {
         "name": "Update",
-        "inputType": ".io.restorecommerce.command.CommandList",
-        "outputType": ".io.restorecommerce.command.CommandListResponse",
+        "inputType": ".io.restorecommerce.unit.UnitList",
+        "outputType": ".io.restorecommerce.unit.UnitListResponse",
         "options": undefined,
         "clientStreaming": false,
         "serverStreaming": false,
       }, {
         "name": "Upsert",
-        "inputType": ".io.restorecommerce.command.CommandList",
-        "outputType": ".io.restorecommerce.command.CommandListResponse",
+        "inputType": ".io.restorecommerce.unit.UnitList",
+        "outputType": ".io.restorecommerce.unit.UnitListResponse",
         "options": undefined,
         "clientStreaming": false,
         "serverStreaming": false,
@@ -932,68 +1049,53 @@ export const protoMetadata: ProtoMetadata = {
     "options": undefined,
     "sourceCodeInfo": {
       "location": [{
-        "path": [4, 0],
-        "span": [11, 0, 17, 1],
-        "leadingComments": " command resource\n",
+        "path": [6, 0],
+        "span": [13, 0, 23, 1],
+        "leadingComments": "\n Microservice definition.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 0, 2, 2],
-        "span": [14, 2, 18],
+        "path": [5, 0, 2, 4],
+        "span": [30, 2, 12],
         "leadingComments": "",
-        "trailingComments": " command name\n",
+        "trailingComments": "...\n",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 0, 2, 3],
-        "span": [15, 2, 43],
+        "path": [4, 0, 2, 9],
+        "span": [62, 2, 21],
         "leadingComments": "",
-        "trailingComments": " all possible parameters\n",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 0, 2, 4],
-        "span": [16, 2, 25],
-        "leadingComments": "",
-        "trailingComments": " command description\n",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 1, 2, 0],
-        "span": [28, 2, 19],
-        "leadingComments": "",
-        "trailingComments": "  field name\n",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 1, 2, 1],
-        "span": [29, 2, 25],
-        "leadingComments": "",
-        "trailingComments": " field description\n",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 1, 2, 2],
-        "span": [30, 2, 25],
-        "leadingComments": "",
-        "trailingComments": " field's type\n",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 1, 2, 3],
-        "span": [31, 2, 24],
-        "leadingComments": "",
-        "trailingComments": " dump properties in case of `object_value``\n",
+        "trailingComments": "convert factor to standard unit\n",
         "leadingDetachedComments": [],
       }],
     },
     "syntax": "proto3",
   }),
   references: {
-    ".io.restorecommerce.command.Command": Command,
-    ".io.restorecommerce.command.CommandParameter": CommandParameter,
-    ".io.restorecommerce.command.CommandParameter.ParameterType": CommandParameter_ParameterType,
-    ".io.restorecommerce.command.CommandList": CommandList,
-    ".io.restorecommerce.command.CommandListResponse": CommandListResponse,
-    ".io.restorecommerce.command.CommandResponse": CommandResponse,
+    ".io.restorecommerce.unit.UnitType": UnitType,
+    ".io.restorecommerce.unit.UnitSystem": UnitSystem,
+    ".io.restorecommerce.unit.Unit": Unit,
+    ".io.restorecommerce.unit.UnitList": UnitList,
+    ".io.restorecommerce.unit.UnitListResponse": UnitListResponse,
+    ".io.restorecommerce.unit.UnitResponse": UnitResponse,
+    ".io.restorecommerce.unit.Deleted": Deleted,
   },
   dependencies: [protoMetadata1, protoMetadata2, protoMetadata3, protoMetadata4, protoMetadata5],
   options: {
-    services: { "Service": { options: { "service_name": "command" }, methods: { "Read": { "is_query": true } } } },
+    messages: {
+      "Unit": {
+        fields: {
+          "parent_id": {
+            "resolver": Resolver.decode(
+              Buffer.from(
+                "Ch0uaW8ucmVzdG9yZWNvbW1lcmNlLnVuaXQuVW5pdBIIcmVzb3VyY2UaBHVuaXQiBFJlYWQqBnBhcmVudA==",
+                "base64",
+              ),
+            ),
+          },
+        },
+      },
+    },
+    services: { "Service": { options: { "service_name": "unit" }, methods: { "Read": { "is_query": true } } } },
   },
 };
 

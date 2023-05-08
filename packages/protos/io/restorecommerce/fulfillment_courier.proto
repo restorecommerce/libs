@@ -13,15 +13,15 @@ import "io/restorecommerce/options.proto";
 Microservice defination
 */
 
-service Service {
+service FulfillmentCourierService {
   option (io.restorecommerce.options.service_name) = "fulfillment_courier";
 
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (FulfillmentCourierResponseList) {
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (FulfillmentCourierListResponse) {
     option (io.restorecommerce.options.is_query) = true;
   };
-  rpc Create (FulfillmentCourierList) returns (FulfillmentCourierResponseList);
-  rpc Update (FulfillmentCourierList) returns (FulfillmentCourierResponseList);
-  rpc Upsert (FulfillmentCourierList) returns (FulfillmentCourierResponseList);
+  rpc Create (FulfillmentCourierList) returns (FulfillmentCourierListResponse);
+  rpc Update (FulfillmentCourierList) returns (FulfillmentCourierListResponse);
+  rpc Upsert (FulfillmentCourierList) returns (FulfillmentCourierListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
 }
 
@@ -55,7 +55,7 @@ message FulfillmentCourierResponse {
   io.restorecommerce.status.Status status = 2;
 }
 
-message FulfillmentCourierResponseList {
+message FulfillmentCourierListResponse {
   repeated FulfillmentCourierResponse items = 1;
   uint32 total_count = 2;
   io.restorecommerce.status.OperationStatus operation_status = 3;

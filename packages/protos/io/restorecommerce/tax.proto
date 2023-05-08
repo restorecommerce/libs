@@ -72,3 +72,8 @@ message Tax {
     }
   ];
 }
+
+message VAT {
+  string tax_id = 1;
+  double vat = 2;
+}

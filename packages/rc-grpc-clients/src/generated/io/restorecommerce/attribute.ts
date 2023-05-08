@@ -5,29 +5,25 @@ import { FileDescriptorProto } from "ts-proto-descriptors";
 export const protobufPackage = "io.restorecommerce.attribute";
 
 export interface Attribute {
-  id?: string | undefined;
-  value?: string | undefined;
-  attribute: Attribute[];
+  id: string;
+  value: string;
 }
 
 export interface AttributeObj {
-  attribute?: Attribute | undefined;
+  attribute?: Attribute;
 }
 
 function createBaseAttribute(): Attribute {
-  return { id: undefined, value: undefined, attribute: [] };
+  return { id: "", value: "" };
 }
 
 export const Attribute = {
   encode(message: Attribute, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== undefined) {
+    if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
-    if (message.value !== undefined) {
+    if (message.value !== "") {
       writer.uint32(18).string(message.value);
-    }
-    for (const v of message.attribute) {
-      Attribute.encode(v!, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -45,9 +41,6 @@ export const Attribute = {
         case 2:
           message.value = reader.string();
           break;
-        case 3:
-          message.attribute.push(Attribute.decode(reader, reader.uint32()));
-          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -57,22 +50,13 @@ export const Attribute = {
   },
 
   fromJSON(object: any): Attribute {
-    return {
-      id: isSet(object.id) ? String(object.id) : undefined,
-      value: isSet(object.value) ? String(object.value) : undefined,
-      attribute: Array.isArray(object?.attribute) ? object.attribute.map((e: any) => Attribute.fromJSON(e)) : [],
-    };
+    return { id: isSet(object.id) ? String(object.id) : "", value: isSet(object.value) ? String(object.value) : "" };
   },
 
   toJSON(message: Attribute): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.value !== undefined && (obj.value = message.value);
-    if (message.attribute) {
-      obj.attribute = message.attribute.map((e) => e ? Attribute.toJSON(e) : undefined);
-    } else {
-      obj.attribute = [];
-    }
     return obj;
   },
 
@@ -82,9 +66,8 @@ export const Attribute = {
 
   fromPartial(object: DeepPartial<Attribute>): Attribute {
     const message = createBaseAttribute();
-    message.id = object.id ?? undefined;
-    message.value = object.value ?? undefined;
-    message.attribute = object.attribute?.map((e) => Attribute.fromPartial(e)) || [];
+    message.id = object.id ?? "";
+    message.value = object.value ?? "";
     return message;
   },
 };
@@ -184,7 +167,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": true,
+        "proto3Optional": false,
       }, {
         "name": "value",
         "number": 2,
@@ -193,20 +176,8 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 1,
-        "jsonName": "value",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
-        "name": "attribute",
-        "number": 3,
-        "label": 3,
-        "type": 11,
-        "typeName": ".io.restorecommerce.attribute.Attribute",
-        "extendee": "",
-        "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "attribute",
+        "jsonName": "value",
         "options": undefined,
         "proto3Optional": false,
       }],
@@ -214,7 +185,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [{ "name": "_id", "options": undefined }, { "name": "_value", "options": undefined }],
+      "oneofDecl": [],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -231,13 +202,13 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "attribute",
         "options": undefined,
-        "proto3Optional": true,
+        "proto3Optional": false,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [{ "name": "_attribute", "options": undefined }],
+      "oneofDecl": [],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],

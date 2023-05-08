@@ -2,37 +2,36 @@
 import type { CallContext, CallOptions } from "nice-grpc-common";
 import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
+import { protoMetadata as protoMetadata6, ShippingAddress } from "./address";
 import { Attribute, protoMetadata as protoMetadata5 } from "./attribute";
 import { protoMetadata as protoMetadata3, Subject } from "./auth";
-import { Item, Parcel, protoMetadata as protoMetadata7 } from "./fulfillment";
-import { protoMetadata as protoMetadata6 } from "./fulfillment_courier";
+import { FulfillmentItem, Parcel, protoMetadata as protoMetadata10 } from "./fulfillment";
+import { protoMetadata as protoMetadata9 } from "./fulfillment_courier";
+import { BoundingBox3D, protoMetadata as protoMetadata8 } from "./geometry";
 import { Meta, protoMetadata as protoMetadata2 } from "./meta";
-import { KafkaSubscription, protoMetadata as protoMetadata8, Resolver } from "./options";
+import { KafkaSubscription, protoMetadata as protoMetadata11, Resolver } from "./options";
 import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata1, ReadRequest } from "./resource_base";
 import { OperationStatus, protoMetadata as protoMetadata4, Status } from "./status";
+import { protoMetadata as protoMetadata7, VAT } from "./tax";
 
 export const protobufPackage = "io.restorecommerce.fulfillment_product";
 
 export interface Preferences {
   /** ID, name or type */
   couriers: Attribute[];
-  pricing: number;
-  compactness: number;
-  homogeneity: number;
+  options: Attribute[];
 }
 
-export interface Query {
-  /**
-   * io.restorecommerce.fulfillment.Address sender = 1;
-   * io.restorecommerce.fulfillment.Address receiver = 2;
-   */
-  goods: Item[];
+export interface ProductQuery {
+  sender?: ShippingAddress;
+  receiver?: ShippingAddress;
+  items: FulfillmentItem[];
   preferences?: Preferences;
   reference_id: string;
 }
 
-export interface QueryList {
-  items: Query[];
+export interface ProductQueryList {
+  items: ProductQuery[];
   total_count: number;
   subject?: Subject;
 }
@@ -55,11 +54,8 @@ export interface Variant {
   name: string;
   description: string;
   price: number;
+  max_size?: BoundingBox3D;
   max_weight: number;
-  max_width: number;
-  max_height: number;
-  max_length: number;
-  max_volume: number;
 }
 
 export interface FulfillmentProductList {
@@ -73,27 +69,28 @@ export interface FulfillmentProductResponse {
   status?: Status;
 }
 
-export interface FulfillmentProductResponseList {
+export interface FulfillmentProductListResponse {
   items: FulfillmentProductResponse[];
   total_count: number;
   operation_status?: OperationStatus;
 }
 
 export interface PackingSolution {
-  reference_id: string;
   price: number;
   compactness: number;
   homogeneity: number;
   score: number;
   parcels: Parcel[];
+  vats: VAT[];
 }
 
 export interface PackingSolutionResponse {
+  reference_id: string;
   solutions: PackingSolution[];
   status?: Status;
 }
 
-export interface PackingSolutionResponseList {
+export interface PackingSolutionListResponse {
   items: PackingSolutionResponse[];
   total_count: number;
   operation_status?: OperationStatus;
@@ -104,7 +101,7 @@ export interface Deleted {
 }
 
 function createBasePreferences(): Preferences {
-  return { couriers: [], pricing: 0, compactness: 0, homogeneity: 0 };
+  return { couriers: [], options: [] };
 }
 
 export const Preferences = {
@@ -112,14 +109,8 @@ export const Preferences = {
     for (const v of message.couriers) {
       Attribute.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.pricing !== 0) {
-      writer.uint32(21).float(message.pricing);
-    }
-    if (message.compactness !== 0) {
-      writer.uint32(29).float(message.compactness);
-    }
-    if (message.homogeneity !== 0) {
-      writer.uint32(37).float(message.homogeneity);
+    for (const v of message.options) {
+      Attribute.encode(v!, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -135,13 +126,7 @@ export const Preferences = {
           message.couriers.push(Attribute.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.pricing = reader.float();
-          break;
-        case 3:
-          message.compactness = reader.float();
-          break;
-        case 4:
-          message.homogeneity = reader.float();
+          message.options.push(Attribute.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -154,9 +139,7 @@ export const Preferences = {
   fromJSON(object: any): Preferences {
     return {
       couriers: Array.isArray(object?.couriers) ? object.couriers.map((e: any) => Attribute.fromJSON(e)) : [],
-      pricing: isSet(object.pricing) ? Number(object.pricing) : 0,
-      compactness: isSet(object.compactness) ? Number(object.compactness) : 0,
-      homogeneity: isSet(object.homogeneity) ? Number(object.homogeneity) : 0,
+      options: Array.isArray(object?.options) ? object.options.map((e: any) => Attribute.fromJSON(e)) : [],
     };
   },
 
@@ -167,9 +150,11 @@ export const Preferences = {
     } else {
       obj.couriers = [];
     }
-    message.pricing !== undefined && (obj.pricing = message.pricing);
-    message.compactness !== undefined && (obj.compactness = message.compactness);
-    message.homogeneity !== undefined && (obj.homogeneity = message.homogeneity);
+    if (message.options) {
+      obj.options = message.options.map((e) => e ? Attribute.toJSON(e) : undefined);
+    } else {
+      obj.options = [];
+    }
     return obj;
   },
 
@@ -180,21 +165,25 @@ export const Preferences = {
   fromPartial(object: DeepPartial<Preferences>): Preferences {
     const message = createBasePreferences();
     message.couriers = object.couriers?.map((e) => Attribute.fromPartial(e)) || [];
-    message.pricing = object.pricing ?? 0;
-    message.compactness = object.compactness ?? 0;
-    message.homogeneity = object.homogeneity ?? 0;
+    message.options = object.options?.map((e) => Attribute.fromPartial(e)) || [];
     return message;
   },
 };
 
-function createBaseQuery(): Query {
-  return { goods: [], preferences: undefined, reference_id: "" };
+function createBaseProductQuery(): ProductQuery {
+  return { sender: undefined, receiver: undefined, items: [], preferences: undefined, reference_id: "" };
 }
 
-export const Query = {
-  encode(message: Query, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    for (const v of message.goods) {
-      Item.encode(v!, writer.uint32(26).fork()).ldelim();
+export const ProductQuery = {
+  encode(message: ProductQuery, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.sender !== undefined) {
+      ShippingAddress.encode(message.sender, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.receiver !== undefined) {
+      ShippingAddress.encode(message.receiver, writer.uint32(18).fork()).ldelim();
+    }
+    for (const v of message.items) {
+      FulfillmentItem.encode(v!, writer.uint32(26).fork()).ldelim();
     }
     if (message.preferences !== undefined) {
       Preferences.encode(message.preferences, writer.uint32(34).fork()).ldelim();
@@ -205,15 +194,21 @@ export const Query = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): Query {
+  decode(input: _m0.Reader | Uint8Array, length?: number): ProductQuery {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQuery();
+    const message = createBaseProductQuery();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
+        case 1:
+          message.sender = ShippingAddress.decode(reader, reader.uint32());
+          break;
+        case 2:
+          message.receiver = ShippingAddress.decode(reader, reader.uint32());
+          break;
         case 3:
-          message.goods.push(Item.decode(reader, reader.uint32()));
+          message.items.push(FulfillmentItem.decode(reader, reader.uint32()));
           break;
         case 4:
           message.preferences = Preferences.decode(reader, reader.uint32());
@@ -229,20 +224,25 @@ export const Query = {
     return message;
   },
 
-  fromJSON(object: any): Query {
+  fromJSON(object: any): ProductQuery {
     return {
-      goods: Array.isArray(object?.goods) ? object.goods.map((e: any) => Item.fromJSON(e)) : [],
+      sender: isSet(object.sender) ? ShippingAddress.fromJSON(object.sender) : undefined,
+      receiver: isSet(object.receiver) ? ShippingAddress.fromJSON(object.receiver) : undefined,
+      items: Array.isArray(object?.items) ? object.items.map((e: any) => FulfillmentItem.fromJSON(e)) : [],
       preferences: isSet(object.preferences) ? Preferences.fromJSON(object.preferences) : undefined,
       reference_id: isSet(object.reference_id) ? String(object.reference_id) : "",
     };
   },
 
-  toJSON(message: Query): unknown {
+  toJSON(message: ProductQuery): unknown {
     const obj: any = {};
-    if (message.goods) {
-      obj.goods = message.goods.map((e) => e ? Item.toJSON(e) : undefined);
+    message.sender !== undefined && (obj.sender = message.sender ? ShippingAddress.toJSON(message.sender) : undefined);
+    message.receiver !== undefined &&
+      (obj.receiver = message.receiver ? ShippingAddress.toJSON(message.receiver) : undefined);
+    if (message.items) {
+      obj.items = message.items.map((e) => e ? FulfillmentItem.toJSON(e) : undefined);
     } else {
-      obj.goods = [];
+      obj.items = [];
     }
     message.preferences !== undefined &&
       (obj.preferences = message.preferences ? Preferences.toJSON(message.preferences) : undefined);
@@ -250,13 +250,19 @@ export const Query = {
     return obj;
   },
 
-  create(base?: DeepPartial<Query>): Query {
-    return Query.fromPartial(base ?? {});
+  create(base?: DeepPartial<ProductQuery>): ProductQuery {
+    return ProductQuery.fromPartial(base ?? {});
   },
 
-  fromPartial(object: DeepPartial<Query>): Query {
-    const message = createBaseQuery();
-    message.goods = object.goods?.map((e) => Item.fromPartial(e)) || [];
+  fromPartial(object: DeepPartial<ProductQuery>): ProductQuery {
+    const message = createBaseProductQuery();
+    message.sender = (object.sender !== undefined && object.sender !== null)
+      ? ShippingAddress.fromPartial(object.sender)
+      : undefined;
+    message.receiver = (object.receiver !== undefined && object.receiver !== null)
+      ? ShippingAddress.fromPartial(object.receiver)
+      : undefined;
+    message.items = object.items?.map((e) => FulfillmentItem.fromPartial(e)) || [];
     message.preferences = (object.preferences !== undefined && object.preferences !== null)
       ? Preferences.fromPartial(object.preferences)
       : undefined;
@@ -265,14 +271,14 @@ export const Query = {
   },
 };
 
-function createBaseQueryList(): QueryList {
+function createBaseProductQueryList(): ProductQueryList {
   return { items: [], total_count: 0, subject: undefined };
 }
 
-export const QueryList = {
-  encode(message: QueryList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const ProductQueryList = {
+  encode(message: ProductQueryList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.items) {
-      Query.encode(v!, writer.uint32(10).fork()).ldelim();
+      ProductQuery.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.total_count !== 0) {
       writer.uint32(16).uint32(message.total_count);
@@ -283,15 +289,15 @@ export const QueryList = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): QueryList {
+  decode(input: _m0.Reader | Uint8Array, length?: number): ProductQueryList {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseQueryList();
+    const message = createBaseProductQueryList();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.items.push(Query.decode(reader, reader.uint32()));
+          message.items.push(ProductQuery.decode(reader, reader.uint32()));
           break;
         case 2:
           message.total_count = reader.uint32();
@@ -307,18 +313,18 @@ export const QueryList = {
     return message;
   },
 
-  fromJSON(object: any): QueryList {
+  fromJSON(object: any): ProductQueryList {
     return {
-      items: Array.isArray(object?.items) ? object.items.map((e: any) => Query.fromJSON(e)) : [],
+      items: Array.isArray(object?.items) ? object.items.map((e: any) => ProductQuery.fromJSON(e)) : [],
       total_count: isSet(object.total_count) ? Number(object.total_count) : 0,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
 
-  toJSON(message: QueryList): unknown {
+  toJSON(message: ProductQueryList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) => e ? Query.toJSON(e) : undefined);
+      obj.items = message.items.map((e) => e ? ProductQuery.toJSON(e) : undefined);
     } else {
       obj.items = [];
     }
@@ -327,13 +333,13 @@ export const QueryList = {
     return obj;
   },
 
-  create(base?: DeepPartial<QueryList>): QueryList {
-    return QueryList.fromPartial(base ?? {});
+  create(base?: DeepPartial<ProductQueryList>): ProductQueryList {
+    return ProductQueryList.fromPartial(base ?? {});
   },
 
-  fromPartial(object: DeepPartial<QueryList>): QueryList {
-    const message = createBaseQueryList();
-    message.items = object.items?.map((e) => Query.fromPartial(e)) || [];
+  fromPartial(object: DeepPartial<ProductQueryList>): ProductQueryList {
+    const message = createBaseProductQueryList();
+    message.items = object.items?.map((e) => ProductQuery.fromPartial(e)) || [];
     message.total_count = object.total_count ?? 0;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
@@ -510,17 +516,7 @@ export const FulfillmentProduct = {
 };
 
 function createBaseVariant(): Variant {
-  return {
-    id: "",
-    name: "",
-    description: "",
-    price: 0,
-    max_weight: 0,
-    max_width: 0,
-    max_height: 0,
-    max_length: 0,
-    max_volume: 0,
-  };
+  return { id: "", name: "", description: "", price: 0, max_size: undefined, max_weight: 0 };
 }
 
 export const Variant = {
@@ -537,20 +533,11 @@ export const Variant = {
     if (message.price !== 0) {
       writer.uint32(33).double(message.price);
     }
+    if (message.max_size !== undefined) {
+      BoundingBox3D.encode(message.max_size, writer.uint32(50).fork()).ldelim();
+    }
     if (message.max_weight !== 0) {
-      writer.uint32(41).double(message.max_weight);
-    }
-    if (message.max_width !== 0) {
-      writer.uint32(49).double(message.max_width);
-    }
-    if (message.max_height !== 0) {
-      writer.uint32(57).double(message.max_height);
-    }
-    if (message.max_length !== 0) {
-      writer.uint32(65).double(message.max_length);
-    }
-    if (message.max_volume !== 0) {
-      writer.uint32(73).double(message.max_volume);
+      writer.uint32(57).double(message.max_weight);
     }
     return writer;
   },
@@ -574,20 +561,11 @@ export const Variant = {
         case 4:
           message.price = reader.double();
           break;
-        case 5:
-          message.max_weight = reader.double();
-          break;
         case 6:
-          message.max_width = reader.double();
+          message.max_size = BoundingBox3D.decode(reader, reader.uint32());
           break;
         case 7:
-          message.max_height = reader.double();
-          break;
-        case 8:
-          message.max_length = reader.double();
-          break;
-        case 9:
-          message.max_volume = reader.double();
+          message.max_weight = reader.double();
           break;
         default:
           reader.skipType(tag & 7);
@@ -603,11 +581,8 @@ export const Variant = {
       name: isSet(object.name) ? String(object.name) : "",
       description: isSet(object.description) ? String(object.description) : "",
       price: isSet(object.price) ? Number(object.price) : 0,
+      max_size: isSet(object.max_size) ? BoundingBox3D.fromJSON(object.max_size) : undefined,
       max_weight: isSet(object.max_weight) ? Number(object.max_weight) : 0,
-      max_width: isSet(object.max_width) ? Number(object.max_width) : 0,
-      max_height: isSet(object.max_height) ? Number(object.max_height) : 0,
-      max_length: isSet(object.max_length) ? Number(object.max_length) : 0,
-      max_volume: isSet(object.max_volume) ? Number(object.max_volume) : 0,
     };
   },
 
@@ -617,11 +592,9 @@ export const Variant = {
     message.name !== undefined && (obj.name = message.name);
     message.description !== undefined && (obj.description = message.description);
     message.price !== undefined && (obj.price = message.price);
+    message.max_size !== undefined &&
+      (obj.max_size = message.max_size ? BoundingBox3D.toJSON(message.max_size) : undefined);
     message.max_weight !== undefined && (obj.max_weight = message.max_weight);
-    message.max_width !== undefined && (obj.max_width = message.max_width);
-    message.max_height !== undefined && (obj.max_height = message.max_height);
-    message.max_length !== undefined && (obj.max_length = message.max_length);
-    message.max_volume !== undefined && (obj.max_volume = message.max_volume);
     return obj;
   },
 
@@ -635,11 +608,10 @@ export const Variant = {
     message.name = object.name ?? "";
     message.description = object.description ?? "";
     message.price = object.price ?? 0;
+    message.max_size = (object.max_size !== undefined && object.max_size !== null)
+      ? BoundingBox3D.fromPartial(object.max_size)
+      : undefined;
     message.max_weight = object.max_weight ?? 0;
-    message.max_width = object.max_width ?? 0;
-    message.max_height = object.max_height ?? 0;
-    message.max_length = object.max_length ?? 0;
-    message.max_volume = object.max_volume ?? 0;
     return message;
   },
 };
@@ -788,12 +760,12 @@ export const FulfillmentProductResponse = {
   },
 };
 
-function createBaseFulfillmentProductResponseList(): FulfillmentProductResponseList {
+function createBaseFulfillmentProductListResponse(): FulfillmentProductListResponse {
   return { items: [], total_count: 0, operation_status: undefined };
 }
 
-export const FulfillmentProductResponseList = {
-  encode(message: FulfillmentProductResponseList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const FulfillmentProductListResponse = {
+  encode(message: FulfillmentProductListResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.items) {
       FulfillmentProductResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -806,10 +778,10 @@ export const FulfillmentProductResponseList = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): FulfillmentProductResponseList {
+  decode(input: _m0.Reader | Uint8Array, length?: number): FulfillmentProductListResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseFulfillmentProductResponseList();
+    const message = createBaseFulfillmentProductListResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -830,7 +802,7 @@ export const FulfillmentProductResponseList = {
     return message;
   },
 
-  fromJSON(object: any): FulfillmentProductResponseList {
+  fromJSON(object: any): FulfillmentProductListResponse {
     return {
       items: Array.isArray(object?.items) ? object.items.map((e: any) => FulfillmentProductResponse.fromJSON(e)) : [],
       total_count: isSet(object.total_count) ? Number(object.total_count) : 0,
@@ -838,7 +810,7 @@ export const FulfillmentProductResponseList = {
     };
   },
 
-  toJSON(message: FulfillmentProductResponseList): unknown {
+  toJSON(message: FulfillmentProductListResponse): unknown {
     const obj: any = {};
     if (message.items) {
       obj.items = message.items.map((e) => e ? FulfillmentProductResponse.toJSON(e) : undefined);
@@ -851,12 +823,12 @@ export const FulfillmentProductResponseList = {
     return obj;
   },
 
-  create(base?: DeepPartial<FulfillmentProductResponseList>): FulfillmentProductResponseList {
-    return FulfillmentProductResponseList.fromPartial(base ?? {});
+  create(base?: DeepPartial<FulfillmentProductListResponse>): FulfillmentProductListResponse {
+    return FulfillmentProductListResponse.fromPartial(base ?? {});
   },
 
-  fromPartial(object: DeepPartial<FulfillmentProductResponseList>): FulfillmentProductResponseList {
-    const message = createBaseFulfillmentProductResponseList();
+  fromPartial(object: DeepPartial<FulfillmentProductListResponse>): FulfillmentProductListResponse {
+    const message = createBaseFulfillmentProductListResponse();
     message.items = object.items?.map((e) => FulfillmentProductResponse.fromPartial(e)) || [];
     message.total_count = object.total_count ?? 0;
     message.operation_status = (object.operation_status !== undefined && object.operation_status !== null)
@@ -867,28 +839,28 @@ export const FulfillmentProductResponseList = {
 };
 
 function createBasePackingSolution(): PackingSolution {
-  return { reference_id: "", price: 0, compactness: 0, homogeneity: 0, score: 0, parcels: [] };
+  return { price: 0, compactness: 0, homogeneity: 0, score: 0, parcels: [], vats: [] };
 }
 
 export const PackingSolution = {
   encode(message: PackingSolution, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.reference_id !== "") {
-      writer.uint32(10).string(message.reference_id);
-    }
     if (message.price !== 0) {
-      writer.uint32(21).float(message.price);
+      writer.uint32(9).double(message.price);
     }
     if (message.compactness !== 0) {
-      writer.uint32(29).float(message.compactness);
+      writer.uint32(17).double(message.compactness);
     }
     if (message.homogeneity !== 0) {
-      writer.uint32(37).float(message.homogeneity);
+      writer.uint32(25).double(message.homogeneity);
     }
     if (message.score !== 0) {
-      writer.uint32(45).float(message.score);
+      writer.uint32(33).double(message.score);
     }
     for (const v of message.parcels) {
-      Parcel.encode(v!, writer.uint32(50).fork()).ldelim();
+      Parcel.encode(v!, writer.uint32(42).fork()).ldelim();
+    }
+    for (const v of message.vats) {
+      VAT.encode(v!, writer.uint32(50).fork()).ldelim();
     }
     return writer;
   },
@@ -901,22 +873,22 @@ export const PackingSolution = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.reference_id = reader.string();
+          message.price = reader.double();
           break;
         case 2:
-          message.price = reader.float();
+          message.compactness = reader.double();
           break;
         case 3:
-          message.compactness = reader.float();
+          message.homogeneity = reader.double();
           break;
         case 4:
-          message.homogeneity = reader.float();
+          message.score = reader.double();
           break;
         case 5:
-          message.score = reader.float();
+          message.parcels.push(Parcel.decode(reader, reader.uint32()));
           break;
         case 6:
-          message.parcels.push(Parcel.decode(reader, reader.uint32()));
+          message.vats.push(VAT.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -928,18 +900,17 @@ export const PackingSolution = {
 
   fromJSON(object: any): PackingSolution {
     return {
-      reference_id: isSet(object.reference_id) ? String(object.reference_id) : "",
       price: isSet(object.price) ? Number(object.price) : 0,
       compactness: isSet(object.compactness) ? Number(object.compactness) : 0,
       homogeneity: isSet(object.homogeneity) ? Number(object.homogeneity) : 0,
       score: isSet(object.score) ? Number(object.score) : 0,
       parcels: Array.isArray(object?.parcels) ? object.parcels.map((e: any) => Parcel.fromJSON(e)) : [],
+      vats: Array.isArray(object?.vats) ? object.vats.map((e: any) => VAT.fromJSON(e)) : [],
     };
   },
 
   toJSON(message: PackingSolution): unknown {
     const obj: any = {};
-    message.reference_id !== undefined && (obj.reference_id = message.reference_id);
     message.price !== undefined && (obj.price = message.price);
     message.compactness !== undefined && (obj.compactness = message.compactness);
     message.homogeneity !== undefined && (obj.homogeneity = message.homogeneity);
@@ -948,6 +919,11 @@ export const PackingSolution = {
       obj.parcels = message.parcels.map((e) => e ? Parcel.toJSON(e) : undefined);
     } else {
       obj.parcels = [];
+    }
+    if (message.vats) {
+      obj.vats = message.vats.map((e) => e ? VAT.toJSON(e) : undefined);
+    } else {
+      obj.vats = [];
     }
     return obj;
   },
@@ -958,27 +934,30 @@ export const PackingSolution = {
 
   fromPartial(object: DeepPartial<PackingSolution>): PackingSolution {
     const message = createBasePackingSolution();
-    message.reference_id = object.reference_id ?? "";
     message.price = object.price ?? 0;
     message.compactness = object.compactness ?? 0;
     message.homogeneity = object.homogeneity ?? 0;
     message.score = object.score ?? 0;
     message.parcels = object.parcels?.map((e) => Parcel.fromPartial(e)) || [];
+    message.vats = object.vats?.map((e) => VAT.fromPartial(e)) || [];
     return message;
   },
 };
 
 function createBasePackingSolutionResponse(): PackingSolutionResponse {
-  return { solutions: [], status: undefined };
+  return { reference_id: "", solutions: [], status: undefined };
 }
 
 export const PackingSolutionResponse = {
   encode(message: PackingSolutionResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.reference_id !== "") {
+      writer.uint32(10).string(message.reference_id);
+    }
     for (const v of message.solutions) {
-      PackingSolution.encode(v!, writer.uint32(10).fork()).ldelim();
+      PackingSolution.encode(v!, writer.uint32(18).fork()).ldelim();
     }
     if (message.status !== undefined) {
-      Status.encode(message.status, writer.uint32(18).fork()).ldelim();
+      Status.encode(message.status, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -991,9 +970,12 @@ export const PackingSolutionResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.solutions.push(PackingSolution.decode(reader, reader.uint32()));
+          message.reference_id = reader.string();
           break;
         case 2:
+          message.solutions.push(PackingSolution.decode(reader, reader.uint32()));
+          break;
+        case 3:
           message.status = Status.decode(reader, reader.uint32());
           break;
         default:
@@ -1006,6 +988,7 @@ export const PackingSolutionResponse = {
 
   fromJSON(object: any): PackingSolutionResponse {
     return {
+      reference_id: isSet(object.reference_id) ? String(object.reference_id) : "",
       solutions: Array.isArray(object?.solutions) ? object.solutions.map((e: any) => PackingSolution.fromJSON(e)) : [],
       status: isSet(object.status) ? Status.fromJSON(object.status) : undefined,
     };
@@ -1013,6 +996,7 @@ export const PackingSolutionResponse = {
 
   toJSON(message: PackingSolutionResponse): unknown {
     const obj: any = {};
+    message.reference_id !== undefined && (obj.reference_id = message.reference_id);
     if (message.solutions) {
       obj.solutions = message.solutions.map((e) => e ? PackingSolution.toJSON(e) : undefined);
     } else {
@@ -1028,6 +1012,7 @@ export const PackingSolutionResponse = {
 
   fromPartial(object: DeepPartial<PackingSolutionResponse>): PackingSolutionResponse {
     const message = createBasePackingSolutionResponse();
+    message.reference_id = object.reference_id ?? "";
     message.solutions = object.solutions?.map((e) => PackingSolution.fromPartial(e)) || [];
     message.status = (object.status !== undefined && object.status !== null)
       ? Status.fromPartial(object.status)
@@ -1036,12 +1021,12 @@ export const PackingSolutionResponse = {
   },
 };
 
-function createBasePackingSolutionResponseList(): PackingSolutionResponseList {
+function createBasePackingSolutionListResponse(): PackingSolutionListResponse {
   return { items: [], total_count: 0, operation_status: undefined };
 }
 
-export const PackingSolutionResponseList = {
-  encode(message: PackingSolutionResponseList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const PackingSolutionListResponse = {
+  encode(message: PackingSolutionListResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.items) {
       PackingSolutionResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
@@ -1054,10 +1039,10 @@ export const PackingSolutionResponseList = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): PackingSolutionResponseList {
+  decode(input: _m0.Reader | Uint8Array, length?: number): PackingSolutionListResponse {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBasePackingSolutionResponseList();
+    const message = createBasePackingSolutionListResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1078,7 +1063,7 @@ export const PackingSolutionResponseList = {
     return message;
   },
 
-  fromJSON(object: any): PackingSolutionResponseList {
+  fromJSON(object: any): PackingSolutionListResponse {
     return {
       items: Array.isArray(object?.items) ? object.items.map((e: any) => PackingSolutionResponse.fromJSON(e)) : [],
       total_count: isSet(object.total_count) ? Number(object.total_count) : 0,
@@ -1086,7 +1071,7 @@ export const PackingSolutionResponseList = {
     };
   },
 
-  toJSON(message: PackingSolutionResponseList): unknown {
+  toJSON(message: PackingSolutionListResponse): unknown {
     const obj: any = {};
     if (message.items) {
       obj.items = message.items.map((e) => e ? PackingSolutionResponse.toJSON(e) : undefined);
@@ -1099,12 +1084,12 @@ export const PackingSolutionResponseList = {
     return obj;
   },
 
-  create(base?: DeepPartial<PackingSolutionResponseList>): PackingSolutionResponseList {
-    return PackingSolutionResponseList.fromPartial(base ?? {});
+  create(base?: DeepPartial<PackingSolutionListResponse>): PackingSolutionListResponse {
+    return PackingSolutionListResponse.fromPartial(base ?? {});
   },
 
-  fromPartial(object: DeepPartial<PackingSolutionResponseList>): PackingSolutionResponseList {
-    const message = createBasePackingSolutionResponseList();
+  fromPartial(object: DeepPartial<PackingSolutionListResponse>): PackingSolutionListResponse {
+    const message = createBasePackingSolutionListResponse();
     message.items = object.items?.map((e) => PackingSolutionResponse.fromPartial(e)) || [];
     message.total_count = object.total_count ?? 0;
     message.operation_status = (object.operation_status !== undefined && object.operation_status !== null)
@@ -1165,24 +1150,24 @@ export const Deleted = {
   },
 };
 
-export type ServiceDefinition = typeof ServiceDefinition;
-export const ServiceDefinition = {
-  name: "Service",
-  fullName: "io.restorecommerce.fulfillment_product.Service",
+export type FulfillmentProductServiceDefinition = typeof FulfillmentProductServiceDefinition;
+export const FulfillmentProductServiceDefinition = {
+  name: "FulfillmentProductService",
+  fullName: "io.restorecommerce.fulfillment_product.FulfillmentProductService",
   methods: {
     read: {
       name: "Read",
       requestType: ReadRequest,
       requestStream: false,
-      responseType: FulfillmentProductResponseList,
+      responseType: FulfillmentProductListResponse,
       responseStream: false,
       options: {},
     },
     find: {
       name: "Find",
-      requestType: QueryList,
+      requestType: ProductQueryList,
       requestStream: false,
-      responseType: PackingSolutionResponseList,
+      responseType: PackingSolutionListResponse,
       responseStream: false,
       options: {},
     },
@@ -1190,7 +1175,7 @@ export const ServiceDefinition = {
       name: "Create",
       requestType: FulfillmentProductList,
       requestStream: false,
-      responseType: FulfillmentProductResponseList,
+      responseType: FulfillmentProductListResponse,
       responseStream: false,
       options: {},
     },
@@ -1198,7 +1183,7 @@ export const ServiceDefinition = {
       name: "Update",
       requestType: FulfillmentProductList,
       requestStream: false,
-      responseType: FulfillmentProductResponseList,
+      responseType: FulfillmentProductListResponse,
       responseStream: false,
       options: {},
     },
@@ -1206,7 +1191,7 @@ export const ServiceDefinition = {
       name: "Upsert",
       requestType: FulfillmentProductList,
       requestStream: false,
-      responseType: FulfillmentProductResponseList,
+      responseType: FulfillmentProductListResponse,
       responseStream: false,
       options: {},
     },
@@ -1221,45 +1206,51 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
+export interface FulfillmentProductServiceImplementation<CallContextExt = {}> {
   read(
     request: ReadRequest,
     context: CallContext & CallContextExt,
-  ): Promise<DeepPartial<FulfillmentProductResponseList>>;
-  find(request: QueryList, context: CallContext & CallContextExt): Promise<DeepPartial<PackingSolutionResponseList>>;
+  ): Promise<DeepPartial<FulfillmentProductListResponse>>;
+  find(
+    request: ProductQueryList,
+    context: CallContext & CallContextExt,
+  ): Promise<DeepPartial<PackingSolutionListResponse>>;
   create(
     request: FulfillmentProductList,
     context: CallContext & CallContextExt,
-  ): Promise<DeepPartial<FulfillmentProductResponseList>>;
+  ): Promise<DeepPartial<FulfillmentProductListResponse>>;
   update(
     request: FulfillmentProductList,
     context: CallContext & CallContextExt,
-  ): Promise<DeepPartial<FulfillmentProductResponseList>>;
+  ): Promise<DeepPartial<FulfillmentProductListResponse>>;
   upsert(
     request: FulfillmentProductList,
     context: CallContext & CallContextExt,
-  ): Promise<DeepPartial<FulfillmentProductResponseList>>;
+  ): Promise<DeepPartial<FulfillmentProductListResponse>>;
   delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;
 }
 
-export interface ServiceClient<CallOptionsExt = {}> {
+export interface FulfillmentProductServiceClient<CallOptionsExt = {}> {
   read(
     request: DeepPartial<ReadRequest>,
     options?: CallOptions & CallOptionsExt,
-  ): Promise<FulfillmentProductResponseList>;
-  find(request: DeepPartial<QueryList>, options?: CallOptions & CallOptionsExt): Promise<PackingSolutionResponseList>;
+  ): Promise<FulfillmentProductListResponse>;
+  find(
+    request: DeepPartial<ProductQueryList>,
+    options?: CallOptions & CallOptionsExt,
+  ): Promise<PackingSolutionListResponse>;
   create(
     request: DeepPartial<FulfillmentProductList>,
     options?: CallOptions & CallOptionsExt,
-  ): Promise<FulfillmentProductResponseList>;
+  ): Promise<FulfillmentProductListResponse>;
   update(
     request: DeepPartial<FulfillmentProductList>,
     options?: CallOptions & CallOptionsExt,
-  ): Promise<FulfillmentProductResponseList>;
+  ): Promise<FulfillmentProductListResponse>;
   upsert(
     request: DeepPartial<FulfillmentProductList>,
     options?: CallOptions & CallOptionsExt,
-  ): Promise<FulfillmentProductResponseList>;
+  ): Promise<FulfillmentProductListResponse>;
   delete(request: DeepPartial<DeleteRequest>, options?: CallOptions & CallOptionsExt): Promise<DeleteResponse>;
 }
 
@@ -1294,6 +1285,9 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/auth.proto",
       "io/restorecommerce/status.proto",
       "io/restorecommerce/attribute.proto",
+      "io/restorecommerce/address.proto",
+      "io/restorecommerce/tax.proto",
+      "io/restorecommerce/geometry.proto",
       "io/restorecommerce/fulfillment_courier.proto",
       "io/restorecommerce/fulfillment.proto",
       "io/restorecommerce/options.proto",
@@ -1315,39 +1309,15 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "pricing",
+        "name": "options",
         "number": 2,
-        "label": 1,
-        "type": 2,
-        "typeName": "",
+        "label": 3,
+        "type": 11,
+        "typeName": ".io.restorecommerce.attribute.Attribute",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "pricing",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "compactness",
-        "number": 3,
-        "label": 1,
-        "type": 2,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "compactness",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "homogeneity",
-        "number": 4,
-        "label": 1,
-        "type": 2,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "homogeneity",
+        "jsonName": "options",
         "options": undefined,
         "proto3Optional": false,
       }],
@@ -1360,17 +1330,41 @@ export const protoMetadata: ProtoMetadata = {
       "reservedRange": [],
       "reservedName": [],
     }, {
-      "name": "Query",
+      "name": "ProductQuery",
       "field": [{
-        "name": "goods",
-        "number": 3,
-        "label": 3,
+        "name": "sender",
+        "number": 1,
+        "label": 1,
         "type": 11,
-        "typeName": ".io.restorecommerce.fulfillment.Item",
+        "typeName": ".io.restorecommerce.address.ShippingAddress",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "goods",
+        "jsonName": "sender",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "receiver",
+        "number": 2,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.address.ShippingAddress",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "receiver",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "items",
+        "number": 3,
+        "label": 3,
+        "type": 11,
+        "typeName": ".io.restorecommerce.fulfillment.FulfillmentItem",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "items",
         "options": undefined,
         "proto3Optional": false,
       }, {
@@ -1407,13 +1401,13 @@ export const protoMetadata: ProtoMetadata = {
       "reservedRange": [],
       "reservedName": [],
     }, {
-      "name": "QueryList",
+      "name": "ProductQueryList",
       "field": [{
         "name": "items",
         "number": 1,
         "label": 3,
         "type": 11,
-        "typeName": ".io.restorecommerce.fulfillment_product.Query",
+        "typeName": ".io.restorecommerce.fulfillment_product.ProductQuery",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
@@ -1649,31 +1643,19 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "max_weight",
-        "number": 5,
-        "label": 1,
-        "type": 1,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "maxWeight",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "max_width",
+        "name": "max_size",
         "number": 6,
         "label": 1,
-        "type": 1,
-        "typeName": "",
+        "type": 11,
+        "typeName": ".io.restorecommerce.geometry.BoundingBox3D",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "maxWidth",
+        "jsonName": "maxSize",
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "max_height",
+        "name": "max_weight",
         "number": 7,
         "label": 1,
         "type": 1,
@@ -1681,31 +1663,7 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "maxHeight",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "max_length",
-        "number": 8,
-        "label": 1,
-        "type": 1,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "maxLength",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "max_volume",
-        "number": 9,
-        "label": 1,
-        "type": 1,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "maxVolume",
+        "jsonName": "maxWeight",
         "options": undefined,
         "proto3Optional": false,
       }],
@@ -1800,7 +1758,7 @@ export const protoMetadata: ProtoMetadata = {
       "reservedRange": [],
       "reservedName": [],
     }, {
-      "name": "FulfillmentProductResponseList",
+      "name": "FulfillmentProductListResponse",
       "field": [{
         "name": "items",
         "number": 1,
@@ -1849,22 +1807,10 @@ export const protoMetadata: ProtoMetadata = {
     }, {
       "name": "PackingSolution",
       "field": [{
-        "name": "reference_id",
+        "name": "price",
         "number": 1,
         "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "referenceId",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "price",
-        "number": 2,
-        "label": 1,
-        "type": 2,
+        "type": 1,
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
@@ -1874,9 +1820,9 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": false,
       }, {
         "name": "compactness",
-        "number": 3,
+        "number": 2,
         "label": 1,
-        "type": 2,
+        "type": 1,
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
@@ -1886,9 +1832,9 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": false,
       }, {
         "name": "homogeneity",
-        "number": 4,
+        "number": 3,
         "label": 1,
-        "type": 2,
+        "type": 1,
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
@@ -1898,9 +1844,9 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": false,
       }, {
         "name": "score",
-        "number": 5,
+        "number": 4,
         "label": 1,
-        "type": 2,
+        "type": 1,
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
@@ -1910,7 +1856,7 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": false,
       }, {
         "name": "parcels",
-        "number": 6,
+        "number": 5,
         "label": 3,
         "type": 11,
         "typeName": ".io.restorecommerce.fulfillment.Parcel",
@@ -1918,6 +1864,18 @@ export const protoMetadata: ProtoMetadata = {
         "defaultValue": "",
         "oneofIndex": 0,
         "jsonName": "parcels",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "vats",
+        "number": 6,
+        "label": 3,
+        "type": 11,
+        "typeName": ".io.restorecommerce.tax.VAT",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "vats",
         "options": undefined,
         "proto3Optional": false,
       }],
@@ -1932,8 +1890,20 @@ export const protoMetadata: ProtoMetadata = {
     }, {
       "name": "PackingSolutionResponse",
       "field": [{
-        "name": "solutions",
+        "name": "reference_id",
         "number": 1,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "referenceId",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "solutions",
+        "number": 2,
         "label": 3,
         "type": 11,
         "typeName": ".io.restorecommerce.fulfillment_product.PackingSolution",
@@ -1945,7 +1915,7 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": false,
       }, {
         "name": "status",
-        "number": 2,
+        "number": 3,
         "label": 1,
         "type": 11,
         "typeName": ".io.restorecommerce.status.Status",
@@ -1965,7 +1935,7 @@ export const protoMetadata: ProtoMetadata = {
       "reservedRange": [],
       "reservedName": [],
     }, {
-      "name": "PackingSolutionResponseList",
+      "name": "PackingSolutionListResponse",
       "field": [{
         "name": "items",
         "number": 1,
@@ -2037,39 +2007,39 @@ export const protoMetadata: ProtoMetadata = {
     }],
     "enumType": [],
     "service": [{
-      "name": "Service",
+      "name": "FulfillmentProductService",
       "method": [{
         "name": "Read",
         "inputType": ".io.restorecommerce.resourcebase.ReadRequest",
-        "outputType": ".io.restorecommerce.fulfillment_product.FulfillmentProductResponseList",
+        "outputType": ".io.restorecommerce.fulfillment_product.FulfillmentProductListResponse",
         "options": { "deprecated": false, "idempotencyLevel": 0, "uninterpretedOption": [] },
         "clientStreaming": false,
         "serverStreaming": false,
       }, {
         "name": "Find",
-        "inputType": ".io.restorecommerce.fulfillment_product.QueryList",
-        "outputType": ".io.restorecommerce.fulfillment_product.PackingSolutionResponseList",
+        "inputType": ".io.restorecommerce.fulfillment_product.ProductQueryList",
+        "outputType": ".io.restorecommerce.fulfillment_product.PackingSolutionListResponse",
         "options": { "deprecated": false, "idempotencyLevel": 0, "uninterpretedOption": [] },
         "clientStreaming": false,
         "serverStreaming": false,
       }, {
         "name": "Create",
         "inputType": ".io.restorecommerce.fulfillment_product.FulfillmentProductList",
-        "outputType": ".io.restorecommerce.fulfillment_product.FulfillmentProductResponseList",
+        "outputType": ".io.restorecommerce.fulfillment_product.FulfillmentProductListResponse",
         "options": undefined,
         "clientStreaming": false,
         "serverStreaming": false,
       }, {
         "name": "Update",
         "inputType": ".io.restorecommerce.fulfillment_product.FulfillmentProductList",
-        "outputType": ".io.restorecommerce.fulfillment_product.FulfillmentProductResponseList",
+        "outputType": ".io.restorecommerce.fulfillment_product.FulfillmentProductListResponse",
         "options": undefined,
         "clientStreaming": false,
         "serverStreaming": false,
       }, {
         "name": "Upsert",
         "inputType": ".io.restorecommerce.fulfillment_product.FulfillmentProductList",
-        "outputType": ".io.restorecommerce.fulfillment_product.FulfillmentProductResponseList",
+        "outputType": ".io.restorecommerce.fulfillment_product.FulfillmentProductListResponse",
         "options": undefined,
         "clientStreaming": false,
         "serverStreaming": false,
@@ -2088,16 +2058,9 @@ export const protoMetadata: ProtoMetadata = {
     "sourceCodeInfo": {
       "location": [{
         "path": [4, 0, 2, 0],
-        "span": [33, 2, 63],
+        "span": [36, 2, 63],
         "leadingComments": "",
         "trailingComments": "ID, name or type\n",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 1, 2, 0],
-        "span": [42, 2, 57],
-        "leadingComments":
-          " io.restorecommerce.fulfillment.Address sender = 1;\n io.restorecommerce.fulfillment.Address receiver = 2;\n",
-        "trailingComments": "",
         "leadingDetachedComments": [],
       }],
     },
@@ -2105,16 +2068,16 @@ export const protoMetadata: ProtoMetadata = {
   }),
   references: {
     ".io.restorecommerce.fulfillment_product.Preferences": Preferences,
-    ".io.restorecommerce.fulfillment_product.Query": Query,
-    ".io.restorecommerce.fulfillment_product.QueryList": QueryList,
+    ".io.restorecommerce.fulfillment_product.ProductQuery": ProductQuery,
+    ".io.restorecommerce.fulfillment_product.ProductQueryList": ProductQueryList,
     ".io.restorecommerce.fulfillment_product.FulfillmentProduct": FulfillmentProduct,
     ".io.restorecommerce.fulfillment_product.Variant": Variant,
     ".io.restorecommerce.fulfillment_product.FulfillmentProductList": FulfillmentProductList,
     ".io.restorecommerce.fulfillment_product.FulfillmentProductResponse": FulfillmentProductResponse,
-    ".io.restorecommerce.fulfillment_product.FulfillmentProductResponseList": FulfillmentProductResponseList,
+    ".io.restorecommerce.fulfillment_product.FulfillmentProductListResponse": FulfillmentProductListResponse,
     ".io.restorecommerce.fulfillment_product.PackingSolution": PackingSolution,
     ".io.restorecommerce.fulfillment_product.PackingSolutionResponse": PackingSolutionResponse,
-    ".io.restorecommerce.fulfillment_product.PackingSolutionResponseList": PackingSolutionResponseList,
+    ".io.restorecommerce.fulfillment_product.PackingSolutionListResponse": PackingSolutionListResponse,
     ".io.restorecommerce.fulfillment_product.Deleted": Deleted,
   },
   dependencies: [
@@ -2126,6 +2089,9 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata6,
     protoMetadata7,
     protoMetadata8,
+    protoMetadata9,
+    protoMetadata10,
+    protoMetadata11,
   ],
   options: {
     messages: {
@@ -2133,7 +2099,7 @@ export const protoMetadata: ProtoMetadata = {
         options: {
           "kafka_subscriber": KafkaSubscription.decode(
             Buffer.from(
-              "ChJmdWxmaWxsbWVudFByb2R1Y3QSL2lvLnJlc3RvcmVjb21tZXJjZS5mdWxmaWxsbWVudF9wcm9kdWN0LnJlc291cmNlGhlmdWxmaWxsbWVudFByb2R1Y3RDcmVhdGVkIhlmdWxmaWxsbWVudFByb2R1Y3RVcGRhdGVkKhlmdWxmaWxsbWVudFByb2R1Y3REZWxldGVk",
+              "ChRmdWxmaWxsbWVudF9wcm9kdWN0cxIvaW8ucmVzdG9yZWNvbW1lcmNlLmZ1bGZpbGxtZW50X3Byb2R1Y3QucmVzb3VyY2UaGWZ1bGZpbGxtZW50UHJvZHVjdENyZWF0ZWQiGWZ1bGZpbGxtZW50UHJvZHVjdFVwZGF0ZWQqGWZ1bGZpbGxtZW50UHJvZHVjdERlbGV0ZWQ=",
               "base64",
             ),
           ),
@@ -2151,7 +2117,7 @@ export const protoMetadata: ProtoMetadata = {
       },
     },
     services: {
-      "Service": {
+      "FulfillmentProductService": {
         options: { "service_name": "fulfillment_product" },
         methods: { "Read": { "is_query": true }, "Find": { "is_query": true } },
       },

@@ -37,7 +37,7 @@ message Deleted {
   string id = 1;
 }
 
-service Service {
+service PriceGroupService {
   option (io.restorecommerce.options.service_name) = "price_group";
 
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (PriceGroupListResponse) {

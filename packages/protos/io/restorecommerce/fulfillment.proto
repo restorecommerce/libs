@@ -73,15 +73,15 @@ enum State {
 }
 
 message FulfillmentItem {
-  string product_id = 1;
-  string variant_id = 2;
-  int32 quantity = 3;
-  io.restorecommerce.product.Package package = 4;
+  optional string product_id = 1;
+  optional string variant_id = 2;
+  optional int32 quantity = 3;
+  optional io.restorecommerce.product.Package package = 4;
 }
 
 message Parcel {
-  string id = 1;
-  string product_id = 2 [
+  optional string id = 1;
+  optional string product_id = 2 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.fulfillment_product.FulfillmentProduct",
       target_service: "resource",
@@ -90,9 +90,9 @@ message Parcel {
       field_name: "product",
     }
   ];
-  string variant_id = 3;
-  FulfillmentItem item = 4;
-  io.restorecommerce.product.Package package = 11;
+  optional string variant_id = 3;
+  optional FulfillmentItem item = 4;
+  optional io.restorecommerce.product.Package package = 11;
 }
 
 message Label {
@@ -101,32 +101,32 @@ message Label {
     string pdf = 2;
     string png = 3;
   }
-  string parcel_id = 4;
-  string shipment_number = 5; //filled on Order
-  State state = 6; //update by Track
-  io.restorecommerce.status.Status status = 7; //API status
+  optional string parcel_id = 4;
+  optional string shipment_number = 5; //filled on Order
+  optional State state = 6; //update by Track
+  optional io.restorecommerce.status.Status status = 7; //API status
 }
 
 message Packing {
-  string reference_id = 1;
+  optional string reference_id = 1;
   repeated Parcel parcels = 2;
-  io.restorecommerce.address.ShippingAddress sender = 3;
-  io.restorecommerce.address.ShippingAddress receiver = 4;
-  string notify = 5;
+  optional io.restorecommerce.address.ShippingAddress sender = 3;
+  optional io.restorecommerce.address.ShippingAddress receiver = 4;
+  optional string notify = 5;
 }
 
 message Event {
-  int64 timestamp = 1;
-  string location = 2;
-  google.protobuf.Any details = 3;
-  io.restorecommerce.status.Status status = 4;
+  optional int64 timestamp = 1;
+  optional string location = 2;
+  optional google.protobuf.Any details = 3;
+  optional io.restorecommerce.status.Status status = 4;
 }
 
 message Tracking {
-  string shipment_number = 1;
+  optional string shipment_number = 1;
   repeated Event events = 3;
-  google.protobuf.Any details = 4;
-  io.restorecommerce.status.Status status = 5;
+  optional google.protobuf.Any details = 4;
+  optional io.restorecommerce.status.Status status = 5;
 }
 
 /**
@@ -141,18 +141,18 @@ message Fulfillment {
     deleted: "fulfillmentDeleted"
   };
 
-  string id = 1;
-  Packing packing = 2; //filled by user
-  io.restorecommerce.meta.Meta meta = 3;
+  optional string id = 1;
+  optional Packing packing = 2; //filled by user
+  optional io.restorecommerce.meta.Meta meta = 3;
   repeated Label labels = 4; //filled by service
   repeated Tracking tracking = 5; //filled by service
-  State state = 6; //filled by service
-  double price = 7;
+  optional State state = 6; //filled by service
+  optional double price = 7;
 }
 
 message FulfillmentList {
   repeated Fulfillment items = 1;
-  uint32 total_count = 2;
+  optional uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
 }
 
@@ -168,15 +168,15 @@ message FulfillmentListResponse {
 }
 
 message FulfillmentId {
-  string id = 1;
+  optional string id = 1;
   repeated string shipment_numbers = 2; //optional
-  google.protobuf.Any options = 3;
-  io.restorecommerce.auth.Subject subject = 4;
+  optional google.protobuf.Any options = 3;
+  optional io.restorecommerce.auth.Subject subject = 4;
 }
 
 message FulfillmentIdList {
   repeated FulfillmentId items = 1;
-  uint32 total_count = 2;
+  optional uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
 }
 

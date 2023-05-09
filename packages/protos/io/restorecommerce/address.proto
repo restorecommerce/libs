@@ -58,20 +58,20 @@ message AddressAddition {
 }
 
 message BusinessAddress {
-  string name = 1;
+  optional string name = 1;
 }
 
 message ResidentialAddress {
-  string title = 1;
-  string given_name = 2;
-  string mid_name = 3;
-  string family_name = 4;
+  optional string title = 1;
+  optional string given_name = 2;
+  optional string mid_name = 3;
+  optional string family_name = 4;
 }
 
 message PackStation {
-  string provider = 1;
-  string station_number = 2;
-  string post_number = 3;
+  optional string provider = 1;
+  optional string station_number = 2;
+  optional string post_number = 3;
 }
 
 message Address {
@@ -102,14 +102,14 @@ message Address {
 }
 
 message Contact {
-  string name = 1;
-  string email = 2;
-  string phone = 3;
+  optional string name = 1;
+  optional string email = 2;
+  optional string phone = 3;
 }
 
 message ShippingAddress {
-  Address address = 1;
-  Contact contact = 2;
-  string comments = 3;
-  io.restorecommerce.country.Country country = 4;
+  optional Address address = 1;
+  optional Contact contact = 2;
+  optional string comments = 3;
+  optional io.restorecommerce.country.Country country = 4;
 }

@@ -74,6 +74,6 @@ message Tax {
 }
 
 message VAT {
-  string tax_id = 1;
-  double vat = 2;
+  optional string tax_id = 1;
+  optional double vat = 2;
 }

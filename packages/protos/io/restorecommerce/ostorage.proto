@@ -157,10 +157,10 @@ message ListRequest {
 // OstorageMessage is used for emitting
 // objectUploaded and objectDownloaded events
 message OstorageMessage {
-  string key = 1;
-  string bucket = 2;
-  google.protobuf.Any metadata = 3;
-  io.restorecommerce.auth.Subject subject = 4;
+  optional string key = 1;
+  optional string bucket = 2;
+  optional google.protobuf.Any metadata = 3;
+  optional io.restorecommerce.auth.Subject subject = 4;
 }
 
 message MoveRequestList {
@@ -169,9 +169,9 @@ message MoveRequestList {
 }
 
 message MoveRequestItem {
-  string bucket = 1; // destination bucket name
-  string sourceObject = 2; // source object with bucket name
-  string key = 3; // destination key name
+  optional string bucket = 1; // destination bucket name
+  optional string sourceObject = 2; // source object with bucket name
+  optional string key = 3; // destination key name
   optional io.restorecommerce.meta.Meta meta = 4;
   optional Options options = 5;
 }

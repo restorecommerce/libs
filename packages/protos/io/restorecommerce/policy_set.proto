@@ -38,11 +38,11 @@ message PolicySetResponse {
 }
 
 message PolicySetRQ {
-  string id = 1;
-  io.restorecommerce.rule.Target target = 2;
-  string combining_algorithm = 3;
+  optional string id = 1;
+  optional io.restorecommerce.rule.Target target = 2;
+  optional string combining_algorithm = 3;
   repeated io.restorecommerce.policy.PolicyRQ policies = 4;
-  io.restorecommerce.rule.Effect effect = 5;
+  optional io.restorecommerce.rule.Effect effect = 5;
 }
 
 service Service {

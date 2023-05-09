@@ -40,12 +40,12 @@ message Rule {
 }
 
 message RuleRQ { // used for `whatIsAllowed` / reverse queries
-  string id = 1;
-  Target target = 2;
-  Effect effect = 3;
-  string condition = 4;
-  ContextQuery context_query = 5;
-  bool evaluation_cacheable = 6;
+  optional string id = 1;
+  optional Target target = 2;
+  optional Effect effect = 3;
+  optional string condition = 4;
+  optional ContextQuery context_query = 5;
+  optional bool evaluation_cacheable = 6;
 }
 
 message RuleList {
@@ -70,7 +70,7 @@ message RuleResponse {
 // The retrieved data can then be passed onto the request's context
 message ContextQuery {
   repeated io.restorecommerce.filter.FilterOp filters = 1;
-  string query = 2;
+  optional string query = 2;
 }
 
 service Service {

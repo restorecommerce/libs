@@ -17,8 +17,8 @@ service Service {
 }
 
 message FieldFilter {
-  string name = 1;
-  bool include = 2;
+  optional string name = 1;
+  optional bool include = 2;
 }
 
 message Sort {
@@ -53,7 +53,7 @@ message Filter {
     DATE = 3;
     ARRAY = 4;
   }
-  ValueType type = 4;
+  optional ValueType type = 4;
   repeated io.restorecommerce.filter.FilterOp filters = 5; // for nested filtering and to make optional its in separate filter.proto file
 }
 
@@ -63,13 +63,13 @@ message FilterOp {
     and = 0;
     or = 1;
   }
-  Operator operator = 2;
+  optional Operator operator = 2;
 }
 
 message Search {
-  string search = 1; // search string
+  optional string search = 1; // search string
   repeated string fields = 2; // list of fields to be searched on entity (if not specified all indexed fields will be searched)
-  bool case_sensitive = 3; // default search is case insensitive
+  optional bool case_sensitive = 3; // default search is case insensitive
 }
 
 message ReadRequest {

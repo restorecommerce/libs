@@ -50,11 +50,11 @@ enum OrderState {
 }
 
 message OrderItem {
-  string product_id = 1;
-  string variant_id = 2;
-  int32 quantity = 3;
-  double unit_price = 4; //Set by service
-  double price = 5; //Set by service
+  optional string product_id = 1;
+  optional string variant_id = 2;
+  optional int32 quantity = 3;
+  optional double unit_price = 4; //Set by service
+  optional double price = 5; //Set by service
   repeated io.restorecommerce.tax.VAT vats = 6; //Set by service
 }
 
@@ -70,18 +70,18 @@ message Order {
     deleted: "orderDeleted"
   };
 
-  string id = 1;
-  io.restorecommerce.meta.Meta meta = 2;
-  OrderState state = 3;
-  string customer_reference = 4;
+  optional string id = 1;
+  optional io.restorecommerce.meta.Meta meta = 2;
+  optional OrderState state = 3;
+  optional string customer_reference = 4;
   repeated OrderItem items = 5;
-  double total_price = 6; //Set by service
-  double total_vat = 7; //Set by service
-  io.restorecommerce.address.ShippingAddress shipping_address = 8;
-  io.restorecommerce.address.ShippingAddress billing_address = 9;
-  string billing_email = 10;
-  string notification_email = 11;
-  io.restorecommerce.fulfillment_product.Preferences packing_preferences = 12;
+  optional double total_price = 6; //Set by service
+  optional double total_vat = 7; //Set by service
+  optional io.restorecommerce.address.ShippingAddress shipping_address = 8;
+  optional io.restorecommerce.address.ShippingAddress billing_address = 9;
+  optional string billing_email = 10;
+  optional string notification_email = 11;
+  optional io.restorecommerce.fulfillment_product.Preferences packing_preferences = 12;
 }
 
 message OrderIdList {
@@ -91,7 +91,7 @@ message OrderIdList {
 
 message OrderList {
   repeated Order items = 1;
-  uint32 total_count = 2;
+  optional uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
 }
 
@@ -111,19 +111,19 @@ message Deleted {
 }
 
 message ShippingDetails {
-  string export_type = 1;
-  string export_description = 2;
-  string invoice_number = 3;
-  io.restorecommerce.address.ShippingAddress sender_address = 4;
+  optional string export_type = 1;
+  optional string export_description = 2;
+  optional string invoice_number = 3;
+  optional io.restorecommerce.address.ShippingAddress sender_address = 4;
 }
 
 message FulfillmentRequest {
-  string reference_id = 1;
-  ShippingDetails shipping_details = 2;
+  optional string reference_id = 1;
+  optional ShippingDetails shipping_details = 2;
 }
 
 message FulfillmentRequestList {
   repeated FulfillmentRequest items = 1;
-  uint32 total_count = 2;
+  optional uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
 }

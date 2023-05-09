@@ -28,7 +28,7 @@ message CommandParameter {
 
   optional string field = 1; //  field name
   optional string description = 2; // field description
-  ParameterType type = 3; // field's type
+  optional ParameterType type = 3; // field's type
   optional string properties = 4; // dump properties in case of `object_value``
 }
 

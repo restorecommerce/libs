@@ -30,12 +30,12 @@ message TokenData {
 }
 
 message Identifier {
-  string id = 1;
-  string type = 2;
-  io.restorecommerce.auth.Subject subject = 3;
+  optional string id = 1;
+  optional string type = 2;
+  optional io.restorecommerce.auth.Subject subject = 3;
 }
 
 message GrantId {
-  string grant_id = 1;
-  io.restorecommerce.auth.Subject subject = 2;
+  optional string grant_id = 1;
+  optional io.restorecommerce.auth.Subject subject = 2;
 }

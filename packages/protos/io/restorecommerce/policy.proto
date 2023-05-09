@@ -25,13 +25,13 @@ message Policy {
 }
 
 message PolicyRQ {
-  string id = 1;
-  io.restorecommerce.rule.Target target = 2;
-  string combining_algorithm = 3;
+  optional string id = 1;
+  optional io.restorecommerce.rule.Target target = 2;
+  optional string combining_algorithm = 3;
   repeated io.restorecommerce.rule.RuleRQ rules = 4;
-  io.restorecommerce.rule.Effect effect = 5;
-  bool has_rules = 6;
-  bool evaluation_cacheable = 7;
+  optional io.restorecommerce.rule.Effect effect = 5;
+  optional bool has_rules = 6;
+  optional bool evaluation_cacheable = 7;
 }
 
 message PolicyList {

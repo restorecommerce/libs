@@ -39,16 +39,16 @@ message Preferences {
 }
 
 message ProductQuery {
-  io.restorecommerce.address.ShippingAddress sender = 1;
-  io.restorecommerce.address.ShippingAddress receiver = 2;
+  optional io.restorecommerce.address.ShippingAddress sender = 1;
+  optional io.restorecommerce.address.ShippingAddress receiver = 2;
   repeated io.restorecommerce.fulfillment.FulfillmentItem items = 3;
-  Preferences preferences = 4;
-  string reference_id = 5;
+  optional Preferences preferences = 4;
+  optional string reference_id = 5;
 }
 
 message ProductQueryList {
   repeated ProductQuery items = 1;
-  uint32 total_count = 2;
+  optional uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
 }
 
@@ -61,10 +61,10 @@ message FulfillmentProduct {
     deleted: "fulfillmentProductDeleted"
   };
 
-  string id = 1;
-  string name = 2;
-  string description = 3;
-  string courier_id = 4 [
+  optional string id = 1;
+  optional string name = 2;
+  optional string description = 3;
+  optional string courier_id = 4 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.fulfillment_courier.FulfillmentCourier",
       target_service: "resource",
@@ -78,21 +78,21 @@ message FulfillmentProduct {
   repeated string tax_ids = 9;
   repeated io.restorecommerce.attribute.Attribute attributes = 10;
   repeated Variant variants = 11;
-  io.restorecommerce.meta.Meta meta = 12;
+  optional io.restorecommerce.meta.Meta meta = 12;
 }
 
 message Variant {
-  string id = 1;
-  string name = 2;
-  string description = 3;
-  double price = 4;
-  io.restorecommerce.geometry.BoundingBox3D max_size = 6;
-  double max_weight = 7;
+  optional string id = 1;
+  optional string name = 2;
+  optional string description = 3;
+  optional double price = 4;
+  optional io.restorecommerce.geometry.BoundingBox3D max_size = 6;
+  optional double max_weight = 7;
 }
 
 message FulfillmentProductList {
   repeated FulfillmentProduct items = 1;
-  uint32 total_count = 2;
+  optional uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
 }
 
@@ -108,23 +108,23 @@ message FulfillmentProductListResponse {
 }
 
 message PackingSolution {
-  double price = 1;
-  double compactness = 2;
-  double homogeneity = 3;
-  double score = 4;
+  optional double price = 1;
+  optional double compactness = 2;
+  optional double homogeneity = 3;
+  optional double score = 4;
   repeated io.restorecommerce.fulfillment.Parcel parcels = 5;
   repeated io.restorecommerce.tax.VAT vats = 6;
 }
 
 message PackingSolutionResponse {
-  string reference_id = 1;
+  optional string reference_id = 1;
   repeated PackingSolution solutions = 2;
-  io.restorecommerce.status.Status status = 3;
+  optional io.restorecommerce.status.Status status = 3;
 }
 
 message PackingSolutionListResponse {
   repeated PackingSolutionResponse items = 1;
-  uint32 total_count = 2;
+  optional uint32 total_count = 2;
   io.restorecommerce.status.OperationStatus operation_status = 3;
 }
 

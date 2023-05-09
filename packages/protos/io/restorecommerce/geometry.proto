@@ -6,18 +6,18 @@ import "io/restorecommerce/options.proto";
 
 
 message Vector3D {
-  double x = 1;
-  double y = 2;
-  double z = 3;
+  optional double x = 1;
+  optional double y = 2;
+  optional double z = 3;
 }
 
 message BoundingBox3D {
-  double width = 1;
-  double height = 2;
-  double length = 3;
+  optional double width = 1;
+  optional double height = 2;
+  optional double length = 3;
 }
 
 message OriginBoundingBox {
-  Vector3D origin = 1;
-  BoundingBox3D bbox = 2;
+  optional Vector3D origin = 1;
+  optional BoundingBox3D bbox = 2;
 }

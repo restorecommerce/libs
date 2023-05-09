@@ -17,8 +17,8 @@ message TraversalRequest {
     Vertices vertices = 1;
     Collection collection = 2;
   }
-  Options opts = 3;
-  bool path = 4;
+  optional Options opts = 3;
+  optional bool path = 4;
   io.restorecommerce.auth.Subject subject = 5;
   repeated Filters filters = 6;
 }
@@ -49,18 +49,18 @@ message Options {
 
 
 message Filters {
-  string entity = 1; // entity on which the filters are applied
-  string edge = 2; // if edge is specified depending on the direction filter are applied only for those entities
+  optional string entity = 1; // entity on which the filters are applied
+  optional string edge = 2; // if edge is specified depending on the direction filter are applied only for those entities
   repeated Filter filter = 3;
   enum Operator {
     and = 0;
     or = 1;
   }
-  Operator operator = 4;
+  optional Operator operator = 4;
 }
 
 message Filter {
-  string field = 1;
+  optional string field = 1;
   enum Operation {
     eq = 0;
     lt = 1;
@@ -72,8 +72,8 @@ message Filter {
     in = 7;
     neq = 8;
   }
-  Operation operation = 2;
-  string value = 3;
+  optional Operation operation = 2;
+  optional string value = 3;
   enum ValueType {
     STRING = 0; // default value type if not specified
     NUMBER = 1;
@@ -81,7 +81,7 @@ message Filter {
     DATE = 3;
     ARRAY = 4;
   }
-  ValueType type = 4;
+  optional ValueType type = 4;
   repeated Filters filters = 5;
 }
 

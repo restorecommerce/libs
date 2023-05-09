@@ -34,19 +34,19 @@ message FulfillmentCourier {
     deleted: "fulfillmentCourierDeleted"
   };
 
-  string id = 1;
-  string name = 4;
-  string description = 5;
-  string logo = 6;
-  string website = 7;
-  string stub_type = 8;
-  google.protobuf.Any configuration = 10;
-  io.restorecommerce.meta.Meta meta = 11;
+  optional string id = 1;
+  optional string name = 4;
+  optional string description = 5;
+  optional string logo = 6;
+  optional string website = 7;
+  optional string stub_type = 8;
+  optional google.protobuf.Any configuration = 10;
+  optional io.restorecommerce.meta.Meta meta = 11;
 }
 
 message FulfillmentCourierList {
   repeated FulfillmentCourier items = 1;
-  uint32 total_count = 2;
+  optional uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
 }
 

@@ -1270,18 +1270,18 @@ export function paymentIdTypeToNumber(object: PaymentIdType): number {
 
 /** Request object for setup calls */
 export interface SetupRequest {
-  ip: string;
+  ip?: string | undefined;
   items: Item[];
-  subtotal: number;
-  shipping: number;
-  handling: number;
-  tax: number;
-  currency: string;
-  returnUrl: string;
-  cancelReturnUrl: string;
-  allowGuestCheckout: boolean;
-  provider: Provider;
-  subject?: Subject;
+  subtotal?: number | undefined;
+  shipping?: number | undefined;
+  handling?: number | undefined;
+  tax?: number | undefined;
+  currency?: string | undefined;
+  returnUrl?: string | undefined;
+  cancelReturnUrl?: string | undefined;
+  allowGuestCheckout?: boolean | undefined;
+  provider?: Provider | undefined;
+  subject?: Subject | undefined;
 }
 
 export interface SetupPayload {
@@ -1303,21 +1303,21 @@ export interface SetupResponse {
 
 /** Request object for authorization or purchase call for cardless payment. */
 export interface PaymentRequest {
-  provider: Provider;
-  paymentSum: number;
-  currency: string;
-  paymentId: string;
-  payerId: string;
-  token: string;
+  provider?: Provider | undefined;
+  paymentSum?: number | undefined;
+  currency?: string | undefined;
+  paymentId?: string | undefined;
+  payerId?: string | undefined;
+  token?: string | undefined;
   subject?: Subject;
 }
 
 /** Request object for capture call for both standard and cardless payments. */
 export interface CaptureRequest {
-  provider: Provider;
-  paymentSum: number;
-  currency: string;
-  paymentId: string;
+  provider?: Provider | undefined;
+  paymentSum?: number | undefined;
+  currency?: string | undefined;
+  paymentId?: string | undefined;
   subject?: Subject;
 }
 
@@ -1342,72 +1342,72 @@ export interface PaymentResponse {
 
 /** Used for building ActiveMerchant::Billing::CreditCard instance. */
 export interface PaymentCard {
-  primaryNumber: string;
-  firstName: string;
-  lastName: string;
-  month: string;
-  year: number;
-  verificationValue: string;
+  primaryNumber?: string | undefined;
+  firstName?: string | undefined;
+  lastName?: string | undefined;
+  month?: string | undefined;
+  year?: number | undefined;
+  verificationValue?: string | undefined;
 }
 
 /** Represents purchased item. Not all providers support this. */
 export interface Item {
-  name: string;
-  description: string;
-  quantity: number;
-  amount: number;
+  name?: string | undefined;
+  description?: string | undefined;
+  quantity?: number | undefined;
+  amount?: number | undefined;
 }
 
 function createBaseSetupRequest(): SetupRequest {
   return {
-    ip: "",
+    ip: undefined,
     items: [],
-    subtotal: 0,
-    shipping: 0,
-    handling: 0,
-    tax: 0,
-    currency: "",
-    returnUrl: "",
-    cancelReturnUrl: "",
-    allowGuestCheckout: false,
-    provider: Provider.NO_PROVIDER,
+    subtotal: undefined,
+    shipping: undefined,
+    handling: undefined,
+    tax: undefined,
+    currency: undefined,
+    returnUrl: undefined,
+    cancelReturnUrl: undefined,
+    allowGuestCheckout: undefined,
+    provider: undefined,
     subject: undefined,
   };
 }
 
 export const SetupRequest = {
   encode(message: SetupRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.ip !== "") {
+    if (message.ip !== undefined) {
       writer.uint32(10).string(message.ip);
     }
     for (const v of message.items) {
       Item.encode(v!, writer.uint32(18).fork()).ldelim();
     }
-    if (message.subtotal !== 0) {
+    if (message.subtotal !== undefined) {
       writer.uint32(24).int32(message.subtotal);
     }
-    if (message.shipping !== 0) {
+    if (message.shipping !== undefined) {
       writer.uint32(32).int32(message.shipping);
     }
-    if (message.handling !== 0) {
+    if (message.handling !== undefined) {
       writer.uint32(40).int32(message.handling);
     }
-    if (message.tax !== 0) {
+    if (message.tax !== undefined) {
       writer.uint32(48).int32(message.tax);
     }
-    if (message.currency !== "") {
+    if (message.currency !== undefined) {
       writer.uint32(58).string(message.currency);
     }
-    if (message.returnUrl !== "") {
+    if (message.returnUrl !== undefined) {
       writer.uint32(66).string(message.returnUrl);
     }
-    if (message.cancelReturnUrl !== "") {
+    if (message.cancelReturnUrl !== undefined) {
       writer.uint32(74).string(message.cancelReturnUrl);
     }
-    if (message.allowGuestCheckout === true) {
+    if (message.allowGuestCheckout !== undefined) {
       writer.uint32(80).bool(message.allowGuestCheckout);
     }
-    if (message.provider !== Provider.NO_PROVIDER) {
+    if (message.provider !== undefined) {
       writer.uint32(88).int32(providerToNumber(message.provider));
     }
     if (message.subject !== undefined) {
@@ -1469,17 +1469,17 @@ export const SetupRequest = {
 
   fromJSON(object: any): SetupRequest {
     return {
-      ip: isSet(object.ip) ? String(object.ip) : "",
+      ip: isSet(object.ip) ? String(object.ip) : undefined,
       items: Array.isArray(object?.items) ? object.items.map((e: any) => Item.fromJSON(e)) : [],
-      subtotal: isSet(object.subtotal) ? Number(object.subtotal) : 0,
-      shipping: isSet(object.shipping) ? Number(object.shipping) : 0,
-      handling: isSet(object.handling) ? Number(object.handling) : 0,
-      tax: isSet(object.tax) ? Number(object.tax) : 0,
-      currency: isSet(object.currency) ? String(object.currency) : "",
-      returnUrl: isSet(object.returnUrl) ? String(object.returnUrl) : "",
-      cancelReturnUrl: isSet(object.cancelReturnUrl) ? String(object.cancelReturnUrl) : "",
-      allowGuestCheckout: isSet(object.allowGuestCheckout) ? Boolean(object.allowGuestCheckout) : false,
-      provider: isSet(object.provider) ? providerFromJSON(object.provider) : Provider.NO_PROVIDER,
+      subtotal: isSet(object.subtotal) ? Number(object.subtotal) : undefined,
+      shipping: isSet(object.shipping) ? Number(object.shipping) : undefined,
+      handling: isSet(object.handling) ? Number(object.handling) : undefined,
+      tax: isSet(object.tax) ? Number(object.tax) : undefined,
+      currency: isSet(object.currency) ? String(object.currency) : undefined,
+      returnUrl: isSet(object.returnUrl) ? String(object.returnUrl) : undefined,
+      cancelReturnUrl: isSet(object.cancelReturnUrl) ? String(object.cancelReturnUrl) : undefined,
+      allowGuestCheckout: isSet(object.allowGuestCheckout) ? Boolean(object.allowGuestCheckout) : undefined,
+      provider: isSet(object.provider) ? providerFromJSON(object.provider) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
@@ -1500,7 +1500,8 @@ export const SetupRequest = {
     message.returnUrl !== undefined && (obj.returnUrl = message.returnUrl);
     message.cancelReturnUrl !== undefined && (obj.cancelReturnUrl = message.cancelReturnUrl);
     message.allowGuestCheckout !== undefined && (obj.allowGuestCheckout = message.allowGuestCheckout);
-    message.provider !== undefined && (obj.provider = providerToJSON(message.provider));
+    message.provider !== undefined &&
+      (obj.provider = message.provider !== undefined ? providerToJSON(message.provider) : undefined);
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
     return obj;
   },
@@ -1511,17 +1512,17 @@ export const SetupRequest = {
 
   fromPartial(object: DeepPartial<SetupRequest>): SetupRequest {
     const message = createBaseSetupRequest();
-    message.ip = object.ip ?? "";
+    message.ip = object.ip ?? undefined;
     message.items = object.items?.map((e) => Item.fromPartial(e)) || [];
-    message.subtotal = object.subtotal ?? 0;
-    message.shipping = object.shipping ?? 0;
-    message.handling = object.handling ?? 0;
-    message.tax = object.tax ?? 0;
-    message.currency = object.currency ?? "";
-    message.returnUrl = object.returnUrl ?? "";
-    message.cancelReturnUrl = object.cancelReturnUrl ?? "";
-    message.allowGuestCheckout = object.allowGuestCheckout ?? false;
-    message.provider = object.provider ?? Provider.NO_PROVIDER;
+    message.subtotal = object.subtotal ?? undefined;
+    message.shipping = object.shipping ?? undefined;
+    message.handling = object.handling ?? undefined;
+    message.tax = object.tax ?? undefined;
+    message.currency = object.currency ?? undefined;
+    message.returnUrl = object.returnUrl ?? undefined;
+    message.cancelReturnUrl = object.cancelReturnUrl ?? undefined;
+    message.allowGuestCheckout = object.allowGuestCheckout ?? undefined;
+    message.provider = object.provider ?? undefined;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
@@ -1735,34 +1736,34 @@ export const SetupResponse = {
 
 function createBasePaymentRequest(): PaymentRequest {
   return {
-    provider: Provider.NO_PROVIDER,
-    paymentSum: 0,
-    currency: "",
-    paymentId: "",
-    payerId: "",
-    token: "",
+    provider: undefined,
+    paymentSum: undefined,
+    currency: undefined,
+    paymentId: undefined,
+    payerId: undefined,
+    token: undefined,
     subject: undefined,
   };
 }
 
 export const PaymentRequest = {
   encode(message: PaymentRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.provider !== Provider.NO_PROVIDER) {
+    if (message.provider !== undefined) {
       writer.uint32(8).int32(providerToNumber(message.provider));
     }
-    if (message.paymentSum !== 0) {
+    if (message.paymentSum !== undefined) {
       writer.uint32(16).int32(message.paymentSum);
     }
-    if (message.currency !== "") {
+    if (message.currency !== undefined) {
       writer.uint32(26).string(message.currency);
     }
-    if (message.paymentId !== "") {
+    if (message.paymentId !== undefined) {
       writer.uint32(34).string(message.paymentId);
     }
-    if (message.payerId !== "") {
+    if (message.payerId !== undefined) {
       writer.uint32(42).string(message.payerId);
     }
-    if (message.token !== "") {
+    if (message.token !== undefined) {
       writer.uint32(50).string(message.token);
     }
     if (message.subject !== undefined) {
@@ -1809,19 +1810,20 @@ export const PaymentRequest = {
 
   fromJSON(object: any): PaymentRequest {
     return {
-      provider: isSet(object.provider) ? providerFromJSON(object.provider) : Provider.NO_PROVIDER,
-      paymentSum: isSet(object.paymentSum) ? Number(object.paymentSum) : 0,
-      currency: isSet(object.currency) ? String(object.currency) : "",
-      paymentId: isSet(object.paymentId) ? String(object.paymentId) : "",
-      payerId: isSet(object.payerId) ? String(object.payerId) : "",
-      token: isSet(object.token) ? String(object.token) : "",
+      provider: isSet(object.provider) ? providerFromJSON(object.provider) : undefined,
+      paymentSum: isSet(object.paymentSum) ? Number(object.paymentSum) : undefined,
+      currency: isSet(object.currency) ? String(object.currency) : undefined,
+      paymentId: isSet(object.paymentId) ? String(object.paymentId) : undefined,
+      payerId: isSet(object.payerId) ? String(object.payerId) : undefined,
+      token: isSet(object.token) ? String(object.token) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
 
   toJSON(message: PaymentRequest): unknown {
     const obj: any = {};
-    message.provider !== undefined && (obj.provider = providerToJSON(message.provider));
+    message.provider !== undefined &&
+      (obj.provider = message.provider !== undefined ? providerToJSON(message.provider) : undefined);
     message.paymentSum !== undefined && (obj.paymentSum = Math.round(message.paymentSum));
     message.currency !== undefined && (obj.currency = message.currency);
     message.paymentId !== undefined && (obj.paymentId = message.paymentId);
@@ -1837,12 +1839,12 @@ export const PaymentRequest = {
 
   fromPartial(object: DeepPartial<PaymentRequest>): PaymentRequest {
     const message = createBasePaymentRequest();
-    message.provider = object.provider ?? Provider.NO_PROVIDER;
-    message.paymentSum = object.paymentSum ?? 0;
-    message.currency = object.currency ?? "";
-    message.paymentId = object.paymentId ?? "";
-    message.payerId = object.payerId ?? "";
-    message.token = object.token ?? "";
+    message.provider = object.provider ?? undefined;
+    message.paymentSum = object.paymentSum ?? undefined;
+    message.currency = object.currency ?? undefined;
+    message.paymentId = object.paymentId ?? undefined;
+    message.payerId = object.payerId ?? undefined;
+    message.token = object.token ?? undefined;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
@@ -1851,21 +1853,21 @@ export const PaymentRequest = {
 };
 
 function createBaseCaptureRequest(): CaptureRequest {
-  return { provider: Provider.NO_PROVIDER, paymentSum: 0, currency: "", paymentId: "", subject: undefined };
+  return { provider: undefined, paymentSum: undefined, currency: undefined, paymentId: undefined, subject: undefined };
 }
 
 export const CaptureRequest = {
   encode(message: CaptureRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.provider !== Provider.NO_PROVIDER) {
+    if (message.provider !== undefined) {
       writer.uint32(8).int32(providerToNumber(message.provider));
     }
-    if (message.paymentSum !== 0) {
+    if (message.paymentSum !== undefined) {
       writer.uint32(16).int32(message.paymentSum);
     }
-    if (message.currency !== "") {
+    if (message.currency !== undefined) {
       writer.uint32(26).string(message.currency);
     }
-    if (message.paymentId !== "") {
+    if (message.paymentId !== undefined) {
       writer.uint32(34).string(message.paymentId);
     }
     if (message.subject !== undefined) {
@@ -1906,17 +1908,18 @@ export const CaptureRequest = {
 
   fromJSON(object: any): CaptureRequest {
     return {
-      provider: isSet(object.provider) ? providerFromJSON(object.provider) : Provider.NO_PROVIDER,
-      paymentSum: isSet(object.paymentSum) ? Number(object.paymentSum) : 0,
-      currency: isSet(object.currency) ? String(object.currency) : "",
-      paymentId: isSet(object.paymentId) ? String(object.paymentId) : "",
+      provider: isSet(object.provider) ? providerFromJSON(object.provider) : undefined,
+      paymentSum: isSet(object.paymentSum) ? Number(object.paymentSum) : undefined,
+      currency: isSet(object.currency) ? String(object.currency) : undefined,
+      paymentId: isSet(object.paymentId) ? String(object.paymentId) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
 
   toJSON(message: CaptureRequest): unknown {
     const obj: any = {};
-    message.provider !== undefined && (obj.provider = providerToJSON(message.provider));
+    message.provider !== undefined &&
+      (obj.provider = message.provider !== undefined ? providerToJSON(message.provider) : undefined);
     message.paymentSum !== undefined && (obj.paymentSum = Math.round(message.paymentSum));
     message.currency !== undefined && (obj.currency = message.currency);
     message.paymentId !== undefined && (obj.paymentId = message.paymentId);
@@ -1930,10 +1933,10 @@ export const CaptureRequest = {
 
   fromPartial(object: DeepPartial<CaptureRequest>): CaptureRequest {
     const message = createBaseCaptureRequest();
-    message.provider = object.provider ?? Provider.NO_PROVIDER;
-    message.paymentSum = object.paymentSum ?? 0;
-    message.currency = object.currency ?? "";
-    message.paymentId = object.paymentId ?? "";
+    message.provider = object.provider ?? undefined;
+    message.paymentSum = object.paymentSum ?? undefined;
+    message.currency = object.currency ?? undefined;
+    message.paymentId = object.paymentId ?? undefined;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
@@ -2138,27 +2141,34 @@ export const PaymentResponse = {
 };
 
 function createBasePaymentCard(): PaymentCard {
-  return { primaryNumber: "", firstName: "", lastName: "", month: "", year: 0, verificationValue: "" };
+  return {
+    primaryNumber: undefined,
+    firstName: undefined,
+    lastName: undefined,
+    month: undefined,
+    year: undefined,
+    verificationValue: undefined,
+  };
 }
 
 export const PaymentCard = {
   encode(message: PaymentCard, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.primaryNumber !== "") {
+    if (message.primaryNumber !== undefined) {
       writer.uint32(10).string(message.primaryNumber);
     }
-    if (message.firstName !== "") {
+    if (message.firstName !== undefined) {
       writer.uint32(18).string(message.firstName);
     }
-    if (message.lastName !== "") {
+    if (message.lastName !== undefined) {
       writer.uint32(26).string(message.lastName);
     }
-    if (message.month !== "") {
+    if (message.month !== undefined) {
       writer.uint32(34).string(message.month);
     }
-    if (message.year !== 0) {
+    if (message.year !== undefined) {
       writer.uint32(40).int32(message.year);
     }
-    if (message.verificationValue !== "") {
+    if (message.verificationValue !== undefined) {
       writer.uint32(50).string(message.verificationValue);
     }
     return writer;
@@ -2199,12 +2209,12 @@ export const PaymentCard = {
 
   fromJSON(object: any): PaymentCard {
     return {
-      primaryNumber: isSet(object.primaryNumber) ? String(object.primaryNumber) : "",
-      firstName: isSet(object.firstName) ? String(object.firstName) : "",
-      lastName: isSet(object.lastName) ? String(object.lastName) : "",
-      month: isSet(object.month) ? String(object.month) : "",
-      year: isSet(object.year) ? Number(object.year) : 0,
-      verificationValue: isSet(object.verificationValue) ? String(object.verificationValue) : "",
+      primaryNumber: isSet(object.primaryNumber) ? String(object.primaryNumber) : undefined,
+      firstName: isSet(object.firstName) ? String(object.firstName) : undefined,
+      lastName: isSet(object.lastName) ? String(object.lastName) : undefined,
+      month: isSet(object.month) ? String(object.month) : undefined,
+      year: isSet(object.year) ? Number(object.year) : undefined,
+      verificationValue: isSet(object.verificationValue) ? String(object.verificationValue) : undefined,
     };
   },
 
@@ -2225,32 +2235,32 @@ export const PaymentCard = {
 
   fromPartial(object: DeepPartial<PaymentCard>): PaymentCard {
     const message = createBasePaymentCard();
-    message.primaryNumber = object.primaryNumber ?? "";
-    message.firstName = object.firstName ?? "";
-    message.lastName = object.lastName ?? "";
-    message.month = object.month ?? "";
-    message.year = object.year ?? 0;
-    message.verificationValue = object.verificationValue ?? "";
+    message.primaryNumber = object.primaryNumber ?? undefined;
+    message.firstName = object.firstName ?? undefined;
+    message.lastName = object.lastName ?? undefined;
+    message.month = object.month ?? undefined;
+    message.year = object.year ?? undefined;
+    message.verificationValue = object.verificationValue ?? undefined;
     return message;
   },
 };
 
 function createBaseItem(): Item {
-  return { name: "", description: "", quantity: 0, amount: 0 };
+  return { name: undefined, description: undefined, quantity: undefined, amount: undefined };
 }
 
 export const Item = {
   encode(message: Item, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.name !== "") {
+    if (message.name !== undefined) {
       writer.uint32(10).string(message.name);
     }
-    if (message.description !== "") {
+    if (message.description !== undefined) {
       writer.uint32(18).string(message.description);
     }
-    if (message.quantity !== 0) {
+    if (message.quantity !== undefined) {
       writer.uint32(24).int32(message.quantity);
     }
-    if (message.amount !== 0) {
+    if (message.amount !== undefined) {
       writer.uint32(32).int32(message.amount);
     }
     return writer;
@@ -2285,10 +2295,10 @@ export const Item = {
 
   fromJSON(object: any): Item {
     return {
-      name: isSet(object.name) ? String(object.name) : "",
-      description: isSet(object.description) ? String(object.description) : "",
-      quantity: isSet(object.quantity) ? Number(object.quantity) : 0,
-      amount: isSet(object.amount) ? Number(object.amount) : 0,
+      name: isSet(object.name) ? String(object.name) : undefined,
+      description: isSet(object.description) ? String(object.description) : undefined,
+      quantity: isSet(object.quantity) ? Number(object.quantity) : undefined,
+      amount: isSet(object.amount) ? Number(object.amount) : undefined,
     };
   },
 
@@ -2307,10 +2317,10 @@ export const Item = {
 
   fromPartial(object: DeepPartial<Item>): Item {
     const message = createBaseItem();
-    message.name = object.name ?? "";
-    message.description = object.description ?? "";
-    message.quantity = object.quantity ?? 0;
-    message.amount = object.amount ?? 0;
+    message.name = object.name ?? undefined;
+    message.description = object.description ?? undefined;
+    message.quantity = object.quantity ?? undefined;
+    message.amount = object.amount ?? undefined;
     return message;
   },
 };
@@ -2442,7 +2452,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "ip",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "items",
         "number": 2,
@@ -2463,10 +2473,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "subtotal",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "shipping",
         "number": 4,
@@ -2475,10 +2485,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "shipping",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "handling",
         "number": 5,
@@ -2487,10 +2497,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "handling",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "tax",
         "number": 6,
@@ -2499,10 +2509,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 4,
         "jsonName": "tax",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "currency",
         "number": 7,
@@ -2511,10 +2521,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 5,
         "jsonName": "currency",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "return_url",
         "number": 8,
@@ -2523,10 +2533,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 6,
         "jsonName": "returnUrl",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "cancel_return_url",
         "number": 9,
@@ -2535,10 +2545,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 7,
         "jsonName": "cancelReturnUrl",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "allow_guest_checkout",
         "number": 10,
@@ -2547,10 +2557,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 8,
         "jsonName": "allowGuestCheckout",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "provider",
         "number": 11,
@@ -2559,10 +2569,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.payment.Provider",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 9,
         "jsonName": "provider",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 12,
@@ -2571,16 +2581,28 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.auth.Subject",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 10,
         "jsonName": "subject",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [
+        { "name": "_ip", "options": undefined },
+        { "name": "_subtotal", "options": undefined },
+        { "name": "_shipping", "options": undefined },
+        { "name": "_handling", "options": undefined },
+        { "name": "_tax", "options": undefined },
+        { "name": "_currency", "options": undefined },
+        { "name": "_return_url", "options": undefined },
+        { "name": "_cancel_return_url", "options": undefined },
+        { "name": "_allow_guest_checkout", "options": undefined },
+        { "name": "_provider", "options": undefined },
+        { "name": "_subject", "options": undefined },
+      ],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -2714,7 +2736,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "provider",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "payment_sum",
         "number": 2,
@@ -2723,10 +2745,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "paymentSum",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "currency",
         "number": 3,
@@ -2735,10 +2757,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "currency",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "payment_id",
         "number": 4,
@@ -2747,10 +2769,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "paymentId",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "payer_id",
         "number": 5,
@@ -2759,10 +2781,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 4,
         "jsonName": "payerId",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "token",
         "number": 6,
@@ -2771,10 +2793,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 5,
         "jsonName": "token",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 7,
@@ -2792,7 +2814,14 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [
+        { "name": "_provider", "options": undefined },
+        { "name": "_payment_sum", "options": undefined },
+        { "name": "_currency", "options": undefined },
+        { "name": "_payment_id", "options": undefined },
+        { "name": "_payer_id", "options": undefined },
+        { "name": "_token", "options": undefined },
+      ],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -2809,7 +2838,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "provider",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "payment_sum",
         "number": 2,
@@ -2818,10 +2847,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "paymentSum",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "currency",
         "number": 3,
@@ -2830,10 +2859,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "currency",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "payment_id",
         "number": 4,
@@ -2842,10 +2871,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "paymentId",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 5,
@@ -2863,7 +2892,10 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_provider", "options": undefined }, { "name": "_payment_sum", "options": undefined }, {
+        "name": "_currency",
+        "options": undefined,
+      }, { "name": "_payment_id", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -2985,7 +3017,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "primaryNumber",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "first_name",
         "number": 2,
@@ -2994,10 +3026,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "firstName",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "last_name",
         "number": 3,
@@ -3006,10 +3038,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "lastName",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "month",
         "number": 4,
@@ -3018,10 +3050,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "month",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "year",
         "number": 5,
@@ -3030,10 +3062,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 4,
         "jsonName": "year",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "verification_value",
         "number": 6,
@@ -3042,16 +3074,23 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 5,
         "jsonName": "verificationValue",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [
+        { "name": "_primary_number", "options": undefined },
+        { "name": "_first_name", "options": undefined },
+        { "name": "_last_name", "options": undefined },
+        { "name": "_month", "options": undefined },
+        { "name": "_year", "options": undefined },
+        { "name": "_verification_value", "options": undefined },
+      ],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -3068,7 +3107,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "name",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "description",
         "number": 2,
@@ -3077,10 +3116,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "description",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "quantity",
         "number": 3,
@@ -3089,10 +3128,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "quantity",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "amount",
         "number": 4,
@@ -3101,16 +3140,19 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "amount",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_name", "options": undefined }, { "name": "_description", "options": undefined }, {
+        "name": "_quantity",
+        "options": undefined,
+      }, { "name": "_amount", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],

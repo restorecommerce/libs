@@ -149,10 +149,10 @@ export interface ListRequest {
  * objectUploaded and objectDownloaded events
  */
 export interface OstorageMessage {
-  key: string;
-  bucket: string;
-  metadata?: Any;
-  subject?: Subject;
+  key?: string | undefined;
+  bucket?: string | undefined;
+  metadata?: Any | undefined;
+  subject?: Subject | undefined;
 }
 
 export interface MoveRequestList {
@@ -162,11 +162,15 @@ export interface MoveRequestList {
 
 export interface MoveRequestItem {
   /** destination bucket name */
-  bucket: string;
+  bucket?:
+    | string
+    | undefined;
   /** source object with bucket name */
-  sourceObject: string;
+  sourceObject?:
+    | string
+    | undefined;
   /** destination key name */
-  key: string;
+  key?: string | undefined;
   meta?: Meta | undefined;
   options?: Options | undefined;
 }
@@ -1765,15 +1769,15 @@ export const ListRequest = {
 };
 
 function createBaseOstorageMessage(): OstorageMessage {
-  return { key: "", bucket: "", metadata: undefined, subject: undefined };
+  return { key: undefined, bucket: undefined, metadata: undefined, subject: undefined };
 }
 
 export const OstorageMessage = {
   encode(message: OstorageMessage, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.key !== "") {
+    if (message.key !== undefined) {
       writer.uint32(10).string(message.key);
     }
-    if (message.bucket !== "") {
+    if (message.bucket !== undefined) {
       writer.uint32(18).string(message.bucket);
     }
     if (message.metadata !== undefined) {
@@ -1814,8 +1818,8 @@ export const OstorageMessage = {
 
   fromJSON(object: any): OstorageMessage {
     return {
-      key: isSet(object.key) ? String(object.key) : "",
-      bucket: isSet(object.bucket) ? String(object.bucket) : "",
+      key: isSet(object.key) ? String(object.key) : undefined,
+      bucket: isSet(object.bucket) ? String(object.bucket) : undefined,
       metadata: isSet(object.metadata) ? Any.fromJSON(object.metadata) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
@@ -1836,8 +1840,8 @@ export const OstorageMessage = {
 
   fromPartial(object: DeepPartial<OstorageMessage>): OstorageMessage {
     const message = createBaseOstorageMessage();
-    message.key = object.key ?? "";
-    message.bucket = object.bucket ?? "";
+    message.key = object.key ?? undefined;
+    message.bucket = object.bucket ?? undefined;
     message.metadata = (object.metadata !== undefined && object.metadata !== null)
       ? Any.fromPartial(object.metadata)
       : undefined;
@@ -1917,18 +1921,18 @@ export const MoveRequestList = {
 };
 
 function createBaseMoveRequestItem(): MoveRequestItem {
-  return { bucket: "", sourceObject: "", key: "", meta: undefined, options: undefined };
+  return { bucket: undefined, sourceObject: undefined, key: undefined, meta: undefined, options: undefined };
 }
 
 export const MoveRequestItem = {
   encode(message: MoveRequestItem, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.bucket !== "") {
+    if (message.bucket !== undefined) {
       writer.uint32(10).string(message.bucket);
     }
-    if (message.sourceObject !== "") {
+    if (message.sourceObject !== undefined) {
       writer.uint32(18).string(message.sourceObject);
     }
-    if (message.key !== "") {
+    if (message.key !== undefined) {
       writer.uint32(26).string(message.key);
     }
     if (message.meta !== undefined) {
@@ -1972,9 +1976,9 @@ export const MoveRequestItem = {
 
   fromJSON(object: any): MoveRequestItem {
     return {
-      bucket: isSet(object.bucket) ? String(object.bucket) : "",
-      sourceObject: isSet(object.sourceObject) ? String(object.sourceObject) : "",
-      key: isSet(object.key) ? String(object.key) : "",
+      bucket: isSet(object.bucket) ? String(object.bucket) : undefined,
+      sourceObject: isSet(object.sourceObject) ? String(object.sourceObject) : undefined,
+      key: isSet(object.key) ? String(object.key) : undefined,
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
       options: isSet(object.options) ? Options.fromJSON(object.options) : undefined,
     };
@@ -1996,9 +2000,9 @@ export const MoveRequestItem = {
 
   fromPartial(object: DeepPartial<MoveRequestItem>): MoveRequestItem {
     const message = createBaseMoveRequestItem();
-    message.bucket = object.bucket ?? "";
-    message.sourceObject = object.sourceObject ?? "";
-    message.key = object.key ?? "";
+    message.bucket = object.bucket ?? undefined;
+    message.sourceObject = object.sourceObject ?? undefined;
+    message.key = object.key ?? undefined;
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
     message.options = (object.options !== undefined && object.options !== null)
       ? Options.fromPartial(object.options)
@@ -3439,7 +3443,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "key",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "bucket",
         "number": 2,
@@ -3448,10 +3452,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "bucket",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "metadata",
         "number": 3,
@@ -3460,10 +3464,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".google.protobuf.Any",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "metadata",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 4,
@@ -3472,16 +3476,19 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.auth.Subject",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "subject",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_key", "options": undefined }, { "name": "_bucket", "options": undefined }, {
+        "name": "_metadata",
+        "options": undefined,
+      }, { "name": "_subject", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -3533,7 +3540,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "bucket",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "sourceObject",
         "number": 2,
@@ -3542,10 +3549,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "sourceObject",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "key",
         "number": 3,
@@ -3554,10 +3561,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "key",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "meta",
         "number": 4,
@@ -3566,7 +3573,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.meta.Meta",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "meta",
         "options": undefined,
         "proto3Optional": true,
@@ -3578,7 +3585,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.ostorage.Options",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 1,
+        "oneofIndex": 4,
         "jsonName": "options",
         "options": undefined,
         "proto3Optional": true,
@@ -3587,7 +3594,13 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [{ "name": "_meta", "options": undefined }, { "name": "_options", "options": undefined }],
+      "oneofDecl": [
+        { "name": "_bucket", "options": undefined },
+        { "name": "_sourceObject", "options": undefined },
+        { "name": "_key", "options": undefined },
+        { "name": "_meta", "options": undefined },
+        { "name": "_options", "options": undefined },
+      ],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -3810,19 +3823,19 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 21, 2, 0],
-        "span": [171, 2, 20],
+        "span": [171, 2, 29],
         "leadingComments": "",
         "trailingComments": " destination bucket name\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 21, 2, 1],
-        "span": [172, 2, 26],
+        "span": [172, 2, 35],
         "leadingComments": "",
         "trailingComments": " source object with bucket name\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 21, 2, 2],
-        "span": [173, 2, 17],
+        "span": [173, 2, 26],
         "leadingComments": "",
         "trailingComments": " destination key name\n",
         "leadingDetachedComments": [],

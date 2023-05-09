@@ -23,44 +23,44 @@ export interface Preferences {
 }
 
 export interface ProductQuery {
-  sender?: ShippingAddress;
-  receiver?: ShippingAddress;
+  sender?: ShippingAddress | undefined;
+  receiver?: ShippingAddress | undefined;
   items: FulfillmentItem[];
-  preferences?: Preferences;
-  referenceId: string;
+  preferences?: Preferences | undefined;
+  referenceId?: string | undefined;
 }
 
 export interface ProductQueryList {
   items: ProductQuery[];
-  totalCount: number;
+  totalCount?: number | undefined;
   subject?: Subject;
 }
 
 export interface FulfillmentProduct {
-  id: string;
-  name: string;
-  description: string;
-  courierId: string;
+  id?: string | undefined;
+  name?: string | undefined;
+  description?: string | undefined;
+  courierId?: string | undefined;
   startZones: string[];
   destinationZones: string[];
   taxIds: string[];
   attributes: Attribute[];
   variants: Variant[];
-  meta?: Meta;
+  meta?: Meta | undefined;
 }
 
 export interface Variant {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  maxSize?: BoundingBox3D;
-  maxWeight: number;
+  id?: string | undefined;
+  name?: string | undefined;
+  description?: string | undefined;
+  price?: number | undefined;
+  maxSize?: BoundingBox3D | undefined;
+  maxWeight?: number | undefined;
 }
 
 export interface FulfillmentProductList {
   items: FulfillmentProduct[];
-  totalCount: number;
+  totalCount?: number | undefined;
   subject?: Subject;
 }
 
@@ -76,23 +76,23 @@ export interface FulfillmentProductListResponse {
 }
 
 export interface PackingSolution {
-  price: number;
-  compactness: number;
-  homogeneity: number;
-  score: number;
+  price?: number | undefined;
+  compactness?: number | undefined;
+  homogeneity?: number | undefined;
+  score?: number | undefined;
   parcels: Parcel[];
   vats: VAT[];
 }
 
 export interface PackingSolutionResponse {
-  referenceId: string;
+  referenceId?: string | undefined;
   solutions: PackingSolution[];
-  status?: Status;
+  status?: Status | undefined;
 }
 
 export interface PackingSolutionListResponse {
   items: PackingSolutionResponse[];
-  totalCount: number;
+  totalCount?: number | undefined;
   operationStatus?: OperationStatus;
 }
 
@@ -171,7 +171,7 @@ export const Preferences = {
 };
 
 function createBaseProductQuery(): ProductQuery {
-  return { sender: undefined, receiver: undefined, items: [], preferences: undefined, referenceId: "" };
+  return { sender: undefined, receiver: undefined, items: [], preferences: undefined, referenceId: undefined };
 }
 
 export const ProductQuery = {
@@ -188,7 +188,7 @@ export const ProductQuery = {
     if (message.preferences !== undefined) {
       Preferences.encode(message.preferences, writer.uint32(34).fork()).ldelim();
     }
-    if (message.referenceId !== "") {
+    if (message.referenceId !== undefined) {
       writer.uint32(42).string(message.referenceId);
     }
     return writer;
@@ -230,7 +230,7 @@ export const ProductQuery = {
       receiver: isSet(object.receiver) ? ShippingAddress.fromJSON(object.receiver) : undefined,
       items: Array.isArray(object?.items) ? object.items.map((e: any) => FulfillmentItem.fromJSON(e)) : [],
       preferences: isSet(object.preferences) ? Preferences.fromJSON(object.preferences) : undefined,
-      referenceId: isSet(object.referenceId) ? String(object.referenceId) : "",
+      referenceId: isSet(object.referenceId) ? String(object.referenceId) : undefined,
     };
   },
 
@@ -266,13 +266,13 @@ export const ProductQuery = {
     message.preferences = (object.preferences !== undefined && object.preferences !== null)
       ? Preferences.fromPartial(object.preferences)
       : undefined;
-    message.referenceId = object.referenceId ?? "";
+    message.referenceId = object.referenceId ?? undefined;
     return message;
   },
 };
 
 function createBaseProductQueryList(): ProductQueryList {
-  return { items: [], totalCount: 0, subject: undefined };
+  return { items: [], totalCount: undefined, subject: undefined };
 }
 
 export const ProductQueryList = {
@@ -280,7 +280,7 @@ export const ProductQueryList = {
     for (const v of message.items) {
       ProductQuery.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.totalCount !== 0) {
+    if (message.totalCount !== undefined) {
       writer.uint32(16).uint32(message.totalCount);
     }
     if (message.subject !== undefined) {
@@ -316,7 +316,7 @@ export const ProductQueryList = {
   fromJSON(object: any): ProductQueryList {
     return {
       items: Array.isArray(object?.items) ? object.items.map((e: any) => ProductQuery.fromJSON(e)) : [],
-      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
+      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
@@ -340,7 +340,7 @@ export const ProductQueryList = {
   fromPartial(object: DeepPartial<ProductQueryList>): ProductQueryList {
     const message = createBaseProductQueryList();
     message.items = object.items?.map((e) => ProductQuery.fromPartial(e)) || [];
-    message.totalCount = object.totalCount ?? 0;
+    message.totalCount = object.totalCount ?? undefined;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
@@ -350,10 +350,10 @@ export const ProductQueryList = {
 
 function createBaseFulfillmentProduct(): FulfillmentProduct {
   return {
-    id: "",
-    name: "",
-    description: "",
-    courierId: "",
+    id: undefined,
+    name: undefined,
+    description: undefined,
+    courierId: undefined,
     startZones: [],
     destinationZones: [],
     taxIds: [],
@@ -365,16 +365,16 @@ function createBaseFulfillmentProduct(): FulfillmentProduct {
 
 export const FulfillmentProduct = {
   encode(message: FulfillmentProduct, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
+    if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
-    if (message.name !== "") {
+    if (message.name !== undefined) {
       writer.uint32(18).string(message.name);
     }
-    if (message.description !== "") {
+    if (message.description !== undefined) {
       writer.uint32(26).string(message.description);
     }
-    if (message.courierId !== "") {
+    if (message.courierId !== undefined) {
       writer.uint32(34).string(message.courierId);
     }
     for (const v of message.startZones) {
@@ -445,10 +445,10 @@ export const FulfillmentProduct = {
 
   fromJSON(object: any): FulfillmentProduct {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
-      name: isSet(object.name) ? String(object.name) : "",
-      description: isSet(object.description) ? String(object.description) : "",
-      courierId: isSet(object.courierId) ? String(object.courierId) : "",
+      id: isSet(object.id) ? String(object.id) : undefined,
+      name: isSet(object.name) ? String(object.name) : undefined,
+      description: isSet(object.description) ? String(object.description) : undefined,
+      courierId: isSet(object.courierId) ? String(object.courierId) : undefined,
       startZones: Array.isArray(object?.startZones) ? object.startZones.map((e: any) => String(e)) : [],
       destinationZones: Array.isArray(object?.destinationZones)
         ? object.destinationZones.map((e: any) => String(e))
@@ -501,10 +501,10 @@ export const FulfillmentProduct = {
 
   fromPartial(object: DeepPartial<FulfillmentProduct>): FulfillmentProduct {
     const message = createBaseFulfillmentProduct();
-    message.id = object.id ?? "";
-    message.name = object.name ?? "";
-    message.description = object.description ?? "";
-    message.courierId = object.courierId ?? "";
+    message.id = object.id ?? undefined;
+    message.name = object.name ?? undefined;
+    message.description = object.description ?? undefined;
+    message.courierId = object.courierId ?? undefined;
     message.startZones = object.startZones?.map((e) => e) || [];
     message.destinationZones = object.destinationZones?.map((e) => e) || [];
     message.taxIds = object.taxIds?.map((e) => e) || [];
@@ -516,27 +516,34 @@ export const FulfillmentProduct = {
 };
 
 function createBaseVariant(): Variant {
-  return { id: "", name: "", description: "", price: 0, maxSize: undefined, maxWeight: 0 };
+  return {
+    id: undefined,
+    name: undefined,
+    description: undefined,
+    price: undefined,
+    maxSize: undefined,
+    maxWeight: undefined,
+  };
 }
 
 export const Variant = {
   encode(message: Variant, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
+    if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
-    if (message.name !== "") {
+    if (message.name !== undefined) {
       writer.uint32(18).string(message.name);
     }
-    if (message.description !== "") {
+    if (message.description !== undefined) {
       writer.uint32(26).string(message.description);
     }
-    if (message.price !== 0) {
+    if (message.price !== undefined) {
       writer.uint32(33).double(message.price);
     }
     if (message.maxSize !== undefined) {
       BoundingBox3D.encode(message.maxSize, writer.uint32(50).fork()).ldelim();
     }
-    if (message.maxWeight !== 0) {
+    if (message.maxWeight !== undefined) {
       writer.uint32(57).double(message.maxWeight);
     }
     return writer;
@@ -577,12 +584,12 @@ export const Variant = {
 
   fromJSON(object: any): Variant {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
-      name: isSet(object.name) ? String(object.name) : "",
-      description: isSet(object.description) ? String(object.description) : "",
-      price: isSet(object.price) ? Number(object.price) : 0,
+      id: isSet(object.id) ? String(object.id) : undefined,
+      name: isSet(object.name) ? String(object.name) : undefined,
+      description: isSet(object.description) ? String(object.description) : undefined,
+      price: isSet(object.price) ? Number(object.price) : undefined,
       maxSize: isSet(object.maxSize) ? BoundingBox3D.fromJSON(object.maxSize) : undefined,
-      maxWeight: isSet(object.maxWeight) ? Number(object.maxWeight) : 0,
+      maxWeight: isSet(object.maxWeight) ? Number(object.maxWeight) : undefined,
     };
   },
 
@@ -604,20 +611,20 @@ export const Variant = {
 
   fromPartial(object: DeepPartial<Variant>): Variant {
     const message = createBaseVariant();
-    message.id = object.id ?? "";
-    message.name = object.name ?? "";
-    message.description = object.description ?? "";
-    message.price = object.price ?? 0;
+    message.id = object.id ?? undefined;
+    message.name = object.name ?? undefined;
+    message.description = object.description ?? undefined;
+    message.price = object.price ?? undefined;
     message.maxSize = (object.maxSize !== undefined && object.maxSize !== null)
       ? BoundingBox3D.fromPartial(object.maxSize)
       : undefined;
-    message.maxWeight = object.maxWeight ?? 0;
+    message.maxWeight = object.maxWeight ?? undefined;
     return message;
   },
 };
 
 function createBaseFulfillmentProductList(): FulfillmentProductList {
-  return { items: [], totalCount: 0, subject: undefined };
+  return { items: [], totalCount: undefined, subject: undefined };
 }
 
 export const FulfillmentProductList = {
@@ -625,7 +632,7 @@ export const FulfillmentProductList = {
     for (const v of message.items) {
       FulfillmentProduct.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.totalCount !== 0) {
+    if (message.totalCount !== undefined) {
       writer.uint32(16).uint32(message.totalCount);
     }
     if (message.subject !== undefined) {
@@ -661,7 +668,7 @@ export const FulfillmentProductList = {
   fromJSON(object: any): FulfillmentProductList {
     return {
       items: Array.isArray(object?.items) ? object.items.map((e: any) => FulfillmentProduct.fromJSON(e)) : [],
-      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
+      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
@@ -685,7 +692,7 @@ export const FulfillmentProductList = {
   fromPartial(object: DeepPartial<FulfillmentProductList>): FulfillmentProductList {
     const message = createBaseFulfillmentProductList();
     message.items = object.items?.map((e) => FulfillmentProduct.fromPartial(e)) || [];
-    message.totalCount = object.totalCount ?? 0;
+    message.totalCount = object.totalCount ?? undefined;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
@@ -839,21 +846,21 @@ export const FulfillmentProductListResponse = {
 };
 
 function createBasePackingSolution(): PackingSolution {
-  return { price: 0, compactness: 0, homogeneity: 0, score: 0, parcels: [], vats: [] };
+  return { price: undefined, compactness: undefined, homogeneity: undefined, score: undefined, parcels: [], vats: [] };
 }
 
 export const PackingSolution = {
   encode(message: PackingSolution, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.price !== 0) {
+    if (message.price !== undefined) {
       writer.uint32(9).double(message.price);
     }
-    if (message.compactness !== 0) {
+    if (message.compactness !== undefined) {
       writer.uint32(17).double(message.compactness);
     }
-    if (message.homogeneity !== 0) {
+    if (message.homogeneity !== undefined) {
       writer.uint32(25).double(message.homogeneity);
     }
-    if (message.score !== 0) {
+    if (message.score !== undefined) {
       writer.uint32(33).double(message.score);
     }
     for (const v of message.parcels) {
@@ -900,10 +907,10 @@ export const PackingSolution = {
 
   fromJSON(object: any): PackingSolution {
     return {
-      price: isSet(object.price) ? Number(object.price) : 0,
-      compactness: isSet(object.compactness) ? Number(object.compactness) : 0,
-      homogeneity: isSet(object.homogeneity) ? Number(object.homogeneity) : 0,
-      score: isSet(object.score) ? Number(object.score) : 0,
+      price: isSet(object.price) ? Number(object.price) : undefined,
+      compactness: isSet(object.compactness) ? Number(object.compactness) : undefined,
+      homogeneity: isSet(object.homogeneity) ? Number(object.homogeneity) : undefined,
+      score: isSet(object.score) ? Number(object.score) : undefined,
       parcels: Array.isArray(object?.parcels) ? object.parcels.map((e: any) => Parcel.fromJSON(e)) : [],
       vats: Array.isArray(object?.vats) ? object.vats.map((e: any) => VAT.fromJSON(e)) : [],
     };
@@ -934,10 +941,10 @@ export const PackingSolution = {
 
   fromPartial(object: DeepPartial<PackingSolution>): PackingSolution {
     const message = createBasePackingSolution();
-    message.price = object.price ?? 0;
-    message.compactness = object.compactness ?? 0;
-    message.homogeneity = object.homogeneity ?? 0;
-    message.score = object.score ?? 0;
+    message.price = object.price ?? undefined;
+    message.compactness = object.compactness ?? undefined;
+    message.homogeneity = object.homogeneity ?? undefined;
+    message.score = object.score ?? undefined;
     message.parcels = object.parcels?.map((e) => Parcel.fromPartial(e)) || [];
     message.vats = object.vats?.map((e) => VAT.fromPartial(e)) || [];
     return message;
@@ -945,12 +952,12 @@ export const PackingSolution = {
 };
 
 function createBasePackingSolutionResponse(): PackingSolutionResponse {
-  return { referenceId: "", solutions: [], status: undefined };
+  return { referenceId: undefined, solutions: [], status: undefined };
 }
 
 export const PackingSolutionResponse = {
   encode(message: PackingSolutionResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.referenceId !== "") {
+    if (message.referenceId !== undefined) {
       writer.uint32(10).string(message.referenceId);
     }
     for (const v of message.solutions) {
@@ -988,7 +995,7 @@ export const PackingSolutionResponse = {
 
   fromJSON(object: any): PackingSolutionResponse {
     return {
-      referenceId: isSet(object.referenceId) ? String(object.referenceId) : "",
+      referenceId: isSet(object.referenceId) ? String(object.referenceId) : undefined,
       solutions: Array.isArray(object?.solutions) ? object.solutions.map((e: any) => PackingSolution.fromJSON(e)) : [],
       status: isSet(object.status) ? Status.fromJSON(object.status) : undefined,
     };
@@ -1012,7 +1019,7 @@ export const PackingSolutionResponse = {
 
   fromPartial(object: DeepPartial<PackingSolutionResponse>): PackingSolutionResponse {
     const message = createBasePackingSolutionResponse();
-    message.referenceId = object.referenceId ?? "";
+    message.referenceId = object.referenceId ?? undefined;
     message.solutions = object.solutions?.map((e) => PackingSolution.fromPartial(e)) || [];
     message.status = (object.status !== undefined && object.status !== null)
       ? Status.fromPartial(object.status)
@@ -1022,7 +1029,7 @@ export const PackingSolutionResponse = {
 };
 
 function createBasePackingSolutionListResponse(): PackingSolutionListResponse {
-  return { items: [], totalCount: 0, operationStatus: undefined };
+  return { items: [], totalCount: undefined, operationStatus: undefined };
 }
 
 export const PackingSolutionListResponse = {
@@ -1030,7 +1037,7 @@ export const PackingSolutionListResponse = {
     for (const v of message.items) {
       PackingSolutionResponse.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.totalCount !== 0) {
+    if (message.totalCount !== undefined) {
       writer.uint32(16).uint32(message.totalCount);
     }
     if (message.operationStatus !== undefined) {
@@ -1066,7 +1073,7 @@ export const PackingSolutionListResponse = {
   fromJSON(object: any): PackingSolutionListResponse {
     return {
       items: Array.isArray(object?.items) ? object.items.map((e: any) => PackingSolutionResponse.fromJSON(e)) : [],
-      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
+      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : undefined,
       operationStatus: isSet(object.operationStatus) ? OperationStatus.fromJSON(object.operationStatus) : undefined,
     };
   },
@@ -1091,7 +1098,7 @@ export const PackingSolutionListResponse = {
   fromPartial(object: DeepPartial<PackingSolutionListResponse>): PackingSolutionListResponse {
     const message = createBasePackingSolutionListResponse();
     message.items = object.items?.map((e) => PackingSolutionResponse.fromPartial(e)) || [];
-    message.totalCount = object.totalCount ?? 0;
+    message.totalCount = object.totalCount ?? undefined;
     message.operationStatus = (object.operationStatus !== undefined && object.operationStatus !== null)
       ? OperationStatus.fromPartial(object.operationStatus)
       : undefined;
@@ -1342,7 +1349,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "sender",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "receiver",
         "number": 2,
@@ -1351,10 +1358,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.address.ShippingAddress",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "receiver",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "items",
         "number": 3,
@@ -1375,10 +1382,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.fulfillment_product.Preferences",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "preferences",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "reference_id",
         "number": 5,
@@ -1387,16 +1394,19 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "referenceId",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_sender", "options": undefined }, { "name": "_receiver", "options": undefined }, {
+        "name": "_preferences",
+        "options": undefined,
+      }, { "name": "_reference_id", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1425,7 +1435,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "totalCount",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 3,
@@ -1443,7 +1453,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_total_count", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1460,7 +1470,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "name",
         "number": 2,
@@ -1469,10 +1479,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "name",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "description",
         "number": 3,
@@ -1481,10 +1491,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "description",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "courier_id",
         "number": 4,
@@ -1493,7 +1503,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "courierId",
         "options": {
           "ctype": 0,
@@ -1504,7 +1514,7 @@ export const protoMetadata: ProtoMetadata = {
           "weak": false,
           "uninterpretedOption": [],
         },
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "start_zones",
         "number": 6,
@@ -1573,16 +1583,22 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.meta.Meta",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 4,
         "jsonName": "meta",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [
+        { "name": "_id", "options": undefined },
+        { "name": "_name", "options": undefined },
+        { "name": "_description", "options": undefined },
+        { "name": "_courier_id", "options": undefined },
+        { "name": "_meta", "options": undefined },
+      ],
       "options": {
         "messageSetWireFormat": false,
         "noStandardDescriptorAccessor": false,
@@ -1605,7 +1621,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "name",
         "number": 2,
@@ -1614,10 +1630,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "name",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "description",
         "number": 3,
@@ -1626,10 +1642,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "description",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "price",
         "number": 4,
@@ -1638,10 +1654,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "price",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "max_size",
         "number": 6,
@@ -1650,10 +1666,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.geometry.BoundingBox3D",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 4,
         "jsonName": "maxSize",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "max_weight",
         "number": 7,
@@ -1662,16 +1678,23 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 5,
         "jsonName": "maxWeight",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [
+        { "name": "_id", "options": undefined },
+        { "name": "_name", "options": undefined },
+        { "name": "_description", "options": undefined },
+        { "name": "_price", "options": undefined },
+        { "name": "_max_size", "options": undefined },
+        { "name": "_max_weight", "options": undefined },
+      ],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1700,7 +1723,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "totalCount",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 3,
@@ -1718,7 +1741,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_total_count", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1817,7 +1840,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "price",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "compactness",
         "number": 2,
@@ -1826,10 +1849,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "compactness",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "homogeneity",
         "number": 3,
@@ -1838,10 +1861,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "homogeneity",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "score",
         "number": 4,
@@ -1850,10 +1873,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "score",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "parcels",
         "number": 5,
@@ -1883,7 +1906,10 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_price", "options": undefined }, { "name": "_compactness", "options": undefined }, {
+        "name": "_homogeneity",
+        "options": undefined,
+      }, { "name": "_score", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1900,7 +1926,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "referenceId",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "solutions",
         "number": 2,
@@ -1921,16 +1947,16 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.status.Status",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "status",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_reference_id", "options": undefined }, { "name": "_status", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1959,7 +1985,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "totalCount",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "operation_status",
         "number": 3,
@@ -1977,7 +2003,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_total_count", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],

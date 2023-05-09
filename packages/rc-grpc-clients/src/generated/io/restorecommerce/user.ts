@@ -85,8 +85,8 @@ export interface LoginRequest {
   /** User name or email */
   identifier: string;
   /** Raw password */
-  password: string;
-  token: string;
+  password?: string | undefined;
+  token?: string | undefined;
 }
 
 export interface OrgIDRequest {
@@ -101,9 +101,9 @@ export interface DeleteUsersByOrgResponse {
 
 export interface FindRequest {
   /** / User ID */
-  id: string;
-  name: string;
-  email: string;
+  id?: string | undefined;
+  name?: string | undefined;
+  email?: string | undefined;
   subject?: Subject;
 }
 
@@ -112,20 +112,22 @@ export interface FindByTokenRequest {
 }
 
 export interface RegisterRequest {
-  id: string;
-  guest: boolean;
-  meta?: Meta;
-  name: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  timezoneId: string;
-  localeId: string;
+  id?: string | undefined;
+  guest?: boolean | undefined;
+  meta?: Meta | undefined;
+  name?: string | undefined;
+  firstName?: string | undefined;
+  lastName?: string | undefined;
+  email?: string | undefined;
+  password?: string | undefined;
+  timezoneId?: string | undefined;
+  localeId?:
+    | string
+    | undefined;
   /** default hierarchical scope */
-  defaultScope: string;
-  userType: UserType;
-  captchaCode: string;
+  defaultScope?: string | undefined;
+  userType?: UserType | undefined;
+  captchaCode?: string | undefined;
 }
 
 export interface ActivateRequest {
@@ -241,7 +243,7 @@ export interface EmailChangeConfirmed {
 /** A list of User. */
 export interface UserList {
   items: User[];
-  totalCount: number;
+  totalCount?: number | undefined;
   subject?: Subject;
 }
 
@@ -282,50 +284,84 @@ export interface FindByRoleRequest {
 /** A User resource. */
 export interface User {
   /** / User ID, unique, key */
-  id: string;
-  meta?: Meta;
+  id?: string | undefined;
+  meta?:
+    | Meta
+    | undefined;
   /** The name of the user, can be used for login */
-  name: string;
-  firstName: string;
-  lastName: string;
+  name?: string | undefined;
+  firstName?: string | undefined;
+  lastName?:
+    | string
+    | undefined;
   /** / Email address, can be used for login */
-  email: string;
+  email?:
+    | string
+    | undefined;
   /** / New email address; set by `requestEmailChange` and overrides actual email upon `confirmEmailChange` */
-  newEmail: string;
+  newEmail?:
+    | string
+    | undefined;
   /** / If the user was activated via the activation process */
-  active: boolean;
+  active?:
+    | boolean
+    | undefined;
   /** / Activation code used in the activation process */
-  activationCode: string;
+  activationCode?:
+    | string
+    | undefined;
   /** / Raw password, not stored */
-  password: string;
+  password?:
+    | string
+    | undefined;
   /** / Encrypted password, stored */
-  passwordHash: string;
+  passwordHash?:
+    | string
+    | undefined;
   /** A user can have multiple roles and different attributes coupled with each role */
   roleAssociations: RoleAssociation[];
   /** timezone_id specifications */
-  timezoneId: string;
+  timezoneId?:
+    | string
+    | undefined;
   /** locale specifications */
-  localeId: string;
+  localeId?:
+    | string
+    | undefined;
   /** default hierarchical scope */
-  defaultScope: string;
+  defaultScope?:
+    | string
+    | undefined;
   /** true in case in case of `register`; set to false after activation */
-  unauthenticated: boolean;
+  unauthenticated?:
+    | boolean
+    | undefined;
   /** / Is the user a guest. A guest is a automatically generated user which can later be turned in a non-guest user. */
-  guest: boolean;
-  image?: Image;
-  userType: UserType;
+  guest?: boolean | undefined;
+  image?: Image | undefined;
+  userType?:
+    | UserType
+    | undefined;
   /** For user invitation */
-  invite: boolean;
+  invite?:
+    | boolean
+    | undefined;
   /** user who is inviting */
-  invitedByUserName: string;
+  invitedByUserName?:
+    | string
+    | undefined;
   /** First name of user inviting */
-  invitedByUserFirstName: string;
+  invitedByUserFirstName?:
+    | string
+    | undefined;
   /** Last name of user inviting */
-  invitedByUserLastName: string;
+  invitedByUserLastName?: string | undefined;
   tokens: Tokens[];
-  lastAccess: number;
+  lastAccess?:
+    | number
+    | undefined;
   /** / additional data */
-  data?: Any;
+  data?: Any | undefined;
 }
 
 /** A User resource with role */
@@ -379,7 +415,7 @@ export interface UserRole {
 }
 
 function createBaseLoginRequest(): LoginRequest {
-  return { identifier: "", password: "", token: "" };
+  return { identifier: "", password: undefined, token: undefined };
 }
 
 export const LoginRequest = {
@@ -387,10 +423,10 @@ export const LoginRequest = {
     if (message.identifier !== "") {
       writer.uint32(10).string(message.identifier);
     }
-    if (message.password !== "") {
+    if (message.password !== undefined) {
       writer.uint32(18).string(message.password);
     }
-    if (message.token !== "") {
+    if (message.token !== undefined) {
       writer.uint32(26).string(message.token);
     }
     return writer;
@@ -423,8 +459,8 @@ export const LoginRequest = {
   fromJSON(object: any): LoginRequest {
     return {
       identifier: isSet(object.identifier) ? String(object.identifier) : "",
-      password: isSet(object.password) ? String(object.password) : "",
-      token: isSet(object.token) ? String(object.token) : "",
+      password: isSet(object.password) ? String(object.password) : undefined,
+      token: isSet(object.token) ? String(object.token) : undefined,
     };
   },
 
@@ -443,8 +479,8 @@ export const LoginRequest = {
   fromPartial(object: DeepPartial<LoginRequest>): LoginRequest {
     const message = createBaseLoginRequest();
     message.identifier = object.identifier ?? "";
-    message.password = object.password ?? "";
-    message.token = object.token ?? "";
+    message.password = object.password ?? undefined;
+    message.token = object.token ?? undefined;
     return message;
   },
 };
@@ -587,18 +623,18 @@ export const DeleteUsersByOrgResponse = {
 };
 
 function createBaseFindRequest(): FindRequest {
-  return { id: "", name: "", email: "", subject: undefined };
+  return { id: undefined, name: undefined, email: undefined, subject: undefined };
 }
 
 export const FindRequest = {
   encode(message: FindRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
+    if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
-    if (message.name !== "") {
+    if (message.name !== undefined) {
       writer.uint32(18).string(message.name);
     }
-    if (message.email !== "") {
+    if (message.email !== undefined) {
       writer.uint32(26).string(message.email);
     }
     if (message.subject !== undefined) {
@@ -636,9 +672,9 @@ export const FindRequest = {
 
   fromJSON(object: any): FindRequest {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
-      name: isSet(object.name) ? String(object.name) : "",
-      email: isSet(object.email) ? String(object.email) : "",
+      id: isSet(object.id) ? String(object.id) : undefined,
+      name: isSet(object.name) ? String(object.name) : undefined,
+      email: isSet(object.email) ? String(object.email) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
@@ -658,9 +694,9 @@ export const FindRequest = {
 
   fromPartial(object: DeepPartial<FindRequest>): FindRequest {
     const message = createBaseFindRequest();
-    message.id = object.id ?? "";
-    message.name = object.name ?? "";
-    message.email = object.email ?? "";
+    message.id = object.id ?? undefined;
+    message.name = object.name ?? undefined;
+    message.email = object.email ?? undefined;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
@@ -721,61 +757,61 @@ export const FindByTokenRequest = {
 
 function createBaseRegisterRequest(): RegisterRequest {
   return {
-    id: "",
-    guest: false,
+    id: undefined,
+    guest: undefined,
     meta: undefined,
-    name: "",
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    timezoneId: "",
-    localeId: "",
-    defaultScope: "",
-    userType: UserType.ORG_USER,
-    captchaCode: "",
+    name: undefined,
+    firstName: undefined,
+    lastName: undefined,
+    email: undefined,
+    password: undefined,
+    timezoneId: undefined,
+    localeId: undefined,
+    defaultScope: undefined,
+    userType: undefined,
+    captchaCode: undefined,
   };
 }
 
 export const RegisterRequest = {
   encode(message: RegisterRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
+    if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
-    if (message.guest === true) {
+    if (message.guest !== undefined) {
       writer.uint32(16).bool(message.guest);
     }
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(26).fork()).ldelim();
     }
-    if (message.name !== "") {
+    if (message.name !== undefined) {
       writer.uint32(34).string(message.name);
     }
-    if (message.firstName !== "") {
+    if (message.firstName !== undefined) {
       writer.uint32(42).string(message.firstName);
     }
-    if (message.lastName !== "") {
+    if (message.lastName !== undefined) {
       writer.uint32(50).string(message.lastName);
     }
-    if (message.email !== "") {
+    if (message.email !== undefined) {
       writer.uint32(58).string(message.email);
     }
-    if (message.password !== "") {
+    if (message.password !== undefined) {
       writer.uint32(66).string(message.password);
     }
-    if (message.timezoneId !== "") {
+    if (message.timezoneId !== undefined) {
       writer.uint32(74).string(message.timezoneId);
     }
-    if (message.localeId !== "") {
+    if (message.localeId !== undefined) {
       writer.uint32(82).string(message.localeId);
     }
-    if (message.defaultScope !== "") {
+    if (message.defaultScope !== undefined) {
       writer.uint32(90).string(message.defaultScope);
     }
-    if (message.userType !== UserType.ORG_USER) {
+    if (message.userType !== undefined) {
       writer.uint32(96).int32(userTypeToNumber(message.userType));
     }
-    if (message.captchaCode !== "") {
+    if (message.captchaCode !== undefined) {
       writer.uint32(106).string(message.captchaCode);
     }
     return writer;
@@ -837,19 +873,19 @@ export const RegisterRequest = {
 
   fromJSON(object: any): RegisterRequest {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
-      guest: isSet(object.guest) ? Boolean(object.guest) : false,
+      id: isSet(object.id) ? String(object.id) : undefined,
+      guest: isSet(object.guest) ? Boolean(object.guest) : undefined,
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
-      name: isSet(object.name) ? String(object.name) : "",
-      firstName: isSet(object.firstName) ? String(object.firstName) : "",
-      lastName: isSet(object.lastName) ? String(object.lastName) : "",
-      email: isSet(object.email) ? String(object.email) : "",
-      password: isSet(object.password) ? String(object.password) : "",
-      timezoneId: isSet(object.timezoneId) ? String(object.timezoneId) : "",
-      localeId: isSet(object.localeId) ? String(object.localeId) : "",
-      defaultScope: isSet(object.defaultScope) ? String(object.defaultScope) : "",
-      userType: isSet(object.userType) ? userTypeFromJSON(object.userType) : UserType.ORG_USER,
-      captchaCode: isSet(object.captchaCode) ? String(object.captchaCode) : "",
+      name: isSet(object.name) ? String(object.name) : undefined,
+      firstName: isSet(object.firstName) ? String(object.firstName) : undefined,
+      lastName: isSet(object.lastName) ? String(object.lastName) : undefined,
+      email: isSet(object.email) ? String(object.email) : undefined,
+      password: isSet(object.password) ? String(object.password) : undefined,
+      timezoneId: isSet(object.timezoneId) ? String(object.timezoneId) : undefined,
+      localeId: isSet(object.localeId) ? String(object.localeId) : undefined,
+      defaultScope: isSet(object.defaultScope) ? String(object.defaultScope) : undefined,
+      userType: isSet(object.userType) ? userTypeFromJSON(object.userType) : undefined,
+      captchaCode: isSet(object.captchaCode) ? String(object.captchaCode) : undefined,
     };
   },
 
@@ -866,7 +902,8 @@ export const RegisterRequest = {
     message.timezoneId !== undefined && (obj.timezoneId = message.timezoneId);
     message.localeId !== undefined && (obj.localeId = message.localeId);
     message.defaultScope !== undefined && (obj.defaultScope = message.defaultScope);
-    message.userType !== undefined && (obj.userType = userTypeToJSON(message.userType));
+    message.userType !== undefined &&
+      (obj.userType = message.userType !== undefined ? userTypeToJSON(message.userType) : undefined);
     message.captchaCode !== undefined && (obj.captchaCode = message.captchaCode);
     return obj;
   },
@@ -877,19 +914,19 @@ export const RegisterRequest = {
 
   fromPartial(object: DeepPartial<RegisterRequest>): RegisterRequest {
     const message = createBaseRegisterRequest();
-    message.id = object.id ?? "";
-    message.guest = object.guest ?? false;
+    message.id = object.id ?? undefined;
+    message.guest = object.guest ?? undefined;
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
-    message.name = object.name ?? "";
-    message.firstName = object.firstName ?? "";
-    message.lastName = object.lastName ?? "";
-    message.email = object.email ?? "";
-    message.password = object.password ?? "";
-    message.timezoneId = object.timezoneId ?? "";
-    message.localeId = object.localeId ?? "";
-    message.defaultScope = object.defaultScope ?? "";
-    message.userType = object.userType ?? UserType.ORG_USER;
-    message.captchaCode = object.captchaCode ?? "";
+    message.name = object.name ?? undefined;
+    message.firstName = object.firstName ?? undefined;
+    message.lastName = object.lastName ?? undefined;
+    message.email = object.email ?? undefined;
+    message.password = object.password ?? undefined;
+    message.timezoneId = object.timezoneId ?? undefined;
+    message.localeId = object.localeId ?? undefined;
+    message.defaultScope = object.defaultScope ?? undefined;
+    message.userType = object.userType ?? undefined;
+    message.captchaCode = object.captchaCode ?? undefined;
     return message;
   },
 };
@@ -1910,7 +1947,7 @@ export const EmailChangeConfirmed = {
 };
 
 function createBaseUserList(): UserList {
-  return { items: [], totalCount: 0, subject: undefined };
+  return { items: [], totalCount: undefined, subject: undefined };
 }
 
 export const UserList = {
@@ -1918,7 +1955,7 @@ export const UserList = {
     for (const v of message.items) {
       User.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.totalCount !== 0) {
+    if (message.totalCount !== undefined) {
       writer.uint32(16).uint32(message.totalCount);
     }
     if (message.subject !== undefined) {
@@ -1954,7 +1991,7 @@ export const UserList = {
   fromJSON(object: any): UserList {
     return {
       items: Array.isArray(object?.items) ? object.items.map((e: any) => User.fromJSON(e)) : [],
-      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
+      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
@@ -1978,7 +2015,7 @@ export const UserList = {
   fromPartial(object: DeepPartial<UserList>): UserList {
     const message = createBaseUserList();
     message.items = object.items?.map((e) => User.fromPartial(e)) || [];
-    message.totalCount = object.totalCount ?? 0;
+    message.totalCount = object.totalCount ?? undefined;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
@@ -2404,110 +2441,110 @@ export const FindByRoleRequest = {
 
 function createBaseUser(): User {
   return {
-    id: "",
+    id: undefined,
     meta: undefined,
-    name: "",
-    firstName: "",
-    lastName: "",
-    email: "",
-    newEmail: "",
-    active: false,
-    activationCode: "",
-    password: "",
-    passwordHash: "",
+    name: undefined,
+    firstName: undefined,
+    lastName: undefined,
+    email: undefined,
+    newEmail: undefined,
+    active: undefined,
+    activationCode: undefined,
+    password: undefined,
+    passwordHash: undefined,
     roleAssociations: [],
-    timezoneId: "",
-    localeId: "",
-    defaultScope: "",
-    unauthenticated: false,
-    guest: false,
+    timezoneId: undefined,
+    localeId: undefined,
+    defaultScope: undefined,
+    unauthenticated: undefined,
+    guest: undefined,
     image: undefined,
-    userType: UserType.ORG_USER,
-    invite: false,
-    invitedByUserName: "",
-    invitedByUserFirstName: "",
-    invitedByUserLastName: "",
+    userType: undefined,
+    invite: undefined,
+    invitedByUserName: undefined,
+    invitedByUserFirstName: undefined,
+    invitedByUserLastName: undefined,
     tokens: [],
-    lastAccess: 0,
+    lastAccess: undefined,
     data: undefined,
   };
 }
 
 export const User = {
   encode(message: User, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
+    if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
-    if (message.name !== "") {
+    if (message.name !== undefined) {
       writer.uint32(26).string(message.name);
     }
-    if (message.firstName !== "") {
+    if (message.firstName !== undefined) {
       writer.uint32(34).string(message.firstName);
     }
-    if (message.lastName !== "") {
+    if (message.lastName !== undefined) {
       writer.uint32(42).string(message.lastName);
     }
-    if (message.email !== "") {
+    if (message.email !== undefined) {
       writer.uint32(50).string(message.email);
     }
-    if (message.newEmail !== "") {
+    if (message.newEmail !== undefined) {
       writer.uint32(58).string(message.newEmail);
     }
-    if (message.active === true) {
+    if (message.active !== undefined) {
       writer.uint32(64).bool(message.active);
     }
-    if (message.activationCode !== "") {
+    if (message.activationCode !== undefined) {
       writer.uint32(74).string(message.activationCode);
     }
-    if (message.password !== "") {
+    if (message.password !== undefined) {
       writer.uint32(82).string(message.password);
     }
-    if (message.passwordHash !== "") {
+    if (message.passwordHash !== undefined) {
       writer.uint32(90).string(message.passwordHash);
     }
     for (const v of message.roleAssociations) {
       RoleAssociation.encode(v!, writer.uint32(98).fork()).ldelim();
     }
-    if (message.timezoneId !== "") {
+    if (message.timezoneId !== undefined) {
       writer.uint32(106).string(message.timezoneId);
     }
-    if (message.localeId !== "") {
+    if (message.localeId !== undefined) {
       writer.uint32(114).string(message.localeId);
     }
-    if (message.defaultScope !== "") {
+    if (message.defaultScope !== undefined) {
       writer.uint32(122).string(message.defaultScope);
     }
-    if (message.unauthenticated === true) {
+    if (message.unauthenticated !== undefined) {
       writer.uint32(128).bool(message.unauthenticated);
     }
-    if (message.guest === true) {
+    if (message.guest !== undefined) {
       writer.uint32(136).bool(message.guest);
     }
     if (message.image !== undefined) {
       Image.encode(message.image, writer.uint32(146).fork()).ldelim();
     }
-    if (message.userType !== UserType.ORG_USER) {
+    if (message.userType !== undefined) {
       writer.uint32(152).int32(userTypeToNumber(message.userType));
     }
-    if (message.invite === true) {
+    if (message.invite !== undefined) {
       writer.uint32(160).bool(message.invite);
     }
-    if (message.invitedByUserName !== "") {
+    if (message.invitedByUserName !== undefined) {
       writer.uint32(170).string(message.invitedByUserName);
     }
-    if (message.invitedByUserFirstName !== "") {
+    if (message.invitedByUserFirstName !== undefined) {
       writer.uint32(178).string(message.invitedByUserFirstName);
     }
-    if (message.invitedByUserLastName !== "") {
+    if (message.invitedByUserLastName !== undefined) {
       writer.uint32(186).string(message.invitedByUserLastName);
     }
     for (const v of message.tokens) {
       Tokens.encode(v!, writer.uint32(194).fork()).ldelim();
     }
-    if (message.lastAccess !== 0) {
+    if (message.lastAccess !== undefined) {
       writer.uint32(201).double(message.lastAccess);
     }
     if (message.data !== undefined) {
@@ -2611,33 +2648,33 @@ export const User = {
 
   fromJSON(object: any): User {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
+      id: isSet(object.id) ? String(object.id) : undefined,
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
-      name: isSet(object.name) ? String(object.name) : "",
-      firstName: isSet(object.firstName) ? String(object.firstName) : "",
-      lastName: isSet(object.lastName) ? String(object.lastName) : "",
-      email: isSet(object.email) ? String(object.email) : "",
-      newEmail: isSet(object.newEmail) ? String(object.newEmail) : "",
-      active: isSet(object.active) ? Boolean(object.active) : false,
-      activationCode: isSet(object.activationCode) ? String(object.activationCode) : "",
-      password: isSet(object.password) ? String(object.password) : "",
-      passwordHash: isSet(object.passwordHash) ? String(object.passwordHash) : "",
+      name: isSet(object.name) ? String(object.name) : undefined,
+      firstName: isSet(object.firstName) ? String(object.firstName) : undefined,
+      lastName: isSet(object.lastName) ? String(object.lastName) : undefined,
+      email: isSet(object.email) ? String(object.email) : undefined,
+      newEmail: isSet(object.newEmail) ? String(object.newEmail) : undefined,
+      active: isSet(object.active) ? Boolean(object.active) : undefined,
+      activationCode: isSet(object.activationCode) ? String(object.activationCode) : undefined,
+      password: isSet(object.password) ? String(object.password) : undefined,
+      passwordHash: isSet(object.passwordHash) ? String(object.passwordHash) : undefined,
       roleAssociations: Array.isArray(object?.roleAssociations)
         ? object.roleAssociations.map((e: any) => RoleAssociation.fromJSON(e))
         : [],
-      timezoneId: isSet(object.timezoneId) ? String(object.timezoneId) : "",
-      localeId: isSet(object.localeId) ? String(object.localeId) : "",
-      defaultScope: isSet(object.defaultScope) ? String(object.defaultScope) : "",
-      unauthenticated: isSet(object.unauthenticated) ? Boolean(object.unauthenticated) : false,
-      guest: isSet(object.guest) ? Boolean(object.guest) : false,
+      timezoneId: isSet(object.timezoneId) ? String(object.timezoneId) : undefined,
+      localeId: isSet(object.localeId) ? String(object.localeId) : undefined,
+      defaultScope: isSet(object.defaultScope) ? String(object.defaultScope) : undefined,
+      unauthenticated: isSet(object.unauthenticated) ? Boolean(object.unauthenticated) : undefined,
+      guest: isSet(object.guest) ? Boolean(object.guest) : undefined,
       image: isSet(object.image) ? Image.fromJSON(object.image) : undefined,
-      userType: isSet(object.userType) ? userTypeFromJSON(object.userType) : UserType.ORG_USER,
-      invite: isSet(object.invite) ? Boolean(object.invite) : false,
-      invitedByUserName: isSet(object.invitedByUserName) ? String(object.invitedByUserName) : "",
-      invitedByUserFirstName: isSet(object.invitedByUserFirstName) ? String(object.invitedByUserFirstName) : "",
-      invitedByUserLastName: isSet(object.invitedByUserLastName) ? String(object.invitedByUserLastName) : "",
+      userType: isSet(object.userType) ? userTypeFromJSON(object.userType) : undefined,
+      invite: isSet(object.invite) ? Boolean(object.invite) : undefined,
+      invitedByUserName: isSet(object.invitedByUserName) ? String(object.invitedByUserName) : undefined,
+      invitedByUserFirstName: isSet(object.invitedByUserFirstName) ? String(object.invitedByUserFirstName) : undefined,
+      invitedByUserLastName: isSet(object.invitedByUserLastName) ? String(object.invitedByUserLastName) : undefined,
       tokens: Array.isArray(object?.tokens) ? object.tokens.map((e: any) => Tokens.fromJSON(e)) : [],
-      lastAccess: isSet(object.lastAccess) ? Number(object.lastAccess) : 0,
+      lastAccess: isSet(object.lastAccess) ? Number(object.lastAccess) : undefined,
       data: isSet(object.data) ? Any.fromJSON(object.data) : undefined,
     };
   },
@@ -2666,7 +2703,8 @@ export const User = {
     message.unauthenticated !== undefined && (obj.unauthenticated = message.unauthenticated);
     message.guest !== undefined && (obj.guest = message.guest);
     message.image !== undefined && (obj.image = message.image ? Image.toJSON(message.image) : undefined);
-    message.userType !== undefined && (obj.userType = userTypeToJSON(message.userType));
+    message.userType !== undefined &&
+      (obj.userType = message.userType !== undefined ? userTypeToJSON(message.userType) : undefined);
     message.invite !== undefined && (obj.invite = message.invite);
     message.invitedByUserName !== undefined && (obj.invitedByUserName = message.invitedByUserName);
     message.invitedByUserFirstName !== undefined && (obj.invitedByUserFirstName = message.invitedByUserFirstName);
@@ -2687,31 +2725,31 @@ export const User = {
 
   fromPartial(object: DeepPartial<User>): User {
     const message = createBaseUser();
-    message.id = object.id ?? "";
+    message.id = object.id ?? undefined;
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
-    message.name = object.name ?? "";
-    message.firstName = object.firstName ?? "";
-    message.lastName = object.lastName ?? "";
-    message.email = object.email ?? "";
-    message.newEmail = object.newEmail ?? "";
-    message.active = object.active ?? false;
-    message.activationCode = object.activationCode ?? "";
-    message.password = object.password ?? "";
-    message.passwordHash = object.passwordHash ?? "";
+    message.name = object.name ?? undefined;
+    message.firstName = object.firstName ?? undefined;
+    message.lastName = object.lastName ?? undefined;
+    message.email = object.email ?? undefined;
+    message.newEmail = object.newEmail ?? undefined;
+    message.active = object.active ?? undefined;
+    message.activationCode = object.activationCode ?? undefined;
+    message.password = object.password ?? undefined;
+    message.passwordHash = object.passwordHash ?? undefined;
     message.roleAssociations = object.roleAssociations?.map((e) => RoleAssociation.fromPartial(e)) || [];
-    message.timezoneId = object.timezoneId ?? "";
-    message.localeId = object.localeId ?? "";
-    message.defaultScope = object.defaultScope ?? "";
-    message.unauthenticated = object.unauthenticated ?? false;
-    message.guest = object.guest ?? false;
+    message.timezoneId = object.timezoneId ?? undefined;
+    message.localeId = object.localeId ?? undefined;
+    message.defaultScope = object.defaultScope ?? undefined;
+    message.unauthenticated = object.unauthenticated ?? undefined;
+    message.guest = object.guest ?? undefined;
     message.image = (object.image !== undefined && object.image !== null) ? Image.fromPartial(object.image) : undefined;
-    message.userType = object.userType ?? UserType.ORG_USER;
-    message.invite = object.invite ?? false;
-    message.invitedByUserName = object.invitedByUserName ?? "";
-    message.invitedByUserFirstName = object.invitedByUserFirstName ?? "";
-    message.invitedByUserLastName = object.invitedByUserLastName ?? "";
+    message.userType = object.userType ?? undefined;
+    message.invite = object.invite ?? undefined;
+    message.invitedByUserName = object.invitedByUserName ?? undefined;
+    message.invitedByUserFirstName = object.invitedByUserFirstName ?? undefined;
+    message.invitedByUserLastName = object.invitedByUserLastName ?? undefined;
     message.tokens = object.tokens?.map((e) => Tokens.fromPartial(e)) || [];
-    message.lastAccess = object.lastAccess ?? 0;
+    message.lastAccess = object.lastAccess ?? undefined;
     message.data = (object.data !== undefined && object.data !== null) ? Any.fromPartial(object.data) : undefined;
     return message;
   },
@@ -3399,7 +3437,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "password",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "token",
         "number": 3,
@@ -3408,16 +3446,16 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "token",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_password", "options": undefined }, { "name": "_token", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -3504,7 +3542,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "name",
         "number": 2,
@@ -3513,10 +3551,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "name",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "email",
         "number": 3,
@@ -3525,10 +3563,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "email",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 4,
@@ -3546,7 +3584,10 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_id", "options": undefined }, { "name": "_name", "options": undefined }, {
+        "name": "_email",
+        "options": undefined,
+      }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -3586,7 +3627,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "guest",
         "number": 2,
@@ -3595,10 +3636,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "guest",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "meta",
         "number": 3,
@@ -3607,10 +3648,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.meta.Meta",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "meta",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "name",
         "number": 4,
@@ -3619,10 +3660,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "name",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "first_name",
         "number": 5,
@@ -3631,10 +3672,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 4,
         "jsonName": "firstName",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "last_name",
         "number": 6,
@@ -3643,10 +3684,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 5,
         "jsonName": "lastName",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "email",
         "number": 7,
@@ -3655,10 +3696,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 6,
         "jsonName": "email",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "password",
         "number": 8,
@@ -3667,10 +3708,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 7,
         "jsonName": "password",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "timezone_id",
         "number": 9,
@@ -3679,10 +3720,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 8,
         "jsonName": "timezoneId",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "locale_id",
         "number": 10,
@@ -3691,10 +3732,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 9,
         "jsonName": "localeId",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "default_scope",
         "number": 11,
@@ -3703,10 +3744,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 10,
         "jsonName": "defaultScope",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "user_type",
         "number": 12,
@@ -3715,10 +3756,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.user.UserType",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 11,
         "jsonName": "userType",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "captcha_code",
         "number": 13,
@@ -3727,16 +3768,30 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 12,
         "jsonName": "captchaCode",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [
+        { "name": "_id", "options": undefined },
+        { "name": "_guest", "options": undefined },
+        { "name": "_meta", "options": undefined },
+        { "name": "_name", "options": undefined },
+        { "name": "_first_name", "options": undefined },
+        { "name": "_last_name", "options": undefined },
+        { "name": "_email", "options": undefined },
+        { "name": "_password", "options": undefined },
+        { "name": "_timezone_id", "options": undefined },
+        { "name": "_locale_id", "options": undefined },
+        { "name": "_default_scope", "options": undefined },
+        { "name": "_user_type", "options": undefined },
+        { "name": "_captcha_code", "options": undefined },
+      ],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -4386,7 +4441,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "totalCount",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 3,
@@ -4404,7 +4459,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_total_count", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -4655,7 +4710,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "meta",
         "number": 2,
@@ -4664,10 +4719,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.meta.Meta",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "meta",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "name",
         "number": 3,
@@ -4676,10 +4731,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "name",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "first_name",
         "number": 4,
@@ -4688,10 +4743,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "firstName",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "last_name",
         "number": 5,
@@ -4700,10 +4755,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 4,
         "jsonName": "lastName",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "email",
         "number": 6,
@@ -4712,10 +4767,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 5,
         "jsonName": "email",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "new_email",
         "number": 7,
@@ -4724,10 +4779,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 6,
         "jsonName": "newEmail",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "active",
         "number": 8,
@@ -4736,10 +4791,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 7,
         "jsonName": "active",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "activation_code",
         "number": 9,
@@ -4748,10 +4803,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 8,
         "jsonName": "activationCode",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "password",
         "number": 10,
@@ -4760,10 +4815,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 9,
         "jsonName": "password",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "password_hash",
         "number": 11,
@@ -4772,10 +4827,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 10,
         "jsonName": "passwordHash",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "role_associations",
         "number": 12,
@@ -4796,7 +4851,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 11,
         "jsonName": "timezoneId",
         "options": {
           "ctype": 0,
@@ -4807,7 +4862,7 @@ export const protoMetadata: ProtoMetadata = {
           "weak": false,
           "uninterpretedOption": [],
         },
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "locale_id",
         "number": 14,
@@ -4816,7 +4871,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 12,
         "jsonName": "localeId",
         "options": {
           "ctype": 0,
@@ -4827,7 +4882,7 @@ export const protoMetadata: ProtoMetadata = {
           "weak": false,
           "uninterpretedOption": [],
         },
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "default_scope",
         "number": 15,
@@ -4836,10 +4891,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 13,
         "jsonName": "defaultScope",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "unauthenticated",
         "number": 16,
@@ -4848,10 +4903,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 14,
         "jsonName": "unauthenticated",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "guest",
         "number": 17,
@@ -4860,10 +4915,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 15,
         "jsonName": "guest",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "image",
         "number": 18,
@@ -4872,10 +4927,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.image.Image",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 16,
         "jsonName": "image",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "user_type",
         "number": 19,
@@ -4884,10 +4939,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.user.UserType",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 17,
         "jsonName": "userType",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "invite",
         "number": 20,
@@ -4896,10 +4951,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 18,
         "jsonName": "invite",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "invited_by_user_name",
         "number": 21,
@@ -4908,10 +4963,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 19,
         "jsonName": "invitedByUserName",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "invited_by_user_first_name",
         "number": 22,
@@ -4920,10 +4975,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 20,
         "jsonName": "invitedByUserFirstName",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "invited_by_user_last_name",
         "number": 23,
@@ -4932,10 +4987,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 21,
         "jsonName": "invitedByUserLastName",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "tokens",
         "number": 24,
@@ -4956,10 +5011,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 22,
         "jsonName": "lastAccess",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "data",
         "number": 26,
@@ -4968,16 +5023,41 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".google.protobuf.Any",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 23,
         "jsonName": "data",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [
+        { "name": "_id", "options": undefined },
+        { "name": "_meta", "options": undefined },
+        { "name": "_name", "options": undefined },
+        { "name": "_first_name", "options": undefined },
+        { "name": "_last_name", "options": undefined },
+        { "name": "_email", "options": undefined },
+        { "name": "_new_email", "options": undefined },
+        { "name": "_active", "options": undefined },
+        { "name": "_activation_code", "options": undefined },
+        { "name": "_password", "options": undefined },
+        { "name": "_password_hash", "options": undefined },
+        { "name": "_timezone_id", "options": undefined },
+        { "name": "_locale_id", "options": undefined },
+        { "name": "_default_scope", "options": undefined },
+        { "name": "_unauthenticated", "options": undefined },
+        { "name": "_guest", "options": undefined },
+        { "name": "_image", "options": undefined },
+        { "name": "_user_type", "options": undefined },
+        { "name": "_invite", "options": undefined },
+        { "name": "_invited_by_user_name", "options": undefined },
+        { "name": "_invited_by_user_first_name", "options": undefined },
+        { "name": "_invited_by_user_last_name", "options": undefined },
+        { "name": "_last_access", "options": undefined },
+        { "name": "_data", "options": undefined },
+      ],
       "options": {
         "messageSetWireFormat": false,
         "noStandardDescriptorAccessor": false,
@@ -5533,19 +5613,19 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 0, 2, 1],
-        "span": [62, 2, 22],
+        "span": [62, 2, 31],
         "leadingComments": "",
         "trailingComments": " Raw password\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 3, 2, 0],
-        "span": [77, 2, 16],
+        "span": [77, 2, 25],
         "leadingComments": "",
         "trailingComments": "/ User ID\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 5, 2, 10],
-        "span": [106, 2, 28],
+        "span": [106, 2, 37],
         "leadingComments": "",
         "trailingComments": " default hierarchical scope\n",
         "leadingDetachedComments": [],
@@ -5666,50 +5746,50 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 0],
-        "span": [267, 2, 16],
+        "span": [267, 2, 25],
         "leadingComments": "",
         "trailingComments": "/ User ID, unique, key\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 2],
-        "span": [269, 2, 18],
+        "span": [269, 2, 27],
         "leadingComments": "",
         "trailingComments": " The name of the user, can be used for login\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 5],
-        "span": [272, 2, 19],
+        "span": [272, 2, 28],
         "leadingComments": "",
         "trailingComments": "/ Email address, can be used for login\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 6],
-        "span": [273, 2, 23],
+        "span": [273, 2, 32],
         "leadingComments": "",
         "trailingComments":
           "/ New email address; set by `requestEmailChange` and overrides actual email upon `confirmEmailChange`\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 7],
-        "span": [274, 2, 18],
+        "span": [274, 2, 27],
         "leadingComments": "",
         "trailingComments": "/ If the user was activated via the activation process\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 8],
-        "span": [275, 2, 29],
+        "span": [275, 2, 38],
         "leadingComments": "",
         "trailingComments": "/ Activation code used in the activation process\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 9],
-        "span": [276, 2, 23],
+        "span": [276, 2, 32],
         "leadingComments": "",
         "trailingComments": "/ Raw password, not stored\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 10],
-        "span": [277, 2, 28],
+        "span": [277, 2, 37],
         "leadingComments": "",
         "trailingComments": "/ Encrypted password, stored\n",
         "leadingDetachedComments": [],
@@ -5733,50 +5813,50 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 14],
-        "span": [297, 2, 28],
+        "span": [297, 2, 37],
         "leadingComments": "",
         "trailingComments": " default hierarchical scope\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 15],
-        "span": [298, 2, 28],
+        "span": [298, 2, 37],
         "leadingComments": "",
         "trailingComments": " true in case in case of `register`; set to false after activation\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 16],
-        "span": [299, 2, 18],
+        "span": [299, 2, 27],
         "leadingComments": "",
         "trailingComments":
           "/ Is the user a guest. A guest is a automatically generated user which can later be turned in a non-guest user.\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 19],
-        "span": [302, 2, 19],
+        "span": [302, 2, 28],
         "leadingComments": "",
         "trailingComments": " For user invitation\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 20],
-        "span": [303, 2, 35],
+        "span": [303, 2, 44],
         "leadingComments": "",
         "trailingComments": " user who is inviting\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 21],
-        "span": [304, 2, 41],
+        "span": [304, 2, 50],
         "leadingComments": "",
         "trailingComments": " First name of user inviting\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 22],
-        "span": [305, 2, 40],
+        "span": [305, 2, 49],
         "leadingComments": "",
         "trailingComments": " Last name of user inviting\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 25],
-        "span": [308, 2, 32],
+        "span": [308, 2, 41],
         "leadingComments": "",
         "trailingComments": "/ additional data\n",
         "leadingDetachedComments": [],

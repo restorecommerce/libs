@@ -117,33 +117,41 @@ export function orderStateToNumber(object: OrderState): number {
 }
 
 export interface OrderItem {
-  productId: string;
-  variantId: string;
-  quantity: number;
+  productId?: string | undefined;
+  variantId?: string | undefined;
+  quantity?:
+    | number
+    | undefined;
   /** Set by service */
-  unitPrice: number;
+  unitPrice?:
+    | number
+    | undefined;
   /** Set by service */
-  price: number;
+  price?:
+    | number
+    | undefined;
   /** Set by service */
   vats: VAT[];
 }
 
 /** Database Entity */
 export interface Order {
-  id: string;
-  meta?: Meta;
-  state: OrderState;
-  customerReference: string;
+  id?: string | undefined;
+  meta?: Meta | undefined;
+  state?: OrderState | undefined;
+  customerReference?: string | undefined;
   items: OrderItem[];
   /** Set by service */
-  totalPrice: number;
+  totalPrice?:
+    | number
+    | undefined;
   /** Set by service */
-  totalVat: number;
-  shippingAddress?: ShippingAddress;
-  billingAddress?: ShippingAddress;
-  billingEmail: string;
-  notificationEmail: string;
-  packingPreferences?: Preferences;
+  totalVat?: number | undefined;
+  shippingAddress?: ShippingAddress | undefined;
+  billingAddress?: ShippingAddress | undefined;
+  billingEmail?: string | undefined;
+  notificationEmail?: string | undefined;
+  packingPreferences?: Preferences | undefined;
 }
 
 export interface OrderIdList {
@@ -153,7 +161,7 @@ export interface OrderIdList {
 
 export interface OrderList {
   items: Order[];
-  totalCount: number;
+  totalCount?: number | undefined;
   subject?: Subject;
 }
 
@@ -173,42 +181,49 @@ export interface Deleted {
 }
 
 export interface ShippingDetails {
-  exportType: string;
-  exportDescription: string;
-  invoiceNumber: string;
-  senderAddress?: ShippingAddress;
+  exportType?: string | undefined;
+  exportDescription?: string | undefined;
+  invoiceNumber?: string | undefined;
+  senderAddress?: ShippingAddress | undefined;
 }
 
 export interface FulfillmentRequest {
-  referenceId: string;
-  shippingDetails?: ShippingDetails;
+  referenceId?: string | undefined;
+  shippingDetails?: ShippingDetails | undefined;
 }
 
 export interface FulfillmentRequestList {
   items: FulfillmentRequest[];
-  totalCount: number;
+  totalCount?: number | undefined;
   subject?: Subject;
 }
 
 function createBaseOrderItem(): OrderItem {
-  return { productId: "", variantId: "", quantity: 0, unitPrice: 0, price: 0, vats: [] };
+  return {
+    productId: undefined,
+    variantId: undefined,
+    quantity: undefined,
+    unitPrice: undefined,
+    price: undefined,
+    vats: [],
+  };
 }
 
 export const OrderItem = {
   encode(message: OrderItem, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.productId !== "") {
+    if (message.productId !== undefined) {
       writer.uint32(10).string(message.productId);
     }
-    if (message.variantId !== "") {
+    if (message.variantId !== undefined) {
       writer.uint32(18).string(message.variantId);
     }
-    if (message.quantity !== 0) {
+    if (message.quantity !== undefined) {
       writer.uint32(24).int32(message.quantity);
     }
-    if (message.unitPrice !== 0) {
+    if (message.unitPrice !== undefined) {
       writer.uint32(33).double(message.unitPrice);
     }
-    if (message.price !== 0) {
+    if (message.price !== undefined) {
       writer.uint32(41).double(message.price);
     }
     for (const v of message.vats) {
@@ -252,11 +267,11 @@ export const OrderItem = {
 
   fromJSON(object: any): OrderItem {
     return {
-      productId: isSet(object.productId) ? String(object.productId) : "",
-      variantId: isSet(object.variantId) ? String(object.variantId) : "",
-      quantity: isSet(object.quantity) ? Number(object.quantity) : 0,
-      unitPrice: isSet(object.unitPrice) ? Number(object.unitPrice) : 0,
-      price: isSet(object.price) ? Number(object.price) : 0,
+      productId: isSet(object.productId) ? String(object.productId) : undefined,
+      variantId: isSet(object.variantId) ? String(object.variantId) : undefined,
+      quantity: isSet(object.quantity) ? Number(object.quantity) : undefined,
+      unitPrice: isSet(object.unitPrice) ? Number(object.unitPrice) : undefined,
+      price: isSet(object.price) ? Number(object.price) : undefined,
       vats: Array.isArray(object?.vats) ? object.vats.map((e: any) => VAT.fromJSON(e)) : [],
     };
   },
@@ -282,11 +297,11 @@ export const OrderItem = {
 
   fromPartial(object: DeepPartial<OrderItem>): OrderItem {
     const message = createBaseOrderItem();
-    message.productId = object.productId ?? "";
-    message.variantId = object.variantId ?? "";
-    message.quantity = object.quantity ?? 0;
-    message.unitPrice = object.unitPrice ?? 0;
-    message.price = object.price ?? 0;
+    message.productId = object.productId ?? undefined;
+    message.variantId = object.variantId ?? undefined;
+    message.quantity = object.quantity ?? undefined;
+    message.unitPrice = object.unitPrice ?? undefined;
+    message.price = object.price ?? undefined;
     message.vats = object.vats?.map((e) => VAT.fromPartial(e)) || [];
     return message;
   },
@@ -294,42 +309,42 @@ export const OrderItem = {
 
 function createBaseOrder(): Order {
   return {
-    id: "",
+    id: undefined,
     meta: undefined,
-    state: OrderState.Created,
-    customerReference: "",
+    state: undefined,
+    customerReference: undefined,
     items: [],
-    totalPrice: 0,
-    totalVat: 0,
+    totalPrice: undefined,
+    totalVat: undefined,
     shippingAddress: undefined,
     billingAddress: undefined,
-    billingEmail: "",
-    notificationEmail: "",
+    billingEmail: undefined,
+    notificationEmail: undefined,
     packingPreferences: undefined,
   };
 }
 
 export const Order = {
   encode(message: Order, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
+    if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
-    if (message.state !== OrderState.Created) {
+    if (message.state !== undefined) {
       writer.uint32(24).int32(orderStateToNumber(message.state));
     }
-    if (message.customerReference !== "") {
+    if (message.customerReference !== undefined) {
       writer.uint32(34).string(message.customerReference);
     }
     for (const v of message.items) {
       OrderItem.encode(v!, writer.uint32(42).fork()).ldelim();
     }
-    if (message.totalPrice !== 0) {
+    if (message.totalPrice !== undefined) {
       writer.uint32(49).double(message.totalPrice);
     }
-    if (message.totalVat !== 0) {
+    if (message.totalVat !== undefined) {
       writer.uint32(57).double(message.totalVat);
     }
     if (message.shippingAddress !== undefined) {
@@ -338,10 +353,10 @@ export const Order = {
     if (message.billingAddress !== undefined) {
       ShippingAddress.encode(message.billingAddress, writer.uint32(74).fork()).ldelim();
     }
-    if (message.billingEmail !== "") {
+    if (message.billingEmail !== undefined) {
       writer.uint32(82).string(message.billingEmail);
     }
-    if (message.notificationEmail !== "") {
+    if (message.notificationEmail !== undefined) {
       writer.uint32(90).string(message.notificationEmail);
     }
     if (message.packingPreferences !== undefined) {
@@ -403,17 +418,17 @@ export const Order = {
 
   fromJSON(object: any): Order {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
+      id: isSet(object.id) ? String(object.id) : undefined,
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
-      state: isSet(object.state) ? orderStateFromJSON(object.state) : OrderState.Created,
-      customerReference: isSet(object.customerReference) ? String(object.customerReference) : "",
+      state: isSet(object.state) ? orderStateFromJSON(object.state) : undefined,
+      customerReference: isSet(object.customerReference) ? String(object.customerReference) : undefined,
       items: Array.isArray(object?.items) ? object.items.map((e: any) => OrderItem.fromJSON(e)) : [],
-      totalPrice: isSet(object.totalPrice) ? Number(object.totalPrice) : 0,
-      totalVat: isSet(object.totalVat) ? Number(object.totalVat) : 0,
+      totalPrice: isSet(object.totalPrice) ? Number(object.totalPrice) : undefined,
+      totalVat: isSet(object.totalVat) ? Number(object.totalVat) : undefined,
       shippingAddress: isSet(object.shippingAddress) ? ShippingAddress.fromJSON(object.shippingAddress) : undefined,
       billingAddress: isSet(object.billingAddress) ? ShippingAddress.fromJSON(object.billingAddress) : undefined,
-      billingEmail: isSet(object.billingEmail) ? String(object.billingEmail) : "",
-      notificationEmail: isSet(object.notificationEmail) ? String(object.notificationEmail) : "",
+      billingEmail: isSet(object.billingEmail) ? String(object.billingEmail) : undefined,
+      notificationEmail: isSet(object.notificationEmail) ? String(object.notificationEmail) : undefined,
       packingPreferences: isSet(object.packingPreferences)
         ? Preferences.fromJSON(object.packingPreferences)
         : undefined,
@@ -424,7 +439,8 @@ export const Order = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
-    message.state !== undefined && (obj.state = orderStateToJSON(message.state));
+    message.state !== undefined &&
+      (obj.state = message.state !== undefined ? orderStateToJSON(message.state) : undefined);
     message.customerReference !== undefined && (obj.customerReference = message.customerReference);
     if (message.items) {
       obj.items = message.items.map((e) => e ? OrderItem.toJSON(e) : undefined);
@@ -452,21 +468,21 @@ export const Order = {
 
   fromPartial(object: DeepPartial<Order>): Order {
     const message = createBaseOrder();
-    message.id = object.id ?? "";
+    message.id = object.id ?? undefined;
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
-    message.state = object.state ?? OrderState.Created;
-    message.customerReference = object.customerReference ?? "";
+    message.state = object.state ?? undefined;
+    message.customerReference = object.customerReference ?? undefined;
     message.items = object.items?.map((e) => OrderItem.fromPartial(e)) || [];
-    message.totalPrice = object.totalPrice ?? 0;
-    message.totalVat = object.totalVat ?? 0;
+    message.totalPrice = object.totalPrice ?? undefined;
+    message.totalVat = object.totalVat ?? undefined;
     message.shippingAddress = (object.shippingAddress !== undefined && object.shippingAddress !== null)
       ? ShippingAddress.fromPartial(object.shippingAddress)
       : undefined;
     message.billingAddress = (object.billingAddress !== undefined && object.billingAddress !== null)
       ? ShippingAddress.fromPartial(object.billingAddress)
       : undefined;
-    message.billingEmail = object.billingEmail ?? "";
-    message.notificationEmail = object.notificationEmail ?? "";
+    message.billingEmail = object.billingEmail ?? undefined;
+    message.notificationEmail = object.notificationEmail ?? undefined;
     message.packingPreferences = (object.packingPreferences !== undefined && object.packingPreferences !== null)
       ? Preferences.fromPartial(object.packingPreferences)
       : undefined;
@@ -543,7 +559,7 @@ export const OrderIdList = {
 };
 
 function createBaseOrderList(): OrderList {
-  return { items: [], totalCount: 0, subject: undefined };
+  return { items: [], totalCount: undefined, subject: undefined };
 }
 
 export const OrderList = {
@@ -551,7 +567,7 @@ export const OrderList = {
     for (const v of message.items) {
       Order.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.totalCount !== 0) {
+    if (message.totalCount !== undefined) {
       writer.uint32(16).uint32(message.totalCount);
     }
     if (message.subject !== undefined) {
@@ -587,7 +603,7 @@ export const OrderList = {
   fromJSON(object: any): OrderList {
     return {
       items: Array.isArray(object?.items) ? object.items.map((e: any) => Order.fromJSON(e)) : [],
-      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
+      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
@@ -611,7 +627,7 @@ export const OrderList = {
   fromPartial(object: DeepPartial<OrderList>): OrderList {
     const message = createBaseOrderList();
     message.items = object.items?.map((e) => Order.fromPartial(e)) || [];
-    message.totalCount = object.totalCount ?? 0;
+    message.totalCount = object.totalCount ?? undefined;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
@@ -815,18 +831,18 @@ export const Deleted = {
 };
 
 function createBaseShippingDetails(): ShippingDetails {
-  return { exportType: "", exportDescription: "", invoiceNumber: "", senderAddress: undefined };
+  return { exportType: undefined, exportDescription: undefined, invoiceNumber: undefined, senderAddress: undefined };
 }
 
 export const ShippingDetails = {
   encode(message: ShippingDetails, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.exportType !== "") {
+    if (message.exportType !== undefined) {
       writer.uint32(10).string(message.exportType);
     }
-    if (message.exportDescription !== "") {
+    if (message.exportDescription !== undefined) {
       writer.uint32(18).string(message.exportDescription);
     }
-    if (message.invoiceNumber !== "") {
+    if (message.invoiceNumber !== undefined) {
       writer.uint32(26).string(message.invoiceNumber);
     }
     if (message.senderAddress !== undefined) {
@@ -864,9 +880,9 @@ export const ShippingDetails = {
 
   fromJSON(object: any): ShippingDetails {
     return {
-      exportType: isSet(object.exportType) ? String(object.exportType) : "",
-      exportDescription: isSet(object.exportDescription) ? String(object.exportDescription) : "",
-      invoiceNumber: isSet(object.invoiceNumber) ? String(object.invoiceNumber) : "",
+      exportType: isSet(object.exportType) ? String(object.exportType) : undefined,
+      exportDescription: isSet(object.exportDescription) ? String(object.exportDescription) : undefined,
+      invoiceNumber: isSet(object.invoiceNumber) ? String(object.invoiceNumber) : undefined,
       senderAddress: isSet(object.senderAddress) ? ShippingAddress.fromJSON(object.senderAddress) : undefined,
     };
   },
@@ -887,9 +903,9 @@ export const ShippingDetails = {
 
   fromPartial(object: DeepPartial<ShippingDetails>): ShippingDetails {
     const message = createBaseShippingDetails();
-    message.exportType = object.exportType ?? "";
-    message.exportDescription = object.exportDescription ?? "";
-    message.invoiceNumber = object.invoiceNumber ?? "";
+    message.exportType = object.exportType ?? undefined;
+    message.exportDescription = object.exportDescription ?? undefined;
+    message.invoiceNumber = object.invoiceNumber ?? undefined;
     message.senderAddress = (object.senderAddress !== undefined && object.senderAddress !== null)
       ? ShippingAddress.fromPartial(object.senderAddress)
       : undefined;
@@ -898,12 +914,12 @@ export const ShippingDetails = {
 };
 
 function createBaseFulfillmentRequest(): FulfillmentRequest {
-  return { referenceId: "", shippingDetails: undefined };
+  return { referenceId: undefined, shippingDetails: undefined };
 }
 
 export const FulfillmentRequest = {
   encode(message: FulfillmentRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.referenceId !== "") {
+    if (message.referenceId !== undefined) {
       writer.uint32(10).string(message.referenceId);
     }
     if (message.shippingDetails !== undefined) {
@@ -935,7 +951,7 @@ export const FulfillmentRequest = {
 
   fromJSON(object: any): FulfillmentRequest {
     return {
-      referenceId: isSet(object.referenceId) ? String(object.referenceId) : "",
+      referenceId: isSet(object.referenceId) ? String(object.referenceId) : undefined,
       shippingDetails: isSet(object.shippingDetails) ? ShippingDetails.fromJSON(object.shippingDetails) : undefined,
     };
   },
@@ -954,7 +970,7 @@ export const FulfillmentRequest = {
 
   fromPartial(object: DeepPartial<FulfillmentRequest>): FulfillmentRequest {
     const message = createBaseFulfillmentRequest();
-    message.referenceId = object.referenceId ?? "";
+    message.referenceId = object.referenceId ?? undefined;
     message.shippingDetails = (object.shippingDetails !== undefined && object.shippingDetails !== null)
       ? ShippingDetails.fromPartial(object.shippingDetails)
       : undefined;
@@ -963,7 +979,7 @@ export const FulfillmentRequest = {
 };
 
 function createBaseFulfillmentRequestList(): FulfillmentRequestList {
-  return { items: [], totalCount: 0, subject: undefined };
+  return { items: [], totalCount: undefined, subject: undefined };
 }
 
 export const FulfillmentRequestList = {
@@ -971,7 +987,7 @@ export const FulfillmentRequestList = {
     for (const v of message.items) {
       FulfillmentRequest.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.totalCount !== 0) {
+    if (message.totalCount !== undefined) {
       writer.uint32(16).uint32(message.totalCount);
     }
     if (message.subject !== undefined) {
@@ -1007,7 +1023,7 @@ export const FulfillmentRequestList = {
   fromJSON(object: any): FulfillmentRequestList {
     return {
       items: Array.isArray(object?.items) ? object.items.map((e: any) => FulfillmentRequest.fromJSON(e)) : [],
-      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
+      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
@@ -1031,7 +1047,7 @@ export const FulfillmentRequestList = {
   fromPartial(object: DeepPartial<FulfillmentRequestList>): FulfillmentRequestList {
     const message = createBaseFulfillmentRequestList();
     message.items = object.items?.map((e) => FulfillmentRequest.fromPartial(e)) || [];
-    message.totalCount = object.totalCount ?? 0;
+    message.totalCount = object.totalCount ?? undefined;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
@@ -1252,7 +1268,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "productId",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "variant_id",
         "number": 2,
@@ -1261,10 +1277,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "variantId",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "quantity",
         "number": 3,
@@ -1273,10 +1289,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "quantity",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "unit_price",
         "number": 4,
@@ -1285,10 +1301,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "unitPrice",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "price",
         "number": 5,
@@ -1297,10 +1313,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 4,
         "jsonName": "price",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "vats",
         "number": 6,
@@ -1318,7 +1334,13 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [
+        { "name": "_product_id", "options": undefined },
+        { "name": "_variant_id", "options": undefined },
+        { "name": "_quantity", "options": undefined },
+        { "name": "_unit_price", "options": undefined },
+        { "name": "_price", "options": undefined },
+      ],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1335,7 +1357,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "meta",
         "number": 2,
@@ -1344,10 +1366,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.meta.Meta",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "meta",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "state",
         "number": 3,
@@ -1356,10 +1378,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.order.OrderState",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "state",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "customer_reference",
         "number": 4,
@@ -1368,10 +1390,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "customerReference",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "items",
         "number": 5,
@@ -1392,10 +1414,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 4,
         "jsonName": "totalPrice",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "total_vat",
         "number": 7,
@@ -1404,10 +1426,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 5,
         "jsonName": "totalVat",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "shipping_address",
         "number": 8,
@@ -1416,10 +1438,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.address.ShippingAddress",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 6,
         "jsonName": "shippingAddress",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "billing_address",
         "number": 9,
@@ -1428,10 +1450,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.address.ShippingAddress",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 7,
         "jsonName": "billingAddress",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "billing_email",
         "number": 10,
@@ -1440,10 +1462,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 8,
         "jsonName": "billingEmail",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "notification_email",
         "number": 11,
@@ -1452,10 +1474,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 9,
         "jsonName": "notificationEmail",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "packing_preferences",
         "number": 12,
@@ -1464,16 +1486,28 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.fulfillment_product.Preferences",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 10,
         "jsonName": "packingPreferences",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [
+        { "name": "_id", "options": undefined },
+        { "name": "_meta", "options": undefined },
+        { "name": "_state", "options": undefined },
+        { "name": "_customer_reference", "options": undefined },
+        { "name": "_total_price", "options": undefined },
+        { "name": "_total_vat", "options": undefined },
+        { "name": "_shipping_address", "options": undefined },
+        { "name": "_billing_address", "options": undefined },
+        { "name": "_billing_email", "options": undefined },
+        { "name": "_notification_email", "options": undefined },
+        { "name": "_packing_preferences", "options": undefined },
+      ],
       "options": {
         "messageSetWireFormat": false,
         "noStandardDescriptorAccessor": false,
@@ -1543,7 +1577,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "totalCount",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 3,
@@ -1561,7 +1595,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_total_count", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1683,7 +1717,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "exportType",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "export_description",
         "number": 2,
@@ -1692,10 +1726,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "exportDescription",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "invoice_number",
         "number": 3,
@@ -1704,10 +1738,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "invoiceNumber",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "sender_address",
         "number": 4,
@@ -1716,16 +1750,21 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.address.ShippingAddress",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "senderAddress",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [
+        { "name": "_export_type", "options": undefined },
+        { "name": "_export_description", "options": undefined },
+        { "name": "_invoice_number", "options": undefined },
+        { "name": "_sender_address", "options": undefined },
+      ],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1742,7 +1781,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "referenceId",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "shipping_details",
         "number": 2,
@@ -1751,16 +1790,19 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.order.ShippingDetails",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "shippingDetails",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_reference_id", "options": undefined }, {
+        "name": "_shipping_details",
+        "options": undefined,
+      }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1789,7 +1831,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "totalCount",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 3,
@@ -1807,7 +1849,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_total_count", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1941,13 +1983,13 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 0, 2, 3],
-        "span": [55, 2, 24],
+        "span": [55, 2, 33],
         "leadingComments": "",
         "trailingComments": "Set by service\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 0, 2, 4],
-        "span": [56, 2, 19],
+        "span": [56, 2, 28],
         "leadingComments": "",
         "trailingComments": "Set by service\n",
         "leadingDetachedComments": [],
@@ -1965,13 +2007,13 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 5],
-        "span": [77, 2, 25],
+        "span": [77, 2, 34],
         "leadingComments": "",
         "trailingComments": "Set by service\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 6],
-        "span": [78, 2, 23],
+        "span": [78, 2, 32],
         "leadingComments": "",
         "trailingComments": "Set by service\n",
         "leadingDetachedComments": [],

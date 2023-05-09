@@ -6,35 +6,35 @@ import { protoMetadata as protoMetadata1 } from "./options";
 export const protobufPackage = "io.restorecommerce.geometry";
 
 export interface Vector3D {
-  x: number;
-  y: number;
-  z: number;
+  x?: number | undefined;
+  y?: number | undefined;
+  z?: number | undefined;
 }
 
 export interface BoundingBox3D {
-  width: number;
-  height: number;
-  length: number;
+  width?: number | undefined;
+  height?: number | undefined;
+  length?: number | undefined;
 }
 
 export interface OriginBoundingBox {
-  origin?: Vector3D;
-  bbox?: BoundingBox3D;
+  origin?: Vector3D | undefined;
+  bbox?: BoundingBox3D | undefined;
 }
 
 function createBaseVector3D(): Vector3D {
-  return { x: 0, y: 0, z: 0 };
+  return { x: undefined, y: undefined, z: undefined };
 }
 
 export const Vector3D = {
   encode(message: Vector3D, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.x !== 0) {
+    if (message.x !== undefined) {
       writer.uint32(9).double(message.x);
     }
-    if (message.y !== 0) {
+    if (message.y !== undefined) {
       writer.uint32(17).double(message.y);
     }
-    if (message.z !== 0) {
+    if (message.z !== undefined) {
       writer.uint32(25).double(message.z);
     }
     return writer;
@@ -66,9 +66,9 @@ export const Vector3D = {
 
   fromJSON(object: any): Vector3D {
     return {
-      x: isSet(object.x) ? Number(object.x) : 0,
-      y: isSet(object.y) ? Number(object.y) : 0,
-      z: isSet(object.z) ? Number(object.z) : 0,
+      x: isSet(object.x) ? Number(object.x) : undefined,
+      y: isSet(object.y) ? Number(object.y) : undefined,
+      z: isSet(object.z) ? Number(object.z) : undefined,
     };
   },
 
@@ -86,26 +86,26 @@ export const Vector3D = {
 
   fromPartial(object: DeepPartial<Vector3D>): Vector3D {
     const message = createBaseVector3D();
-    message.x = object.x ?? 0;
-    message.y = object.y ?? 0;
-    message.z = object.z ?? 0;
+    message.x = object.x ?? undefined;
+    message.y = object.y ?? undefined;
+    message.z = object.z ?? undefined;
     return message;
   },
 };
 
 function createBaseBoundingBox3D(): BoundingBox3D {
-  return { width: 0, height: 0, length: 0 };
+  return { width: undefined, height: undefined, length: undefined };
 }
 
 export const BoundingBox3D = {
   encode(message: BoundingBox3D, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.width !== 0) {
+    if (message.width !== undefined) {
       writer.uint32(9).double(message.width);
     }
-    if (message.height !== 0) {
+    if (message.height !== undefined) {
       writer.uint32(17).double(message.height);
     }
-    if (message.length !== 0) {
+    if (message.length !== undefined) {
       writer.uint32(25).double(message.length);
     }
     return writer;
@@ -137,9 +137,9 @@ export const BoundingBox3D = {
 
   fromJSON(object: any): BoundingBox3D {
     return {
-      width: isSet(object.width) ? Number(object.width) : 0,
-      height: isSet(object.height) ? Number(object.height) : 0,
-      length: isSet(object.length) ? Number(object.length) : 0,
+      width: isSet(object.width) ? Number(object.width) : undefined,
+      height: isSet(object.height) ? Number(object.height) : undefined,
+      length: isSet(object.length) ? Number(object.length) : undefined,
     };
   },
 
@@ -157,9 +157,9 @@ export const BoundingBox3D = {
 
   fromPartial(object: DeepPartial<BoundingBox3D>): BoundingBox3D {
     const message = createBaseBoundingBox3D();
-    message.width = object.width ?? 0;
-    message.height = object.height ?? 0;
-    message.length = object.length ?? 0;
+    message.width = object.width ?? undefined;
+    message.height = object.height ?? undefined;
+    message.length = object.length ?? undefined;
     return message;
   },
 };
@@ -271,7 +271,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "x",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "y",
         "number": 2,
@@ -280,10 +280,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "y",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "z",
         "number": 3,
@@ -292,16 +292,19 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "z",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_x", "options": undefined }, { "name": "_y", "options": undefined }, {
+        "name": "_z",
+        "options": undefined,
+      }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -318,7 +321,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "width",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "height",
         "number": 2,
@@ -327,10 +330,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "height",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "length",
         "number": 3,
@@ -339,16 +342,19 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "length",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_width", "options": undefined }, { "name": "_height", "options": undefined }, {
+        "name": "_length",
+        "options": undefined,
+      }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -365,7 +371,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "origin",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "bbox",
         "number": 2,
@@ -374,16 +380,16 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.geometry.BoundingBox3D",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "bbox",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_origin", "options": undefined }, { "name": "_bbox", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],

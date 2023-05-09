@@ -6,40 +6,46 @@ import { protoMetadata as protoMetadata1 } from "../../google/protobuf/descripto
 export const protobufPackage = "io.restorecommerce.options";
 
 export interface Resolver {
-  target_type: string;
-  target_service: string;
-  target_sub_service: string;
-  target_method: string;
-  field_name: string;
+  target_type?: string | undefined;
+  target_service?: string | undefined;
+  target_sub_service?: string | undefined;
+  target_method?: string | undefined;
+  field_name?: string | undefined;
 }
 
 export interface KafkaSubscription {
-  plural: string;
-  topic: string;
-  created: string;
-  updated: string;
-  deleted: string;
+  plural?: string | undefined;
+  topic?: string | undefined;
+  created?: string | undefined;
+  updated?: string | undefined;
+  deleted?: string | undefined;
 }
 
 function createBaseResolver(): Resolver {
-  return { target_type: "", target_service: "", target_sub_service: "", target_method: "", field_name: "" };
+  return {
+    target_type: undefined,
+    target_service: undefined,
+    target_sub_service: undefined,
+    target_method: undefined,
+    field_name: undefined,
+  };
 }
 
 export const Resolver = {
   encode(message: Resolver, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.target_type !== "") {
+    if (message.target_type !== undefined) {
       writer.uint32(10).string(message.target_type);
     }
-    if (message.target_service !== "") {
+    if (message.target_service !== undefined) {
       writer.uint32(18).string(message.target_service);
     }
-    if (message.target_sub_service !== "") {
+    if (message.target_sub_service !== undefined) {
       writer.uint32(26).string(message.target_sub_service);
     }
-    if (message.target_method !== "") {
+    if (message.target_method !== undefined) {
       writer.uint32(34).string(message.target_method);
     }
-    if (message.field_name !== "") {
+    if (message.field_name !== undefined) {
       writer.uint32(42).string(message.field_name);
     }
     return writer;
@@ -77,11 +83,11 @@ export const Resolver = {
 
   fromJSON(object: any): Resolver {
     return {
-      target_type: isSet(object.target_type) ? String(object.target_type) : "",
-      target_service: isSet(object.target_service) ? String(object.target_service) : "",
-      target_sub_service: isSet(object.target_sub_service) ? String(object.target_sub_service) : "",
-      target_method: isSet(object.target_method) ? String(object.target_method) : "",
-      field_name: isSet(object.field_name) ? String(object.field_name) : "",
+      target_type: isSet(object.target_type) ? String(object.target_type) : undefined,
+      target_service: isSet(object.target_service) ? String(object.target_service) : undefined,
+      target_sub_service: isSet(object.target_sub_service) ? String(object.target_sub_service) : undefined,
+      target_method: isSet(object.target_method) ? String(object.target_method) : undefined,
+      field_name: isSet(object.field_name) ? String(object.field_name) : undefined,
     };
   },
 
@@ -101,34 +107,34 @@ export const Resolver = {
 
   fromPartial(object: DeepPartial<Resolver>): Resolver {
     const message = createBaseResolver();
-    message.target_type = object.target_type ?? "";
-    message.target_service = object.target_service ?? "";
-    message.target_sub_service = object.target_sub_service ?? "";
-    message.target_method = object.target_method ?? "";
-    message.field_name = object.field_name ?? "";
+    message.target_type = object.target_type ?? undefined;
+    message.target_service = object.target_service ?? undefined;
+    message.target_sub_service = object.target_sub_service ?? undefined;
+    message.target_method = object.target_method ?? undefined;
+    message.field_name = object.field_name ?? undefined;
     return message;
   },
 };
 
 function createBaseKafkaSubscription(): KafkaSubscription {
-  return { plural: "", topic: "", created: "", updated: "", deleted: "" };
+  return { plural: undefined, topic: undefined, created: undefined, updated: undefined, deleted: undefined };
 }
 
 export const KafkaSubscription = {
   encode(message: KafkaSubscription, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.plural !== "") {
+    if (message.plural !== undefined) {
       writer.uint32(10).string(message.plural);
     }
-    if (message.topic !== "") {
+    if (message.topic !== undefined) {
       writer.uint32(18).string(message.topic);
     }
-    if (message.created !== "") {
+    if (message.created !== undefined) {
       writer.uint32(26).string(message.created);
     }
-    if (message.updated !== "") {
+    if (message.updated !== undefined) {
       writer.uint32(34).string(message.updated);
     }
-    if (message.deleted !== "") {
+    if (message.deleted !== undefined) {
       writer.uint32(42).string(message.deleted);
     }
     return writer;
@@ -166,11 +172,11 @@ export const KafkaSubscription = {
 
   fromJSON(object: any): KafkaSubscription {
     return {
-      plural: isSet(object.plural) ? String(object.plural) : "",
-      topic: isSet(object.topic) ? String(object.topic) : "",
-      created: isSet(object.created) ? String(object.created) : "",
-      updated: isSet(object.updated) ? String(object.updated) : "",
-      deleted: isSet(object.deleted) ? String(object.deleted) : "",
+      plural: isSet(object.plural) ? String(object.plural) : undefined,
+      topic: isSet(object.topic) ? String(object.topic) : undefined,
+      created: isSet(object.created) ? String(object.created) : undefined,
+      updated: isSet(object.updated) ? String(object.updated) : undefined,
+      deleted: isSet(object.deleted) ? String(object.deleted) : undefined,
     };
   },
 
@@ -190,11 +196,11 @@ export const KafkaSubscription = {
 
   fromPartial(object: DeepPartial<KafkaSubscription>): KafkaSubscription {
     const message = createBaseKafkaSubscription();
-    message.plural = object.plural ?? "";
-    message.topic = object.topic ?? "";
-    message.created = object.created ?? "";
-    message.updated = object.updated ?? "";
-    message.deleted = object.deleted ?? "";
+    message.plural = object.plural ?? undefined;
+    message.topic = object.topic ?? undefined;
+    message.created = object.created ?? undefined;
+    message.updated = object.updated ?? undefined;
+    message.deleted = object.deleted ?? undefined;
     return message;
   },
 };
@@ -240,7 +246,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "targetType",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "target_service",
         "number": 2,
@@ -249,10 +255,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "targetService",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "target_sub_service",
         "number": 3,
@@ -261,10 +267,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "targetSubService",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "target_method",
         "number": 4,
@@ -273,10 +279,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "targetMethod",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "field_name",
         "number": 5,
@@ -285,16 +291,22 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 4,
         "jsonName": "fieldName",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [
+        { "name": "_target_type", "options": undefined },
+        { "name": "_target_service", "options": undefined },
+        { "name": "_target_sub_service", "options": undefined },
+        { "name": "_target_method", "options": undefined },
+        { "name": "_field_name", "options": undefined },
+      ],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -311,7 +323,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "plural",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "topic",
         "number": 2,
@@ -320,10 +332,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "topic",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "created",
         "number": 3,
@@ -332,10 +344,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "created",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "updated",
         "number": 4,
@@ -344,10 +356,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "updated",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "deleted",
         "number": 5,
@@ -356,16 +368,22 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 4,
         "jsonName": "deleted",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [
+        { "name": "_plural", "options": undefined },
+        { "name": "_topic", "options": undefined },
+        { "name": "_created", "options": undefined },
+        { "name": "_updated", "options": undefined },
+        { "name": "_deleted", "options": undefined },
+      ],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -383,7 +401,7 @@ export const protoMetadata: ProtoMetadata = {
       "oneofIndex": 0,
       "jsonName": "resolver",
       "options": undefined,
-      "proto3Optional": false,
+      "proto3Optional": true,
     }, {
       "name": "is_query",
       "number": 31001,
@@ -395,7 +413,7 @@ export const protoMetadata: ProtoMetadata = {
       "oneofIndex": 0,
       "jsonName": "isQuery",
       "options": undefined,
-      "proto3Optional": false,
+      "proto3Optional": true,
     }, {
       "name": "service_name",
       "number": 31002,
@@ -407,7 +425,7 @@ export const protoMetadata: ProtoMetadata = {
       "oneofIndex": 0,
       "jsonName": "serviceName",
       "options": undefined,
-      "proto3Optional": false,
+      "proto3Optional": true,
     }, {
       "name": "kafka_subscriber",
       "number": 31003,
@@ -419,7 +437,7 @@ export const protoMetadata: ProtoMetadata = {
       "oneofIndex": 0,
       "jsonName": "kafkaSubscriber",
       "options": undefined,
-      "proto3Optional": false,
+      "proto3Optional": true,
     }],
     "options": undefined,
     "sourceCodeInfo": { "location": [] },

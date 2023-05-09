@@ -11,8 +11,8 @@ import { OperationStatus, protoMetadata as protoMetadata4, Status } from "./stat
 export const protobufPackage = "io.restorecommerce.resourcebase";
 
 export interface FieldFilter {
-  name: string;
-  include: boolean;
+  name?: string | undefined;
+  include?: boolean | undefined;
 }
 
 export interface Sort {
@@ -77,7 +77,9 @@ export interface Filter {
   field: string;
   operation: Filter_Operation;
   value: string;
-  type: Filter_ValueType;
+  type?:
+    | Filter_ValueType
+    | undefined;
   /** for nested filtering and to make optional its in separate filter.proto file */
   filters: FilterOp6[];
 }
@@ -255,7 +257,7 @@ export function filter_ValueTypeToNumber(object: Filter_ValueType): number {
 
 export interface FilterOp {
   filter: Filter[];
-  operator: FilterOp_Operator;
+  operator?: FilterOp_Operator | undefined;
 }
 
 export enum FilterOp_Operator {
@@ -305,11 +307,13 @@ export function filterOp_OperatorToNumber(object: FilterOp_Operator): number {
 
 export interface Search {
   /** search string */
-  search: string;
+  search?:
+    | string
+    | undefined;
   /** list of fields to be searched on entity (if not specified all indexed fields will be searched) */
   fields: string[];
   /** default search is case insensitive */
-  case_sensitive: boolean;
+  case_sensitive?: boolean | undefined;
 }
 
 export interface ReadRequest {
@@ -381,15 +385,15 @@ export interface Resource {
 }
 
 function createBaseFieldFilter(): FieldFilter {
-  return { name: "", include: false };
+  return { name: undefined, include: undefined };
 }
 
 export const FieldFilter = {
   encode(message: FieldFilter, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.name !== "") {
+    if (message.name !== undefined) {
       writer.uint32(10).string(message.name);
     }
-    if (message.include === true) {
+    if (message.include !== undefined) {
       writer.uint32(16).bool(message.include);
     }
     return writer;
@@ -418,8 +422,8 @@ export const FieldFilter = {
 
   fromJSON(object: any): FieldFilter {
     return {
-      name: isSet(object.name) ? String(object.name) : "",
-      include: isSet(object.include) ? Boolean(object.include) : false,
+      name: isSet(object.name) ? String(object.name) : undefined,
+      include: isSet(object.include) ? Boolean(object.include) : undefined,
     };
   },
 
@@ -436,8 +440,8 @@ export const FieldFilter = {
 
   fromPartial(object: DeepPartial<FieldFilter>): FieldFilter {
     const message = createBaseFieldFilter();
-    message.name = object.name ?? "";
-    message.include = object.include ?? false;
+    message.name = object.name ?? undefined;
+    message.include = object.include ?? undefined;
     return message;
   },
 };
@@ -506,7 +510,7 @@ export const Sort = {
 };
 
 function createBaseFilter(): Filter {
-  return { field: "", operation: Filter_Operation.eq, value: "", type: Filter_ValueType.STRING, filters: [] };
+  return { field: "", operation: Filter_Operation.eq, value: "", type: undefined, filters: [] };
 }
 
 export const Filter = {
@@ -520,7 +524,7 @@ export const Filter = {
     if (message.value !== "") {
       writer.uint32(26).string(message.value);
     }
-    if (message.type !== Filter_ValueType.STRING) {
+    if (message.type !== undefined) {
       writer.uint32(32).int32(filter_ValueTypeToNumber(message.type));
     }
     for (const v of message.filters) {
@@ -564,7 +568,7 @@ export const Filter = {
       field: isSet(object.field) ? String(object.field) : "",
       operation: isSet(object.operation) ? filter_OperationFromJSON(object.operation) : Filter_Operation.eq,
       value: isSet(object.value) ? String(object.value) : "",
-      type: isSet(object.type) ? filter_ValueTypeFromJSON(object.type) : Filter_ValueType.STRING,
+      type: isSet(object.type) ? filter_ValueTypeFromJSON(object.type) : undefined,
       filters: Array.isArray(object?.filters) ? object.filters.map((e: any) => FilterOp.fromJSON(e)) : [],
     };
   },
@@ -574,7 +578,8 @@ export const Filter = {
     message.field !== undefined && (obj.field = message.field);
     message.operation !== undefined && (obj.operation = filter_OperationToJSON(message.operation));
     message.value !== undefined && (obj.value = message.value);
-    message.type !== undefined && (obj.type = filter_ValueTypeToJSON(message.type));
+    message.type !== undefined &&
+      (obj.type = message.type !== undefined ? filter_ValueTypeToJSON(message.type) : undefined);
     if (message.filters) {
       obj.filters = message.filters.map((e) => e ? FilterOp6.toJSON(e) : undefined);
     } else {
@@ -592,14 +597,14 @@ export const Filter = {
     message.field = object.field ?? "";
     message.operation = object.operation ?? Filter_Operation.eq;
     message.value = object.value ?? "";
-    message.type = object.type ?? Filter_ValueType.STRING;
+    message.type = object.type ?? undefined;
     message.filters = object.filters?.map((e) => FilterOp6.fromPartial(e)) || [];
     return message;
   },
 };
 
 function createBaseFilterOp(): FilterOp {
-  return { filter: [], operator: FilterOp_Operator.and };
+  return { filter: [], operator: undefined };
 }
 
 export const FilterOp = {
@@ -607,7 +612,7 @@ export const FilterOp = {
     for (const v of message.filter) {
       Filter.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.operator !== FilterOp_Operator.and) {
+    if (message.operator !== undefined) {
       writer.uint32(16).int32(filterOp_OperatorToNumber(message.operator));
     }
     return writer;
@@ -637,7 +642,7 @@ export const FilterOp = {
   fromJSON(object: any): FilterOp {
     return {
       filter: Array.isArray(object?.filter) ? object.filter.map((e: any) => Filter.fromJSON(e)) : [],
-      operator: isSet(object.operator) ? filterOp_OperatorFromJSON(object.operator) : FilterOp_Operator.and,
+      operator: isSet(object.operator) ? filterOp_OperatorFromJSON(object.operator) : undefined,
     };
   },
 
@@ -648,7 +653,8 @@ export const FilterOp = {
     } else {
       obj.filter = [];
     }
-    message.operator !== undefined && (obj.operator = filterOp_OperatorToJSON(message.operator));
+    message.operator !== undefined &&
+      (obj.operator = message.operator !== undefined ? filterOp_OperatorToJSON(message.operator) : undefined);
     return obj;
   },
 
@@ -659,24 +665,24 @@ export const FilterOp = {
   fromPartial(object: DeepPartial<FilterOp>): FilterOp {
     const message = createBaseFilterOp();
     message.filter = object.filter?.map((e) => Filter.fromPartial(e)) || [];
-    message.operator = object.operator ?? FilterOp_Operator.and;
+    message.operator = object.operator ?? undefined;
     return message;
   },
 };
 
 function createBaseSearch(): Search {
-  return { search: "", fields: [], case_sensitive: false };
+  return { search: undefined, fields: [], case_sensitive: undefined };
 }
 
 export const Search = {
   encode(message: Search, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.search !== "") {
+    if (message.search !== undefined) {
       writer.uint32(10).string(message.search);
     }
     for (const v of message.fields) {
       writer.uint32(18).string(v!);
     }
-    if (message.case_sensitive === true) {
+    if (message.case_sensitive !== undefined) {
       writer.uint32(24).bool(message.case_sensitive);
     }
     return writer;
@@ -708,9 +714,9 @@ export const Search = {
 
   fromJSON(object: any): Search {
     return {
-      search: isSet(object.search) ? String(object.search) : "",
+      search: isSet(object.search) ? String(object.search) : undefined,
       fields: Array.isArray(object?.fields) ? object.fields.map((e: any) => String(e)) : [],
-      case_sensitive: isSet(object.case_sensitive) ? Boolean(object.case_sensitive) : false,
+      case_sensitive: isSet(object.case_sensitive) ? Boolean(object.case_sensitive) : undefined,
     };
   },
 
@@ -732,9 +738,9 @@ export const Search = {
 
   fromPartial(object: DeepPartial<Search>): Search {
     const message = createBaseSearch();
-    message.search = object.search ?? "";
+    message.search = object.search ?? undefined;
     message.fields = object.fields?.map((e) => e) || [];
-    message.case_sensitive = object.case_sensitive ?? false;
+    message.case_sensitive = object.case_sensitive ?? undefined;
     return message;
   },
 };
@@ -1478,7 +1484,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "name",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "include",
         "number": 2,
@@ -1487,16 +1493,16 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "include",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_name", "options": undefined }, { "name": "_include", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1594,7 +1600,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "type",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "filters",
         "number": 5,
@@ -1640,7 +1646,7 @@ export const protoMetadata: ProtoMetadata = {
         "reservedName": [],
       }],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_type", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1669,7 +1675,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "operator",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
@@ -1685,7 +1691,7 @@ export const protoMetadata: ProtoMetadata = {
         "reservedName": [],
       }],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_operator", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1702,7 +1708,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "search",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "fields",
         "number": 2,
@@ -1723,16 +1729,16 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "caseSensitive",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_search", "options": undefined }, { "name": "_case_sensitive", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -2205,7 +2211,7 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 4, 2, 0],
-        "span": [69, 2, 20],
+        "span": [69, 2, 29],
         "leadingComments": "",
         "trailingComments": " search string\n",
         "leadingDetachedComments": [],
@@ -2218,7 +2224,7 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 4, 2, 2],
-        "span": [71, 2, 26],
+        "span": [71, 2, 35],
         "leadingComments": "",
         "trailingComments": " default search is case insensitive\n",
         "leadingDetachedComments": [],

@@ -29,7 +29,7 @@ export interface OperationStatus {
 
 export interface StatusListResponse {
   status: Status[];
-  operationStatus?: OperationStatus;
+  operationStatus?: OperationStatus | undefined;
 }
 
 function createBaseStatus(): Status {
@@ -605,13 +605,13 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "operationStatus",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_operation_status", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],

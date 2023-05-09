@@ -17,14 +17,14 @@ export interface TokenData {
 }
 
 export interface Identifier {
-  id: string;
-  type: string;
-  subject?: Subject;
+  id?: string | undefined;
+  type?: string | undefined;
+  subject?: Subject | undefined;
 }
 
 export interface GrantId {
-  grant_id: string;
-  subject?: Subject;
+  grant_id?: string | undefined;
+  subject?: Subject | undefined;
 }
 
 function createBaseTokenData(): TokenData {
@@ -121,15 +121,15 @@ export const TokenData = {
 };
 
 function createBaseIdentifier(): Identifier {
-  return { id: "", type: "", subject: undefined };
+  return { id: undefined, type: undefined, subject: undefined };
 }
 
 export const Identifier = {
   encode(message: Identifier, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
+    if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
-    if (message.type !== "") {
+    if (message.type !== undefined) {
       writer.uint32(18).string(message.type);
     }
     if (message.subject !== undefined) {
@@ -164,8 +164,8 @@ export const Identifier = {
 
   fromJSON(object: any): Identifier {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
-      type: isSet(object.type) ? String(object.type) : "",
+      id: isSet(object.id) ? String(object.id) : undefined,
+      type: isSet(object.type) ? String(object.type) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
@@ -184,8 +184,8 @@ export const Identifier = {
 
   fromPartial(object: DeepPartial<Identifier>): Identifier {
     const message = createBaseIdentifier();
-    message.id = object.id ?? "";
-    message.type = object.type ?? "";
+    message.id = object.id ?? undefined;
+    message.type = object.type ?? undefined;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
@@ -194,12 +194,12 @@ export const Identifier = {
 };
 
 function createBaseGrantId(): GrantId {
-  return { grant_id: "", subject: undefined };
+  return { grant_id: undefined, subject: undefined };
 }
 
 export const GrantId = {
   encode(message: GrantId, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.grant_id !== "") {
+    if (message.grant_id !== undefined) {
       writer.uint32(10).string(message.grant_id);
     }
     if (message.subject !== undefined) {
@@ -231,7 +231,7 @@ export const GrantId = {
 
   fromJSON(object: any): GrantId {
     return {
-      grant_id: isSet(object.grant_id) ? String(object.grant_id) : "",
+      grant_id: isSet(object.grant_id) ? String(object.grant_id) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
@@ -249,7 +249,7 @@ export const GrantId = {
 
   fromPartial(object: DeepPartial<GrantId>): GrantId {
     const message = createBaseGrantId();
-    message.grant_id = object.grant_id ?? "";
+    message.grant_id = object.grant_id ?? undefined;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
@@ -452,7 +452,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "type",
         "number": 2,
@@ -461,10 +461,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "type",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 3,
@@ -473,16 +473,19 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.auth.Subject",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "subject",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_id", "options": undefined }, { "name": "_type", "options": undefined }, {
+        "name": "_subject",
+        "options": undefined,
+      }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -499,7 +502,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "grantId",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 2,
@@ -508,16 +511,16 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.auth.Subject",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "subject",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_grant_id", "options": undefined }, { "name": "_subject", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],

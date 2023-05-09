@@ -12,8 +12,8 @@ export const protobufPackage = "io.restorecommerce.graph";
 export interface TraversalRequest {
   vertices?: Vertices | undefined;
   collection?: Collection | undefined;
-  opts?: Options;
-  path: boolean;
+  opts?: Options | undefined;
+  path?: boolean | undefined;
   subject?: Subject;
   filters: Filters[];
 }
@@ -90,11 +90,13 @@ export function options_DirectionToNumber(object: Options_Direction): number {
 
 export interface Filters {
   /** entity on which the filters are applied */
-  entity: string;
+  entity?:
+    | string
+    | undefined;
   /** if edge is specified depending on the direction filter are applied only for those entities */
-  edge: string;
+  edge?: string | undefined;
   filter: Filter[];
-  operator: Filters_Operator;
+  operator?: Filters_Operator | undefined;
 }
 
 export enum Filters_Operator {
@@ -143,10 +145,10 @@ export function filters_OperatorToNumber(object: Filters_Operator): number {
 }
 
 export interface Filter {
-  field: string;
-  operation: Filter_Operation;
-  value: string;
-  type: Filter_ValueType;
+  field?: string | undefined;
+  operation?: Filter_Operation | undefined;
+  value?: string | undefined;
+  type?: Filter_ValueType | undefined;
   filters: Filters[];
 }
 
@@ -330,7 +332,14 @@ export interface TraversalResponse {
 }
 
 function createBaseTraversalRequest(): TraversalRequest {
-  return { vertices: undefined, collection: undefined, opts: undefined, path: false, subject: undefined, filters: [] };
+  return {
+    vertices: undefined,
+    collection: undefined,
+    opts: undefined,
+    path: undefined,
+    subject: undefined,
+    filters: [],
+  };
 }
 
 export const TraversalRequest = {
@@ -344,7 +353,7 @@ export const TraversalRequest = {
     if (message.opts !== undefined) {
       Options.encode(message.opts, writer.uint32(26).fork()).ldelim();
     }
-    if (message.path === true) {
+    if (message.path !== undefined) {
       writer.uint32(32).bool(message.path);
     }
     if (message.subject !== undefined) {
@@ -394,7 +403,7 @@ export const TraversalRequest = {
       vertices: isSet(object.vertices) ? Vertices.fromJSON(object.vertices) : undefined,
       collection: isSet(object.collection) ? Collection.fromJSON(object.collection) : undefined,
       opts: isSet(object.opts) ? Options.fromJSON(object.opts) : undefined,
-      path: isSet(object.path) ? Boolean(object.path) : false,
+      path: isSet(object.path) ? Boolean(object.path) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
       filters: Array.isArray(object?.filters) ? object.filters.map((e: any) => Filters.fromJSON(e)) : [],
     };
@@ -429,7 +438,7 @@ export const TraversalRequest = {
       ? Collection.fromPartial(object.collection)
       : undefined;
     message.opts = (object.opts !== undefined && object.opts !== null) ? Options.fromPartial(object.opts) : undefined;
-    message.path = object.path ?? false;
+    message.path = object.path ?? undefined;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
@@ -700,21 +709,21 @@ export const Options = {
 };
 
 function createBaseFilters(): Filters {
-  return { entity: "", edge: "", filter: [], operator: Filters_Operator.and };
+  return { entity: undefined, edge: undefined, filter: [], operator: undefined };
 }
 
 export const Filters = {
   encode(message: Filters, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.entity !== "") {
+    if (message.entity !== undefined) {
       writer.uint32(10).string(message.entity);
     }
-    if (message.edge !== "") {
+    if (message.edge !== undefined) {
       writer.uint32(18).string(message.edge);
     }
     for (const v of message.filter) {
       Filter.encode(v!, writer.uint32(26).fork()).ldelim();
     }
-    if (message.operator !== Filters_Operator.and) {
+    if (message.operator !== undefined) {
       writer.uint32(32).int32(filters_OperatorToNumber(message.operator));
     }
     return writer;
@@ -749,10 +758,10 @@ export const Filters = {
 
   fromJSON(object: any): Filters {
     return {
-      entity: isSet(object.entity) ? String(object.entity) : "",
-      edge: isSet(object.edge) ? String(object.edge) : "",
+      entity: isSet(object.entity) ? String(object.entity) : undefined,
+      edge: isSet(object.edge) ? String(object.edge) : undefined,
       filter: Array.isArray(object?.filter) ? object.filter.map((e: any) => Filter.fromJSON(e)) : [],
-      operator: isSet(object.operator) ? filters_OperatorFromJSON(object.operator) : Filters_Operator.and,
+      operator: isSet(object.operator) ? filters_OperatorFromJSON(object.operator) : undefined,
     };
   },
 
@@ -765,7 +774,8 @@ export const Filters = {
     } else {
       obj.filter = [];
     }
-    message.operator !== undefined && (obj.operator = filters_OperatorToJSON(message.operator));
+    message.operator !== undefined &&
+      (obj.operator = message.operator !== undefined ? filters_OperatorToJSON(message.operator) : undefined);
     return obj;
   },
 
@@ -775,30 +785,30 @@ export const Filters = {
 
   fromPartial(object: DeepPartial<Filters>): Filters {
     const message = createBaseFilters();
-    message.entity = object.entity ?? "";
-    message.edge = object.edge ?? "";
+    message.entity = object.entity ?? undefined;
+    message.edge = object.edge ?? undefined;
     message.filter = object.filter?.map((e) => Filter.fromPartial(e)) || [];
-    message.operator = object.operator ?? Filters_Operator.and;
+    message.operator = object.operator ?? undefined;
     return message;
   },
 };
 
 function createBaseFilter(): Filter {
-  return { field: "", operation: Filter_Operation.eq, value: "", type: Filter_ValueType.STRING, filters: [] };
+  return { field: undefined, operation: undefined, value: undefined, type: undefined, filters: [] };
 }
 
 export const Filter = {
   encode(message: Filter, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.field !== "") {
+    if (message.field !== undefined) {
       writer.uint32(10).string(message.field);
     }
-    if (message.operation !== Filter_Operation.eq) {
+    if (message.operation !== undefined) {
       writer.uint32(16).int32(filter_OperationToNumber(message.operation));
     }
-    if (message.value !== "") {
+    if (message.value !== undefined) {
       writer.uint32(26).string(message.value);
     }
-    if (message.type !== Filter_ValueType.STRING) {
+    if (message.type !== undefined) {
       writer.uint32(32).int32(filter_ValueTypeToNumber(message.type));
     }
     for (const v of message.filters) {
@@ -839,10 +849,10 @@ export const Filter = {
 
   fromJSON(object: any): Filter {
     return {
-      field: isSet(object.field) ? String(object.field) : "",
-      operation: isSet(object.operation) ? filter_OperationFromJSON(object.operation) : Filter_Operation.eq,
-      value: isSet(object.value) ? String(object.value) : "",
-      type: isSet(object.type) ? filter_ValueTypeFromJSON(object.type) : Filter_ValueType.STRING,
+      field: isSet(object.field) ? String(object.field) : undefined,
+      operation: isSet(object.operation) ? filter_OperationFromJSON(object.operation) : undefined,
+      value: isSet(object.value) ? String(object.value) : undefined,
+      type: isSet(object.type) ? filter_ValueTypeFromJSON(object.type) : undefined,
       filters: Array.isArray(object?.filters) ? object.filters.map((e: any) => Filters.fromJSON(e)) : [],
     };
   },
@@ -850,9 +860,11 @@ export const Filter = {
   toJSON(message: Filter): unknown {
     const obj: any = {};
     message.field !== undefined && (obj.field = message.field);
-    message.operation !== undefined && (obj.operation = filter_OperationToJSON(message.operation));
+    message.operation !== undefined &&
+      (obj.operation = message.operation !== undefined ? filter_OperationToJSON(message.operation) : undefined);
     message.value !== undefined && (obj.value = message.value);
-    message.type !== undefined && (obj.type = filter_ValueTypeToJSON(message.type));
+    message.type !== undefined &&
+      (obj.type = message.type !== undefined ? filter_ValueTypeToJSON(message.type) : undefined);
     if (message.filters) {
       obj.filters = message.filters.map((e) => e ? Filters.toJSON(e) : undefined);
     } else {
@@ -867,10 +879,10 @@ export const Filter = {
 
   fromPartial(object: DeepPartial<Filter>): Filter {
     const message = createBaseFilter();
-    message.field = object.field ?? "";
-    message.operation = object.operation ?? Filter_Operation.eq;
-    message.value = object.value ?? "";
-    message.type = object.type ?? Filter_ValueType.STRING;
+    message.field = object.field ?? undefined;
+    message.operation = object.operation ?? undefined;
+    message.value = object.value ?? undefined;
+    message.type = object.type ?? undefined;
     message.filters = object.filters?.map((e) => Filters.fromPartial(e)) || [];
     return message;
   },
@@ -1048,10 +1060,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.graph.Options",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "opts",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "path",
         "number": 4,
@@ -1060,10 +1072,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "path",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 5,
@@ -1093,7 +1105,10 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [{ "name": "vertex", "options": undefined }],
+      "oneofDecl": [{ "name": "vertex", "options": undefined }, { "name": "_opts", "options": undefined }, {
+        "name": "_path",
+        "options": undefined,
+      }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1285,7 +1300,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "entity",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "edge",
         "number": 2,
@@ -1294,10 +1309,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "edge",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "filter",
         "number": 3,
@@ -1318,10 +1333,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.graph.Filters.Operator",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "operator",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
@@ -1337,7 +1352,10 @@ export const protoMetadata: ProtoMetadata = {
         "reservedName": [],
       }],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_entity", "options": undefined }, { "name": "_edge", "options": undefined }, {
+        "name": "_operator",
+        "options": undefined,
+      }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1354,7 +1372,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "field",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "operation",
         "number": 2,
@@ -1363,10 +1381,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.graph.Filter.Operation",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "operation",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "value",
         "number": 3,
@@ -1375,10 +1393,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "value",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "type",
         "number": 4,
@@ -1387,10 +1405,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.graph.Filter.ValueType",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "type",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "filters",
         "number": 5,
@@ -1436,7 +1454,10 @@ export const protoMetadata: ProtoMetadata = {
         "reservedName": [],
       }],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_field", "options": undefined }, { "name": "_operation", "options": undefined }, {
+        "name": "_value",
+        "options": undefined,
+      }, { "name": "_type", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1548,13 +1569,13 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 4, 2, 0],
-        "span": [51, 2, 20],
+        "span": [51, 2, 29],
         "leadingComments": "",
         "trailingComments": " entity on which the filters are applied\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 4, 2, 1],
-        "span": [52, 2, 18],
+        "span": [52, 2, 27],
         "leadingComments": "",
         "trailingComments":
           " if edge is specified depending on the direction filter are applied only for those entities\n",

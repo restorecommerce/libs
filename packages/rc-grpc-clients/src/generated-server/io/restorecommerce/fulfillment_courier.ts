@@ -12,19 +12,19 @@ import { OperationStatus, protoMetadata as protoMetadata5, Status } from "./stat
 export const protobufPackage = "io.restorecommerce.fulfillment_courier";
 
 export interface FulfillmentCourier {
-  id: string;
-  name: string;
-  description: string;
-  logo: string;
-  website: string;
-  stub_type: string;
-  configuration?: Any;
-  meta?: Meta;
+  id?: string | undefined;
+  name?: string | undefined;
+  description?: string | undefined;
+  logo?: string | undefined;
+  website?: string | undefined;
+  stub_type?: string | undefined;
+  configuration?: Any | undefined;
+  meta?: Meta | undefined;
 }
 
 export interface FulfillmentCourierList {
   items: FulfillmentCourier[];
-  total_count: number;
+  total_count?: number | undefined;
   subject?: Subject;
 }
 
@@ -45,12 +45,12 @@ export interface Deleted {
 
 function createBaseFulfillmentCourier(): FulfillmentCourier {
   return {
-    id: "",
-    name: "",
-    description: "",
-    logo: "",
-    website: "",
-    stub_type: "",
+    id: undefined,
+    name: undefined,
+    description: undefined,
+    logo: undefined,
+    website: undefined,
+    stub_type: undefined,
     configuration: undefined,
     meta: undefined,
   };
@@ -58,22 +58,22 @@ function createBaseFulfillmentCourier(): FulfillmentCourier {
 
 export const FulfillmentCourier = {
   encode(message: FulfillmentCourier, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
+    if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
-    if (message.name !== "") {
+    if (message.name !== undefined) {
       writer.uint32(34).string(message.name);
     }
-    if (message.description !== "") {
+    if (message.description !== undefined) {
       writer.uint32(42).string(message.description);
     }
-    if (message.logo !== "") {
+    if (message.logo !== undefined) {
       writer.uint32(50).string(message.logo);
     }
-    if (message.website !== "") {
+    if (message.website !== undefined) {
       writer.uint32(58).string(message.website);
     }
-    if (message.stub_type !== "") {
+    if (message.stub_type !== undefined) {
       writer.uint32(66).string(message.stub_type);
     }
     if (message.configuration !== undefined) {
@@ -126,12 +126,12 @@ export const FulfillmentCourier = {
 
   fromJSON(object: any): FulfillmentCourier {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
-      name: isSet(object.name) ? String(object.name) : "",
-      description: isSet(object.description) ? String(object.description) : "",
-      logo: isSet(object.logo) ? String(object.logo) : "",
-      website: isSet(object.website) ? String(object.website) : "",
-      stub_type: isSet(object.stub_type) ? String(object.stub_type) : "",
+      id: isSet(object.id) ? String(object.id) : undefined,
+      name: isSet(object.name) ? String(object.name) : undefined,
+      description: isSet(object.description) ? String(object.description) : undefined,
+      logo: isSet(object.logo) ? String(object.logo) : undefined,
+      website: isSet(object.website) ? String(object.website) : undefined,
+      stub_type: isSet(object.stub_type) ? String(object.stub_type) : undefined,
       configuration: isSet(object.configuration) ? Any.fromJSON(object.configuration) : undefined,
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
     };
@@ -157,12 +157,12 @@ export const FulfillmentCourier = {
 
   fromPartial(object: DeepPartial<FulfillmentCourier>): FulfillmentCourier {
     const message = createBaseFulfillmentCourier();
-    message.id = object.id ?? "";
-    message.name = object.name ?? "";
-    message.description = object.description ?? "";
-    message.logo = object.logo ?? "";
-    message.website = object.website ?? "";
-    message.stub_type = object.stub_type ?? "";
+    message.id = object.id ?? undefined;
+    message.name = object.name ?? undefined;
+    message.description = object.description ?? undefined;
+    message.logo = object.logo ?? undefined;
+    message.website = object.website ?? undefined;
+    message.stub_type = object.stub_type ?? undefined;
     message.configuration = (object.configuration !== undefined && object.configuration !== null)
       ? Any.fromPartial(object.configuration)
       : undefined;
@@ -172,7 +172,7 @@ export const FulfillmentCourier = {
 };
 
 function createBaseFulfillmentCourierList(): FulfillmentCourierList {
-  return { items: [], total_count: 0, subject: undefined };
+  return { items: [], total_count: undefined, subject: undefined };
 }
 
 export const FulfillmentCourierList = {
@@ -180,7 +180,7 @@ export const FulfillmentCourierList = {
     for (const v of message.items) {
       FulfillmentCourier.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.total_count !== 0) {
+    if (message.total_count !== undefined) {
       writer.uint32(16).uint32(message.total_count);
     }
     if (message.subject !== undefined) {
@@ -216,7 +216,7 @@ export const FulfillmentCourierList = {
   fromJSON(object: any): FulfillmentCourierList {
     return {
       items: Array.isArray(object?.items) ? object.items.map((e: any) => FulfillmentCourier.fromJSON(e)) : [],
-      total_count: isSet(object.total_count) ? Number(object.total_count) : 0,
+      total_count: isSet(object.total_count) ? Number(object.total_count) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
@@ -240,7 +240,7 @@ export const FulfillmentCourierList = {
   fromPartial(object: DeepPartial<FulfillmentCourierList>): FulfillmentCourierList {
     const message = createBaseFulfillmentCourierList();
     message.items = object.items?.map((e) => FulfillmentCourier.fromPartial(e)) || [];
-    message.total_count = object.total_count ?? 0;
+    message.total_count = object.total_count ?? undefined;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
@@ -580,7 +580,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "name",
         "number": 4,
@@ -589,10 +589,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "name",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "description",
         "number": 5,
@@ -601,10 +601,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "description",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "logo",
         "number": 6,
@@ -613,10 +613,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "logo",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "website",
         "number": 7,
@@ -625,10 +625,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 4,
         "jsonName": "website",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "stub_type",
         "number": 8,
@@ -637,10 +637,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 5,
         "jsonName": "stubType",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "configuration",
         "number": 10,
@@ -649,10 +649,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".google.protobuf.Any",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 6,
         "jsonName": "configuration",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "meta",
         "number": 11,
@@ -661,16 +661,25 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.meta.Meta",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 7,
         "jsonName": "meta",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [
+        { "name": "_id", "options": undefined },
+        { "name": "_name", "options": undefined },
+        { "name": "_description", "options": undefined },
+        { "name": "_logo", "options": undefined },
+        { "name": "_website", "options": undefined },
+        { "name": "_stub_type", "options": undefined },
+        { "name": "_configuration", "options": undefined },
+        { "name": "_meta", "options": undefined },
+      ],
       "options": {
         "messageSetWireFormat": false,
         "noStandardDescriptorAccessor": false,
@@ -705,7 +714,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "totalCount",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 3,
@@ -723,7 +732,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_total_count", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],

@@ -43,11 +43,11 @@ export interface PolicySetResponse {
 }
 
 export interface PolicySetRQ {
-  id: string;
-  target?: Target;
-  combiningAlgorithm: string;
+  id?: string | undefined;
+  target?: Target | undefined;
+  combiningAlgorithm?: string | undefined;
   policies: PolicyRQ[];
-  effect: Effect;
+  effect?: Effect | undefined;
 }
 
 function createBasePolicySet(): PolicySet {
@@ -393,24 +393,24 @@ export const PolicySetResponse = {
 };
 
 function createBasePolicySetRQ(): PolicySetRQ {
-  return { id: "", target: undefined, combiningAlgorithm: "", policies: [], effect: Effect.PERMIT };
+  return { id: undefined, target: undefined, combiningAlgorithm: undefined, policies: [], effect: undefined };
 }
 
 export const PolicySetRQ = {
   encode(message: PolicySetRQ, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
+    if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
     if (message.target !== undefined) {
       Target.encode(message.target, writer.uint32(18).fork()).ldelim();
     }
-    if (message.combiningAlgorithm !== "") {
+    if (message.combiningAlgorithm !== undefined) {
       writer.uint32(26).string(message.combiningAlgorithm);
     }
     for (const v of message.policies) {
       PolicyRQ.encode(v!, writer.uint32(34).fork()).ldelim();
     }
-    if (message.effect !== Effect.PERMIT) {
+    if (message.effect !== undefined) {
       writer.uint32(40).int32(effectToNumber(message.effect));
     }
     return writer;
@@ -448,11 +448,11 @@ export const PolicySetRQ = {
 
   fromJSON(object: any): PolicySetRQ {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
+      id: isSet(object.id) ? String(object.id) : undefined,
       target: isSet(object.target) ? Target.fromJSON(object.target) : undefined,
-      combiningAlgorithm: isSet(object.combiningAlgorithm) ? String(object.combiningAlgorithm) : "",
+      combiningAlgorithm: isSet(object.combiningAlgorithm) ? String(object.combiningAlgorithm) : undefined,
       policies: Array.isArray(object?.policies) ? object.policies.map((e: any) => PolicyRQ.fromJSON(e)) : [],
-      effect: isSet(object.effect) ? effectFromJSON(object.effect) : Effect.PERMIT,
+      effect: isSet(object.effect) ? effectFromJSON(object.effect) : undefined,
     };
   },
 
@@ -466,7 +466,8 @@ export const PolicySetRQ = {
     } else {
       obj.policies = [];
     }
-    message.effect !== undefined && (obj.effect = effectToJSON(message.effect));
+    message.effect !== undefined &&
+      (obj.effect = message.effect !== undefined ? effectToJSON(message.effect) : undefined);
     return obj;
   },
 
@@ -476,13 +477,13 @@ export const PolicySetRQ = {
 
   fromPartial(object: DeepPartial<PolicySetRQ>): PolicySetRQ {
     const message = createBasePolicySetRQ();
-    message.id = object.id ?? "";
+    message.id = object.id ?? undefined;
     message.target = (object.target !== undefined && object.target !== null)
       ? Target.fromPartial(object.target)
       : undefined;
-    message.combiningAlgorithm = object.combiningAlgorithm ?? "";
+    message.combiningAlgorithm = object.combiningAlgorithm ?? undefined;
     message.policies = object.policies?.map((e) => PolicyRQ.fromPartial(e)) || [];
-    message.effect = object.effect ?? Effect.PERMIT;
+    message.effect = object.effect ?? undefined;
     return message;
   },
 };
@@ -831,7 +832,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "target",
         "number": 2,
@@ -840,10 +841,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.rule.Target",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "target",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "combining_algorithm",
         "number": 3,
@@ -852,10 +853,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "combiningAlgorithm",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "policies",
         "number": 4,
@@ -876,16 +877,19 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.rule.Effect",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "effect",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_id", "options": undefined }, { "name": "_target", "options": undefined }, {
+        "name": "_combining_algorithm",
+        "options": undefined,
+      }, { "name": "_effect", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],

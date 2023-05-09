@@ -11,13 +11,13 @@ import { OperationStatus, protoMetadata as protoMetadata4, Status } from "./stat
 export const protobufPackage = "io.restorecommerce.resourcebase";
 
 export interface FieldFilter {
-  name: string;
-  include: boolean;
+  name?: string | undefined;
+  include?: boolean | undefined;
 }
 
 export interface Sort {
   field: string;
-  order: Sort_SortOrder;
+  order?: Sort_SortOrder | undefined;
 }
 
 export enum Sort_SortOrder {
@@ -77,7 +77,9 @@ export interface Filter {
   field: string;
   operation: Filter_Operation;
   value: string;
-  type: Filter_ValueType;
+  type?:
+    | Filter_ValueType
+    | undefined;
   /** for nested filtering and to make optional its in separate filter.proto file */
   filters: FilterOp6[];
 }
@@ -255,7 +257,7 @@ export function filter_ValueTypeToNumber(object: Filter_ValueType): number {
 
 export interface FilterOp {
   filter: Filter[];
-  operator: FilterOp_Operator;
+  operator?: FilterOp_Operator | undefined;
 }
 
 export enum FilterOp_Operator {
@@ -305,16 +307,18 @@ export function filterOp_OperatorToNumber(object: FilterOp_Operator): number {
 
 export interface Search {
   /** search string */
-  search: string;
+  search?:
+    | string
+    | undefined;
   /** list of fields to be searched on entity (if not specified all indexed fields will be searched) */
   fields: string[];
   /** default search is case insensitive */
-  caseSensitive: boolean;
+  caseSensitive?: boolean | undefined;
 }
 
 export interface ReadRequest {
-  offset: number;
-  limit: number;
+  offset?: number | undefined;
+  limit?: number | undefined;
   sort: Sort[];
   /** / Filter based on fieldName|operation, value|list */
   filters: FilterOp[];
@@ -330,14 +334,16 @@ export interface ReadRequest {
    */
   localesLimiter: string[];
   customQueries: string[];
-  customArguments?: Any;
+  customArguments?: Any | undefined;
   subject?: Subject;
-  search?: Search;
+  search?: Search | undefined;
 }
 
 export interface DeleteRequest {
   /** / Request to purge the whole collection */
-  collection: boolean;
+  collection?:
+    | boolean
+    | undefined;
   /** / Delete specified documents */
   ids: string[];
   subject?: Subject;
@@ -355,7 +361,7 @@ export interface DeleteResponse {
 /** / List of resources */
 export interface ResourceList {
   items: Resource[];
-  totalCount: number;
+  totalCount?: number | undefined;
   subject?: Subject;
 }
 
@@ -374,20 +380,20 @@ export interface ResourceResponse {
 
 /** / Example resource */
 export interface Resource {
-  id: string;
-  meta?: Meta;
+  id?: string | undefined;
+  meta?: Meta | undefined;
 }
 
 function createBaseFieldFilter(): FieldFilter {
-  return { name: "", include: false };
+  return { name: undefined, include: undefined };
 }
 
 export const FieldFilter = {
   encode(message: FieldFilter, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.name !== "") {
+    if (message.name !== undefined) {
       writer.uint32(10).string(message.name);
     }
-    if (message.include === true) {
+    if (message.include !== undefined) {
       writer.uint32(16).bool(message.include);
     }
     return writer;
@@ -416,8 +422,8 @@ export const FieldFilter = {
 
   fromJSON(object: any): FieldFilter {
     return {
-      name: isSet(object.name) ? String(object.name) : "",
-      include: isSet(object.include) ? Boolean(object.include) : false,
+      name: isSet(object.name) ? String(object.name) : undefined,
+      include: isSet(object.include) ? Boolean(object.include) : undefined,
     };
   },
 
@@ -434,14 +440,14 @@ export const FieldFilter = {
 
   fromPartial(object: DeepPartial<FieldFilter>): FieldFilter {
     const message = createBaseFieldFilter();
-    message.name = object.name ?? "";
-    message.include = object.include ?? false;
+    message.name = object.name ?? undefined;
+    message.include = object.include ?? undefined;
     return message;
   },
 };
 
 function createBaseSort(): Sort {
-  return { field: "", order: Sort_SortOrder.UNSORTED };
+  return { field: "", order: undefined };
 }
 
 export const Sort = {
@@ -449,7 +455,7 @@ export const Sort = {
     if (message.field !== "") {
       writer.uint32(10).string(message.field);
     }
-    if (message.order !== Sort_SortOrder.UNSORTED) {
+    if (message.order !== undefined) {
       writer.uint32(16).int32(sort_SortOrderToNumber(message.order));
     }
     return writer;
@@ -479,14 +485,15 @@ export const Sort = {
   fromJSON(object: any): Sort {
     return {
       field: isSet(object.field) ? String(object.field) : "",
-      order: isSet(object.order) ? sort_SortOrderFromJSON(object.order) : Sort_SortOrder.UNSORTED,
+      order: isSet(object.order) ? sort_SortOrderFromJSON(object.order) : undefined,
     };
   },
 
   toJSON(message: Sort): unknown {
     const obj: any = {};
     message.field !== undefined && (obj.field = message.field);
-    message.order !== undefined && (obj.order = sort_SortOrderToJSON(message.order));
+    message.order !== undefined &&
+      (obj.order = message.order !== undefined ? sort_SortOrderToJSON(message.order) : undefined);
     return obj;
   },
 
@@ -497,13 +504,13 @@ export const Sort = {
   fromPartial(object: DeepPartial<Sort>): Sort {
     const message = createBaseSort();
     message.field = object.field ?? "";
-    message.order = object.order ?? Sort_SortOrder.UNSORTED;
+    message.order = object.order ?? undefined;
     return message;
   },
 };
 
 function createBaseFilter(): Filter {
-  return { field: "", operation: Filter_Operation.eq, value: "", type: Filter_ValueType.STRING, filters: [] };
+  return { field: "", operation: Filter_Operation.eq, value: "", type: undefined, filters: [] };
 }
 
 export const Filter = {
@@ -517,7 +524,7 @@ export const Filter = {
     if (message.value !== "") {
       writer.uint32(26).string(message.value);
     }
-    if (message.type !== Filter_ValueType.STRING) {
+    if (message.type !== undefined) {
       writer.uint32(32).int32(filter_ValueTypeToNumber(message.type));
     }
     for (const v of message.filters) {
@@ -561,7 +568,7 @@ export const Filter = {
       field: isSet(object.field) ? String(object.field) : "",
       operation: isSet(object.operation) ? filter_OperationFromJSON(object.operation) : Filter_Operation.eq,
       value: isSet(object.value) ? String(object.value) : "",
-      type: isSet(object.type) ? filter_ValueTypeFromJSON(object.type) : Filter_ValueType.STRING,
+      type: isSet(object.type) ? filter_ValueTypeFromJSON(object.type) : undefined,
       filters: Array.isArray(object?.filters) ? object.filters.map((e: any) => FilterOp.fromJSON(e)) : [],
     };
   },
@@ -571,7 +578,8 @@ export const Filter = {
     message.field !== undefined && (obj.field = message.field);
     message.operation !== undefined && (obj.operation = filter_OperationToJSON(message.operation));
     message.value !== undefined && (obj.value = message.value);
-    message.type !== undefined && (obj.type = filter_ValueTypeToJSON(message.type));
+    message.type !== undefined &&
+      (obj.type = message.type !== undefined ? filter_ValueTypeToJSON(message.type) : undefined);
     if (message.filters) {
       obj.filters = message.filters.map((e) => e ? FilterOp6.toJSON(e) : undefined);
     } else {
@@ -589,14 +597,14 @@ export const Filter = {
     message.field = object.field ?? "";
     message.operation = object.operation ?? Filter_Operation.eq;
     message.value = object.value ?? "";
-    message.type = object.type ?? Filter_ValueType.STRING;
+    message.type = object.type ?? undefined;
     message.filters = object.filters?.map((e) => FilterOp6.fromPartial(e)) || [];
     return message;
   },
 };
 
 function createBaseFilterOp(): FilterOp {
-  return { filter: [], operator: FilterOp_Operator.and };
+  return { filter: [], operator: undefined };
 }
 
 export const FilterOp = {
@@ -604,7 +612,7 @@ export const FilterOp = {
     for (const v of message.filter) {
       Filter.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.operator !== FilterOp_Operator.and) {
+    if (message.operator !== undefined) {
       writer.uint32(16).int32(filterOp_OperatorToNumber(message.operator));
     }
     return writer;
@@ -634,7 +642,7 @@ export const FilterOp = {
   fromJSON(object: any): FilterOp {
     return {
       filter: Array.isArray(object?.filter) ? object.filter.map((e: any) => Filter.fromJSON(e)) : [],
-      operator: isSet(object.operator) ? filterOp_OperatorFromJSON(object.operator) : FilterOp_Operator.and,
+      operator: isSet(object.operator) ? filterOp_OperatorFromJSON(object.operator) : undefined,
     };
   },
 
@@ -645,7 +653,8 @@ export const FilterOp = {
     } else {
       obj.filter = [];
     }
-    message.operator !== undefined && (obj.operator = filterOp_OperatorToJSON(message.operator));
+    message.operator !== undefined &&
+      (obj.operator = message.operator !== undefined ? filterOp_OperatorToJSON(message.operator) : undefined);
     return obj;
   },
 
@@ -656,24 +665,24 @@ export const FilterOp = {
   fromPartial(object: DeepPartial<FilterOp>): FilterOp {
     const message = createBaseFilterOp();
     message.filter = object.filter?.map((e) => Filter.fromPartial(e)) || [];
-    message.operator = object.operator ?? FilterOp_Operator.and;
+    message.operator = object.operator ?? undefined;
     return message;
   },
 };
 
 function createBaseSearch(): Search {
-  return { search: "", fields: [], caseSensitive: false };
+  return { search: undefined, fields: [], caseSensitive: undefined };
 }
 
 export const Search = {
   encode(message: Search, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.search !== "") {
+    if (message.search !== undefined) {
       writer.uint32(10).string(message.search);
     }
     for (const v of message.fields) {
       writer.uint32(18).string(v!);
     }
-    if (message.caseSensitive === true) {
+    if (message.caseSensitive !== undefined) {
       writer.uint32(24).bool(message.caseSensitive);
     }
     return writer;
@@ -705,9 +714,9 @@ export const Search = {
 
   fromJSON(object: any): Search {
     return {
-      search: isSet(object.search) ? String(object.search) : "",
+      search: isSet(object.search) ? String(object.search) : undefined,
       fields: Array.isArray(object?.fields) ? object.fields.map((e: any) => String(e)) : [],
-      caseSensitive: isSet(object.caseSensitive) ? Boolean(object.caseSensitive) : false,
+      caseSensitive: isSet(object.caseSensitive) ? Boolean(object.caseSensitive) : undefined,
     };
   },
 
@@ -729,17 +738,17 @@ export const Search = {
 
   fromPartial(object: DeepPartial<Search>): Search {
     const message = createBaseSearch();
-    message.search = object.search ?? "";
+    message.search = object.search ?? undefined;
     message.fields = object.fields?.map((e) => e) || [];
-    message.caseSensitive = object.caseSensitive ?? false;
+    message.caseSensitive = object.caseSensitive ?? undefined;
     return message;
   },
 };
 
 function createBaseReadRequest(): ReadRequest {
   return {
-    offset: 0,
-    limit: 0,
+    offset: undefined,
+    limit: undefined,
     sort: [],
     filters: [],
     field: [],
@@ -753,10 +762,10 @@ function createBaseReadRequest(): ReadRequest {
 
 export const ReadRequest = {
   encode(message: ReadRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.offset !== 0) {
+    if (message.offset !== undefined) {
       writer.uint32(8).uint32(message.offset);
     }
-    if (message.limit !== 0) {
+    if (message.limit !== undefined) {
       writer.uint32(16).uint32(message.limit);
     }
     for (const v of message.sort) {
@@ -833,8 +842,8 @@ export const ReadRequest = {
 
   fromJSON(object: any): ReadRequest {
     return {
-      offset: isSet(object.offset) ? Number(object.offset) : 0,
-      limit: isSet(object.limit) ? Number(object.limit) : 0,
+      offset: isSet(object.offset) ? Number(object.offset) : undefined,
+      limit: isSet(object.limit) ? Number(object.limit) : undefined,
       sort: Array.isArray(object?.sort) ? object.sort.map((e: any) => Sort.fromJSON(e)) : [],
       filters: Array.isArray(object?.filters) ? object.filters.map((e: any) => FilterOp.fromJSON(e)) : [],
       field: Array.isArray(object?.field) ? object.field.map((e: any) => FieldFilter.fromJSON(e)) : [],
@@ -888,8 +897,8 @@ export const ReadRequest = {
 
   fromPartial(object: DeepPartial<ReadRequest>): ReadRequest {
     const message = createBaseReadRequest();
-    message.offset = object.offset ?? 0;
-    message.limit = object.limit ?? 0;
+    message.offset = object.offset ?? undefined;
+    message.limit = object.limit ?? undefined;
     message.sort = object.sort?.map((e) => Sort.fromPartial(e)) || [];
     message.filters = object.filters?.map((e) => FilterOp.fromPartial(e)) || [];
     message.field = object.field?.map((e) => FieldFilter.fromPartial(e)) || [];
@@ -909,12 +918,12 @@ export const ReadRequest = {
 };
 
 function createBaseDeleteRequest(): DeleteRequest {
-  return { collection: false, ids: [], subject: undefined, view: [], analyzer: [] };
+  return { collection: undefined, ids: [], subject: undefined, view: [], analyzer: [] };
 }
 
 export const DeleteRequest = {
   encode(message: DeleteRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.collection === true) {
+    if (message.collection !== undefined) {
       writer.uint32(8).bool(message.collection);
     }
     for (const v of message.ids) {
@@ -964,7 +973,7 @@ export const DeleteRequest = {
 
   fromJSON(object: any): DeleteRequest {
     return {
-      collection: isSet(object.collection) ? Boolean(object.collection) : false,
+      collection: isSet(object.collection) ? Boolean(object.collection) : undefined,
       ids: Array.isArray(object?.ids) ? object.ids.map((e: any) => String(e)) : [],
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
       view: Array.isArray(object?.view) ? object.view.map((e: any) => String(e)) : [],
@@ -1000,7 +1009,7 @@ export const DeleteRequest = {
 
   fromPartial(object: DeepPartial<DeleteRequest>): DeleteRequest {
     const message = createBaseDeleteRequest();
-    message.collection = object.collection ?? false;
+    message.collection = object.collection ?? undefined;
     message.ids = object.ids?.map((e) => e) || [];
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
@@ -1081,7 +1090,7 @@ export const DeleteResponse = {
 };
 
 function createBaseResourceList(): ResourceList {
-  return { items: [], totalCount: 0, subject: undefined };
+  return { items: [], totalCount: undefined, subject: undefined };
 }
 
 export const ResourceList = {
@@ -1089,7 +1098,7 @@ export const ResourceList = {
     for (const v of message.items) {
       Resource.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.totalCount !== 0) {
+    if (message.totalCount !== undefined) {
       writer.uint32(16).uint32(message.totalCount);
     }
     if (message.subject !== undefined) {
@@ -1125,7 +1134,7 @@ export const ResourceList = {
   fromJSON(object: any): ResourceList {
     return {
       items: Array.isArray(object?.items) ? object.items.map((e: any) => Resource.fromJSON(e)) : [],
-      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
+      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
@@ -1149,7 +1158,7 @@ export const ResourceList = {
   fromPartial(object: DeepPartial<ResourceList>): ResourceList {
     const message = createBaseResourceList();
     message.items = object.items?.map((e) => Resource.fromPartial(e)) || [];
-    message.totalCount = object.totalCount ?? 0;
+    message.totalCount = object.totalCount ?? undefined;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
@@ -1302,12 +1311,12 @@ export const ResourceResponse = {
 };
 
 function createBaseResource(): Resource {
-  return { id: "", meta: undefined };
+  return { id: undefined, meta: undefined };
 }
 
 export const Resource = {
   encode(message: Resource, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
+    if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
     if (message.meta !== undefined) {
@@ -1339,7 +1348,7 @@ export const Resource = {
 
   fromJSON(object: any): Resource {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
+      id: isSet(object.id) ? String(object.id) : undefined,
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
     };
   },
@@ -1357,7 +1366,7 @@ export const Resource = {
 
   fromPartial(object: DeepPartial<Resource>): Resource {
     const message = createBaseResource();
-    message.id = object.id ?? "";
+    message.id = object.id ?? undefined;
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
     return message;
   },
@@ -1475,7 +1484,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "name",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "include",
         "number": 2,
@@ -1484,16 +1493,16 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "include",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_name", "options": undefined }, { "name": "_include", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1522,7 +1531,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "order",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
@@ -1538,7 +1547,7 @@ export const protoMetadata: ProtoMetadata = {
         "reservedName": [],
       }],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_order", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1591,7 +1600,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "type",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "filters",
         "number": 5,
@@ -1637,7 +1646,7 @@ export const protoMetadata: ProtoMetadata = {
         "reservedName": [],
       }],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_type", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1666,7 +1675,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "operator",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
@@ -1682,7 +1691,7 @@ export const protoMetadata: ProtoMetadata = {
         "reservedName": [],
       }],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_operator", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1699,7 +1708,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "search",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "fields",
         "number": 2,
@@ -1720,16 +1729,16 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "caseSensitive",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_search", "options": undefined }, { "name": "_case_sensitive", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1746,7 +1755,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "offset",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "limit",
         "number": 2,
@@ -1755,10 +1764,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "limit",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "sort",
         "number": 3,
@@ -1827,10 +1836,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".google.protobuf.Any",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "customArguments",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 10,
@@ -1851,16 +1860,19 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.resourcebase.Search",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "search",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_offset", "options": undefined }, { "name": "_limit", "options": undefined }, {
+        "name": "_custom_arguments",
+        "options": undefined,
+      }, { "name": "_search", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1877,7 +1889,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "collection",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "ids",
         "number": 2,
@@ -1931,7 +1943,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_collection", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1995,7 +2007,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "totalCount",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 3,
@@ -2013,7 +2025,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_total_count", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -2112,7 +2124,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "meta",
         "number": 2,
@@ -2121,16 +2133,16 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.meta.Meta",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "meta",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_id", "options": undefined }, { "name": "_meta", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -2199,7 +2211,7 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 4, 2, 0],
-        "span": [69, 2, 20],
+        "span": [69, 2, 29],
         "leadingComments": "",
         "trailingComments": " search string\n",
         "leadingDetachedComments": [],
@@ -2212,7 +2224,7 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 4, 2, 2],
-        "span": [71, 2, 26],
+        "span": [71, 2, 35],
         "leadingComments": "",
         "trailingComments": " default search is case insensitive\n",
         "leadingDetachedComments": [],
@@ -2237,7 +2249,7 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 6, 2, 0],
-        "span": [102, 2, 22],
+        "span": [102, 2, 31],
         "leadingComments": "/ Request to purge the whole collection\n",
         "trailingComments": "",
         "leadingDetachedComments": [],

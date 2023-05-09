@@ -43,20 +43,20 @@ export interface AddressAddition {
 }
 
 export interface BusinessAddress {
-  name: string;
+  name?: string | undefined;
 }
 
 export interface ResidentialAddress {
-  title: string;
-  givenName: string;
-  midName: string;
-  familyName: string;
+  title?: string | undefined;
+  givenName?: string | undefined;
+  midName?: string | undefined;
+  familyName?: string | undefined;
 }
 
 export interface PackStation {
-  provider: string;
-  stationNumber: string;
-  postNumber: string;
+  provider?: string | undefined;
+  stationNumber?: string | undefined;
+  postNumber?: string | undefined;
 }
 
 export interface Address {
@@ -77,16 +77,16 @@ export interface Address {
 }
 
 export interface Contact {
-  name: string;
-  email: string;
-  phone: string;
+  name?: string | undefined;
+  email?: string | undefined;
+  phone?: string | undefined;
 }
 
 export interface ShippingAddress {
-  address?: Address;
-  contact?: Contact;
-  comments: string;
-  country?: Country;
+  address?: Address | undefined;
+  contact?: Contact | undefined;
+  comments?: string | undefined;
+  country?: Country | undefined;
 }
 
 function createBaseDeleted(): Deleted {
@@ -486,12 +486,12 @@ export const AddressAddition = {
 };
 
 function createBaseBusinessAddress(): BusinessAddress {
-  return { name: "" };
+  return { name: undefined };
 }
 
 export const BusinessAddress = {
   encode(message: BusinessAddress, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.name !== "") {
+    if (message.name !== undefined) {
       writer.uint32(10).string(message.name);
     }
     return writer;
@@ -516,7 +516,7 @@ export const BusinessAddress = {
   },
 
   fromJSON(object: any): BusinessAddress {
-    return { name: isSet(object.name) ? String(object.name) : "" };
+    return { name: isSet(object.name) ? String(object.name) : undefined };
   },
 
   toJSON(message: BusinessAddress): unknown {
@@ -531,27 +531,27 @@ export const BusinessAddress = {
 
   fromPartial(object: DeepPartial<BusinessAddress>): BusinessAddress {
     const message = createBaseBusinessAddress();
-    message.name = object.name ?? "";
+    message.name = object.name ?? undefined;
     return message;
   },
 };
 
 function createBaseResidentialAddress(): ResidentialAddress {
-  return { title: "", givenName: "", midName: "", familyName: "" };
+  return { title: undefined, givenName: undefined, midName: undefined, familyName: undefined };
 }
 
 export const ResidentialAddress = {
   encode(message: ResidentialAddress, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.title !== "") {
+    if (message.title !== undefined) {
       writer.uint32(10).string(message.title);
     }
-    if (message.givenName !== "") {
+    if (message.givenName !== undefined) {
       writer.uint32(18).string(message.givenName);
     }
-    if (message.midName !== "") {
+    if (message.midName !== undefined) {
       writer.uint32(26).string(message.midName);
     }
-    if (message.familyName !== "") {
+    if (message.familyName !== undefined) {
       writer.uint32(34).string(message.familyName);
     }
     return writer;
@@ -586,10 +586,10 @@ export const ResidentialAddress = {
 
   fromJSON(object: any): ResidentialAddress {
     return {
-      title: isSet(object.title) ? String(object.title) : "",
-      givenName: isSet(object.givenName) ? String(object.givenName) : "",
-      midName: isSet(object.midName) ? String(object.midName) : "",
-      familyName: isSet(object.familyName) ? String(object.familyName) : "",
+      title: isSet(object.title) ? String(object.title) : undefined,
+      givenName: isSet(object.givenName) ? String(object.givenName) : undefined,
+      midName: isSet(object.midName) ? String(object.midName) : undefined,
+      familyName: isSet(object.familyName) ? String(object.familyName) : undefined,
     };
   },
 
@@ -608,27 +608,27 @@ export const ResidentialAddress = {
 
   fromPartial(object: DeepPartial<ResidentialAddress>): ResidentialAddress {
     const message = createBaseResidentialAddress();
-    message.title = object.title ?? "";
-    message.givenName = object.givenName ?? "";
-    message.midName = object.midName ?? "";
-    message.familyName = object.familyName ?? "";
+    message.title = object.title ?? undefined;
+    message.givenName = object.givenName ?? undefined;
+    message.midName = object.midName ?? undefined;
+    message.familyName = object.familyName ?? undefined;
     return message;
   },
 };
 
 function createBasePackStation(): PackStation {
-  return { provider: "", stationNumber: "", postNumber: "" };
+  return { provider: undefined, stationNumber: undefined, postNumber: undefined };
 }
 
 export const PackStation = {
   encode(message: PackStation, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.provider !== "") {
+    if (message.provider !== undefined) {
       writer.uint32(10).string(message.provider);
     }
-    if (message.stationNumber !== "") {
+    if (message.stationNumber !== undefined) {
       writer.uint32(18).string(message.stationNumber);
     }
-    if (message.postNumber !== "") {
+    if (message.postNumber !== undefined) {
       writer.uint32(26).string(message.postNumber);
     }
     return writer;
@@ -660,9 +660,9 @@ export const PackStation = {
 
   fromJSON(object: any): PackStation {
     return {
-      provider: isSet(object.provider) ? String(object.provider) : "",
-      stationNumber: isSet(object.stationNumber) ? String(object.stationNumber) : "",
-      postNumber: isSet(object.postNumber) ? String(object.postNumber) : "",
+      provider: isSet(object.provider) ? String(object.provider) : undefined,
+      stationNumber: isSet(object.stationNumber) ? String(object.stationNumber) : undefined,
+      postNumber: isSet(object.postNumber) ? String(object.postNumber) : undefined,
     };
   },
 
@@ -680,9 +680,9 @@ export const PackStation = {
 
   fromPartial(object: DeepPartial<PackStation>): PackStation {
     const message = createBasePackStation();
-    message.provider = object.provider ?? "";
-    message.stationNumber = object.stationNumber ?? "";
-    message.postNumber = object.postNumber ?? "";
+    message.provider = object.provider ?? undefined;
+    message.stationNumber = object.stationNumber ?? undefined;
+    message.postNumber = object.postNumber ?? undefined;
     return message;
   },
 };
@@ -891,18 +891,18 @@ export const Address = {
 };
 
 function createBaseContact(): Contact {
-  return { name: "", email: "", phone: "" };
+  return { name: undefined, email: undefined, phone: undefined };
 }
 
 export const Contact = {
   encode(message: Contact, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.name !== "") {
+    if (message.name !== undefined) {
       writer.uint32(10).string(message.name);
     }
-    if (message.email !== "") {
+    if (message.email !== undefined) {
       writer.uint32(18).string(message.email);
     }
-    if (message.phone !== "") {
+    if (message.phone !== undefined) {
       writer.uint32(26).string(message.phone);
     }
     return writer;
@@ -934,9 +934,9 @@ export const Contact = {
 
   fromJSON(object: any): Contact {
     return {
-      name: isSet(object.name) ? String(object.name) : "",
-      email: isSet(object.email) ? String(object.email) : "",
-      phone: isSet(object.phone) ? String(object.phone) : "",
+      name: isSet(object.name) ? String(object.name) : undefined,
+      email: isSet(object.email) ? String(object.email) : undefined,
+      phone: isSet(object.phone) ? String(object.phone) : undefined,
     };
   },
 
@@ -954,15 +954,15 @@ export const Contact = {
 
   fromPartial(object: DeepPartial<Contact>): Contact {
     const message = createBaseContact();
-    message.name = object.name ?? "";
-    message.email = object.email ?? "";
-    message.phone = object.phone ?? "";
+    message.name = object.name ?? undefined;
+    message.email = object.email ?? undefined;
+    message.phone = object.phone ?? undefined;
     return message;
   },
 };
 
 function createBaseShippingAddress(): ShippingAddress {
-  return { address: undefined, contact: undefined, comments: "", country: undefined };
+  return { address: undefined, contact: undefined, comments: undefined, country: undefined };
 }
 
 export const ShippingAddress = {
@@ -973,7 +973,7 @@ export const ShippingAddress = {
     if (message.contact !== undefined) {
       Contact.encode(message.contact, writer.uint32(18).fork()).ldelim();
     }
-    if (message.comments !== "") {
+    if (message.comments !== undefined) {
       writer.uint32(26).string(message.comments);
     }
     if (message.country !== undefined) {
@@ -1013,7 +1013,7 @@ export const ShippingAddress = {
     return {
       address: isSet(object.address) ? Address.fromJSON(object.address) : undefined,
       contact: isSet(object.contact) ? Contact.fromJSON(object.contact) : undefined,
-      comments: isSet(object.comments) ? String(object.comments) : "",
+      comments: isSet(object.comments) ? String(object.comments) : undefined,
       country: isSet(object.country) ? Country.fromJSON(object.country) : undefined,
     };
   },
@@ -1039,7 +1039,7 @@ export const ShippingAddress = {
     message.contact = (object.contact !== undefined && object.contact !== null)
       ? Contact.fromPartial(object.contact)
       : undefined;
-    message.comments = object.comments ?? "";
+    message.comments = object.comments ?? undefined;
     message.country = (object.country !== undefined && object.country !== null)
       ? Country.fromPartial(object.country)
       : undefined;
@@ -1382,13 +1382,13 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "name",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_name", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1405,7 +1405,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "title",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "given_name",
         "number": 2,
@@ -1414,10 +1414,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "givenName",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "mid_name",
         "number": 3,
@@ -1426,10 +1426,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "midName",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "family_name",
         "number": 4,
@@ -1438,16 +1438,19 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "familyName",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_title", "options": undefined }, { "name": "_given_name", "options": undefined }, {
+        "name": "_mid_name",
+        "options": undefined,
+      }, { "name": "_family_name", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1464,7 +1467,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "provider",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "station_number",
         "number": 2,
@@ -1473,10 +1476,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "stationNumber",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "post_number",
         "number": 3,
@@ -1485,16 +1488,20 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "postNumber",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [
+        { "name": "_provider", "options": undefined },
+        { "name": "_station_number", "options": undefined },
+        { "name": "_post_number", "options": undefined },
+      ],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1711,7 +1718,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "name",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "email",
         "number": 2,
@@ -1720,10 +1727,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "email",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "phone",
         "number": 3,
@@ -1732,16 +1739,19 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "phone",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_name", "options": undefined }, { "name": "_email", "options": undefined }, {
+        "name": "_phone",
+        "options": undefined,
+      }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1758,7 +1768,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "address",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "contact",
         "number": 2,
@@ -1767,10 +1777,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.address.Contact",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "contact",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "comments",
         "number": 3,
@@ -1779,10 +1789,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "comments",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "country",
         "number": 4,
@@ -1791,16 +1801,19 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.country.Country",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "country",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_address", "options": undefined }, { "name": "_contact", "options": undefined }, {
+        "name": "_comments",
+        "options": undefined,
+      }, { "name": "_country", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],

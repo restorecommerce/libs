@@ -37,13 +37,13 @@ export interface Policy {
 }
 
 export interface PolicyRQ {
-  id: string;
-  target?: Target;
-  combining_algorithm: string;
+  id?: string | undefined;
+  target?: Target | undefined;
+  combining_algorithm?: string | undefined;
   rules: RuleRQ[];
-  effect: Effect;
-  has_rules: boolean;
-  evaluation_cacheable: boolean;
+  effect?: Effect | undefined;
+  has_rules?: boolean | undefined;
+  evaluation_cacheable?: boolean | undefined;
 }
 
 export interface PolicyList {
@@ -207,37 +207,37 @@ export const Policy = {
 
 function createBasePolicyRQ(): PolicyRQ {
   return {
-    id: "",
+    id: undefined,
     target: undefined,
-    combining_algorithm: "",
+    combining_algorithm: undefined,
     rules: [],
-    effect: Effect.PERMIT,
-    has_rules: false,
-    evaluation_cacheable: false,
+    effect: undefined,
+    has_rules: undefined,
+    evaluation_cacheable: undefined,
   };
 }
 
 export const PolicyRQ = {
   encode(message: PolicyRQ, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
+    if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
     if (message.target !== undefined) {
       Target.encode(message.target, writer.uint32(18).fork()).ldelim();
     }
-    if (message.combining_algorithm !== "") {
+    if (message.combining_algorithm !== undefined) {
       writer.uint32(26).string(message.combining_algorithm);
     }
     for (const v of message.rules) {
       RuleRQ.encode(v!, writer.uint32(34).fork()).ldelim();
     }
-    if (message.effect !== Effect.PERMIT) {
+    if (message.effect !== undefined) {
       writer.uint32(40).int32(effectToNumber(message.effect));
     }
-    if (message.has_rules === true) {
+    if (message.has_rules !== undefined) {
       writer.uint32(48).bool(message.has_rules);
     }
-    if (message.evaluation_cacheable === true) {
+    if (message.evaluation_cacheable !== undefined) {
       writer.uint32(56).bool(message.evaluation_cacheable);
     }
     return writer;
@@ -281,13 +281,13 @@ export const PolicyRQ = {
 
   fromJSON(object: any): PolicyRQ {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
+      id: isSet(object.id) ? String(object.id) : undefined,
       target: isSet(object.target) ? Target.fromJSON(object.target) : undefined,
-      combining_algorithm: isSet(object.combining_algorithm) ? String(object.combining_algorithm) : "",
+      combining_algorithm: isSet(object.combining_algorithm) ? String(object.combining_algorithm) : undefined,
       rules: Array.isArray(object?.rules) ? object.rules.map((e: any) => RuleRQ.fromJSON(e)) : [],
-      effect: isSet(object.effect) ? effectFromJSON(object.effect) : Effect.PERMIT,
-      has_rules: isSet(object.has_rules) ? Boolean(object.has_rules) : false,
-      evaluation_cacheable: isSet(object.evaluation_cacheable) ? Boolean(object.evaluation_cacheable) : false,
+      effect: isSet(object.effect) ? effectFromJSON(object.effect) : undefined,
+      has_rules: isSet(object.has_rules) ? Boolean(object.has_rules) : undefined,
+      evaluation_cacheable: isSet(object.evaluation_cacheable) ? Boolean(object.evaluation_cacheable) : undefined,
     };
   },
 
@@ -301,7 +301,8 @@ export const PolicyRQ = {
     } else {
       obj.rules = [];
     }
-    message.effect !== undefined && (obj.effect = effectToJSON(message.effect));
+    message.effect !== undefined &&
+      (obj.effect = message.effect !== undefined ? effectToJSON(message.effect) : undefined);
     message.has_rules !== undefined && (obj.has_rules = message.has_rules);
     message.evaluation_cacheable !== undefined && (obj.evaluation_cacheable = message.evaluation_cacheable);
     return obj;
@@ -313,15 +314,15 @@ export const PolicyRQ = {
 
   fromPartial(object: DeepPartial<PolicyRQ>): PolicyRQ {
     const message = createBasePolicyRQ();
-    message.id = object.id ?? "";
+    message.id = object.id ?? undefined;
     message.target = (object.target !== undefined && object.target !== null)
       ? Target.fromPartial(object.target)
       : undefined;
-    message.combining_algorithm = object.combining_algorithm ?? "";
+    message.combining_algorithm = object.combining_algorithm ?? undefined;
     message.rules = object.rules?.map((e) => RuleRQ.fromPartial(e)) || [];
-    message.effect = object.effect ?? Effect.PERMIT;
-    message.has_rules = object.has_rules ?? false;
-    message.evaluation_cacheable = object.evaluation_cacheable ?? false;
+    message.effect = object.effect ?? undefined;
+    message.has_rules = object.has_rules ?? undefined;
+    message.evaluation_cacheable = object.evaluation_cacheable ?? undefined;
     return message;
   },
 };
@@ -787,7 +788,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "target",
         "number": 2,
@@ -796,10 +797,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.rule.Target",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "target",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "combining_algorithm",
         "number": 3,
@@ -808,10 +809,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "combiningAlgorithm",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "rules",
         "number": 4,
@@ -832,10 +833,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.rule.Effect",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "effect",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "has_rules",
         "number": 6,
@@ -844,10 +845,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 4,
         "jsonName": "hasRules",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "evaluation_cacheable",
         "number": 7,
@@ -856,16 +857,23 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 5,
         "jsonName": "evaluationCacheable",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [
+        { "name": "_id", "options": undefined },
+        { "name": "_target", "options": undefined },
+        { "name": "_combining_algorithm", "options": undefined },
+        { "name": "_effect", "options": undefined },
+        { "name": "_has_rules", "options": undefined },
+        { "name": "_evaluation_cacheable", "options": undefined },
+      ],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],

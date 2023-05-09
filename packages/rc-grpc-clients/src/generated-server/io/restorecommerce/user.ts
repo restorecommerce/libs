@@ -101,9 +101,9 @@ export interface DeleteUsersByOrgResponse {
 
 export interface FindRequest {
   /** / User ID */
-  id: string;
-  name: string;
-  email: string;
+  id?: string | undefined;
+  name?: string | undefined;
+  email?: string | undefined;
   subject?: Subject;
 }
 
@@ -243,7 +243,7 @@ export interface EmailChangeConfirmed {
 /** A list of User. */
 export interface UserList {
   items: User[];
-  total_count: number;
+  total_count?: number | undefined;
   subject?: Subject;
 }
 
@@ -623,18 +623,18 @@ export const DeleteUsersByOrgResponse = {
 };
 
 function createBaseFindRequest(): FindRequest {
-  return { id: "", name: "", email: "", subject: undefined };
+  return { id: undefined, name: undefined, email: undefined, subject: undefined };
 }
 
 export const FindRequest = {
   encode(message: FindRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
+    if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
-    if (message.name !== "") {
+    if (message.name !== undefined) {
       writer.uint32(18).string(message.name);
     }
-    if (message.email !== "") {
+    if (message.email !== undefined) {
       writer.uint32(26).string(message.email);
     }
     if (message.subject !== undefined) {
@@ -672,9 +672,9 @@ export const FindRequest = {
 
   fromJSON(object: any): FindRequest {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
-      name: isSet(object.name) ? String(object.name) : "",
-      email: isSet(object.email) ? String(object.email) : "",
+      id: isSet(object.id) ? String(object.id) : undefined,
+      name: isSet(object.name) ? String(object.name) : undefined,
+      email: isSet(object.email) ? String(object.email) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
@@ -694,9 +694,9 @@ export const FindRequest = {
 
   fromPartial(object: DeepPartial<FindRequest>): FindRequest {
     const message = createBaseFindRequest();
-    message.id = object.id ?? "";
-    message.name = object.name ?? "";
-    message.email = object.email ?? "";
+    message.id = object.id ?? undefined;
+    message.name = object.name ?? undefined;
+    message.email = object.email ?? undefined;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
@@ -1950,7 +1950,7 @@ export const EmailChangeConfirmed = {
 };
 
 function createBaseUserList(): UserList {
-  return { items: [], total_count: 0, subject: undefined };
+  return { items: [], total_count: undefined, subject: undefined };
 }
 
 export const UserList = {
@@ -1958,7 +1958,7 @@ export const UserList = {
     for (const v of message.items) {
       User.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.total_count !== 0) {
+    if (message.total_count !== undefined) {
       writer.uint32(16).uint32(message.total_count);
     }
     if (message.subject !== undefined) {
@@ -1994,7 +1994,7 @@ export const UserList = {
   fromJSON(object: any): UserList {
     return {
       items: Array.isArray(object?.items) ? object.items.map((e: any) => User.fromJSON(e)) : [],
-      total_count: isSet(object.total_count) ? Number(object.total_count) : 0,
+      total_count: isSet(object.total_count) ? Number(object.total_count) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
@@ -2018,7 +2018,7 @@ export const UserList = {
   fromPartial(object: DeepPartial<UserList>): UserList {
     const message = createBaseUserList();
     message.items = object.items?.map((e) => User.fromPartial(e)) || [];
-    message.total_count = object.total_count ?? 0;
+    message.total_count = object.total_count ?? undefined;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
@@ -3557,7 +3557,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "name",
         "number": 2,
@@ -3566,10 +3566,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "name",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "email",
         "number": 3,
@@ -3578,10 +3578,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "email",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 4,
@@ -3599,7 +3599,10 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_id", "options": undefined }, { "name": "_name", "options": undefined }, {
+        "name": "_email",
+        "options": undefined,
+      }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -4453,7 +4456,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "totalCount",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 3,
@@ -4471,7 +4474,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_total_count", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -5631,7 +5634,7 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 3, 2, 0],
-        "span": [77, 2, 16],
+        "span": [77, 2, 25],
         "leadingComments": "",
         "trailingComments": "/ User ID\n",
         "leadingDetachedComments": [],

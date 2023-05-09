@@ -43,8 +43,8 @@ export interface Tax {
 }
 
 export interface VAT {
-  taxId: string;
-  vat: number;
+  taxId?: string | undefined;
+  vat?: number | undefined;
 }
 
 function createBaseDeleted(): Deleted {
@@ -425,15 +425,15 @@ export const Tax = {
 };
 
 function createBaseVAT(): VAT {
-  return { taxId: "", vat: 0 };
+  return { taxId: undefined, vat: undefined };
 }
 
 export const VAT = {
   encode(message: VAT, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.taxId !== "") {
+    if (message.taxId !== undefined) {
       writer.uint32(10).string(message.taxId);
     }
-    if (message.vat !== 0) {
+    if (message.vat !== undefined) {
       writer.uint32(17).double(message.vat);
     }
     return writer;
@@ -461,7 +461,10 @@ export const VAT = {
   },
 
   fromJSON(object: any): VAT {
-    return { taxId: isSet(object.taxId) ? String(object.taxId) : "", vat: isSet(object.vat) ? Number(object.vat) : 0 };
+    return {
+      taxId: isSet(object.taxId) ? String(object.taxId) : undefined,
+      vat: isSet(object.vat) ? Number(object.vat) : undefined,
+    };
   },
 
   toJSON(message: VAT): unknown {
@@ -477,8 +480,8 @@ export const VAT = {
 
   fromPartial(object: DeepPartial<VAT>): VAT {
     const message = createBaseVAT();
-    message.taxId = object.taxId ?? "";
-    message.vat = object.vat ?? 0;
+    message.taxId = object.taxId ?? undefined;
+    message.vat = object.vat ?? undefined;
     return message;
   },
 };
@@ -855,7 +858,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "taxId",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "vat",
         "number": 2,
@@ -864,16 +867,16 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "vat",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_tax_id", "options": undefined }, { "name": "_vat", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],

@@ -36,7 +36,9 @@ export interface CommandParameter {
     | string
     | undefined;
   /** field's type */
-  type: CommandParameter_ParameterType;
+  type?:
+    | CommandParameter_ParameterType
+    | undefined;
   /** dump properties in case of `object_value`` */
   properties?: string | undefined;
 }
@@ -223,12 +225,7 @@ export const Command = {
 };
 
 function createBaseCommandParameter(): CommandParameter {
-  return {
-    field: undefined,
-    description: undefined,
-    type: CommandParameter_ParameterType.boolean_value,
-    properties: undefined,
-  };
+  return { field: undefined, description: undefined, type: undefined, properties: undefined };
 }
 
 export const CommandParameter = {
@@ -239,7 +236,7 @@ export const CommandParameter = {
     if (message.description !== undefined) {
       writer.uint32(18).string(message.description);
     }
-    if (message.type !== CommandParameter_ParameterType.boolean_value) {
+    if (message.type !== undefined) {
       writer.uint32(24).int32(commandParameter_ParameterTypeToNumber(message.type));
     }
     if (message.properties !== undefined) {
@@ -279,9 +276,7 @@ export const CommandParameter = {
     return {
       field: isSet(object.field) ? String(object.field) : undefined,
       description: isSet(object.description) ? String(object.description) : undefined,
-      type: isSet(object.type)
-        ? commandParameter_ParameterTypeFromJSON(object.type)
-        : CommandParameter_ParameterType.boolean_value,
+      type: isSet(object.type) ? commandParameter_ParameterTypeFromJSON(object.type) : undefined,
       properties: isSet(object.properties) ? String(object.properties) : undefined,
     };
   },
@@ -290,7 +285,8 @@ export const CommandParameter = {
     const obj: any = {};
     message.field !== undefined && (obj.field = message.field);
     message.description !== undefined && (obj.description = message.description);
-    message.type !== undefined && (obj.type = commandParameter_ParameterTypeToJSON(message.type));
+    message.type !== undefined &&
+      (obj.type = message.type !== undefined ? commandParameter_ParameterTypeToJSON(message.type) : undefined);
     message.properties !== undefined && (obj.properties = message.properties);
     return obj;
   },
@@ -303,7 +299,7 @@ export const CommandParameter = {
     const message = createBaseCommandParameter();
     message.field = object.field ?? undefined;
     message.description = object.description ?? undefined;
-    message.type = object.type ?? CommandParameter_ParameterType.boolean_value;
+    message.type = object.type ?? undefined;
     message.properties = object.properties ?? undefined;
     return message;
   },
@@ -736,10 +732,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.command.CommandParameter.ParameterType",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "type",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "properties",
         "number": 4,
@@ -748,7 +744,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 2,
+        "oneofIndex": 3,
         "jsonName": "properties",
         "options": undefined,
         "proto3Optional": true,
@@ -770,9 +766,9 @@ export const protoMetadata: ProtoMetadata = {
       }],
       "extensionRange": [],
       "oneofDecl": [{ "name": "_field", "options": undefined }, { "name": "_description", "options": undefined }, {
-        "name": "_properties",
+        "name": "_type",
         "options": undefined,
-      }],
+      }, { "name": "_properties", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -988,7 +984,7 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 2],
-        "span": [30, 2, 25],
+        "span": [30, 2, 34],
         "leadingComments": "",
         "trailingComments": " field's type\n",
         "leadingDetachedComments": [],

@@ -66,31 +66,33 @@ export interface Target {
 }
 
 export interface Rule {
-  id: string;
-  meta?: Meta;
-  name: string;
-  description: string;
-  target?: Target;
-  contextQuery?: ContextQuery;
+  id?: string | undefined;
+  meta?: Meta | undefined;
+  name?: string | undefined;
+  description?: string | undefined;
+  target?: Target | undefined;
+  contextQuery?:
+    | ContextQuery
+    | undefined;
   /** JS code */
-  condition: string;
-  effect: Effect;
-  evaluationCacheable: boolean;
+  condition?: string | undefined;
+  effect?: Effect | undefined;
+  evaluationCacheable?: boolean | undefined;
 }
 
 /** used for `whatIsAllowed` / reverse queries */
 export interface RuleRQ {
-  id: string;
-  target?: Target;
-  effect: Effect;
-  condition: string;
-  contextQuery?: ContextQuery;
-  evaluationCacheable: boolean;
+  id?: string | undefined;
+  target?: Target | undefined;
+  effect?: Effect | undefined;
+  condition?: string | undefined;
+  contextQuery?: ContextQuery | undefined;
+  evaluationCacheable?: boolean | undefined;
 }
 
 export interface RuleList {
   items: Rule[];
-  totalCount: number;
+  totalCount?: number | undefined;
   subject?: Subject;
 }
 
@@ -112,7 +114,7 @@ export interface RuleResponse {
  */
 export interface ContextQuery {
   filters: FilterOp[];
-  query: string;
+  query?: string | undefined;
 }
 
 function createBaseTarget(): Target {
@@ -200,30 +202,30 @@ export const Target = {
 
 function createBaseRule(): Rule {
   return {
-    id: "",
+    id: undefined,
     meta: undefined,
-    name: "",
-    description: "",
+    name: undefined,
+    description: undefined,
     target: undefined,
     contextQuery: undefined,
-    condition: "",
-    effect: Effect.PERMIT,
-    evaluationCacheable: false,
+    condition: undefined,
+    effect: undefined,
+    evaluationCacheable: undefined,
   };
 }
 
 export const Rule = {
   encode(message: Rule, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
+    if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
-    if (message.name !== "") {
+    if (message.name !== undefined) {
       writer.uint32(26).string(message.name);
     }
-    if (message.description !== "") {
+    if (message.description !== undefined) {
       writer.uint32(34).string(message.description);
     }
     if (message.target !== undefined) {
@@ -232,13 +234,13 @@ export const Rule = {
     if (message.contextQuery !== undefined) {
       ContextQuery.encode(message.contextQuery, writer.uint32(50).fork()).ldelim();
     }
-    if (message.condition !== "") {
+    if (message.condition !== undefined) {
       writer.uint32(58).string(message.condition);
     }
-    if (message.effect !== Effect.PERMIT) {
+    if (message.effect !== undefined) {
       writer.uint32(64).int32(effectToNumber(message.effect));
     }
-    if (message.evaluationCacheable === true) {
+    if (message.evaluationCacheable !== undefined) {
       writer.uint32(72).bool(message.evaluationCacheable);
     }
     return writer;
@@ -288,15 +290,15 @@ export const Rule = {
 
   fromJSON(object: any): Rule {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
+      id: isSet(object.id) ? String(object.id) : undefined,
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
-      name: isSet(object.name) ? String(object.name) : "",
-      description: isSet(object.description) ? String(object.description) : "",
+      name: isSet(object.name) ? String(object.name) : undefined,
+      description: isSet(object.description) ? String(object.description) : undefined,
       target: isSet(object.target) ? Target.fromJSON(object.target) : undefined,
       contextQuery: isSet(object.contextQuery) ? ContextQuery.fromJSON(object.contextQuery) : undefined,
-      condition: isSet(object.condition) ? String(object.condition) : "",
-      effect: isSet(object.effect) ? effectFromJSON(object.effect) : Effect.PERMIT,
-      evaluationCacheable: isSet(object.evaluationCacheable) ? Boolean(object.evaluationCacheable) : false,
+      condition: isSet(object.condition) ? String(object.condition) : undefined,
+      effect: isSet(object.effect) ? effectFromJSON(object.effect) : undefined,
+      evaluationCacheable: isSet(object.evaluationCacheable) ? Boolean(object.evaluationCacheable) : undefined,
     };
   },
 
@@ -310,7 +312,8 @@ export const Rule = {
     message.contextQuery !== undefined &&
       (obj.contextQuery = message.contextQuery ? ContextQuery.toJSON(message.contextQuery) : undefined);
     message.condition !== undefined && (obj.condition = message.condition);
-    message.effect !== undefined && (obj.effect = effectToJSON(message.effect));
+    message.effect !== undefined &&
+      (obj.effect = message.effect !== undefined ? effectToJSON(message.effect) : undefined);
     message.evaluationCacheable !== undefined && (obj.evaluationCacheable = message.evaluationCacheable);
     return obj;
   },
@@ -321,52 +324,52 @@ export const Rule = {
 
   fromPartial(object: DeepPartial<Rule>): Rule {
     const message = createBaseRule();
-    message.id = object.id ?? "";
+    message.id = object.id ?? undefined;
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
-    message.name = object.name ?? "";
-    message.description = object.description ?? "";
+    message.name = object.name ?? undefined;
+    message.description = object.description ?? undefined;
     message.target = (object.target !== undefined && object.target !== null)
       ? Target.fromPartial(object.target)
       : undefined;
     message.contextQuery = (object.contextQuery !== undefined && object.contextQuery !== null)
       ? ContextQuery.fromPartial(object.contextQuery)
       : undefined;
-    message.condition = object.condition ?? "";
-    message.effect = object.effect ?? Effect.PERMIT;
-    message.evaluationCacheable = object.evaluationCacheable ?? false;
+    message.condition = object.condition ?? undefined;
+    message.effect = object.effect ?? undefined;
+    message.evaluationCacheable = object.evaluationCacheable ?? undefined;
     return message;
   },
 };
 
 function createBaseRuleRQ(): RuleRQ {
   return {
-    id: "",
+    id: undefined,
     target: undefined,
-    effect: Effect.PERMIT,
-    condition: "",
+    effect: undefined,
+    condition: undefined,
     contextQuery: undefined,
-    evaluationCacheable: false,
+    evaluationCacheable: undefined,
   };
 }
 
 export const RuleRQ = {
   encode(message: RuleRQ, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
+    if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
     if (message.target !== undefined) {
       Target.encode(message.target, writer.uint32(18).fork()).ldelim();
     }
-    if (message.effect !== Effect.PERMIT) {
+    if (message.effect !== undefined) {
       writer.uint32(24).int32(effectToNumber(message.effect));
     }
-    if (message.condition !== "") {
+    if (message.condition !== undefined) {
       writer.uint32(34).string(message.condition);
     }
     if (message.contextQuery !== undefined) {
       ContextQuery.encode(message.contextQuery, writer.uint32(42).fork()).ldelim();
     }
-    if (message.evaluationCacheable === true) {
+    if (message.evaluationCacheable !== undefined) {
       writer.uint32(48).bool(message.evaluationCacheable);
     }
     return writer;
@@ -407,12 +410,12 @@ export const RuleRQ = {
 
   fromJSON(object: any): RuleRQ {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
+      id: isSet(object.id) ? String(object.id) : undefined,
       target: isSet(object.target) ? Target.fromJSON(object.target) : undefined,
-      effect: isSet(object.effect) ? effectFromJSON(object.effect) : Effect.PERMIT,
-      condition: isSet(object.condition) ? String(object.condition) : "",
+      effect: isSet(object.effect) ? effectFromJSON(object.effect) : undefined,
+      condition: isSet(object.condition) ? String(object.condition) : undefined,
       contextQuery: isSet(object.contextQuery) ? ContextQuery.fromJSON(object.contextQuery) : undefined,
-      evaluationCacheable: isSet(object.evaluationCacheable) ? Boolean(object.evaluationCacheable) : false,
+      evaluationCacheable: isSet(object.evaluationCacheable) ? Boolean(object.evaluationCacheable) : undefined,
     };
   },
 
@@ -420,7 +423,8 @@ export const RuleRQ = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.target !== undefined && (obj.target = message.target ? Target.toJSON(message.target) : undefined);
-    message.effect !== undefined && (obj.effect = effectToJSON(message.effect));
+    message.effect !== undefined &&
+      (obj.effect = message.effect !== undefined ? effectToJSON(message.effect) : undefined);
     message.condition !== undefined && (obj.condition = message.condition);
     message.contextQuery !== undefined &&
       (obj.contextQuery = message.contextQuery ? ContextQuery.toJSON(message.contextQuery) : undefined);
@@ -434,22 +438,22 @@ export const RuleRQ = {
 
   fromPartial(object: DeepPartial<RuleRQ>): RuleRQ {
     const message = createBaseRuleRQ();
-    message.id = object.id ?? "";
+    message.id = object.id ?? undefined;
     message.target = (object.target !== undefined && object.target !== null)
       ? Target.fromPartial(object.target)
       : undefined;
-    message.effect = object.effect ?? Effect.PERMIT;
-    message.condition = object.condition ?? "";
+    message.effect = object.effect ?? undefined;
+    message.condition = object.condition ?? undefined;
     message.contextQuery = (object.contextQuery !== undefined && object.contextQuery !== null)
       ? ContextQuery.fromPartial(object.contextQuery)
       : undefined;
-    message.evaluationCacheable = object.evaluationCacheable ?? false;
+    message.evaluationCacheable = object.evaluationCacheable ?? undefined;
     return message;
   },
 };
 
 function createBaseRuleList(): RuleList {
-  return { items: [], totalCount: 0, subject: undefined };
+  return { items: [], totalCount: undefined, subject: undefined };
 }
 
 export const RuleList = {
@@ -457,7 +461,7 @@ export const RuleList = {
     for (const v of message.items) {
       Rule.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.totalCount !== 0) {
+    if (message.totalCount !== undefined) {
       writer.uint32(16).uint32(message.totalCount);
     }
     if (message.subject !== undefined) {
@@ -493,7 +497,7 @@ export const RuleList = {
   fromJSON(object: any): RuleList {
     return {
       items: Array.isArray(object?.items) ? object.items.map((e: any) => Rule.fromJSON(e)) : [],
-      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : 0,
+      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
@@ -517,7 +521,7 @@ export const RuleList = {
   fromPartial(object: DeepPartial<RuleList>): RuleList {
     const message = createBaseRuleList();
     message.items = object.items?.map((e) => Rule.fromPartial(e)) || [];
-    message.totalCount = object.totalCount ?? 0;
+    message.totalCount = object.totalCount ?? undefined;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
@@ -670,7 +674,7 @@ export const RuleResponse = {
 };
 
 function createBaseContextQuery(): ContextQuery {
-  return { filters: [], query: "" };
+  return { filters: [], query: undefined };
 }
 
 export const ContextQuery = {
@@ -678,7 +682,7 @@ export const ContextQuery = {
     for (const v of message.filters) {
       FilterOp.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.query !== "") {
+    if (message.query !== undefined) {
       writer.uint32(18).string(message.query);
     }
     return writer;
@@ -708,7 +712,7 @@ export const ContextQuery = {
   fromJSON(object: any): ContextQuery {
     return {
       filters: Array.isArray(object?.filters) ? object.filters.map((e: any) => FilterOp.fromJSON(e)) : [],
-      query: isSet(object.query) ? String(object.query) : "",
+      query: isSet(object.query) ? String(object.query) : undefined,
     };
   },
 
@@ -730,7 +734,7 @@ export const ContextQuery = {
   fromPartial(object: DeepPartial<ContextQuery>): ContextQuery {
     const message = createBaseContextQuery();
     message.filters = object.filters?.map((e) => FilterOp.fromPartial(e)) || [];
-    message.query = object.query ?? "";
+    message.query = object.query ?? undefined;
     return message;
   },
 };
@@ -895,7 +899,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "meta",
         "number": 2,
@@ -904,10 +908,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.meta.Meta",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "meta",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "name",
         "number": 3,
@@ -916,10 +920,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "name",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "description",
         "number": 4,
@@ -928,10 +932,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "description",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "target",
         "number": 5,
@@ -940,10 +944,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.rule.Target",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 4,
         "jsonName": "target",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "context_query",
         "number": 6,
@@ -952,10 +956,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.rule.ContextQuery",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 5,
         "jsonName": "contextQuery",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "condition",
         "number": 7,
@@ -964,10 +968,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 6,
         "jsonName": "condition",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "effect",
         "number": 8,
@@ -976,10 +980,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.rule.Effect",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 7,
         "jsonName": "effect",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "evaluation_cacheable",
         "number": 9,
@@ -988,16 +992,26 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 8,
         "jsonName": "evaluationCacheable",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [
+        { "name": "_id", "options": undefined },
+        { "name": "_meta", "options": undefined },
+        { "name": "_name", "options": undefined },
+        { "name": "_description", "options": undefined },
+        { "name": "_target", "options": undefined },
+        { "name": "_context_query", "options": undefined },
+        { "name": "_condition", "options": undefined },
+        { "name": "_effect", "options": undefined },
+        { "name": "_evaluation_cacheable", "options": undefined },
+      ],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1014,7 +1028,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "id",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "target",
         "number": 2,
@@ -1023,10 +1037,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.rule.Target",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 1,
         "jsonName": "target",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "effect",
         "number": 3,
@@ -1035,10 +1049,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.rule.Effect",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 2,
         "jsonName": "effect",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "condition",
         "number": 4,
@@ -1047,10 +1061,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 3,
         "jsonName": "condition",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "context_query",
         "number": 5,
@@ -1059,10 +1073,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.rule.ContextQuery",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 4,
         "jsonName": "contextQuery",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "evaluation_cacheable",
         "number": 6,
@@ -1071,16 +1085,23 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
+        "oneofIndex": 5,
         "jsonName": "evaluationCacheable",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [
+        { "name": "_id", "options": undefined },
+        { "name": "_target", "options": undefined },
+        { "name": "_effect", "options": undefined },
+        { "name": "_condition", "options": undefined },
+        { "name": "_context_query", "options": undefined },
+        { "name": "_evaluation_cacheable", "options": undefined },
+      ],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1109,7 +1130,7 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "totalCount",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }, {
         "name": "subject",
         "number": 3,
@@ -1127,7 +1148,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_total_count", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1238,13 +1259,13 @@ export const protoMetadata: ProtoMetadata = {
         "oneofIndex": 0,
         "jsonName": "query",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_query", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1317,7 +1338,7 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 6],
-        "span": [36, 2, 23],
+        "span": [36, 2, 32],
         "leadingComments": "",
         "trailingComments": " JS code\n",
         "leadingDetachedComments": [],

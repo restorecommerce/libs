@@ -37,7 +37,7 @@ message Deleted {
   string id = 1;
 }
 
-service Service {
+service ManufacturerService {
   option (io.restorecommerce.options.service_name) = "manufacturer";
 
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ManufacturerListResponse)  {

@@ -62,10 +62,9 @@ service FulfillmentService {
 }
 
 enum State {
-  Undefined = 0;
+  Created = 0;
   Invalid = 1;
   Failed = 2;
-  Created = 3;
   Submitted = 4;
   Shipping = 5;
   Fulfilled = 6;

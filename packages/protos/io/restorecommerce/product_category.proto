@@ -56,7 +56,7 @@ message Parent {
   optional string parent_id = 1;
 }
 
-service Service {
+service ProductCategoryService {
   option (io.restorecommerce.options.service_name) = "product_category";
 
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ProductCategoryListResponse) {

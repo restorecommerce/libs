@@ -39,7 +39,7 @@ message Deleted {
   string id = 1;
 }
 
-service Service {
+service ProductPrototypeService {
   option (io.restorecommerce.options.service_name) = "product_prototype";
 
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ProductPrototypeListResponse) {

@@ -2,9 +2,12 @@ syntax = "proto3";
 
 package io.restorecommerce.product;
 
+import "google/protobuf/any.proto";
+
 import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/image.proto";
+import "io/restorecommerce/file.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
 import "io/restorecommerce/attribute.proto";
@@ -14,7 +17,7 @@ import "io/restorecommerce/options.proto";
 // Used by resolvers
 import "io/restorecommerce/manufacturer.proto";
 
-service Service {
+service ProductService {
   option (io.restorecommerce.options.service_name) = "product";
 
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ProductListResponse) {
@@ -24,6 +27,37 @@ service Service {
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
   rpc Update (ProductList) returns (ProductListResponse);
   rpc Upsert (ProductList) returns (ProductListResponse);
+}
+
+enum AssociationType {
+  Miscellaneous = 0;
+  Accesory = 1;
+  Recommendation = 2;
+}
+
+message Association {
+  optional string product_id = 1 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.product.Product",
+      target_service: "catalog",
+      target_sub_service: "product",
+      target_method: "Read",
+      field_name: "product",
+    }
+  ];
+  AssociationType type = 2;
+  repeated string tags = 3;
+  google.protobuf.any.Any data = 4;
+}
+
+message Appendix {
+  optional int64 index = 1;
+  optional string name = 2;
+  optional string description = 3;
+  repeated string tags = 4;
+  optional string url = 5;
+  optional string content_type = 6;
+  optional io.restorecommerce.image.Image thumbnail = 7;
 }
 
 // Product resource entity
@@ -37,12 +71,15 @@ message Product {
   };
 
   optional string id = 1;
+  io.restorecommerce.meta.Meta meta = 2;
   oneof product_type {
-    IndividualProduct product = 2;
-    Bundle bundle = 3;
+    IndividualProduct product = 3;
+    Bundle bundle = 4;
   }
-  optional bool active = 4;
-  optional io.restorecommerce.meta.Meta meta = 5;
+  optional bool active = 5;
+  repeated string tags = 6;
+  repeated Association associations = 7;
+  google.protobuf.any.Any data = 8;
 }
 
 message IndividualProduct {
@@ -59,8 +96,24 @@ message IndividualProduct {
   ];
   optional string taric_code = 4;
   oneof classification {
-    Identifier prototype = 5;
-    Identifier category = 6;
+    string prototype_id = 5 [
+      (io.restorecommerce.options.resolver) = {
+        target_type: ".io.restorecommerce.product_prototype.ProductPrototype",
+        target_service: "catalog",
+        target_sub_service: "product_prototype",
+        target_method: "Read",
+        field_name: "prototype",
+      }
+    ];
+    string category_id = 6 [
+      (io.restorecommerce.options.resolver) = {
+        target_type: ".io.restorecommerce.product_category.ProductCategory",
+        target_service: "catalog",
+        target_sub_service: "product_category",
+        target_method: "Read",
+        field_name: "category",
+      }
+    ];
   }
   repeated string tax_ids = 7;
   optional string gtin = 8;
@@ -76,10 +129,6 @@ message PhysicalProduct {
 
 message VirtualProduct {
   repeated VirtualVariant variants = 1;
-}
-
-message Identifier {
-  optional string id = 1;
 }
 
 message ProductList {
@@ -113,11 +162,12 @@ message PhysicalVariant {
   optional double price = 5;
   optional bool sale = 6;
   optional double sale_price = 7;
-  repeated io.restorecommerce.image.Image image = 8;
-  optional string stock_keeping_unit = 9;
-  optional string template_variant = 10;
-  optional Package packaged = 11;
-  repeated io.restorecommerce.attribute.Attribute attributes = 12;
+  repeated io.restorecommerce.image.Image images = 8;
+  repeated io.restorecommerce.file.File files = 9;
+  optional string stock_keeping_unit = 10;
+  optional string template_variant = 11;
+  optional Package packaged = 12;
+  repeated io.restorecommerce.attribute.Attribute attributes = 13;
 }
 
 message VirtualVariant {
@@ -128,10 +178,11 @@ message VirtualVariant {
   optional double price = 5;
   optional bool sale = 6;
   optional double sale_price = 7;
-  repeated io.restorecommerce.image.Image image = 8;
-  optional string stock_keeping_unit = 9;
-  optional string template_variant = 10;
-  repeated io.restorecommerce.attribute.Attribute attributes = 11;
+  repeated io.restorecommerce.image.Image images = 8;
+  repeated io.restorecommerce.file.File files = 9;
+  optional string stock_keeping_unit = 10;
+  optional string template_variant = 11;
+  repeated io.restorecommerce.attribute.Attribute attributes = 12;
 }
 
 message Bundle {
@@ -144,7 +195,15 @@ message Bundle {
 }
 
 message BundleProduct {
-  optional string product_id = 1;
+  optional string product_id = 1 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.product.Product",
+      target_service: "catalog",
+      target_sub_service: "product",
+      target_method: "Read",
+      field_name: "product",
+    }
+  ];
   optional string variant_id = 2;
   optional uint32 quantity = 3;
   optional double tax_ratio = 4; //Discount in relation to the bundle price

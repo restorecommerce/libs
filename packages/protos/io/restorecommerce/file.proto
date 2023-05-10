@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package io.restorecommerce.file;
+
+message File {
+  optional string id = 1;
+  optional int64 index = 2;
+  optional string caption = 3;
+  optional string filename = 4;
+  optional string content_type = 5;
+  optional string url = 6;
+  optional int64 bytes = 7;
+  repeated string tags = 8;
+}
+
+message FileList {
+  repeated File items = 1;
+  optional uint32 total_count = 2;
+}
+
+message Deleted {
+  string id = 1;
+}

@@ -2,7 +2,6 @@ syntax = "proto3";
 
 package io.restorecommerce.image;
 
-// ProductCategory resource
 message Image {
   optional string id = 1;
   optional string caption = 2;
@@ -12,6 +11,8 @@ message Image {
   optional double width = 6;
   optional double height = 7;
   optional double length = 8;
+  repeated string tags = 9;
+  optional int64 index = 10;
 }
 
 message ImageList {

@@ -7,6 +7,7 @@ import "google/protobuf/any.proto";
 import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/image.proto";
+import "io/restorecommerce/options.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
 import "io/restorecommerce/attribute.proto";
@@ -78,8 +79,7 @@ message Product {
   optional bool active = 5;
   repeated string tags = 6;
   repeated Association associations = 7;
-  repeated Appendix appendix = 8;
-  google.protobuf.any.Any data = 9;
+  google.protobuf.any.Any data = 8;
 }
 
 message IndividualProduct {
@@ -162,11 +162,12 @@ message PhysicalVariant {
   optional double price = 5;
   optional bool sale = 6;
   optional double sale_price = 7;
-  repeated io.restorecommerce.image.Image image = 8;
-  optional string stock_keeping_unit = 9;
-  optional string template_variant = 10;
-  optional Package packaged = 11;
-  repeated io.restorecommerce.attribute.Attribute attributes = 12;
+  repeated io.restorecommerce.image.Image images = 8;
+  repeated io.restorecommerce.file.File files = 9;
+  optional string stock_keeping_unit = 10;
+  optional string template_variant = 11;
+  optional Package packaged = 12;
+  repeated io.restorecommerce.attribute.Attribute attributes = 13;
 }
 
 message VirtualVariant {
@@ -177,10 +178,11 @@ message VirtualVariant {
   optional double price = 5;
   optional bool sale = 6;
   optional double sale_price = 7;
-  repeated io.restorecommerce.image.Image image = 8;
-  optional string stock_keeping_unit = 9;
-  optional string template_variant = 10;
-  repeated io.restorecommerce.attribute.Attribute attributes = 11;
+  repeated io.restorecommerce.image.Image images = 8;
+  repeated io.restorecommerce.file.File files = 9;
+  optional string stock_keeping_unit = 10;
+  optional string template_variant = 11;
+  repeated io.restorecommerce.attribute.Attribute attributes = 12;
 }
 
 message Bundle {

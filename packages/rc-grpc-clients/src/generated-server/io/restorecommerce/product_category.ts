@@ -489,10 +489,10 @@ export const Parent = {
   },
 };
 
-export type ServiceDefinition = typeof ServiceDefinition;
-export const ServiceDefinition = {
-  name: "Service",
-  fullName: "io.restorecommerce.product_category.Service",
+export type ProductCategoryServiceDefinition = typeof ProductCategoryServiceDefinition;
+export const ProductCategoryServiceDefinition = {
+  name: "ProductCategoryService",
+  fullName: "io.restorecommerce.product_category.ProductCategoryService",
   methods: {
     read: {
       name: "Read",
@@ -537,7 +537,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
+export interface ProductCategoryServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<ProductCategoryListResponse>>;
   create(
     request: ProductCategoryList,
@@ -554,7 +554,7 @@ export interface ServiceImplementation<CallContextExt = {}> {
   ): Promise<DeepPartial<ProductCategoryListResponse>>;
 }
 
-export interface ServiceClient<CallOptionsExt = {}> {
+export interface ProductCategoryServiceClient<CallOptionsExt = {}> {
   read(request: DeepPartial<ReadRequest>, options?: CallOptions & CallOptionsExt): Promise<ProductCategoryListResponse>;
   create(
     request: DeepPartial<ProductCategoryList>,
@@ -896,7 +896,7 @@ export const protoMetadata: ProtoMetadata = {
     }],
     "enumType": [],
     "service": [{
-      "name": "Service",
+      "name": "ProductCategoryService",
       "method": [{
         "name": "Read",
         "inputType": ".io.restorecommerce.resourcebase.ReadRequest",
@@ -987,7 +987,10 @@ export const protoMetadata: ProtoMetadata = {
       },
     },
     services: {
-      "Service": { options: { "service_name": "product_category" }, methods: { "Read": { "is_query": true } } },
+      "ProductCategoryService": {
+        options: { "service_name": "product_category" },
+        methods: { "Read": { "is_query": true } },
+      },
     },
   },
 };

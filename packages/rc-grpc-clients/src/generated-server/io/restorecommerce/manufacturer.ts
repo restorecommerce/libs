@@ -391,10 +391,10 @@ export const Deleted = {
   },
 };
 
-export type ServiceDefinition = typeof ServiceDefinition;
-export const ServiceDefinition = {
-  name: "Service",
-  fullName: "io.restorecommerce.manufacturer.Service",
+export type ManufacturerServiceDefinition = typeof ManufacturerServiceDefinition;
+export const ManufacturerServiceDefinition = {
+  name: "ManufacturerService",
+  fullName: "io.restorecommerce.manufacturer.ManufacturerService",
   methods: {
     read: {
       name: "Read",
@@ -439,7 +439,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
+export interface ManufacturerServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<ManufacturerListResponse>>;
   create(
     request: ManufacturerList,
@@ -456,7 +456,7 @@ export interface ServiceImplementation<CallContextExt = {}> {
   ): Promise<DeepPartial<ManufacturerListResponse>>;
 }
 
-export interface ServiceClient<CallOptionsExt = {}> {
+export interface ManufacturerServiceClient<CallOptionsExt = {}> {
   read(request: DeepPartial<ReadRequest>, options?: CallOptions & CallOptionsExt): Promise<ManufacturerListResponse>;
   create(
     request: DeepPartial<ManufacturerList>,
@@ -724,7 +724,7 @@ export const protoMetadata: ProtoMetadata = {
     }],
     "enumType": [],
     "service": [{
-      "name": "Service",
+      "name": "ManufacturerService",
       "method": [{
         "name": "Read",
         "inputType": ".io.restorecommerce.resourcebase.ReadRequest",
@@ -785,7 +785,9 @@ export const protoMetadata: ProtoMetadata = {
   },
   dependencies: [protoMetadata1, protoMetadata2, protoMetadata3, protoMetadata4, protoMetadata5],
   options: {
-    services: { "Service": { options: { "service_name": "manufacturer" }, methods: { "Read": { "is_query": true } } } },
+    services: {
+      "ManufacturerService": { options: { "service_name": "manufacturer" }, methods: { "Read": { "is_query": true } } },
+    },
   },
 };
 

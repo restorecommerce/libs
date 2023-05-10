@@ -16,10 +16,9 @@ import { OperationStatus, protoMetadata as protoMetadata4, Status } from "./stat
 export const protobufPackage = "io.restorecommerce.fulfillment";
 
 export enum State {
-  Undefined = "Undefined",
+  Created = "Created",
   Invalid = "Invalid",
   Failed = "Failed",
-  Created = "Created",
   Submitted = "Submitted",
   Shipping = "Shipping",
   Fulfilled = "Fulfilled",
@@ -30,17 +29,14 @@ export enum State {
 export function stateFromJSON(object: any): State {
   switch (object) {
     case 0:
-    case "Undefined":
-      return State.Undefined;
+    case "Created":
+      return State.Created;
     case 1:
     case "Invalid":
       return State.Invalid;
     case 2:
     case "Failed":
       return State.Failed;
-    case 3:
-    case "Created":
-      return State.Created;
     case 4:
     case "Submitted":
       return State.Submitted;
@@ -62,14 +58,12 @@ export function stateFromJSON(object: any): State {
 
 export function stateToJSON(object: State): string {
   switch (object) {
-    case State.Undefined:
-      return "Undefined";
+    case State.Created:
+      return "Created";
     case State.Invalid:
       return "Invalid";
     case State.Failed:
       return "Failed";
-    case State.Created:
-      return "Created";
     case State.Submitted:
       return "Submitted";
     case State.Shipping:
@@ -86,14 +80,12 @@ export function stateToJSON(object: State): string {
 
 export function stateToNumber(object: State): number {
   switch (object) {
-    case State.Undefined:
+    case State.Created:
       return 0;
     case State.Invalid:
       return 1;
     case State.Failed:
       return 2;
-    case State.Created:
-      return 3;
     case State.Submitted:
       return 4;
     case State.Shipping:
@@ -2356,10 +2348,9 @@ export const protoMetadata: ProtoMetadata = {
     "enumType": [{
       "name": "State",
       "value": [
-        { "name": "Undefined", "number": 0, "options": undefined },
+        { "name": "Created", "number": 0, "options": undefined },
         { "name": "Invalid", "number": 1, "options": undefined },
         { "name": "Failed", "number": 2, "options": undefined },
-        { "name": "Created", "number": 3, "options": undefined },
         { "name": "Submitted", "number": 4, "options": undefined },
         { "name": "Shipping", "number": 5, "options": undefined },
         { "name": "Fulfilled", "number": 6, "options": undefined },
@@ -2489,55 +2480,55 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 2, 2, 4],
-        "span": [104, 2, 38],
+        "span": [103, 2, 38],
         "leadingComments": "",
         "trailingComments": "filled on Order\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 2, 2, 5],
-        "span": [105, 2, 27],
+        "span": [104, 2, 27],
         "leadingComments": "",
         "trailingComments": "update by Track\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 2, 2, 6],
-        "span": [106, 2, 55],
+        "span": [105, 2, 55],
         "leadingComments": "",
         "trailingComments": "API status\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 6],
-        "span": [134, 0, 150, 1],
+        "span": [133, 0, 149, 1],
         "leadingComments": "*\nThis is the message of how it get stored to the database\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 6, 2, 1],
-        "span": [144, 2, 31],
+        "span": [143, 2, 31],
         "leadingComments": "",
         "trailingComments": "filled by user\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 6, 2, 3],
-        "span": [146, 2, 28],
+        "span": [145, 2, 28],
         "leadingComments": "",
         "trailingComments": "filled by service\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 6, 2, 4],
-        "span": [147, 2, 33],
+        "span": [146, 2, 33],
         "leadingComments": "",
         "trailingComments": "filled by service\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 6, 2, 5],
-        "span": [148, 2, 27],
+        "span": [147, 2, 27],
         "leadingComments": "",
         "trailingComments": "filled by service\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 10, 2, 1],
-        "span": [171, 2, 39],
+        "span": [170, 2, 39],
         "leadingComments": "",
         "trailingComments": "optional\n",
         "leadingDetachedComments": [],

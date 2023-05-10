@@ -419,10 +419,10 @@ export const Deleted = {
   },
 };
 
-export type ServiceDefinition = typeof ServiceDefinition;
-export const ServiceDefinition = {
-  name: "Service",
-  fullName: "io.restorecommerce.product_prototype.Service",
+export type ProductPrototypeServiceDefinition = typeof ProductPrototypeServiceDefinition;
+export const ProductPrototypeServiceDefinition = {
+  name: "ProductPrototypeService",
+  fullName: "io.restorecommerce.product_prototype.ProductPrototypeService",
   methods: {
     read: {
       name: "Read",
@@ -467,7 +467,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
+export interface ProductPrototypeServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<ProductPrototypeListResponse>>;
   create(
     request: ProductPrototypeList,
@@ -484,7 +484,7 @@ export interface ServiceImplementation<CallContextExt = {}> {
   ): Promise<DeepPartial<ProductPrototypeListResponse>>;
 }
 
-export interface ServiceClient<CallOptionsExt = {}> {
+export interface ProductPrototypeServiceClient<CallOptionsExt = {}> {
   read(
     request: DeepPartial<ReadRequest>,
     options?: CallOptions & CallOptionsExt,
@@ -783,7 +783,7 @@ export const protoMetadata: ProtoMetadata = {
     }],
     "enumType": [],
     "service": [{
-      "name": "Service",
+      "name": "ProductPrototypeService",
       "method": [{
         "name": "Read",
         "inputType": ".io.restorecommerce.resourcebase.ReadRequest",
@@ -845,7 +845,10 @@ export const protoMetadata: ProtoMetadata = {
   dependencies: [protoMetadata1, protoMetadata2, protoMetadata3, protoMetadata4, protoMetadata5],
   options: {
     services: {
-      "Service": { options: { "service_name": "product_prototype" }, methods: { "Read": { "is_query": true } } },
+      "ProductPrototypeService": {
+        options: { "service_name": "product_prototype" },
+        methods: { "Read": { "is_query": true } },
+      },
     },
   },
 };

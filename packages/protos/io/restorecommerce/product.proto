@@ -3,7 +3,6 @@ syntax = "proto3";
 package io.restorecommerce.product;
 
 import "google/protobuf/any.proto";
-
 import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/image.proto";
@@ -47,7 +46,7 @@ message Association {
   ];
   AssociationType type = 2;
   repeated string tags = 3;
-  google.protobuf.any.Any data = 4;
+  google.protobuf.Any data = 4;
 }
 
 message Appendix {
@@ -79,7 +78,7 @@ message Product {
   optional bool active = 5;
   repeated string tags = 6;
   repeated Association associations = 7;
-  google.protobuf.any.Any data = 8;
+  google.protobuf.Any data = 8;
 }
 
 message IndividualProduct {

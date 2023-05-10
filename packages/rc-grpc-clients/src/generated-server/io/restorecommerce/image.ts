@@ -1,10 +1,10 @@
 /* eslint-disable */
+import * as Long from "long";
 import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
 
 export const protobufPackage = "io.restorecommerce.image";
 
-/** ProductCategory resource */
 export interface Image {
   id?: string | undefined;
   caption?: string | undefined;
@@ -14,6 +14,8 @@ export interface Image {
   width?: number | undefined;
   height?: number | undefined;
   length?: number | undefined;
+  tags: string[];
+  index?: number | undefined;
 }
 
 export interface ImageList {
@@ -35,6 +37,8 @@ function createBaseImage(): Image {
     width: undefined,
     height: undefined,
     length: undefined,
+    tags: [],
+    index: undefined,
   };
 }
 
@@ -63,6 +67,12 @@ export const Image = {
     }
     if (message.length !== undefined) {
       writer.uint32(65).double(message.length);
+    }
+    for (const v of message.tags) {
+      writer.uint32(74).string(v!);
+    }
+    if (message.index !== undefined) {
+      writer.uint32(80).int64(message.index);
     }
     return writer;
   },
@@ -98,6 +108,12 @@ export const Image = {
         case 8:
           message.length = reader.double();
           break;
+        case 9:
+          message.tags.push(reader.string());
+          break;
+        case 10:
+          message.index = longToNumber(reader.int64() as Long);
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -116,6 +132,8 @@ export const Image = {
       width: isSet(object.width) ? Number(object.width) : undefined,
       height: isSet(object.height) ? Number(object.height) : undefined,
       length: isSet(object.length) ? Number(object.length) : undefined,
+      tags: Array.isArray(object?.tags) ? object.tags.map((e: any) => String(e)) : [],
+      index: isSet(object.index) ? Number(object.index) : undefined,
     };
   },
 
@@ -129,6 +147,12 @@ export const Image = {
     message.width !== undefined && (obj.width = message.width);
     message.height !== undefined && (obj.height = message.height);
     message.length !== undefined && (obj.length = message.length);
+    if (message.tags) {
+      obj.tags = message.tags.map((e) => e);
+    } else {
+      obj.tags = [];
+    }
+    message.index !== undefined && (obj.index = Math.round(message.index));
     return obj;
   },
 
@@ -146,6 +170,8 @@ export const Image = {
     message.width = object.width ?? undefined;
     message.height = object.height ?? undefined;
     message.length = object.length ?? undefined;
+    message.tags = object.tags?.map((e) => e) || [];
+    message.index = object.index ?? undefined;
     return message;
   },
 };
@@ -393,6 +419,30 @@ export const protoMetadata: ProtoMetadata = {
         "jsonName": "length",
         "options": undefined,
         "proto3Optional": true,
+      }, {
+        "name": "tags",
+        "number": 9,
+        "label": 3,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "tags",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "index",
+        "number": 10,
+        "label": 1,
+        "type": 3,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 8,
+        "jsonName": "index",
+        "options": undefined,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
@@ -407,6 +457,7 @@ export const protoMetadata: ProtoMetadata = {
         { "name": "_width", "options": undefined },
         { "name": "_height", "options": undefined },
         { "name": "_length", "options": undefined },
+        { "name": "_index", "options": undefined },
       ],
       "options": undefined,
       "reservedRange": [],
@@ -474,15 +525,7 @@ export const protoMetadata: ProtoMetadata = {
     "service": [],
     "extension": [],
     "options": undefined,
-    "sourceCodeInfo": {
-      "location": [{
-        "path": [4, 0],
-        "span": [5, 0, 14, 1],
-        "leadingComments": " ProductCategory resource\n",
-        "trailingComments": "",
-        "leadingDetachedComments": [],
-      }],
-    },
+    "sourceCodeInfo": { "location": [] },
     "syntax": "proto3",
   }),
   references: {
@@ -493,12 +536,45 @@ export const protoMetadata: ProtoMetadata = {
   dependencies: [],
 };
 
+declare var self: any | undefined;
+declare var window: any | undefined;
+declare var global: any | undefined;
+var tsProtoGlobalThis: any = (() => {
+  if (typeof globalThis !== "undefined") {
+    return globalThis;
+  }
+  if (typeof self !== "undefined") {
+    return self;
+  }
+  if (typeof window !== "undefined") {
+    return window;
+  }
+  if (typeof global !== "undefined") {
+    return global;
+  }
+  throw "Unable to locate global object";
+})();
+
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
 export type DeepPartial<T> = T extends Builtin ? T
   : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
   : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+function longToNumber(long: Long): number {
+  if (long.gt(Number.MAX_SAFE_INTEGER)) {
+    throw new tsProtoGlobalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
+  }
+  return long.toNumber();
+}
+
+// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
+// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
+}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

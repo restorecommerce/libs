@@ -3,84 +3,74 @@ import * as Long from "long";
 import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
 
-export const protobufPackage = "io.restorecommerce.image";
+export const protobufPackage = "io.restorecommerce.file";
 
-export interface Image {
+export interface File {
   id?: string | undefined;
+  index?: number | undefined;
   caption?: string | undefined;
   filename?: string | undefined;
-  contentType?: string | undefined;
+  content_type?: string | undefined;
   url?: string | undefined;
-  width?: number | undefined;
-  height?: number | undefined;
-  length?: number | undefined;
+  bytes?: number | undefined;
   tags: string[];
-  index?: number | undefined;
 }
 
-export interface ImageList {
-  items: Image[];
-  totalCount?: number | undefined;
+export interface FileList {
+  items: File[];
+  total_count?: number | undefined;
 }
 
 export interface Deleted {
   id: string;
 }
 
-function createBaseImage(): Image {
+function createBaseFile(): File {
   return {
     id: undefined,
+    index: undefined,
     caption: undefined,
     filename: undefined,
-    contentType: undefined,
+    content_type: undefined,
     url: undefined,
-    width: undefined,
-    height: undefined,
-    length: undefined,
+    bytes: undefined,
     tags: [],
-    index: undefined,
   };
 }
 
-export const Image = {
-  encode(message: Image, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const File = {
+  encode(message: File, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
+    if (message.index !== undefined) {
+      writer.uint32(16).int64(message.index);
+    }
     if (message.caption !== undefined) {
-      writer.uint32(18).string(message.caption);
+      writer.uint32(26).string(message.caption);
     }
     if (message.filename !== undefined) {
-      writer.uint32(26).string(message.filename);
+      writer.uint32(34).string(message.filename);
     }
-    if (message.contentType !== undefined) {
-      writer.uint32(34).string(message.contentType);
+    if (message.content_type !== undefined) {
+      writer.uint32(42).string(message.content_type);
     }
     if (message.url !== undefined) {
-      writer.uint32(42).string(message.url);
+      writer.uint32(50).string(message.url);
     }
-    if (message.width !== undefined) {
-      writer.uint32(49).double(message.width);
-    }
-    if (message.height !== undefined) {
-      writer.uint32(57).double(message.height);
-    }
-    if (message.length !== undefined) {
-      writer.uint32(65).double(message.length);
+    if (message.bytes !== undefined) {
+      writer.uint32(56).int64(message.bytes);
     }
     for (const v of message.tags) {
-      writer.uint32(74).string(v!);
-    }
-    if (message.index !== undefined) {
-      writer.uint32(80).int64(message.index);
+      writer.uint32(66).string(v!);
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): Image {
+  decode(input: _m0.Reader | Uint8Array, length?: number): File {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseImage();
+    const message = createBaseFile();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -88,31 +78,25 @@ export const Image = {
           message.id = reader.string();
           break;
         case 2:
-          message.caption = reader.string();
+          message.index = longToNumber(reader.int64() as Long);
           break;
         case 3:
-          message.filename = reader.string();
+          message.caption = reader.string();
           break;
         case 4:
-          message.contentType = reader.string();
+          message.filename = reader.string();
           break;
         case 5:
-          message.url = reader.string();
+          message.content_type = reader.string();
           break;
         case 6:
-          message.width = reader.double();
+          message.url = reader.string();
           break;
         case 7:
-          message.height = reader.double();
+          message.bytes = longToNumber(reader.int64() as Long);
           break;
         case 8:
-          message.length = reader.double();
-          break;
-        case 9:
           message.tags.push(reader.string());
-          break;
-        case 10:
-          message.index = longToNumber(reader.int64() as Long);
           break;
         default:
           reader.skipType(tag & 7);
@@ -122,87 +106,81 @@ export const Image = {
     return message;
   },
 
-  fromJSON(object: any): Image {
+  fromJSON(object: any): File {
     return {
       id: isSet(object.id) ? String(object.id) : undefined,
+      index: isSet(object.index) ? Number(object.index) : undefined,
       caption: isSet(object.caption) ? String(object.caption) : undefined,
       filename: isSet(object.filename) ? String(object.filename) : undefined,
-      contentType: isSet(object.contentType) ? String(object.contentType) : undefined,
+      content_type: isSet(object.content_type) ? String(object.content_type) : undefined,
       url: isSet(object.url) ? String(object.url) : undefined,
-      width: isSet(object.width) ? Number(object.width) : undefined,
-      height: isSet(object.height) ? Number(object.height) : undefined,
-      length: isSet(object.length) ? Number(object.length) : undefined,
+      bytes: isSet(object.bytes) ? Number(object.bytes) : undefined,
       tags: Array.isArray(object?.tags) ? object.tags.map((e: any) => String(e)) : [],
-      index: isSet(object.index) ? Number(object.index) : undefined,
     };
   },
 
-  toJSON(message: Image): unknown {
+  toJSON(message: File): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
+    message.index !== undefined && (obj.index = Math.round(message.index));
     message.caption !== undefined && (obj.caption = message.caption);
     message.filename !== undefined && (obj.filename = message.filename);
-    message.contentType !== undefined && (obj.contentType = message.contentType);
+    message.content_type !== undefined && (obj.content_type = message.content_type);
     message.url !== undefined && (obj.url = message.url);
-    message.width !== undefined && (obj.width = message.width);
-    message.height !== undefined && (obj.height = message.height);
-    message.length !== undefined && (obj.length = message.length);
+    message.bytes !== undefined && (obj.bytes = Math.round(message.bytes));
     if (message.tags) {
       obj.tags = message.tags.map((e) => e);
     } else {
       obj.tags = [];
     }
-    message.index !== undefined && (obj.index = Math.round(message.index));
     return obj;
   },
 
-  create(base?: DeepPartial<Image>): Image {
-    return Image.fromPartial(base ?? {});
+  create(base?: DeepPartial<File>): File {
+    return File.fromPartial(base ?? {});
   },
 
-  fromPartial(object: DeepPartial<Image>): Image {
-    const message = createBaseImage();
+  fromPartial(object: DeepPartial<File>): File {
+    const message = createBaseFile();
     message.id = object.id ?? undefined;
+    message.index = object.index ?? undefined;
     message.caption = object.caption ?? undefined;
     message.filename = object.filename ?? undefined;
-    message.contentType = object.contentType ?? undefined;
+    message.content_type = object.content_type ?? undefined;
     message.url = object.url ?? undefined;
-    message.width = object.width ?? undefined;
-    message.height = object.height ?? undefined;
-    message.length = object.length ?? undefined;
+    message.bytes = object.bytes ?? undefined;
     message.tags = object.tags?.map((e) => e) || [];
-    message.index = object.index ?? undefined;
     return message;
   },
 };
 
-function createBaseImageList(): ImageList {
-  return { items: [], totalCount: undefined };
+function createBaseFileList(): FileList {
+  return { items: [], total_count: undefined };
 }
 
-export const ImageList = {
-  encode(message: ImageList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const FileList = {
+  encode(message: FileList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.items) {
-      Image.encode(v!, writer.uint32(10).fork()).ldelim();
+      File.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    if (message.totalCount !== undefined) {
-      writer.uint32(16).uint32(message.totalCount);
+    if (message.total_count !== undefined) {
+      writer.uint32(16).uint32(message.total_count);
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): ImageList {
+  decode(input: _m0.Reader | Uint8Array, length?: number): FileList {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseImageList();
+    const message = createBaseFileList();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.items.push(Image.decode(reader, reader.uint32()));
+          message.items.push(File.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.totalCount = reader.uint32();
+          message.total_count = reader.uint32();
           break;
         default:
           reader.skipType(tag & 7);
@@ -212,32 +190,32 @@ export const ImageList = {
     return message;
   },
 
-  fromJSON(object: any): ImageList {
+  fromJSON(object: any): FileList {
     return {
-      items: Array.isArray(object?.items) ? object.items.map((e: any) => Image.fromJSON(e)) : [],
-      totalCount: isSet(object.totalCount) ? Number(object.totalCount) : undefined,
+      items: Array.isArray(object?.items) ? object.items.map((e: any) => File.fromJSON(e)) : [],
+      total_count: isSet(object.total_count) ? Number(object.total_count) : undefined,
     };
   },
 
-  toJSON(message: ImageList): unknown {
+  toJSON(message: FileList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) => e ? Image.toJSON(e) : undefined);
+      obj.items = message.items.map((e) => e ? File.toJSON(e) : undefined);
     } else {
       obj.items = [];
     }
-    message.totalCount !== undefined && (obj.totalCount = Math.round(message.totalCount));
+    message.total_count !== undefined && (obj.total_count = Math.round(message.total_count));
     return obj;
   },
 
-  create(base?: DeepPartial<ImageList>): ImageList {
-    return ImageList.fromPartial(base ?? {});
+  create(base?: DeepPartial<FileList>): FileList {
+    return FileList.fromPartial(base ?? {});
   },
 
-  fromPartial(object: DeepPartial<ImageList>): ImageList {
-    const message = createBaseImageList();
-    message.items = object.items?.map((e) => Image.fromPartial(e)) || [];
-    message.totalCount = object.totalCount ?? undefined;
+  fromPartial(object: DeepPartial<FileList>): FileList {
+    const message = createBaseFileList();
+    message.items = object.items?.map((e) => File.fromPartial(e)) || [];
+    message.total_count = object.total_count ?? undefined;
     return message;
   },
 };
@@ -316,13 +294,13 @@ export interface ProtoMetadata {
 
 export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto1.fromPartial({
-    "name": "io/restorecommerce/image.proto",
-    "package": "io.restorecommerce.image",
+    "name": "io/restorecommerce/file.proto",
+    "package": "io.restorecommerce.file",
     "dependency": [],
     "publicDependency": [],
     "weakDependency": [],
     "messageType": [{
-      "name": "Image",
+      "name": "File",
       "field": [{
         "name": "id",
         "number": 1,
@@ -336,19 +314,19 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "caption",
+        "name": "index",
         "number": 2,
         "label": 1,
-        "type": 9,
+        "type": 3,
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 1,
-        "jsonName": "caption",
+        "jsonName": "index",
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "filename",
+        "name": "caption",
         "number": 3,
         "label": 1,
         "type": 9,
@@ -356,11 +334,11 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 2,
-        "jsonName": "filename",
+        "jsonName": "caption",
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "content_type",
+        "name": "filename",
         "number": 4,
         "label": 1,
         "type": 9,
@@ -368,11 +346,11 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 3,
-        "jsonName": "contentType",
+        "jsonName": "filename",
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "url",
+        "name": "content_type",
         "number": 5,
         "label": 1,
         "type": 9,
@@ -380,48 +358,36 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 4,
-        "jsonName": "url",
+        "jsonName": "contentType",
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "width",
+        "name": "url",
         "number": 6,
         "label": 1,
-        "type": 1,
+        "type": 9,
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 5,
-        "jsonName": "width",
+        "jsonName": "url",
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "height",
+        "name": "bytes",
         "number": 7,
         "label": 1,
-        "type": 1,
+        "type": 3,
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 6,
-        "jsonName": "height",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
-        "name": "length",
-        "number": 8,
-        "label": 1,
-        "type": 1,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 7,
-        "jsonName": "length",
+        "jsonName": "bytes",
         "options": undefined,
         "proto3Optional": true,
       }, {
         "name": "tags",
-        "number": 9,
+        "number": 8,
         "label": 3,
         "type": 9,
         "typeName": "",
@@ -431,18 +397,6 @@ export const protoMetadata: ProtoMetadata = {
         "jsonName": "tags",
         "options": undefined,
         "proto3Optional": false,
-      }, {
-        "name": "index",
-        "number": 10,
-        "label": 1,
-        "type": 3,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 8,
-        "jsonName": "index",
-        "options": undefined,
-        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
@@ -450,26 +404,24 @@ export const protoMetadata: ProtoMetadata = {
       "extensionRange": [],
       "oneofDecl": [
         { "name": "_id", "options": undefined },
+        { "name": "_index", "options": undefined },
         { "name": "_caption", "options": undefined },
         { "name": "_filename", "options": undefined },
         { "name": "_content_type", "options": undefined },
         { "name": "_url", "options": undefined },
-        { "name": "_width", "options": undefined },
-        { "name": "_height", "options": undefined },
-        { "name": "_length", "options": undefined },
-        { "name": "_index", "options": undefined },
+        { "name": "_bytes", "options": undefined },
       ],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
     }, {
-      "name": "ImageList",
+      "name": "FileList",
       "field": [{
         "name": "items",
         "number": 1,
         "label": 3,
         "type": 11,
-        "typeName": ".io.restorecommerce.image.Image",
+        "typeName": ".io.restorecommerce.file.File",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
@@ -529,9 +481,9 @@ export const protoMetadata: ProtoMetadata = {
     "syntax": "proto3",
   }),
   references: {
-    ".io.restorecommerce.image.Image": Image,
-    ".io.restorecommerce.image.ImageList": ImageList,
-    ".io.restorecommerce.image.Deleted": Deleted,
+    ".io.restorecommerce.file.File": File,
+    ".io.restorecommerce.file.FileList": FileList,
+    ".io.restorecommerce.file.Deleted": Deleted,
   },
   dependencies: [],
 };

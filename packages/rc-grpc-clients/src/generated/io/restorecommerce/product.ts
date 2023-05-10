@@ -1,26 +1,102 @@
 /* eslint-disable */
+import * as Long from "long";
 import type { CallContext, CallOptions } from "nice-grpc-common";
 import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import { Attribute, protoMetadata as protoMetadata6 } from "./attribute";
-import { protoMetadata as protoMetadata4, Subject } from "./auth";
-import { BoundingBox3D, protoMetadata as protoMetadata7 } from "./geometry";
-import { Image, protoMetadata as protoMetadata3 } from "./image";
-import { protoMetadata as protoMetadata9 } from "./manufacturer";
-import { Meta, protoMetadata as protoMetadata2 } from "./meta";
-import { KafkaSubscription, protoMetadata as protoMetadata8, Resolver } from "./options";
-import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata1, ReadRequest } from "./resource_base";
-import { OperationStatus, protoMetadata as protoMetadata5, Status } from "./status";
+import { Any, protoMetadata as protoMetadata1 } from "../../google/protobuf/any";
+import { Attribute, protoMetadata as protoMetadata8 } from "./attribute";
+import { protoMetadata as protoMetadata6, Subject } from "./auth";
+import { File, protoMetadata as protoMetadata5 } from "./file";
+import { BoundingBox3D, protoMetadata as protoMetadata9 } from "./geometry";
+import { Image, protoMetadata as protoMetadata4 } from "./image";
+import { protoMetadata as protoMetadata11 } from "./manufacturer";
+import { Meta, protoMetadata as protoMetadata3 } from "./meta";
+import { KafkaSubscription, protoMetadata as protoMetadata10, Resolver } from "./options";
+import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata2, ReadRequest } from "./resource_base";
+import { OperationStatus, protoMetadata as protoMetadata7, Status } from "./status";
 
 export const protobufPackage = "io.restorecommerce.product";
+
+export enum AssociationType {
+  Miscellaneous = "Miscellaneous",
+  Accesory = "Accesory",
+  Recommendation = "Recommendation",
+  UNRECOGNIZED = "UNRECOGNIZED",
+}
+
+export function associationTypeFromJSON(object: any): AssociationType {
+  switch (object) {
+    case 0:
+    case "Miscellaneous":
+      return AssociationType.Miscellaneous;
+    case 1:
+    case "Accesory":
+      return AssociationType.Accesory;
+    case 2:
+    case "Recommendation":
+      return AssociationType.Recommendation;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return AssociationType.UNRECOGNIZED;
+  }
+}
+
+export function associationTypeToJSON(object: AssociationType): string {
+  switch (object) {
+    case AssociationType.Miscellaneous:
+      return "Miscellaneous";
+    case AssociationType.Accesory:
+      return "Accesory";
+    case AssociationType.Recommendation:
+      return "Recommendation";
+    case AssociationType.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
+
+export function associationTypeToNumber(object: AssociationType): number {
+  switch (object) {
+    case AssociationType.Miscellaneous:
+      return 0;
+    case AssociationType.Accesory:
+      return 1;
+    case AssociationType.Recommendation:
+      return 2;
+    case AssociationType.UNRECOGNIZED:
+    default:
+      return -1;
+  }
+}
+
+export interface Association {
+  productId?: string | undefined;
+  type: AssociationType;
+  tags: string[];
+  data?: Any;
+}
+
+export interface Appendix {
+  index?: number | undefined;
+  name?: string | undefined;
+  description?: string | undefined;
+  tags: string[];
+  url?: string | undefined;
+  contentType?: string | undefined;
+  thumbnail?: Image | undefined;
+}
 
 /** Product resource entity */
 export interface Product {
   id?: string | undefined;
+  meta?: Meta;
   product?: IndividualProduct | undefined;
   bundle?: Bundle | undefined;
   active?: boolean | undefined;
-  meta?: Meta | undefined;
+  tags: string[];
+  associations: Association[];
+  data?: Any;
 }
 
 export interface IndividualProduct {
@@ -28,8 +104,8 @@ export interface IndividualProduct {
   description?: string | undefined;
   manufacturerId?: string | undefined;
   taricCode?: string | undefined;
-  prototype?: Identifier | undefined;
-  category?: Identifier | undefined;
+  prototypeId?: string | undefined;
+  categoryId?: string | undefined;
   taxIds: string[];
   gtin?: string | undefined;
   physical?: PhysicalProduct | undefined;
@@ -42,10 +118,6 @@ export interface PhysicalProduct {
 
 export interface VirtualProduct {
   variants: VirtualVariant[];
-}
-
-export interface Identifier {
-  id?: string | undefined;
 }
 
 export interface ProductList {
@@ -79,7 +151,8 @@ export interface PhysicalVariant {
   price?: number | undefined;
   sale?: boolean | undefined;
   salePrice?: number | undefined;
-  image: Image[];
+  images: Image[];
+  files: File[];
   stockKeepingUnit?: string | undefined;
   templateVariant?: string | undefined;
   packaged?: Package | undefined;
@@ -94,7 +167,8 @@ export interface VirtualVariant {
   price?: number | undefined;
   sale?: boolean | undefined;
   salePrice?: number | undefined;
-  image: Image[];
+  images: Image[];
+  files: File[];
   stockKeepingUnit?: string | undefined;
   templateVariant?: string | undefined;
   attributes: Attribute[];
@@ -123,8 +197,223 @@ export interface Deleted {
   id?: string | undefined;
 }
 
+function createBaseAssociation(): Association {
+  return { productId: undefined, type: AssociationType.Miscellaneous, tags: [], data: undefined };
+}
+
+export const Association = {
+  encode(message: Association, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.productId !== undefined) {
+      writer.uint32(10).string(message.productId);
+    }
+    if (message.type !== AssociationType.Miscellaneous) {
+      writer.uint32(16).int32(associationTypeToNumber(message.type));
+    }
+    for (const v of message.tags) {
+      writer.uint32(26).string(v!);
+    }
+    if (message.data !== undefined) {
+      Any.encode(message.data, writer.uint32(34).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): Association {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseAssociation();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.productId = reader.string();
+          break;
+        case 2:
+          message.type = associationTypeFromJSON(reader.int32());
+          break;
+        case 3:
+          message.tags.push(reader.string());
+          break;
+        case 4:
+          message.data = Any.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): Association {
+    return {
+      productId: isSet(object.productId) ? String(object.productId) : undefined,
+      type: isSet(object.type) ? associationTypeFromJSON(object.type) : AssociationType.Miscellaneous,
+      tags: Array.isArray(object?.tags) ? object.tags.map((e: any) => String(e)) : [],
+      data: isSet(object.data) ? Any.fromJSON(object.data) : undefined,
+    };
+  },
+
+  toJSON(message: Association): unknown {
+    const obj: any = {};
+    message.productId !== undefined && (obj.productId = message.productId);
+    message.type !== undefined && (obj.type = associationTypeToJSON(message.type));
+    if (message.tags) {
+      obj.tags = message.tags.map((e) => e);
+    } else {
+      obj.tags = [];
+    }
+    message.data !== undefined && (obj.data = message.data ? Any.toJSON(message.data) : undefined);
+    return obj;
+  },
+
+  create(base?: DeepPartial<Association>): Association {
+    return Association.fromPartial(base ?? {});
+  },
+
+  fromPartial(object: DeepPartial<Association>): Association {
+    const message = createBaseAssociation();
+    message.productId = object.productId ?? undefined;
+    message.type = object.type ?? AssociationType.Miscellaneous;
+    message.tags = object.tags?.map((e) => e) || [];
+    message.data = (object.data !== undefined && object.data !== null) ? Any.fromPartial(object.data) : undefined;
+    return message;
+  },
+};
+
+function createBaseAppendix(): Appendix {
+  return {
+    index: undefined,
+    name: undefined,
+    description: undefined,
+    tags: [],
+    url: undefined,
+    contentType: undefined,
+    thumbnail: undefined,
+  };
+}
+
+export const Appendix = {
+  encode(message: Appendix, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.index !== undefined) {
+      writer.uint32(8).int64(message.index);
+    }
+    if (message.name !== undefined) {
+      writer.uint32(18).string(message.name);
+    }
+    if (message.description !== undefined) {
+      writer.uint32(26).string(message.description);
+    }
+    for (const v of message.tags) {
+      writer.uint32(34).string(v!);
+    }
+    if (message.url !== undefined) {
+      writer.uint32(42).string(message.url);
+    }
+    if (message.contentType !== undefined) {
+      writer.uint32(50).string(message.contentType);
+    }
+    if (message.thumbnail !== undefined) {
+      Image.encode(message.thumbnail, writer.uint32(58).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): Appendix {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseAppendix();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.index = longToNumber(reader.int64() as Long);
+          break;
+        case 2:
+          message.name = reader.string();
+          break;
+        case 3:
+          message.description = reader.string();
+          break;
+        case 4:
+          message.tags.push(reader.string());
+          break;
+        case 5:
+          message.url = reader.string();
+          break;
+        case 6:
+          message.contentType = reader.string();
+          break;
+        case 7:
+          message.thumbnail = Image.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): Appendix {
+    return {
+      index: isSet(object.index) ? Number(object.index) : undefined,
+      name: isSet(object.name) ? String(object.name) : undefined,
+      description: isSet(object.description) ? String(object.description) : undefined,
+      tags: Array.isArray(object?.tags) ? object.tags.map((e: any) => String(e)) : [],
+      url: isSet(object.url) ? String(object.url) : undefined,
+      contentType: isSet(object.contentType) ? String(object.contentType) : undefined,
+      thumbnail: isSet(object.thumbnail) ? Image.fromJSON(object.thumbnail) : undefined,
+    };
+  },
+
+  toJSON(message: Appendix): unknown {
+    const obj: any = {};
+    message.index !== undefined && (obj.index = Math.round(message.index));
+    message.name !== undefined && (obj.name = message.name);
+    message.description !== undefined && (obj.description = message.description);
+    if (message.tags) {
+      obj.tags = message.tags.map((e) => e);
+    } else {
+      obj.tags = [];
+    }
+    message.url !== undefined && (obj.url = message.url);
+    message.contentType !== undefined && (obj.contentType = message.contentType);
+    message.thumbnail !== undefined &&
+      (obj.thumbnail = message.thumbnail ? Image.toJSON(message.thumbnail) : undefined);
+    return obj;
+  },
+
+  create(base?: DeepPartial<Appendix>): Appendix {
+    return Appendix.fromPartial(base ?? {});
+  },
+
+  fromPartial(object: DeepPartial<Appendix>): Appendix {
+    const message = createBaseAppendix();
+    message.index = object.index ?? undefined;
+    message.name = object.name ?? undefined;
+    message.description = object.description ?? undefined;
+    message.tags = object.tags?.map((e) => e) || [];
+    message.url = object.url ?? undefined;
+    message.contentType = object.contentType ?? undefined;
+    message.thumbnail = (object.thumbnail !== undefined && object.thumbnail !== null)
+      ? Image.fromPartial(object.thumbnail)
+      : undefined;
+    return message;
+  },
+};
+
 function createBaseProduct(): Product {
-  return { id: undefined, product: undefined, bundle: undefined, active: undefined, meta: undefined };
+  return {
+    id: undefined,
+    meta: undefined,
+    product: undefined,
+    bundle: undefined,
+    active: undefined,
+    tags: [],
+    associations: [],
+    data: undefined,
+  };
 }
 
 export const Product = {
@@ -132,17 +421,26 @@ export const Product = {
     if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
+    if (message.meta !== undefined) {
+      Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
+    }
     if (message.product !== undefined) {
-      IndividualProduct.encode(message.product, writer.uint32(18).fork()).ldelim();
+      IndividualProduct.encode(message.product, writer.uint32(26).fork()).ldelim();
     }
     if (message.bundle !== undefined) {
-      Bundle.encode(message.bundle, writer.uint32(26).fork()).ldelim();
+      Bundle.encode(message.bundle, writer.uint32(34).fork()).ldelim();
     }
     if (message.active !== undefined) {
-      writer.uint32(32).bool(message.active);
+      writer.uint32(40).bool(message.active);
     }
-    if (message.meta !== undefined) {
-      Meta.encode(message.meta, writer.uint32(42).fork()).ldelim();
+    for (const v of message.tags) {
+      writer.uint32(50).string(v!);
+    }
+    for (const v of message.associations) {
+      Association.encode(v!, writer.uint32(58).fork()).ldelim();
+    }
+    if (message.data !== undefined) {
+      Any.encode(message.data, writer.uint32(66).fork()).ldelim();
     }
     return writer;
   },
@@ -158,16 +456,25 @@ export const Product = {
           message.id = reader.string();
           break;
         case 2:
-          message.product = IndividualProduct.decode(reader, reader.uint32());
+          message.meta = Meta.decode(reader, reader.uint32());
           break;
         case 3:
-          message.bundle = Bundle.decode(reader, reader.uint32());
+          message.product = IndividualProduct.decode(reader, reader.uint32());
           break;
         case 4:
-          message.active = reader.bool();
+          message.bundle = Bundle.decode(reader, reader.uint32());
           break;
         case 5:
-          message.meta = Meta.decode(reader, reader.uint32());
+          message.active = reader.bool();
+          break;
+        case 6:
+          message.tags.push(reader.string());
+          break;
+        case 7:
+          message.associations.push(Association.decode(reader, reader.uint32()));
+          break;
+        case 8:
+          message.data = Any.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -180,21 +487,37 @@ export const Product = {
   fromJSON(object: any): Product {
     return {
       id: isSet(object.id) ? String(object.id) : undefined,
+      meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
       product: isSet(object.product) ? IndividualProduct.fromJSON(object.product) : undefined,
       bundle: isSet(object.bundle) ? Bundle.fromJSON(object.bundle) : undefined,
       active: isSet(object.active) ? Boolean(object.active) : undefined,
-      meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
+      tags: Array.isArray(object?.tags) ? object.tags.map((e: any) => String(e)) : [],
+      associations: Array.isArray(object?.associations)
+        ? object.associations.map((e: any) => Association.fromJSON(e))
+        : [],
+      data: isSet(object.data) ? Any.fromJSON(object.data) : undefined,
     };
   },
 
   toJSON(message: Product): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
+    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.product !== undefined &&
       (obj.product = message.product ? IndividualProduct.toJSON(message.product) : undefined);
     message.bundle !== undefined && (obj.bundle = message.bundle ? Bundle.toJSON(message.bundle) : undefined);
     message.active !== undefined && (obj.active = message.active);
-    message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
+    if (message.tags) {
+      obj.tags = message.tags.map((e) => e);
+    } else {
+      obj.tags = [];
+    }
+    if (message.associations) {
+      obj.associations = message.associations.map((e) => e ? Association.toJSON(e) : undefined);
+    } else {
+      obj.associations = [];
+    }
+    message.data !== undefined && (obj.data = message.data ? Any.toJSON(message.data) : undefined);
     return obj;
   },
 
@@ -205,6 +528,7 @@ export const Product = {
   fromPartial(object: DeepPartial<Product>): Product {
     const message = createBaseProduct();
     message.id = object.id ?? undefined;
+    message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
     message.product = (object.product !== undefined && object.product !== null)
       ? IndividualProduct.fromPartial(object.product)
       : undefined;
@@ -212,7 +536,9 @@ export const Product = {
       ? Bundle.fromPartial(object.bundle)
       : undefined;
     message.active = object.active ?? undefined;
-    message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
+    message.tags = object.tags?.map((e) => e) || [];
+    message.associations = object.associations?.map((e) => Association.fromPartial(e)) || [];
+    message.data = (object.data !== undefined && object.data !== null) ? Any.fromPartial(object.data) : undefined;
     return message;
   },
 };
@@ -223,8 +549,8 @@ function createBaseIndividualProduct(): IndividualProduct {
     description: undefined,
     manufacturerId: undefined,
     taricCode: undefined,
-    prototype: undefined,
-    category: undefined,
+    prototypeId: undefined,
+    categoryId: undefined,
     taxIds: [],
     gtin: undefined,
     physical: undefined,
@@ -246,11 +572,11 @@ export const IndividualProduct = {
     if (message.taricCode !== undefined) {
       writer.uint32(34).string(message.taricCode);
     }
-    if (message.prototype !== undefined) {
-      Identifier.encode(message.prototype, writer.uint32(42).fork()).ldelim();
+    if (message.prototypeId !== undefined) {
+      writer.uint32(42).string(message.prototypeId);
     }
-    if (message.category !== undefined) {
-      Identifier.encode(message.category, writer.uint32(50).fork()).ldelim();
+    if (message.categoryId !== undefined) {
+      writer.uint32(50).string(message.categoryId);
     }
     for (const v of message.taxIds) {
       writer.uint32(58).string(v!);
@@ -287,10 +613,10 @@ export const IndividualProduct = {
           message.taricCode = reader.string();
           break;
         case 5:
-          message.prototype = Identifier.decode(reader, reader.uint32());
+          message.prototypeId = reader.string();
           break;
         case 6:
-          message.category = Identifier.decode(reader, reader.uint32());
+          message.categoryId = reader.string();
           break;
         case 7:
           message.taxIds.push(reader.string());
@@ -318,8 +644,8 @@ export const IndividualProduct = {
       description: isSet(object.description) ? String(object.description) : undefined,
       manufacturerId: isSet(object.manufacturerId) ? String(object.manufacturerId) : undefined,
       taricCode: isSet(object.taricCode) ? String(object.taricCode) : undefined,
-      prototype: isSet(object.prototype) ? Identifier.fromJSON(object.prototype) : undefined,
-      category: isSet(object.category) ? Identifier.fromJSON(object.category) : undefined,
+      prototypeId: isSet(object.prototypeId) ? String(object.prototypeId) : undefined,
+      categoryId: isSet(object.categoryId) ? String(object.categoryId) : undefined,
       taxIds: Array.isArray(object?.taxIds) ? object.taxIds.map((e: any) => String(e)) : [],
       gtin: isSet(object.gtin) ? String(object.gtin) : undefined,
       physical: isSet(object.physical) ? PhysicalProduct.fromJSON(object.physical) : undefined,
@@ -333,10 +659,8 @@ export const IndividualProduct = {
     message.description !== undefined && (obj.description = message.description);
     message.manufacturerId !== undefined && (obj.manufacturerId = message.manufacturerId);
     message.taricCode !== undefined && (obj.taricCode = message.taricCode);
-    message.prototype !== undefined &&
-      (obj.prototype = message.prototype ? Identifier.toJSON(message.prototype) : undefined);
-    message.category !== undefined &&
-      (obj.category = message.category ? Identifier.toJSON(message.category) : undefined);
+    message.prototypeId !== undefined && (obj.prototypeId = message.prototypeId);
+    message.categoryId !== undefined && (obj.categoryId = message.categoryId);
     if (message.taxIds) {
       obj.taxIds = message.taxIds.map((e) => e);
     } else {
@@ -360,12 +684,8 @@ export const IndividualProduct = {
     message.description = object.description ?? undefined;
     message.manufacturerId = object.manufacturerId ?? undefined;
     message.taricCode = object.taricCode ?? undefined;
-    message.prototype = (object.prototype !== undefined && object.prototype !== null)
-      ? Identifier.fromPartial(object.prototype)
-      : undefined;
-    message.category = (object.category !== undefined && object.category !== null)
-      ? Identifier.fromPartial(object.category)
-      : undefined;
+    message.prototypeId = object.prototypeId ?? undefined;
+    message.categoryId = object.categoryId ?? undefined;
     message.taxIds = object.taxIds?.map((e) => e) || [];
     message.gtin = object.gtin ?? undefined;
     message.physical = (object.physical !== undefined && object.physical !== null)
@@ -488,57 +808,6 @@ export const VirtualProduct = {
   fromPartial(object: DeepPartial<VirtualProduct>): VirtualProduct {
     const message = createBaseVirtualProduct();
     message.variants = object.variants?.map((e) => VirtualVariant.fromPartial(e)) || [];
-    return message;
-  },
-};
-
-function createBaseIdentifier(): Identifier {
-  return { id: undefined };
-}
-
-export const Identifier = {
-  encode(message: Identifier, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== undefined) {
-      writer.uint32(10).string(message.id);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): Identifier {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseIdentifier();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.id = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): Identifier {
-    return { id: isSet(object.id) ? String(object.id) : undefined };
-  },
-
-  toJSON(message: Identifier): unknown {
-    const obj: any = {};
-    message.id !== undefined && (obj.id = message.id);
-    return obj;
-  },
-
-  create(base?: DeepPartial<Identifier>): Identifier {
-    return Identifier.fromPartial(base ?? {});
-  },
-
-  fromPartial(object: DeepPartial<Identifier>): Identifier {
-    const message = createBaseIdentifier();
-    message.id = object.id ?? undefined;
     return message;
   },
 };
@@ -847,7 +1116,8 @@ function createBasePhysicalVariant(): PhysicalVariant {
     price: undefined,
     sale: undefined,
     salePrice: undefined,
-    image: [],
+    images: [],
+    files: [],
     stockKeepingUnit: undefined,
     templateVariant: undefined,
     packaged: undefined,
@@ -878,20 +1148,23 @@ export const PhysicalVariant = {
     if (message.salePrice !== undefined) {
       writer.uint32(57).double(message.salePrice);
     }
-    for (const v of message.image) {
+    for (const v of message.images) {
       Image.encode(v!, writer.uint32(66).fork()).ldelim();
     }
+    for (const v of message.files) {
+      File.encode(v!, writer.uint32(74).fork()).ldelim();
+    }
     if (message.stockKeepingUnit !== undefined) {
-      writer.uint32(74).string(message.stockKeepingUnit);
+      writer.uint32(82).string(message.stockKeepingUnit);
     }
     if (message.templateVariant !== undefined) {
-      writer.uint32(82).string(message.templateVariant);
+      writer.uint32(90).string(message.templateVariant);
     }
     if (message.packaged !== undefined) {
-      Package.encode(message.packaged, writer.uint32(90).fork()).ldelim();
+      Package.encode(message.packaged, writer.uint32(98).fork()).ldelim();
     }
     for (const v of message.attributes) {
-      Attribute.encode(v!, writer.uint32(98).fork()).ldelim();
+      Attribute.encode(v!, writer.uint32(106).fork()).ldelim();
     }
     return writer;
   },
@@ -925,18 +1198,21 @@ export const PhysicalVariant = {
           message.salePrice = reader.double();
           break;
         case 8:
-          message.image.push(Image.decode(reader, reader.uint32()));
+          message.images.push(Image.decode(reader, reader.uint32()));
           break;
         case 9:
-          message.stockKeepingUnit = reader.string();
+          message.files.push(File.decode(reader, reader.uint32()));
           break;
         case 10:
-          message.templateVariant = reader.string();
+          message.stockKeepingUnit = reader.string();
           break;
         case 11:
-          message.packaged = Package.decode(reader, reader.uint32());
+          message.templateVariant = reader.string();
           break;
         case 12:
+          message.packaged = Package.decode(reader, reader.uint32());
+          break;
+        case 13:
           message.attributes.push(Attribute.decode(reader, reader.uint32()));
           break;
         default:
@@ -956,7 +1232,8 @@ export const PhysicalVariant = {
       price: isSet(object.price) ? Number(object.price) : undefined,
       sale: isSet(object.sale) ? Boolean(object.sale) : undefined,
       salePrice: isSet(object.salePrice) ? Number(object.salePrice) : undefined,
-      image: Array.isArray(object?.image) ? object.image.map((e: any) => Image.fromJSON(e)) : [],
+      images: Array.isArray(object?.images) ? object.images.map((e: any) => Image.fromJSON(e)) : [],
+      files: Array.isArray(object?.files) ? object.files.map((e: any) => File.fromJSON(e)) : [],
       stockKeepingUnit: isSet(object.stockKeepingUnit) ? String(object.stockKeepingUnit) : undefined,
       templateVariant: isSet(object.templateVariant) ? String(object.templateVariant) : undefined,
       packaged: isSet(object.packaged) ? Package.fromJSON(object.packaged) : undefined,
@@ -973,10 +1250,15 @@ export const PhysicalVariant = {
     message.price !== undefined && (obj.price = message.price);
     message.sale !== undefined && (obj.sale = message.sale);
     message.salePrice !== undefined && (obj.salePrice = message.salePrice);
-    if (message.image) {
-      obj.image = message.image.map((e) => e ? Image.toJSON(e) : undefined);
+    if (message.images) {
+      obj.images = message.images.map((e) => e ? Image.toJSON(e) : undefined);
     } else {
-      obj.image = [];
+      obj.images = [];
+    }
+    if (message.files) {
+      obj.files = message.files.map((e) => e ? File.toJSON(e) : undefined);
+    } else {
+      obj.files = [];
     }
     message.stockKeepingUnit !== undefined && (obj.stockKeepingUnit = message.stockKeepingUnit);
     message.templateVariant !== undefined && (obj.templateVariant = message.templateVariant);
@@ -1002,7 +1284,8 @@ export const PhysicalVariant = {
     message.price = object.price ?? undefined;
     message.sale = object.sale ?? undefined;
     message.salePrice = object.salePrice ?? undefined;
-    message.image = object.image?.map((e) => Image.fromPartial(e)) || [];
+    message.images = object.images?.map((e) => Image.fromPartial(e)) || [];
+    message.files = object.files?.map((e) => File.fromPartial(e)) || [];
     message.stockKeepingUnit = object.stockKeepingUnit ?? undefined;
     message.templateVariant = object.templateVariant ?? undefined;
     message.packaged = (object.packaged !== undefined && object.packaged !== null)
@@ -1022,7 +1305,8 @@ function createBaseVirtualVariant(): VirtualVariant {
     price: undefined,
     sale: undefined,
     salePrice: undefined,
-    image: [],
+    images: [],
+    files: [],
     stockKeepingUnit: undefined,
     templateVariant: undefined,
     attributes: [],
@@ -1052,17 +1336,20 @@ export const VirtualVariant = {
     if (message.salePrice !== undefined) {
       writer.uint32(57).double(message.salePrice);
     }
-    for (const v of message.image) {
+    for (const v of message.images) {
       Image.encode(v!, writer.uint32(66).fork()).ldelim();
     }
+    for (const v of message.files) {
+      File.encode(v!, writer.uint32(74).fork()).ldelim();
+    }
     if (message.stockKeepingUnit !== undefined) {
-      writer.uint32(74).string(message.stockKeepingUnit);
+      writer.uint32(82).string(message.stockKeepingUnit);
     }
     if (message.templateVariant !== undefined) {
-      writer.uint32(82).string(message.templateVariant);
+      writer.uint32(90).string(message.templateVariant);
     }
     for (const v of message.attributes) {
-      Attribute.encode(v!, writer.uint32(90).fork()).ldelim();
+      Attribute.encode(v!, writer.uint32(98).fork()).ldelim();
     }
     return writer;
   },
@@ -1096,15 +1383,18 @@ export const VirtualVariant = {
           message.salePrice = reader.double();
           break;
         case 8:
-          message.image.push(Image.decode(reader, reader.uint32()));
+          message.images.push(Image.decode(reader, reader.uint32()));
           break;
         case 9:
-          message.stockKeepingUnit = reader.string();
+          message.files.push(File.decode(reader, reader.uint32()));
           break;
         case 10:
-          message.templateVariant = reader.string();
+          message.stockKeepingUnit = reader.string();
           break;
         case 11:
+          message.templateVariant = reader.string();
+          break;
+        case 12:
           message.attributes.push(Attribute.decode(reader, reader.uint32()));
           break;
         default:
@@ -1124,7 +1414,8 @@ export const VirtualVariant = {
       price: isSet(object.price) ? Number(object.price) : undefined,
       sale: isSet(object.sale) ? Boolean(object.sale) : undefined,
       salePrice: isSet(object.salePrice) ? Number(object.salePrice) : undefined,
-      image: Array.isArray(object?.image) ? object.image.map((e: any) => Image.fromJSON(e)) : [],
+      images: Array.isArray(object?.images) ? object.images.map((e: any) => Image.fromJSON(e)) : [],
+      files: Array.isArray(object?.files) ? object.files.map((e: any) => File.fromJSON(e)) : [],
       stockKeepingUnit: isSet(object.stockKeepingUnit) ? String(object.stockKeepingUnit) : undefined,
       templateVariant: isSet(object.templateVariant) ? String(object.templateVariant) : undefined,
       attributes: Array.isArray(object?.attributes) ? object.attributes.map((e: any) => Attribute.fromJSON(e)) : [],
@@ -1140,10 +1431,15 @@ export const VirtualVariant = {
     message.price !== undefined && (obj.price = message.price);
     message.sale !== undefined && (obj.sale = message.sale);
     message.salePrice !== undefined && (obj.salePrice = message.salePrice);
-    if (message.image) {
-      obj.image = message.image.map((e) => e ? Image.toJSON(e) : undefined);
+    if (message.images) {
+      obj.images = message.images.map((e) => e ? Image.toJSON(e) : undefined);
     } else {
-      obj.image = [];
+      obj.images = [];
+    }
+    if (message.files) {
+      obj.files = message.files.map((e) => e ? File.toJSON(e) : undefined);
+    } else {
+      obj.files = [];
     }
     message.stockKeepingUnit !== undefined && (obj.stockKeepingUnit = message.stockKeepingUnit);
     message.templateVariant !== undefined && (obj.templateVariant = message.templateVariant);
@@ -1168,7 +1464,8 @@ export const VirtualVariant = {
     message.price = object.price ?? undefined;
     message.sale = object.sale ?? undefined;
     message.salePrice = object.salePrice ?? undefined;
-    message.image = object.image?.map((e) => Image.fromPartial(e)) || [];
+    message.images = object.images?.map((e) => Image.fromPartial(e)) || [];
+    message.files = object.files?.map((e) => File.fromPartial(e)) || [];
     message.stockKeepingUnit = object.stockKeepingUnit ?? undefined;
     message.templateVariant = object.templateVariant ?? undefined;
     message.attributes = object.attributes?.map((e) => Attribute.fromPartial(e)) || [];
@@ -1416,10 +1713,10 @@ export const Deleted = {
   },
 };
 
-export type ServiceDefinition = typeof ServiceDefinition;
-export const ServiceDefinition = {
-  name: "Service",
-  fullName: "io.restorecommerce.product.Service",
+export type ProductServiceDefinition = typeof ProductServiceDefinition;
+export const ProductServiceDefinition = {
+  name: "ProductService",
+  fullName: "io.restorecommerce.product.ProductService",
   methods: {
     read: {
       name: "Read",
@@ -1464,7 +1761,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
+export interface ProductServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<ProductListResponse>>;
   create(request: ProductList, context: CallContext & CallContextExt): Promise<DeepPartial<ProductListResponse>>;
   delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;
@@ -1472,7 +1769,7 @@ export interface ServiceImplementation<CallContextExt = {}> {
   upsert(request: ProductList, context: CallContext & CallContextExt): Promise<DeepPartial<ProductListResponse>>;
 }
 
-export interface ServiceClient<CallOptionsExt = {}> {
+export interface ProductServiceClient<CallOptionsExt = {}> {
   read(request: DeepPartial<ReadRequest>, options?: CallOptions & CallOptionsExt): Promise<ProductListResponse>;
   create(request: DeepPartial<ProductList>, options?: CallOptions & CallOptionsExt): Promise<ProductListResponse>;
   delete(request: DeepPartial<DeleteRequest>, options?: CallOptions & CallOptionsExt): Promise<DeleteResponse>;
@@ -1506,9 +1803,11 @@ export const protoMetadata: ProtoMetadata = {
     "name": "io/restorecommerce/product.proto",
     "package": "io.restorecommerce.product",
     "dependency": [
+      "google/protobuf/any.proto",
       "io/restorecommerce/resource_base.proto",
       "io/restorecommerce/meta.proto",
       "io/restorecommerce/image.proto",
+      "io/restorecommerce/file.proto",
       "io/restorecommerce/auth.proto",
       "io/restorecommerce/status.proto",
       "io/restorecommerce/attribute.proto",
@@ -1519,6 +1818,175 @@ export const protoMetadata: ProtoMetadata = {
     "publicDependency": [],
     "weakDependency": [],
     "messageType": [{
+      "name": "Association",
+      "field": [{
+        "name": "product_id",
+        "number": 1,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "productId",
+        "options": {
+          "ctype": 0,
+          "packed": false,
+          "jstype": 0,
+          "lazy": false,
+          "deprecated": false,
+          "weak": false,
+          "uninterpretedOption": [],
+        },
+        "proto3Optional": true,
+      }, {
+        "name": "type",
+        "number": 2,
+        "label": 1,
+        "type": 14,
+        "typeName": ".io.restorecommerce.product.AssociationType",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "type",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "tags",
+        "number": 3,
+        "label": 3,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "tags",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "data",
+        "number": 4,
+        "label": 1,
+        "type": 11,
+        "typeName": ".google.protobuf.Any",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "data",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [{ "name": "_product_id", "options": undefined }],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "Appendix",
+      "field": [{
+        "name": "index",
+        "number": 1,
+        "label": 1,
+        "type": 3,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "index",
+        "options": undefined,
+        "proto3Optional": true,
+      }, {
+        "name": "name",
+        "number": 2,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 1,
+        "jsonName": "name",
+        "options": undefined,
+        "proto3Optional": true,
+      }, {
+        "name": "description",
+        "number": 3,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 2,
+        "jsonName": "description",
+        "options": undefined,
+        "proto3Optional": true,
+      }, {
+        "name": "tags",
+        "number": 4,
+        "label": 3,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "tags",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "url",
+        "number": 5,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 3,
+        "jsonName": "url",
+        "options": undefined,
+        "proto3Optional": true,
+      }, {
+        "name": "content_type",
+        "number": 6,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 4,
+        "jsonName": "contentType",
+        "options": undefined,
+        "proto3Optional": true,
+      }, {
+        "name": "thumbnail",
+        "number": 7,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.image.Image",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 5,
+        "jsonName": "thumbnail",
+        "options": undefined,
+        "proto3Optional": true,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [
+        { "name": "_index", "options": undefined },
+        { "name": "_name", "options": undefined },
+        { "name": "_description", "options": undefined },
+        { "name": "_url", "options": undefined },
+        { "name": "_content_type", "options": undefined },
+        { "name": "_thumbnail", "options": undefined },
+      ],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
       "name": "Product",
       "field": [{
         "name": "id",
@@ -1533,8 +2001,20 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "product",
+        "name": "meta",
         "number": 2,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.meta.Meta",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "meta",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "product",
+        "number": 3,
         "label": 1,
         "type": 11,
         "typeName": ".io.restorecommerce.product.IndividualProduct",
@@ -1546,7 +2026,7 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": false,
       }, {
         "name": "bundle",
-        "number": 3,
+        "number": 4,
         "label": 1,
         "type": 11,
         "typeName": ".io.restorecommerce.product.Bundle",
@@ -1558,7 +2038,7 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": false,
       }, {
         "name": "active",
-        "number": 4,
+        "number": 5,
         "label": 1,
         "type": 8,
         "typeName": "",
@@ -1569,17 +2049,41 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "meta",
-        "number": 5,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.meta.Meta",
+        "name": "tags",
+        "number": 6,
+        "label": 3,
+        "type": 9,
+        "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 3,
-        "jsonName": "meta",
+        "oneofIndex": 0,
+        "jsonName": "tags",
         "options": undefined,
-        "proto3Optional": true,
+        "proto3Optional": false,
+      }, {
+        "name": "associations",
+        "number": 7,
+        "label": 3,
+        "type": 11,
+        "typeName": ".io.restorecommerce.product.Association",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "associations",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "data",
+        "number": 8,
+        "label": 1,
+        "type": 11,
+        "typeName": ".google.protobuf.Any",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "data",
+        "options": undefined,
+        "proto3Optional": false,
       }],
       "extension": [],
       "nestedType": [],
@@ -1588,7 +2092,7 @@ export const protoMetadata: ProtoMetadata = {
       "oneofDecl": [{ "name": "product_type", "options": undefined }, { "name": "_id", "options": undefined }, {
         "name": "_active",
         "options": undefined,
-      }, { "name": "_meta", "options": undefined }],
+      }],
       "options": {
         "messageSetWireFormat": false,
         "noStandardDescriptorAccessor": false,
@@ -1657,28 +2161,44 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "prototype",
+        "name": "prototype_id",
         "number": 5,
         "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.product.Identifier",
+        "type": 9,
+        "typeName": "",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "prototype",
-        "options": undefined,
+        "jsonName": "prototypeId",
+        "options": {
+          "ctype": 0,
+          "packed": false,
+          "jstype": 0,
+          "lazy": false,
+          "deprecated": false,
+          "weak": false,
+          "uninterpretedOption": [],
+        },
         "proto3Optional": false,
       }, {
-        "name": "category",
+        "name": "category_id",
         "number": 6,
         "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.product.Identifier",
+        "type": 9,
+        "typeName": "",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "category",
-        "options": undefined,
+        "jsonName": "categoryId",
+        "options": {
+          "ctype": 0,
+          "packed": false,
+          "jstype": 0,
+          "lazy": false,
+          "deprecated": false,
+          "weak": false,
+          "uninterpretedOption": [],
+        },
         "proto3Optional": false,
       }, {
         "name": "tax_ids",
@@ -1788,29 +2308,6 @@ export const protoMetadata: ProtoMetadata = {
       "enumType": [],
       "extensionRange": [],
       "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "Identifier",
-      "field": [{
-        "name": "id",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "id",
-        "options": undefined,
-        "proto3Optional": true,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [{ "name": "_id", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -2081,7 +2578,7 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "image",
+        "name": "images",
         "number": 8,
         "label": 3,
         "type": 11,
@@ -2089,12 +2586,24 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "image",
+        "jsonName": "images",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "files",
+        "number": 9,
+        "label": 3,
+        "type": 11,
+        "typeName": ".io.restorecommerce.file.File",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "files",
         "options": undefined,
         "proto3Optional": false,
       }, {
         "name": "stock_keeping_unit",
-        "number": 9,
+        "number": 10,
         "label": 1,
         "type": 9,
         "typeName": "",
@@ -2106,7 +2615,7 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": true,
       }, {
         "name": "template_variant",
-        "number": 10,
+        "number": 11,
         "label": 1,
         "type": 9,
         "typeName": "",
@@ -2118,7 +2627,7 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": true,
       }, {
         "name": "packaged",
-        "number": 11,
+        "number": 12,
         "label": 1,
         "type": 11,
         "typeName": ".io.restorecommerce.product.Package",
@@ -2130,7 +2639,7 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": true,
       }, {
         "name": "attributes",
-        "number": 12,
+        "number": 13,
         "label": 3,
         "type": 11,
         "typeName": ".io.restorecommerce.attribute.Attribute",
@@ -2247,7 +2756,7 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "image",
+        "name": "images",
         "number": 8,
         "label": 3,
         "type": 11,
@@ -2255,12 +2764,24 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "image",
+        "jsonName": "images",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "files",
+        "number": 9,
+        "label": 3,
+        "type": 11,
+        "typeName": ".io.restorecommerce.file.File",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "files",
         "options": undefined,
         "proto3Optional": false,
       }, {
         "name": "stock_keeping_unit",
-        "number": 9,
+        "number": 10,
         "label": 1,
         "type": 9,
         "typeName": "",
@@ -2272,7 +2793,7 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": true,
       }, {
         "name": "template_variant",
-        "number": 10,
+        "number": 11,
         "label": 1,
         "type": 9,
         "typeName": "",
@@ -2284,7 +2805,7 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": true,
       }, {
         "name": "attributes",
-        "number": 11,
+        "number": 12,
         "label": 3,
         "type": 11,
         "typeName": ".io.restorecommerce.attribute.Attribute",
@@ -2411,7 +2932,15 @@ export const protoMetadata: ProtoMetadata = {
         "defaultValue": "",
         "oneofIndex": 0,
         "jsonName": "productId",
-        "options": undefined,
+        "options": {
+          "ctype": 0,
+          "packed": false,
+          "jstype": 0,
+          "lazy": false,
+          "deprecated": false,
+          "weak": false,
+          "uninterpretedOption": [],
+        },
         "proto3Optional": true,
       }, {
         "name": "variant_id",
@@ -2485,9 +3014,19 @@ export const protoMetadata: ProtoMetadata = {
       "reservedRange": [],
       "reservedName": [],
     }],
-    "enumType": [],
+    "enumType": [{
+      "name": "AssociationType",
+      "value": [{ "name": "Miscellaneous", "number": 0, "options": undefined }, {
+        "name": "Accesory",
+        "number": 1,
+        "options": undefined,
+      }, { "name": "Recommendation", "number": 2, "options": undefined }],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }],
     "service": [{
-      "name": "Service",
+      "name": "ProductService",
       "method": [{
         "name": "Read",
         "inputType": ".io.restorecommerce.resourcebase.ReadRequest",
@@ -2530,20 +3069,20 @@ export const protoMetadata: ProtoMetadata = {
     "options": undefined,
     "sourceCodeInfo": {
       "location": [{
-        "path": [3, 8],
-        "span": [14, 0, 47],
+        "path": [3, 10],
+        "span": [16, 0, 47],
         "leadingComments": " Used by resolvers\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 0],
-        "span": [29, 0, 45, 1],
+        "path": [4, 2],
+        "span": [62, 0, 81, 1],
         "leadingComments": " Product resource entity\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 12, 2, 3],
-        "span": [149, 2, 32],
+        "path": [4, 13, 2, 3],
+        "span": [207, 2, 32],
         "leadingComments": "",
         "trailingComments": "Discount in relation to the bundle price\n",
         "leadingDetachedComments": [],
@@ -2552,11 +3091,13 @@ export const protoMetadata: ProtoMetadata = {
     "syntax": "proto3",
   }),
   references: {
+    ".io.restorecommerce.product.AssociationType": AssociationType,
+    ".io.restorecommerce.product.Association": Association,
+    ".io.restorecommerce.product.Appendix": Appendix,
     ".io.restorecommerce.product.Product": Product,
     ".io.restorecommerce.product.IndividualProduct": IndividualProduct,
     ".io.restorecommerce.product.PhysicalProduct": PhysicalProduct,
     ".io.restorecommerce.product.VirtualProduct": VirtualProduct,
-    ".io.restorecommerce.product.Identifier": Identifier,
     ".io.restorecommerce.product.ProductList": ProductList,
     ".io.restorecommerce.product.ProductListResponse": ProductListResponse,
     ".io.restorecommerce.product.ProductResponse": ProductResponse,
@@ -2577,9 +3118,23 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata7,
     protoMetadata8,
     protoMetadata9,
+    protoMetadata10,
+    protoMetadata11,
   ],
   options: {
     messages: {
+      "Association": {
+        fields: {
+          "product_id": {
+            "resolver": Resolver.decode(
+              Buffer.from(
+                "CiMuaW8ucmVzdG9yZWNvbW1lcmNlLnByb2R1Y3QuUHJvZHVjdBIHY2F0YWxvZxoHcHJvZHVjdCIEUmVhZCoHcHJvZHVjdA==",
+                "base64",
+              ),
+            ),
+          },
+        },
+      },
       "Product": {
         options: {
           "kafka_subscriber": KafkaSubscription.decode(
@@ -2600,12 +3155,61 @@ export const protoMetadata: ProtoMetadata = {
               ),
             ),
           },
+          "prototype_id": {
+            "resolver": Resolver.decode(
+              Buffer.from(
+                "CjYuaW8ucmVzdG9yZWNvbW1lcmNlLnByb2R1Y3RfcHJvdG90eXBlLlByb2R1Y3RQcm90b3R5cGUSB2NhdGFsb2caEXByb2R1Y3RfcHJvdG90eXBlIgRSZWFkKglwcm90b3R5cGU=",
+                "base64",
+              ),
+            ),
+          },
+          "category_id": {
+            "resolver": Resolver.decode(
+              Buffer.from(
+                "CjQuaW8ucmVzdG9yZWNvbW1lcmNlLnByb2R1Y3RfY2F0ZWdvcnkuUHJvZHVjdENhdGVnb3J5EgdjYXRhbG9nGhBwcm9kdWN0X2NhdGVnb3J5IgRSZWFkKghjYXRlZ29yeQ==",
+                "base64",
+              ),
+            ),
+          },
+        },
+      },
+      "BundleProduct": {
+        fields: {
+          "product_id": {
+            "resolver": Resolver.decode(
+              Buffer.from(
+                "CiMuaW8ucmVzdG9yZWNvbW1lcmNlLnByb2R1Y3QuUHJvZHVjdBIHY2F0YWxvZxoHcHJvZHVjdCIEUmVhZCoHcHJvZHVjdA==",
+                "base64",
+              ),
+            ),
+          },
         },
       },
     },
-    services: { "Service": { options: { "service_name": "product" }, methods: { "Read": { "is_query": true } } } },
+    services: {
+      "ProductService": { options: { "service_name": "product" }, methods: { "Read": { "is_query": true } } },
+    },
   },
 };
+
+declare var self: any | undefined;
+declare var window: any | undefined;
+declare var global: any | undefined;
+var tsProtoGlobalThis: any = (() => {
+  if (typeof globalThis !== "undefined") {
+    return globalThis;
+  }
+  if (typeof self !== "undefined") {
+    return self;
+  }
+  if (typeof window !== "undefined") {
+    return window;
+  }
+  if (typeof global !== "undefined") {
+    return global;
+  }
+  throw "Unable to locate global object";
+})();
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
@@ -2613,6 +3217,20 @@ export type DeepPartial<T> = T extends Builtin ? T
   : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
   : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+function longToNumber(long: Long): number {
+  if (long.gt(Number.MAX_SAFE_INTEGER)) {
+    throw new tsProtoGlobalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
+  }
+  return long.toNumber();
+}
+
+// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
+// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
+if (_m0.util.Long !== Long) {
+  _m0.util.Long = Long as any;
+  _m0.configure();
+}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

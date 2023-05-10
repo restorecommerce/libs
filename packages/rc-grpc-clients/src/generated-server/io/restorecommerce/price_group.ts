@@ -391,10 +391,10 @@ export const Deleted = {
   },
 };
 
-export type ServiceDefinition = typeof ServiceDefinition;
-export const ServiceDefinition = {
-  name: "Service",
-  fullName: "io.restorecommerce.price_group.Service",
+export type PriceGroupServiceDefinition = typeof PriceGroupServiceDefinition;
+export const PriceGroupServiceDefinition = {
+  name: "PriceGroupService",
+  fullName: "io.restorecommerce.price_group.PriceGroupService",
   methods: {
     read: {
       name: "Read",
@@ -439,7 +439,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
+export interface PriceGroupServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<PriceGroupListResponse>>;
   create(request: PriceGroupList, context: CallContext & CallContextExt): Promise<DeepPartial<PriceGroupListResponse>>;
   delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;
@@ -447,7 +447,7 @@ export interface ServiceImplementation<CallContextExt = {}> {
   upsert(request: PriceGroupList, context: CallContext & CallContextExt): Promise<DeepPartial<PriceGroupListResponse>>;
 }
 
-export interface ServiceClient<CallOptionsExt = {}> {
+export interface PriceGroupServiceClient<CallOptionsExt = {}> {
   read(request: DeepPartial<ReadRequest>, options?: CallOptions & CallOptionsExt): Promise<PriceGroupListResponse>;
   create(request: DeepPartial<PriceGroupList>, options?: CallOptions & CallOptionsExt): Promise<PriceGroupListResponse>;
   delete(request: DeepPartial<DeleteRequest>, options?: CallOptions & CallOptionsExt): Promise<DeleteResponse>;
@@ -706,7 +706,7 @@ export const protoMetadata: ProtoMetadata = {
     }],
     "enumType": [],
     "service": [{
-      "name": "Service",
+      "name": "PriceGroupService",
       "method": [{
         "name": "Read",
         "inputType": ".io.restorecommerce.resourcebase.ReadRequest",
@@ -767,7 +767,9 @@ export const protoMetadata: ProtoMetadata = {
   },
   dependencies: [protoMetadata1, protoMetadata2, protoMetadata3, protoMetadata4, protoMetadata5],
   options: {
-    services: { "Service": { options: { "service_name": "price_group" }, methods: { "Read": { "is_query": true } } } },
+    services: {
+      "PriceGroupService": { options: { "service_name": "price_group" }, methods: { "Read": { "is_query": true } } },
+    },
   },
 };
 

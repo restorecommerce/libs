@@ -20,8 +20,8 @@ import { flushCache, getOrFill } from './cache';
 import { Events, registerProtoMeta } from '@restorecommerce/kafka-client';
 import { mapResourceURNObligationProperties } from '../utils';
 import {
-  ServiceClient,
-  ServiceDefinition
+  AccessControlServiceClient,
+  AccessControlServiceDefinition
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/access_control';
 import { Response_Decision } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/access_control';
 import { Attribute } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/attribute';
@@ -176,12 +176,12 @@ export const createResourceTarget = (resource: Resource[], action: AuthZAction) 
 };
 
 export class UnAuthZ implements IAuthZ {
-  acs: ServiceClient;
+  acs: AccessControlServiceClient;
   /**
    *
    * @param acs Access Control Service definition (gRPC)
    */
-  constructor(acs: ServiceClient) {
+  constructor(acs: AccessControlServiceClient) {
     this.acs = acs;
   }
 
@@ -292,12 +292,12 @@ export class UnAuthZ implements IAuthZ {
  * General authorizer. Marshalls data and requests access to the Access Control Service (ACS).
  */
 export class ACSAuthZ implements IAuthZ {
-  acs: ServiceClient;
+  acs: AccessControlServiceClient;
   /**
    *
    * @param acs Access Control Service definition (gRPC)
    */
-  constructor(acs: ServiceClient, ids?: any) {
+  constructor(acs: AccessControlServiceClient, ids?: any) {
     this.acs = acs;
   }
 
@@ -475,10 +475,10 @@ export const initAuthZ = async (config?: any): Promise<void | ACSAuthZ> => {
       const grpcClientConfig = cfg.get('client');
       const grpcACSConfig = grpcClientConfig['acs-srv'];
       const channel = createChannel(grpcACSConfig.address);
-      const acsClient: ServiceClient = createClient({
+      const acsClient: AccessControlServiceClient = createClient({
         ...grpcACSConfig,
         logger
-      }, ServiceDefinition, channel);
+      }, AccessControlServiceDefinition, channel);
       authZ = new ACSAuthZ(acsClient);
       // listeners for rules / policies / policySets modified, so as to
       // delete the Cache as it would be invalid if ACS resources are modified

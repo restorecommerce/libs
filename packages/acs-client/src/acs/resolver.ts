@@ -15,7 +15,7 @@ import {
   Response_Decision
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/access_control';
 import { FilterOp } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base';
-import { ServiceDefinition } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/access_control';
+import { AccessControlServiceDefinition } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/access_control';
 
 
 const subjectIsUnauthenticated = (subject: any): subject is UnauthenticatedContext => {
@@ -31,7 +31,7 @@ const whatIsAllowedRequest = async (subject: DeepPartial<Subject>, resource: Res
     const acsClient = createClient({
       ...grpcConfig,
       logger
-    }, ServiceDefinition, channel);
+    }, AccessControlServiceDefinition, channel);
     return await new UnAuthZ(acsClient).whatIsAllowed({
       target: {
         subject: (subject as UnauthenticatedData), resource, action
@@ -62,7 +62,7 @@ export const isAllowedRequest = async (subject: Subject,
     const acsClient = createClient({
       ...grpcConfig,
       logger
-    }, ServiceDefinition, channel);
+    }, AccessControlServiceDefinition, channel);
     return await new UnAuthZ(acsClient).isAllowed({
       target: {
         subject: (subject as UnauthenticatedData), resource, action

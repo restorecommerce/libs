@@ -23,16 +23,16 @@ export type Query = {
 
 export type NotificationQuery = {
   __typename?: 'NotificationQuery';
-  NotificationService: NotificationNotificationServiceQuery;
+  notification: NotificationNotificationQuery;
 };
 
-export type NotificationNotificationServiceQuery = {
-  __typename?: 'NotificationNotificationServiceQuery';
+export type NotificationNotificationQuery = {
+  __typename?: 'NotificationNotificationQuery';
   Read?: Maybe<ProtoIoRestorecommerceNotificationNotificationListResponse>;
 };
 
 
-export type NotificationNotificationServiceQueryReadArgs = {
+export type NotificationNotificationQueryReadArgs = {
   input: IIoRestorecommerceResourcebaseReadRequest;
 };
 
@@ -225,22 +225,22 @@ export type Mutation = {
 
 export type NotificationMutation = {
   __typename?: 'NotificationMutation';
-  NotificationService: NotificationNotificationServiceMutation;
+  notification: NotificationNotificationMutation;
 };
 
-export type NotificationNotificationServiceMutation = {
-  __typename?: 'NotificationNotificationServiceMutation';
+export type NotificationNotificationMutation = {
+  __typename?: 'NotificationNotificationMutation';
   Mutate?: Maybe<ProtoIoRestorecommerceNotificationNotificationListResponse>;
   Delete?: Maybe<ProtoIoRestorecommerceResourcebaseDeleteResponse>;
 };
 
 
-export type NotificationNotificationServiceMutationMutateArgs = {
+export type NotificationNotificationMutationMutateArgs = {
   input: IIoRestorecommerceNotificationNotificationList;
 };
 
 
-export type NotificationNotificationServiceMutationDeleteArgs = {
+export type NotificationNotificationMutationDeleteArgs = {
   input: IIoRestorecommerceResourcebaseDeleteRequest;
 };
 
@@ -425,7 +425,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>;
   NotificationQuery: ResolverTypeWrapper<NotificationQuery>;
-  NotificationNotificationServiceQuery: ResolverTypeWrapper<NotificationNotificationServiceQuery>;
+  NotificationNotificationQuery: ResolverTypeWrapper<NotificationNotificationQuery>;
   ProtoIoRestorecommerceNotificationNotificationListResponse: ResolverTypeWrapper<ProtoIoRestorecommerceNotificationNotificationListResponse>;
   IoRestorecommerceNotificationNotificationListResponse: ResolverTypeWrapper<IoRestorecommerceNotificationNotificationListResponse>;
   IoRestorecommerceNotificationNotificationResponse: ResolverTypeWrapper<IoRestorecommerceNotificationNotificationResponse>;
@@ -458,7 +458,7 @@ export type ResolversTypes = ResolversObject<{
   IIoRestorecommerceResourcebaseSearch: IIoRestorecommerceResourcebaseSearch;
   Mutation: ResolverTypeWrapper<{}>;
   NotificationMutation: ResolverTypeWrapper<NotificationMutation>;
-  NotificationNotificationServiceMutation: ResolverTypeWrapper<NotificationNotificationServiceMutation>;
+  NotificationNotificationMutation: ResolverTypeWrapper<NotificationNotificationMutation>;
   IIoRestorecommerceNotificationNotificationList: IIoRestorecommerceNotificationNotificationList;
   IIoRestorecommerceNotificationNotification: IIoRestorecommerceNotificationNotification;
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
@@ -477,7 +477,7 @@ export type ResolversTypes = ResolversObject<{
 export type ResolversParentTypes = ResolversObject<{
   Query: {};
   NotificationQuery: NotificationQuery;
-  NotificationNotificationServiceQuery: NotificationNotificationServiceQuery;
+  NotificationNotificationQuery: NotificationNotificationQuery;
   ProtoIoRestorecommerceNotificationNotificationListResponse: ProtoIoRestorecommerceNotificationNotificationListResponse;
   IoRestorecommerceNotificationNotificationListResponse: IoRestorecommerceNotificationNotificationListResponse;
   IoRestorecommerceNotificationNotificationResponse: IoRestorecommerceNotificationNotificationResponse;
@@ -503,7 +503,7 @@ export type ResolversParentTypes = ResolversObject<{
   IIoRestorecommerceResourcebaseSearch: IIoRestorecommerceResourcebaseSearch;
   Mutation: {};
   NotificationMutation: NotificationMutation;
-  NotificationNotificationServiceMutation: NotificationNotificationServiceMutation;
+  NotificationNotificationMutation: NotificationNotificationMutation;
   IIoRestorecommerceNotificationNotificationList: IIoRestorecommerceNotificationNotificationList;
   IIoRestorecommerceNotificationNotification: IIoRestorecommerceNotificationNotification;
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
@@ -521,12 +521,12 @@ export type QueryResolvers<ContextType = NotificationContext, ParentType extends
 }>;
 
 export type NotificationQueryResolvers<ContextType = NotificationContext, ParentType extends ResolversParentTypes['NotificationQuery'] = ResolversParentTypes['NotificationQuery']> = ResolversObject<{
-  NotificationService?: Resolver<ResolversTypes['NotificationNotificationServiceQuery'], ParentType, ContextType>;
+  notification?: Resolver<ResolversTypes['NotificationNotificationQuery'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type NotificationNotificationServiceQueryResolvers<ContextType = NotificationContext, ParentType extends ResolversParentTypes['NotificationNotificationServiceQuery'] = ResolversParentTypes['NotificationNotificationServiceQuery']> = ResolversObject<{
-  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceNotificationNotificationListResponse']>, ParentType, ContextType, RequireFields<NotificationNotificationServiceQueryReadArgs, 'input'>>;
+export type NotificationNotificationQueryResolvers<ContextType = NotificationContext, ParentType extends ResolversParentTypes['NotificationNotificationQuery'] = ResolversParentTypes['NotificationNotificationQuery']> = ResolversObject<{
+  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceNotificationNotificationListResponse']>, ParentType, ContextType, RequireFields<NotificationNotificationQueryReadArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -618,13 +618,13 @@ export type MutationResolvers<ContextType = NotificationContext, ParentType exte
 }>;
 
 export type NotificationMutationResolvers<ContextType = NotificationContext, ParentType extends ResolversParentTypes['NotificationMutation'] = ResolversParentTypes['NotificationMutation']> = ResolversObject<{
-  NotificationService?: Resolver<ResolversTypes['NotificationNotificationServiceMutation'], ParentType, ContextType>;
+  notification?: Resolver<ResolversTypes['NotificationNotificationMutation'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type NotificationNotificationServiceMutationResolvers<ContextType = NotificationContext, ParentType extends ResolversParentTypes['NotificationNotificationServiceMutation'] = ResolversParentTypes['NotificationNotificationServiceMutation']> = ResolversObject<{
-  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceNotificationNotificationListResponse']>, ParentType, ContextType, RequireFields<NotificationNotificationServiceMutationMutateArgs, 'input'>>;
-  Delete?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceResourcebaseDeleteResponse']>, ParentType, ContextType, RequireFields<NotificationNotificationServiceMutationDeleteArgs, 'input'>>;
+export type NotificationNotificationMutationResolvers<ContextType = NotificationContext, ParentType extends ResolversParentTypes['NotificationNotificationMutation'] = ResolversParentTypes['NotificationNotificationMutation']> = ResolversObject<{
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceNotificationNotificationListResponse']>, ParentType, ContextType, RequireFields<NotificationNotificationMutationMutateArgs, 'input'>>;
+  Delete?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceResourcebaseDeleteResponse']>, ParentType, ContextType, RequireFields<NotificationNotificationMutationDeleteArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -655,7 +655,7 @@ export type SubscriptionOutputResolvers<ContextType = NotificationContext, Paren
 export type Resolvers<ContextType = NotificationContext> = ResolversObject<{
   Query?: QueryResolvers<ContextType>;
   NotificationQuery?: NotificationQueryResolvers<ContextType>;
-  NotificationNotificationServiceQuery?: NotificationNotificationServiceQueryResolvers<ContextType>;
+  NotificationNotificationQuery?: NotificationNotificationQueryResolvers<ContextType>;
   ProtoIoRestorecommerceNotificationNotificationListResponse?: ProtoIoRestorecommerceNotificationNotificationListResponseResolvers<ContextType>;
   IoRestorecommerceNotificationNotificationListResponse?: IoRestorecommerceNotificationNotificationListResponseResolvers<ContextType>;
   IoRestorecommerceNotificationNotificationResponse?: IoRestorecommerceNotificationNotificationResponseResolvers<ContextType>;
@@ -675,7 +675,7 @@ export type Resolvers<ContextType = NotificationContext> = ResolversObject<{
   GoogleProtobufAnyValue?: GraphQLScalarType;
   Mutation?: MutationResolvers<ContextType>;
   NotificationMutation?: NotificationMutationResolvers<ContextType>;
-  NotificationNotificationServiceMutation?: NotificationNotificationServiceMutationResolvers<ContextType>;
+  NotificationNotificationMutation?: NotificationNotificationMutationResolvers<ContextType>;
   ProtoIoRestorecommerceResourcebaseDeleteResponse?: ProtoIoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType>;
   IoRestorecommerceResourcebaseDeleteResponse?: IoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;

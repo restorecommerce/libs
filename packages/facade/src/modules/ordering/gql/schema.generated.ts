@@ -23,16 +23,16 @@ export type Query = {
 
 export type OrderingQuery = {
   __typename?: 'OrderingQuery';
-  OrderService: OrderingOrderServiceQuery;
+  order: OrderingOrderQuery;
 };
 
-export type OrderingOrderServiceQuery = {
-  __typename?: 'OrderingOrderServiceQuery';
+export type OrderingOrderQuery = {
+  __typename?: 'OrderingOrderQuery';
   Read?: Maybe<ProtoIoRestorecommerceOrderOrderListResponse>;
 };
 
 
-export type OrderingOrderServiceQueryReadArgs = {
+export type OrderingOrderQueryReadArgs = {
   input: IIoRestorecommerceResourcebaseReadRequest;
 };
 
@@ -338,11 +338,11 @@ export type Mutation = {
 
 export type OrderingMutation = {
   __typename?: 'OrderingMutation';
-  OrderService: OrderingOrderServiceMutation;
+  order: OrderingOrderMutation;
 };
 
-export type OrderingOrderServiceMutation = {
-  __typename?: 'OrderingOrderServiceMutation';
+export type OrderingOrderMutation = {
+  __typename?: 'OrderingOrderMutation';
   Mutate?: Maybe<ProtoIoRestorecommerceOrderOrderListResponse>;
   Evaluate?: Maybe<ProtoIoRestorecommerceOrderOrderListResponse>;
   Submit?: Maybe<ProtoIoRestorecommerceOrderOrderListResponse>;
@@ -355,47 +355,47 @@ export type OrderingOrderServiceMutation = {
 };
 
 
-export type OrderingOrderServiceMutationMutateArgs = {
+export type OrderingOrderMutationMutateArgs = {
   input: IIoRestorecommerceOrderOrderList;
 };
 
 
-export type OrderingOrderServiceMutationEvaluateArgs = {
+export type OrderingOrderMutationEvaluateArgs = {
   input: IIoRestorecommerceOrderOrderList;
 };
 
 
-export type OrderingOrderServiceMutationSubmitArgs = {
+export type OrderingOrderMutationSubmitArgs = {
   input: IIoRestorecommerceOrderOrderList;
 };
 
 
-export type OrderingOrderServiceMutationWithdrawArgs = {
+export type OrderingOrderMutationWithdrawArgs = {
   input: IIoRestorecommerceOrderOrderIdList;
 };
 
 
-export type OrderingOrderServiceMutationCancelArgs = {
+export type OrderingOrderMutationCancelArgs = {
   input: IIoRestorecommerceOrderOrderIdList;
 };
 
 
-export type OrderingOrderServiceMutationDeleteArgs = {
+export type OrderingOrderMutationDeleteArgs = {
   input: IIoRestorecommerceResourcebaseDeleteRequest;
 };
 
 
-export type OrderingOrderServiceMutationQueryPackingSolutionArgs = {
+export type OrderingOrderMutationQueryPackingSolutionArgs = {
   input: IIoRestorecommerceOrderFulfillmentRequestList;
 };
 
 
-export type OrderingOrderServiceMutationCreateFulfillmentArgs = {
+export type OrderingOrderMutationCreateFulfillmentArgs = {
   input: IIoRestorecommerceOrderFulfillmentRequestList;
 };
 
 
-export type OrderingOrderServiceMutationTriggerFulfillmentArgs = {
+export type OrderingOrderMutationTriggerFulfillmentArgs = {
   input: IIoRestorecommerceOrderFulfillmentRequestList;
 };
 
@@ -855,7 +855,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>;
   OrderingQuery: ResolverTypeWrapper<OrderingQuery>;
-  OrderingOrderServiceQuery: ResolverTypeWrapper<OrderingOrderServiceQuery>;
+  OrderingOrderQuery: ResolverTypeWrapper<OrderingOrderQuery>;
   ProtoIoRestorecommerceOrderOrderListResponse: ResolverTypeWrapper<ProtoIoRestorecommerceOrderOrderListResponse>;
   IoRestorecommerceOrderOrderListResponse: ResolverTypeWrapper<IoRestorecommerceOrderOrderListResponse>;
   IoRestorecommerceOrderOrderResponse: ResolverTypeWrapper<IoRestorecommerceOrderOrderResponse>;
@@ -901,7 +901,7 @@ export type ResolversTypes = ResolversObject<{
   IIoRestorecommerceResourcebaseSearch: IIoRestorecommerceResourcebaseSearch;
   Mutation: ResolverTypeWrapper<{}>;
   OrderingMutation: ResolverTypeWrapper<OrderingMutation>;
-  OrderingOrderServiceMutation: ResolverTypeWrapper<OrderingOrderServiceMutation>;
+  OrderingOrderMutation: ResolverTypeWrapper<OrderingOrderMutation>;
   IIoRestorecommerceOrderOrderList: IIoRestorecommerceOrderOrderList;
   IIoRestorecommerceOrderOrder: IIoRestorecommerceOrderOrder;
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
@@ -959,7 +959,7 @@ export type ResolversTypes = ResolversObject<{
 export type ResolversParentTypes = ResolversObject<{
   Query: {};
   OrderingQuery: OrderingQuery;
-  OrderingOrderServiceQuery: OrderingOrderServiceQuery;
+  OrderingOrderQuery: OrderingOrderQuery;
   ProtoIoRestorecommerceOrderOrderListResponse: ProtoIoRestorecommerceOrderOrderListResponse;
   IoRestorecommerceOrderOrderListResponse: IoRestorecommerceOrderOrderListResponse;
   IoRestorecommerceOrderOrderResponse: IoRestorecommerceOrderOrderResponse;
@@ -997,7 +997,7 @@ export type ResolversParentTypes = ResolversObject<{
   IIoRestorecommerceResourcebaseSearch: IIoRestorecommerceResourcebaseSearch;
   Mutation: {};
   OrderingMutation: OrderingMutation;
-  OrderingOrderServiceMutation: OrderingOrderServiceMutation;
+  OrderingOrderMutation: OrderingOrderMutation;
   IIoRestorecommerceOrderOrderList: IIoRestorecommerceOrderOrderList;
   IIoRestorecommerceOrderOrder: IIoRestorecommerceOrderOrder;
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
@@ -1053,12 +1053,12 @@ export type QueryResolvers<ContextType = OrderingContext, ParentType extends Res
 }>;
 
 export type OrderingQueryResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['OrderingQuery'] = ResolversParentTypes['OrderingQuery']> = ResolversObject<{
-  OrderService?: Resolver<ResolversTypes['OrderingOrderServiceQuery'], ParentType, ContextType>;
+  order?: Resolver<ResolversTypes['OrderingOrderQuery'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type OrderingOrderServiceQueryResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['OrderingOrderServiceQuery'] = ResolversParentTypes['OrderingOrderServiceQuery']> = ResolversObject<{
-  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOrderOrderListResponse']>, ParentType, ContextType, RequireFields<OrderingOrderServiceQueryReadArgs, 'input'>>;
+export type OrderingOrderQueryResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['OrderingOrderQuery'] = ResolversParentTypes['OrderingOrderQuery']> = ResolversObject<{
+  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOrderOrderListResponse']>, ParentType, ContextType, RequireFields<OrderingOrderQueryReadArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1253,20 +1253,20 @@ export type MutationResolvers<ContextType = OrderingContext, ParentType extends 
 }>;
 
 export type OrderingMutationResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['OrderingMutation'] = ResolversParentTypes['OrderingMutation']> = ResolversObject<{
-  OrderService?: Resolver<ResolversTypes['OrderingOrderServiceMutation'], ParentType, ContextType>;
+  order?: Resolver<ResolversTypes['OrderingOrderMutation'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type OrderingOrderServiceMutationResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['OrderingOrderServiceMutation'] = ResolversParentTypes['OrderingOrderServiceMutation']> = ResolversObject<{
-  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOrderOrderListResponse']>, ParentType, ContextType, RequireFields<OrderingOrderServiceMutationMutateArgs, 'input'>>;
-  Evaluate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOrderOrderListResponse']>, ParentType, ContextType, RequireFields<OrderingOrderServiceMutationEvaluateArgs, 'input'>>;
-  Submit?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOrderOrderListResponse']>, ParentType, ContextType, RequireFields<OrderingOrderServiceMutationSubmitArgs, 'input'>>;
-  Withdraw?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOrderOrderListResponse']>, ParentType, ContextType, RequireFields<OrderingOrderServiceMutationWithdrawArgs, 'input'>>;
-  Cancel?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOrderOrderListResponse']>, ParentType, ContextType, RequireFields<OrderingOrderServiceMutationCancelArgs, 'input'>>;
-  Delete?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceResourcebaseDeleteResponse']>, ParentType, ContextType, RequireFields<OrderingOrderServiceMutationDeleteArgs, 'input'>>;
-  QueryPackingSolution?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceFulfillmentProductPackingSolutionListResponse']>, ParentType, ContextType, RequireFields<OrderingOrderServiceMutationQueryPackingSolutionArgs, 'input'>>;
-  CreateFulfillment?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceFulfillmentFulfillmentListResponse']>, ParentType, ContextType, RequireFields<OrderingOrderServiceMutationCreateFulfillmentArgs, 'input'>>;
-  TriggerFulfillment?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceStatusStatusListResponse']>, ParentType, ContextType, RequireFields<OrderingOrderServiceMutationTriggerFulfillmentArgs, 'input'>>;
+export type OrderingOrderMutationResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['OrderingOrderMutation'] = ResolversParentTypes['OrderingOrderMutation']> = ResolversObject<{
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOrderOrderListResponse']>, ParentType, ContextType, RequireFields<OrderingOrderMutationMutateArgs, 'input'>>;
+  Evaluate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOrderOrderListResponse']>, ParentType, ContextType, RequireFields<OrderingOrderMutationEvaluateArgs, 'input'>>;
+  Submit?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOrderOrderListResponse']>, ParentType, ContextType, RequireFields<OrderingOrderMutationSubmitArgs, 'input'>>;
+  Withdraw?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOrderOrderListResponse']>, ParentType, ContextType, RequireFields<OrderingOrderMutationWithdrawArgs, 'input'>>;
+  Cancel?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceOrderOrderListResponse']>, ParentType, ContextType, RequireFields<OrderingOrderMutationCancelArgs, 'input'>>;
+  Delete?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceResourcebaseDeleteResponse']>, ParentType, ContextType, RequireFields<OrderingOrderMutationDeleteArgs, 'input'>>;
+  QueryPackingSolution?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceFulfillmentProductPackingSolutionListResponse']>, ParentType, ContextType, RequireFields<OrderingOrderMutationQueryPackingSolutionArgs, 'input'>>;
+  CreateFulfillment?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceFulfillmentFulfillmentListResponse']>, ParentType, ContextType, RequireFields<OrderingOrderMutationCreateFulfillmentArgs, 'input'>>;
+  TriggerFulfillment?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceStatusStatusListResponse']>, ParentType, ContextType, RequireFields<OrderingOrderMutationTriggerFulfillmentArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1475,7 +1475,7 @@ export type SubscriptionOutputResolvers<ContextType = OrderingContext, ParentTyp
 export type Resolvers<ContextType = OrderingContext> = ResolversObject<{
   Query?: QueryResolvers<ContextType>;
   OrderingQuery?: OrderingQueryResolvers<ContextType>;
-  OrderingOrderServiceQuery?: OrderingOrderServiceQueryResolvers<ContextType>;
+  OrderingOrderQuery?: OrderingOrderQueryResolvers<ContextType>;
   ProtoIoRestorecommerceOrderOrderListResponse?: ProtoIoRestorecommerceOrderOrderListResponseResolvers<ContextType>;
   IoRestorecommerceOrderOrderListResponse?: IoRestorecommerceOrderOrderListResponseResolvers<ContextType>;
   IoRestorecommerceOrderOrderResponse?: IoRestorecommerceOrderOrderResponseResolvers<ContextType>;
@@ -1508,7 +1508,7 @@ export type Resolvers<ContextType = OrderingContext> = ResolversObject<{
   GoogleProtobufAnyValue?: GraphQLScalarType;
   Mutation?: MutationResolvers<ContextType>;
   OrderingMutation?: OrderingMutationResolvers<ContextType>;
-  OrderingOrderServiceMutation?: OrderingOrderServiceMutationResolvers<ContextType>;
+  OrderingOrderMutation?: OrderingOrderMutationResolvers<ContextType>;
   ProtoIoRestorecommerceResourcebaseDeleteResponse?: ProtoIoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType>;
   IoRestorecommerceResourcebaseDeleteResponse?: IoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType>;
   ProtoIoRestorecommerceFulfillmentProductPackingSolutionListResponse?: ProtoIoRestorecommerceFulfillmentProductPackingSolutionListResponseResolvers<ContextType>;

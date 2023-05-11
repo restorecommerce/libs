@@ -130,6 +130,16 @@ export const snakeToCamel = (s: string): string => {
     .join('');
 }
 
+export const camelToSnake = (serviceName: string) => {
+  // convert camel case to snake case
+  serviceName = serviceName.replace(/(?:^|\.?)([A-Z])/g, (x, y) => { return '_' + y.toLowerCase(); }).replace(/^_/, '');
+  return serviceName;
+};
+
+export const getServiceName = (serviceName: string) => {
+  return serviceName.endsWith('Service') ? camelToSnake(serviceName.substr(0, serviceName.length - 7)) : camelToSnake(serviceName);
+};
+
 export const capitalize = (s: string): string => {
   return s.substring(0, 1).toUpperCase() + s.substring(1);
 }

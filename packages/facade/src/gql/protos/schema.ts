@@ -11,7 +11,7 @@ import {
 import flat from 'array.prototype.flat';
 import { getWhitelistBlacklistConfig, Mutate } from './graphql';
 import { GraphQLFieldConfig, GraphQLFieldConfigArgumentMap, GraphQLFieldConfigMap } from 'graphql/type/definition';
-import { capitalize, capitalizeProtoName, useSubscriptions } from './utils';
+import { capitalize, capitalizeProtoName, useSubscriptions, getServiceName } from './utils';
 import { getTyping } from './registry';
 
 const typeCache = new Map<string, GraphQLObjectType>();
@@ -226,8 +226,7 @@ export const generateSubServiceSchemas = (subServices: ProtoMetadata[], config: 
   subServices.forEach((meta) => {
     meta.fileDescriptor.service.forEach(service => {
       if (service.name) {
-        // const subName = meta.options.services[service.name].options!['service_name'];
-        const subName = service.name;
+        const subName = getServiceName(service.name);
         const {mutations, queries} = getWhitelistBlacklistConfig(service, config, meta, subName)
 
         const schemas = getGQLSchemas(service);
@@ -260,8 +259,8 @@ export const generateSubServiceSchemas = (subServices: ProtoMetadata[], config: 
   if (config.root) {
     return generateSchema(flat(subServices.map(meta => {
       return meta.fileDescriptor.service.map(service => {
-        if (meta.options && meta.options.services && meta.options.services[service.name]) {
-          const subName = meta.options.services[service.name].options!['service_name'];
+        if (service.name) {
+          const subName = getServiceName(service.name);
 
           return ({
             prefix: prefix + subName.substring(0, 1).toUpperCase() + subName.substring(1).toLowerCase(),

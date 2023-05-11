@@ -12,7 +12,8 @@ import {
   decodeBufferFields,
   getKeys,
   snakeToCamel,
-  useSubscriptions
+  useSubscriptions,
+  getServiceName
 } from './utils';
 import {
   KafkaSubscription,
@@ -328,8 +329,9 @@ export const generateResolver = (...namespaces: string[]) => {
 export const generateSubServiceResolvers = <T, M extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, M>>(subServices: ProtoMetadata[], config: SubSpaceServiceConfig, namespace: string): T => {
   subServices.forEach((meta) => {
     meta.fileDescriptor.service.forEach(service => {
-      if (meta.options && meta.options.services && meta.options.services[service.name]) {
-        const subName = meta.options.services[service.name].options!['service_name'];
+      if (service.name) {
+        // strip Service from end of String for sub service name
+        const subName = getServiceName(service.name);
         const {mutations, queries} = getWhitelistBlacklistConfig(service, config, meta, subName);
 
         const func = getGQLResolverFunctions<M, CTX>(service, namespace, subName || namespace, config);
@@ -438,11 +440,11 @@ export const generateSubServiceResolvers = <T, M extends Record<string, any>, CT
   if (config.root) {
     return generateResolver(...flat(subServices.map(meta => {
       return meta.fileDescriptor.service.map(service => {
-        if (meta.options && meta.options.services && meta.options.services[service.name]) {
-          return meta.options.services[service.name].options!['service_name'];
+        if (service.name) {
+          return getServiceName(service.name);
         }
-        return null;
-      }).filter(s => s !== null);
+        return '';
+      }).filter(s => s !== '');
     })));
   }
 

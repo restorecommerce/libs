@@ -6,9 +6,7 @@ import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/options.proto";
 
 // Service provides the CRUD operations
-service Service {
-  option (io.restorecommerce.options.service_name) = "search";
-
+service SearchService {
   rpc Search (SearchRequest) returns (SearchResponse);
 }
 

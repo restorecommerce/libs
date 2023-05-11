@@ -487,10 +487,10 @@ export const VAT = {
 };
 
 /** Microservice definition. */
-export type ServiceDefinition = typeof ServiceDefinition;
-export const ServiceDefinition = {
-  name: "Service",
-  fullName: "io.restorecommerce.tax.Service",
+export type TaxServiceDefinition = typeof TaxServiceDefinition;
+export const TaxServiceDefinition = {
+  name: "TaxService",
+  fullName: "io.restorecommerce.tax.TaxService",
   methods: {
     read: {
       name: "Read",
@@ -535,7 +535,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
+export interface TaxServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<TaxListResponse>>;
   create(request: TaxList, context: CallContext & CallContextExt): Promise<DeepPartial<TaxListResponse>>;
   delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;
@@ -543,7 +543,7 @@ export interface ServiceImplementation<CallContextExt = {}> {
   upsert(request: TaxList, context: CallContext & CallContextExt): Promise<DeepPartial<TaxListResponse>>;
 }
 
-export interface ServiceClient<CallOptionsExt = {}> {
+export interface TaxServiceClient<CallOptionsExt = {}> {
   read(request: DeepPartial<ReadRequest>, options?: CallOptions & CallOptionsExt): Promise<TaxListResponse>;
   create(request: DeepPartial<TaxList>, options?: CallOptions & CallOptionsExt): Promise<TaxListResponse>;
   delete(request: DeepPartial<DeleteRequest>, options?: CallOptions & CallOptionsExt): Promise<DeleteResponse>;
@@ -883,7 +883,7 @@ export const protoMetadata: ProtoMetadata = {
     }],
     "enumType": [],
     "service": [{
-      "name": "Service",
+      "name": "TaxService",
       "method": [{
         "name": "Read",
         "inputType": ".io.restorecommerce.resourcebase.ReadRequest",
@@ -920,7 +920,7 @@ export const protoMetadata: ProtoMetadata = {
         "clientStreaming": false,
         "serverStreaming": false,
       }],
-      "options": { "deprecated": false, "uninterpretedOption": [] },
+      "options": undefined,
     }],
     "extension": [],
     "options": undefined,
@@ -933,7 +933,7 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0],
-        "span": [17, 0, 27, 1],
+        "span": [17, 0, 25, 1],
         "leadingComments": "\n Microservice definition.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
@@ -981,7 +981,7 @@ export const protoMetadata: ProtoMetadata = {
         },
       },
     },
-    services: { "Service": { options: { "service_name": "tax" }, methods: { "Read": { "is_query": true } } } },
+    services: { "TaxService": { options: undefined, methods: { "Read": { "is_query": true } } } },
   },
 };
 

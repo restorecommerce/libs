@@ -13,9 +13,7 @@ import "io/restorecommerce/options.proto";
  * The microservice for scheduling jobs.
  * Provides CRUD operations.
  */
-service Service {
-  option (io.restorecommerce.options.service_name) = "job";
-
+service JobService {
   rpc Read (JobReadRequest) returns (JobListResponse) {
     option (io.restorecommerce.options.is_query) = true;
   };

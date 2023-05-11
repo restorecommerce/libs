@@ -22,11 +22,11 @@ export type Mutation = {
 
 export type PaymentMutation = {
   __typename?: 'PaymentMutation';
-  payment: PaymentPaymentMutation;
+  PaymentService: PaymentPaymentServiceMutation;
 };
 
-export type PaymentPaymentMutation = {
-  __typename?: 'PaymentPaymentMutation';
+export type PaymentPaymentServiceMutation = {
+  __typename?: 'PaymentPaymentServiceMutation';
   SetupAuthorization?: Maybe<ProtoIoRestorecommercePaymentSetupResponse>;
   SetupPurchase?: Maybe<ProtoIoRestorecommercePaymentSetupResponse>;
   Authorize?: Maybe<ProtoIoRestorecommercePaymentPaymentResponse>;
@@ -35,27 +35,27 @@ export type PaymentPaymentMutation = {
 };
 
 
-export type PaymentPaymentMutationSetupAuthorizationArgs = {
+export type PaymentPaymentServiceMutationSetupAuthorizationArgs = {
   input: IIoRestorecommercePaymentSetupRequest;
 };
 
 
-export type PaymentPaymentMutationSetupPurchaseArgs = {
+export type PaymentPaymentServiceMutationSetupPurchaseArgs = {
   input: IIoRestorecommercePaymentSetupRequest;
 };
 
 
-export type PaymentPaymentMutationAuthorizeArgs = {
+export type PaymentPaymentServiceMutationAuthorizeArgs = {
   input: IIoRestorecommercePaymentPaymentRequest;
 };
 
 
-export type PaymentPaymentMutationPurchaseArgs = {
+export type PaymentPaymentServiceMutationPurchaseArgs = {
   input: IIoRestorecommercePaymentPaymentRequest;
 };
 
 
-export type PaymentPaymentMutationCaptureArgs = {
+export type PaymentPaymentServiceMutationCaptureArgs = {
   input: IIoRestorecommercePaymentCaptureRequest;
 };
 
@@ -399,7 +399,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = ResolversObject<{
   Mutation: ResolverTypeWrapper<{}>;
   PaymentMutation: ResolverTypeWrapper<PaymentMutation>;
-  PaymentPaymentMutation: ResolverTypeWrapper<PaymentPaymentMutation>;
+  PaymentPaymentServiceMutation: ResolverTypeWrapper<PaymentPaymentServiceMutation>;
   ProtoIoRestorecommercePaymentSetupResponse: ResolverTypeWrapper<ProtoIoRestorecommercePaymentSetupResponse>;
   IoRestorecommercePaymentSetupResponse: ResolverTypeWrapper<IoRestorecommercePaymentSetupResponse>;
   IoRestorecommercePaymentSetupPayloadStatus: ResolverTypeWrapper<IoRestorecommercePaymentSetupPayloadStatus>;
@@ -427,7 +427,7 @@ export type ResolversTypes = ResolversObject<{
 export type ResolversParentTypes = ResolversObject<{
   Mutation: {};
   PaymentMutation: PaymentMutation;
-  PaymentPaymentMutation: PaymentPaymentMutation;
+  PaymentPaymentServiceMutation: PaymentPaymentServiceMutation;
   ProtoIoRestorecommercePaymentSetupResponse: ProtoIoRestorecommercePaymentSetupResponse;
   IoRestorecommercePaymentSetupResponse: IoRestorecommercePaymentSetupResponse;
   IoRestorecommercePaymentSetupPayloadStatus: IoRestorecommercePaymentSetupPayloadStatus;
@@ -454,16 +454,16 @@ export type MutationResolvers<ContextType = PaymentContext, ParentType extends R
 }>;
 
 export type PaymentMutationResolvers<ContextType = PaymentContext, ParentType extends ResolversParentTypes['PaymentMutation'] = ResolversParentTypes['PaymentMutation']> = ResolversObject<{
-  payment?: Resolver<ResolversTypes['PaymentPaymentMutation'], ParentType, ContextType>;
+  PaymentService?: Resolver<ResolversTypes['PaymentPaymentServiceMutation'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type PaymentPaymentMutationResolvers<ContextType = PaymentContext, ParentType extends ResolversParentTypes['PaymentPaymentMutation'] = ResolversParentTypes['PaymentPaymentMutation']> = ResolversObject<{
-  SetupAuthorization?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommercePaymentSetupResponse']>, ParentType, ContextType, RequireFields<PaymentPaymentMutationSetupAuthorizationArgs, 'input'>>;
-  SetupPurchase?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommercePaymentSetupResponse']>, ParentType, ContextType, RequireFields<PaymentPaymentMutationSetupPurchaseArgs, 'input'>>;
-  Authorize?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommercePaymentPaymentResponse']>, ParentType, ContextType, RequireFields<PaymentPaymentMutationAuthorizeArgs, 'input'>>;
-  Purchase?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommercePaymentPaymentResponse']>, ParentType, ContextType, RequireFields<PaymentPaymentMutationPurchaseArgs, 'input'>>;
-  Capture?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommercePaymentPaymentResponse']>, ParentType, ContextType, RequireFields<PaymentPaymentMutationCaptureArgs, 'input'>>;
+export type PaymentPaymentServiceMutationResolvers<ContextType = PaymentContext, ParentType extends ResolversParentTypes['PaymentPaymentServiceMutation'] = ResolversParentTypes['PaymentPaymentServiceMutation']> = ResolversObject<{
+  SetupAuthorization?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommercePaymentSetupResponse']>, ParentType, ContextType, RequireFields<PaymentPaymentServiceMutationSetupAuthorizationArgs, 'input'>>;
+  SetupPurchase?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommercePaymentSetupResponse']>, ParentType, ContextType, RequireFields<PaymentPaymentServiceMutationSetupPurchaseArgs, 'input'>>;
+  Authorize?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommercePaymentPaymentResponse']>, ParentType, ContextType, RequireFields<PaymentPaymentServiceMutationAuthorizeArgs, 'input'>>;
+  Purchase?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommercePaymentPaymentResponse']>, ParentType, ContextType, RequireFields<PaymentPaymentServiceMutationPurchaseArgs, 'input'>>;
+  Capture?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommercePaymentPaymentResponse']>, ParentType, ContextType, RequireFields<PaymentPaymentServiceMutationCaptureArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -541,7 +541,7 @@ export type SubscriptionOutputResolvers<ContextType = PaymentContext, ParentType
 export type Resolvers<ContextType = PaymentContext> = ResolversObject<{
   Mutation?: MutationResolvers<ContextType>;
   PaymentMutation?: PaymentMutationResolvers<ContextType>;
-  PaymentPaymentMutation?: PaymentPaymentMutationResolvers<ContextType>;
+  PaymentPaymentServiceMutation?: PaymentPaymentServiceMutationResolvers<ContextType>;
   ProtoIoRestorecommercePaymentSetupResponse?: ProtoIoRestorecommercePaymentSetupResponseResolvers<ContextType>;
   IoRestorecommercePaymentSetupResponse?: IoRestorecommercePaymentSetupResponseResolvers<ContextType>;
   IoRestorecommercePaymentSetupPayloadStatus?: IoRestorecommercePaymentSetupPayloadStatusResolvers<ContextType>;

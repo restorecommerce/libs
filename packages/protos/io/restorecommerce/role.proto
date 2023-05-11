@@ -8,9 +8,7 @@ import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
 import "io/restorecommerce/options.proto";
 
-service Service {
-  option (io.restorecommerce.options.service_name) = "role";
-
+service RoleService {
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (RoleListResponse) {
     option (io.restorecommerce.options.is_query) = true;
   };

@@ -11,9 +11,7 @@ import "io/restorecommerce/options.proto";
 /*
 * Microservice definition.
 */
-service Service {
-  option (io.restorecommerce.options.service_name) = "authentication_log";
-
+service AuthenticationLogService {
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (AuthenticationLogListResponse) {
     option (io.restorecommerce.options.is_query) = true;
   };

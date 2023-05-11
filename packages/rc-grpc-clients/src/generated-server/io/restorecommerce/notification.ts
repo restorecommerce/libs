@@ -457,10 +457,10 @@ export const Notification = {
 };
 
 /** Message structure for Notification */
-export type ServiceDefinition = typeof ServiceDefinition;
-export const ServiceDefinition = {
-  name: "Service",
-  fullName: "io.restorecommerce.notification.Service",
+export type NotificationServiceDefinition = typeof NotificationServiceDefinition;
+export const NotificationServiceDefinition = {
+  name: "NotificationService",
+  fullName: "io.restorecommerce.notification.NotificationService",
   methods: {
     read: {
       name: "Read",
@@ -505,7 +505,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
+export interface NotificationServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<NotificationListResponse>>;
   create(
     request: NotificationList,
@@ -522,7 +522,7 @@ export interface ServiceImplementation<CallContextExt = {}> {
   ): Promise<DeepPartial<NotificationListResponse>>;
 }
 
-export interface ServiceClient<CallOptionsExt = {}> {
+export interface NotificationServiceClient<CallOptionsExt = {}> {
   read(request: DeepPartial<ReadRequest>, options?: CallOptions & CallOptionsExt): Promise<NotificationListResponse>;
   create(
     request: DeepPartial<NotificationList>,
@@ -855,7 +855,7 @@ export const protoMetadata: ProtoMetadata = {
     }],
     "enumType": [],
     "service": [{
-      "name": "Service",
+      "name": "NotificationService",
       "method": [{
         "name": "Read",
         "inputType": ".io.restorecommerce.resourcebase.ReadRequest",
@@ -892,14 +892,14 @@ export const protoMetadata: ProtoMetadata = {
         "clientStreaming": false,
         "serverStreaming": false,
       }],
-      "options": { "deprecated": false, "uninterpretedOption": [] },
+      "options": undefined,
     }],
     "extension": [],
     "options": undefined,
     "sourceCodeInfo": {
       "location": [{
         "path": [6, 0],
-        "span": [11, 0, 21, 1],
+        "span": [11, 0, 19, 1],
         "leadingComments": " Message structure for Notification\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
@@ -915,9 +915,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.notification.Notification": Notification,
   },
   dependencies: [protoMetadata1, protoMetadata2, protoMetadata3, protoMetadata4, protoMetadata5],
-  options: {
-    services: { "Service": { options: { "service_name": "notification" }, methods: { "Read": { "is_query": true } } } },
-  },
+  options: { services: { "NotificationService": { options: undefined, methods: { "Read": { "is_query": true } } } } },
 };
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;

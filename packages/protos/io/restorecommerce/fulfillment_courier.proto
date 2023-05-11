@@ -14,8 +14,6 @@ Microservice defination
 */
 
 service FulfillmentCourierService {
-  option (io.restorecommerce.options.service_name) = "fulfillment_courier";
-
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (FulfillmentCourierListResponse) {
     option (io.restorecommerce.options.is_query) = true;
   };

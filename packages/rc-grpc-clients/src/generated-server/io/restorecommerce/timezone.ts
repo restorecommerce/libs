@@ -381,10 +381,10 @@ export const Timezone = {
 };
 
 /** Microservice definition. */
-export type ServiceDefinition = typeof ServiceDefinition;
-export const ServiceDefinition = {
-  name: "Service",
-  fullName: "io.restorecommerce.timezone.Service",
+export type TimezoneServiceDefinition = typeof TimezoneServiceDefinition;
+export const TimezoneServiceDefinition = {
+  name: "TimezoneService",
+  fullName: "io.restorecommerce.timezone.TimezoneService",
   methods: {
     read: {
       name: "Read",
@@ -429,7 +429,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
+export interface TimezoneServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<TimezoneListResponse>>;
   create(request: TimezoneList, context: CallContext & CallContextExt): Promise<DeepPartial<TimezoneListResponse>>;
   delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;
@@ -437,7 +437,7 @@ export interface ServiceImplementation<CallContextExt = {}> {
   upsert(request: TimezoneList, context: CallContext & CallContextExt): Promise<DeepPartial<TimezoneListResponse>>;
 }
 
-export interface ServiceClient<CallOptionsExt = {}> {
+export interface TimezoneServiceClient<CallOptionsExt = {}> {
   read(request: DeepPartial<ReadRequest>, options?: CallOptions & CallOptionsExt): Promise<TimezoneListResponse>;
   create(request: DeepPartial<TimezoneList>, options?: CallOptions & CallOptionsExt): Promise<TimezoneListResponse>;
   delete(request: DeepPartial<DeleteRequest>, options?: CallOptions & CallOptionsExt): Promise<DeleteResponse>;
@@ -684,7 +684,7 @@ export const protoMetadata: ProtoMetadata = {
     }],
     "enumType": [],
     "service": [{
-      "name": "Service",
+      "name": "TimezoneService",
       "method": [{
         "name": "Read",
         "inputType": ".io.restorecommerce.resourcebase.ReadRequest",
@@ -721,14 +721,14 @@ export const protoMetadata: ProtoMetadata = {
         "clientStreaming": false,
         "serverStreaming": false,
       }],
-      "options": { "deprecated": false, "uninterpretedOption": [] },
+      "options": undefined,
     }],
     "extension": [],
     "options": undefined,
     "sourceCodeInfo": {
       "location": [{
         "path": [6, 0],
-        "span": [13, 0, 23, 1],
+        "span": [13, 0, 21, 1],
         "leadingComments": "\n Microservice definition.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
@@ -744,9 +744,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.timezone.Timezone": Timezone,
   },
   dependencies: [protoMetadata1, protoMetadata2, protoMetadata3, protoMetadata4, protoMetadata5],
-  options: {
-    services: { "Service": { options: { "service_name": "timezone" }, methods: { "Read": { "is_query": true } } } },
-  },
+  options: { services: { "TimezoneService": { options: undefined, methods: { "Read": { "is_query": true } } } } },
 };
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;

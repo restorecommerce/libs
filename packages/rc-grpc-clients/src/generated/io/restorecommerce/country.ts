@@ -422,10 +422,10 @@ export const Country = {
 };
 
 /** Microservice definition. */
-export type ServiceDefinition = typeof ServiceDefinition;
-export const ServiceDefinition = {
-  name: "Service",
-  fullName: "io.restorecommerce.country.Service",
+export type CountryServiceDefinition = typeof CountryServiceDefinition;
+export const CountryServiceDefinition = {
+  name: "CountryService",
+  fullName: "io.restorecommerce.country.CountryService",
   methods: {
     read: {
       name: "Read",
@@ -470,7 +470,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
+export interface CountryServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<CountryListResponse>>;
   create(request: CountryList, context: CallContext & CallContextExt): Promise<DeepPartial<CountryListResponse>>;
   delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;
@@ -478,7 +478,7 @@ export interface ServiceImplementation<CallContextExt = {}> {
   upsert(request: CountryList, context: CallContext & CallContextExt): Promise<DeepPartial<CountryListResponse>>;
 }
 
-export interface ServiceClient<CallOptionsExt = {}> {
+export interface CountryServiceClient<CallOptionsExt = {}> {
   read(request: DeepPartial<ReadRequest>, options?: CallOptions & CallOptionsExt): Promise<CountryListResponse>;
   create(request: DeepPartial<CountryList>, options?: CallOptions & CallOptionsExt): Promise<CountryListResponse>;
   delete(request: DeepPartial<DeleteRequest>, options?: CallOptions & CallOptionsExt): Promise<DeleteResponse>;
@@ -764,7 +764,7 @@ export const protoMetadata: ProtoMetadata = {
     }],
     "enumType": [],
     "service": [{
-      "name": "Service",
+      "name": "CountryService",
       "method": [{
         "name": "Read",
         "inputType": ".io.restorecommerce.resourcebase.ReadRequest",
@@ -801,14 +801,14 @@ export const protoMetadata: ProtoMetadata = {
         "clientStreaming": false,
         "serverStreaming": false,
       }],
-      "options": { "deprecated": false, "uninterpretedOption": [] },
+      "options": undefined,
     }],
     "extension": [],
     "options": undefined,
     "sourceCodeInfo": {
       "location": [{
         "path": [6, 0],
-        "span": [13, 0, 23, 1],
+        "span": [13, 0, 21, 1],
         "leadingComments": "\n Microservice definition.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
@@ -824,9 +824,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.country.Country": Country,
   },
   dependencies: [protoMetadata1, protoMetadata2, protoMetadata3, protoMetadata4, protoMetadata5],
-  options: {
-    services: { "Service": { options: { "service_name": "country" }, methods: { "Read": { "is_query": true } } } },
-  },
+  options: { services: { "CountryService": { options: undefined, methods: { "Read": { "is_query": true } } } } },
 };
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;

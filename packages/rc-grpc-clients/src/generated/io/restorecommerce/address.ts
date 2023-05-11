@@ -1048,10 +1048,10 @@ export const ShippingAddress = {
 };
 
 /** Microservice definition. */
-export type ServiceDefinition = typeof ServiceDefinition;
-export const ServiceDefinition = {
-  name: "Service",
-  fullName: "io.restorecommerce.address.Service",
+export type AddressServiceDefinition = typeof AddressServiceDefinition;
+export const AddressServiceDefinition = {
+  name: "AddressService",
+  fullName: "io.restorecommerce.address.AddressService",
   methods: {
     read: {
       name: "Read",
@@ -1096,7 +1096,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
+export interface AddressServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<AddressListResponse>>;
   create(request: AddressList, context: CallContext & CallContextExt): Promise<DeepPartial<AddressListResponse>>;
   delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;
@@ -1104,7 +1104,7 @@ export interface ServiceImplementation<CallContextExt = {}> {
   upsert(request: AddressList, context: CallContext & CallContextExt): Promise<DeepPartial<AddressListResponse>>;
 }
 
-export interface ServiceClient<CallOptionsExt = {}> {
+export interface AddressServiceClient<CallOptionsExt = {}> {
   read(request: DeepPartial<ReadRequest>, options?: CallOptions & CallOptionsExt): Promise<AddressListResponse>;
   create(request: DeepPartial<AddressList>, options?: CallOptions & CallOptionsExt): Promise<AddressListResponse>;
   delete(request: DeepPartial<DeleteRequest>, options?: CallOptions & CallOptionsExt): Promise<DeleteResponse>;
@@ -1820,7 +1820,7 @@ export const protoMetadata: ProtoMetadata = {
     }],
     "enumType": [],
     "service": [{
-      "name": "Service",
+      "name": "AddressService",
       "method": [{
         "name": "Read",
         "inputType": ".io.restorecommerce.resourcebase.ReadRequest",
@@ -1857,7 +1857,7 @@ export const protoMetadata: ProtoMetadata = {
         "clientStreaming": false,
         "serverStreaming": false,
       }],
-      "options": { "deprecated": false, "uninterpretedOption": [] },
+      "options": undefined,
     }],
     "extension": [],
     "options": undefined,
@@ -1870,7 +1870,7 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0],
-        "span": [16, 0, 26, 1],
+        "span": [16, 0, 24, 1],
         "leadingComments": "\n Microservice definition.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
@@ -1908,7 +1908,7 @@ export const protoMetadata: ProtoMetadata = {
         },
       },
     },
-    services: { "Service": { options: { "service_name": "address" }, methods: { "Read": { "is_query": true } } } },
+    services: { "AddressService": { options: undefined, methods: { "Read": { "is_query": true } } } },
   },
 };
 

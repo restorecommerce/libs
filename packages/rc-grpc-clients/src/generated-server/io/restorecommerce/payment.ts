@@ -2331,10 +2331,10 @@ export const Item = {
   },
 };
 
-export type ServiceDefinition = typeof ServiceDefinition;
-export const ServiceDefinition = {
-  name: "Service",
-  fullName: "io.restorecommerce.payment.Service",
+export type PaymentServiceDefinition = typeof PaymentServiceDefinition;
+export const PaymentServiceDefinition = {
+  name: "PaymentService",
+  fullName: "io.restorecommerce.payment.PaymentService",
   methods: {
     /** Wrapper for setup_authorization in ActiveMerchant */
     setupAuthorization: {
@@ -2384,7 +2384,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
+export interface PaymentServiceImplementation<CallContextExt = {}> {
   /** Wrapper for setup_authorization in ActiveMerchant */
   setupAuthorization(request: SetupRequest, context: CallContext & CallContextExt): Promise<DeepPartial<SetupResponse>>;
   /** Wrapper for setup_purchase in ActiveMerchant */
@@ -2397,7 +2397,7 @@ export interface ServiceImplementation<CallContextExt = {}> {
   capture(request: CaptureRequest, context: CallContext & CallContextExt): Promise<DeepPartial<PaymentResponse>>;
 }
 
-export interface ServiceClient<CallOptionsExt = {}> {
+export interface PaymentServiceClient<CallOptionsExt = {}> {
   /** Wrapper for setup_authorization in ActiveMerchant */
   setupAuthorization(
     request: DeepPartial<SetupRequest>,
@@ -3329,7 +3329,7 @@ export const protoMetadata: ProtoMetadata = {
       "reservedName": [],
     }],
     "service": [{
-      "name": "Service",
+      "name": "PaymentService",
       "method": [{
         "name": "SetupAuthorization",
         "inputType": ".io.restorecommerce.payment.SetupRequest",
@@ -3366,95 +3366,95 @@ export const protoMetadata: ProtoMetadata = {
         "clientStreaming": false,
         "serverStreaming": false,
       }],
-      "options": { "deprecated": false, "uninterpretedOption": [] },
+      "options": undefined,
     }],
     "extension": [],
     "options": undefined,
     "sourceCodeInfo": {
       "location": [{
         "path": [6, 0, 2, 0],
-        "span": [10, 2, 64],
+        "span": [8, 2, 64],
         "leadingComments": " Wrapper for setup_authorization in ActiveMerchant\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 1],
-        "span": [13, 2, 59],
+        "span": [11, 2, 59],
         "leadingComments": " Wrapper for setup_purchase in ActiveMerchant\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 2],
-        "span": [16, 2, 59],
+        "span": [14, 2, 59],
         "leadingComments":
           " Gets payment details by token or transaction. Only supported by PayPal Express Checkout.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 3],
-        "span": [19, 2, 58],
+        "span": [17, 2, 58],
         "leadingComments":
           " Gets payment details by token or transaction. Only supported by PayPal Express Checkout.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 4],
-        "span": [22, 2, 57],
+        "span": [20, 2, 57],
         "leadingComments": " Can capture both cardless and standard authorization.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 0],
-        "span": [26, 0, 39, 1],
+        "span": [24, 0, 37, 1],
         "leadingComments": " Request object for setup calls\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 3],
-        "span": [53, 0, 56, 1],
+        "span": [51, 0, 54, 1],
         "leadingComments": " Response object for setup calls.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 4],
-        "span": [59, 0, 67, 1],
+        "span": [57, 0, 65, 1],
         "leadingComments": " Request object for authorization or purchase call for cardless payment.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 5],
-        "span": [70, 0, 76, 1],
+        "span": [68, 0, 74, 1],
         "leadingComments": " Request object for capture call for both standard and cardless payments.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 8],
-        "span": [90, 0, 93, 1],
+        "span": [88, 0, 91, 1],
         "leadingComments":
           " Unified response object for authorization, purchase and capture calls\n for both standard and cardless payments.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 9],
-        "span": [96, 0, 103, 1],
+        "span": [94, 0, 101, 1],
         "leadingComments": " Used for building ActiveMerchant::Billing::CreditCard instance.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 10],
-        "span": [106, 0, 111, 1],
+        "span": [104, 0, 109, 1],
         "leadingComments": " Represents purchased item. Not all providers support this.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [5, 0],
-        "span": [114, 0, 262, 1],
+        "span": [112, 0, 260, 1],
         "leadingComments": " Possible service providers. Provider names must be exactly as in config.yml.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [5, 1],
-        "span": [265, 0, 269, 1],
+        "span": [263, 0, 267, 1],
         "leadingComments": " Possible payment identifiers.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
@@ -3478,7 +3478,6 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.payment.Item": Item,
   },
   dependencies: [protoMetadata1, protoMetadata2, protoMetadata3],
-  options: { services: { "Service": { options: { "service_name": "payment" }, methods: {} } } },
 };
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;

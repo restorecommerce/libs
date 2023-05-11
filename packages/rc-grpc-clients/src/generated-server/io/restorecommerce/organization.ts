@@ -632,10 +632,10 @@ export const Organization = {
   },
 };
 
-export type ServiceDefinition = typeof ServiceDefinition;
-export const ServiceDefinition = {
-  name: "Service",
-  fullName: "io.restorecommerce.organization.Service",
+export type OrganizationServiceDefinition = typeof OrganizationServiceDefinition;
+export const OrganizationServiceDefinition = {
+  name: "OrganizationService",
+  fullName: "io.restorecommerce.organization.OrganizationService",
   methods: {
     read: {
       name: "Read",
@@ -680,7 +680,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
+export interface OrganizationServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<OrganizationListResponse>>;
   create(
     request: OrganizationList,
@@ -697,7 +697,7 @@ export interface ServiceImplementation<CallContextExt = {}> {
   ): Promise<DeepPartial<OrganizationListResponse>>;
 }
 
-export interface ServiceClient<CallOptionsExt = {}> {
+export interface OrganizationServiceClient<CallOptionsExt = {}> {
   read(request: DeepPartial<ReadRequest>, options?: CallOptions & CallOptionsExt): Promise<OrganizationListResponse>;
   create(
     request: DeepPartial<OrganizationList>,
@@ -1182,7 +1182,7 @@ export const protoMetadata: ProtoMetadata = {
     }],
     "enumType": [],
     "service": [{
-      "name": "Service",
+      "name": "OrganizationService",
       "method": [{
         "name": "Read",
         "inputType": ".io.restorecommerce.resourcebase.ReadRequest",
@@ -1219,7 +1219,7 @@ export const protoMetadata: ProtoMetadata = {
         "clientStreaming": false,
         "serverStreaming": false,
       }],
-      "options": { "deprecated": false, "uninterpretedOption": [] },
+      "options": undefined,
     }],
     "extension": [],
     "options": undefined,
@@ -1232,37 +1232,37 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 5, 2, 0],
-        "span": [55, 2, 25],
+        "span": [53, 2, 25],
         "leadingComments": "",
         "trailingComments": "/ Organization ID, unique, key\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 5, 2, 2],
-        "span": [57, 2, 65, 4],
+        "span": [55, 2, 63, 4],
         "leadingComments": "",
         "trailingComments": "/ Address for the organization\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 5, 2, 3],
-        "span": [66, 2, 74, 4],
+        "span": [64, 2, 72, 4],
         "leadingComments": "",
         "trailingComments": "  Hierarchically superior organization; may be null\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 5, 2, 4],
-        "span": [75, 2, 83, 4],
+        "span": [73, 2, 81, 4],
         "leadingComments": "",
         "trailingComments": " list of possible legal addresses of different types\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 5, 2, 7],
-        "span": [86, 2, 27],
+        "span": [84, 2, 27],
         "leadingComments": "",
         "trailingComments": " base64; arangoDB does not support blob storage\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 5, 2, 14],
-        "span": [93, 2, 41],
+        "span": [91, 2, 41],
         "leadingComments": "",
         "trailingComments": "/ additional data\n",
         "leadingDetachedComments": [],
@@ -1319,7 +1319,7 @@ export const protoMetadata: ProtoMetadata = {
         },
       },
     },
-    services: { "Service": { options: { "service_name": "organization" }, methods: { "Read": { "is_query": true } } } },
+    services: { "OrganizationService": { options: undefined, methods: { "Read": { "is_query": true } } } },
   },
 };
 

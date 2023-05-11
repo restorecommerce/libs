@@ -23,16 +23,16 @@ export type Query = {
 
 export type SchedulingQuery = {
   __typename?: 'SchedulingQuery';
-  job: SchedulingJobQuery;
+  JobService: SchedulingJobServiceQuery;
 };
 
-export type SchedulingJobQuery = {
-  __typename?: 'SchedulingJobQuery';
+export type SchedulingJobServiceQuery = {
+  __typename?: 'SchedulingJobServiceQuery';
   Read?: Maybe<ProtoIoRestorecommerceJobJobListResponse>;
 };
 
 
-export type SchedulingJobQueryReadArgs = {
+export type SchedulingJobServiceQueryReadArgs = {
   input: IIoRestorecommerceJobJobReadRequest;
 };
 
@@ -183,22 +183,22 @@ export type Mutation = {
 
 export type SchedulingMutation = {
   __typename?: 'SchedulingMutation';
-  job: SchedulingJobMutation;
+  JobService: SchedulingJobServiceMutation;
 };
 
-export type SchedulingJobMutation = {
-  __typename?: 'SchedulingJobMutation';
+export type SchedulingJobServiceMutation = {
+  __typename?: 'SchedulingJobServiceMutation';
   Mutate?: Maybe<ProtoIoRestorecommerceJobJobListResponse>;
   Delete?: Maybe<ProtoIoRestorecommerceResourcebaseDeleteResponse>;
 };
 
 
-export type SchedulingJobMutationMutateArgs = {
+export type SchedulingJobServiceMutationMutateArgs = {
   input: IIoRestorecommerceJobJobList;
 };
 
 
-export type SchedulingJobMutationDeleteArgs = {
+export type SchedulingJobServiceMutationDeleteArgs = {
   input: IIoRestorecommerceResourcebaseDeleteRequest;
 };
 
@@ -301,9 +301,10 @@ export type IIoRestorecommerceResourcebaseDeleteRequest = {
 export type Subscription = {
   __typename?: 'Subscription';
   orderingOrders?: Maybe<SubscriptionOutput>;
-  fulfillmentFulfillment?: Maybe<SubscriptionOutput>;
+  catalogProducts?: Maybe<SubscriptionOutput>;
+  fulfillmentFulfillments?: Maybe<SubscriptionOutput>;
   fulfillmentFulfillmentCouriers?: Maybe<SubscriptionOutput>;
-  fulfillmentFulfillmentProduct?: Maybe<SubscriptionOutput>;
+  fulfillmentFulfillment_products?: Maybe<SubscriptionOutput>;
 };
 
 
@@ -312,7 +313,12 @@ export type SubscriptionOrderingOrdersArgs = {
 };
 
 
-export type SubscriptionFulfillmentFulfillmentArgs = {
+export type SubscriptionCatalogProductsArgs = {
+  action?: InputMaybe<SubscriptionAction>;
+};
+
+
+export type SubscriptionFulfillmentFulfillmentsArgs = {
   action?: InputMaybe<SubscriptionAction>;
 };
 
@@ -322,7 +328,7 @@ export type SubscriptionFulfillmentFulfillmentCouriersArgs = {
 };
 
 
-export type SubscriptionFulfillmentFulfillmentProductArgs = {
+export type SubscriptionFulfillmentFulfillment_ProductsArgs = {
   action?: InputMaybe<SubscriptionAction>;
 };
 
@@ -409,7 +415,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>;
   SchedulingQuery: ResolverTypeWrapper<SchedulingQuery>;
-  SchedulingJobQuery: ResolverTypeWrapper<SchedulingJobQuery>;
+  SchedulingJobServiceQuery: ResolverTypeWrapper<SchedulingJobServiceQuery>;
   ProtoIoRestorecommerceJobJobListResponse: ResolverTypeWrapper<ProtoIoRestorecommerceJobJobListResponse>;
   IoRestorecommerceJobJobListResponse: ResolverTypeWrapper<IoRestorecommerceJobJobListResponse>;
   IoRestorecommerceJobJobResponse: ResolverTypeWrapper<IoRestorecommerceJobJobResponse>;
@@ -437,7 +443,7 @@ export type ResolversTypes = ResolversObject<{
   IIoRestorecommerceResourcebaseFieldFilter: IIoRestorecommerceResourcebaseFieldFilter;
   Mutation: ResolverTypeWrapper<{}>;
   SchedulingMutation: ResolverTypeWrapper<SchedulingMutation>;
-  SchedulingJobMutation: ResolverTypeWrapper<SchedulingJobMutation>;
+  SchedulingJobServiceMutation: ResolverTypeWrapper<SchedulingJobServiceMutation>;
   IIoRestorecommerceJobJobList: IIoRestorecommerceJobJobList;
   IIoRestorecommerceJobJob: IIoRestorecommerceJobJob;
   IIoRestorecommerceJobData: IIoRestorecommerceJobData;
@@ -461,7 +467,7 @@ export type ResolversTypes = ResolversObject<{
 export type ResolversParentTypes = ResolversObject<{
   Query: {};
   SchedulingQuery: SchedulingQuery;
-  SchedulingJobQuery: SchedulingJobQuery;
+  SchedulingJobServiceQuery: SchedulingJobServiceQuery;
   ProtoIoRestorecommerceJobJobListResponse: ProtoIoRestorecommerceJobJobListResponse;
   IoRestorecommerceJobJobListResponse: IoRestorecommerceJobJobListResponse;
   IoRestorecommerceJobJobResponse: IoRestorecommerceJobJobResponse;
@@ -486,7 +492,7 @@ export type ResolversParentTypes = ResolversObject<{
   IIoRestorecommerceResourcebaseFieldFilter: IIoRestorecommerceResourcebaseFieldFilter;
   Mutation: {};
   SchedulingMutation: SchedulingMutation;
-  SchedulingJobMutation: SchedulingJobMutation;
+  SchedulingJobServiceMutation: SchedulingJobServiceMutation;
   IIoRestorecommerceJobJobList: IIoRestorecommerceJobJobList;
   IIoRestorecommerceJobJob: IIoRestorecommerceJobJob;
   IIoRestorecommerceJobData: IIoRestorecommerceJobData;
@@ -509,12 +515,12 @@ export type QueryResolvers<ContextType = SchedulingContext, ParentType extends R
 }>;
 
 export type SchedulingQueryResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['SchedulingQuery'] = ResolversParentTypes['SchedulingQuery']> = ResolversObject<{
-  job?: Resolver<ResolversTypes['SchedulingJobQuery'], ParentType, ContextType>;
+  JobService?: Resolver<ResolversTypes['SchedulingJobServiceQuery'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type SchedulingJobQueryResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['SchedulingJobQuery'] = ResolversParentTypes['SchedulingJobQuery']> = ResolversObject<{
-  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceJobJobListResponse']>, ParentType, ContextType, RequireFields<SchedulingJobQueryReadArgs, 'input'>>;
+export type SchedulingJobServiceQueryResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['SchedulingJobServiceQuery'] = ResolversParentTypes['SchedulingJobServiceQuery']> = ResolversObject<{
+  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceJobJobListResponse']>, ParentType, ContextType, RequireFields<SchedulingJobServiceQueryReadArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -635,13 +641,13 @@ export type MutationResolvers<ContextType = SchedulingContext, ParentType extend
 }>;
 
 export type SchedulingMutationResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['SchedulingMutation'] = ResolversParentTypes['SchedulingMutation']> = ResolversObject<{
-  job?: Resolver<ResolversTypes['SchedulingJobMutation'], ParentType, ContextType>;
+  JobService?: Resolver<ResolversTypes['SchedulingJobServiceMutation'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type SchedulingJobMutationResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['SchedulingJobMutation'] = ResolversParentTypes['SchedulingJobMutation']> = ResolversObject<{
-  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceJobJobListResponse']>, ParentType, ContextType, RequireFields<SchedulingJobMutationMutateArgs, 'input'>>;
-  Delete?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceResourcebaseDeleteResponse']>, ParentType, ContextType, RequireFields<SchedulingJobMutationDeleteArgs, 'input'>>;
+export type SchedulingJobServiceMutationResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['SchedulingJobServiceMutation'] = ResolversParentTypes['SchedulingJobServiceMutation']> = ResolversObject<{
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceJobJobListResponse']>, ParentType, ContextType, RequireFields<SchedulingJobServiceMutationMutateArgs, 'input'>>;
+  Delete?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceResourcebaseDeleteResponse']>, ParentType, ContextType, RequireFields<SchedulingJobServiceMutationDeleteArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -658,9 +664,10 @@ export type IoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType = S
 
 export type SubscriptionResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
   orderingOrders?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "orderingOrders", ParentType, ContextType, Partial<SubscriptionOrderingOrdersArgs>>;
-  fulfillmentFulfillment?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "fulfillmentFulfillment", ParentType, ContextType, Partial<SubscriptionFulfillmentFulfillmentArgs>>;
+  catalogProducts?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "catalogProducts", ParentType, ContextType, Partial<SubscriptionCatalogProductsArgs>>;
+  fulfillmentFulfillments?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "fulfillmentFulfillments", ParentType, ContextType, Partial<SubscriptionFulfillmentFulfillmentsArgs>>;
   fulfillmentFulfillmentCouriers?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "fulfillmentFulfillmentCouriers", ParentType, ContextType, Partial<SubscriptionFulfillmentFulfillmentCouriersArgs>>;
-  fulfillmentFulfillmentProduct?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "fulfillmentFulfillmentProduct", ParentType, ContextType, Partial<SubscriptionFulfillmentFulfillmentProductArgs>>;
+  fulfillmentFulfillment_products?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "fulfillmentFulfillment_products", ParentType, ContextType, Partial<SubscriptionFulfillmentFulfillment_ProductsArgs>>;
 }>;
 
 export type SubscriptionOutputResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['SubscriptionOutput'] = ResolversParentTypes['SubscriptionOutput']> = ResolversObject<{
@@ -671,7 +678,7 @@ export type SubscriptionOutputResolvers<ContextType = SchedulingContext, ParentT
 export type Resolvers<ContextType = SchedulingContext> = ResolversObject<{
   Query?: QueryResolvers<ContextType>;
   SchedulingQuery?: SchedulingQueryResolvers<ContextType>;
-  SchedulingJobQuery?: SchedulingJobQueryResolvers<ContextType>;
+  SchedulingJobServiceQuery?: SchedulingJobServiceQueryResolvers<ContextType>;
   ProtoIoRestorecommerceJobJobListResponse?: ProtoIoRestorecommerceJobJobListResponseResolvers<ContextType>;
   IoRestorecommerceJobJobListResponse?: IoRestorecommerceJobJobListResponseResolvers<ContextType>;
   IoRestorecommerceJobJobResponse?: IoRestorecommerceJobJobResponseResolvers<ContextType>;
@@ -692,7 +699,7 @@ export type Resolvers<ContextType = SchedulingContext> = ResolversObject<{
   IoRestorecommerceJobJobReadRequestSortOrder?: IoRestorecommerceJobJobReadRequestSortOrderResolvers;
   Mutation?: MutationResolvers<ContextType>;
   SchedulingMutation?: SchedulingMutationResolvers<ContextType>;
-  SchedulingJobMutation?: SchedulingJobMutationResolvers<ContextType>;
+  SchedulingJobServiceMutation?: SchedulingJobServiceMutationResolvers<ContextType>;
   ProtoIoRestorecommerceResourcebaseDeleteResponse?: ProtoIoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType>;
   IoRestorecommerceResourcebaseDeleteResponse?: IoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;

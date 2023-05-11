@@ -49,9 +49,7 @@ message CommandResponse {
   io.restorecommerce.status.Status status = 2;
 }
 
-service Service {
-  option (io.restorecommerce.options.service_name) = "command";
-
+service CommandService {
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (CommandListResponse) {
     option (io.restorecommerce.options.is_query) = true;
   };

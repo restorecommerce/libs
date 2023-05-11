@@ -17,8 +17,6 @@ import "io/restorecommerce/options.proto";
 import "io/restorecommerce/manufacturer.proto";
 
 service ProductService {
-  option (io.restorecommerce.options.service_name) = "product";
-
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ProductListResponse) {
     option (io.restorecommerce.options.is_query) = true;
   };

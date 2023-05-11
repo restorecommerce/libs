@@ -428,10 +428,10 @@ export const NotificationChannel = {
 };
 
 /** Message structure for Notification Channel */
-export type ServiceDefinition = typeof ServiceDefinition;
-export const ServiceDefinition = {
-  name: "Service",
-  fullName: "io.restorecommerce.notification_channel.Service",
+export type NotificationChannelServiceDefinition = typeof NotificationChannelServiceDefinition;
+export const NotificationChannelServiceDefinition = {
+  name: "NotificationChannelService",
+  fullName: "io.restorecommerce.notification_channel.NotificationChannelService",
   methods: {
     read: {
       name: "Read",
@@ -476,7 +476,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
+export interface NotificationChannelServiceImplementation<CallContextExt = {}> {
   read(
     request: ReadRequest,
     context: CallContext & CallContextExt,
@@ -496,7 +496,7 @@ export interface ServiceImplementation<CallContextExt = {}> {
   ): Promise<DeepPartial<NotificationChannelListResponse>>;
 }
 
-export interface ServiceClient<CallOptionsExt = {}> {
+export interface NotificationChannelServiceClient<CallOptionsExt = {}> {
   read(
     request: DeepPartial<ReadRequest>,
     options?: CallOptions & CallOptionsExt,
@@ -805,7 +805,7 @@ export const protoMetadata: ProtoMetadata = {
     }],
     "enumType": [],
     "service": [{
-      "name": "Service",
+      "name": "NotificationChannelService",
       "method": [{
         "name": "Read",
         "inputType": ".io.restorecommerce.resourcebase.ReadRequest",

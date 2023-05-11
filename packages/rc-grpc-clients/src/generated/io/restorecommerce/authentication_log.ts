@@ -480,10 +480,10 @@ export const Deleted = {
 };
 
 /** Microservice definition. */
-export type ServiceDefinition = typeof ServiceDefinition;
-export const ServiceDefinition = {
-  name: "Service",
-  fullName: "io.restorecommerce.authentication_log.Service",
+export type AuthenticationLogServiceDefinition = typeof AuthenticationLogServiceDefinition;
+export const AuthenticationLogServiceDefinition = {
+  name: "AuthenticationLogService",
+  fullName: "io.restorecommerce.authentication_log.AuthenticationLogService",
   methods: {
     read: {
       name: "Read",
@@ -528,7 +528,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
+export interface AuthenticationLogServiceImplementation<CallContextExt = {}> {
   read(
     request: ReadRequest,
     context: CallContext & CallContextExt,
@@ -548,7 +548,7 @@ export interface ServiceImplementation<CallContextExt = {}> {
   ): Promise<DeepPartial<AuthenticationLogListResponse>>;
 }
 
-export interface ServiceClient<CallOptionsExt = {}> {
+export interface AuthenticationLogServiceClient<CallOptionsExt = {}> {
   read(
     request: DeepPartial<ReadRequest>,
     options?: CallOptions & CallOptionsExt,
@@ -899,7 +899,7 @@ export const protoMetadata: ProtoMetadata = {
     }],
     "enumType": [],
     "service": [{
-      "name": "Service",
+      "name": "AuthenticationLogService",
       "method": [{
         "name": "Read",
         "inputType": ".io.restorecommerce.resourcebase.ReadRequest",
@@ -936,56 +936,56 @@ export const protoMetadata: ProtoMetadata = {
         "clientStreaming": false,
         "serverStreaming": false,
       }],
-      "options": { "deprecated": false, "uninterpretedOption": [] },
+      "options": undefined,
     }],
     "extension": [],
     "options": undefined,
     "sourceCodeInfo": {
       "location": [{
         "path": [6, 0],
-        "span": [13, 0, 23, 1],
+        "span": [13, 0, 21, 1],
         "leadingComments": "\n Microservice definition.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 3],
-        "span": [45, 0, 56, 1],
+        "span": [43, 0, 54, 1],
         "leadingComments": "*\n Authentication Log\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 3, 2, 0],
-        "span": [46, 2, 25],
+        "span": [44, 2, 25],
         "leadingComments": "",
         "trailingComments": " log id\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 3, 2, 5],
-        "span": [51, 2, 27],
+        "span": [49, 2, 27],
         "leadingComments": "",
         "trailingComments": " time stamp of login, logout or token update\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 3, 2, 6],
-        "span": [52, 2, 31],
+        "span": [50, 2, 31],
         "leadingComments": "",
         "trailingComments": " login, logout\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 3, 2, 7],
-        "span": [53, 2, 49],
+        "span": [51, 2, 49],
         "leadingComments": "",
         "trailingComments": " meta info\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 3, 2, 8],
-        "span": [54, 2, 33],
+        "span": [52, 2, 33],
         "leadingComments": "",
         "trailingComments": " subject id\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 3, 2, 9],
-        "span": [55, 2, 34],
+        "span": [53, 2, 34],
         "leadingComments": "",
         "trailingComments": " token name associated with io.restorecommerce.auth.Token.token_name\n",
         "leadingDetachedComments": [],
@@ -1002,9 +1002,7 @@ export const protoMetadata: ProtoMetadata = {
   },
   dependencies: [protoMetadata1, protoMetadata2, protoMetadata3, protoMetadata4, protoMetadata5],
   options: {
-    services: {
-      "Service": { options: { "service_name": "authentication_log" }, methods: { "Read": { "is_query": true } } },
-    },
+    services: { "AuthenticationLogService": { options: undefined, methods: { "Read": { "is_query": true } } } },
   },
 };
 

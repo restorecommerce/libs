@@ -8,7 +8,7 @@ import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
 
 // Message structure for Notification Channel
-service Service {
+service NotificationChannelService {
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (NotificationChannelListResponse);
   rpc Create (NotificationChannelList) returns (NotificationChannelListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);

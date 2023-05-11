@@ -391,10 +391,10 @@ export const Locale = {
 };
 
 /** Microservice definition. */
-export type ServiceDefinition = typeof ServiceDefinition;
-export const ServiceDefinition = {
-  name: "Service",
-  fullName: "io.restorecommerce.locale.Service",
+export type LocaleServiceDefinition = typeof LocaleServiceDefinition;
+export const LocaleServiceDefinition = {
+  name: "LocaleService",
+  fullName: "io.restorecommerce.locale.LocaleService",
   methods: {
     read: {
       name: "Read",
@@ -439,7 +439,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
+export interface LocaleServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<LocaleListResponse>>;
   create(request: LocaleList, context: CallContext & CallContextExt): Promise<DeepPartial<LocaleListResponse>>;
   delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;
@@ -447,7 +447,7 @@ export interface ServiceImplementation<CallContextExt = {}> {
   upsert(request: LocaleList, context: CallContext & CallContextExt): Promise<DeepPartial<LocaleListResponse>>;
 }
 
-export interface ServiceClient<CallOptionsExt = {}> {
+export interface LocaleServiceClient<CallOptionsExt = {}> {
   read(request: DeepPartial<ReadRequest>, options?: CallOptions & CallOptionsExt): Promise<LocaleListResponse>;
   create(request: DeepPartial<LocaleList>, options?: CallOptions & CallOptionsExt): Promise<LocaleListResponse>;
   delete(request: DeepPartial<DeleteRequest>, options?: CallOptions & CallOptionsExt): Promise<DeleteResponse>;
@@ -706,7 +706,7 @@ export const protoMetadata: ProtoMetadata = {
     }],
     "enumType": [],
     "service": [{
-      "name": "Service",
+      "name": "LocaleService",
       "method": [{
         "name": "Read",
         "inputType": ".io.restorecommerce.resourcebase.ReadRequest",
@@ -743,14 +743,14 @@ export const protoMetadata: ProtoMetadata = {
         "clientStreaming": false,
         "serverStreaming": false,
       }],
-      "options": { "deprecated": false, "uninterpretedOption": [] },
+      "options": undefined,
     }],
     "extension": [],
     "options": undefined,
     "sourceCodeInfo": {
       "location": [{
         "path": [6, 0],
-        "span": [13, 0, 23, 1],
+        "span": [13, 0, 21, 1],
         "leadingComments": "\n Microservice definition.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
@@ -766,9 +766,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.locale.Locale": Locale,
   },
   dependencies: [protoMetadata1, protoMetadata2, protoMetadata3, protoMetadata4, protoMetadata5],
-  options: {
-    services: { "Service": { options: { "service_name": "locale" }, methods: { "Read": { "is_query": true } } } },
-  },
+  options: { services: { "LocaleService": { options: undefined, methods: { "Read": { "is_query": true } } } } },
 };
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;

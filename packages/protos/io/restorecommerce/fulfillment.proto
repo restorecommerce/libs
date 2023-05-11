@@ -16,8 +16,6 @@ import "io/restorecommerce/options.proto";
 Microservice definition.
 */
 service FulfillmentService {
-  option (io.restorecommerce.options.service_name) = "fulfillment";
-
   /**
    Returns a list of shipment IDs.
    */

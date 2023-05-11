@@ -225,8 +225,9 @@ export const generateSchema = (setup: { prefix: string, namespace: string }[]) =
 export const generateSubServiceSchemas = (subServices: ProtoMetadata[], config: SubSpaceServiceConfig, namespace: string, prefix: string): GraphQLSchema => {
   subServices.forEach((meta) => {
     meta.fileDescriptor.service.forEach(service => {
-      if (meta.options && meta.options.services && meta.options.services[service.name]) {
-        const subName = meta.options.services[service.name].options!['service_name'];
+      if (service.name) {
+        // const subName = meta.options.services[service.name].options!['service_name'];
+        const subName = service.name;
         const {mutations, queries} = getWhitelistBlacklistConfig(service, config, meta, subName)
 
         const schemas = getGQLSchemas(service);

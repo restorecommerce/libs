@@ -1,18 +1,18 @@
 import { RestoreCommerceGrpcClient } from '@restorecommerce/rc-grpc-clients';
 import {
-  ServiceClient,
-  ServiceDefinition
+  SearchServiceClient,
+  SearchServiceDefinition
 } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/search';
 import { GrpcClientConfig } from '@restorecommerce/grpc-client';
 
 export class IndexingSrvGrpcClient extends RestoreCommerceGrpcClient {
 
-  readonly search: ServiceClient;
+  readonly search: SearchServiceClient;
 
   constructor(address: string, cfg: GrpcClientConfig) {
     super(address, cfg);
 
-    this.search = this.createClient(cfg, ServiceDefinition, this.channel);
+    this.search = this.createClient(cfg, SearchServiceDefinition, this.channel);
   }
 
 }

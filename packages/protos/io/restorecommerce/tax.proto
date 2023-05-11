@@ -15,9 +15,7 @@ import "io/restorecommerce/tax_type.proto";
 /*
 * Microservice definition.
 */
-service Service {
-  option (io.restorecommerce.options.service_name) = "tax";
-
+service TaxService {
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (TaxListResponse) {
     option (io.restorecommerce.options.is_query) = true;
   };

@@ -19,9 +19,7 @@ import "io/restorecommerce/locale.proto";
 /**
  * The microservice for the user resource.
  */
-service Service {
-  option (io.restorecommerce.options.service_name) = "user";
-
+service UserService {
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (UserListWithRoleResponse) {
     option (io.restorecommerce.options.is_query) = true;
   };

@@ -45,9 +45,7 @@ message PolicySetRQ {
   optional io.restorecommerce.rule.Effect effect = 5;
 }
 
-service Service {
-  option (io.restorecommerce.options.service_name) = "policy_set";
-
+service PolicySetService {
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (PolicySetListResponse) {
     option (io.restorecommerce.options.is_query) = true;
   };

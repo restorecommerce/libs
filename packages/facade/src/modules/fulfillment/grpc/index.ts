@@ -1,24 +1,24 @@
 import { RestoreCommerceGrpcClient } from '@restorecommerce/rc-grpc-clients';
 import {
-  ServiceClient as fulfillmentClient,
-  ServiceDefinition as fulfillmentService
+  FulfillmentServiceClient,
+  FulfillmentServiceDefinition
 } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/fulfillment';
 import {
-  ServiceClient as fulfillment_courierClient,
-  ServiceDefinition as fulfillment_courierService
+  FulfillmentCourierServiceClient,
+  FulfillmentCourierServiceDefinition
 } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/fulfillment_courier';
 import { GrpcClientConfig } from '@restorecommerce/grpc-client';
 
 export class FulfillmentSrvGrpcClient extends RestoreCommerceGrpcClient {
 
-  readonly fulfillment: fulfillmentClient;
-  readonly fulfillment_courier: fulfillment_courierClient;
+  readonly fulfillment: FulfillmentServiceClient;
+  readonly fulfillment_courier: FulfillmentCourierServiceClient;
 
   constructor(address: string, cfg: GrpcClientConfig) {
     super(address, cfg);
 
-    this.fulfillment = this.createClient(cfg, fulfillmentService, this.channel);
-    this.fulfillment_courier = this.createClient(cfg, fulfillment_courierService, this.channel);
+    this.fulfillment = this.createClient(cfg, FulfillmentServiceDefinition, this.channel);
+    this.fulfillment_courier = this.createClient(cfg, FulfillmentCourierServiceDefinition, this.channel);
   }
 
 }

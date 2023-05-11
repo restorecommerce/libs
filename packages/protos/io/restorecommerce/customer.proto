@@ -17,9 +17,7 @@ import "io/restorecommerce/organization.proto";
 /*
 Microservice definition.
 */
-service Service {
-  option (io.restorecommerce.options.service_name) = "customer";
-
+service CustomerService {
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (CustomerListResponse) {
     option (io.restorecommerce.options.is_query) = true;
   };

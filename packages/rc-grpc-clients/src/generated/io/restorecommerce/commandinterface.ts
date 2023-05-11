@@ -175,10 +175,10 @@ export const CommandResponse = {
 };
 
 /** RPC service for executing commands */
-export type ServiceDefinition = typeof ServiceDefinition;
-export const ServiceDefinition = {
-  name: "Service",
-  fullName: "io.restorecommerce.commandinterface.Service",
+export type CommandInterfaceServiceDefinition = typeof CommandInterfaceServiceDefinition;
+export const CommandInterfaceServiceDefinition = {
+  name: "CommandInterfaceService",
+  fullName: "io.restorecommerce.commandinterface.CommandInterfaceService",
   methods: {
     command: {
       name: "Command",
@@ -191,11 +191,11 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
+export interface CommandInterfaceServiceImplementation<CallContextExt = {}> {
   command(request: CommandRequest, context: CallContext & CallContextExt): Promise<DeepPartial<Any>>;
 }
 
-export interface ServiceClient<CallOptionsExt = {}> {
+export interface CommandInterfaceServiceClient<CallOptionsExt = {}> {
   command(request: DeepPartial<CommandRequest>, options?: CallOptions & CallOptionsExt): Promise<Any>;
 }
 
@@ -312,7 +312,7 @@ export const protoMetadata: ProtoMetadata = {
     }],
     "enumType": [],
     "service": [{
-      "name": "Service",
+      "name": "CommandInterfaceService",
       "method": [{
         "name": "Command",
         "inputType": ".io.restorecommerce.commandinterface.CommandRequest",
@@ -321,7 +321,7 @@ export const protoMetadata: ProtoMetadata = {
         "clientStreaming": false,
         "serverStreaming": false,
       }],
-      "options": { "deprecated": false, "uninterpretedOption": [] },
+      "options": undefined,
     }],
     "extension": [],
     "options": undefined,
@@ -365,7 +365,7 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0],
-        "span": [28, 0, 31, 1],
+        "span": [28, 0, 30, 1],
         "leadingComments": "*\n RPC service for executing commands\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
@@ -378,7 +378,6 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.commandinterface.CommandResponse": CommandResponse,
   },
   dependencies: [protoMetadata1, protoMetadata2, protoMetadata3],
-  options: { services: { "Service": { options: { "service_name": "commandinterface" }, methods: {} } } },
 };
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;

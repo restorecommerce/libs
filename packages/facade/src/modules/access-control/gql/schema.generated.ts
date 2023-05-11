@@ -23,25 +23,25 @@ export type Query = {
 
 export type AccessControlQuery = {
   __typename?: 'AccessControlQuery';
-  access_control: AccessControlAccessControlQuery;
-  policy: AccessControlPolicyQuery;
-  rule: AccessControlRuleQuery;
-  policy_set: AccessControlPolicySetQuery;
+  AccessControlService: AccessControlAccessControlServiceQuery;
+  PolicyService: AccessControlPolicyServiceQuery;
+  RuleService: AccessControlRuleServiceQuery;
+  PolicySetService: AccessControlPolicySetServiceQuery;
 };
 
-export type AccessControlAccessControlQuery = {
-  __typename?: 'AccessControlAccessControlQuery';
+export type AccessControlAccessControlServiceQuery = {
+  __typename?: 'AccessControlAccessControlServiceQuery';
   IsAllowed?: Maybe<ProtoIoRestorecommerceAccessControlResponse>;
   WhatIsAllowed?: Maybe<ProtoIoRestorecommerceAccessControlReverseQuery>;
 };
 
 
-export type AccessControlAccessControlQueryIsAllowedArgs = {
+export type AccessControlAccessControlServiceQueryIsAllowedArgs = {
   input: IIoRestorecommerceAccessControlRequest;
 };
 
 
-export type AccessControlAccessControlQueryWhatIsAllowedArgs = {
+export type AccessControlAccessControlServiceQueryWhatIsAllowedArgs = {
   input: IIoRestorecommerceAccessControlRequest;
 };
 
@@ -206,13 +206,13 @@ export enum IoRestorecommerceFilterFilterOpOperator {
   Or = 1
 }
 
-export type AccessControlPolicyQuery = {
-  __typename?: 'AccessControlPolicyQuery';
+export type AccessControlPolicyServiceQuery = {
+  __typename?: 'AccessControlPolicyServiceQuery';
   Read?: Maybe<ProtoIoRestorecommercePolicyPolicyListResponse>;
 };
 
 
-export type AccessControlPolicyQueryReadArgs = {
+export type AccessControlPolicyServiceQueryReadArgs = {
   input: IIoRestorecommerceResourcebaseReadRequest;
 };
 
@@ -355,13 +355,13 @@ export type IIoRestorecommerceResourcebaseSearch = {
   caseSensitive?: InputMaybe<Scalars['Boolean']>;
 };
 
-export type AccessControlRuleQuery = {
-  __typename?: 'AccessControlRuleQuery';
+export type AccessControlRuleServiceQuery = {
+  __typename?: 'AccessControlRuleServiceQuery';
   Read?: Maybe<ProtoIoRestorecommerceRuleRuleListResponse>;
 };
 
 
-export type AccessControlRuleQueryReadArgs = {
+export type AccessControlRuleServiceQueryReadArgs = {
   input: IIoRestorecommerceResourcebaseReadRequest;
 };
 
@@ -396,13 +396,13 @@ export type IoRestorecommerceRuleRule = {
   evaluationCacheable?: Maybe<Scalars['Boolean']>;
 };
 
-export type AccessControlPolicySetQuery = {
-  __typename?: 'AccessControlPolicySetQuery';
+export type AccessControlPolicySetServiceQuery = {
+  __typename?: 'AccessControlPolicySetServiceQuery';
   Read?: Maybe<ProtoIoRestorecommercePolicySetPolicySetListResponse>;
 };
 
 
-export type AccessControlPolicySetQueryReadArgs = {
+export type AccessControlPolicySetServiceQueryReadArgs = {
   input: IIoRestorecommerceResourcebaseReadRequest;
 };
 
@@ -442,24 +442,24 @@ export type Mutation = {
 
 export type AccessControlMutation = {
   __typename?: 'AccessControlMutation';
-  policy: AccessControlPolicyMutation;
-  rule: AccessControlRuleMutation;
-  policy_set: AccessControlPolicySetMutation;
+  PolicyService: AccessControlPolicyServiceMutation;
+  RuleService: AccessControlRuleServiceMutation;
+  PolicySetService: AccessControlPolicySetServiceMutation;
 };
 
-export type AccessControlPolicyMutation = {
-  __typename?: 'AccessControlPolicyMutation';
+export type AccessControlPolicyServiceMutation = {
+  __typename?: 'AccessControlPolicyServiceMutation';
   Mutate?: Maybe<ProtoIoRestorecommercePolicyPolicyListResponse>;
   Delete?: Maybe<ProtoIoRestorecommerceResourcebaseDeleteResponse>;
 };
 
 
-export type AccessControlPolicyMutationMutateArgs = {
+export type AccessControlPolicyServiceMutationMutateArgs = {
   input: IIoRestorecommercePolicyPolicyList;
 };
 
 
-export type AccessControlPolicyMutationDeleteArgs = {
+export type AccessControlPolicyServiceMutationDeleteArgs = {
   input: IIoRestorecommerceResourcebaseDeleteRequest;
 };
 
@@ -521,19 +521,19 @@ export type IIoRestorecommerceResourcebaseDeleteRequest = {
   scope?: InputMaybe<Scalars['String']>;
 };
 
-export type AccessControlRuleMutation = {
-  __typename?: 'AccessControlRuleMutation';
+export type AccessControlRuleServiceMutation = {
+  __typename?: 'AccessControlRuleServiceMutation';
   Mutate?: Maybe<ProtoIoRestorecommerceRuleRuleListResponse>;
   Delete?: Maybe<ProtoIoRestorecommerceResourcebaseDeleteResponse>;
 };
 
 
-export type AccessControlRuleMutationMutateArgs = {
+export type AccessControlRuleServiceMutationMutateArgs = {
   input: IIoRestorecommerceRuleRuleList;
 };
 
 
-export type AccessControlRuleMutationDeleteArgs = {
+export type AccessControlRuleServiceMutationDeleteArgs = {
   input: IIoRestorecommerceResourcebaseDeleteRequest;
 };
 
@@ -562,19 +562,19 @@ export type IIoRestorecommerceRuleContextQuery = {
   query?: InputMaybe<Scalars['String']>;
 };
 
-export type AccessControlPolicySetMutation = {
-  __typename?: 'AccessControlPolicySetMutation';
+export type AccessControlPolicySetServiceMutation = {
+  __typename?: 'AccessControlPolicySetServiceMutation';
   Mutate?: Maybe<ProtoIoRestorecommercePolicySetPolicySetListResponse>;
   Delete?: Maybe<ProtoIoRestorecommerceResourcebaseDeleteResponse>;
 };
 
 
-export type AccessControlPolicySetMutationMutateArgs = {
+export type AccessControlPolicySetServiceMutationMutateArgs = {
   input: IIoRestorecommercePolicySetPolicySetList;
 };
 
 
-export type AccessControlPolicySetMutationDeleteArgs = {
+export type AccessControlPolicySetServiceMutationDeleteArgs = {
   input: IIoRestorecommerceResourcebaseDeleteRequest;
 };
 
@@ -599,9 +599,10 @@ export type IIoRestorecommercePolicySetPolicySet = {
 export type Subscription = {
   __typename?: 'Subscription';
   orderingOrders?: Maybe<SubscriptionOutput>;
-  fulfillmentFulfillment?: Maybe<SubscriptionOutput>;
+  catalogProducts?: Maybe<SubscriptionOutput>;
+  fulfillmentFulfillments?: Maybe<SubscriptionOutput>;
   fulfillmentFulfillmentCouriers?: Maybe<SubscriptionOutput>;
-  fulfillmentFulfillmentProduct?: Maybe<SubscriptionOutput>;
+  fulfillmentFulfillment_products?: Maybe<SubscriptionOutput>;
 };
 
 
@@ -610,7 +611,12 @@ export type SubscriptionOrderingOrdersArgs = {
 };
 
 
-export type SubscriptionFulfillmentFulfillmentArgs = {
+export type SubscriptionCatalogProductsArgs = {
+  action?: InputMaybe<SubscriptionAction>;
+};
+
+
+export type SubscriptionFulfillmentFulfillmentsArgs = {
   action?: InputMaybe<SubscriptionAction>;
 };
 
@@ -620,7 +626,7 @@ export type SubscriptionFulfillmentFulfillmentCouriersArgs = {
 };
 
 
-export type SubscriptionFulfillmentFulfillmentProductArgs = {
+export type SubscriptionFulfillmentFulfillment_ProductsArgs = {
   action?: InputMaybe<SubscriptionAction>;
 };
 
@@ -707,7 +713,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>;
   AccessControlQuery: ResolverTypeWrapper<AccessControlQuery>;
-  AccessControlAccessControlQuery: ResolverTypeWrapper<AccessControlAccessControlQuery>;
+  AccessControlAccessControlServiceQuery: ResolverTypeWrapper<AccessControlAccessControlServiceQuery>;
   ProtoIoRestorecommerceAccessControlResponse: ResolverTypeWrapper<ProtoIoRestorecommerceAccessControlResponse>;
   IoRestorecommerceAccessControlResponse: ResolverTypeWrapper<IoRestorecommerceAccessControlResponse>;
   IoRestorecommerceAccessControlResponseDecision: IoRestorecommerceAccessControlResponseDecision;
@@ -735,7 +741,7 @@ export type ResolversTypes = ResolversObject<{
   IoRestorecommerceFilterFilterOperation: IoRestorecommerceFilterFilterOperation;
   IoRestorecommerceFilterFilterValueType: IoRestorecommerceFilterFilterValueType;
   IoRestorecommerceFilterFilterOpOperator: IoRestorecommerceFilterFilterOpOperator;
-  AccessControlPolicyQuery: ResolverTypeWrapper<AccessControlPolicyQuery>;
+  AccessControlPolicyServiceQuery: ResolverTypeWrapper<AccessControlPolicyServiceQuery>;
   ProtoIoRestorecommercePolicyPolicyListResponse: ResolverTypeWrapper<ProtoIoRestorecommercePolicyPolicyListResponse>;
   IoRestorecommercePolicyPolicyListResponse: ResolverTypeWrapper<IoRestorecommercePolicyPolicyListResponse>;
   IoRestorecommercePolicyPolicyResponse: ResolverTypeWrapper<IoRestorecommercePolicyPolicyResponse>;
@@ -756,19 +762,19 @@ export type ResolversTypes = ResolversObject<{
   IoRestorecommerceResourcebaseFilterOpOperator: IoRestorecommerceResourcebaseFilterOpOperator;
   IIoRestorecommerceResourcebaseFieldFilter: IIoRestorecommerceResourcebaseFieldFilter;
   IIoRestorecommerceResourcebaseSearch: IIoRestorecommerceResourcebaseSearch;
-  AccessControlRuleQuery: ResolverTypeWrapper<AccessControlRuleQuery>;
+  AccessControlRuleServiceQuery: ResolverTypeWrapper<AccessControlRuleServiceQuery>;
   ProtoIoRestorecommerceRuleRuleListResponse: ResolverTypeWrapper<ProtoIoRestorecommerceRuleRuleListResponse>;
   IoRestorecommerceRuleRuleListResponse: ResolverTypeWrapper<IoRestorecommerceRuleRuleListResponse>;
   IoRestorecommerceRuleRuleResponse: ResolverTypeWrapper<IoRestorecommerceRuleRuleResponse>;
   IoRestorecommerceRuleRule: ResolverTypeWrapper<IoRestorecommerceRuleRule>;
-  AccessControlPolicySetQuery: ResolverTypeWrapper<AccessControlPolicySetQuery>;
+  AccessControlPolicySetServiceQuery: ResolverTypeWrapper<AccessControlPolicySetServiceQuery>;
   ProtoIoRestorecommercePolicySetPolicySetListResponse: ResolverTypeWrapper<ProtoIoRestorecommercePolicySetPolicySetListResponse>;
   IoRestorecommercePolicySetPolicySetListResponse: ResolverTypeWrapper<IoRestorecommercePolicySetPolicySetListResponse>;
   IoRestorecommercePolicySetPolicySetResponse: ResolverTypeWrapper<IoRestorecommercePolicySetPolicySetResponse>;
   IoRestorecommercePolicySetPolicySet: ResolverTypeWrapper<IoRestorecommercePolicySetPolicySet>;
   Mutation: ResolverTypeWrapper<{}>;
   AccessControlMutation: ResolverTypeWrapper<AccessControlMutation>;
-  AccessControlPolicyMutation: ResolverTypeWrapper<AccessControlPolicyMutation>;
+  AccessControlPolicyServiceMutation: ResolverTypeWrapper<AccessControlPolicyServiceMutation>;
   IIoRestorecommercePolicyPolicyList: IIoRestorecommercePolicyPolicyList;
   IIoRestorecommercePolicyPolicy: IIoRestorecommercePolicyPolicy;
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
@@ -777,11 +783,11 @@ export type ResolversTypes = ResolversObject<{
   ProtoIoRestorecommerceResourcebaseDeleteResponse: ResolverTypeWrapper<ProtoIoRestorecommerceResourcebaseDeleteResponse>;
   IoRestorecommerceResourcebaseDeleteResponse: ResolverTypeWrapper<IoRestorecommerceResourcebaseDeleteResponse>;
   IIoRestorecommerceResourcebaseDeleteRequest: IIoRestorecommerceResourcebaseDeleteRequest;
-  AccessControlRuleMutation: ResolverTypeWrapper<AccessControlRuleMutation>;
+  AccessControlRuleServiceMutation: ResolverTypeWrapper<AccessControlRuleServiceMutation>;
   IIoRestorecommerceRuleRuleList: IIoRestorecommerceRuleRuleList;
   IIoRestorecommerceRuleRule: IIoRestorecommerceRuleRule;
   IIoRestorecommerceRuleContextQuery: IIoRestorecommerceRuleContextQuery;
-  AccessControlPolicySetMutation: ResolverTypeWrapper<AccessControlPolicySetMutation>;
+  AccessControlPolicySetServiceMutation: ResolverTypeWrapper<AccessControlPolicySetServiceMutation>;
   IIoRestorecommercePolicySetPolicySetList: IIoRestorecommercePolicySetPolicySetList;
   IIoRestorecommercePolicySetPolicySet: IIoRestorecommercePolicySetPolicySet;
   Subscription: ResolverTypeWrapper<{}>;
@@ -793,7 +799,7 @@ export type ResolversTypes = ResolversObject<{
 export type ResolversParentTypes = ResolversObject<{
   Query: {};
   AccessControlQuery: AccessControlQuery;
-  AccessControlAccessControlQuery: AccessControlAccessControlQuery;
+  AccessControlAccessControlServiceQuery: AccessControlAccessControlServiceQuery;
   ProtoIoRestorecommerceAccessControlResponse: ProtoIoRestorecommerceAccessControlResponse;
   IoRestorecommerceAccessControlResponse: IoRestorecommerceAccessControlResponse;
   IoRestorecommerceAttributeAttribute: IoRestorecommerceAttributeAttribute;
@@ -816,7 +822,7 @@ export type ResolversParentTypes = ResolversObject<{
   IoRestorecommerceRuleContextQuery: IoRestorecommerceRuleContextQuery;
   IoRestorecommerceFilterFilterOp: IoRestorecommerceFilterFilterOp;
   IoRestorecommerceFilterFilter: IoRestorecommerceFilterFilter;
-  AccessControlPolicyQuery: AccessControlPolicyQuery;
+  AccessControlPolicyServiceQuery: AccessControlPolicyServiceQuery;
   ProtoIoRestorecommercePolicyPolicyListResponse: ProtoIoRestorecommercePolicyPolicyListResponse;
   IoRestorecommercePolicyPolicyListResponse: IoRestorecommercePolicyPolicyListResponse;
   IoRestorecommercePolicyPolicyResponse: IoRestorecommercePolicyPolicyResponse;
@@ -833,19 +839,19 @@ export type ResolversParentTypes = ResolversObject<{
   IIoRestorecommerceFilterFilter: IIoRestorecommerceFilterFilter;
   IIoRestorecommerceResourcebaseFieldFilter: IIoRestorecommerceResourcebaseFieldFilter;
   IIoRestorecommerceResourcebaseSearch: IIoRestorecommerceResourcebaseSearch;
-  AccessControlRuleQuery: AccessControlRuleQuery;
+  AccessControlRuleServiceQuery: AccessControlRuleServiceQuery;
   ProtoIoRestorecommerceRuleRuleListResponse: ProtoIoRestorecommerceRuleRuleListResponse;
   IoRestorecommerceRuleRuleListResponse: IoRestorecommerceRuleRuleListResponse;
   IoRestorecommerceRuleRuleResponse: IoRestorecommerceRuleRuleResponse;
   IoRestorecommerceRuleRule: IoRestorecommerceRuleRule;
-  AccessControlPolicySetQuery: AccessControlPolicySetQuery;
+  AccessControlPolicySetServiceQuery: AccessControlPolicySetServiceQuery;
   ProtoIoRestorecommercePolicySetPolicySetListResponse: ProtoIoRestorecommercePolicySetPolicySetListResponse;
   IoRestorecommercePolicySetPolicySetListResponse: IoRestorecommercePolicySetPolicySetListResponse;
   IoRestorecommercePolicySetPolicySetResponse: IoRestorecommercePolicySetPolicySetResponse;
   IoRestorecommercePolicySetPolicySet: IoRestorecommercePolicySetPolicySet;
   Mutation: {};
   AccessControlMutation: AccessControlMutation;
-  AccessControlPolicyMutation: AccessControlPolicyMutation;
+  AccessControlPolicyServiceMutation: AccessControlPolicyServiceMutation;
   IIoRestorecommercePolicyPolicyList: IIoRestorecommercePolicyPolicyList;
   IIoRestorecommercePolicyPolicy: IIoRestorecommercePolicyPolicy;
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
@@ -853,11 +859,11 @@ export type ResolversParentTypes = ResolversObject<{
   ProtoIoRestorecommerceResourcebaseDeleteResponse: ProtoIoRestorecommerceResourcebaseDeleteResponse;
   IoRestorecommerceResourcebaseDeleteResponse: IoRestorecommerceResourcebaseDeleteResponse;
   IIoRestorecommerceResourcebaseDeleteRequest: IIoRestorecommerceResourcebaseDeleteRequest;
-  AccessControlRuleMutation: AccessControlRuleMutation;
+  AccessControlRuleServiceMutation: AccessControlRuleServiceMutation;
   IIoRestorecommerceRuleRuleList: IIoRestorecommerceRuleRuleList;
   IIoRestorecommerceRuleRule: IIoRestorecommerceRuleRule;
   IIoRestorecommerceRuleContextQuery: IIoRestorecommerceRuleContextQuery;
-  AccessControlPolicySetMutation: AccessControlPolicySetMutation;
+  AccessControlPolicySetServiceMutation: AccessControlPolicySetServiceMutation;
   IIoRestorecommercePolicySetPolicySetList: IIoRestorecommercePolicySetPolicySetList;
   IIoRestorecommercePolicySetPolicySet: IIoRestorecommercePolicySetPolicySet;
   Subscription: {};
@@ -869,16 +875,16 @@ export type QueryResolvers<ContextType = AccessControlContext, ParentType extend
 }>;
 
 export type AccessControlQueryResolvers<ContextType = AccessControlContext, ParentType extends ResolversParentTypes['AccessControlQuery'] = ResolversParentTypes['AccessControlQuery']> = ResolversObject<{
-  access_control?: Resolver<ResolversTypes['AccessControlAccessControlQuery'], ParentType, ContextType>;
-  policy?: Resolver<ResolversTypes['AccessControlPolicyQuery'], ParentType, ContextType>;
-  rule?: Resolver<ResolversTypes['AccessControlRuleQuery'], ParentType, ContextType>;
-  policy_set?: Resolver<ResolversTypes['AccessControlPolicySetQuery'], ParentType, ContextType>;
+  AccessControlService?: Resolver<ResolversTypes['AccessControlAccessControlServiceQuery'], ParentType, ContextType>;
+  PolicyService?: Resolver<ResolversTypes['AccessControlPolicyServiceQuery'], ParentType, ContextType>;
+  RuleService?: Resolver<ResolversTypes['AccessControlRuleServiceQuery'], ParentType, ContextType>;
+  PolicySetService?: Resolver<ResolversTypes['AccessControlPolicySetServiceQuery'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type AccessControlAccessControlQueryResolvers<ContextType = AccessControlContext, ParentType extends ResolversParentTypes['AccessControlAccessControlQuery'] = ResolversParentTypes['AccessControlAccessControlQuery']> = ResolversObject<{
-  IsAllowed?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceAccessControlResponse']>, ParentType, ContextType, RequireFields<AccessControlAccessControlQueryIsAllowedArgs, 'input'>>;
-  WhatIsAllowed?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceAccessControlReverseQuery']>, ParentType, ContextType, RequireFields<AccessControlAccessControlQueryWhatIsAllowedArgs, 'input'>>;
+export type AccessControlAccessControlServiceQueryResolvers<ContextType = AccessControlContext, ParentType extends ResolversParentTypes['AccessControlAccessControlServiceQuery'] = ResolversParentTypes['AccessControlAccessControlServiceQuery']> = ResolversObject<{
+  IsAllowed?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceAccessControlResponse']>, ParentType, ContextType, RequireFields<AccessControlAccessControlServiceQueryIsAllowedArgs, 'input'>>;
+  WhatIsAllowed?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceAccessControlReverseQuery']>, ParentType, ContextType, RequireFields<AccessControlAccessControlServiceQueryWhatIsAllowedArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -992,8 +998,8 @@ export type IoRestorecommerceFilterFilterValueTypeResolvers = { STRING: 0, NUMBE
 
 export type IoRestorecommerceFilterFilterOpOperatorResolvers = { and: 0, or: 1 };
 
-export type AccessControlPolicyQueryResolvers<ContextType = AccessControlContext, ParentType extends ResolversParentTypes['AccessControlPolicyQuery'] = ResolversParentTypes['AccessControlPolicyQuery']> = ResolversObject<{
-  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommercePolicyPolicyListResponse']>, ParentType, ContextType, RequireFields<AccessControlPolicyQueryReadArgs, 'input'>>;
+export type AccessControlPolicyServiceQueryResolvers<ContextType = AccessControlContext, ParentType extends ResolversParentTypes['AccessControlPolicyServiceQuery'] = ResolversParentTypes['AccessControlPolicyServiceQuery']> = ResolversObject<{
+  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommercePolicyPolicyListResponse']>, ParentType, ContextType, RequireFields<AccessControlPolicyServiceQueryReadArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1057,8 +1063,8 @@ export type IoRestorecommerceResourcebaseFilterValueTypeResolvers = { STRING: 0,
 
 export type IoRestorecommerceResourcebaseFilterOpOperatorResolvers = { and: 0, or: 1 };
 
-export type AccessControlRuleQueryResolvers<ContextType = AccessControlContext, ParentType extends ResolversParentTypes['AccessControlRuleQuery'] = ResolversParentTypes['AccessControlRuleQuery']> = ResolversObject<{
-  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceRuleRuleListResponse']>, ParentType, ContextType, RequireFields<AccessControlRuleQueryReadArgs, 'input'>>;
+export type AccessControlRuleServiceQueryResolvers<ContextType = AccessControlContext, ParentType extends ResolversParentTypes['AccessControlRuleServiceQuery'] = ResolversParentTypes['AccessControlRuleServiceQuery']> = ResolversObject<{
+  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceRuleRuleListResponse']>, ParentType, ContextType, RequireFields<AccessControlRuleServiceQueryReadArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1093,8 +1099,8 @@ export type IoRestorecommerceRuleRuleResolvers<ContextType = AccessControlContex
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type AccessControlPolicySetQueryResolvers<ContextType = AccessControlContext, ParentType extends ResolversParentTypes['AccessControlPolicySetQuery'] = ResolversParentTypes['AccessControlPolicySetQuery']> = ResolversObject<{
-  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommercePolicySetPolicySetListResponse']>, ParentType, ContextType, RequireFields<AccessControlPolicySetQueryReadArgs, 'input'>>;
+export type AccessControlPolicySetServiceQueryResolvers<ContextType = AccessControlContext, ParentType extends ResolversParentTypes['AccessControlPolicySetServiceQuery'] = ResolversParentTypes['AccessControlPolicySetServiceQuery']> = ResolversObject<{
+  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommercePolicySetPolicySetListResponse']>, ParentType, ContextType, RequireFields<AccessControlPolicySetServiceQueryReadArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1132,15 +1138,15 @@ export type MutationResolvers<ContextType = AccessControlContext, ParentType ext
 }>;
 
 export type AccessControlMutationResolvers<ContextType = AccessControlContext, ParentType extends ResolversParentTypes['AccessControlMutation'] = ResolversParentTypes['AccessControlMutation']> = ResolversObject<{
-  policy?: Resolver<ResolversTypes['AccessControlPolicyMutation'], ParentType, ContextType>;
-  rule?: Resolver<ResolversTypes['AccessControlRuleMutation'], ParentType, ContextType>;
-  policy_set?: Resolver<ResolversTypes['AccessControlPolicySetMutation'], ParentType, ContextType>;
+  PolicyService?: Resolver<ResolversTypes['AccessControlPolicyServiceMutation'], ParentType, ContextType>;
+  RuleService?: Resolver<ResolversTypes['AccessControlRuleServiceMutation'], ParentType, ContextType>;
+  PolicySetService?: Resolver<ResolversTypes['AccessControlPolicySetServiceMutation'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type AccessControlPolicyMutationResolvers<ContextType = AccessControlContext, ParentType extends ResolversParentTypes['AccessControlPolicyMutation'] = ResolversParentTypes['AccessControlPolicyMutation']> = ResolversObject<{
-  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommercePolicyPolicyListResponse']>, ParentType, ContextType, RequireFields<AccessControlPolicyMutationMutateArgs, 'input'>>;
-  Delete?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceResourcebaseDeleteResponse']>, ParentType, ContextType, RequireFields<AccessControlPolicyMutationDeleteArgs, 'input'>>;
+export type AccessControlPolicyServiceMutationResolvers<ContextType = AccessControlContext, ParentType extends ResolversParentTypes['AccessControlPolicyServiceMutation'] = ResolversParentTypes['AccessControlPolicyServiceMutation']> = ResolversObject<{
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommercePolicyPolicyListResponse']>, ParentType, ContextType, RequireFields<AccessControlPolicyServiceMutationMutateArgs, 'input'>>;
+  Delete?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceResourcebaseDeleteResponse']>, ParentType, ContextType, RequireFields<AccessControlPolicyServiceMutationDeleteArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1155,23 +1161,24 @@ export type IoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType = A
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type AccessControlRuleMutationResolvers<ContextType = AccessControlContext, ParentType extends ResolversParentTypes['AccessControlRuleMutation'] = ResolversParentTypes['AccessControlRuleMutation']> = ResolversObject<{
-  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceRuleRuleListResponse']>, ParentType, ContextType, RequireFields<AccessControlRuleMutationMutateArgs, 'input'>>;
-  Delete?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceResourcebaseDeleteResponse']>, ParentType, ContextType, RequireFields<AccessControlRuleMutationDeleteArgs, 'input'>>;
+export type AccessControlRuleServiceMutationResolvers<ContextType = AccessControlContext, ParentType extends ResolversParentTypes['AccessControlRuleServiceMutation'] = ResolversParentTypes['AccessControlRuleServiceMutation']> = ResolversObject<{
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceRuleRuleListResponse']>, ParentType, ContextType, RequireFields<AccessControlRuleServiceMutationMutateArgs, 'input'>>;
+  Delete?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceResourcebaseDeleteResponse']>, ParentType, ContextType, RequireFields<AccessControlRuleServiceMutationDeleteArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type AccessControlPolicySetMutationResolvers<ContextType = AccessControlContext, ParentType extends ResolversParentTypes['AccessControlPolicySetMutation'] = ResolversParentTypes['AccessControlPolicySetMutation']> = ResolversObject<{
-  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommercePolicySetPolicySetListResponse']>, ParentType, ContextType, RequireFields<AccessControlPolicySetMutationMutateArgs, 'input'>>;
-  Delete?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceResourcebaseDeleteResponse']>, ParentType, ContextType, RequireFields<AccessControlPolicySetMutationDeleteArgs, 'input'>>;
+export type AccessControlPolicySetServiceMutationResolvers<ContextType = AccessControlContext, ParentType extends ResolversParentTypes['AccessControlPolicySetServiceMutation'] = ResolversParentTypes['AccessControlPolicySetServiceMutation']> = ResolversObject<{
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommercePolicySetPolicySetListResponse']>, ParentType, ContextType, RequireFields<AccessControlPolicySetServiceMutationMutateArgs, 'input'>>;
+  Delete?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceResourcebaseDeleteResponse']>, ParentType, ContextType, RequireFields<AccessControlPolicySetServiceMutationDeleteArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type SubscriptionResolvers<ContextType = AccessControlContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
   orderingOrders?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "orderingOrders", ParentType, ContextType, Partial<SubscriptionOrderingOrdersArgs>>;
-  fulfillmentFulfillment?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "fulfillmentFulfillment", ParentType, ContextType, Partial<SubscriptionFulfillmentFulfillmentArgs>>;
+  catalogProducts?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "catalogProducts", ParentType, ContextType, Partial<SubscriptionCatalogProductsArgs>>;
+  fulfillmentFulfillments?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "fulfillmentFulfillments", ParentType, ContextType, Partial<SubscriptionFulfillmentFulfillmentsArgs>>;
   fulfillmentFulfillmentCouriers?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "fulfillmentFulfillmentCouriers", ParentType, ContextType, Partial<SubscriptionFulfillmentFulfillmentCouriersArgs>>;
-  fulfillmentFulfillmentProduct?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "fulfillmentFulfillmentProduct", ParentType, ContextType, Partial<SubscriptionFulfillmentFulfillmentProductArgs>>;
+  fulfillmentFulfillment_products?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "fulfillmentFulfillment_products", ParentType, ContextType, Partial<SubscriptionFulfillmentFulfillment_ProductsArgs>>;
 }>;
 
 export type SubscriptionOutputResolvers<ContextType = AccessControlContext, ParentType extends ResolversParentTypes['SubscriptionOutput'] = ResolversParentTypes['SubscriptionOutput']> = ResolversObject<{
@@ -1182,7 +1189,7 @@ export type SubscriptionOutputResolvers<ContextType = AccessControlContext, Pare
 export type Resolvers<ContextType = AccessControlContext> = ResolversObject<{
   Query?: QueryResolvers<ContextType>;
   AccessControlQuery?: AccessControlQueryResolvers<ContextType>;
-  AccessControlAccessControlQuery?: AccessControlAccessControlQueryResolvers<ContextType>;
+  AccessControlAccessControlServiceQuery?: AccessControlAccessControlServiceQueryResolvers<ContextType>;
   ProtoIoRestorecommerceAccessControlResponse?: ProtoIoRestorecommerceAccessControlResponseResolvers<ContextType>;
   IoRestorecommerceAccessControlResponse?: IoRestorecommerceAccessControlResponseResolvers<ContextType>;
   IoRestorecommerceAccessControlResponseDecision?: IoRestorecommerceAccessControlResponseDecisionResolvers;
@@ -1202,7 +1209,7 @@ export type Resolvers<ContextType = AccessControlContext> = ResolversObject<{
   IoRestorecommerceFilterFilterOperation?: IoRestorecommerceFilterFilterOperationResolvers;
   IoRestorecommerceFilterFilterValueType?: IoRestorecommerceFilterFilterValueTypeResolvers;
   IoRestorecommerceFilterFilterOpOperator?: IoRestorecommerceFilterFilterOpOperatorResolvers;
-  AccessControlPolicyQuery?: AccessControlPolicyQueryResolvers<ContextType>;
+  AccessControlPolicyServiceQuery?: AccessControlPolicyServiceQueryResolvers<ContextType>;
   ProtoIoRestorecommercePolicyPolicyListResponse?: ProtoIoRestorecommercePolicyPolicyListResponseResolvers<ContextType>;
   IoRestorecommercePolicyPolicyListResponse?: IoRestorecommercePolicyPolicyListResponseResolvers<ContextType>;
   IoRestorecommercePolicyPolicyResponse?: IoRestorecommercePolicyPolicyResponseResolvers<ContextType>;
@@ -1214,23 +1221,23 @@ export type Resolvers<ContextType = AccessControlContext> = ResolversObject<{
   IoRestorecommerceResourcebaseFilterOperation?: IoRestorecommerceResourcebaseFilterOperationResolvers;
   IoRestorecommerceResourcebaseFilterValueType?: IoRestorecommerceResourcebaseFilterValueTypeResolvers;
   IoRestorecommerceResourcebaseFilterOpOperator?: IoRestorecommerceResourcebaseFilterOpOperatorResolvers;
-  AccessControlRuleQuery?: AccessControlRuleQueryResolvers<ContextType>;
+  AccessControlRuleServiceQuery?: AccessControlRuleServiceQueryResolvers<ContextType>;
   ProtoIoRestorecommerceRuleRuleListResponse?: ProtoIoRestorecommerceRuleRuleListResponseResolvers<ContextType>;
   IoRestorecommerceRuleRuleListResponse?: IoRestorecommerceRuleRuleListResponseResolvers<ContextType>;
   IoRestorecommerceRuleRuleResponse?: IoRestorecommerceRuleRuleResponseResolvers<ContextType>;
   IoRestorecommerceRuleRule?: IoRestorecommerceRuleRuleResolvers<ContextType>;
-  AccessControlPolicySetQuery?: AccessControlPolicySetQueryResolvers<ContextType>;
+  AccessControlPolicySetServiceQuery?: AccessControlPolicySetServiceQueryResolvers<ContextType>;
   ProtoIoRestorecommercePolicySetPolicySetListResponse?: ProtoIoRestorecommercePolicySetPolicySetListResponseResolvers<ContextType>;
   IoRestorecommercePolicySetPolicySetListResponse?: IoRestorecommercePolicySetPolicySetListResponseResolvers<ContextType>;
   IoRestorecommercePolicySetPolicySetResponse?: IoRestorecommercePolicySetPolicySetResponseResolvers<ContextType>;
   IoRestorecommercePolicySetPolicySet?: IoRestorecommercePolicySetPolicySetResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   AccessControlMutation?: AccessControlMutationResolvers<ContextType>;
-  AccessControlPolicyMutation?: AccessControlPolicyMutationResolvers<ContextType>;
+  AccessControlPolicyServiceMutation?: AccessControlPolicyServiceMutationResolvers<ContextType>;
   ProtoIoRestorecommerceResourcebaseDeleteResponse?: ProtoIoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType>;
   IoRestorecommerceResourcebaseDeleteResponse?: IoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType>;
-  AccessControlRuleMutation?: AccessControlRuleMutationResolvers<ContextType>;
-  AccessControlPolicySetMutation?: AccessControlPolicySetMutationResolvers<ContextType>;
+  AccessControlRuleServiceMutation?: AccessControlRuleServiceMutationResolvers<ContextType>;
+  AccessControlPolicySetServiceMutation?: AccessControlPolicySetServiceMutationResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
   SubscriptionOutput?: SubscriptionOutputResolvers<ContextType>;
 }>;

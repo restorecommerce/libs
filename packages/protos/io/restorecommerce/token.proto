@@ -9,9 +9,7 @@ import "io/restorecommerce/options.proto";
 /*
 * Microservice definition.
 */
-service Service {
-  option (io.restorecommerce.options.service_name) = "token";
-
+service TokenService {
   rpc upsert (TokenData) returns (google.protobuf.Any); // creates or upserts ID_token to `Redis` and returns sucess or failure message
   rpc find (Identifier) returns (google.protobuf.Any) {
     option (io.restorecommerce.options.is_query) = true;

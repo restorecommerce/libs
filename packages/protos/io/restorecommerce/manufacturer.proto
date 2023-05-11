@@ -38,8 +38,6 @@ message Deleted {
 }
 
 service ManufacturerService {
-  option (io.restorecommerce.options.service_name) = "manufacturer";
-
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ManufacturerListResponse)  {
     option (io.restorecommerce.options.is_query) = true;
   };

@@ -23,16 +23,16 @@ export type Mutation = {
 
 export type IndexingMutation = {
   __typename?: 'IndexingMutation';
-  search: IndexingSearchMutation;
+  SearchService: IndexingSearchServiceMutation;
 };
 
-export type IndexingSearchMutation = {
-  __typename?: 'IndexingSearchMutation';
+export type IndexingSearchServiceMutation = {
+  __typename?: 'IndexingSearchServiceMutation';
   Search?: Maybe<ProtoIoRestorecommerceSearchSearchResponse>;
 };
 
 
-export type IndexingSearchMutationSearchArgs = {
+export type IndexingSearchServiceMutationSearchArgs = {
   input: IIoRestorecommerceSearchSearchRequest;
 };
 
@@ -61,9 +61,10 @@ export type IIoRestorecommerceSearchSearchRequest = {
 export type Subscription = {
   __typename?: 'Subscription';
   orderingOrders?: Maybe<SubscriptionOutput>;
-  fulfillmentFulfillment?: Maybe<SubscriptionOutput>;
+  catalogProducts?: Maybe<SubscriptionOutput>;
+  fulfillmentFulfillments?: Maybe<SubscriptionOutput>;
   fulfillmentFulfillmentCouriers?: Maybe<SubscriptionOutput>;
-  fulfillmentFulfillmentProduct?: Maybe<SubscriptionOutput>;
+  fulfillmentFulfillment_products?: Maybe<SubscriptionOutput>;
 };
 
 
@@ -72,7 +73,12 @@ export type SubscriptionOrderingOrdersArgs = {
 };
 
 
-export type SubscriptionFulfillmentFulfillmentArgs = {
+export type SubscriptionCatalogProductsArgs = {
+  action?: InputMaybe<SubscriptionAction>;
+};
+
+
+export type SubscriptionFulfillmentFulfillmentsArgs = {
   action?: InputMaybe<SubscriptionAction>;
 };
 
@@ -82,7 +88,7 @@ export type SubscriptionFulfillmentFulfillmentCouriersArgs = {
 };
 
 
-export type SubscriptionFulfillmentFulfillmentProductArgs = {
+export type SubscriptionFulfillmentFulfillment_ProductsArgs = {
   action?: InputMaybe<SubscriptionAction>;
 };
 
@@ -169,7 +175,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = ResolversObject<{
   Mutation: ResolverTypeWrapper<{}>;
   IndexingMutation: ResolverTypeWrapper<IndexingMutation>;
-  IndexingSearchMutation: ResolverTypeWrapper<IndexingSearchMutation>;
+  IndexingSearchServiceMutation: ResolverTypeWrapper<IndexingSearchServiceMutation>;
   ProtoIoRestorecommerceSearchSearchResponse: ResolverTypeWrapper<ProtoIoRestorecommerceSearchSearchResponse>;
   IoRestorecommerceSearchSearchResponse: ResolverTypeWrapper<IoRestorecommerceSearchSearchResponse>;
   GoogleProtobufAny: ResolverTypeWrapper<GoogleProtobufAny>;
@@ -186,7 +192,7 @@ export type ResolversTypes = ResolversObject<{
 export type ResolversParentTypes = ResolversObject<{
   Mutation: {};
   IndexingMutation: IndexingMutation;
-  IndexingSearchMutation: IndexingSearchMutation;
+  IndexingSearchServiceMutation: IndexingSearchServiceMutation;
   ProtoIoRestorecommerceSearchSearchResponse: ProtoIoRestorecommerceSearchSearchResponse;
   IoRestorecommerceSearchSearchResponse: IoRestorecommerceSearchSearchResponse;
   GoogleProtobufAny: GoogleProtobufAny;
@@ -203,12 +209,12 @@ export type MutationResolvers<ContextType = IndexingContext, ParentType extends 
 }>;
 
 export type IndexingMutationResolvers<ContextType = IndexingContext, ParentType extends ResolversParentTypes['IndexingMutation'] = ResolversParentTypes['IndexingMutation']> = ResolversObject<{
-  search?: Resolver<ResolversTypes['IndexingSearchMutation'], ParentType, ContextType>;
+  SearchService?: Resolver<ResolversTypes['IndexingSearchServiceMutation'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IndexingSearchMutationResolvers<ContextType = IndexingContext, ParentType extends ResolversParentTypes['IndexingSearchMutation'] = ResolversParentTypes['IndexingSearchMutation']> = ResolversObject<{
-  Search?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceSearchSearchResponse']>, ParentType, ContextType, RequireFields<IndexingSearchMutationSearchArgs, 'input'>>;
+export type IndexingSearchServiceMutationResolvers<ContextType = IndexingContext, ParentType extends ResolversParentTypes['IndexingSearchServiceMutation'] = ResolversParentTypes['IndexingSearchServiceMutation']> = ResolversObject<{
+  Search?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceSearchSearchResponse']>, ParentType, ContextType, RequireFields<IndexingSearchServiceMutationSearchArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -234,9 +240,10 @@ export interface GoogleProtobufAnyValueScalarConfig extends GraphQLScalarTypeCon
 
 export type SubscriptionResolvers<ContextType = IndexingContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
   orderingOrders?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "orderingOrders", ParentType, ContextType, Partial<SubscriptionOrderingOrdersArgs>>;
-  fulfillmentFulfillment?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "fulfillmentFulfillment", ParentType, ContextType, Partial<SubscriptionFulfillmentFulfillmentArgs>>;
+  catalogProducts?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "catalogProducts", ParentType, ContextType, Partial<SubscriptionCatalogProductsArgs>>;
+  fulfillmentFulfillments?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "fulfillmentFulfillments", ParentType, ContextType, Partial<SubscriptionFulfillmentFulfillmentsArgs>>;
   fulfillmentFulfillmentCouriers?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "fulfillmentFulfillmentCouriers", ParentType, ContextType, Partial<SubscriptionFulfillmentFulfillmentCouriersArgs>>;
-  fulfillmentFulfillmentProduct?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "fulfillmentFulfillmentProduct", ParentType, ContextType, Partial<SubscriptionFulfillmentFulfillmentProductArgs>>;
+  fulfillmentFulfillment_products?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "fulfillmentFulfillment_products", ParentType, ContextType, Partial<SubscriptionFulfillmentFulfillment_ProductsArgs>>;
 }>;
 
 export type SubscriptionOutputResolvers<ContextType = IndexingContext, ParentType extends ResolversParentTypes['SubscriptionOutput'] = ResolversParentTypes['SubscriptionOutput']> = ResolversObject<{
@@ -247,7 +254,7 @@ export type SubscriptionOutputResolvers<ContextType = IndexingContext, ParentTyp
 export type Resolvers<ContextType = IndexingContext> = ResolversObject<{
   Mutation?: MutationResolvers<ContextType>;
   IndexingMutation?: IndexingMutationResolvers<ContextType>;
-  IndexingSearchMutation?: IndexingSearchMutationResolvers<ContextType>;
+  IndexingSearchServiceMutation?: IndexingSearchServiceMutationResolvers<ContextType>;
   ProtoIoRestorecommerceSearchSearchResponse?: ProtoIoRestorecommerceSearchSearchResponseResolvers<ContextType>;
   IoRestorecommerceSearchSearchResponse?: IoRestorecommerceSearchSearchResponseResolvers<ContextType>;
   GoogleProtobufAny?: GoogleProtobufAnyResolvers<ContextType>;

@@ -14,9 +14,7 @@ import "io/restorecommerce/contact_point_type.proto";
 import "io/restorecommerce/timezone.proto";
 import "io/restorecommerce/locale.proto";
 
-service Service {
-  option (io.restorecommerce.options.service_name) = "contact_point";
-
+service ContactPointService {
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ContactPointListResponse) {
     option (io.restorecommerce.options.is_query) = true;
   };

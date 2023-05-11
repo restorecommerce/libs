@@ -1531,10 +1531,10 @@ export const JobFilter = {
  * The microservice for scheduling jobs.
  * Provides CRUD operations.
  */
-export type ServiceDefinition = typeof ServiceDefinition;
-export const ServiceDefinition = {
-  name: "Service",
-  fullName: "io.restorecommerce.job.Service",
+export type JobServiceDefinition = typeof JobServiceDefinition;
+export const JobServiceDefinition = {
+  name: "JobService",
+  fullName: "io.restorecommerce.job.JobService",
   methods: {
     read: {
       name: "Read",
@@ -1579,7 +1579,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
+export interface JobServiceImplementation<CallContextExt = {}> {
   read(request: JobReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<JobListResponse>>;
   create(request: JobList, context: CallContext & CallContextExt): Promise<DeepPartial<JobListResponse>>;
   delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;
@@ -1587,7 +1587,7 @@ export interface ServiceImplementation<CallContextExt = {}> {
   upsert(request: JobList, context: CallContext & CallContextExt): Promise<DeepPartial<JobListResponse>>;
 }
 
-export interface ServiceClient<CallOptionsExt = {}> {
+export interface JobServiceClient<CallOptionsExt = {}> {
   read(request: DeepPartial<JobReadRequest>, options?: CallOptions & CallOptionsExt): Promise<JobListResponse>;
   create(request: DeepPartial<JobList>, options?: CallOptions & CallOptionsExt): Promise<JobListResponse>;
   delete(request: DeepPartial<DeleteRequest>, options?: CallOptions & CallOptionsExt): Promise<DeleteResponse>;
@@ -2495,7 +2495,7 @@ export const protoMetadata: ProtoMetadata = {
     }],
     "enumType": [],
     "service": [{
-      "name": "Service",
+      "name": "JobService",
       "method": [{
         "name": "Read",
         "inputType": ".io.restorecommerce.job.JobReadRequest",
@@ -2532,287 +2532,287 @@ export const protoMetadata: ProtoMetadata = {
         "clientStreaming": false,
         "serverStreaming": false,
       }],
-      "options": { "deprecated": false, "uninterpretedOption": [] },
+      "options": undefined,
     }],
     "extension": [],
     "options": undefined,
     "sourceCodeInfo": {
       "location": [{
         "path": [6, 0],
-        "span": [15, 0, 25, 1],
+        "span": [15, 0, 23, 1],
         "leadingComments": "*\n The microservice for scheduling jobs.\n Provides CRUD operations.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 0],
-        "span": [31, 0, 33, 1],
+        "span": [29, 0, 31, 1],
         "leadingComments": "*\n A Kafka event.\n Send when a job resource got deleted.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1],
-        "span": [38, 0, 42, 1],
+        "span": [36, 0, 40, 1],
         "leadingComments": "*\n A list of jobs.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 4],
-        "span": [58, 0, 67, 1],
+        "span": [56, 0, 65, 1],
         "leadingComments": "*\n A Job resource\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 4, 2, 0],
-        "span": [59, 2, 25],
+        "span": [57, 2, 25],
         "leadingComments": "",
         "trailingComments": " Job ID\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 4, 2, 1],
-        "span": [61, 2, 28],
+        "span": [59, 2, 28],
         "leadingComments": "",
         "trailingComments": " Job type\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 4, 2, 2],
-        "span": [62, 2, 26],
+        "span": [60, 2, 26],
         "leadingComments": "",
         "trailingComments": " Job-specific data with variable payload\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 4, 2, 3],
-        "span": [64, 2, 28],
+        "span": [62, 2, 28],
         "leadingComments": "",
         "trailingComments": " Used to specify the time at which the job is run\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 4, 2, 4],
-        "span": [66, 2, 35],
+        "span": [64, 2, 35],
         "leadingComments": "",
         "trailingComments": " The job options\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 5],
-        "span": [72, 0, 89, 1],
+        "span": [70, 0, 87, 1],
         "leadingComments": "*\n Job Options\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 5, 2, 0],
-        "span": [81, 2, 34],
+        "span": [79, 2, 34],
         "leadingComments": "",
         "trailingComments": " Job priority\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 5, 2, 1],
-        "span": [82, 2, 32],
+        "span": [80, 2, 32],
         "leadingComments": "",
         "trailingComments": " Amount of possible failing runs until job fails\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 5, 2, 2],
-        "span": [83, 2, 32],
+        "span": [81, 2, 32],
         "leadingComments": "",
         "trailingComments": " Delay settings between failed job runs\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 5, 2, 3],
-        "span": [84, 2, 31],
+        "span": [82, 2, 31],
         "leadingComments": "",
         "trailingComments": " The number of milliseconds after which the job should be fail with a timeout error\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 5, 2, 4],
-        "span": [86, 2, 30],
+        "span": [84, 2, 30],
         "leadingComments": "",
         "trailingComments": " Used for periodic jobs\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 5, 2, 5],
-        "span": [87, 2, 29],
+        "span": [85, 2, 29],
         "leadingComments": "",
         "trailingComments": " To override the job ID - by default, the job ID is a unique generated by bull\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 5, 2, 6],
-        "span": [88, 2, 38],
+        "span": [86, 2, 38],
         "leadingComments": "",
         "trailingComments": " If true, removes the job when it successfully completes\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 6, 2, 5],
-        "span": [97, 2, 28],
+        "span": [95, 2, 28],
         "leadingComments": "",
         "trailingComments": " To override the job ID - by default, the job ID is a unique generated by bull\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 6, 2, 6],
-        "span": [98, 2, 25],
+        "span": [96, 2, 25],
         "leadingComments": "",
         "trailingComments": " time zone\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 7],
-        "span": [102, 0, 106, 1],
+        "span": [100, 0, 104, 1],
         "leadingComments": " Data which is stored within a job instance\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 7, 2, 0],
-        "span": [103, 2, 43],
+        "span": [101, 2, 43],
         "leadingComments": "",
         "trailingComments": " optional variable payload\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 7, 2, 2],
-        "span": [105, 2, 33],
+        "span": [103, 2, 33],
         "leadingComments": "",
         "trailingComments": " id of job creator\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 8],
-        "span": [112, 0, 117, 1],
+        "span": [110, 0, 115, 1],
         "leadingComments":
           "*\n A scheduled Job.\n Emitted to Kafka by the scheduling service with event name 'queuedJob' and retreived by a service which processes this job.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 8, 2, 0],
-        "span": [113, 2, 25],
+        "span": [111, 2, 25],
         "leadingComments": "",
         "trailingComments": " Job instance ID\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 8, 2, 2],
-        "span": [115, 2, 25],
+        "span": [113, 2, 25],
         "leadingComments": "",
         "trailingComments": " Job-specific data with variable payload\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 8, 2, 3],
-        "span": [116, 2, 36],
+        "span": [114, 2, 36],
         "leadingComments": "",
         "trailingComments": " Type of schedule (ONCE, RECURR, etc)\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 9],
-        "span": [123, 0, 129, 1],
+        "span": [121, 0, 127, 1],
         "leadingComments":
           "*\n A finished scheduled Job.\n Emitted to Kafka by the service which processed the job with event name 'done' and retrieved by the scheduling service.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 9, 2, 0],
-        "span": [124, 2, 25],
+        "span": [122, 2, 25],
         "leadingComments": "",
         "trailingComments": " Job instance ID\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 9, 2, 1],
-        "span": [125, 2, 36],
+        "span": [123, 2, 36],
         "leadingComments": "",
         "trailingComments": " Type of schedule (ONCE, RECURR, etc)\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 9, 2, 2],
-        "span": [126, 2, 37],
+        "span": [124, 2, 37],
         "leadingComments": "",
         "trailingComments": " Whether to delete scheduled job\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 9, 2, 3],
-        "span": [127, 2, 27],
+        "span": [125, 2, 27],
         "leadingComments": "",
         "trailingComments": " Job type\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 10],
-        "span": [135, 0, 140, 1],
+        "span": [133, 0, 138, 1],
         "leadingComments":
           "*\n A failed scheduled Job event from the Job Service.\n Emitted to Kafka by the service which processed the Job and retrieved by the scheduling service.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 10, 2, 0],
-        "span": [136, 2, 25],
+        "span": [134, 2, 25],
         "leadingComments": "",
         "trailingComments": " Job instance ID\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 10, 2, 1],
-        "span": [137, 2, 28],
+        "span": [135, 2, 28],
         "leadingComments": "",
         "trailingComments": " Error message\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 10, 2, 2],
-        "span": [138, 2, 36],
+        "span": [136, 2, 36],
         "leadingComments": "",
         "trailingComments": " Type of job ex: ONCE, RECURR etc.\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 10, 2, 3],
-        "span": [139, 2, 27],
+        "span": [137, 2, 27],
         "leadingComments": "",
         "trailingComments": " Job type\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 11],
-        "span": [145, 0, 152, 1],
+        "span": [143, 0, 150, 1],
         "leadingComments": "*\n Delay between retries.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 11, 4, 0, 2, 0],
-        "span": [147, 4, 14],
+        "span": [145, 4, 14],
         "leadingComments": "",
         "trailingComments": " Retry with the same delay\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 11, 4, 0, 2, 1],
-        "span": [148, 4, 20],
+        "span": [146, 4, 20],
         "leadingComments": "",
         "trailingComments": " Exponential delay increase between retries\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 11, 2, 0],
-        "span": [150, 2, 28],
+        "span": [148, 2, 28],
         "leadingComments": "",
         "trailingComments": " Time until retry in milliseconds\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 11, 2, 1],
-        "span": [151, 2, 25],
+        "span": [149, 2, 25],
         "leadingComments": "",
         "trailingComments": " Calculation of the delay\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 12],
-        "span": [155, 0, 171, 1],
+        "span": [153, 0, 169, 1],
         "leadingComments": " Job-specific read request\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 12, 4, 0],
-        "span": [158, 2, 162, 3],
+        "span": [156, 2, 160, 3],
         "leadingComments": " only possible to sort jobs by creation date\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 12, 2, 2],
-        "span": [166, 2, 32],
+        "span": [164, 2, 32],
         "leadingComments": " Filter based on fieldName|operation, value|list\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 12, 2, 3],
-        "span": [169, 2, 65],
+        "span": [167, 2, 65],
         "leadingComments": " Fields selector\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 13],
-        "span": [174, 0, 177, 1],
+        "span": [172, 0, 175, 1],
         "leadingComments": " filter\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
@@ -2840,9 +2840,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.job.JobFilter": JobFilter,
   },
   dependencies: [protoMetadata1, protoMetadata2, protoMetadata3, protoMetadata4, protoMetadata5, protoMetadata6],
-  options: {
-    services: { "Service": { options: { "service_name": "job" }, methods: { "Read": { "is_query": true } } } },
-  },
+  options: { services: { "JobService": { options: undefined, methods: { "Read": { "is_query": true } } } } },
 };
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;

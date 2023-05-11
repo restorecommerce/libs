@@ -421,10 +421,10 @@ export const ReverseQuery = {
   },
 };
 
-export type ServiceDefinition = typeof ServiceDefinition;
-export const ServiceDefinition = {
-  name: "Service",
-  fullName: "io.restorecommerce.access_control.Service",
+export type AccessControlServiceDefinition = typeof AccessControlServiceDefinition;
+export const AccessControlServiceDefinition = {
+  name: "AccessControlService",
+  fullName: "io.restorecommerce.access_control.AccessControlService",
   methods: {
     isAllowed: {
       name: "IsAllowed",
@@ -445,12 +445,12 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
+export interface AccessControlServiceImplementation<CallContextExt = {}> {
   isAllowed(request: Request, context: CallContext & CallContextExt): Promise<DeepPartial<Response>>;
   whatIsAllowed(request: Request, context: CallContext & CallContextExt): Promise<DeepPartial<ReverseQuery>>;
 }
 
-export interface ServiceClient<CallOptionsExt = {}> {
+export interface AccessControlServiceClient<CallOptionsExt = {}> {
   isAllowed(request: DeepPartial<Request>, options?: CallOptions & CallOptionsExt): Promise<Response>;
   whatIsAllowed(request: DeepPartial<Request>, options?: CallOptions & CallOptionsExt): Promise<ReverseQuery>;
 }
@@ -692,7 +692,7 @@ export const protoMetadata: ProtoMetadata = {
     }],
     "enumType": [],
     "service": [{
-      "name": "Service",
+      "name": "AccessControlService",
       "method": [{
         "name": "IsAllowed",
         "inputType": ".io.restorecommerce.access_control.Request",
@@ -708,7 +708,7 @@ export const protoMetadata: ProtoMetadata = {
         "clientStreaming": false,
         "serverStreaming": false,
       }],
-      "options": { "deprecated": false, "uninterpretedOption": [] },
+      "options": undefined,
     }],
     "extension": [],
     "options": undefined,
@@ -734,8 +734,8 @@ export const protoMetadata: ProtoMetadata = {
   dependencies: [protoMetadata1, protoMetadata2, protoMetadata3, protoMetadata4, protoMetadata5, protoMetadata6],
   options: {
     services: {
-      "Service": {
-        options: { "service_name": "access_control" },
+      "AccessControlService": {
+        options: undefined,
         methods: { "IsAllowed": { "is_query": true }, "WhatIsAllowed": { "is_query": true } },
       },
     },

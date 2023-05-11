@@ -38,8 +38,6 @@ message Deleted {
 }
 
 service PriceGroupService {
-  option (io.restorecommerce.options.service_name) = "price_group";
-
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (PriceGroupListResponse) {
     option (io.restorecommerce.options.is_query) = true;
   };

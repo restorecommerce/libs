@@ -933,7 +933,7 @@ export const protoMetadata: ProtoMetadata = {
         "clientStreaming": false,
         "serverStreaming": false,
       }],
-      "options": { "deprecated": false, "uninterpretedOption": [] },
+      "options": undefined,
     }],
     "extension": [],
     "options": undefined,
@@ -986,12 +986,7 @@ export const protoMetadata: ProtoMetadata = {
         },
       },
     },
-    services: {
-      "ProductCategoryService": {
-        options: { "service_name": "product_category" },
-        methods: { "Read": { "is_query": true } },
-      },
-    },
+    services: { "ProductCategoryService": { options: undefined, methods: { "Read": { "is_query": true } } } },
   },
 };
 

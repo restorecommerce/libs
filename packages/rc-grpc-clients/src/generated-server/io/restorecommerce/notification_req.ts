@@ -447,10 +447,10 @@ export const Log = {
   },
 };
 
-export type ServiceDefinition = typeof ServiceDefinition;
-export const ServiceDefinition = {
-  name: "Service",
-  fullName: "io.restorecommerce.notification_req.Service",
+export type NotificationReqServiceDefinition = typeof NotificationReqServiceDefinition;
+export const NotificationReqServiceDefinition = {
+  name: "NotificationReqService",
+  fullName: "io.restorecommerce.notification_req.NotificationReqService",
   methods: {
     /** direct notifications */
     send: {
@@ -464,12 +464,12 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
+export interface NotificationReqServiceImplementation<CallContextExt = {}> {
   /** direct notifications */
   send(request: NotificationReq, context: CallContext & CallContextExt): Promise<DeepPartial<OperationStatusObj>>;
 }
 
-export interface ServiceClient<CallOptionsExt = {}> {
+export interface NotificationReqServiceClient<CallOptionsExt = {}> {
   /** direct notifications */
   send(request: DeepPartial<NotificationReq>, options?: CallOptions & CallOptionsExt): Promise<OperationStatusObj>;
 }
@@ -804,7 +804,7 @@ export const protoMetadata: ProtoMetadata = {
     }],
     "enumType": [],
     "service": [{
-      "name": "Service",
+      "name": "NotificationReqService",
       "method": [{
         "name": "Send",
         "inputType": ".io.restorecommerce.notification_req.NotificationReq",

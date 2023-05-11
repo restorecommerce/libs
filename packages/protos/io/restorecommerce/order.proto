@@ -15,8 +15,6 @@ import "io/restorecommerce/fulfillment_product.proto";
 
 
 service OrderService {
-  option (io.restorecommerce.options.service_name) = "order";
-
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (OrderListResponse) {
     option (io.restorecommerce.options.is_query) = true;
   };

@@ -382,10 +382,10 @@ export const ContactPointTypeResponse = {
 };
 
 /** Microservice definition. */
-export type ServiceDefinition = typeof ServiceDefinition;
-export const ServiceDefinition = {
-  name: "Service",
-  fullName: "io.restorecommerce.contact_point_type.Service",
+export type ContactPointTypeServiceDefinition = typeof ContactPointTypeServiceDefinition;
+export const ContactPointTypeServiceDefinition = {
+  name: "ContactPointTypeService",
+  fullName: "io.restorecommerce.contact_point_type.ContactPointTypeService",
   methods: {
     read: {
       name: "Read",
@@ -430,7 +430,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
+export interface ContactPointTypeServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<ContactPointTypeListResponse>>;
   create(
     request: ContactPointTypeList,
@@ -447,7 +447,7 @@ export interface ServiceImplementation<CallContextExt = {}> {
   ): Promise<DeepPartial<ContactPointTypeListResponse>>;
 }
 
-export interface ServiceClient<CallOptionsExt = {}> {
+export interface ContactPointTypeServiceClient<CallOptionsExt = {}> {
   read(
     request: DeepPartial<ReadRequest>,
     options?: CallOptions & CallOptionsExt,
@@ -706,7 +706,7 @@ export const protoMetadata: ProtoMetadata = {
     }],
     "enumType": [],
     "service": [{
-      "name": "Service",
+      "name": "ContactPointTypeService",
       "method": [{
         "name": "Read",
         "inputType": ".io.restorecommerce.resourcebase.ReadRequest",
@@ -743,14 +743,14 @@ export const protoMetadata: ProtoMetadata = {
         "clientStreaming": false,
         "serverStreaming": false,
       }],
-      "options": { "deprecated": false, "uninterpretedOption": [] },
+      "options": undefined,
     }],
     "extension": [],
     "options": undefined,
     "sourceCodeInfo": {
       "location": [{
         "path": [6, 0],
-        "span": [13, 0, 23, 1],
+        "span": [13, 0, 21, 1],
         "leadingComments": "\n Microservice definition.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
@@ -767,9 +767,7 @@ export const protoMetadata: ProtoMetadata = {
   },
   dependencies: [protoMetadata1, protoMetadata2, protoMetadata3, protoMetadata4, protoMetadata5],
   options: {
-    services: {
-      "Service": { options: { "service_name": "contact_point_type" }, methods: { "Read": { "is_query": true } } },
-    },
+    services: { "ContactPointTypeService": { options: undefined, methods: { "Read": { "is_query": true } } } },
   },
 };
 

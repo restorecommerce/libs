@@ -6,7 +6,7 @@ import {
   Sort_SortOrder,
   FieldFilter
 } from './generated/io/restorecommerce/resource_base';
-import { ServiceDefinition, ServiceClient } from './generated/io/restorecommerce/commandinterface';
+import { CommandInterfaceServiceClient, CommandInterfaceServiceDefinition } from './generated/io/restorecommerce/commandinterface';
 import { createChannel } from 'nice-grpc';
 
 export { DeleteRequest, ReadRequest, Sort, Sort_SortOrder, FieldFilter };
@@ -15,11 +15,11 @@ export class RestoreCommerceGrpcClient {
 
   protected channel: Channel;
 
-  readonly command: ServiceClient;
+  readonly command: CommandInterfaceServiceClient;
 
   constructor(address: string, cfg: GrpcClientConfig) {
     this.channel = createChannel(address);
-    this.command = createClient(cfg, ServiceDefinition, this.channel);
+    this.command = createClient(cfg, CommandInterfaceServiceDefinition, this.channel);
   }
 
   protected createClient = createClient;

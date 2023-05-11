@@ -3063,7 +3063,7 @@ export const protoMetadata: ProtoMetadata = {
         "clientStreaming": false,
         "serverStreaming": false,
       }],
-      "options": { "deprecated": false, "uninterpretedOption": [] },
+      "options": undefined,
     }],
     "extension": [],
     "options": undefined,
@@ -3076,13 +3076,13 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 2],
-        "span": [62, 0, 81, 1],
+        "span": [60, 0, 79, 1],
         "leadingComments": " Product resource entity\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 13, 2, 3],
-        "span": [207, 2, 32],
+        "span": [205, 2, 32],
         "leadingComments": "",
         "trailingComments": "Discount in relation to the bundle price\n",
         "leadingDetachedComments": [],
@@ -3186,9 +3186,7 @@ export const protoMetadata: ProtoMetadata = {
         },
       },
     },
-    services: {
-      "ProductService": { options: { "service_name": "product" }, methods: { "Read": { "is_query": true } } },
-    },
+    services: { "ProductService": { options: undefined, methods: { "Read": { "is_query": true } } } },
   },
 };
 

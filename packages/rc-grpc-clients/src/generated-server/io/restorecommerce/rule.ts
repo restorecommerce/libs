@@ -739,10 +739,10 @@ export const ContextQuery = {
   },
 };
 
-export type ServiceDefinition = typeof ServiceDefinition;
-export const ServiceDefinition = {
-  name: "Service",
-  fullName: "io.restorecommerce.rule.Service",
+export type RuleServiceDefinition = typeof RuleServiceDefinition;
+export const RuleServiceDefinition = {
+  name: "RuleService",
+  fullName: "io.restorecommerce.rule.RuleService",
   methods: {
     read: {
       name: "Read",
@@ -787,7 +787,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
+export interface RuleServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<RuleListResponse>>;
   create(request: RuleList, context: CallContext & CallContextExt): Promise<DeepPartial<RuleListResponse>>;
   delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;
@@ -795,7 +795,7 @@ export interface ServiceImplementation<CallContextExt = {}> {
   upsert(request: RuleList, context: CallContext & CallContextExt): Promise<DeepPartial<RuleListResponse>>;
 }
 
-export interface ServiceClient<CallOptionsExt = {}> {
+export interface RuleServiceClient<CallOptionsExt = {}> {
   read(request: DeepPartial<ReadRequest>, options?: CallOptions & CallOptionsExt): Promise<RuleListResponse>;
   create(request: DeepPartial<RuleList>, options?: CallOptions & CallOptionsExt): Promise<RuleListResponse>;
   delete(request: DeepPartial<DeleteRequest>, options?: CallOptions & CallOptionsExt): Promise<DeleteResponse>;
@@ -1282,7 +1282,7 @@ export const protoMetadata: ProtoMetadata = {
       "reservedName": [],
     }],
     "service": [{
-      "name": "Service",
+      "name": "RuleService",
       "method": [{
         "name": "Read",
         "inputType": ".io.restorecommerce.resourcebase.ReadRequest",
@@ -1319,7 +1319,7 @@ export const protoMetadata: ProtoMetadata = {
         "clientStreaming": false,
         "serverStreaming": false,
       }],
-      "options": { "deprecated": false, "uninterpretedOption": [] },
+      "options": undefined,
     }],
     "extension": [],
     "options": undefined,
@@ -1378,9 +1378,7 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata6,
     protoMetadata7,
   ],
-  options: {
-    services: { "Service": { options: { "service_name": "rule" }, methods: { "Read": { "is_query": true } } } },
-  },
+  options: { services: { "RuleService": { options: undefined, methods: { "Read": { "is_query": true } } } } },
 };
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;

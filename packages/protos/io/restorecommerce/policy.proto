@@ -51,9 +51,7 @@ message PolicyResponse {
   io.restorecommerce.status.Status status = 2;
 }
 
-service Service {
-  option (io.restorecommerce.options.service_name) = "policy";
-
+service PolicyService {
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (PolicyListResponse) {
     option (io.restorecommerce.options.is_query) = true;
   };

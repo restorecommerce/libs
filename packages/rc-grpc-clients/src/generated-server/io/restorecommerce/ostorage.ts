@@ -2240,10 +2240,10 @@ export const MoveResponseItem = {
   },
 };
 
-export type ServiceDefinition = typeof ServiceDefinition;
-export const ServiceDefinition = {
-  name: "Service",
-  fullName: "io.restorecommerce.ostorage.Service",
+export type ObjectServiceDefinition = typeof ObjectServiceDefinition;
+export const ObjectServiceDefinition = {
+  name: "ObjectService",
+  fullName: "io.restorecommerce.ostorage.ObjectService",
   methods: {
     get: {
       name: "Get",
@@ -2296,7 +2296,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
+export interface ObjectServiceImplementation<CallContextExt = {}> {
   get(
     request: GetRequest,
     context: CallContext & CallContextExt,
@@ -2308,7 +2308,7 @@ export interface ServiceImplementation<CallContextExt = {}> {
   move(request: MoveRequestList, context: CallContext & CallContextExt): Promise<DeepPartial<MoveResponseList>>;
 }
 
-export interface ServiceClient<CallOptionsExt = {}> {
+export interface ObjectServiceClient<CallOptionsExt = {}> {
   get(request: DeepPartial<GetRequest>, options?: CallOptions & CallOptionsExt): AsyncIterable<ObjectResponse>;
   put(request: AsyncIterable<DeepPartial<Object>>, options?: CallOptions & CallOptionsExt): Promise<PutResponse>;
   delete(request: DeepPartial<DeleteRequest>, options?: CallOptions & CallOptionsExt): Promise<DeleteResponse>;
@@ -3748,7 +3748,7 @@ export const protoMetadata: ProtoMetadata = {
     }],
     "enumType": [],
     "service": [{
-      "name": "Service",
+      "name": "ObjectService",
       "method": [{
         "name": "Get",
         "inputType": ".io.restorecommerce.ostorage.GetRequest",
@@ -3792,50 +3792,50 @@ export const protoMetadata: ProtoMetadata = {
         "clientStreaming": false,
         "serverStreaming": false,
       }],
-      "options": { "deprecated": false, "uninterpretedOption": [] },
+      "options": undefined,
     }],
     "extension": [],
     "options": undefined,
     "sourceCodeInfo": {
       "location": [{
         "path": [4, 5, 2, 8],
-        "span": [68, 2, 40],
+        "span": [66, 2, 40],
         "leadingComments": "",
         "trailingComments": " optional meta data ex: from and to dates\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 17, 2, 5],
-        "span": [145, 2, 19],
+        "span": [143, 2, 19],
         "leadingComments": "",
         "trailingComments": " file size of uploaded object\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 18, 2, 1],
-        "span": [150, 2, 58],
+        "span": [148, 2, 58],
         "leadingComments": "",
         "trailingComments": "/ Filter based on fieldName|operation, value|list\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 19],
-        "span": [158, 0, 163, 1],
+        "span": [156, 0, 161, 1],
         "leadingComments": " OstorageMessage is used for emitting\n objectUploaded and objectDownloaded events\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 21, 2, 0],
-        "span": [171, 2, 29],
+        "span": [169, 2, 29],
         "leadingComments": "",
         "trailingComments": " destination bucket name\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 21, 2, 1],
-        "span": [172, 2, 35],
+        "span": [170, 2, 35],
         "leadingComments": "",
         "trailingComments": " source object with bucket name\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 21, 2, 2],
-        "span": [173, 2, 26],
+        "span": [171, 2, 26],
         "leadingComments": "",
         "trailingComments": " destination key name\n",
         "leadingDetachedComments": [],
@@ -3882,10 +3882,7 @@ export const protoMetadata: ProtoMetadata = {
   ],
   options: {
     services: {
-      "Service": {
-        options: { "service_name": "object" },
-        methods: { "Get": { "is_query": true }, "List": { "is_query": true } },
-      },
+      "ObjectService": { options: undefined, methods: { "Get": { "is_query": true }, "List": { "is_query": true } } },
     },
   },
 };

@@ -45,9 +45,7 @@ message ReverseQuery {
   io.restorecommerce.status.OperationStatus operation_status = 3;
 }
 
-service Service {
-  option (io.restorecommerce.options.service_name) = "access_control";
-
+service AccessControlService {
   rpc IsAllowed (Request) returns (Response) {
     option (io.restorecommerce.options.is_query) = true;
   };

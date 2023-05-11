@@ -435,10 +435,10 @@ export const Credential = {
 };
 
 /** Microservice definition. */
-export type ServiceDefinition = typeof ServiceDefinition;
-export const ServiceDefinition = {
-  name: "Service",
-  fullName: "io.restorecommerce.credential.Service",
+export type CredentialServiceDefinition = typeof CredentialServiceDefinition;
+export const CredentialServiceDefinition = {
+  name: "CredentialService",
+  fullName: "io.restorecommerce.credential.CredentialService",
   methods: {
     read: {
       name: "Read",
@@ -483,7 +483,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
+export interface CredentialServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<CredentialListResponse>>;
   create(request: CredentialList, context: CallContext & CallContextExt): Promise<DeepPartial<CredentialListResponse>>;
   delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;
@@ -491,7 +491,7 @@ export interface ServiceImplementation<CallContextExt = {}> {
   upsert(request: CredentialList, context: CallContext & CallContextExt): Promise<DeepPartial<CredentialListResponse>>;
 }
 
-export interface ServiceClient<CallOptionsExt = {}> {
+export interface CredentialServiceClient<CallOptionsExt = {}> {
   read(request: DeepPartial<ReadRequest>, options?: CallOptions & CallOptionsExt): Promise<CredentialListResponse>;
   create(request: DeepPartial<CredentialList>, options?: CallOptions & CallOptionsExt): Promise<CredentialListResponse>;
   delete(request: DeepPartial<DeleteRequest>, options?: CallOptions & CallOptionsExt): Promise<DeleteResponse>;
@@ -791,7 +791,7 @@ export const protoMetadata: ProtoMetadata = {
     }],
     "enumType": [],
     "service": [{
-      "name": "Service",
+      "name": "CredentialService",
       "method": [{
         "name": "Read",
         "inputType": ".io.restorecommerce.resourcebase.ReadRequest",

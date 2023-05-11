@@ -743,7 +743,7 @@ export const protoMetadata: ProtoMetadata = {
         "clientStreaming": false,
         "serverStreaming": false,
       }],
-      "options": { "deprecated": false, "uninterpretedOption": [] },
+      "options": undefined,
     }],
     "extension": [],
     "options": undefined,
@@ -766,11 +766,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.price_group.Deleted": Deleted,
   },
   dependencies: [protoMetadata1, protoMetadata2, protoMetadata3, protoMetadata4, protoMetadata5],
-  options: {
-    services: {
-      "PriceGroupService": { options: { "service_name": "price_group" }, methods: { "Read": { "is_query": true } } },
-    },
-  },
+  options: { services: { "PriceGroupService": { options: undefined, methods: { "Read": { "is_query": true } } } } },
 };
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;

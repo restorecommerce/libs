@@ -761,7 +761,7 @@ export const protoMetadata: ProtoMetadata = {
         "clientStreaming": false,
         "serverStreaming": false,
       }],
-      "options": { "deprecated": false, "uninterpretedOption": [] },
+      "options": undefined,
     }],
     "extension": [],
     "options": undefined,
@@ -784,11 +784,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.manufacturer.Deleted": Deleted,
   },
   dependencies: [protoMetadata1, protoMetadata2, protoMetadata3, protoMetadata4, protoMetadata5],
-  options: {
-    services: {
-      "ManufacturerService": { options: { "service_name": "manufacturer" }, methods: { "Read": { "is_query": true } } },
-    },
-  },
+  options: { services: { "ManufacturerService": { options: undefined, methods: { "Read": { "is_query": true } } } } },
 };
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;

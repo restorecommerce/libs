@@ -161,10 +161,10 @@ export const SearchResponse = {
 };
 
 /** Service provides the CRUD operations */
-export type ServiceDefinition = typeof ServiceDefinition;
-export const ServiceDefinition = {
-  name: "Service",
-  fullName: "io.restorecommerce.search.Service",
+export type SearchServiceDefinition = typeof SearchServiceDefinition;
+export const SearchServiceDefinition = {
+  name: "SearchService",
+  fullName: "io.restorecommerce.search.SearchService",
   methods: {
     search: {
       name: "Search",
@@ -177,11 +177,11 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
+export interface SearchServiceImplementation<CallContextExt = {}> {
   search(request: SearchRequest, context: CallContext & CallContextExt): Promise<DeepPartial<SearchResponse>>;
 }
 
-export interface ServiceClient<CallOptionsExt = {}> {
+export interface SearchServiceClient<CallOptionsExt = {}> {
   search(request: DeepPartial<SearchRequest>, options?: CallOptions & CallOptionsExt): Promise<SearchResponse>;
 }
 
@@ -298,7 +298,7 @@ export const protoMetadata: ProtoMetadata = {
     }],
     "enumType": [],
     "service": [{
-      "name": "Service",
+      "name": "SearchService",
       "method": [{
         "name": "Search",
         "inputType": ".io.restorecommerce.search.SearchRequest",
@@ -307,14 +307,14 @@ export const protoMetadata: ProtoMetadata = {
         "clientStreaming": false,
         "serverStreaming": false,
       }],
-      "options": { "deprecated": false, "uninterpretedOption": [] },
+      "options": undefined,
     }],
     "extension": [],
     "options": undefined,
     "sourceCodeInfo": {
       "location": [{
         "path": [6, 0],
-        "span": [8, 0, 12, 1],
+        "span": [8, 0, 10, 1],
         "leadingComments": " Service provides the CRUD operations\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
@@ -327,7 +327,6 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.search.SearchResponse": SearchResponse,
   },
   dependencies: [protoMetadata1, protoMetadata2, protoMetadata3],
-  options: { services: { "Service": { options: { "service_name": "search" }, methods: {} } } },
 };
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;

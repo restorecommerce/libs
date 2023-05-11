@@ -3085,10 +3085,10 @@ export const UserRole = {
 };
 
 /** The microservice for the user resource. */
-export type ServiceDefinition = typeof ServiceDefinition;
-export const ServiceDefinition = {
-  name: "Service",
-  fullName: "io.restorecommerce.user.Service",
+export type UserServiceDefinition = typeof UserServiceDefinition;
+export const UserServiceDefinition = {
+  name: "UserService",
+  fullName: "io.restorecommerce.user.UserService",
   methods: {
     read: {
       name: "Read",
@@ -3261,7 +3261,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
+export interface UserServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<UserListWithRoleResponse>>;
   create(request: UserList, context: CallContext & CallContextExt): Promise<DeepPartial<UserListResponse>>;
   delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;
@@ -3315,7 +3315,7 @@ export interface ServiceImplementation<CallContextExt = {}> {
   ): Promise<DeepPartial<OperationStatusObj>>;
 }
 
-export interface ServiceClient<CallOptionsExt = {}> {
+export interface UserServiceClient<CallOptionsExt = {}> {
   read(request: DeepPartial<ReadRequest>, options?: CallOptions & CallOptionsExt): Promise<UserListWithRoleResponse>;
   create(request: DeepPartial<UserList>, options?: CallOptions & CallOptionsExt): Promise<UserListResponse>;
   delete(request: DeepPartial<DeleteRequest>, options?: CallOptions & CallOptionsExt): Promise<DeleteResponse>;
@@ -5432,7 +5432,7 @@ export const protoMetadata: ProtoMetadata = {
       "reservedName": [],
     }],
     "service": [{
-      "name": "Service",
+      "name": "UserService",
       "method": [{
         "name": "Read",
         "inputType": ".io.restorecommerce.resourcebase.ReadRequest",
@@ -5581,7 +5581,7 @@ export const protoMetadata: ProtoMetadata = {
         "clientStreaming": false,
         "serverStreaming": false,
       }],
-      "options": { "deprecated": false, "uninterpretedOption": [] },
+      "options": undefined,
     }],
     "extension": [],
     "options": undefined,
@@ -5594,391 +5594,391 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0],
-        "span": [21, 0, 54, 1],
+        "span": [21, 0, 52, 1],
         "leadingComments": "*\n The microservice for the user resource.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 0],
-        "span": [60, 0, 64, 1],
+        "span": [58, 0, 62, 1],
         "leadingComments":
           "*\n Request to verify password and retrieve the user's info.\n Either name or email can be provided.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 0, 2, 0],
-        "span": [61, 2, 24],
+        "span": [59, 2, 24],
         "leadingComments": "",
         "trailingComments": " User name or email\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 0, 2, 1],
-        "span": [62, 2, 31],
+        "span": [60, 2, 31],
         "leadingComments": "",
         "trailingComments": " Raw password\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 3, 2, 0],
-        "span": [77, 2, 25],
+        "span": [75, 2, 25],
         "leadingComments": "",
         "trailingComments": "/ User ID\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 5, 2, 10],
-        "span": [106, 2, 37],
+        "span": [104, 2, 37],
         "leadingComments": "",
         "trailingComments": " default hierarchical scope\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 6, 2, 0],
-        "span": [112, 2, 24],
+        "span": [110, 2, 24],
         "leadingComments": "",
         "trailingComments": "/ user name or email\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 7, 2, 0],
-        "span": [118, 2, 24],
+        "span": [116, 2, 24],
         "leadingComments": "",
         "trailingComments": " user name or email\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 8, 2, 0],
-        "span": [125, 2, 24],
+        "span": [123, 2, 24],
         "leadingComments": "",
         "trailingComments": " user name or email\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 10, 2, 0],
-        "span": [137, 2, 24],
+        "span": [135, 2, 24],
         "leadingComments": "",
         "trailingComments": " user name or email\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 11, 2, 0],
-        "span": [142, 2, 24],
+        "span": [140, 2, 24],
         "leadingComments": "",
         "trailingComments": " user name or email\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 12, 2, 0],
-        "span": [149, 2, 24],
+        "span": [147, 2, 24],
         "leadingComments": "",
         "trailingComments": " user name or email\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 13, 2, 0],
-        "span": [155, 2, 24],
+        "span": [153, 2, 24],
         "leadingComments": "",
         "trailingComments": " user name or email\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 14, 2, 0],
-        "span": [161, 2, 24],
+        "span": [159, 2, 24],
         "leadingComments": "",
         "trailingComments": "/ User ID\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 15, 2, 0],
-        "span": [166, 2, 24],
+        "span": [164, 2, 24],
         "leadingComments": "",
         "trailingComments": "/ User name or email\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 16],
-        "span": [178, 0, 180, 1],
+        "span": [176, 0, 178, 1],
         "leadingComments":
           "*\n User deletion event.\n Send when a user was deleted or unregistered.\n\n Events:\n usersDeleted,\n unregistered,\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 17],
-        "span": [188, 0, 191, 1],
+        "span": [186, 0, 189, 1],
         "leadingComments": "*\n User password changed event.\n\n Events:\n passwordChanged,\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 17, 2, 0],
-        "span": [189, 2, 16],
+        "span": [187, 2, 16],
         "leadingComments": "",
         "trailingComments": "/ User ID\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 18, 2, 0],
-        "span": [194, 2, 16],
+        "span": [192, 2, 16],
         "leadingComments": "",
         "trailingComments": " User ID\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 19],
-        "span": [200, 0, 204, 1],
+        "span": [198, 0, 202, 1],
         "leadingComments": "*\n User email id changed event.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 20, 2, 0],
-        "span": [207, 2, 16],
+        "span": [205, 2, 16],
         "leadingComments": "",
         "trailingComments": "/ User ID\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 21],
-        "span": [214, 0, 218, 1],
+        "span": [212, 0, 216, 1],
         "leadingComments": "*\n A list of User.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 26],
-        "span": [245, 0, 247, 1],
+        "span": [243, 0, 245, 1],
         "leadingComments": "*\n User activation request.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 26, 2, 0],
-        "span": [246, 2, 16],
+        "span": [244, 2, 16],
         "leadingComments": "",
         "trailingComments": "/ User ID\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28],
-        "span": [258, 0, 309, 1],
+        "span": [256, 0, 307, 1],
         "leadingComments": "*\n A User resource.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 0],
-        "span": [267, 2, 25],
+        "span": [265, 2, 25],
         "leadingComments": "",
         "trailingComments": "/ User ID, unique, key\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 2],
-        "span": [269, 2, 27],
+        "span": [267, 2, 27],
         "leadingComments": "",
         "trailingComments": " The name of the user, can be used for login\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 5],
-        "span": [272, 2, 28],
+        "span": [270, 2, 28],
         "leadingComments": "",
         "trailingComments": "/ Email address, can be used for login\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 6],
-        "span": [273, 2, 32],
+        "span": [271, 2, 32],
         "leadingComments": "",
         "trailingComments":
           "/ New email address; set by `requestEmailChange` and overrides actual email upon `confirmEmailChange`\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 7],
-        "span": [274, 2, 27],
+        "span": [272, 2, 27],
         "leadingComments": "",
         "trailingComments": "/ If the user was activated via the activation process\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 8],
-        "span": [275, 2, 38],
+        "span": [273, 2, 38],
         "leadingComments": "",
         "trailingComments": "/ Activation code used in the activation process\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 9],
-        "span": [276, 2, 32],
+        "span": [274, 2, 32],
         "leadingComments": "",
         "trailingComments": "/ Raw password, not stored\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 10],
-        "span": [277, 2, 37],
+        "span": [275, 2, 37],
         "leadingComments": "",
         "trailingComments": "/ Encrypted password, stored\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 11],
-        "span": [278, 2, 74],
+        "span": [276, 2, 74],
         "leadingComments": "",
         "trailingComments": " A user can have multiple roles and different attributes coupled with each role\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 12],
-        "span": [279, 2, 287, 4],
+        "span": [277, 2, 285, 4],
         "leadingComments": "",
         "trailingComments": " timezone_id specifications\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 13],
-        "span": [288, 2, 296, 4],
+        "span": [286, 2, 294, 4],
         "leadingComments": "",
         "trailingComments": " locale specifications\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 14],
-        "span": [297, 2, 37],
+        "span": [295, 2, 37],
         "leadingComments": "",
         "trailingComments": " default hierarchical scope\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 15],
-        "span": [298, 2, 37],
+        "span": [296, 2, 37],
         "leadingComments": "",
         "trailingComments": " true in case in case of `register`; set to false after activation\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 16],
-        "span": [299, 2, 27],
+        "span": [297, 2, 27],
         "leadingComments": "",
         "trailingComments":
           "/ Is the user a guest. A guest is a automatically generated user which can later be turned in a non-guest user.\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 19],
-        "span": [302, 2, 28],
+        "span": [300, 2, 28],
         "leadingComments": "",
         "trailingComments": " For user invitation\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 20],
-        "span": [303, 2, 44],
+        "span": [301, 2, 44],
         "leadingComments": "",
         "trailingComments": " user who is inviting\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 21],
-        "span": [304, 2, 50],
+        "span": [302, 2, 50],
         "leadingComments": "",
         "trailingComments": " First name of user inviting\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 22],
-        "span": [305, 2, 49],
+        "span": [303, 2, 49],
         "leadingComments": "",
         "trailingComments": " Last name of user inviting\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 28, 2, 25],
-        "span": [308, 2, 41],
+        "span": [306, 2, 41],
         "leadingComments": "",
         "trailingComments": "/ additional data\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 29],
-        "span": [314, 0, 358, 1],
+        "span": [312, 0, 356, 1],
         "leadingComments": "*\n A User resource with role\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 29, 2, 0],
-        "span": [315, 2, 16],
+        "span": [313, 2, 16],
         "leadingComments": "",
         "trailingComments": "/ User ID, unique, key\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 29, 2, 2],
-        "span": [317, 2, 18],
+        "span": [315, 2, 18],
         "leadingComments": "",
         "trailingComments": " The name of the user, can be used for login\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 29, 2, 5],
-        "span": [320, 2, 19],
+        "span": [318, 2, 19],
         "leadingComments": "",
         "trailingComments": "/ Email address, can be used for login\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 29, 2, 6],
-        "span": [321, 2, 23],
+        "span": [319, 2, 23],
         "leadingComments": "",
         "trailingComments":
           "/ New email address; set by `requestEmailChange` and overrides actual email upon `confirmEmailChange`\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 29, 2, 7],
-        "span": [322, 2, 18],
+        "span": [320, 2, 18],
         "leadingComments": "",
         "trailingComments": "/ If the user was activated via the activation process\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 29, 2, 8],
-        "span": [323, 2, 29],
+        "span": [321, 2, 29],
         "leadingComments": "",
         "trailingComments": "/ Activation code used in the activation process\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 29, 2, 9],
-        "span": [324, 2, 23],
+        "span": [322, 2, 23],
         "leadingComments": "",
         "trailingComments": "/ Raw password, not stored\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 29, 2, 10],
-        "span": [325, 2, 28],
+        "span": [323, 2, 28],
         "leadingComments": "",
         "trailingComments": "/ Encrypted password, stored\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 29, 2, 11],
-        "span": [326, 2, 74],
+        "span": [324, 2, 74],
         "leadingComments": "",
         "trailingComments": " A user can have multiple roles and different attributes coupled with each role\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 29, 2, 12],
-        "span": [327, 2, 335, 4],
+        "span": [325, 2, 333, 4],
         "leadingComments": "",
         "trailingComments": " timezone_id specifications\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 29, 2, 13],
-        "span": [336, 2, 344, 4],
+        "span": [334, 2, 342, 4],
         "leadingComments": "",
         "trailingComments": " locale specifications\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 29, 2, 14],
-        "span": [345, 2, 28],
+        "span": [343, 2, 28],
         "leadingComments": "",
         "trailingComments": " default hierarchical scope\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 29, 2, 15],
-        "span": [346, 2, 28],
+        "span": [344, 2, 28],
         "leadingComments": "",
         "trailingComments": " true in case in case of `register`; set to false after activation\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 29, 2, 16],
-        "span": [347, 2, 18],
+        "span": [345, 2, 18],
         "leadingComments": "",
         "trailingComments":
           "/ Is the user a guest. A guest is a automatically generated user which can later be turned in a non-guest user.\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 29, 2, 19],
-        "span": [350, 2, 19],
+        "span": [348, 2, 19],
         "leadingComments": "",
         "trailingComments": " For user invitation\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 29, 2, 20],
-        "span": [351, 2, 35],
+        "span": [349, 2, 35],
         "leadingComments": "",
         "trailingComments": " user who is inviting\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 29, 2, 21],
-        "span": [352, 2, 41],
+        "span": [350, 2, 41],
         "leadingComments": "",
         "trailingComments": " First name of user inviting\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 29, 2, 22],
-        "span": [353, 2, 40],
+        "span": [351, 2, 40],
         "leadingComments": "",
         "trailingComments": " Last name of user inviting\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 29, 2, 25],
-        "span": [356, 2, 32],
+        "span": [354, 2, 32],
         "leadingComments": "",
         "trailingComments": "/ additional data\n",
         "leadingDetachedComments": [],
@@ -6084,8 +6084,8 @@ export const protoMetadata: ProtoMetadata = {
       },
     },
     services: {
-      "Service": {
-        options: { "service_name": "user" },
+      "UserService": {
+        options: undefined,
         methods: {
           "Read": { "is_query": true },
           "Find": { "is_query": true },

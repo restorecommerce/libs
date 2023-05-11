@@ -258,10 +258,10 @@ export const GrantId = {
 };
 
 /** Microservice definition. */
-export type ServiceDefinition = typeof ServiceDefinition;
-export const ServiceDefinition = {
-  name: "Service",
-  fullName: "io.restorecommerce.token.Service",
+export type TokenServiceDefinition = typeof TokenServiceDefinition;
+export const TokenServiceDefinition = {
+  name: "TokenService",
+  fullName: "io.restorecommerce.token.TokenService",
   methods: {
     /** creates or upserts ID_token to `Redis` and returns sucess or failure message */
     upsert: {
@@ -310,7 +310,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
+export interface TokenServiceImplementation<CallContextExt = {}> {
   /** creates or upserts ID_token to `Redis` and returns sucess or failure message */
   upsert(request: TokenData, context: CallContext & CallContextExt): Promise<DeepPartial<Any>>;
   find(request: Identifier, context: CallContext & CallContextExt): Promise<DeepPartial<Any>>;
@@ -322,7 +322,7 @@ export interface ServiceImplementation<CallContextExt = {}> {
   consume(request: Identifier, context: CallContext & CallContextExt): Promise<DeepPartial<Any>>;
 }
 
-export interface ServiceClient<CallOptionsExt = {}> {
+export interface TokenServiceClient<CallOptionsExt = {}> {
   /** creates or upserts ID_token to `Redis` and returns sucess or failure message */
   upsert(request: DeepPartial<TokenData>, options?: CallOptions & CallOptionsExt): Promise<Any>;
   find(request: DeepPartial<Identifier>, options?: CallOptions & CallOptionsExt): Promise<Any>;
@@ -527,7 +527,7 @@ export const protoMetadata: ProtoMetadata = {
     }],
     "enumType": [],
     "service": [{
-      "name": "Service",
+      "name": "TokenService",
       "method": [{
         "name": "upsert",
         "inputType": ".io.restorecommerce.token.TokenData",
@@ -564,38 +564,38 @@ export const protoMetadata: ProtoMetadata = {
         "clientStreaming": false,
         "serverStreaming": false,
       }],
-      "options": { "deprecated": false, "uninterpretedOption": [] },
+      "options": undefined,
     }],
     "extension": [],
     "options": undefined,
     "sourceCodeInfo": {
       "location": [{
         "path": [6, 0],
-        "span": [11, 0, 21, 1],
+        "span": [11, 0, 19, 1],
         "leadingComments": "\n Microservice definition.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 0],
-        "span": [14, 2, 55],
+        "span": [12, 2, 55],
         "leadingComments": "",
         "trailingComments": " creates or upserts ID_token to `Redis` and returns sucess or failure message\n",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 2],
-        "span": [18, 2, 57],
+        "span": [16, 2, 57],
         "leadingComments": "",
         "trailingComments": " removes the id_token from redis\n",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 3],
-        "span": [19, 2, 62],
+        "span": [17, 2, 62],
         "leadingComments": "",
         "trailingComments": " Destroy/Drop/Remove a stored id_token by its grantId property reference.\n",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 4],
-        "span": [20, 2, 57],
+        "span": [18, 2, 57],
         "leadingComments": "",
         "trailingComments":
           ' Mark a stored id_token as consumed (not yet expired though!). Future finds for this id should be fulfilled with an object containing additional property named "consumed" with a truthy value (timestamp, date, boolean, etc).\n',
@@ -610,9 +610,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.token.GrantId": GrantId,
   },
   dependencies: [protoMetadata1, protoMetadata2, protoMetadata3],
-  options: {
-    services: { "Service": { options: { "service_name": "token" }, methods: { "find": { "is_query": true } } } },
-  },
+  options: { services: { "TokenService": { options: undefined, methods: { "find": { "is_query": true } } } } },
 };
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;

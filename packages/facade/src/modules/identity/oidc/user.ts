@@ -1,6 +1,6 @@
 import { OIDCBodyLoginFn, AuthUserKeyWhitelist, AuthUser, OIDCLoginFn, OIDCBodyLoginCredentials } from './interfaces';
 import {
-  ServiceClient as userService,
+  UserServiceClient as userService,
   LoginRequest,
   FindRequest,
   User

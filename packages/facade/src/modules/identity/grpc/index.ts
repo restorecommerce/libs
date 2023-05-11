@@ -1,42 +1,42 @@
 import { RestoreCommerceGrpcClient } from '@restorecommerce/rc-grpc-clients';
 import {
-  ServiceClient as userClient,
-  ServiceDefinition as userService
+  UserServiceClient,
+  UserServiceDefinition
 } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/user';
 import {
-  ServiceClient as roleClient,
-  ServiceDefinition as roleService
+  RoleServiceClient,
+  RoleServiceDefinition
 } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/role';
 import {
-  ServiceClient as authentication_logClient,
-  ServiceDefinition as authentication_logService
+  AuthenticationLogServiceClient,
+  AuthenticationLogServiceDefinition
 } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/authentication_log';
 import {
-  ServiceClient as tokenClient,
-  ServiceDefinition as tokenService
+  TokenServiceClient,
+  TokenServiceDefinition
 } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/token';
 import {
-  ServiceClient as oauthClient,
-  ServiceDefinition as oauthService
+  OAuthServiceClient,
+  OAuthServiceDefinition
 } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/oauth';
 import { GrpcClientConfig } from '@restorecommerce/grpc-client';
 
 export class IdentitySrvGrpcClient extends RestoreCommerceGrpcClient {
 
-  readonly user: userClient;
-  readonly role: roleClient;
-  readonly authentication_log: authentication_logClient;
-  readonly token: tokenClient;
-  readonly oauth: oauthClient;
+  readonly user: UserServiceClient;
+  readonly role: RoleServiceClient;
+  readonly authentication_log: AuthenticationLogServiceClient;
+  readonly token: TokenServiceClient;
+  readonly oauth: OAuthServiceClient;
 
   constructor(address: string, cfg: GrpcClientConfig) {
     super(address, cfg);
 
-    this.user = this.createClient(cfg, userService, this.channel);
-    this.role = this.createClient(cfg, roleService, this.channel);
-    this.authentication_log = this.createClient(cfg, authentication_logService, this.channel);
-    this.token = this.createClient(cfg, tokenService, this.channel);
-    this.oauth = this.createClient(cfg, oauthService, this.channel);
+    this.user = this.createClient(cfg, UserServiceDefinition, this.channel);
+    this.role = this.createClient(cfg, RoleServiceDefinition, this.channel);
+    this.authentication_log = this.createClient(cfg, AuthenticationLogServiceDefinition, this.channel);
+    this.token = this.createClient(cfg, TokenServiceDefinition, this.channel);
+    this.oauth = this.createClient(cfg, OAuthServiceDefinition, this.channel);
   }
 
 }

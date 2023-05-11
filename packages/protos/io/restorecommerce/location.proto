@@ -16,9 +16,7 @@ import "io/restorecommerce/address.proto";
 /*
 * Microservice definition.
 */
-service Service {
-  option (io.restorecommerce.options.service_name) = "location";
-
+service LocationService {
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (LocationListResponse) {
     option (io.restorecommerce.options.is_query) = true;
   };

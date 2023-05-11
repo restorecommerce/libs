@@ -584,10 +584,10 @@ export const Guest = {
 };
 
 /** Microservice definition. */
-export type ServiceDefinition = typeof ServiceDefinition;
-export const ServiceDefinition = {
-  name: "Service",
-  fullName: "io.restorecommerce.customer.Service",
+export type CustomerServiceDefinition = typeof CustomerServiceDefinition;
+export const CustomerServiceDefinition = {
+  name: "CustomerService",
+  fullName: "io.restorecommerce.customer.CustomerService",
   methods: {
     read: {
       name: "Read",
@@ -632,7 +632,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
+export interface CustomerServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<CustomerListResponse>>;
   create(request: CustomerList, context: CallContext & CallContextExt): Promise<DeepPartial<CustomerListResponse>>;
   delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;
@@ -640,7 +640,7 @@ export interface ServiceImplementation<CallContextExt = {}> {
   upsert(request: CustomerList, context: CallContext & CallContextExt): Promise<DeepPartial<CustomerListResponse>>;
 }
 
-export interface ServiceClient<CallOptionsExt = {}> {
+export interface CustomerServiceClient<CallOptionsExt = {}> {
   read(request: DeepPartial<ReadRequest>, options?: CallOptions & CallOptionsExt): Promise<CustomerListResponse>;
   create(request: DeepPartial<CustomerList>, options?: CallOptions & CallOptionsExt): Promise<CustomerListResponse>;
   delete(request: DeepPartial<DeleteRequest>, options?: CallOptions & CallOptionsExt): Promise<DeleteResponse>;
@@ -1077,7 +1077,7 @@ export const protoMetadata: ProtoMetadata = {
     }],
     "enumType": [],
     "service": [{
-      "name": "Service",
+      "name": "CustomerService",
       "method": [{
         "name": "Read",
         "inputType": ".io.restorecommerce.resourcebase.ReadRequest",
@@ -1114,7 +1114,7 @@ export const protoMetadata: ProtoMetadata = {
         "clientStreaming": false,
         "serverStreaming": false,
       }],
-      "options": { "deprecated": false, "uninterpretedOption": [] },
+      "options": undefined,
     }],
     "extension": [],
     "options": undefined,
@@ -1127,7 +1127,7 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0],
-        "span": [19, 0, 29, 1],
+        "span": [19, 0, 27, 1],
         "leadingComments": "\nMicroservice definition.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
@@ -1220,7 +1220,7 @@ export const protoMetadata: ProtoMetadata = {
         },
       },
     },
-    services: { "Service": { options: { "service_name": "customer" }, methods: { "Read": { "is_query": true } } } },
+    services: { "CustomerService": { options: undefined, methods: { "Read": { "is_query": true } } } },
   },
 };
 

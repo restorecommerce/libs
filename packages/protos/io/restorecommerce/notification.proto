@@ -9,9 +9,7 @@ import "io/restorecommerce/status.proto";
 import "io/restorecommerce/options.proto";
 
 // Message structure for Notification
-service Service {
-  option (io.restorecommerce.options.service_name) = "notification";
-
+service NotificationService {
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (NotificationListResponse) {
     option (io.restorecommerce.options.is_query) = true;
   };

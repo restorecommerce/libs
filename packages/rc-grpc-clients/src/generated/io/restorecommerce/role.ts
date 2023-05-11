@@ -412,10 +412,10 @@ export const Deleted = {
   },
 };
 
-export type ServiceDefinition = typeof ServiceDefinition;
-export const ServiceDefinition = {
-  name: "Service",
-  fullName: "io.restorecommerce.role.Service",
+export type RoleServiceDefinition = typeof RoleServiceDefinition;
+export const RoleServiceDefinition = {
+  name: "RoleService",
+  fullName: "io.restorecommerce.role.RoleService",
   methods: {
     read: {
       name: "Read",
@@ -460,7 +460,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
+export interface RoleServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<RoleListResponse>>;
   create(request: RoleList, context: CallContext & CallContextExt): Promise<DeepPartial<RoleListResponse>>;
   delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;
@@ -468,7 +468,7 @@ export interface ServiceImplementation<CallContextExt = {}> {
   upsert(request: RoleList, context: CallContext & CallContextExt): Promise<DeepPartial<RoleListResponse>>;
 }
 
-export interface ServiceClient<CallOptionsExt = {}> {
+export interface RoleServiceClient<CallOptionsExt = {}> {
   read(request: DeepPartial<ReadRequest>, options?: CallOptions & CallOptionsExt): Promise<RoleListResponse>;
   create(request: DeepPartial<RoleList>, options?: CallOptions & CallOptionsExt): Promise<RoleListResponse>;
   delete(request: DeepPartial<DeleteRequest>, options?: CallOptions & CallOptionsExt): Promise<DeleteResponse>;
@@ -739,7 +739,7 @@ export const protoMetadata: ProtoMetadata = {
     }],
     "enumType": [],
     "service": [{
-      "name": "Service",
+      "name": "RoleService",
       "method": [{
         "name": "Read",
         "inputType": ".io.restorecommerce.resourcebase.ReadRequest",
@@ -776,20 +776,20 @@ export const protoMetadata: ProtoMetadata = {
         "clientStreaming": false,
         "serverStreaming": false,
       }],
-      "options": { "deprecated": false, "uninterpretedOption": [] },
+      "options": undefined,
     }],
     "extension": [],
     "options": undefined,
     "sourceCodeInfo": {
       "location": [{
         "path": [4, 0, 2, 2],
-        "span": [25, 2, 27],
+        "span": [23, 2, 27],
         "leadingComments": "",
         "trailingComments": " specifies the role of the user\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 0, 2, 4],
-        "span": [27, 2, 42],
+        "span": [25, 2, 42],
         "leadingComments": "",
         "trailingComments": " role id who can assign this role\n",
         "leadingDetachedComments": [],
@@ -805,9 +805,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.role.Deleted": Deleted,
   },
   dependencies: [protoMetadata1, protoMetadata2, protoMetadata3, protoMetadata4, protoMetadata5],
-  options: {
-    services: { "Service": { options: { "service_name": "role" }, methods: { "Read": { "is_query": true } } } },
-  },
+  options: { services: { "RoleService": { options: undefined, methods: { "Read": { "is_query": true } } } } },
 };
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;

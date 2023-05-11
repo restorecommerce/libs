@@ -11,9 +11,7 @@ import "io/restorecommerce/options.proto";
 /*
 * Microservice definition.
 */
-service Service {
-  option (io.restorecommerce.options.service_name) = "contact_point_type";
-
+service ContactPointTypeService {
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ContactPointTypeListResponse) {
     option (io.restorecommerce.options.is_query) = true;
   };

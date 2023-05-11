@@ -454,10 +454,10 @@ export const ContactPoint = {
   },
 };
 
-export type ServiceDefinition = typeof ServiceDefinition;
-export const ServiceDefinition = {
-  name: "Service",
-  fullName: "io.restorecommerce.contact_point.Service",
+export type ContactPointServiceDefinition = typeof ContactPointServiceDefinition;
+export const ContactPointServiceDefinition = {
+  name: "ContactPointService",
+  fullName: "io.restorecommerce.contact_point.ContactPointService",
   methods: {
     read: {
       name: "Read",
@@ -502,7 +502,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
+export interface ContactPointServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<ContactPointListResponse>>;
   create(
     request: ContactPointList,
@@ -519,7 +519,7 @@ export interface ServiceImplementation<CallContextExt = {}> {
   ): Promise<DeepPartial<ContactPointListResponse>>;
 }
 
-export interface ServiceClient<CallOptionsExt = {}> {
+export interface ContactPointServiceClient<CallOptionsExt = {}> {
   read(request: DeepPartial<ReadRequest>, options?: CallOptions & CallOptionsExt): Promise<ContactPointListResponse>;
   create(
     request: DeepPartial<ContactPointList>,
@@ -890,7 +890,7 @@ export const protoMetadata: ProtoMetadata = {
     }],
     "enumType": [],
     "service": [{
-      "name": "Service",
+      "name": "ContactPointService",
       "method": [{
         "name": "Read",
         "inputType": ".io.restorecommerce.resourcebase.ReadRequest",
@@ -927,7 +927,7 @@ export const protoMetadata: ProtoMetadata = {
         "clientStreaming": false,
         "serverStreaming": false,
       }],
-      "options": { "deprecated": false, "uninterpretedOption": [] },
+      "options": undefined,
     }],
     "extension": [],
     "options": undefined,
@@ -999,9 +999,7 @@ export const protoMetadata: ProtoMetadata = {
         },
       },
     },
-    services: {
-      "Service": { options: { "service_name": "contact_point" }, methods: { "Read": { "is_query": true } } },
-    },
+    services: { "ContactPointService": { options: undefined, methods: { "Read": { "is_query": true } } } },
   },
 };
 

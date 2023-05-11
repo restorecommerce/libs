@@ -881,7 +881,7 @@ export const protoMetadata: ProtoMetadata = {
         "clientStreaming": false,
         "serverStreaming": false,
       }],
-      "options": { "deprecated": false, "uninterpretedOption": [] },
+      "options": undefined,
     }],
     "extension": [],
     "options": undefined,
@@ -909,12 +909,7 @@ export const protoMetadata: ProtoMetadata = {
         },
       },
     },
-    services: {
-      "FulfillmentCourierService": {
-        options: { "service_name": "fulfillment_courier" },
-        methods: { "Read": { "is_query": true } },
-      },
-    },
+    services: { "FulfillmentCourierService": { options: undefined, methods: { "Read": { "is_query": true } } } },
   },
 };
 

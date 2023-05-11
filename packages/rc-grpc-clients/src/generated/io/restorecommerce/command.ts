@@ -526,10 +526,10 @@ export const CommandResponse = {
   },
 };
 
-export type ServiceDefinition = typeof ServiceDefinition;
-export const ServiceDefinition = {
-  name: "Service",
-  fullName: "io.restorecommerce.command.Service",
+export type CommandServiceDefinition = typeof CommandServiceDefinition;
+export const CommandServiceDefinition = {
+  name: "CommandService",
+  fullName: "io.restorecommerce.command.CommandService",
   methods: {
     read: {
       name: "Read",
@@ -574,7 +574,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
+export interface CommandServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<CommandListResponse>>;
   create(request: CommandList, context: CallContext & CallContextExt): Promise<DeepPartial<CommandListResponse>>;
   delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;
@@ -582,7 +582,7 @@ export interface ServiceImplementation<CallContextExt = {}> {
   upsert(request: CommandList, context: CallContext & CallContextExt): Promise<DeepPartial<CommandListResponse>>;
 }
 
-export interface ServiceClient<CallOptionsExt = {}> {
+export interface CommandServiceClient<CallOptionsExt = {}> {
   read(request: DeepPartial<ReadRequest>, options?: CallOptions & CallOptionsExt): Promise<CommandListResponse>;
   create(request: DeepPartial<CommandList>, options?: CallOptions & CallOptionsExt): Promise<CommandListResponse>;
   delete(request: DeepPartial<DeleteRequest>, options?: CallOptions & CallOptionsExt): Promise<DeleteResponse>;
@@ -904,7 +904,7 @@ export const protoMetadata: ProtoMetadata = {
     }],
     "enumType": [],
     "service": [{
-      "name": "Service",
+      "name": "CommandService",
       "method": [{
         "name": "Read",
         "inputType": ".io.restorecommerce.resourcebase.ReadRequest",
@@ -941,7 +941,7 @@ export const protoMetadata: ProtoMetadata = {
         "clientStreaming": false,
         "serverStreaming": false,
       }],
-      "options": { "deprecated": false, "uninterpretedOption": [] },
+      "options": undefined,
     }],
     "extension": [],
     "options": undefined,
@@ -1007,9 +1007,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.command.CommandResponse": CommandResponse,
   },
   dependencies: [protoMetadata1, protoMetadata2, protoMetadata3, protoMetadata4, protoMetadata5],
-  options: {
-    services: { "Service": { options: { "service_name": "command" }, methods: { "Read": { "is_query": true } } } },
-  },
+  options: { services: { "CommandService": { options: undefined, methods: { "Read": { "is_query": true } } } } },
 };
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;

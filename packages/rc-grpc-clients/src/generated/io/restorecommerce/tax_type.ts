@@ -447,10 +447,10 @@ export const TaxType = {
 };
 
 /** Microservice definition. */
-export type ServiceDefinition = typeof ServiceDefinition;
-export const ServiceDefinition = {
-  name: "Service",
-  fullName: "io.restorecommerce.tax_type.Service",
+export type TaxTypeServiceDefinition = typeof TaxTypeServiceDefinition;
+export const TaxTypeServiceDefinition = {
+  name: "TaxTypeService",
+  fullName: "io.restorecommerce.tax_type.TaxTypeService",
   methods: {
     read: {
       name: "Read",
@@ -495,7 +495,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
+export interface TaxTypeServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<TaxTypeListResponse>>;
   create(request: TaxTypeList, context: CallContext & CallContextExt): Promise<DeepPartial<TaxTypeListResponse>>;
   delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;
@@ -503,7 +503,7 @@ export interface ServiceImplementation<CallContextExt = {}> {
   upsert(request: TaxTypeList, context: CallContext & CallContextExt): Promise<DeepPartial<TaxTypeListResponse>>;
 }
 
-export interface ServiceClient<CallOptionsExt = {}> {
+export interface TaxTypeServiceClient<CallOptionsExt = {}> {
   read(request: DeepPartial<ReadRequest>, options?: CallOptions & CallOptionsExt): Promise<TaxTypeListResponse>;
   create(request: DeepPartial<TaxTypeList>, options?: CallOptions & CallOptionsExt): Promise<TaxTypeListResponse>;
   delete(request: DeepPartial<DeleteRequest>, options?: CallOptions & CallOptionsExt): Promise<DeleteResponse>;
@@ -787,7 +787,7 @@ export const protoMetadata: ProtoMetadata = {
       "reservedName": [],
     }],
     "service": [{
-      "name": "Service",
+      "name": "TaxTypeService",
       "method": [{
         "name": "Read",
         "inputType": ".io.restorecommerce.resourcebase.ReadRequest",
@@ -824,14 +824,14 @@ export const protoMetadata: ProtoMetadata = {
         "clientStreaming": false,
         "serverStreaming": false,
       }],
-      "options": { "deprecated": false, "uninterpretedOption": [] },
+      "options": undefined,
     }],
     "extension": [],
     "options": undefined,
     "sourceCodeInfo": {
       "location": [{
         "path": [6, 0],
-        "span": [13, 0, 23, 1],
+        "span": [13, 0, 21, 1],
         "leadingComments": "\n Microservice definition.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
@@ -848,9 +848,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.tax_type.TaxType": TaxType,
   },
   dependencies: [protoMetadata1, protoMetadata2, protoMetadata3, protoMetadata4, protoMetadata5],
-  options: {
-    services: { "Service": { options: { "service_name": "tax_type" }, methods: { "Read": { "is_query": true } } } },
-  },
+  options: { services: { "TaxTypeService": { options: undefined, methods: { "Read": { "is_query": true } } } } },
 };
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;

@@ -820,7 +820,7 @@ export const protoMetadata: ProtoMetadata = {
         "clientStreaming": false,
         "serverStreaming": false,
       }],
-      "options": { "deprecated": false, "uninterpretedOption": [] },
+      "options": undefined,
     }],
     "extension": [],
     "options": undefined,
@@ -844,12 +844,7 @@ export const protoMetadata: ProtoMetadata = {
   },
   dependencies: [protoMetadata1, protoMetadata2, protoMetadata3, protoMetadata4, protoMetadata5],
   options: {
-    services: {
-      "ProductPrototypeService": {
-        options: { "service_name": "product_prototype" },
-        methods: { "Read": { "is_query": true } },
-      },
-    },
+    services: { "ProductPrototypeService": { options: undefined, methods: { "Read": { "is_query": true } } } },
   },
 };
 

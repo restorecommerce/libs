@@ -73,9 +73,7 @@ message ContextQuery {
   optional string query = 2;
 }
 
-service Service {
-  option (io.restorecommerce.options.service_name) = "rule";
-
+service RuleService {
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (RuleListResponse) {
     option (io.restorecommerce.options.is_query) = true;
   };

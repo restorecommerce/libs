@@ -11,7 +11,7 @@ import "io/restorecommerce/status.proto";
 /*
 * Microservice definition.
 */
-service Service {
+service PaymentMethodService {
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (PaymentMethodListResponse);
   rpc Create (PaymentMethodList) returns (PaymentMethodListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);

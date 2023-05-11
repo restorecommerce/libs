@@ -2077,14 +2077,14 @@ export const protoMetadata: ProtoMetadata = {
         "clientStreaming": false,
         "serverStreaming": false,
       }],
-      "options": { "deprecated": false, "uninterpretedOption": [] },
+      "options": undefined,
     }],
     "extension": [],
     "options": undefined,
     "sourceCodeInfo": {
       "location": [{
         "path": [4, 0, 2, 0],
-        "span": [36, 2, 63],
+        "span": [34, 2, 63],
         "leadingComments": "",
         "trailingComments": "ID, name or type\n",
         "leadingDetachedComments": [],
@@ -2144,7 +2144,7 @@ export const protoMetadata: ProtoMetadata = {
     },
     services: {
       "FulfillmentProductService": {
-        options: { "service_name": "fulfillment_product" },
+        options: undefined,
         methods: { "Read": { "is_query": true }, "Find": { "is_query": true } },
       },
     },

@@ -488,10 +488,10 @@ export const PolicySetRQ = {
   },
 };
 
-export type ServiceDefinition = typeof ServiceDefinition;
-export const ServiceDefinition = {
-  name: "Service",
-  fullName: "io.restorecommerce.policy_set.Service",
+export type PolicySetServiceDefinition = typeof PolicySetServiceDefinition;
+export const PolicySetServiceDefinition = {
+  name: "PolicySetService",
+  fullName: "io.restorecommerce.policy_set.PolicySetService",
   methods: {
     read: {
       name: "Read",
@@ -536,7 +536,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
+export interface PolicySetServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<PolicySetListResponse>>;
   create(request: PolicySetList, context: CallContext & CallContextExt): Promise<DeepPartial<PolicySetListResponse>>;
   delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;
@@ -544,7 +544,7 @@ export interface ServiceImplementation<CallContextExt = {}> {
   upsert(request: PolicySetList, context: CallContext & CallContextExt): Promise<DeepPartial<PolicySetListResponse>>;
 }
 
-export interface ServiceClient<CallOptionsExt = {}> {
+export interface PolicySetServiceClient<CallOptionsExt = {}> {
   read(request: DeepPartial<ReadRequest>, options?: CallOptions & CallOptionsExt): Promise<PolicySetListResponse>;
   create(request: DeepPartial<PolicySetList>, options?: CallOptions & CallOptionsExt): Promise<PolicySetListResponse>;
   delete(request: DeepPartial<DeleteRequest>, options?: CallOptions & CallOptionsExt): Promise<DeleteResponse>;
@@ -896,7 +896,7 @@ export const protoMetadata: ProtoMetadata = {
     }],
     "enumType": [],
     "service": [{
-      "name": "Service",
+      "name": "PolicySetService",
       "method": [{
         "name": "Read",
         "inputType": ".io.restorecommerce.resourcebase.ReadRequest",
@@ -933,7 +933,7 @@ export const protoMetadata: ProtoMetadata = {
         "clientStreaming": false,
         "serverStreaming": false,
       }],
-      "options": { "deprecated": false, "uninterpretedOption": [] },
+      "options": undefined,
     }],
     "extension": [],
     "options": undefined,
@@ -964,9 +964,7 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata6,
     protoMetadata7,
   ],
-  options: {
-    services: { "Service": { options: { "service_name": "policy_set" }, methods: { "Read": { "is_query": true } } } },
-  },
+  options: { services: { "PolicySetService": { options: undefined, methods: { "Read": { "is_query": true } } } } },
 };
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;

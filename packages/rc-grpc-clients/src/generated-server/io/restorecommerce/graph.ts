@@ -963,10 +963,10 @@ export const TraversalResponse = {
 };
 
 /** Service provides the CRUD operations */
-export type ServiceDefinition = typeof ServiceDefinition;
-export const ServiceDefinition = {
-  name: "Service",
-  fullName: "io.restorecommerce.graph.Service",
+export type GraphServiceDefinition = typeof GraphServiceDefinition;
+export const GraphServiceDefinition = {
+  name: "GraphService",
+  fullName: "io.restorecommerce.graph.GraphService",
   methods: {
     traversal: {
       name: "Traversal",
@@ -979,14 +979,14 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
+export interface GraphServiceImplementation<CallContextExt = {}> {
   traversal(
     request: TraversalRequest,
     context: CallContext & CallContextExt,
   ): ServerStreamingMethodResult<DeepPartial<TraversalResponse>>;
 }
 
-export interface ServiceClient<CallOptionsExt = {}> {
+export interface GraphServiceClient<CallOptionsExt = {}> {
   traversal(
     request: DeepPartial<TraversalRequest>,
     options?: CallOptions & CallOptionsExt,
@@ -1511,7 +1511,7 @@ export const protoMetadata: ProtoMetadata = {
     }],
     "enumType": [],
     "service": [{
-      "name": "Service",
+      "name": "GraphService",
       "method": [{
         "name": "Traversal",
         "inputType": ".io.restorecommerce.graph.TraversalRequest",

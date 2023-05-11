@@ -470,10 +470,10 @@ export const Location = {
 };
 
 /** Microservice definition. */
-export type ServiceDefinition = typeof ServiceDefinition;
-export const ServiceDefinition = {
-  name: "Service",
-  fullName: "io.restorecommerce.location.Service",
+export type LocationServiceDefinition = typeof LocationServiceDefinition;
+export const LocationServiceDefinition = {
+  name: "LocationService",
+  fullName: "io.restorecommerce.location.LocationService",
   methods: {
     read: {
       name: "Read",
@@ -518,7 +518,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
+export interface LocationServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<LocationListResponse>>;
   create(request: LocationList, context: CallContext & CallContextExt): Promise<DeepPartial<LocationListResponse>>;
   delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;
@@ -526,7 +526,7 @@ export interface ServiceImplementation<CallContextExt = {}> {
   upsert(request: LocationList, context: CallContext & CallContextExt): Promise<DeepPartial<LocationListResponse>>;
 }
 
-export interface ServiceClient<CallOptionsExt = {}> {
+export interface LocationServiceClient<CallOptionsExt = {}> {
   read(request: DeepPartial<ReadRequest>, options?: CallOptions & CallOptionsExt): Promise<LocationListResponse>;
   create(request: DeepPartial<LocationList>, options?: CallOptions & CallOptionsExt): Promise<LocationListResponse>;
   delete(request: DeepPartial<DeleteRequest>, options?: CallOptions & CallOptionsExt): Promise<DeleteResponse>;
@@ -879,7 +879,7 @@ export const protoMetadata: ProtoMetadata = {
     }],
     "enumType": [],
     "service": [{
-      "name": "Service",
+      "name": "LocationService",
       "method": [{
         "name": "Read",
         "inputType": ".io.restorecommerce.resourcebase.ReadRequest",
@@ -916,7 +916,7 @@ export const protoMetadata: ProtoMetadata = {
         "clientStreaming": false,
         "serverStreaming": false,
       }],
-      "options": { "deprecated": false, "uninterpretedOption": [] },
+      "options": undefined,
     }],
     "extension": [],
     "options": undefined,
@@ -929,43 +929,43 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0],
-        "span": [18, 0, 28, 1],
+        "span": [18, 0, 26, 1],
         "leadingComments": "\n Microservice definition.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 4, 2, 0],
-        "span": [52, 2, 25],
+        "span": [50, 2, 25],
         "leadingComments": "",
         "trailingComments": " Location ID, unique, key\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 4, 2, 2],
-        "span": [54, 2, 27],
+        "span": [52, 2, 27],
         "leadingComments": "",
         "trailingComments": " Location name\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 4, 2, 4],
-        "span": [56, 2, 64, 4],
+        "span": [54, 2, 62, 4],
         "leadingComments": "",
         "trailingComments": " Organization to which this location is linked\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 4, 2, 5],
-        "span": [65, 2, 73, 4],
+        "span": [63, 2, 71, 4],
         "leadingComments": "",
         "trailingComments": "  Location which may contain this location; may be null\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 4, 2, 7],
-        "span": [83, 2, 40],
+        "span": [81, 2, 40],
         "leadingComments": "",
         "trailingComments": "/ additional data\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 4, 2, 8],
-        "span": [84, 2, 28],
+        "span": [82, 2, 28],
         "leadingComments": "",
         "trailingComments": " location type\n",
         "leadingDetachedComments": [],
@@ -1021,7 +1021,7 @@ export const protoMetadata: ProtoMetadata = {
         },
       },
     },
-    services: { "Service": { options: { "service_name": "location" }, methods: { "Read": { "is_query": true } } } },
+    services: { "LocationService": { options: undefined, methods: { "Read": { "is_query": true } } } },
   },
 };
 

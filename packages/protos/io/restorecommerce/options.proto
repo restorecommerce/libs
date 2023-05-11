@@ -5,33 +5,33 @@ import "google/protobuf/descriptor.proto";
 package io.restorecommerce.options;
 
 extend google.protobuf.FieldOptions {
-  optional Resolver resolver = 31000;
+  Resolver resolver = 31000;
 }
 
 extend google.protobuf.MethodOptions {
-  optional bool is_query = 31001;
+  bool is_query = 31001;
 }
 
 extend google.protobuf.ServiceOptions {
-  optional string service_name = 31002;
+  string service_name = 31002;
 }
 
 message Resolver {
-  optional string target_type = 1;
-  optional string target_service = 2;
-  optional string target_sub_service = 3;
-  optional string target_method = 4;
-  optional string field_name = 5;
+  string target_type = 1;
+  string target_service = 2;
+  string target_sub_service = 3;
+  string target_method = 4;
+  string field_name = 5;
 }
 
 extend google.protobuf.MessageOptions {
-  optional KafkaSubscription kafka_subscriber = 31003;
+  KafkaSubscription kafka_subscriber = 31003;
 }
 
 message KafkaSubscription {
-  optional string plural = 1;
-  optional string topic = 2;
-  optional string created = 3;
-  optional string updated = 4;
- optional  string deleted = 5;
+  string plural = 1;
+  string topic = 2;
+  string created = 3;
+  string updated = 4;
+  string deleted = 5;
 }

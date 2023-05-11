@@ -503,10 +503,10 @@ export const GetTokenResponse = {
   },
 };
 
-export type ServiceDefinition = typeof ServiceDefinition;
-export const ServiceDefinition = {
-  name: "Service",
-  fullName: "io.restorecommerce.oauth.Service",
+export type OAuthServiceDefinition = typeof OAuthServiceDefinition;
+export const OAuthServiceDefinition = {
+  name: "OAuthService",
+  fullName: "io.restorecommerce.oauth.OAuthService",
   methods: {
     availableServices: {
       name: "AvailableServices",
@@ -543,7 +543,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
+export interface OAuthServiceImplementation<CallContextExt = {}> {
   availableServices(request: Empty, context: CallContext & CallContextExt): Promise<DeepPartial<ServicesResponse>>;
   generateLinks(request: Empty, context: CallContext & CallContextExt): Promise<DeepPartial<GenerateLinksResponse>>;
   exchangeCode(
@@ -553,7 +553,7 @@ export interface ServiceImplementation<CallContextExt = {}> {
   getToken(request: GetTokenRequest, context: CallContext & CallContextExt): Promise<DeepPartial<GetTokenResponse>>;
 }
 
-export interface ServiceClient<CallOptionsExt = {}> {
+export interface OAuthServiceClient<CallOptionsExt = {}> {
   availableServices(request: DeepPartial<Empty>, options?: CallOptions & CallOptionsExt): Promise<ServicesResponse>;
   generateLinks(request: DeepPartial<Empty>, options?: CallOptions & CallOptionsExt): Promise<GenerateLinksResponse>;
   exchangeCode(
@@ -850,7 +850,7 @@ export const protoMetadata: ProtoMetadata = {
     }],
     "enumType": [],
     "service": [{
-      "name": "Service",
+      "name": "OAuthService",
       "method": [{
         "name": "AvailableServices",
         "inputType": ".google.protobuf.Empty",

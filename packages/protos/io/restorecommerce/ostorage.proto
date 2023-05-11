@@ -11,9 +11,7 @@ import "io/restorecommerce/status.proto";
 import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/options.proto";
 
-service Service {
-  option (io.restorecommerce.options.service_name) = "object";
-
+service ObjectService {
   rpc Get (GetRequest) returns (stream ObjectResponse) {
     option (io.restorecommerce.options.is_query) = true;
   };

@@ -7,7 +7,7 @@ import "io/restorecommerce/status.proto";
 import "io/restorecommerce/resource_base.proto";
 
 // Service provides the CRUD operations
-service Service {
+service GraphService {
   rpc Traversal (TraversalRequest) returns (stream TraversalResponse);
 }
 

@@ -13,9 +13,7 @@ import "io/restorecommerce/options.proto";
 import "io/restorecommerce/address.proto";
 import "io/restorecommerce/contact_point.proto";
 
-service Service {
-  option (io.restorecommerce.options.service_name) = "organization";
-
+service OrganizationService {
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (OrganizationListResponse) {
     option (io.restorecommerce.options.is_query) = true;
   };

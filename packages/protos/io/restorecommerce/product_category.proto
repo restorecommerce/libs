@@ -57,8 +57,6 @@ message Parent {
 }
 
 service ProductCategoryService {
-  option (io.restorecommerce.options.service_name) = "product_category";
-
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ProductCategoryListResponse) {
     option (io.restorecommerce.options.is_query) = true;
   };

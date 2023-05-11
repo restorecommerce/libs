@@ -40,8 +40,6 @@ message Deleted {
 }
 
 service ProductPrototypeService {
-  option (io.restorecommerce.options.service_name) = "product_prototype";
-
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ProductPrototypeListResponse) {
     option (io.restorecommerce.options.is_query) = true;
   };

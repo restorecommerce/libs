@@ -81,8 +81,8 @@ export interface DecisionResponse {
   decision: Response_Decision;
   obligation?: Obligation[];
   operation_status: {
-    code: number;
-    message: string;
+    code?: number;
+    message?: string;
   };
 };
 

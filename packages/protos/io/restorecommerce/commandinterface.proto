@@ -26,7 +26,6 @@ message CommandResponse {
 /**
 * RPC service for executing commands
 */
-service Service {
-  option (io.restorecommerce.options.service_name) = "commandinterface";
+service CommandInterfaceService {
   rpc Command(CommandRequest) returns (google.protobuf.Any);
 }

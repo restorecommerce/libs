@@ -513,10 +513,10 @@ export const PaymentMethod = {
 };
 
 /** Microservice definition. */
-export type ServiceDefinition = typeof ServiceDefinition;
-export const ServiceDefinition = {
-  name: "Service",
-  fullName: "io.restorecommerce.payment_method.Service",
+export type PaymentMethodServiceDefinition = typeof PaymentMethodServiceDefinition;
+export const PaymentMethodServiceDefinition = {
+  name: "PaymentMethodService",
+  fullName: "io.restorecommerce.payment_method.PaymentMethodService",
   methods: {
     read: {
       name: "Read",
@@ -561,7 +561,7 @@ export const ServiceDefinition = {
   },
 } as const;
 
-export interface ServiceImplementation<CallContextExt = {}> {
+export interface PaymentMethodServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<PaymentMethodListResponse>>;
   create(
     request: PaymentMethodList,
@@ -578,7 +578,7 @@ export interface ServiceImplementation<CallContextExt = {}> {
   ): Promise<DeepPartial<PaymentMethodListResponse>>;
 }
 
-export interface ServiceClient<CallOptionsExt = {}> {
+export interface PaymentMethodServiceClient<CallOptionsExt = {}> {
   read(request: DeepPartial<ReadRequest>, options?: CallOptions & CallOptionsExt): Promise<PaymentMethodListResponse>;
   create(
     request: DeepPartial<PaymentMethodList>,
@@ -881,7 +881,7 @@ export const protoMetadata: ProtoMetadata = {
       "reservedName": [],
     }],
     "service": [{
-      "name": "Service",
+      "name": "PaymentMethodService",
       "method": [{
         "name": "Read",
         "inputType": ".io.restorecommerce.resourcebase.ReadRequest",

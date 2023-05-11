@@ -9,11 +9,11 @@ import { cfg } from '../lib';
 import {
   Request,
   Response_Decision,
-  ServiceImplementation,
+  AccessControlServiceImplementation,
   DeepPartial,
   ReverseQuery,
   Response,
-  ServiceDefinition
+  AccessControlServiceDefinition
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/access_control';
 import { createServer, Server } from 'nice-grpc';
 import { Effect } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/rule';
@@ -159,9 +159,9 @@ const updateMetaData = (resourceList: Array<any>): Array<CtxResource> => {
   });
 };
 
-const startGrpcMockServer = async (implementation: ServiceImplementation) => {
+const startGrpcMockServer = async (implementation: AccessControlServiceImplementation) => {
   mockServer = createServer();
-  mockServer.add(ServiceDefinition, implementation);
+  mockServer.add(AccessControlServiceDefinition, implementation);
   await mockServer.listen('0.0.0.0:50061');
   logger.info('ACS Server started on port 50061');
 };

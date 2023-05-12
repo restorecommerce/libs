@@ -13,7 +13,6 @@ describe("proto-meta", () => {
 
   it('should produce correct GQL Objects', () => {
     const obj = getTyping('.io.restorecommerce.order.Order');
-
     expect(obj).toBeTruthy();
 
     const output = obj!.output;
@@ -22,8 +21,7 @@ describe("proto-meta", () => {
     expect(output.name).toEqual('IoRestorecommerceOrderOrder');
 
     const fields = (output as GraphQLObjectType).getFields();
-
-    for (let key of ['id', 'name', 'description', 'customerReference', 'billingEmail']) {
+    for (let key of ['id', 'customerReference', 'billingEmail', 'notificationEmail']) {
       expect(fields[key].type).toBeInstanceOf(GraphQLScalarType);
       expect((fields[key].type as GraphQLScalarType).name).toEqual('String');
     }
@@ -34,7 +32,7 @@ describe("proto-meta", () => {
     expect(fields.items.type).toBeInstanceOf(GraphQLList);
     expect((fields.items.type as GraphQLList<any>).ofType).toBeInstanceOf(GraphQLNonNull);
     expect(((fields.items.type as GraphQLList<any>).ofType as GraphQLNonNull<any>).ofType).toBeInstanceOf(GraphQLObjectType);
-    expect(((fields.items.type as GraphQLList<any>).ofType as GraphQLNonNull<any>).ofType).toEqual(getTyping('.io.restorecommerce.order.Item')!.output)
+    expect(((fields.items.type as GraphQLList<any>).ofType as GraphQLNonNull<any>).ofType).toEqual(getTyping('.io.restorecommerce.order.OrderItem')!.output)
 
     expect(fields.meta.type).toEqual(getTyping('.io.restorecommerce.meta.Meta')!.output);
   });

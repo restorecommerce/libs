@@ -109,5 +109,4 @@ message ShippingAddress {
   optional Address address = 1;
   optional Contact contact = 2;
   optional string comments = 3;
-  optional io.restorecommerce.country.Country country = 4;
 }

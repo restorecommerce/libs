@@ -11,6 +11,7 @@ import "io/restorecommerce/address.proto";
 import "io/restorecommerce/country.proto";
 import "io/restorecommerce/product.proto";
 import "io/restorecommerce/options.proto";
+import "io/restorecommerce/tax.proto";
 
 /**
 Microservice definition.
@@ -39,6 +40,11 @@ service FulfillmentService {
   rpc Upsert (FulfillmentList) returns (FulfillmentListResponse);
 
   /**
+  Evaluate fulfillment for correctness
+  */
+  rpc Evaluate (FulfillmentList) returns (FulfillmentListResponse);
+
+  /**
   Creates, Submits and Updates fulfillment orders against API
   */
   rpc Submit (FulfillmentList) returns (FulfillmentListResponse);
@@ -47,6 +53,11 @@ service FulfillmentService {
   Track a batch of fulfillments
   */
   rpc Track (FulfillmentIdList) returns (FulfillmentListResponse);
+
+  /**
+  Withdraw a batch of fulfillments and request for cancelation
+  */
+  rpc Withdraw (FulfillmentIdList) returns (FulfillmentListResponse);
 
   /**
   Cancel a batch of fulfillments
@@ -63,9 +74,10 @@ enum State {
   Created = 0;
   Invalid = 1;
   Failed = 2;
-  Submitted = 4;
-  Shipping = 5;
-  Fulfilled = 6;
+  Submitted = 3;
+  InTransit = 4;
+  Fulfilled = 5;
+  Withdrawn = 6;
   Cancelled = 7;
 }
 
@@ -89,7 +101,9 @@ message Parcel {
   ];
   optional string variant_id = 3;
   optional FulfillmentItem item = 4;
-  optional io.restorecommerce.product.Package package = 11;
+  optional double price = 5;
+  repeated io.restorecommerce.tax.VAT vats = 6; //Set by service
+  optional io.restorecommerce.product.Package package = 7;
 }
 
 message Label {
@@ -104,7 +118,7 @@ message Label {
   optional io.restorecommerce.status.Status status = 7; //API status
 }
 
-message Packing {
+message Packaging {
   optional string reference_id = 1;
   repeated Parcel parcels = 2;
   optional io.restorecommerce.address.ShippingAddress sender = 3;
@@ -139,12 +153,13 @@ message Fulfillment {
   };
 
   optional string id = 1;
-  optional Packing packing = 2; //filled by user
+  optional Packaging packaging = 2; //filled by user
   optional io.restorecommerce.meta.Meta meta = 3;
   repeated Label labels = 4; //filled by service
   repeated Tracking tracking = 5; //filled by service
   optional State state = 6; //filled by service
-  optional double price = 7;
+  optional double total_price = 7;
+  optional double total_vat = 8;
 }
 
 message FulfillmentList {

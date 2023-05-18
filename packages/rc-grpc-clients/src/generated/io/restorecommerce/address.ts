@@ -3,7 +3,7 @@ import type { CallContext, CallOptions } from "nice-grpc-common";
 import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
 import { protoMetadata as protoMetadata3, Subject } from "./auth";
-import { Country, protoMetadata as protoMetadata6 } from "./country";
+import { protoMetadata as protoMetadata6 } from "./country";
 import { Meta, protoMetadata as protoMetadata2 } from "./meta";
 import { protoMetadata as protoMetadata5, Resolver } from "./options";
 import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata1, ReadRequest } from "./resource_base";
@@ -86,7 +86,6 @@ export interface ShippingAddress {
   address?: Address | undefined;
   contact?: Contact | undefined;
   comments?: string | undefined;
-  country?: Country | undefined;
 }
 
 function createBaseDeleted(): Deleted {
@@ -962,7 +961,7 @@ export const Contact = {
 };
 
 function createBaseShippingAddress(): ShippingAddress {
-  return { address: undefined, contact: undefined, comments: undefined, country: undefined };
+  return { address: undefined, contact: undefined, comments: undefined };
 }
 
 export const ShippingAddress = {
@@ -975,9 +974,6 @@ export const ShippingAddress = {
     }
     if (message.comments !== undefined) {
       writer.uint32(26).string(message.comments);
-    }
-    if (message.country !== undefined) {
-      Country.encode(message.country, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -998,9 +994,6 @@ export const ShippingAddress = {
         case 3:
           message.comments = reader.string();
           break;
-        case 4:
-          message.country = Country.decode(reader, reader.uint32());
-          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -1014,7 +1007,6 @@ export const ShippingAddress = {
       address: isSet(object.address) ? Address.fromJSON(object.address) : undefined,
       contact: isSet(object.contact) ? Contact.fromJSON(object.contact) : undefined,
       comments: isSet(object.comments) ? String(object.comments) : undefined,
-      country: isSet(object.country) ? Country.fromJSON(object.country) : undefined,
     };
   },
 
@@ -1023,7 +1015,6 @@ export const ShippingAddress = {
     message.address !== undefined && (obj.address = message.address ? Address.toJSON(message.address) : undefined);
     message.contact !== undefined && (obj.contact = message.contact ? Contact.toJSON(message.contact) : undefined);
     message.comments !== undefined && (obj.comments = message.comments);
-    message.country !== undefined && (obj.country = message.country ? Country.toJSON(message.country) : undefined);
     return obj;
   },
 
@@ -1040,9 +1031,6 @@ export const ShippingAddress = {
       ? Contact.fromPartial(object.contact)
       : undefined;
     message.comments = object.comments ?? undefined;
-    message.country = (object.country !== undefined && object.country !== null)
-      ? Country.fromPartial(object.country)
-      : undefined;
     return message;
   },
 };
@@ -1793,18 +1781,6 @@ export const protoMetadata: ProtoMetadata = {
         "jsonName": "comments",
         "options": undefined,
         "proto3Optional": true,
-      }, {
-        "name": "country",
-        "number": 4,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.country.Country",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 3,
-        "jsonName": "country",
-        "options": undefined,
-        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
@@ -1813,7 +1789,7 @@ export const protoMetadata: ProtoMetadata = {
       "oneofDecl": [{ "name": "_address", "options": undefined }, { "name": "_contact", "options": undefined }, {
         "name": "_comments",
         "options": undefined,
-      }, { "name": "_country", "options": undefined }],
+      }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],

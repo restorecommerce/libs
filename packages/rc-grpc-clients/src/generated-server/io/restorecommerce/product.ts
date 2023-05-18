@@ -19,7 +19,7 @@ export const protobufPackage = "io.restorecommerce.product";
 
 export enum AssociationType {
   Miscellaneous = "Miscellaneous",
-  Accesory = "Accesory",
+  Accessory = "Accessory",
   Recommendation = "Recommendation",
   UNRECOGNIZED = "UNRECOGNIZED",
 }
@@ -30,8 +30,8 @@ export function associationTypeFromJSON(object: any): AssociationType {
     case "Miscellaneous":
       return AssociationType.Miscellaneous;
     case 1:
-    case "Accesory":
-      return AssociationType.Accesory;
+    case "Accessory":
+      return AssociationType.Accessory;
     case 2:
     case "Recommendation":
       return AssociationType.Recommendation;
@@ -46,8 +46,8 @@ export function associationTypeToJSON(object: AssociationType): string {
   switch (object) {
     case AssociationType.Miscellaneous:
       return "Miscellaneous";
-    case AssociationType.Accesory:
-      return "Accesory";
+    case AssociationType.Accessory:
+      return "Accessory";
     case AssociationType.Recommendation:
       return "Recommendation";
     case AssociationType.UNRECOGNIZED:
@@ -60,7 +60,7 @@ export function associationTypeToNumber(object: AssociationType): number {
   switch (object) {
     case AssociationType.Miscellaneous:
       return 0;
-    case AssociationType.Accesory:
+    case AssociationType.Accessory:
       return 1;
     case AssociationType.Recommendation:
       return 2;
@@ -155,7 +155,7 @@ export interface PhysicalVariant {
   files: File[];
   stock_keeping_unit?: string | undefined;
   template_variant?: string | undefined;
-  packaged?: Package | undefined;
+  package?: Package | undefined;
   attributes: Attribute[];
 }
 
@@ -1120,7 +1120,7 @@ function createBasePhysicalVariant(): PhysicalVariant {
     files: [],
     stock_keeping_unit: undefined,
     template_variant: undefined,
-    packaged: undefined,
+    package: undefined,
     attributes: [],
   };
 }
@@ -1160,8 +1160,8 @@ export const PhysicalVariant = {
     if (message.template_variant !== undefined) {
       writer.uint32(90).string(message.template_variant);
     }
-    if (message.packaged !== undefined) {
-      Package.encode(message.packaged, writer.uint32(98).fork()).ldelim();
+    if (message.package !== undefined) {
+      Package.encode(message.package, writer.uint32(98).fork()).ldelim();
     }
     for (const v of message.attributes) {
       Attribute.encode(v!, writer.uint32(106).fork()).ldelim();
@@ -1210,7 +1210,7 @@ export const PhysicalVariant = {
           message.template_variant = reader.string();
           break;
         case 12:
-          message.packaged = Package.decode(reader, reader.uint32());
+          message.package = Package.decode(reader, reader.uint32());
           break;
         case 13:
           message.attributes.push(Attribute.decode(reader, reader.uint32()));
@@ -1236,7 +1236,7 @@ export const PhysicalVariant = {
       files: Array.isArray(object?.files) ? object.files.map((e: any) => File.fromJSON(e)) : [],
       stock_keeping_unit: isSet(object.stock_keeping_unit) ? String(object.stock_keeping_unit) : undefined,
       template_variant: isSet(object.template_variant) ? String(object.template_variant) : undefined,
-      packaged: isSet(object.packaged) ? Package.fromJSON(object.packaged) : undefined,
+      package: isSet(object.package) ? Package.fromJSON(object.package) : undefined,
       attributes: Array.isArray(object?.attributes) ? object.attributes.map((e: any) => Attribute.fromJSON(e)) : [],
     };
   },
@@ -1262,7 +1262,7 @@ export const PhysicalVariant = {
     }
     message.stock_keeping_unit !== undefined && (obj.stock_keeping_unit = message.stock_keeping_unit);
     message.template_variant !== undefined && (obj.template_variant = message.template_variant);
-    message.packaged !== undefined && (obj.packaged = message.packaged ? Package.toJSON(message.packaged) : undefined);
+    message.package !== undefined && (obj.package = message.package ? Package.toJSON(message.package) : undefined);
     if (message.attributes) {
       obj.attributes = message.attributes.map((e) => e ? Attribute.toJSON(e) : undefined);
     } else {
@@ -1288,8 +1288,8 @@ export const PhysicalVariant = {
     message.files = object.files?.map((e) => File.fromPartial(e)) || [];
     message.stock_keeping_unit = object.stock_keeping_unit ?? undefined;
     message.template_variant = object.template_variant ?? undefined;
-    message.packaged = (object.packaged !== undefined && object.packaged !== null)
-      ? Package.fromPartial(object.packaged)
+    message.package = (object.package !== undefined && object.package !== null)
+      ? Package.fromPartial(object.package)
       : undefined;
     message.attributes = object.attributes?.map((e) => Attribute.fromPartial(e)) || [];
     return message;
@@ -2633,7 +2633,7 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "packaged",
+        "name": "package",
         "number": 12,
         "label": 1,
         "type": 11,
@@ -2641,7 +2641,7 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 9,
-        "jsonName": "packaged",
+        "jsonName": "package",
         "options": undefined,
         "proto3Optional": true,
       }, {
@@ -2671,7 +2671,7 @@ export const protoMetadata: ProtoMetadata = {
         { "name": "_sale_price", "options": undefined },
         { "name": "_stock_keeping_unit", "options": undefined },
         { "name": "_template_variant", "options": undefined },
-        { "name": "_packaged", "options": undefined },
+        { "name": "_package", "options": undefined },
       ],
       "options": undefined,
       "reservedRange": [],
@@ -3024,7 +3024,7 @@ export const protoMetadata: ProtoMetadata = {
     "enumType": [{
       "name": "AssociationType",
       "value": [{ "name": "Miscellaneous", "number": 0, "options": undefined }, {
-        "name": "Accesory",
+        "name": "Accessory",
         "number": 1,
         "options": undefined,
       }, { "name": "Recommendation", "number": 2, "options": undefined }],

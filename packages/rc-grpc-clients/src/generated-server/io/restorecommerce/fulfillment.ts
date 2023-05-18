@@ -12,6 +12,7 @@ import { KafkaSubscription, protoMetadata as protoMetadata9, Resolver } from "./
 import { Package, protoMetadata as protoMetadata8 } from "./product";
 import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata2, ReadRequest } from "./resource_base";
 import { OperationStatus, protoMetadata as protoMetadata4, Status } from "./status";
+import { protoMetadata as protoMetadata10, VAT } from "./tax";
 
 export const protobufPackage = "io.restorecommerce.fulfillment";
 
@@ -20,8 +21,9 @@ export enum State {
   Invalid = "Invalid",
   Failed = "Failed",
   Submitted = "Submitted",
-  Shipping = "Shipping",
+  InTransit = "InTransit",
   Fulfilled = "Fulfilled",
+  Withdrawn = "Withdrawn",
   Cancelled = "Cancelled",
   UNRECOGNIZED = "UNRECOGNIZED",
 }
@@ -37,15 +39,18 @@ export function stateFromJSON(object: any): State {
     case 2:
     case "Failed":
       return State.Failed;
-    case 4:
+    case 3:
     case "Submitted":
       return State.Submitted;
+    case 4:
+    case "InTransit":
+      return State.InTransit;
     case 5:
-    case "Shipping":
-      return State.Shipping;
-    case 6:
     case "Fulfilled":
       return State.Fulfilled;
+    case 6:
+    case "Withdrawn":
+      return State.Withdrawn;
     case 7:
     case "Cancelled":
       return State.Cancelled;
@@ -66,10 +71,12 @@ export function stateToJSON(object: State): string {
       return "Failed";
     case State.Submitted:
       return "Submitted";
-    case State.Shipping:
-      return "Shipping";
+    case State.InTransit:
+      return "InTransit";
     case State.Fulfilled:
       return "Fulfilled";
+    case State.Withdrawn:
+      return "Withdrawn";
     case State.Cancelled:
       return "Cancelled";
     case State.UNRECOGNIZED:
@@ -87,10 +94,12 @@ export function stateToNumber(object: State): number {
     case State.Failed:
       return 2;
     case State.Submitted:
+      return 3;
+    case State.InTransit:
       return 4;
-    case State.Shipping:
-      return 5;
     case State.Fulfilled:
+      return 5;
+    case State.Withdrawn:
       return 6;
     case State.Cancelled:
       return 7;
@@ -112,6 +121,11 @@ export interface Parcel {
   product_id?: string | undefined;
   variant_id?: string | undefined;
   item?: FulfillmentItem | undefined;
+  price?:
+    | number
+    | undefined;
+  /** Set by service */
+  vats: VAT[];
   package?: Package | undefined;
 }
 
@@ -134,7 +148,7 @@ export interface Label {
   status?: Status | undefined;
 }
 
-export interface Packing {
+export interface Packaging {
   reference_id?: string | undefined;
   parcels: Parcel[];
   sender?: ShippingAddress | undefined;
@@ -162,7 +176,7 @@ export interface Fulfillment {
     | string
     | undefined;
   /** filled by user */
-  packing?: Packing | undefined;
+  packaging?: Packaging | undefined;
   meta?:
     | Meta
     | undefined;
@@ -172,7 +186,8 @@ export interface Fulfillment {
   tracking: Tracking[];
   /** filled by service */
   state?: State | undefined;
-  price?: number | undefined;
+  total_price?: number | undefined;
+  total_vat?: number | undefined;
 }
 
 export interface FulfillmentList {
@@ -295,7 +310,15 @@ export const FulfillmentItem = {
 };
 
 function createBaseParcel(): Parcel {
-  return { id: undefined, product_id: undefined, variant_id: undefined, item: undefined, package: undefined };
+  return {
+    id: undefined,
+    product_id: undefined,
+    variant_id: undefined,
+    item: undefined,
+    price: undefined,
+    vats: [],
+    package: undefined,
+  };
 }
 
 export const Parcel = {
@@ -312,8 +335,14 @@ export const Parcel = {
     if (message.item !== undefined) {
       FulfillmentItem.encode(message.item, writer.uint32(34).fork()).ldelim();
     }
+    if (message.price !== undefined) {
+      writer.uint32(41).double(message.price);
+    }
+    for (const v of message.vats) {
+      VAT.encode(v!, writer.uint32(50).fork()).ldelim();
+    }
     if (message.package !== undefined) {
-      Package.encode(message.package, writer.uint32(90).fork()).ldelim();
+      Package.encode(message.package, writer.uint32(58).fork()).ldelim();
     }
     return writer;
   },
@@ -337,7 +366,13 @@ export const Parcel = {
         case 4:
           message.item = FulfillmentItem.decode(reader, reader.uint32());
           break;
-        case 11:
+        case 5:
+          message.price = reader.double();
+          break;
+        case 6:
+          message.vats.push(VAT.decode(reader, reader.uint32()));
+          break;
+        case 7:
           message.package = Package.decode(reader, reader.uint32());
           break;
         default:
@@ -354,6 +389,8 @@ export const Parcel = {
       product_id: isSet(object.product_id) ? String(object.product_id) : undefined,
       variant_id: isSet(object.variant_id) ? String(object.variant_id) : undefined,
       item: isSet(object.item) ? FulfillmentItem.fromJSON(object.item) : undefined,
+      price: isSet(object.price) ? Number(object.price) : undefined,
+      vats: Array.isArray(object?.vats) ? object.vats.map((e: any) => VAT.fromJSON(e)) : [],
       package: isSet(object.package) ? Package.fromJSON(object.package) : undefined,
     };
   },
@@ -364,6 +401,12 @@ export const Parcel = {
     message.product_id !== undefined && (obj.product_id = message.product_id);
     message.variant_id !== undefined && (obj.variant_id = message.variant_id);
     message.item !== undefined && (obj.item = message.item ? FulfillmentItem.toJSON(message.item) : undefined);
+    message.price !== undefined && (obj.price = message.price);
+    if (message.vats) {
+      obj.vats = message.vats.map((e) => e ? VAT.toJSON(e) : undefined);
+    } else {
+      obj.vats = [];
+    }
     message.package !== undefined && (obj.package = message.package ? Package.toJSON(message.package) : undefined);
     return obj;
   },
@@ -380,6 +423,8 @@ export const Parcel = {
     message.item = (object.item !== undefined && object.item !== null)
       ? FulfillmentItem.fromPartial(object.item)
       : undefined;
+    message.price = object.price ?? undefined;
+    message.vats = object.vats?.map((e) => VAT.fromPartial(e)) || [];
     message.package = (object.package !== undefined && object.package !== null)
       ? Package.fromPartial(object.package)
       : undefined;
@@ -504,12 +549,12 @@ export const Label = {
   },
 };
 
-function createBasePacking(): Packing {
+function createBasePackaging(): Packaging {
   return { reference_id: undefined, parcels: [], sender: undefined, receiver: undefined, notify: undefined };
 }
 
-export const Packing = {
-  encode(message: Packing, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const Packaging = {
+  encode(message: Packaging, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.reference_id !== undefined) {
       writer.uint32(10).string(message.reference_id);
     }
@@ -528,10 +573,10 @@ export const Packing = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): Packing {
+  decode(input: _m0.Reader | Uint8Array, length?: number): Packaging {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBasePacking();
+    const message = createBasePackaging();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -558,7 +603,7 @@ export const Packing = {
     return message;
   },
 
-  fromJSON(object: any): Packing {
+  fromJSON(object: any): Packaging {
     return {
       reference_id: isSet(object.reference_id) ? String(object.reference_id) : undefined,
       parcels: Array.isArray(object?.parcels) ? object.parcels.map((e: any) => Parcel.fromJSON(e)) : [],
@@ -568,7 +613,7 @@ export const Packing = {
     };
   },
 
-  toJSON(message: Packing): unknown {
+  toJSON(message: Packaging): unknown {
     const obj: any = {};
     message.reference_id !== undefined && (obj.reference_id = message.reference_id);
     if (message.parcels) {
@@ -583,12 +628,12 @@ export const Packing = {
     return obj;
   },
 
-  create(base?: DeepPartial<Packing>): Packing {
-    return Packing.fromPartial(base ?? {});
+  create(base?: DeepPartial<Packaging>): Packaging {
+    return Packaging.fromPartial(base ?? {});
   },
 
-  fromPartial(object: DeepPartial<Packing>): Packing {
-    const message = createBasePacking();
+  fromPartial(object: DeepPartial<Packaging>): Packaging {
+    const message = createBasePackaging();
     message.reference_id = object.reference_id ?? undefined;
     message.parcels = object.parcels?.map((e) => Parcel.fromPartial(e)) || [];
     message.sender = (object.sender !== undefined && object.sender !== null)
@@ -777,12 +822,13 @@ export const Tracking = {
 function createBaseFulfillment(): Fulfillment {
   return {
     id: undefined,
-    packing: undefined,
+    packaging: undefined,
     meta: undefined,
     labels: [],
     tracking: [],
     state: undefined,
-    price: undefined,
+    total_price: undefined,
+    total_vat: undefined,
   };
 }
 
@@ -791,8 +837,8 @@ export const Fulfillment = {
     if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
-    if (message.packing !== undefined) {
-      Packing.encode(message.packing, writer.uint32(18).fork()).ldelim();
+    if (message.packaging !== undefined) {
+      Packaging.encode(message.packaging, writer.uint32(18).fork()).ldelim();
     }
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(26).fork()).ldelim();
@@ -806,8 +852,11 @@ export const Fulfillment = {
     if (message.state !== undefined) {
       writer.uint32(48).int32(stateToNumber(message.state));
     }
-    if (message.price !== undefined) {
-      writer.uint32(57).double(message.price);
+    if (message.total_price !== undefined) {
+      writer.uint32(57).double(message.total_price);
+    }
+    if (message.total_vat !== undefined) {
+      writer.uint32(65).double(message.total_vat);
     }
     return writer;
   },
@@ -823,7 +872,7 @@ export const Fulfillment = {
           message.id = reader.string();
           break;
         case 2:
-          message.packing = Packing.decode(reader, reader.uint32());
+          message.packaging = Packaging.decode(reader, reader.uint32());
           break;
         case 3:
           message.meta = Meta.decode(reader, reader.uint32());
@@ -838,7 +887,10 @@ export const Fulfillment = {
           message.state = stateFromJSON(reader.int32());
           break;
         case 7:
-          message.price = reader.double();
+          message.total_price = reader.double();
+          break;
+        case 8:
+          message.total_vat = reader.double();
           break;
         default:
           reader.skipType(tag & 7);
@@ -851,19 +903,21 @@ export const Fulfillment = {
   fromJSON(object: any): Fulfillment {
     return {
       id: isSet(object.id) ? String(object.id) : undefined,
-      packing: isSet(object.packing) ? Packing.fromJSON(object.packing) : undefined,
+      packaging: isSet(object.packaging) ? Packaging.fromJSON(object.packaging) : undefined,
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
       labels: Array.isArray(object?.labels) ? object.labels.map((e: any) => Label.fromJSON(e)) : [],
       tracking: Array.isArray(object?.tracking) ? object.tracking.map((e: any) => Tracking.fromJSON(e)) : [],
       state: isSet(object.state) ? stateFromJSON(object.state) : undefined,
-      price: isSet(object.price) ? Number(object.price) : undefined,
+      total_price: isSet(object.total_price) ? Number(object.total_price) : undefined,
+      total_vat: isSet(object.total_vat) ? Number(object.total_vat) : undefined,
     };
   },
 
   toJSON(message: Fulfillment): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.packing !== undefined && (obj.packing = message.packing ? Packing.toJSON(message.packing) : undefined);
+    message.packaging !== undefined &&
+      (obj.packaging = message.packaging ? Packaging.toJSON(message.packaging) : undefined);
     message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     if (message.labels) {
       obj.labels = message.labels.map((e) => e ? Label.toJSON(e) : undefined);
@@ -876,7 +930,8 @@ export const Fulfillment = {
       obj.tracking = [];
     }
     message.state !== undefined && (obj.state = message.state !== undefined ? stateToJSON(message.state) : undefined);
-    message.price !== undefined && (obj.price = message.price);
+    message.total_price !== undefined && (obj.total_price = message.total_price);
+    message.total_vat !== undefined && (obj.total_vat = message.total_vat);
     return obj;
   },
 
@@ -887,14 +942,15 @@ export const Fulfillment = {
   fromPartial(object: DeepPartial<Fulfillment>): Fulfillment {
     const message = createBaseFulfillment();
     message.id = object.id ?? undefined;
-    message.packing = (object.packing !== undefined && object.packing !== null)
-      ? Packing.fromPartial(object.packing)
+    message.packaging = (object.packaging !== undefined && object.packaging !== null)
+      ? Packaging.fromPartial(object.packaging)
       : undefined;
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
     message.labels = object.labels?.map((e) => Label.fromPartial(e)) || [];
     message.tracking = object.tracking?.map((e) => Tracking.fromPartial(e)) || [];
     message.state = object.state ?? undefined;
-    message.price = object.price ?? undefined;
+    message.total_price = object.total_price ?? undefined;
+    message.total_vat = object.total_vat ?? undefined;
     return message;
   },
 };
@@ -1380,6 +1436,15 @@ export const FulfillmentServiceDefinition = {
       responseStream: false,
       options: {},
     },
+    /** Evaluate fulfillment for correctness */
+    evaluate: {
+      name: "Evaluate",
+      requestType: FulfillmentList,
+      requestStream: false,
+      responseType: FulfillmentListResponse,
+      responseStream: false,
+      options: {},
+    },
     /** Creates, Submits and Updates fulfillment orders against API */
     submit: {
       name: "Submit",
@@ -1392,6 +1457,15 @@ export const FulfillmentServiceDefinition = {
     /** Track a batch of fulfillments */
     track: {
       name: "Track",
+      requestType: FulfillmentIdList,
+      requestStream: false,
+      responseType: FulfillmentListResponse,
+      responseStream: false,
+      options: {},
+    },
+    /** Withdraw a batch of fulfillments and request for cancelation */
+    withdraw: {
+      name: "Withdraw",
       requestType: FulfillmentIdList,
       requestStream: false,
       responseType: FulfillmentListResponse,
@@ -1437,6 +1511,11 @@ export interface FulfillmentServiceImplementation<CallContextExt = {}> {
     request: FulfillmentList,
     context: CallContext & CallContextExt,
   ): Promise<DeepPartial<FulfillmentListResponse>>;
+  /** Evaluate fulfillment for correctness */
+  evaluate(
+    request: FulfillmentList,
+    context: CallContext & CallContextExt,
+  ): Promise<DeepPartial<FulfillmentListResponse>>;
   /** Creates, Submits and Updates fulfillment orders against API */
   submit(
     request: FulfillmentList,
@@ -1444,6 +1523,11 @@ export interface FulfillmentServiceImplementation<CallContextExt = {}> {
   ): Promise<DeepPartial<FulfillmentListResponse>>;
   /** Track a batch of fulfillments */
   track(
+    request: FulfillmentIdList,
+    context: CallContext & CallContextExt,
+  ): Promise<DeepPartial<FulfillmentListResponse>>;
+  /** Withdraw a batch of fulfillments and request for cancelation */
+  withdraw(
     request: FulfillmentIdList,
     context: CallContext & CallContextExt,
   ): Promise<DeepPartial<FulfillmentListResponse>>;
@@ -1474,6 +1558,11 @@ export interface FulfillmentServiceClient<CallOptionsExt = {}> {
     request: DeepPartial<FulfillmentList>,
     options?: CallOptions & CallOptionsExt,
   ): Promise<FulfillmentListResponse>;
+  /** Evaluate fulfillment for correctness */
+  evaluate(
+    request: DeepPartial<FulfillmentList>,
+    options?: CallOptions & CallOptionsExt,
+  ): Promise<FulfillmentListResponse>;
   /** Creates, Submits and Updates fulfillment orders against API */
   submit(
     request: DeepPartial<FulfillmentList>,
@@ -1481,6 +1570,11 @@ export interface FulfillmentServiceClient<CallOptionsExt = {}> {
   ): Promise<FulfillmentListResponse>;
   /** Track a batch of fulfillments */
   track(
+    request: DeepPartial<FulfillmentIdList>,
+    options?: CallOptions & CallOptionsExt,
+  ): Promise<FulfillmentListResponse>;
+  /** Withdraw a batch of fulfillments and request for cancelation */
+  withdraw(
     request: DeepPartial<FulfillmentIdList>,
     options?: CallOptions & CallOptionsExt,
   ): Promise<FulfillmentListResponse>;
@@ -1528,6 +1622,7 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/country.proto",
       "io/restorecommerce/product.proto",
       "io/restorecommerce/options.proto",
+      "io/restorecommerce/tax.proto",
     ],
     "publicDependency": [],
     "weakDependency": [],
@@ -1652,14 +1747,38 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
+        "name": "price",
+        "number": 5,
+        "label": 1,
+        "type": 1,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 4,
+        "jsonName": "price",
+        "options": undefined,
+        "proto3Optional": true,
+      }, {
+        "name": "vats",
+        "number": 6,
+        "label": 3,
+        "type": 11,
+        "typeName": ".io.restorecommerce.tax.VAT",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "vats",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
         "name": "package",
-        "number": 11,
+        "number": 7,
         "label": 1,
         "type": 11,
         "typeName": ".io.restorecommerce.product.Package",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 4,
+        "oneofIndex": 5,
         "jsonName": "package",
         "options": undefined,
         "proto3Optional": true,
@@ -1673,6 +1792,7 @@ export const protoMetadata: ProtoMetadata = {
         { "name": "_product_id", "options": undefined },
         { "name": "_variant_id", "options": undefined },
         { "name": "_item", "options": undefined },
+        { "name": "_price", "options": undefined },
         { "name": "_package", "options": undefined },
       ],
       "options": undefined,
@@ -1780,7 +1900,7 @@ export const protoMetadata: ProtoMetadata = {
       "reservedRange": [],
       "reservedName": [],
     }, {
-      "name": "Packing",
+      "name": "Packaging",
       "field": [{
         "name": "reference_id",
         "number": 1,
@@ -1993,15 +2113,15 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "packing",
+        "name": "packaging",
         "number": 2,
         "label": 1,
         "type": 11,
-        "typeName": ".io.restorecommerce.fulfillment.Packing",
+        "typeName": ".io.restorecommerce.fulfillment.Packaging",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 1,
-        "jsonName": "packing",
+        "jsonName": "packaging",
         "options": undefined,
         "proto3Optional": true,
       }, {
@@ -2053,7 +2173,7 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "price",
+        "name": "total_price",
         "number": 7,
         "label": 1,
         "type": 1,
@@ -2061,7 +2181,19 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 4,
-        "jsonName": "price",
+        "jsonName": "totalPrice",
+        "options": undefined,
+        "proto3Optional": true,
+      }, {
+        "name": "total_vat",
+        "number": 8,
+        "label": 1,
+        "type": 1,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 5,
+        "jsonName": "totalVat",
         "options": undefined,
         "proto3Optional": true,
       }],
@@ -2071,10 +2203,11 @@ export const protoMetadata: ProtoMetadata = {
       "extensionRange": [],
       "oneofDecl": [
         { "name": "_id", "options": undefined },
-        { "name": "_packing", "options": undefined },
+        { "name": "_packaging", "options": undefined },
         { "name": "_meta", "options": undefined },
         { "name": "_state", "options": undefined },
-        { "name": "_price", "options": undefined },
+        { "name": "_total_price", "options": undefined },
+        { "name": "_total_vat", "options": undefined },
       ],
       "options": {
         "messageSetWireFormat": false,
@@ -2353,9 +2486,10 @@ export const protoMetadata: ProtoMetadata = {
         { "name": "Created", "number": 0, "options": undefined },
         { "name": "Invalid", "number": 1, "options": undefined },
         { "name": "Failed", "number": 2, "options": undefined },
-        { "name": "Submitted", "number": 4, "options": undefined },
-        { "name": "Shipping", "number": 5, "options": undefined },
-        { "name": "Fulfilled", "number": 6, "options": undefined },
+        { "name": "Submitted", "number": 3, "options": undefined },
+        { "name": "InTransit", "number": 4, "options": undefined },
+        { "name": "Fulfilled", "number": 5, "options": undefined },
+        { "name": "Withdrawn", "number": 6, "options": undefined },
         { "name": "Cancelled", "number": 7, "options": undefined },
       ],
       "options": undefined,
@@ -2393,6 +2527,13 @@ export const protoMetadata: ProtoMetadata = {
         "clientStreaming": false,
         "serverStreaming": false,
       }, {
+        "name": "Evaluate",
+        "inputType": ".io.restorecommerce.fulfillment.FulfillmentList",
+        "outputType": ".io.restorecommerce.fulfillment.FulfillmentListResponse",
+        "options": undefined,
+        "clientStreaming": false,
+        "serverStreaming": false,
+      }, {
         "name": "Submit",
         "inputType": ".io.restorecommerce.fulfillment.FulfillmentList",
         "outputType": ".io.restorecommerce.fulfillment.FulfillmentListResponse",
@@ -2401,6 +2542,13 @@ export const protoMetadata: ProtoMetadata = {
         "serverStreaming": false,
       }, {
         "name": "Track",
+        "inputType": ".io.restorecommerce.fulfillment.FulfillmentIdList",
+        "outputType": ".io.restorecommerce.fulfillment.FulfillmentListResponse",
+        "options": undefined,
+        "clientStreaming": false,
+        "serverStreaming": false,
+      }, {
+        "name": "Withdraw",
         "inputType": ".io.restorecommerce.fulfillment.FulfillmentIdList",
         "outputType": ".io.restorecommerce.fulfillment.FulfillmentListResponse",
         "options": undefined,
@@ -2481,6 +2629,12 @@ export const protoMetadata: ProtoMetadata = {
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
+        "path": [4, 1, 2, 5],
+        "span": [106, 2, 47],
+        "leadingComments": "",
+        "trailingComments": "Set by service\n",
+        "leadingDetachedComments": [],
+      }, {
         "path": [4, 2, 2, 4],
         "span": [101, 2, 38],
         "leadingComments": "",
@@ -2543,7 +2697,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.fulfillment.FulfillmentItem": FulfillmentItem,
     ".io.restorecommerce.fulfillment.Parcel": Parcel,
     ".io.restorecommerce.fulfillment.Label": Label,
-    ".io.restorecommerce.fulfillment.Packing": Packing,
+    ".io.restorecommerce.fulfillment.Packaging": Packaging,
     ".io.restorecommerce.fulfillment.Event": Event,
     ".io.restorecommerce.fulfillment.Tracking": Tracking,
     ".io.restorecommerce.fulfillment.Fulfillment": Fulfillment,
@@ -2564,6 +2718,7 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata7,
     protoMetadata8,
     protoMetadata9,
+    protoMetadata10,
   ],
   options: {
     messages: {

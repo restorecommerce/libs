@@ -28,7 +28,7 @@ service ProductService {
 
 enum AssociationType {
   Miscellaneous = 0;
-  Accesory = 1;
+  Accessory = 1;
   Recommendation = 2;
 }
 
@@ -163,7 +163,7 @@ message PhysicalVariant {
   repeated io.restorecommerce.file.File files = 9;
   optional string stock_keeping_unit = 10;
   optional string template_variant = 11;
-  optional Package packaged = 12;
+  optional Package package = 12;
   repeated io.restorecommerce.attribute.Attribute attributes = 13;
 }
 

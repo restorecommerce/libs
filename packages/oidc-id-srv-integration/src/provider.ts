@@ -13,7 +13,7 @@ import logger from './logger';
 import { cfg } from './config';
 import { getRedisInstance } from './redis';
 import { createClient, createChannel } from '@restorecommerce/grpc-client';
-import { ServiceDefinition } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/token';
+import { TokenServiceDefinition } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/token';
 
 // TODO add authEP handler
 // const authEPHandler = new EndpointHandler('authentication_log');
@@ -23,7 +23,7 @@ const channel = createChannel(grpcTokenConfig.address);
 const tokenService = createClient({
   ...grpcTokenConfig,
   logger
-}, ServiceDefinition, channel);
+}, TokenServiceDefinition, channel);
 const adapter = createIdentityServiceAdapterClass(tokenService, logger, getRedisInstance(cfg.get('redis:db-indexes:db-findByToken')));
 
 

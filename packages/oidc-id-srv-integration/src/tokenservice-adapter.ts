@@ -2,7 +2,7 @@ import { AdapterConstructor, Adapter, AdapterPayload } from 'oidc-provider';
 import { RedisClientType } from 'redis';
 import { cfg } from './config';
 import * as _ from 'lodash';
-import { ServiceClient } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/token';
+import { TokenServiceClient } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/token';
 
 const unmarshallProtobufAny = (msg: any): any => JSON.parse(msg.value.toString());
 const marshallProtobufAny = (msg: any): any => {
@@ -20,7 +20,7 @@ const epochTime = () =>  {
 
 const delegate = (type: string) => ['AccessToken', 'RefreshToken'].includes(type);
 
-export function createIdentityServiceAdapterClass(tokenService: ServiceClient, logger: any, redisClient: RedisClientType<any, any>): AdapterConstructor {
+export function createIdentityServiceAdapterClass(tokenService: TokenServiceClient, logger: any, redisClient: RedisClientType<any, any>): AdapterConstructor {
   return class IdentityServiceAdapter implements Adapter {
 
     constructor(public type: string) { }

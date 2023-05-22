@@ -183,7 +183,7 @@ export type IoRestorecommerceProductPhysicalVariant = {
   files?: Maybe<Array<IoRestorecommerceFileFile>>;
   stockKeepingUnit?: Maybe<Scalars['String']>;
   templateVariant?: Maybe<Scalars['String']>;
-  packaged?: Maybe<IoRestorecommerceProductPackage>;
+  package?: Maybe<IoRestorecommerceProductPackage>;
   attributes?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
 };
 
@@ -264,7 +264,7 @@ export type IoRestorecommerceProductAssociation = {
 
 export enum IoRestorecommerceProductAssociationType {
   Miscellaneous = 0,
-  Accesory = 1,
+  Accessory = 1,
   Recommendation = 2
 }
 
@@ -612,7 +612,7 @@ export type IIoRestorecommerceProductPhysicalVariant = {
   files?: InputMaybe<Array<IIoRestorecommerceFileFile>>;
   stockKeepingUnit?: InputMaybe<Scalars['String']>;
   templateVariant?: InputMaybe<Scalars['String']>;
-  packaged?: InputMaybe<IIoRestorecommerceProductPackage>;
+  package?: InputMaybe<IIoRestorecommerceProductPackage>;
   attributes?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
 };
 
@@ -1322,7 +1322,7 @@ export type IoRestorecommerceProductPhysicalVariantResolvers<ContextType = Catal
   files?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceFileFile']>>, ParentType, ContextType>;
   stockKeepingUnit?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   templateVariant?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  packaged?: Resolver<Maybe<ResolversTypes['IoRestorecommerceProductPackage']>, ParentType, ContextType>;
+  package?: Resolver<Maybe<ResolversTypes['IoRestorecommerceProductPackage']>, ParentType, ContextType>;
   attributes?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -1402,7 +1402,7 @@ export type IoRestorecommerceProductAssociationResolvers<ContextType = CatalogCo
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceProductAssociationTypeResolvers = { Miscellaneous: 0, Accesory: 1, Recommendation: 2 };
+export type IoRestorecommerceProductAssociationTypeResolvers = { Miscellaneous: 0, Accessory: 1, Recommendation: 2 };
 
 export type GoogleProtobufAnyResolvers<ContextType = CatalogContext, ParentType extends ResolversParentTypes['GoogleProtobufAny'] = ResolversParentTypes['GoogleProtobufAny']> = ResolversObject<{
   typeUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;

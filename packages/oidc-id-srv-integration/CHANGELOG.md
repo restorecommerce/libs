@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.6](https://github.com/restorecommerce/libs/compare/@restorecommerce/oidc-id-srv-integration@1.0.5...@restorecommerce/oidc-id-srv-integration@1.0.6) (2023-05-22)
+
+
+### Bug Fixes
+
+* **facade:** regenerated schema for changes in protos ([0da0851](https://github.com/restorecommerce/libs/commit/0da08515e4e1d05482d5881cbfe55523fc7fa368))
+
+
+
+
+
 ## [1.0.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/oidc-id-srv-integration@1.0.4...@restorecommerce/oidc-id-srv-integration@1.0.5) (2022-11-16)
 
 **Note:** Version bump only for package @restorecommerce/oidc-id-srv-integration

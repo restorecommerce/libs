@@ -3,6 +3,97 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/rc-grpc-clients@2.0.2...@restorecommerce/rc-grpc-clients@3.0.0) (2023-05-22)
+
+
+### Bug Fixes
+
+* **address, fulfillment, product:** fix naming and complete fulfillment calls ([5c720e6](https://github.com/restorecommerce/libs/commit/5c720e67ddbbe21875029b9c3d0d5f6589746401))
+* **facade:** regenerated schema for changes in protos ([0da0851](https://github.com/restorecommerce/libs/commit/0da08515e4e1d05482d5881cbfe55523fc7fa368))
+* **facade:** renamed service in protos and removed service names options from proto files, fixed typing issues. ([25a24f0](https://github.com/restorecommerce/libs/commit/25a24f063e2499c06c171f1265297500816879f2))
+* **generated src:** re-generate ts.prototypes after merge! ([46d9f26](https://github.com/restorecommerce/libs/commit/46d9f26a2457e2dc1d2b8eb1b59d76da60ca2643))
+* **protos:** restore nested attribute as its referenced in obligation masked properties in ACS ([d6536f9](https://github.com/restorecommerce/libs/commit/d6536f96dfc30eb1905c899af519d50778e2edee))
+* **rc-grpc-client:** regenerated typings for updated protos (optional fields for fullfilment, product protos etc) ([95fa6a4](https://github.com/restorecommerce/libs/commit/95fa6a46c7e7a745870c4ae295cd51f2ae62c7d3))
+* **rc-grpc-client:** regenrated typings for changes in proto files ([42c3702](https://github.com/restorecommerce/libs/commit/42c370242071b1b210447503a7ef25f16629e6ab))
+* **rc-grpc-clients, facade:** WIP optional fields ([98f0977](https://github.com/restorecommerce/libs/commit/98f097730503bd0fa021bc886ba55d477dafb89f))
+
+
+* Integration (rebased) (#47) ([718fa5f](https://github.com/restorecommerce/libs/commit/718fa5f8edfc56e2968c0cb3704eda2855fdee0c)), closes [#47](https://github.com/restorecommerce/libs/issues/47)
+
+
+### BREAKING CHANGES
+
+* Significant changes of naming and structure in proto files
+
+* regenerate rc-qrpc-client
+
+* chore: upgrade Apollo Server 4
+
+* changes for ApolloServer 4 migration
+
+* koaMiddleware
+
+* fixed: unknown type error
+
+* removed: getTokenForRequest
+
+* removed: unnused packages
+
+* add new line
+
+* fix: failed unit tests
+
+* merge
+
+* refinement order.proto and fulfillment.proto for integration tests
+
+* integration
+
+* feat(fulfillment-srv, ordering-srv): integration
+
+Adjustments of protos for fulfillment, ordering and products according to system integration
+* Significant changes of naming and structure in proto files
+
+* fix rebase mistakes
+
+* feat(virtual and physical products): virtual and Physical Products
+
+Products are now differentiated as virtual or physical products by a oneof in product.nature
+* Variants of the product are now in product.nature.physical.variants, for virual
+likewise
+
+* merge master into integration
+
+* reverse ServiceImplementation to ServiceServiceImplementation, regenerate client and server source
+
+* generate rc-grpc-client form local protos
+
+* units!
+
+* remove experimental units
+
+* protos before merge
+
+* feat(fulfillment, ordering and products): finalization of protos for fulfillment and ordering
+
+Refactoreing of Product, Fulfillment, Ordering and Address Protos for a successful integration of
+all services.
+* - Products now differentiate to physical or virtual nature
+
+* regenerate prototypes
+
+* order CancelRequestList not required
+
+* remove experimental index.ts for generated code
+
+* remove experimental index.ts for generated code
+
+* fix package.json typo
+
+
+
+
+
 ## [2.0.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/rc-grpc-clients@2.0.1...@restorecommerce/rc-grpc-clients@2.0.2) (2022-11-16)
 
 

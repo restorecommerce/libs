@@ -3,6 +3,85 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/grpc-client@1.0.3...@restorecommerce/grpc-client@2.0.0) (2023-05-22)
+
+
+* Integration (rebased) (#47) ([718fa5f](https://github.com/restorecommerce/libs/commit/718fa5f8edfc56e2968c0cb3704eda2855fdee0c)), closes [#47](https://github.com/restorecommerce/libs/issues/47)
+
+
+### BREAKING CHANGES
+
+* Significant changes of naming and structure in proto files
+
+* regenerate rc-qrpc-client
+
+* chore: upgrade Apollo Server 4
+
+* changes for ApolloServer 4 migration
+
+* koaMiddleware
+
+* fixed: unknown type error
+
+* removed: getTokenForRequest
+
+* removed: unnused packages
+
+* add new line
+
+* fix: failed unit tests
+
+* merge
+
+* refinement order.proto and fulfillment.proto for integration tests
+
+* integration
+
+* feat(fulfillment-srv, ordering-srv): integration
+
+Adjustments of protos for fulfillment, ordering and products according to system integration
+* Significant changes of naming and structure in proto files
+
+* fix rebase mistakes
+
+* feat(virtual and physical products): virtual and Physical Products
+
+Products are now differentiated as virtual or physical products by a oneof in product.nature
+* Variants of the product are now in product.nature.physical.variants, for virual
+likewise
+
+* merge master into integration
+
+* reverse ServiceImplementation to ServiceServiceImplementation, regenerate client and server source
+
+* generate rc-grpc-client form local protos
+
+* units!
+
+* remove experimental units
+
+* protos before merge
+
+* feat(fulfillment, ordering and products): finalization of protos for fulfillment and ordering
+
+Refactoreing of Product, Fulfillment, Ordering and Address Protos for a successful integration of
+all services.
+* - Products now differentiate to physical or virtual nature
+
+* regenerate prototypes
+
+* order CancelRequestList not required
+
+* remove experimental index.ts for generated code
+
+* remove experimental index.ts for generated code
+
+* fix package.json typo
+
+
+
+
+
 ## [1.0.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/grpc-client@1.0.2...@restorecommerce/grpc-client@1.0.3) (2022-10-14)
 
 **Note:** Version bump only for package @restorecommerce/grpc-client

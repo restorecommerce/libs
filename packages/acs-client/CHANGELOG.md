@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@1.1.0...@restorecommerce/acs-client@1.1.1) (2023-05-22)
+
+
+### Bug Fixes
+
+* **acs-client:** fix test imports ([3a092ef](https://github.com/restorecommerce/libs/commit/3a092ef3e34b45df0c121c3fef3f8a51d99acb96))
+* **acs-client:** typings ([a7cb719](https://github.com/restorecommerce/libs/commit/a7cb7193bd823274fbbb91b20db1c812f7a2c997))
+* **acs-client:** unit tests ([b04ac15](https://github.com/restorecommerce/libs/commit/b04ac1508acc7acb28c0891a5177169c8748e722))
+* **facade:** regenerated schema for changes in protos ([0da0851](https://github.com/restorecommerce/libs/commit/0da08515e4e1d05482d5881cbfe55523fc7fa368))
+* **facade:** renamed service in protos and removed service names options from proto files, fixed typing issues. ([25a24f0](https://github.com/restorecommerce/libs/commit/25a24f063e2499c06c171f1265297500816879f2))
+
+
+
+
+
 # [1.1.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@1.0.5...@restorecommerce/acs-client@1.1.0) (2022-12-28)
 
 

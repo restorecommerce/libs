@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.1.4...@restorecommerce/facade@1.1.5) (2023-05-22)
+
+
+### Bug Fixes
+
+* **acs-client:** fix test imports ([3a092ef](https://github.com/restorecommerce/libs/commit/3a092ef3e34b45df0c121c3fef3f8a51d99acb96))
+* **facade:** build error for null field ([aa7f405](https://github.com/restorecommerce/libs/commit/aa7f405aa3940be8d75abd3e10c6f29a19688d09))
+* **facade:** downgrade nanoid, import koa-body, match test to object ([d05cee1](https://github.com/restorecommerce/libs/commit/d05cee10c7d631d54b5466e6122fee769505a6da))
+* **facade:** fixed sub service name space ([f3266e7](https://github.com/restorecommerce/libs/commit/f3266e7461c7bb2db0a7be05fb79ff132f062ec5))
+* **facade:** regenerated schema for changes in protos ([0da0851](https://github.com/restorecommerce/libs/commit/0da08515e4e1d05482d5881cbfe55523fc7fa368))
+* **facade:** renamed service in protos and removed service names options from proto files, fixed typing issues. ([25a24f0](https://github.com/restorecommerce/libs/commit/25a24f063e2499c06c171f1265297500816879f2))
+* **facade:** restore facade code-gen to previous working version ([294a55f](https://github.com/restorecommerce/libs/commit/294a55f7135aa4b072fdecefbd33baed9efeb4ca))
+* **facade:** unit test ([748ab00](https://github.com/restorecommerce/libs/commit/748ab00483fa1893aa50006795c654834a7ffb57))
+* failed unit tests ([0f06228](https://github.com/restorecommerce/libs/commit/0f062288ad929303a9544a3d30357b666dec555c))
+* **protos:** restore nested attribute as its referenced in obligation masked properties in ACS ([d6536f9](https://github.com/restorecommerce/libs/commit/d6536f96dfc30eb1905c899af519d50778e2edee))
+* **rc-grpc-clients, facade:** WIP optional fields ([98f0977](https://github.com/restorecommerce/libs/commit/98f097730503bd0fa021bc886ba55d477dafb89f))
+
+
+### Reverts
+
+* Revert "chore: upgrade Apollo Server 4" ([90464f2](https://github.com/restorecommerce/libs/commit/90464f2ba77261406718a76d4a854ff7cbcfedf2))
+
+
+
+
+
 ## [1.1.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.1.3...@restorecommerce/facade@1.1.4) (2022-11-16)
 
 

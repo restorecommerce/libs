@@ -56,7 +56,7 @@ export const createActionTarget = (action: any): Attribute[] => {
     return [{
       id: urns.actionID,
       value: urns.action + `:${action.valueOf().toLowerCase()}`,
-      attribute: []
+      attributes: []
     }];
   }
 };
@@ -66,14 +66,14 @@ export const createSubjectTarget = (subject: DeepPartial<Subject>): Attribute[] 
     return [{
       id: urns.unauthenticated_user,
       value: 'true',
-      attribute: []
+      attributes: []
     }];
   }
   let flattened: Attribute[] = [
     {
       id: urns.subjectID,
       value: subject.id,
-      attribute: []
+      attributes: []
     }
   ];
 
@@ -82,12 +82,12 @@ export const createSubjectTarget = (subject: DeepPartial<Subject>): Attribute[] 
       {
         id: urns.roleScopingEntity,
         value: urns.orgScope,
-        attribute: []
+        attributes: []
       },
       {
         id: urns.roleScopingInstance,
         value: subject.scope,
-        attribute: []
+        attributes: []
       }
     ]);
   }
@@ -132,7 +132,7 @@ export const createResourceTarget = (resource: Resource[], action: AuthZAction) 
         flattened.push({
           id: urns.entity,
           value: urns.model + `:${resourceType}`,
-          attribute: []
+          attributes: []
         });
       }
 
@@ -141,14 +141,14 @@ export const createResourceTarget = (resource: Resource[], action: AuthZAction) 
         flattened.push({
           id: urns.resourceID,
           value: resourceInstance,
-          attribute: []
+          attributes: []
         });
       } else if (resourceInstance && _.isArray(resourceInstance) && resourceInstance.length > 0) {
         resourceInstance.forEach((instance) => {
           flattened.push({
             id: urns.resourceID,
             value: instance,
-            attribute: []
+            attributes: []
           });
         });
       }
@@ -159,7 +159,7 @@ export const createResourceTarget = (resource: Resource[], action: AuthZAction) 
           flattened.push({
             id: urns.property,
             value: urns.model + `:${resourceType}#${property}`,
-            attribute: []
+            attributes: []
           });
         });
       }
@@ -167,7 +167,7 @@ export const createResourceTarget = (resource: Resource[], action: AuthZAction) 
       flattened.push({
         id: urns.operation,
         value: resourceObj.resource,
-        attribute: []
+        attributes: []
       });
     }
   });
@@ -218,7 +218,7 @@ export class UnAuthZ implements IAuthZ {
 
       response = {
         decision: isAllowed.decision,
-        obligation: mapResourceURNObligationProperties(isAllowed.obligation),
+        obligation: mapResourceURNObligationProperties(isAllowed.obligations),
         operation_status: isAllowed.operation_status
       };
     } catch (err) {
@@ -264,7 +264,7 @@ export class UnAuthZ implements IAuthZ {
 
       response = {
         ...whatIsAllowed,
-        obligation: mapResourceURNObligationProperties(whatIsAllowed.obligation)
+        obligation: mapResourceURNObligationProperties(whatIsAllowed.obligations)
       } as any; // TODO Decision?
     } catch (err) {
       logger.error('Error invoking access-control-srv whatIsAllowed operation',  { code: err.code, message: err.message, stack: err.stack });
@@ -338,7 +338,7 @@ export class ACSAuthZ implements IAuthZ {
 
       response = {
         decision: isAllowed.decision,
-        obligation: mapResourceURNObligationProperties(isAllowed.obligation),
+        obligation: mapResourceURNObligationProperties(isAllowed.obligations),
         operation_status: isAllowed.operation_status
       };
     } catch (err) {
@@ -394,7 +394,7 @@ export class ACSAuthZ implements IAuthZ {
 
       response = {
         ...whatIsAllowed,
-        obligation: mapResourceURNObligationProperties(whatIsAllowed.obligation)
+        obligation: mapResourceURNObligationProperties(whatIsAllowed.obligations)
       } as any; // TODO Decision?
     } catch (err) {
       logger.error('Error invoking access-control-srv whatIsAllowed operation',  { code: err.code, message: err.message, stack: err.stack });

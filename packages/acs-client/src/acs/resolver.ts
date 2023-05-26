@@ -294,7 +294,7 @@ export const isAllowed = async (request: Request, authZ: ACSAuthZ): Promise<Deci
     const isAllowedResponse = await authZ.acs.isAllowed(request);
     response = {
       decision: isAllowedResponse.decision,
-      obligation: mapResourceURNObligationProperties(isAllowedResponse.obligation),
+      obligation: mapResourceURNObligationProperties(isAllowedResponse.obligations),
       operation_status: isAllowedResponse.operation_status
     };
   } catch (err) {
@@ -318,7 +318,7 @@ export const whatIsAllowed = async (request: Request, authZ: ACSAuthZ): Promise<
     const whatIsAllowedResponse = await authZ.acs.whatIsAllowed(request);
     response = {
       ...whatIsAllowedResponse,
-      obligation: mapResourceURNObligationProperties(whatIsAllowedResponse.obligation)
+      obligation: mapResourceURNObligationProperties(whatIsAllowedResponse.obligations)
     } as any; // TODO Decision?
   } catch (err) {
     logger.error('Error invoking acs-srv whatIsAllowed method', { code: err.code, message: err.message, stack: err.stack });

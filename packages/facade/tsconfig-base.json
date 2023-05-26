@@ -4,7 +4,7 @@
     "typeRoots": [
       "./node_modules/@types"
     ],
-    "esModuleInterop": false,
+    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "declaration": true,
     "strict": true,

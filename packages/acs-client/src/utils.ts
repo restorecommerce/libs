@@ -736,7 +736,7 @@ export const mapResourceURNObligationProperties = (obligation: Attribute[]): Obl
         // name space exists add the entity name to obligation as well with name space
         resource = resourceWithNameSpace;
       }
-      const obligationAttributes = obligationObj.attribute;
+      const obligationAttributes = obligationObj.attributes;
       let property = new Set<string>();
       for (let obligationAttribute of obligationAttributes) {
         if (obligationAttribute.id === urns.maskedProperty) {

@@ -10,6 +10,6 @@ message Meta {
     optional double created = 1; // timestamp
     optional double modified = 2; // timestamp
     optional string modified_by = 3; // ID from last User who modified it
-    repeated io.restorecommerce.attribute.Attribute owner = 4;
-    repeated io.restorecommerce.attribute.AttributeObj acl = 5;
+    repeated io.restorecommerce.attribute.Attribute owners = 4;
+    repeated io.restorecommerce.attribute.AttributeObj acls = 5;
 }

@@ -185,7 +185,7 @@ message VirtualVariant {
 message Bundle {
   optional string name = 1;
   optional string description = 2;
-  repeated io.restorecommerce.image.Image image = 3;
+  repeated io.restorecommerce.image.Image images = 3;
   repeated BundleProduct products = 4;
   optional double price = 5;
   optional Package pre_packaged = 6;

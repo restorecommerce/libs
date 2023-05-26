@@ -58,7 +58,7 @@ message Filter {
 }
 
 message FilterOp {
-  repeated Filter filter = 1;
+  repeated Filter filters = 1;
   enum Operator {
     and = 0;
     or = 1;
@@ -75,13 +75,13 @@ message Search {
 message ReadRequest {
   optional uint32 offset = 1;
   optional uint32 limit = 2;
-  repeated Sort sort = 3;
+  repeated Sort sorts = 3;
 
   /// Filter based on fieldName|operation, value|list
   repeated FilterOp filters = 4; // repeated filters
 
   /// Fields selector
-  repeated FieldFilter field = 5;
+  repeated FieldFilter fields = 5;
 
   /** Check the query parameters of HTTP request.
     * If query parameter `locales` is given,
@@ -104,8 +104,8 @@ message DeleteRequest {
   /// Delete specified documents
   repeated string ids = 2;
   io.restorecommerce.auth.Subject subject = 3;
-  repeated string view = 4; // list of views to be dropped
-  repeated string analyzer = 5; // list of analyzers to be deleted
+  repeated string views = 4; // list of views to be dropped
+  repeated string analyzers = 5; // list of analyzers to be deleted
 }
 
 message DeleteResponse {

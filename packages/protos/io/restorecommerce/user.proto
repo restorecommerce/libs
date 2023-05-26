@@ -353,5 +353,5 @@ message UserRole {
   repeated io.restorecommerce.auth.Tokens tokens = 24;
   double last_access = 25;
   google.protobuf.Any data = 26; /// additional data
-  repeated io.restorecommerce.role.Role role = 27;
+  repeated io.restorecommerce.role.Role roles = 27;
 }

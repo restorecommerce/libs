@@ -30,7 +30,7 @@ message CopyRequestList {
 }
 
 message CopyResponseList {
-  repeated copyResponsePayloadWithStatus response = 1;
+  repeated copyResponsePayloadWithStatus responses = 1;
   io.restorecommerce.status.OperationStatus operation_status = 2;
 }
 
@@ -104,7 +104,7 @@ message GetRequest {
 }
 
 message ListResponse {
-  repeated ObjectsDataWithPayloadStatus response = 1;
+  repeated ObjectsDataWithPayloadStatus responses = 1;
   io.restorecommerce.status.OperationStatus operation_status = 2;
 }
 
@@ -175,7 +175,7 @@ message MoveRequestItem {
 }
 
 message MoveResponseList {
-  repeated MoveResponsePayloadWithStatus response = 1;
+  repeated MoveResponsePayloadWithStatus responses = 1;
   io.restorecommerce.status.OperationStatus operation_status = 2;
 }
 

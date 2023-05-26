@@ -89,7 +89,7 @@ message Invoice {
 * List of Invoice Positions data
 */
 message InvoicesPositionsData {
-  repeated InvoicePositions invoices_positions_data = 1;
+  repeated InvoicePositions invoice_positions = 1;
 }
 
 message InvoicePositions {
@@ -128,7 +128,7 @@ message BillingAddress {
 
 message InvoicePosition {
   optional string currency = 1;
-  repeated InvoiceRow tableList = 2;
+  repeated InvoiceRow invoiceRows = 2;
   optional InvoicePrice totalPrice = 3;
 }
 

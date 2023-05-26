@@ -29,7 +29,7 @@ message Filter {
 }
 
 message FilterOp {
-  repeated Filter filter = 1;
+  repeated Filter filters = 1;
   enum Operator {
     and = 0;
     or = 1;

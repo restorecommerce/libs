@@ -25,21 +25,21 @@ message TraversalRequest {
 
 message Vertices {
   string collection_name = 1;
-  repeated string start_vertex_id = 2;
+  repeated string start_vertex_ids = 2;
 }
 
 message Collection {
   string collection_name = 1;
   uint32 limit = 2;
   uint32 offset = 3;
-  repeated io.restorecommerce.resourcebase.Sort sort = 4;
+  repeated io.restorecommerce.resourcebase.Sort sorts = 4;
 }
 
 message Options {
- repeated string include_vertex = 1; // to include vertices
- repeated string exclude_vertex = 2; // to exclude vertices
- repeated string include_edge = 3; // to include vertices
- repeated string exclude_edge = 4; // to exclude vertices
+ repeated string include_vertexs = 1; // to include vertices
+ repeated string exclude_vertexs = 2; // to exclude vertices
+ repeated string include_edges = 3; // to include vertices
+ repeated string exclude_edges = 4; // to exclude vertices
  Direction direction = 5; // either inbound or outbound, defaults to outbound direction
  enum Direction {
    OUTBOUND = 0;
@@ -51,7 +51,7 @@ message Options {
 message Filters {
   optional string entity = 1; // entity on which the filters are applied
   optional string edge = 2; // if edge is specified depending on the direction filter are applied only for those entities
-  repeated Filter filter = 3;
+  repeated Filter filters = 3;
   enum Operator {
     and = 0;
     or = 1;

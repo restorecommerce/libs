@@ -5,9 +5,9 @@ package io.restorecommerce.attribute;
 message Attribute {
   optional string id = 1;
   optional string value = 2;
-  repeated Attribute attribute = 3;
+  repeated Attribute attributes = 3;
 }
 
 message AttributeObj {
-  optional Attribute attribute = 1;
+  optional Attribute attributes = 1;
 }

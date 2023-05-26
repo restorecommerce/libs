@@ -156,7 +156,7 @@ message Fulfillment {
   optional Packaging packaging = 2; //filled by user
   optional io.restorecommerce.meta.Meta meta = 3;
   repeated Label labels = 4; //filled by service
-  repeated Tracking tracking = 5; //filled by service
+  repeated Tracking trackings = 5; //filled by service
   optional State state = 6; //filled by service
   optional double total_price = 7;
   optional double total_vat = 8;

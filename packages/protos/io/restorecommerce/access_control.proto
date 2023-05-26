@@ -34,14 +34,14 @@ message Response {
     INDETERMINATE = 3;
   }
   Decision decision = 1;
-  repeated io.restorecommerce.attribute.Attribute obligation = 2;
+  repeated io.restorecommerce.attribute.Attribute obligations = 2;
   bool evaluation_cacheable = 3;
   io.restorecommerce.status.OperationStatus operation_status = 4;
 }
 
 message ReverseQuery {
   repeated io.restorecommerce.policy_set.PolicySetRQ policy_sets = 1;
-  repeated io.restorecommerce.attribute.Attribute obligation = 2;
+  repeated io.restorecommerce.attribute.Attribute obligations = 2;
   io.restorecommerce.status.OperationStatus operation_status = 3;
 }
 

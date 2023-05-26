@@ -25,7 +25,7 @@ message Payload {
 message RenderRequest {
   string id = 1; // identifies the render request payload
   // List of templates with associated data and rendering options
-  repeated Payload payload = 2;
+  repeated Payload payloads = 2;
 }
 
 message RenderResponse {

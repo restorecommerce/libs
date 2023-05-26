@@ -13,7 +13,7 @@ service SearchService {
 message SearchRequest {
   optional string collection = 1;
   optional string text = 2;
-  repeated string acl = 3;
+  repeated string acls = 3;
   io.restorecommerce.auth.Subject subject = 4;
 }
 

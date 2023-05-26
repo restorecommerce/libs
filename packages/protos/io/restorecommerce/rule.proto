@@ -14,9 +14,9 @@ import "io/restorecommerce/options.proto";
 * Target specified by a Rule or a Request.
 */
 message Target {
-  repeated io.restorecommerce.attribute.Attribute subject = 1;
+  repeated io.restorecommerce.attribute.Attribute subjects = 1;
   repeated io.restorecommerce.attribute.Attribute resources = 2;
-  repeated io.restorecommerce.attribute.Attribute action = 3;
+  repeated io.restorecommerce.attribute.Attribute actions = 3;
 }
 
 /**

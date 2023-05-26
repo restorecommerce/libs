@@ -165,7 +165,7 @@ message JobReadRequest {
   optional JobFilter filter = 4;
 
   // Fields selector
-  repeated io.restorecommerce.resourcebase.FieldFilter field = 3;
+  repeated io.restorecommerce.resourcebase.FieldFilter fields = 3;
   io.restorecommerce.auth.Subject subject = 5;
 }
 

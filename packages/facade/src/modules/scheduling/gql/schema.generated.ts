@@ -81,20 +81,20 @@ export type IoRestorecommerceMetaMeta = {
   created?: Maybe<Scalars['Float']>;
   modified?: Maybe<Scalars['Float']>;
   modifiedBy?: Maybe<Scalars['String']>;
-  owner?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
-  acl?: Maybe<Array<IoRestorecommerceAttributeAttributeObj>>;
+  owners?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
+  acls?: Maybe<Array<IoRestorecommerceAttributeAttributeObj>>;
 };
 
 export type IoRestorecommerceAttributeAttribute = {
   __typename?: 'IoRestorecommerceAttributeAttribute';
   id?: Maybe<Scalars['String']>;
   value?: Maybe<Scalars['String']>;
-  attribute?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
+  attributes?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
 };
 
 export type IoRestorecommerceAttributeAttributeObj = {
   __typename?: 'IoRestorecommerceAttributeAttributeObj';
-  attribute?: Maybe<IoRestorecommerceAttributeAttribute>;
+  attributes?: Maybe<IoRestorecommerceAttributeAttribute>;
 };
 
 export type IoRestorecommerceJobJobOptions = {
@@ -155,7 +155,7 @@ export type IIoRestorecommerceJobJobReadRequest = {
   limit?: InputMaybe<Scalars['Int']>;
   sort?: InputMaybe<IoRestorecommerceJobJobReadRequestSortOrder>;
   filter?: InputMaybe<IIoRestorecommerceJobJobFilter>;
-  field?: InputMaybe<Array<IIoRestorecommerceResourcebaseFieldFilter>>;
+  fields?: InputMaybe<Array<IIoRestorecommerceResourcebaseFieldFilter>>;
   /** target scope */
   scope?: InputMaybe<Scalars['String']>;
 };
@@ -233,18 +233,18 @@ export type IIoRestorecommerceMetaMeta = {
   created?: InputMaybe<Scalars['Float']>;
   modified?: InputMaybe<Scalars['Float']>;
   modifiedBy?: InputMaybe<Scalars['String']>;
-  owner?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
-  acl?: InputMaybe<Array<IIoRestorecommerceAttributeAttributeObj>>;
+  owners?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
+  acls?: InputMaybe<Array<IIoRestorecommerceAttributeAttributeObj>>;
 };
 
 export type IIoRestorecommerceAttributeAttribute = {
   id?: InputMaybe<Scalars['String']>;
   value?: InputMaybe<Scalars['String']>;
-  attribute?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
+  attributes?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
 };
 
 export type IIoRestorecommerceAttributeAttributeObj = {
-  attribute?: InputMaybe<IIoRestorecommerceAttributeAttribute>;
+  attributes?: InputMaybe<IIoRestorecommerceAttributeAttribute>;
 };
 
 export type IIoRestorecommerceJobJobOptions = {
@@ -292,8 +292,8 @@ export type IoRestorecommerceResourcebaseDeleteResponse = {
 export type IIoRestorecommerceResourcebaseDeleteRequest = {
   collection?: InputMaybe<Scalars['Boolean']>;
   ids?: InputMaybe<Array<Scalars['String']>>;
-  view?: InputMaybe<Array<Scalars['String']>>;
-  analyzer?: InputMaybe<Array<Scalars['String']>>;
+  views?: InputMaybe<Array<Scalars['String']>>;
+  analyzers?: InputMaybe<Array<Scalars['String']>>;
   /** target scope */
   scope?: InputMaybe<Scalars['String']>;
 };
@@ -572,20 +572,20 @@ export type IoRestorecommerceMetaMetaResolvers<ContextType = SchedulingContext, 
   created?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   modified?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   modifiedBy?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  owner?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
-  acl?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttributeObj']>>, ParentType, ContextType>;
+  owners?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
+  acls?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttributeObj']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type IoRestorecommerceAttributeAttributeResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['IoRestorecommerceAttributeAttribute'] = ResolversParentTypes['IoRestorecommerceAttributeAttribute']> = ResolversObject<{
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   value?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  attribute?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
+  attributes?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type IoRestorecommerceAttributeAttributeObjResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['IoRestorecommerceAttributeAttributeObj'] = ResolversParentTypes['IoRestorecommerceAttributeAttributeObj']> = ResolversObject<{
-  attribute?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAttributeAttribute']>, ParentType, ContextType>;
+  attributes?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAttributeAttribute']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

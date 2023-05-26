@@ -106,7 +106,7 @@ export type IoRestorecommerceUserUserRole = {
   tokens?: Maybe<Array<IoRestorecommerceAuthTokens>>;
   lastAccess?: Maybe<Scalars['Float']>;
   data?: Maybe<GoogleProtobufAny>;
-  role?: Maybe<Array<IoRestorecommerceRoleRole>>;
+  roles?: Maybe<Array<IoRestorecommerceRoleRole>>;
 };
 
 export type IoRestorecommerceMetaMeta = {
@@ -114,20 +114,20 @@ export type IoRestorecommerceMetaMeta = {
   created?: Maybe<Scalars['Float']>;
   modified?: Maybe<Scalars['Float']>;
   modifiedBy?: Maybe<Scalars['String']>;
-  owner?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
-  acl?: Maybe<Array<IoRestorecommerceAttributeAttributeObj>>;
+  owners?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
+  acls?: Maybe<Array<IoRestorecommerceAttributeAttributeObj>>;
 };
 
 export type IoRestorecommerceAttributeAttribute = {
   __typename?: 'IoRestorecommerceAttributeAttribute';
   id?: Maybe<Scalars['String']>;
   value?: Maybe<Scalars['String']>;
-  attribute?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
+  attributes?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
 };
 
 export type IoRestorecommerceAttributeAttributeObj = {
   __typename?: 'IoRestorecommerceAttributeAttributeObj';
-  attribute?: Maybe<IoRestorecommerceAttributeAttribute>;
+  attributes?: Maybe<IoRestorecommerceAttributeAttribute>;
 };
 
 export type IoRestorecommerceAuthRoleAssociation = {
@@ -216,9 +216,9 @@ export type IoRestorecommerceStatusOperationStatus = {
 export type IIoRestorecommerceResourcebaseReadRequest = {
   offset?: InputMaybe<Scalars['Int']>;
   limit?: InputMaybe<Scalars['Int']>;
-  sort?: InputMaybe<Array<IIoRestorecommerceResourcebaseSort>>;
+  sorts?: InputMaybe<Array<IIoRestorecommerceResourcebaseSort>>;
   filters?: InputMaybe<Array<IIoRestorecommerceResourcebaseFilterOp>>;
-  field?: InputMaybe<Array<IIoRestorecommerceResourcebaseFieldFilter>>;
+  fields?: InputMaybe<Array<IIoRestorecommerceResourcebaseFieldFilter>>;
   localesLimiter?: InputMaybe<Array<Scalars['String']>>;
   customQueries?: InputMaybe<Array<Scalars['String']>>;
   customArguments?: InputMaybe<IGoogleProtobufAny>;
@@ -239,7 +239,7 @@ export enum IoRestorecommerceResourcebaseSortSortOrder {
 }
 
 export type IIoRestorecommerceResourcebaseFilterOp = {
-  filter?: InputMaybe<Array<IIoRestorecommerceResourcebaseFilter>>;
+  filters?: InputMaybe<Array<IIoRestorecommerceResourcebaseFilter>>;
   operator?: InputMaybe<IoRestorecommerceResourcebaseFilterOpOperator>;
 };
 
@@ -272,7 +272,7 @@ export enum IoRestorecommerceResourcebaseFilterValueType {
 }
 
 export type IIoRestorecommerceFilterFilterOp = {
-  filter?: InputMaybe<Array<IIoRestorecommerceFilterFilter>>;
+  filters?: InputMaybe<Array<IIoRestorecommerceFilterFilter>>;
   operator?: InputMaybe<IoRestorecommerceFilterFilterOpOperator>;
 };
 
@@ -394,7 +394,7 @@ export type IIoRestorecommerceUserFindByRoleRequest = {
 export type IIoRestorecommerceAttributeAttribute = {
   id?: InputMaybe<Scalars['String']>;
   value?: InputMaybe<Scalars['String']>;
-  attribute?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
+  attributes?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
 };
 
 export type ProtoIoRestorecommerceUserUserResponse = {
@@ -645,12 +645,12 @@ export type IIoRestorecommerceMetaMeta = {
   created?: InputMaybe<Scalars['Float']>;
   modified?: InputMaybe<Scalars['Float']>;
   modifiedBy?: InputMaybe<Scalars['String']>;
-  owner?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
-  acl?: InputMaybe<Array<IIoRestorecommerceAttributeAttributeObj>>;
+  owners?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
+  acls?: InputMaybe<Array<IIoRestorecommerceAttributeAttributeObj>>;
 };
 
 export type IIoRestorecommerceAttributeAttributeObj = {
-  attribute?: InputMaybe<IIoRestorecommerceAttributeAttribute>;
+  attributes?: InputMaybe<IIoRestorecommerceAttributeAttribute>;
 };
 
 export type IIoRestorecommerceAuthRoleAssociation = {
@@ -703,8 +703,8 @@ export type IoRestorecommerceResourcebaseDeleteResponse = {
 export type IIoRestorecommerceResourcebaseDeleteRequest = {
   collection?: InputMaybe<Scalars['Boolean']>;
   ids?: InputMaybe<Array<Scalars['String']>>;
-  view?: InputMaybe<Array<Scalars['String']>>;
-  analyzer?: InputMaybe<Array<Scalars['String']>>;
+  views?: InputMaybe<Array<Scalars['String']>>;
+  analyzers?: InputMaybe<Array<Scalars['String']>>;
   /** target scope */
   scope?: InputMaybe<Scalars['String']>;
 };
@@ -1402,7 +1402,7 @@ export type IoRestorecommerceUserUserRoleResolvers<ContextType = IdentityContext
   tokens?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAuthTokens']>>, ParentType, ContextType>;
   lastAccess?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   data?: Resolver<Maybe<ResolversTypes['GoogleProtobufAny']>, ParentType, ContextType>;
-  role?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceRoleRole']>>, ParentType, ContextType>;
+  roles?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceRoleRole']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1410,20 +1410,20 @@ export type IoRestorecommerceMetaMetaResolvers<ContextType = IdentityContext, Pa
   created?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   modified?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   modifiedBy?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  owner?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
-  acl?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttributeObj']>>, ParentType, ContextType>;
+  owners?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
+  acls?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttributeObj']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type IoRestorecommerceAttributeAttributeResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['IoRestorecommerceAttributeAttribute'] = ResolversParentTypes['IoRestorecommerceAttributeAttribute']> = ResolversObject<{
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   value?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  attribute?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
+  attributes?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type IoRestorecommerceAttributeAttributeObjResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['IoRestorecommerceAttributeAttributeObj'] = ResolversParentTypes['IoRestorecommerceAttributeAttributeObj']> = ResolversObject<{
-  attribute?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAttributeAttribute']>, ParentType, ContextType>;
+  attributes?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAttributeAttribute']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

@@ -76,20 +76,20 @@ export type IoRestorecommerceMetaMeta = {
   created?: Maybe<Scalars['Float']>;
   modified?: Maybe<Scalars['Float']>;
   modifiedBy?: Maybe<Scalars['String']>;
-  owner?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
-  acl?: Maybe<Array<IoRestorecommerceAttributeAttributeObj>>;
+  owners?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
+  acls?: Maybe<Array<IoRestorecommerceAttributeAttributeObj>>;
 };
 
 export type IoRestorecommerceAttributeAttribute = {
   __typename?: 'IoRestorecommerceAttributeAttribute';
   id?: Maybe<Scalars['String']>;
   value?: Maybe<Scalars['String']>;
-  attribute?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
+  attributes?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
 };
 
 export type IoRestorecommerceAttributeAttributeObj = {
   __typename?: 'IoRestorecommerceAttributeAttributeObj';
-  attribute?: Maybe<IoRestorecommerceAttributeAttribute>;
+  attributes?: Maybe<IoRestorecommerceAttributeAttribute>;
 };
 
 export type IoRestorecommerceOstorageOptions = {
@@ -137,7 +137,7 @@ export type ProtoIoRestorecommerceOstorageListResponse = {
 
 export type IoRestorecommerceOstorageListResponse = {
   __typename?: 'IoRestorecommerceOstorageListResponse';
-  response?: Maybe<Array<IoRestorecommerceOstorageObjectsDataWithPayloadStatus>>;
+  responses?: Maybe<Array<IoRestorecommerceOstorageObjectsDataWithPayloadStatus>>;
   operationStatus?: Maybe<IoRestorecommerceStatusOperationStatus>;
 };
 
@@ -162,7 +162,7 @@ export type IIoRestorecommerceOstorageListRequest = {
 };
 
 export type IIoRestorecommerceFilterFilterOp = {
-  filter?: InputMaybe<Array<IIoRestorecommerceFilterFilter>>;
+  filters?: InputMaybe<Array<IIoRestorecommerceFilterFilter>>;
   operator?: InputMaybe<IoRestorecommerceFilterFilterOpOperator>;
 };
 
@@ -277,18 +277,18 @@ export type IIoRestorecommerceMetaMeta = {
   created?: InputMaybe<Scalars['Float']>;
   modified?: InputMaybe<Scalars['Float']>;
   modifiedBy?: InputMaybe<Scalars['String']>;
-  owner?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
-  acl?: InputMaybe<Array<IIoRestorecommerceAttributeAttributeObj>>;
+  owners?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
+  acls?: InputMaybe<Array<IIoRestorecommerceAttributeAttributeObj>>;
 };
 
 export type IIoRestorecommerceAttributeAttribute = {
   id?: InputMaybe<Scalars['String']>;
   value?: InputMaybe<Scalars['String']>;
-  attribute?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
+  attributes?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
 };
 
 export type IIoRestorecommerceAttributeAttributeObj = {
-  attribute?: InputMaybe<IIoRestorecommerceAttributeAttribute>;
+  attributes?: InputMaybe<IIoRestorecommerceAttributeAttribute>;
 };
 
 export type IIoRestorecommerceOstorageOptions = {
@@ -333,7 +333,7 @@ export type ProtoIoRestorecommerceOstorageCopyResponseList = {
 
 export type IoRestorecommerceOstorageCopyResponseList = {
   __typename?: 'IoRestorecommerceOstorageCopyResponseList';
-  response?: Maybe<Array<IoRestorecommerceOstorageCopyResponsePayloadWithStatus>>;
+  responses?: Maybe<Array<IoRestorecommerceOstorageCopyResponsePayloadWithStatus>>;
   operationStatus?: Maybe<IoRestorecommerceStatusOperationStatus>;
 };
 
@@ -371,7 +371,7 @@ export type ProtoIoRestorecommerceOstorageMoveResponseList = {
 
 export type IoRestorecommerceOstorageMoveResponseList = {
   __typename?: 'IoRestorecommerceOstorageMoveResponseList';
-  response?: Maybe<Array<IoRestorecommerceOstorageMoveResponsePayloadWithStatus>>;
+  responses?: Maybe<Array<IoRestorecommerceOstorageMoveResponsePayloadWithStatus>>;
   operationStatus?: Maybe<IoRestorecommerceStatusOperationStatus>;
 };
 
@@ -695,20 +695,20 @@ export type IoRestorecommerceMetaMetaResolvers<ContextType = OstorageContext, Pa
   created?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   modified?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   modifiedBy?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  owner?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
-  acl?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttributeObj']>>, ParentType, ContextType>;
+  owners?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
+  acls?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttributeObj']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type IoRestorecommerceAttributeAttributeResolvers<ContextType = OstorageContext, ParentType extends ResolversParentTypes['IoRestorecommerceAttributeAttribute'] = ResolversParentTypes['IoRestorecommerceAttributeAttribute']> = ResolversObject<{
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   value?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  attribute?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
+  attributes?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type IoRestorecommerceAttributeAttributeObjResolvers<ContextType = OstorageContext, ParentType extends ResolversParentTypes['IoRestorecommerceAttributeAttributeObj'] = ResolversParentTypes['IoRestorecommerceAttributeAttributeObj']> = ResolversObject<{
-  attribute?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAttributeAttribute']>, ParentType, ContextType>;
+  attributes?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAttributeAttribute']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -754,7 +754,7 @@ export type ProtoIoRestorecommerceOstorageListResponseResolvers<ContextType = Os
 }>;
 
 export type IoRestorecommerceOstorageListResponseResolvers<ContextType = OstorageContext, ParentType extends ResolversParentTypes['IoRestorecommerceOstorageListResponse'] = ResolversParentTypes['IoRestorecommerceOstorageListResponse']> = ResolversObject<{
-  response?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceOstorageObjectsDataWithPayloadStatus']>>, ParentType, ContextType>;
+  responses?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceOstorageObjectsDataWithPayloadStatus']>>, ParentType, ContextType>;
   operationStatus?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusOperationStatus']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -843,7 +843,7 @@ export type ProtoIoRestorecommerceOstorageCopyResponseListResolvers<ContextType 
 }>;
 
 export type IoRestorecommerceOstorageCopyResponseListResolvers<ContextType = OstorageContext, ParentType extends ResolversParentTypes['IoRestorecommerceOstorageCopyResponseList'] = ResolversParentTypes['IoRestorecommerceOstorageCopyResponseList']> = ResolversObject<{
-  response?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceOstorageCopyResponsePayloadWithStatus']>>, ParentType, ContextType>;
+  responses?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceOstorageCopyResponsePayloadWithStatus']>>, ParentType, ContextType>;
   operationStatus?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusOperationStatus']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -869,7 +869,7 @@ export type ProtoIoRestorecommerceOstorageMoveResponseListResolvers<ContextType 
 }>;
 
 export type IoRestorecommerceOstorageMoveResponseListResolvers<ContextType = OstorageContext, ParentType extends ResolversParentTypes['IoRestorecommerceOstorageMoveResponseList'] = ResolversParentTypes['IoRestorecommerceOstorageMoveResponseList']> = ResolversObject<{
-  response?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceOstorageMoveResponsePayloadWithStatus']>>, ParentType, ContextType>;
+  responses?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceOstorageMoveResponsePayloadWithStatus']>>, ParentType, ContextType>;
   operationStatus?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusOperationStatus']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;

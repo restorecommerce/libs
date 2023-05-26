@@ -55,7 +55,7 @@ export type GoogleProtobufAny = {
 export type IIoRestorecommerceSearchSearchRequest = {
   collection?: InputMaybe<Scalars['String']>;
   text?: InputMaybe<Scalars['String']>;
-  acl?: InputMaybe<Array<Scalars['String']>>;
+  acls?: InputMaybe<Array<Scalars['String']>>;
 };
 
 export type Subscription = {

@@ -183,7 +183,7 @@ export interface Fulfillment {
   /** filled by service */
   labels: Label[];
   /** filled by service */
-  tracking: Tracking[];
+  trackings: Tracking[];
   /** filled by service */
   state?: State | undefined;
   total_price?: number | undefined;
@@ -825,7 +825,7 @@ function createBaseFulfillment(): Fulfillment {
     packaging: undefined,
     meta: undefined,
     labels: [],
-    tracking: [],
+    trackings: [],
     state: undefined,
     total_price: undefined,
     total_vat: undefined,
@@ -846,7 +846,7 @@ export const Fulfillment = {
     for (const v of message.labels) {
       Label.encode(v!, writer.uint32(34).fork()).ldelim();
     }
-    for (const v of message.tracking) {
+    for (const v of message.trackings) {
       Tracking.encode(v!, writer.uint32(42).fork()).ldelim();
     }
     if (message.state !== undefined) {
@@ -881,7 +881,7 @@ export const Fulfillment = {
           message.labels.push(Label.decode(reader, reader.uint32()));
           break;
         case 5:
-          message.tracking.push(Tracking.decode(reader, reader.uint32()));
+          message.trackings.push(Tracking.decode(reader, reader.uint32()));
           break;
         case 6:
           message.state = stateFromJSON(reader.int32());
@@ -906,7 +906,7 @@ export const Fulfillment = {
       packaging: isSet(object.packaging) ? Packaging.fromJSON(object.packaging) : undefined,
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
       labels: Array.isArray(object?.labels) ? object.labels.map((e: any) => Label.fromJSON(e)) : [],
-      tracking: Array.isArray(object?.tracking) ? object.tracking.map((e: any) => Tracking.fromJSON(e)) : [],
+      trackings: Array.isArray(object?.trackings) ? object.trackings.map((e: any) => Tracking.fromJSON(e)) : [],
       state: isSet(object.state) ? stateFromJSON(object.state) : undefined,
       total_price: isSet(object.total_price) ? Number(object.total_price) : undefined,
       total_vat: isSet(object.total_vat) ? Number(object.total_vat) : undefined,
@@ -924,10 +924,10 @@ export const Fulfillment = {
     } else {
       obj.labels = [];
     }
-    if (message.tracking) {
-      obj.tracking = message.tracking.map((e) => e ? Tracking.toJSON(e) : undefined);
+    if (message.trackings) {
+      obj.trackings = message.trackings.map((e) => e ? Tracking.toJSON(e) : undefined);
     } else {
-      obj.tracking = [];
+      obj.trackings = [];
     }
     message.state !== undefined && (obj.state = message.state !== undefined ? stateToJSON(message.state) : undefined);
     message.total_price !== undefined && (obj.total_price = message.total_price);
@@ -947,7 +947,7 @@ export const Fulfillment = {
       : undefined;
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
     message.labels = object.labels?.map((e) => Label.fromPartial(e)) || [];
-    message.tracking = object.tracking?.map((e) => Tracking.fromPartial(e)) || [];
+    message.trackings = object.trackings?.map((e) => Tracking.fromPartial(e)) || [];
     message.state = object.state ?? undefined;
     message.total_price = object.total_price ?? undefined;
     message.total_vat = object.total_vat ?? undefined;
@@ -2149,7 +2149,7 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "tracking",
+        "name": "trackings",
         "number": 5,
         "label": 3,
         "type": 11,
@@ -2157,7 +2157,7 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "tracking",
+        "jsonName": "trackings",
         "options": undefined,
         "proto3Optional": false,
       }, {
@@ -2576,115 +2576,127 @@ export const protoMetadata: ProtoMetadata = {
     "sourceCodeInfo": {
       "location": [{
         "path": [6, 0],
-        "span": [17, 0, 59, 1],
+        "span": [18, 0, 70, 1],
         "leadingComments": "*\nMicroservice definition.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 0],
-        "span": [21, 2, 23, 3],
+        "span": [22, 2, 24, 3],
         "leadingComments": "*\nReturns a list of shipment IDs.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 1],
-        "span": [28, 2, 65],
+        "span": [29, 2, 65],
         "leadingComments": "*\nCreates fulfillment orders\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 2],
-        "span": [33, 2, 65],
+        "span": [34, 2, 65],
         "leadingComments": "*\nUpdates fulfillment orders unless Status is beyond Submit\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 3],
-        "span": [38, 2, 65],
+        "span": [39, 2, 65],
         "leadingComments": "*\nCreates or Updates fulfillment orders unless Status is beyond Submit\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 4],
-        "span": [43, 2, 65],
-        "leadingComments": "*\nCreates, Submits and Updates fulfillment orders against API\n",
+        "span": [44, 2, 67],
+        "leadingComments": "*\nEvaluate fulfillment for correctness\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 5],
-        "span": [48, 2, 66],
-        "leadingComments": "*\nTrack a batch of fulfillments\n",
+        "span": [49, 2, 65],
+        "leadingComments": "*\nCreates, Submits and Updates fulfillment orders against API\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 6],
-        "span": [53, 2, 67],
-        "leadingComments": "*\nCancel a batch of fulfillments\n",
+        "span": [54, 2, 66],
+        "leadingComments": "*\nTrack a batch of fulfillments\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 7],
-        "span": [58, 2, 118],
+        "span": [59, 2, 69],
+        "leadingComments": "*\nWithdraw a batch of fulfillments and request for cancelation\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [6, 0, 2, 8],
+        "span": [64, 2, 67],
+        "leadingComments": "*\nCancel a batch of fulfillments\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [6, 0, 2, 9],
+        "span": [69, 2, 118],
         "leadingComments": "*\nDelete a batch of fulfillments from the database\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 5],
-        "span": [106, 2, 47],
+        "span": [104, 2, 47],
         "leadingComments": "",
         "trailingComments": "Set by service\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 2, 2, 4],
-        "span": [101, 2, 38],
+        "span": [115, 2, 38],
         "leadingComments": "",
         "trailingComments": "filled on Order\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 2, 2, 5],
-        "span": [102, 2, 27],
+        "span": [116, 2, 27],
         "leadingComments": "",
         "trailingComments": "update by Track\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 2, 2, 6],
-        "span": [103, 2, 55],
+        "span": [117, 2, 55],
         "leadingComments": "",
         "trailingComments": "API status\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 6],
-        "span": [131, 0, 147, 1],
+        "span": [145, 0, 162, 1],
         "leadingComments": "*\nThis is the message of how it get stored to the database\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 6, 2, 1],
-        "span": [141, 2, 31],
+        "span": [155, 2, 35],
         "leadingComments": "",
         "trailingComments": "filled by user\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 6, 2, 3],
-        "span": [143, 2, 28],
+        "span": [157, 2, 28],
         "leadingComments": "",
         "trailingComments": "filled by service\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 6, 2, 4],
-        "span": [144, 2, 33],
+        "span": [158, 2, 34],
         "leadingComments": "",
         "trailingComments": "filled by service\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 6, 2, 5],
-        "span": [145, 2, 27],
+        "span": [159, 2, 27],
         "leadingComments": "",
         "trailingComments": "filled by service\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 10, 2, 1],
-        "span": [168, 2, 39],
+        "span": [183, 2, 39],
         "leadingComments": "",
         "trailingComments": "optional\n",
         "leadingDetachedComments": [],

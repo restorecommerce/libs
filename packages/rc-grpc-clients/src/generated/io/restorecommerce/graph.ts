@@ -20,25 +20,25 @@ export interface TraversalRequest {
 
 export interface Vertices {
   collectionName: string;
-  startVertexId: string[];
+  startVertexIds: string[];
 }
 
 export interface Collection {
   collectionName: string;
   limit: number;
   offset: number;
-  sort: Sort[];
+  sorts: Sort[];
 }
 
 export interface Options {
   /** to include vertices */
-  includeVertex: string[];
+  includeVertexs: string[];
   /** to exclude vertices */
-  excludeVertex: string[];
+  excludeVertexs: string[];
   /** to include vertices */
-  includeEdge: string[];
+  includeEdges: string[];
   /** to exclude vertices */
-  excludeEdge: string[];
+  excludeEdges: string[];
   /** either inbound or outbound, defaults to outbound direction */
   direction: Options_Direction;
 }
@@ -95,7 +95,7 @@ export interface Filters {
     | undefined;
   /** if edge is specified depending on the direction filter are applied only for those entities */
   edge?: string | undefined;
-  filter: Filter[];
+  filters: Filter[];
   operator?: Filters_Operator | undefined;
 }
 
@@ -448,7 +448,7 @@ export const TraversalRequest = {
 };
 
 function createBaseVertices(): Vertices {
-  return { collectionName: "", startVertexId: [] };
+  return { collectionName: "", startVertexIds: [] };
 }
 
 export const Vertices = {
@@ -456,7 +456,7 @@ export const Vertices = {
     if (message.collectionName !== "") {
       writer.uint32(10).string(message.collectionName);
     }
-    for (const v of message.startVertexId) {
+    for (const v of message.startVertexIds) {
       writer.uint32(18).string(v!);
     }
     return writer;
@@ -473,7 +473,7 @@ export const Vertices = {
           message.collectionName = reader.string();
           break;
         case 2:
-          message.startVertexId.push(reader.string());
+          message.startVertexIds.push(reader.string());
           break;
         default:
           reader.skipType(tag & 7);
@@ -486,17 +486,17 @@ export const Vertices = {
   fromJSON(object: any): Vertices {
     return {
       collectionName: isSet(object.collectionName) ? String(object.collectionName) : "",
-      startVertexId: Array.isArray(object?.startVertexId) ? object.startVertexId.map((e: any) => String(e)) : [],
+      startVertexIds: Array.isArray(object?.startVertexIds) ? object.startVertexIds.map((e: any) => String(e)) : [],
     };
   },
 
   toJSON(message: Vertices): unknown {
     const obj: any = {};
     message.collectionName !== undefined && (obj.collectionName = message.collectionName);
-    if (message.startVertexId) {
-      obj.startVertexId = message.startVertexId.map((e) => e);
+    if (message.startVertexIds) {
+      obj.startVertexIds = message.startVertexIds.map((e) => e);
     } else {
-      obj.startVertexId = [];
+      obj.startVertexIds = [];
     }
     return obj;
   },
@@ -508,13 +508,13 @@ export const Vertices = {
   fromPartial(object: DeepPartial<Vertices>): Vertices {
     const message = createBaseVertices();
     message.collectionName = object.collectionName ?? "";
-    message.startVertexId = object.startVertexId?.map((e) => e) || [];
+    message.startVertexIds = object.startVertexIds?.map((e) => e) || [];
     return message;
   },
 };
 
 function createBaseCollection(): Collection {
-  return { collectionName: "", limit: 0, offset: 0, sort: [] };
+  return { collectionName: "", limit: 0, offset: 0, sorts: [] };
 }
 
 export const Collection = {
@@ -528,7 +528,7 @@ export const Collection = {
     if (message.offset !== 0) {
       writer.uint32(24).uint32(message.offset);
     }
-    for (const v of message.sort) {
+    for (const v of message.sorts) {
       Sort.encode(v!, writer.uint32(34).fork()).ldelim();
     }
     return writer;
@@ -551,7 +551,7 @@ export const Collection = {
           message.offset = reader.uint32();
           break;
         case 4:
-          message.sort.push(Sort.decode(reader, reader.uint32()));
+          message.sorts.push(Sort.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -566,7 +566,7 @@ export const Collection = {
       collectionName: isSet(object.collectionName) ? String(object.collectionName) : "",
       limit: isSet(object.limit) ? Number(object.limit) : 0,
       offset: isSet(object.offset) ? Number(object.offset) : 0,
-      sort: Array.isArray(object?.sort) ? object.sort.map((e: any) => Sort.fromJSON(e)) : [],
+      sorts: Array.isArray(object?.sorts) ? object.sorts.map((e: any) => Sort.fromJSON(e)) : [],
     };
   },
 
@@ -575,10 +575,10 @@ export const Collection = {
     message.collectionName !== undefined && (obj.collectionName = message.collectionName);
     message.limit !== undefined && (obj.limit = Math.round(message.limit));
     message.offset !== undefined && (obj.offset = Math.round(message.offset));
-    if (message.sort) {
-      obj.sort = message.sort.map((e) => e ? Sort.toJSON(e) : undefined);
+    if (message.sorts) {
+      obj.sorts = message.sorts.map((e) => e ? Sort.toJSON(e) : undefined);
     } else {
-      obj.sort = [];
+      obj.sorts = [];
     }
     return obj;
   },
@@ -592,33 +592,33 @@ export const Collection = {
     message.collectionName = object.collectionName ?? "";
     message.limit = object.limit ?? 0;
     message.offset = object.offset ?? 0;
-    message.sort = object.sort?.map((e) => Sort.fromPartial(e)) || [];
+    message.sorts = object.sorts?.map((e) => Sort.fromPartial(e)) || [];
     return message;
   },
 };
 
 function createBaseOptions(): Options {
   return {
-    includeVertex: [],
-    excludeVertex: [],
-    includeEdge: [],
-    excludeEdge: [],
+    includeVertexs: [],
+    excludeVertexs: [],
+    includeEdges: [],
+    excludeEdges: [],
     direction: Options_Direction.OUTBOUND,
   };
 }
 
 export const Options = {
   encode(message: Options, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    for (const v of message.includeVertex) {
+    for (const v of message.includeVertexs) {
       writer.uint32(10).string(v!);
     }
-    for (const v of message.excludeVertex) {
+    for (const v of message.excludeVertexs) {
       writer.uint32(18).string(v!);
     }
-    for (const v of message.includeEdge) {
+    for (const v of message.includeEdges) {
       writer.uint32(26).string(v!);
     }
-    for (const v of message.excludeEdge) {
+    for (const v of message.excludeEdges) {
       writer.uint32(34).string(v!);
     }
     if (message.direction !== Options_Direction.OUTBOUND) {
@@ -635,16 +635,16 @@ export const Options = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.includeVertex.push(reader.string());
+          message.includeVertexs.push(reader.string());
           break;
         case 2:
-          message.excludeVertex.push(reader.string());
+          message.excludeVertexs.push(reader.string());
           break;
         case 3:
-          message.includeEdge.push(reader.string());
+          message.includeEdges.push(reader.string());
           break;
         case 4:
-          message.excludeEdge.push(reader.string());
+          message.excludeEdges.push(reader.string());
           break;
         case 5:
           message.direction = options_DirectionFromJSON(reader.int32());
@@ -659,35 +659,35 @@ export const Options = {
 
   fromJSON(object: any): Options {
     return {
-      includeVertex: Array.isArray(object?.includeVertex) ? object.includeVertex.map((e: any) => String(e)) : [],
-      excludeVertex: Array.isArray(object?.excludeVertex) ? object.excludeVertex.map((e: any) => String(e)) : [],
-      includeEdge: Array.isArray(object?.includeEdge) ? object.includeEdge.map((e: any) => String(e)) : [],
-      excludeEdge: Array.isArray(object?.excludeEdge) ? object.excludeEdge.map((e: any) => String(e)) : [],
+      includeVertexs: Array.isArray(object?.includeVertexs) ? object.includeVertexs.map((e: any) => String(e)) : [],
+      excludeVertexs: Array.isArray(object?.excludeVertexs) ? object.excludeVertexs.map((e: any) => String(e)) : [],
+      includeEdges: Array.isArray(object?.includeEdges) ? object.includeEdges.map((e: any) => String(e)) : [],
+      excludeEdges: Array.isArray(object?.excludeEdges) ? object.excludeEdges.map((e: any) => String(e)) : [],
       direction: isSet(object.direction) ? options_DirectionFromJSON(object.direction) : Options_Direction.OUTBOUND,
     };
   },
 
   toJSON(message: Options): unknown {
     const obj: any = {};
-    if (message.includeVertex) {
-      obj.includeVertex = message.includeVertex.map((e) => e);
+    if (message.includeVertexs) {
+      obj.includeVertexs = message.includeVertexs.map((e) => e);
     } else {
-      obj.includeVertex = [];
+      obj.includeVertexs = [];
     }
-    if (message.excludeVertex) {
-      obj.excludeVertex = message.excludeVertex.map((e) => e);
+    if (message.excludeVertexs) {
+      obj.excludeVertexs = message.excludeVertexs.map((e) => e);
     } else {
-      obj.excludeVertex = [];
+      obj.excludeVertexs = [];
     }
-    if (message.includeEdge) {
-      obj.includeEdge = message.includeEdge.map((e) => e);
+    if (message.includeEdges) {
+      obj.includeEdges = message.includeEdges.map((e) => e);
     } else {
-      obj.includeEdge = [];
+      obj.includeEdges = [];
     }
-    if (message.excludeEdge) {
-      obj.excludeEdge = message.excludeEdge.map((e) => e);
+    if (message.excludeEdges) {
+      obj.excludeEdges = message.excludeEdges.map((e) => e);
     } else {
-      obj.excludeEdge = [];
+      obj.excludeEdges = [];
     }
     message.direction !== undefined && (obj.direction = options_DirectionToJSON(message.direction));
     return obj;
@@ -699,17 +699,17 @@ export const Options = {
 
   fromPartial(object: DeepPartial<Options>): Options {
     const message = createBaseOptions();
-    message.includeVertex = object.includeVertex?.map((e) => e) || [];
-    message.excludeVertex = object.excludeVertex?.map((e) => e) || [];
-    message.includeEdge = object.includeEdge?.map((e) => e) || [];
-    message.excludeEdge = object.excludeEdge?.map((e) => e) || [];
+    message.includeVertexs = object.includeVertexs?.map((e) => e) || [];
+    message.excludeVertexs = object.excludeVertexs?.map((e) => e) || [];
+    message.includeEdges = object.includeEdges?.map((e) => e) || [];
+    message.excludeEdges = object.excludeEdges?.map((e) => e) || [];
     message.direction = object.direction ?? Options_Direction.OUTBOUND;
     return message;
   },
 };
 
 function createBaseFilters(): Filters {
-  return { entity: undefined, edge: undefined, filter: [], operator: undefined };
+  return { entity: undefined, edge: undefined, filters: [], operator: undefined };
 }
 
 export const Filters = {
@@ -720,7 +720,7 @@ export const Filters = {
     if (message.edge !== undefined) {
       writer.uint32(18).string(message.edge);
     }
-    for (const v of message.filter) {
+    for (const v of message.filters) {
       Filter.encode(v!, writer.uint32(26).fork()).ldelim();
     }
     if (message.operator !== undefined) {
@@ -743,7 +743,7 @@ export const Filters = {
           message.edge = reader.string();
           break;
         case 3:
-          message.filter.push(Filter.decode(reader, reader.uint32()));
+          message.filters.push(Filter.decode(reader, reader.uint32()));
           break;
         case 4:
           message.operator = filters_OperatorFromJSON(reader.int32());
@@ -760,7 +760,7 @@ export const Filters = {
     return {
       entity: isSet(object.entity) ? String(object.entity) : undefined,
       edge: isSet(object.edge) ? String(object.edge) : undefined,
-      filter: Array.isArray(object?.filter) ? object.filter.map((e: any) => Filter.fromJSON(e)) : [],
+      filters: Array.isArray(object?.filters) ? object.filters.map((e: any) => Filter.fromJSON(e)) : [],
       operator: isSet(object.operator) ? filters_OperatorFromJSON(object.operator) : undefined,
     };
   },
@@ -769,10 +769,10 @@ export const Filters = {
     const obj: any = {};
     message.entity !== undefined && (obj.entity = message.entity);
     message.edge !== undefined && (obj.edge = message.edge);
-    if (message.filter) {
-      obj.filter = message.filter.map((e) => e ? Filter.toJSON(e) : undefined);
+    if (message.filters) {
+      obj.filters = message.filters.map((e) => e ? Filter.toJSON(e) : undefined);
     } else {
-      obj.filter = [];
+      obj.filters = [];
     }
     message.operator !== undefined &&
       (obj.operator = message.operator !== undefined ? filters_OperatorToJSON(message.operator) : undefined);
@@ -787,7 +787,7 @@ export const Filters = {
     const message = createBaseFilters();
     message.entity = object.entity ?? undefined;
     message.edge = object.edge ?? undefined;
-    message.filter = object.filter?.map((e) => Filter.fromPartial(e)) || [];
+    message.filters = object.filters?.map((e) => Filter.fromPartial(e)) || [];
     message.operator = object.operator ?? undefined;
     return message;
   },
@@ -1127,7 +1127,7 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "start_vertex_id",
+        "name": "start_vertex_ids",
         "number": 2,
         "label": 3,
         "type": 9,
@@ -1135,7 +1135,7 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "startVertexId",
+        "jsonName": "startVertexIds",
         "options": undefined,
         "proto3Optional": false,
       }],
@@ -1186,7 +1186,7 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "sort",
+        "name": "sorts",
         "number": 4,
         "label": 3,
         "type": 11,
@@ -1194,7 +1194,7 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "sort",
+        "jsonName": "sorts",
         "options": undefined,
         "proto3Optional": false,
       }],
@@ -1209,7 +1209,7 @@ export const protoMetadata: ProtoMetadata = {
     }, {
       "name": "Options",
       "field": [{
-        "name": "include_vertex",
+        "name": "include_vertexs",
         "number": 1,
         "label": 3,
         "type": 9,
@@ -1217,11 +1217,11 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "includeVertex",
+        "jsonName": "includeVertexs",
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "exclude_vertex",
+        "name": "exclude_vertexs",
         "number": 2,
         "label": 3,
         "type": 9,
@@ -1229,11 +1229,11 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "excludeVertex",
+        "jsonName": "excludeVertexs",
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "include_edge",
+        "name": "include_edges",
         "number": 3,
         "label": 3,
         "type": 9,
@@ -1241,11 +1241,11 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "includeEdge",
+        "jsonName": "includeEdges",
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "exclude_edge",
+        "name": "exclude_edges",
         "number": 4,
         "label": 3,
         "type": 9,
@@ -1253,7 +1253,7 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "excludeEdge",
+        "jsonName": "excludeEdges",
         "options": undefined,
         "proto3Optional": false,
       }, {
@@ -1314,7 +1314,7 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "filter",
+        "name": "filters",
         "number": 3,
         "label": 3,
         "type": 11,
@@ -1322,7 +1322,7 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "filter",
+        "jsonName": "filters",
         "options": undefined,
         "proto3Optional": false,
       }, {
@@ -1539,25 +1539,25 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 3, 2, 0],
-        "span": [38, 1, 36],
+        "span": [38, 1, 37],
         "leadingComments": "",
         "trailingComments": " to include vertices\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 3, 2, 1],
-        "span": [39, 1, 36],
+        "span": [39, 1, 37],
         "leadingComments": "",
         "trailingComments": " to exclude vertices\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 3, 2, 2],
-        "span": [40, 1, 34],
+        "span": [40, 1, 35],
         "leadingComments": "",
         "trailingComments": " to include vertices\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 3, 2, 3],
-        "span": [41, 1, 34],
+        "span": [41, 1, 35],
         "leadingComments": "",
         "trailingComments": " to exclude vertices\n",
         "leadingDetachedComments": [],

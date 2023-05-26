@@ -60,9 +60,9 @@ export function effectToNumber(object: Effect): number {
 
 /** Target specified by a Rule or a Request. */
 export interface Target {
-  subject: Attribute[];
+  subjects: Attribute[];
   resources: Attribute[];
-  action: Attribute[];
+  actions: Attribute[];
 }
 
 export interface Rule {
@@ -118,18 +118,18 @@ export interface ContextQuery {
 }
 
 function createBaseTarget(): Target {
-  return { subject: [], resources: [], action: [] };
+  return { subjects: [], resources: [], actions: [] };
 }
 
 export const Target = {
   encode(message: Target, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    for (const v of message.subject) {
+    for (const v of message.subjects) {
       Attribute.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     for (const v of message.resources) {
       Attribute.encode(v!, writer.uint32(18).fork()).ldelim();
     }
-    for (const v of message.action) {
+    for (const v of message.actions) {
       Attribute.encode(v!, writer.uint32(26).fork()).ldelim();
     }
     return writer;
@@ -143,13 +143,13 @@ export const Target = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.subject.push(Attribute.decode(reader, reader.uint32()));
+          message.subjects.push(Attribute.decode(reader, reader.uint32()));
           break;
         case 2:
           message.resources.push(Attribute.decode(reader, reader.uint32()));
           break;
         case 3:
-          message.action.push(Attribute.decode(reader, reader.uint32()));
+          message.actions.push(Attribute.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -161,28 +161,28 @@ export const Target = {
 
   fromJSON(object: any): Target {
     return {
-      subject: Array.isArray(object?.subject) ? object.subject.map((e: any) => Attribute.fromJSON(e)) : [],
+      subjects: Array.isArray(object?.subjects) ? object.subjects.map((e: any) => Attribute.fromJSON(e)) : [],
       resources: Array.isArray(object?.resources) ? object.resources.map((e: any) => Attribute.fromJSON(e)) : [],
-      action: Array.isArray(object?.action) ? object.action.map((e: any) => Attribute.fromJSON(e)) : [],
+      actions: Array.isArray(object?.actions) ? object.actions.map((e: any) => Attribute.fromJSON(e)) : [],
     };
   },
 
   toJSON(message: Target): unknown {
     const obj: any = {};
-    if (message.subject) {
-      obj.subject = message.subject.map((e) => e ? Attribute.toJSON(e) : undefined);
+    if (message.subjects) {
+      obj.subjects = message.subjects.map((e) => e ? Attribute.toJSON(e) : undefined);
     } else {
-      obj.subject = [];
+      obj.subjects = [];
     }
     if (message.resources) {
       obj.resources = message.resources.map((e) => e ? Attribute.toJSON(e) : undefined);
     } else {
       obj.resources = [];
     }
-    if (message.action) {
-      obj.action = message.action.map((e) => e ? Attribute.toJSON(e) : undefined);
+    if (message.actions) {
+      obj.actions = message.actions.map((e) => e ? Attribute.toJSON(e) : undefined);
     } else {
-      obj.action = [];
+      obj.actions = [];
     }
     return obj;
   },
@@ -193,9 +193,9 @@ export const Target = {
 
   fromPartial(object: DeepPartial<Target>): Target {
     const message = createBaseTarget();
-    message.subject = object.subject?.map((e) => Attribute.fromPartial(e)) || [];
+    message.subjects = object.subjects?.map((e) => Attribute.fromPartial(e)) || [];
     message.resources = object.resources?.map((e) => Attribute.fromPartial(e)) || [];
-    message.action = object.action?.map((e) => Attribute.fromPartial(e)) || [];
+    message.actions = object.actions?.map((e) => Attribute.fromPartial(e)) || [];
     return message;
   },
 };
@@ -842,7 +842,7 @@ export const protoMetadata: ProtoMetadata = {
     "messageType": [{
       "name": "Target",
       "field": [{
-        "name": "subject",
+        "name": "subjects",
         "number": 1,
         "label": 3,
         "type": 11,
@@ -850,7 +850,7 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "subject",
+        "jsonName": "subjects",
         "options": undefined,
         "proto3Optional": false,
       }, {
@@ -866,7 +866,7 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "action",
+        "name": "actions",
         "number": 3,
         "label": 3,
         "type": 11,
@@ -874,7 +874,7 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "action",
+        "jsonName": "actions",
         "options": undefined,
         "proto3Optional": false,
       }],

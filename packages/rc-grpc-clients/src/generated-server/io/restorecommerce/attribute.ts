@@ -7,15 +7,15 @@ export const protobufPackage = "io.restorecommerce.attribute";
 export interface Attribute {
   id?: string | undefined;
   value?: string | undefined;
-  attribute: Attribute[];
+  attributes: Attribute[];
 }
 
 export interface AttributeObj {
-  attribute?: Attribute | undefined;
+  attributes?: Attribute | undefined;
 }
 
 function createBaseAttribute(): Attribute {
-  return { id: undefined, value: undefined, attribute: [] };
+  return { id: undefined, value: undefined, attributes: [] };
 }
 
 export const Attribute = {
@@ -26,7 +26,7 @@ export const Attribute = {
     if (message.value !== undefined) {
       writer.uint32(18).string(message.value);
     }
-    for (const v of message.attribute) {
+    for (const v of message.attributes) {
       Attribute.encode(v!, writer.uint32(26).fork()).ldelim();
     }
     return writer;
@@ -46,7 +46,7 @@ export const Attribute = {
           message.value = reader.string();
           break;
         case 3:
-          message.attribute.push(Attribute.decode(reader, reader.uint32()));
+          message.attributes.push(Attribute.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -60,7 +60,7 @@ export const Attribute = {
     return {
       id: isSet(object.id) ? String(object.id) : undefined,
       value: isSet(object.value) ? String(object.value) : undefined,
-      attribute: Array.isArray(object?.attribute) ? object.attribute.map((e: any) => Attribute.fromJSON(e)) : [],
+      attributes: Array.isArray(object?.attributes) ? object.attributes.map((e: any) => Attribute.fromJSON(e)) : [],
     };
   },
 
@@ -68,10 +68,10 @@ export const Attribute = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.value !== undefined && (obj.value = message.value);
-    if (message.attribute) {
-      obj.attribute = message.attribute.map((e) => e ? Attribute.toJSON(e) : undefined);
+    if (message.attributes) {
+      obj.attributes = message.attributes.map((e) => e ? Attribute.toJSON(e) : undefined);
     } else {
-      obj.attribute = [];
+      obj.attributes = [];
     }
     return obj;
   },
@@ -84,19 +84,19 @@ export const Attribute = {
     const message = createBaseAttribute();
     message.id = object.id ?? undefined;
     message.value = object.value ?? undefined;
-    message.attribute = object.attribute?.map((e) => Attribute.fromPartial(e)) || [];
+    message.attributes = object.attributes?.map((e) => Attribute.fromPartial(e)) || [];
     return message;
   },
 };
 
 function createBaseAttributeObj(): AttributeObj {
-  return { attribute: undefined };
+  return { attributes: undefined };
 }
 
 export const AttributeObj = {
   encode(message: AttributeObj, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.attribute !== undefined) {
-      Attribute.encode(message.attribute, writer.uint32(10).fork()).ldelim();
+    if (message.attributes !== undefined) {
+      Attribute.encode(message.attributes, writer.uint32(10).fork()).ldelim();
     }
     return writer;
   },
@@ -109,7 +109,7 @@ export const AttributeObj = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.attribute = Attribute.decode(reader, reader.uint32());
+          message.attributes = Attribute.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -120,13 +120,13 @@ export const AttributeObj = {
   },
 
   fromJSON(object: any): AttributeObj {
-    return { attribute: isSet(object.attribute) ? Attribute.fromJSON(object.attribute) : undefined };
+    return { attributes: isSet(object.attributes) ? Attribute.fromJSON(object.attributes) : undefined };
   },
 
   toJSON(message: AttributeObj): unknown {
     const obj: any = {};
-    message.attribute !== undefined &&
-      (obj.attribute = message.attribute ? Attribute.toJSON(message.attribute) : undefined);
+    message.attributes !== undefined &&
+      (obj.attributes = message.attributes ? Attribute.toJSON(message.attributes) : undefined);
     return obj;
   },
 
@@ -136,8 +136,8 @@ export const AttributeObj = {
 
   fromPartial(object: DeepPartial<AttributeObj>): AttributeObj {
     const message = createBaseAttributeObj();
-    message.attribute = (object.attribute !== undefined && object.attribute !== null)
-      ? Attribute.fromPartial(object.attribute)
+    message.attributes = (object.attributes !== undefined && object.attributes !== null)
+      ? Attribute.fromPartial(object.attributes)
       : undefined;
     return message;
   },
@@ -198,7 +198,7 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "attribute",
+        "name": "attributes",
         "number": 3,
         "label": 3,
         "type": 11,
@@ -206,7 +206,7 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "attribute",
+        "jsonName": "attributes",
         "options": undefined,
         "proto3Optional": false,
       }],
@@ -221,7 +221,7 @@ export const protoMetadata: ProtoMetadata = {
     }, {
       "name": "AttributeObj",
       "field": [{
-        "name": "attribute",
+        "name": "attributes",
         "number": 1,
         "label": 1,
         "type": 11,
@@ -229,7 +229,7 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "attribute",
+        "jsonName": "attributes",
         "options": undefined,
         "proto3Optional": true,
       }],
@@ -237,7 +237,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [{ "name": "_attribute", "options": undefined }],
+      "oneofDecl": [{ "name": "_attributes", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],

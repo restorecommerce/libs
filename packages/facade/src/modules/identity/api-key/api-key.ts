@@ -5,7 +5,15 @@ import { Events, registerProtoMeta } from '@restorecommerce/kafka-client';
 import { createServiceConfig } from '@restorecommerce/service-config';
 import { protoMetadata as commandInterfaceMeta } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/commandinterface';
 
-const Router = require('koa-router');
+// const Router = require('koa-router');
+
+import Router from 'koa-router';
+// import controller from './controller';
+
+const router = new Router();
+// router.get('/getVisibleZones', controller.getVisibleZones);
+// router.get('/searchZones', controller.searchZones);
+// router.get('/crawler', controller.crawler);
 
 export interface APIParams {
   apiKey?: boolean | string;

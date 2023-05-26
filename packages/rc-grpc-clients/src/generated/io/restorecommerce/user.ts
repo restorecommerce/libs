@@ -411,7 +411,7 @@ export interface UserRole {
   lastAccess: number;
   /** / additional data */
   data?: Any;
-  role: Role[];
+  roles: Role[];
 }
 
 function createBaseLoginRequest(): LoginRequest {
@@ -2783,7 +2783,7 @@ function createBaseUserRole(): UserRole {
     tokens: [],
     lastAccess: 0,
     data: undefined,
-    role: [],
+    roles: [],
   };
 }
 
@@ -2867,7 +2867,7 @@ export const UserRole = {
     if (message.data !== undefined) {
       Any.encode(message.data, writer.uint32(210).fork()).ldelim();
     }
-    for (const v of message.role) {
+    for (const v of message.roles) {
       Role.encode(v!, writer.uint32(218).fork()).ldelim();
     }
     return writer;
@@ -2959,7 +2959,7 @@ export const UserRole = {
           message.data = Any.decode(reader, reader.uint32());
           break;
         case 27:
-          message.role.push(Role.decode(reader, reader.uint32()));
+          message.roles.push(Role.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -2999,7 +2999,7 @@ export const UserRole = {
       tokens: Array.isArray(object?.tokens) ? object.tokens.map((e: any) => Tokens.fromJSON(e)) : [],
       lastAccess: isSet(object.lastAccess) ? Number(object.lastAccess) : 0,
       data: isSet(object.data) ? Any.fromJSON(object.data) : undefined,
-      role: Array.isArray(object?.role) ? object.role.map((e: any) => Role.fromJSON(e)) : [],
+      roles: Array.isArray(object?.roles) ? object.roles.map((e: any) => Role.fromJSON(e)) : [],
     };
   },
 
@@ -3039,10 +3039,10 @@ export const UserRole = {
     }
     message.lastAccess !== undefined && (obj.lastAccess = message.lastAccess);
     message.data !== undefined && (obj.data = message.data ? Any.toJSON(message.data) : undefined);
-    if (message.role) {
-      obj.role = message.role.map((e) => e ? Role.toJSON(e) : undefined);
+    if (message.roles) {
+      obj.roles = message.roles.map((e) => e ? Role.toJSON(e) : undefined);
     } else {
-      obj.role = [];
+      obj.roles = [];
     }
     return obj;
   },
@@ -3079,7 +3079,7 @@ export const UserRole = {
     message.tokens = object.tokens?.map((e) => Tokens.fromPartial(e)) || [];
     message.lastAccess = object.lastAccess ?? 0;
     message.data = (object.data !== undefined && object.data !== null) ? Any.fromPartial(object.data) : undefined;
-    message.role = object.role?.map((e) => Role.fromPartial(e)) || [];
+    message.roles = object.roles?.map((e) => Role.fromPartial(e)) || [];
     return message;
   },
 };
@@ -5398,7 +5398,7 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "role",
+        "name": "roles",
         "number": 27,
         "label": 3,
         "type": 11,
@@ -5406,7 +5406,7 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "role",
+        "jsonName": "roles",
         "options": undefined,
         "proto3Optional": false,
       }],

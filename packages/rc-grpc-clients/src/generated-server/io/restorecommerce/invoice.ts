@@ -64,7 +64,7 @@ export interface Invoice {
 
 /** List of Invoice Positions data */
 export interface InvoicesPositionsData {
-  invoices_positions_data: InvoicePositions[];
+  invoice_positions: InvoicePositions[];
 }
 
 export interface InvoicePositions {
@@ -117,7 +117,7 @@ export interface BillingAddress {
 
 export interface InvoicePosition {
   currency?: string | undefined;
-  tableList: InvoiceRow[];
+  invoiceRows: InvoiceRow[];
   totalPrice?: InvoicePrice | undefined;
 }
 
@@ -688,12 +688,12 @@ export const Invoice = {
 };
 
 function createBaseInvoicesPositionsData(): InvoicesPositionsData {
-  return { invoices_positions_data: [] };
+  return { invoice_positions: [] };
 }
 
 export const InvoicesPositionsData = {
   encode(message: InvoicesPositionsData, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    for (const v of message.invoices_positions_data) {
+    for (const v of message.invoice_positions) {
       InvoicePositions.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     return writer;
@@ -707,7 +707,7 @@ export const InvoicesPositionsData = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.invoices_positions_data.push(InvoicePositions.decode(reader, reader.uint32()));
+          message.invoice_positions.push(InvoicePositions.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -719,20 +719,18 @@ export const InvoicesPositionsData = {
 
   fromJSON(object: any): InvoicesPositionsData {
     return {
-      invoices_positions_data: Array.isArray(object?.invoices_positions_data)
-        ? object.invoices_positions_data.map((e: any) => InvoicePositions.fromJSON(e))
+      invoice_positions: Array.isArray(object?.invoice_positions)
+        ? object.invoice_positions.map((e: any) => InvoicePositions.fromJSON(e))
         : [],
     };
   },
 
   toJSON(message: InvoicesPositionsData): unknown {
     const obj: any = {};
-    if (message.invoices_positions_data) {
-      obj.invoices_positions_data = message.invoices_positions_data.map((e) =>
-        e ? InvoicePositions.toJSON(e) : undefined
-      );
+    if (message.invoice_positions) {
+      obj.invoice_positions = message.invoice_positions.map((e) => e ? InvoicePositions.toJSON(e) : undefined);
     } else {
-      obj.invoices_positions_data = [];
+      obj.invoice_positions = [];
     }
     return obj;
   },
@@ -743,7 +741,7 @@ export const InvoicesPositionsData = {
 
   fromPartial(object: DeepPartial<InvoicesPositionsData>): InvoicesPositionsData {
     const message = createBaseInvoicesPositionsData();
-    message.invoices_positions_data = object.invoices_positions_data?.map((e) => InvoicePositions.fromPartial(e)) || [];
+    message.invoice_positions = object.invoice_positions?.map((e) => InvoicePositions.fromPartial(e)) || [];
     return message;
   },
 };
@@ -1178,7 +1176,7 @@ export const BillingAddress = {
 };
 
 function createBaseInvoicePosition(): InvoicePosition {
-  return { currency: undefined, tableList: [], totalPrice: undefined };
+  return { currency: undefined, invoiceRows: [], totalPrice: undefined };
 }
 
 export const InvoicePosition = {
@@ -1186,7 +1184,7 @@ export const InvoicePosition = {
     if (message.currency !== undefined) {
       writer.uint32(10).string(message.currency);
     }
-    for (const v of message.tableList) {
+    for (const v of message.invoiceRows) {
       InvoiceRow.encode(v!, writer.uint32(18).fork()).ldelim();
     }
     if (message.totalPrice !== undefined) {
@@ -1206,7 +1204,7 @@ export const InvoicePosition = {
           message.currency = reader.string();
           break;
         case 2:
-          message.tableList.push(InvoiceRow.decode(reader, reader.uint32()));
+          message.invoiceRows.push(InvoiceRow.decode(reader, reader.uint32()));
           break;
         case 3:
           message.totalPrice = InvoicePrice.decode(reader, reader.uint32());
@@ -1222,7 +1220,7 @@ export const InvoicePosition = {
   fromJSON(object: any): InvoicePosition {
     return {
       currency: isSet(object.currency) ? String(object.currency) : undefined,
-      tableList: Array.isArray(object?.tableList) ? object.tableList.map((e: any) => InvoiceRow.fromJSON(e)) : [],
+      invoiceRows: Array.isArray(object?.invoiceRows) ? object.invoiceRows.map((e: any) => InvoiceRow.fromJSON(e)) : [],
       totalPrice: isSet(object.totalPrice) ? InvoicePrice.fromJSON(object.totalPrice) : undefined,
     };
   },
@@ -1230,10 +1228,10 @@ export const InvoicePosition = {
   toJSON(message: InvoicePosition): unknown {
     const obj: any = {};
     message.currency !== undefined && (obj.currency = message.currency);
-    if (message.tableList) {
-      obj.tableList = message.tableList.map((e) => e ? InvoiceRow.toJSON(e) : undefined);
+    if (message.invoiceRows) {
+      obj.invoiceRows = message.invoiceRows.map((e) => e ? InvoiceRow.toJSON(e) : undefined);
     } else {
-      obj.tableList = [];
+      obj.invoiceRows = [];
     }
     message.totalPrice !== undefined &&
       (obj.totalPrice = message.totalPrice ? InvoicePrice.toJSON(message.totalPrice) : undefined);
@@ -1247,7 +1245,7 @@ export const InvoicePosition = {
   fromPartial(object: DeepPartial<InvoicePosition>): InvoicePosition {
     const message = createBaseInvoicePosition();
     message.currency = object.currency ?? undefined;
-    message.tableList = object.tableList?.map((e) => InvoiceRow.fromPartial(e)) || [];
+    message.invoiceRows = object.invoiceRows?.map((e) => InvoiceRow.fromPartial(e)) || [];
     message.totalPrice = (object.totalPrice !== undefined && object.totalPrice !== null)
       ? InvoicePrice.fromPartial(object.totalPrice)
       : undefined;
@@ -1971,7 +1969,7 @@ export const protoMetadata: ProtoMetadata = {
     }, {
       "name": "InvoicesPositionsData",
       "field": [{
-        "name": "invoices_positions_data",
+        "name": "invoice_positions",
         "number": 1,
         "label": 3,
         "type": 11,
@@ -1979,7 +1977,7 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "invoicesPositionsData",
+        "jsonName": "invoicePositions",
         "options": undefined,
         "proto3Optional": false,
       }],
@@ -2363,7 +2361,7 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "tableList",
+        "name": "invoiceRows",
         "number": 2,
         "label": 3,
         "type": 11,
@@ -2371,7 +2369,7 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "tableList",
+        "jsonName": "invoiceRows",
         "options": undefined,
         "proto3Optional": false,
       }, {

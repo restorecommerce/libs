@@ -73,7 +73,7 @@ export interface RenderRequest {
   /** identifies the render request payload */
   id: string;
   /** List of templates with associated data and rendering options */
-  payload: Payload[];
+  payloads: Payload[];
 }
 
 export interface RenderResponse {
@@ -192,7 +192,7 @@ export const Payload = {
 };
 
 function createBaseRenderRequest(): RenderRequest {
-  return { id: "", payload: [] };
+  return { id: "", payloads: [] };
 }
 
 export const RenderRequest = {
@@ -200,7 +200,7 @@ export const RenderRequest = {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
-    for (const v of message.payload) {
+    for (const v of message.payloads) {
       Payload.encode(v!, writer.uint32(18).fork()).ldelim();
     }
     return writer;
@@ -217,7 +217,7 @@ export const RenderRequest = {
           message.id = reader.string();
           break;
         case 2:
-          message.payload.push(Payload.decode(reader, reader.uint32()));
+          message.payloads.push(Payload.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -230,17 +230,17 @@ export const RenderRequest = {
   fromJSON(object: any): RenderRequest {
     return {
       id: isSet(object.id) ? String(object.id) : "",
-      payload: Array.isArray(object?.payload) ? object.payload.map((e: any) => Payload.fromJSON(e)) : [],
+      payloads: Array.isArray(object?.payloads) ? object.payloads.map((e: any) => Payload.fromJSON(e)) : [],
     };
   },
 
   toJSON(message: RenderRequest): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    if (message.payload) {
-      obj.payload = message.payload.map((e) => e ? Payload.toJSON(e) : undefined);
+    if (message.payloads) {
+      obj.payloads = message.payloads.map((e) => e ? Payload.toJSON(e) : undefined);
     } else {
-      obj.payload = [];
+      obj.payloads = [];
     }
     return obj;
   },
@@ -252,7 +252,7 @@ export const RenderRequest = {
   fromPartial(object: DeepPartial<RenderRequest>): RenderRequest {
     const message = createBaseRenderRequest();
     message.id = object.id ?? "";
-    message.payload = object.payload?.map((e) => Payload.fromPartial(e)) || [];
+    message.payloads = object.payloads?.map((e) => Payload.fromPartial(e)) || [];
     return message;
   },
 };
@@ -459,7 +459,7 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "payload",
+        "name": "payloads",
         "number": 2,
         "label": 3,
         "type": 11,
@@ -467,7 +467,7 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "payload",
+        "jsonName": "payloads",
         "options": undefined,
         "proto3Optional": false,
       }],
@@ -570,7 +570,7 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 1],
-        "span": [27, 2, 31],
+        "span": [27, 2, 32],
         "leadingComments": " List of templates with associated data and rendering options\n",
         "trailingComments": "",
         "leadingDetachedComments": [],

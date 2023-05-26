@@ -314,7 +314,7 @@ export interface JobReadRequest {
     | JobFilter
     | undefined;
   /** Fields selector */
-  field: FieldFilter[];
+  fields: FieldFilter[];
   subject?: Subject;
 }
 
@@ -1364,7 +1364,7 @@ export const Backoff = {
 };
 
 function createBaseJobReadRequest(): JobReadRequest {
-  return { limit: undefined, sort: undefined, filter: undefined, field: [], subject: undefined };
+  return { limit: undefined, sort: undefined, filter: undefined, fields: [], subject: undefined };
 }
 
 export const JobReadRequest = {
@@ -1378,7 +1378,7 @@ export const JobReadRequest = {
     if (message.filter !== undefined) {
       JobFilter.encode(message.filter, writer.uint32(34).fork()).ldelim();
     }
-    for (const v of message.field) {
+    for (const v of message.fields) {
       FieldFilter.encode(v!, writer.uint32(26).fork()).ldelim();
     }
     if (message.subject !== undefined) {
@@ -1404,7 +1404,7 @@ export const JobReadRequest = {
           message.filter = JobFilter.decode(reader, reader.uint32());
           break;
         case 3:
-          message.field.push(FieldFilter.decode(reader, reader.uint32()));
+          message.fields.push(FieldFilter.decode(reader, reader.uint32()));
           break;
         case 5:
           message.subject = Subject.decode(reader, reader.uint32());
@@ -1422,7 +1422,7 @@ export const JobReadRequest = {
       limit: isSet(object.limit) ? Number(object.limit) : undefined,
       sort: isSet(object.sort) ? jobReadRequest_SortOrderFromJSON(object.sort) : undefined,
       filter: isSet(object.filter) ? JobFilter.fromJSON(object.filter) : undefined,
-      field: Array.isArray(object?.field) ? object.field.map((e: any) => FieldFilter.fromJSON(e)) : [],
+      fields: Array.isArray(object?.fields) ? object.fields.map((e: any) => FieldFilter.fromJSON(e)) : [],
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
@@ -1433,10 +1433,10 @@ export const JobReadRequest = {
     message.sort !== undefined &&
       (obj.sort = message.sort !== undefined ? jobReadRequest_SortOrderToJSON(message.sort) : undefined);
     message.filter !== undefined && (obj.filter = message.filter ? JobFilter.toJSON(message.filter) : undefined);
-    if (message.field) {
-      obj.field = message.field.map((e) => e ? FieldFilter.toJSON(e) : undefined);
+    if (message.fields) {
+      obj.fields = message.fields.map((e) => e ? FieldFilter.toJSON(e) : undefined);
     } else {
-      obj.field = [];
+      obj.fields = [];
     }
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
     return obj;
@@ -1453,7 +1453,7 @@ export const JobReadRequest = {
     message.filter = (object.filter !== undefined && object.filter !== null)
       ? JobFilter.fromPartial(object.filter)
       : undefined;
-    message.field = object.field?.map((e) => FieldFilter.fromPartial(e)) || [];
+    message.fields = object.fields?.map((e) => FieldFilter.fromPartial(e)) || [];
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
@@ -2412,7 +2412,7 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "field",
+        "name": "fields",
         "number": 3,
         "label": 3,
         "type": 11,
@@ -2420,7 +2420,7 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "field",
+        "jsonName": "fields",
         "options": undefined,
         "proto3Optional": false,
       }, {
@@ -2806,7 +2806,7 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 12, 2, 3],
-        "span": [167, 2, 65],
+        "span": [167, 2, 66],
         "leadingComments": " Fields selector\n",
         "trailingComments": "",
         "leadingDetachedComments": [],

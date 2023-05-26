@@ -11,7 +11,7 @@ export const protobufPackage = "io.restorecommerce.search";
 export interface SearchRequest {
   collection?: string | undefined;
   text?: string | undefined;
-  acl: string[];
+  acls: string[];
   subject?: Subject;
 }
 
@@ -20,7 +20,7 @@ export interface SearchResponse {
 }
 
 function createBaseSearchRequest(): SearchRequest {
-  return { collection: undefined, text: undefined, acl: [], subject: undefined };
+  return { collection: undefined, text: undefined, acls: [], subject: undefined };
 }
 
 export const SearchRequest = {
@@ -31,7 +31,7 @@ export const SearchRequest = {
     if (message.text !== undefined) {
       writer.uint32(18).string(message.text);
     }
-    for (const v of message.acl) {
+    for (const v of message.acls) {
       writer.uint32(26).string(v!);
     }
     if (message.subject !== undefined) {
@@ -54,7 +54,7 @@ export const SearchRequest = {
           message.text = reader.string();
           break;
         case 3:
-          message.acl.push(reader.string());
+          message.acls.push(reader.string());
           break;
         case 4:
           message.subject = Subject.decode(reader, reader.uint32());
@@ -71,7 +71,7 @@ export const SearchRequest = {
     return {
       collection: isSet(object.collection) ? String(object.collection) : undefined,
       text: isSet(object.text) ? String(object.text) : undefined,
-      acl: Array.isArray(object?.acl) ? object.acl.map((e: any) => String(e)) : [],
+      acls: Array.isArray(object?.acls) ? object.acls.map((e: any) => String(e)) : [],
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
@@ -80,10 +80,10 @@ export const SearchRequest = {
     const obj: any = {};
     message.collection !== undefined && (obj.collection = message.collection);
     message.text !== undefined && (obj.text = message.text);
-    if (message.acl) {
-      obj.acl = message.acl.map((e) => e);
+    if (message.acls) {
+      obj.acls = message.acls.map((e) => e);
     } else {
-      obj.acl = [];
+      obj.acls = [];
     }
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
     return obj;
@@ -97,7 +97,7 @@ export const SearchRequest = {
     const message = createBaseSearchRequest();
     message.collection = object.collection ?? undefined;
     message.text = object.text ?? undefined;
-    message.acl = object.acl?.map((e) => e) || [];
+    message.acls = object.acls?.map((e) => e) || [];
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
       : undefined;
@@ -240,7 +240,7 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "acl",
+        "name": "acls",
         "number": 3,
         "label": 3,
         "type": 9,
@@ -248,7 +248,7 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "acl",
+        "jsonName": "acls",
         "options": undefined,
         "proto3Optional": false,
       }, {

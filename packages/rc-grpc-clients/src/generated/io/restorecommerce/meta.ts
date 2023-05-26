@@ -16,12 +16,12 @@ export interface Meta {
     | undefined;
   /** ID from last User who modified it */
   modifiedBy?: string | undefined;
-  owner: Attribute[];
-  acl: AttributeObj[];
+  owners: Attribute[];
+  acls: AttributeObj[];
 }
 
 function createBaseMeta(): Meta {
-  return { created: undefined, modified: undefined, modifiedBy: undefined, owner: [], acl: [] };
+  return { created: undefined, modified: undefined, modifiedBy: undefined, owners: [], acls: [] };
 }
 
 export const Meta = {
@@ -35,10 +35,10 @@ export const Meta = {
     if (message.modifiedBy !== undefined) {
       writer.uint32(26).string(message.modifiedBy);
     }
-    for (const v of message.owner) {
+    for (const v of message.owners) {
       Attribute.encode(v!, writer.uint32(34).fork()).ldelim();
     }
-    for (const v of message.acl) {
+    for (const v of message.acls) {
       AttributeObj.encode(v!, writer.uint32(42).fork()).ldelim();
     }
     return writer;
@@ -61,10 +61,10 @@ export const Meta = {
           message.modifiedBy = reader.string();
           break;
         case 4:
-          message.owner.push(Attribute.decode(reader, reader.uint32()));
+          message.owners.push(Attribute.decode(reader, reader.uint32()));
           break;
         case 5:
-          message.acl.push(AttributeObj.decode(reader, reader.uint32()));
+          message.acls.push(AttributeObj.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -79,8 +79,8 @@ export const Meta = {
       created: isSet(object.created) ? Number(object.created) : undefined,
       modified: isSet(object.modified) ? Number(object.modified) : undefined,
       modifiedBy: isSet(object.modifiedBy) ? String(object.modifiedBy) : undefined,
-      owner: Array.isArray(object?.owner) ? object.owner.map((e: any) => Attribute.fromJSON(e)) : [],
-      acl: Array.isArray(object?.acl) ? object.acl.map((e: any) => AttributeObj.fromJSON(e)) : [],
+      owners: Array.isArray(object?.owners) ? object.owners.map((e: any) => Attribute.fromJSON(e)) : [],
+      acls: Array.isArray(object?.acls) ? object.acls.map((e: any) => AttributeObj.fromJSON(e)) : [],
     };
   },
 
@@ -89,15 +89,15 @@ export const Meta = {
     message.created !== undefined && (obj.created = message.created);
     message.modified !== undefined && (obj.modified = message.modified);
     message.modifiedBy !== undefined && (obj.modifiedBy = message.modifiedBy);
-    if (message.owner) {
-      obj.owner = message.owner.map((e) => e ? Attribute.toJSON(e) : undefined);
+    if (message.owners) {
+      obj.owners = message.owners.map((e) => e ? Attribute.toJSON(e) : undefined);
     } else {
-      obj.owner = [];
+      obj.owners = [];
     }
-    if (message.acl) {
-      obj.acl = message.acl.map((e) => e ? AttributeObj.toJSON(e) : undefined);
+    if (message.acls) {
+      obj.acls = message.acls.map((e) => e ? AttributeObj.toJSON(e) : undefined);
     } else {
-      obj.acl = [];
+      obj.acls = [];
     }
     return obj;
   },
@@ -111,8 +111,8 @@ export const Meta = {
     message.created = object.created ?? undefined;
     message.modified = object.modified ?? undefined;
     message.modifiedBy = object.modifiedBy ?? undefined;
-    message.owner = object.owner?.map((e) => Attribute.fromPartial(e)) || [];
-    message.acl = object.acl?.map((e) => AttributeObj.fromPartial(e)) || [];
+    message.owners = object.owners?.map((e) => Attribute.fromPartial(e)) || [];
+    message.acls = object.acls?.map((e) => AttributeObj.fromPartial(e)) || [];
     return message;
   },
 };
@@ -184,7 +184,7 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "owner",
+        "name": "owners",
         "number": 4,
         "label": 3,
         "type": 11,
@@ -192,11 +192,11 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "owner",
+        "jsonName": "owners",
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "acl",
+        "name": "acls",
         "number": 5,
         "label": 3,
         "type": 11,
@@ -204,7 +204,7 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "acl",
+        "jsonName": "acls",
         "options": undefined,
         "proto3Optional": false,
       }],

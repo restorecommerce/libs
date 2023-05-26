@@ -177,7 +177,7 @@ export interface VirtualVariant {
 export interface Bundle {
   name?: string | undefined;
   description?: string | undefined;
-  image: Image[];
+  images: Image[];
   products: BundleProduct[];
   price?: number | undefined;
   prePackaged?: Package | undefined;
@@ -1474,7 +1474,14 @@ export const VirtualVariant = {
 };
 
 function createBaseBundle(): Bundle {
-  return { name: undefined, description: undefined, image: [], products: [], price: undefined, prePackaged: undefined };
+  return {
+    name: undefined,
+    description: undefined,
+    images: [],
+    products: [],
+    price: undefined,
+    prePackaged: undefined,
+  };
 }
 
 export const Bundle = {
@@ -1485,7 +1492,7 @@ export const Bundle = {
     if (message.description !== undefined) {
       writer.uint32(18).string(message.description);
     }
-    for (const v of message.image) {
+    for (const v of message.images) {
       Image.encode(v!, writer.uint32(26).fork()).ldelim();
     }
     for (const v of message.products) {
@@ -1514,7 +1521,7 @@ export const Bundle = {
           message.description = reader.string();
           break;
         case 3:
-          message.image.push(Image.decode(reader, reader.uint32()));
+          message.images.push(Image.decode(reader, reader.uint32()));
           break;
         case 4:
           message.products.push(BundleProduct.decode(reader, reader.uint32()));
@@ -1537,7 +1544,7 @@ export const Bundle = {
     return {
       name: isSet(object.name) ? String(object.name) : undefined,
       description: isSet(object.description) ? String(object.description) : undefined,
-      image: Array.isArray(object?.image) ? object.image.map((e: any) => Image.fromJSON(e)) : [],
+      images: Array.isArray(object?.images) ? object.images.map((e: any) => Image.fromJSON(e)) : [],
       products: Array.isArray(object?.products) ? object.products.map((e: any) => BundleProduct.fromJSON(e)) : [],
       price: isSet(object.price) ? Number(object.price) : undefined,
       prePackaged: isSet(object.prePackaged) ? Package.fromJSON(object.prePackaged) : undefined,
@@ -1548,10 +1555,10 @@ export const Bundle = {
     const obj: any = {};
     message.name !== undefined && (obj.name = message.name);
     message.description !== undefined && (obj.description = message.description);
-    if (message.image) {
-      obj.image = message.image.map((e) => e ? Image.toJSON(e) : undefined);
+    if (message.images) {
+      obj.images = message.images.map((e) => e ? Image.toJSON(e) : undefined);
     } else {
-      obj.image = [];
+      obj.images = [];
     }
     if (message.products) {
       obj.products = message.products.map((e) => e ? BundleProduct.toJSON(e) : undefined);
@@ -1572,7 +1579,7 @@ export const Bundle = {
     const message = createBaseBundle();
     message.name = object.name ?? undefined;
     message.description = object.description ?? undefined;
-    message.image = object.image?.map((e) => Image.fromPartial(e)) || [];
+    message.images = object.images?.map((e) => Image.fromPartial(e)) || [];
     message.products = object.products?.map((e) => BundleProduct.fromPartial(e)) || [];
     message.price = object.price ?? undefined;
     message.prePackaged = (object.prePackaged !== undefined && object.prePackaged !== null)
@@ -2861,7 +2868,7 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "image",
+        "name": "images",
         "number": 3,
         "label": 3,
         "type": 11,
@@ -2869,7 +2876,7 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "image",
+        "jsonName": "images",
         "options": undefined,
         "proto3Optional": false,
       }, {

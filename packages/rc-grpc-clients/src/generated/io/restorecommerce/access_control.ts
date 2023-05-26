@@ -28,7 +28,7 @@ export interface Context {
 
 export interface Response {
   decision: Response_Decision;
-  obligation: Attribute[];
+  obligations: Attribute[];
   evaluationCacheable: boolean;
   operationStatus?: OperationStatus;
 }
@@ -96,7 +96,7 @@ export function response_DecisionToNumber(object: Response_Decision): number {
 
 export interface ReverseQuery {
   policySets: PolicySetRQ[];
-  obligation: Attribute[];
+  obligations: Attribute[];
   operationStatus?: OperationStatus;
 }
 
@@ -246,7 +246,12 @@ export const Context = {
 };
 
 function createBaseResponse(): Response {
-  return { decision: Response_Decision.PERMIT, obligation: [], evaluationCacheable: false, operationStatus: undefined };
+  return {
+    decision: Response_Decision.PERMIT,
+    obligations: [],
+    evaluationCacheable: false,
+    operationStatus: undefined,
+  };
 }
 
 export const Response = {
@@ -254,7 +259,7 @@ export const Response = {
     if (message.decision !== Response_Decision.PERMIT) {
       writer.uint32(8).int32(response_DecisionToNumber(message.decision));
     }
-    for (const v of message.obligation) {
+    for (const v of message.obligations) {
       Attribute.encode(v!, writer.uint32(18).fork()).ldelim();
     }
     if (message.evaluationCacheable === true) {
@@ -277,7 +282,7 @@ export const Response = {
           message.decision = response_DecisionFromJSON(reader.int32());
           break;
         case 2:
-          message.obligation.push(Attribute.decode(reader, reader.uint32()));
+          message.obligations.push(Attribute.decode(reader, reader.uint32()));
           break;
         case 3:
           message.evaluationCacheable = reader.bool();
@@ -296,7 +301,7 @@ export const Response = {
   fromJSON(object: any): Response {
     return {
       decision: isSet(object.decision) ? response_DecisionFromJSON(object.decision) : Response_Decision.PERMIT,
-      obligation: Array.isArray(object?.obligation) ? object.obligation.map((e: any) => Attribute.fromJSON(e)) : [],
+      obligations: Array.isArray(object?.obligations) ? object.obligations.map((e: any) => Attribute.fromJSON(e)) : [],
       evaluationCacheable: isSet(object.evaluationCacheable) ? Boolean(object.evaluationCacheable) : false,
       operationStatus: isSet(object.operationStatus) ? OperationStatus.fromJSON(object.operationStatus) : undefined,
     };
@@ -305,10 +310,10 @@ export const Response = {
   toJSON(message: Response): unknown {
     const obj: any = {};
     message.decision !== undefined && (obj.decision = response_DecisionToJSON(message.decision));
-    if (message.obligation) {
-      obj.obligation = message.obligation.map((e) => e ? Attribute.toJSON(e) : undefined);
+    if (message.obligations) {
+      obj.obligations = message.obligations.map((e) => e ? Attribute.toJSON(e) : undefined);
     } else {
-      obj.obligation = [];
+      obj.obligations = [];
     }
     message.evaluationCacheable !== undefined && (obj.evaluationCacheable = message.evaluationCacheable);
     message.operationStatus !== undefined &&
@@ -323,7 +328,7 @@ export const Response = {
   fromPartial(object: DeepPartial<Response>): Response {
     const message = createBaseResponse();
     message.decision = object.decision ?? Response_Decision.PERMIT;
-    message.obligation = object.obligation?.map((e) => Attribute.fromPartial(e)) || [];
+    message.obligations = object.obligations?.map((e) => Attribute.fromPartial(e)) || [];
     message.evaluationCacheable = object.evaluationCacheable ?? false;
     message.operationStatus = (object.operationStatus !== undefined && object.operationStatus !== null)
       ? OperationStatus.fromPartial(object.operationStatus)
@@ -333,7 +338,7 @@ export const Response = {
 };
 
 function createBaseReverseQuery(): ReverseQuery {
-  return { policySets: [], obligation: [], operationStatus: undefined };
+  return { policySets: [], obligations: [], operationStatus: undefined };
 }
 
 export const ReverseQuery = {
@@ -341,7 +346,7 @@ export const ReverseQuery = {
     for (const v of message.policySets) {
       PolicySetRQ.encode(v!, writer.uint32(10).fork()).ldelim();
     }
-    for (const v of message.obligation) {
+    for (const v of message.obligations) {
       Attribute.encode(v!, writer.uint32(18).fork()).ldelim();
     }
     if (message.operationStatus !== undefined) {
@@ -361,7 +366,7 @@ export const ReverseQuery = {
           message.policySets.push(PolicySetRQ.decode(reader, reader.uint32()));
           break;
         case 2:
-          message.obligation.push(Attribute.decode(reader, reader.uint32()));
+          message.obligations.push(Attribute.decode(reader, reader.uint32()));
           break;
         case 3:
           message.operationStatus = OperationStatus.decode(reader, reader.uint32());
@@ -377,7 +382,7 @@ export const ReverseQuery = {
   fromJSON(object: any): ReverseQuery {
     return {
       policySets: Array.isArray(object?.policySets) ? object.policySets.map((e: any) => PolicySetRQ.fromJSON(e)) : [],
-      obligation: Array.isArray(object?.obligation) ? object.obligation.map((e: any) => Attribute.fromJSON(e)) : [],
+      obligations: Array.isArray(object?.obligations) ? object.obligations.map((e: any) => Attribute.fromJSON(e)) : [],
       operationStatus: isSet(object.operationStatus) ? OperationStatus.fromJSON(object.operationStatus) : undefined,
     };
   },
@@ -389,10 +394,10 @@ export const ReverseQuery = {
     } else {
       obj.policySets = [];
     }
-    if (message.obligation) {
-      obj.obligation = message.obligation.map((e) => e ? Attribute.toJSON(e) : undefined);
+    if (message.obligations) {
+      obj.obligations = message.obligations.map((e) => e ? Attribute.toJSON(e) : undefined);
     } else {
-      obj.obligation = [];
+      obj.obligations = [];
     }
     message.operationStatus !== undefined &&
       (obj.operationStatus = message.operationStatus ? OperationStatus.toJSON(message.operationStatus) : undefined);
@@ -406,7 +411,7 @@ export const ReverseQuery = {
   fromPartial(object: DeepPartial<ReverseQuery>): ReverseQuery {
     const message = createBaseReverseQuery();
     message.policySets = object.policySets?.map((e) => PolicySetRQ.fromPartial(e)) || [];
-    message.obligation = object.obligation?.map((e) => Attribute.fromPartial(e)) || [];
+    message.obligations = object.obligations?.map((e) => Attribute.fromPartial(e)) || [];
     message.operationStatus = (object.operationStatus !== undefined && object.operationStatus !== null)
       ? OperationStatus.fromPartial(object.operationStatus)
       : undefined;
@@ -580,7 +585,7 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "obligation",
+        "name": "obligations",
         "number": 2,
         "label": 3,
         "type": 11,
@@ -588,7 +593,7 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "obligation",
+        "jsonName": "obligations",
         "options": undefined,
         "proto3Optional": false,
       }, {
@@ -650,7 +655,7 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "obligation",
+        "name": "obligations",
         "number": 2,
         "label": 3,
         "type": 11,
@@ -658,7 +663,7 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "obligation",
+        "jsonName": "obligations",
         "options": undefined,
         "proto3Optional": false,
       }, {

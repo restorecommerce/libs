@@ -184,7 +184,7 @@ export function filter_ValueTypeToNumber(object: Filter_ValueType): number {
 }
 
 export interface FilterOp {
-  filter: Filter[];
+  filters: Filter[];
   operator: FilterOp_Operator;
 }
 
@@ -327,12 +327,12 @@ export const Filter = {
 };
 
 function createBaseFilterOp(): FilterOp {
-  return { filter: [], operator: FilterOp_Operator.and };
+  return { filters: [], operator: FilterOp_Operator.and };
 }
 
 export const FilterOp = {
   encode(message: FilterOp, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    for (const v of message.filter) {
+    for (const v of message.filters) {
       Filter.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.operator !== FilterOp_Operator.and) {
@@ -349,7 +349,7 @@ export const FilterOp = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.filter.push(Filter.decode(reader, reader.uint32()));
+          message.filters.push(Filter.decode(reader, reader.uint32()));
           break;
         case 2:
           message.operator = filterOp_OperatorFromJSON(reader.int32());
@@ -364,17 +364,17 @@ export const FilterOp = {
 
   fromJSON(object: any): FilterOp {
     return {
-      filter: Array.isArray(object?.filter) ? object.filter.map((e: any) => Filter.fromJSON(e)) : [],
+      filters: Array.isArray(object?.filters) ? object.filters.map((e: any) => Filter.fromJSON(e)) : [],
       operator: isSet(object.operator) ? filterOp_OperatorFromJSON(object.operator) : FilterOp_Operator.and,
     };
   },
 
   toJSON(message: FilterOp): unknown {
     const obj: any = {};
-    if (message.filter) {
-      obj.filter = message.filter.map((e) => e ? Filter.toJSON(e) : undefined);
+    if (message.filters) {
+      obj.filters = message.filters.map((e) => e ? Filter.toJSON(e) : undefined);
     } else {
-      obj.filter = [];
+      obj.filters = [];
     }
     message.operator !== undefined && (obj.operator = filterOp_OperatorToJSON(message.operator));
     return obj;
@@ -386,7 +386,7 @@ export const FilterOp = {
 
   fromPartial(object: DeepPartial<FilterOp>): FilterOp {
     const message = createBaseFilterOp();
-    message.filter = object.filter?.map((e) => Filter.fromPartial(e)) || [];
+    message.filters = object.filters?.map((e) => Filter.fromPartial(e)) || [];
     message.operator = object.operator ?? FilterOp_Operator.and;
     return message;
   },
@@ -522,7 +522,7 @@ export const protoMetadata: ProtoMetadata = {
     }, {
       "name": "FilterOp",
       "field": [{
-        "name": "filter",
+        "name": "filters",
         "number": 1,
         "label": 3,
         "type": 11,
@@ -530,7 +530,7 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "filter",
+        "jsonName": "filters",
         "options": undefined,
         "proto3Optional": false,
       }, {

@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.6](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.1.5...@restorecommerce/facade@1.1.6) (2023-05-29)
+
+
+### Bug Fixes
+
+* **acs-client:** fixed acs-client typings for pluralized proto changes ([d20f14a](https://github.com/restorecommerce/libs/commit/d20f14af72e5f9ea7b3fce9b2b619b2c13fa2744))
+* **facade:** up facade module for regenerated typings (Pluralized proto fields) ([3866585](https://github.com/restorecommerce/libs/commit/38665855742e7aea6baf574d12f723c99ec16cff))
+* **rc-grpc-client:** updated typings for pluralized proto changes ([2929b11](https://github.com/restorecommerce/libs/commit/2929b11034fc18f247a3267108a28fb6e4500cfe))
+
+
+
+
+
 ## [1.1.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.1.4...@restorecommerce/facade@1.1.5) (2023-05-22)
 
 

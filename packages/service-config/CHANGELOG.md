@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/service-config@1.0.4...@restorecommerce/service-config@1.0.5) (2023-05-29)
+
+
+### Bug Fixes
+
+* fix package lock and unit tests for acs-client ([754b3e3](https://github.com/restorecommerce/libs/commit/754b3e39d321fe860358427ad6fdd12b75863142))
+
+
+
+
+
 ## [1.0.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/service-config@1.0.3...@restorecommerce/service-config@1.0.4) (2023-05-22)
 
 **Note:** Version bump only for package @restorecommerce/service-config

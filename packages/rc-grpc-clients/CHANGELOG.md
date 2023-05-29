@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/rc-grpc-clients@3.0.0...@restorecommerce/rc-grpc-clients@3.0.1) (2023-05-29)
+
+
+### Bug Fixes
+
+* fix package lock and unit tests for acs-client ([754b3e3](https://github.com/restorecommerce/libs/commit/754b3e39d321fe860358427ad6fdd12b75863142))
+* **protos:** pluralize rendering proto ([f1f2afa](https://github.com/restorecommerce/libs/commit/f1f2afaa47755be6ba34fafda157ee797d2cb9fb))
+* **rc-grpc-clients:** removed unit.ts as no proto referenced ([6cdb58a](https://github.com/restorecommerce/libs/commit/6cdb58a7b64df600d4dd57bf2201e90df2aa88f1))
+* **rc-grpc-client:** updated typings for pluralized proto changes ([2929b11](https://github.com/restorecommerce/libs/commit/2929b11034fc18f247a3267108a28fb6e4500cfe))
+
+
+
+
+
 # [3.0.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/rc-grpc-clients@2.0.2...@restorecommerce/rc-grpc-clients@3.0.0) (2023-05-22)
 
 

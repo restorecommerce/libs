@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/cart@1.0.0...@restorecommerce/cart@1.0.1) (2023-05-29)
+
+**Note:** Version bump only for package @restorecommerce/cart
+
+
+
+
+
 # [1.0.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/cart@0.3.5...@restorecommerce/cart@1.0.0) (2022-08-25)
 
 

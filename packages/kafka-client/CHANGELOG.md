@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.7](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.0.6...@restorecommerce/kafka-client@1.0.7) (2023-05-29)
+
+
+### Bug Fixes
+
+* **facade:** up facade module for regenerated typings (Pluralized proto fields) ([3866585](https://github.com/restorecommerce/kafka-client/commit/38665855742e7aea6baf574d12f723c99ec16cff))
+* fix package lock and unit tests for acs-client ([754b3e3](https://github.com/restorecommerce/kafka-client/commit/754b3e39d321fe860358427ad6fdd12b75863142))
+
+
+
+
+
 ## [1.0.6](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.0.5...@restorecommerce/kafka-client@1.0.6) (2023-05-22)
 
 **Note:** Version bump only for package @restorecommerce/kafka-client

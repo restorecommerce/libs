@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@1.1.1...@restorecommerce/acs-client@1.1.2) (2023-05-29)
+
+
+### Bug Fixes
+
+* **acs-client:** fix unit tests for proto file changes ([1b9e3cf](https://github.com/restorecommerce/libs/commit/1b9e3cf7793292910f76056bf61cc87a302b564a))
+* **acs-client:** fixed acs-client typings for pluralized proto changes ([d20f14a](https://github.com/restorecommerce/libs/commit/d20f14af72e5f9ea7b3fce9b2b619b2c13fa2744))
+* fix package lock and unit tests for acs-client ([754b3e3](https://github.com/restorecommerce/libs/commit/754b3e39d321fe860358427ad6fdd12b75863142))
+
+
+
+
+
 ## [1.1.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@1.1.0...@restorecommerce/acs-client@1.1.1) (2023-05-22)
 
 

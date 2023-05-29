@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@3.0.0...@restorecommerce/protos@3.0.1) (2023-05-29)
+
+
+### Bug Fixes
+
+* **protos:** pluralize rendering proto ([f1f2afa](https://github.com/restorecommerce/libs/commit/f1f2afaa47755be6ba34fafda157ee797d2cb9fb))
+
+
+
+
+
 # [3.0.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@2.0.2...@restorecommerce/protos@3.0.0) (2023-05-22)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/grpc-client@2.0.0...@restorecommerce/grpc-client@2.0.1) (2023-05-29)
+
+
+### Bug Fixes
+
+* fix package lock and unit tests for acs-client ([754b3e3](https://github.com/restorecommerce/libs/commit/754b3e39d321fe860358427ad6fdd12b75863142))
+
+
+
+
+
 # [2.0.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/grpc-client@1.0.3...@restorecommerce/grpc-client@2.0.0) (2023-05-22)
 
 

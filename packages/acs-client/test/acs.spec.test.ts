@@ -161,7 +161,7 @@ const updateMetaData = (resourceList: Array<any>): Array<CtxResource> => {
 
 const startGrpcMockServer = async (implementation: AccessControlServiceImplementation) => {
   mockServer = createServer();
-  mockServer.add(AccessControlServiceDefinition, implementation);
+  mockServer.add(AccessControlServiceDefinition as any, implementation as any);
   await mockServer.listen('0.0.0.0:50061');
   logger.info('ACS Server started on port 50061');
 };

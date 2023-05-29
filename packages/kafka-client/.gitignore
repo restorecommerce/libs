@@ -17,4 +17,3 @@ lib/
 coverage/
 
 !.eslintrc.js
-!setupTopics.js

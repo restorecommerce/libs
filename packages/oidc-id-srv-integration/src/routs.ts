@@ -1,7 +1,7 @@
 import * as assert from 'assert';
 import bodyParser from 'koa-bodyparser';
 import * as Router from 'koa-router';
-import Provider from 'oidc-provider';
+import Provider, { InteractionResults, AccountClaims } from 'oidc-provider';
 import { Config } from './interfaces';
 
 const debug = (obj: any) => JSON.stringify(obj);
@@ -12,7 +12,7 @@ export const setupRouts = (provider: Provider, router: Router, config: Config) =
 
   router.get(`${pathPrefix}/interaction/:uid`, async (ctx: any, next: any) => {
     const { uid, prompt, params, session } = await provider.interactionDetails(ctx.req, ctx.res);
-    const client = await provider.Client.find(params.client_id);
+    const client = await provider.Client.find(params.client_id as string);
 
     switch (prompt.name) {
       case 'select_account' as string: {
@@ -23,7 +23,7 @@ export const setupRouts = (provider: Provider, router: Router, config: Config) =
         }
 
         const account = await provider.Account.findAccount(ctx, session.accountId);
-        const { email } = await account.claims('prompt', 'email', { email: null }, []);
+        const { email } = await account?.claims('prompt', 'email', { email: null }, []) as AccountClaims;
 
         return ctx.render('select_account', {
           client,
@@ -76,7 +76,7 @@ export const setupRouts = (provider: Provider, router: Router, config: Config) =
   router.post(`${pathPrefix}/interaction/:uid/login`, body, async (ctx: any, next: any) => {
     try {
       const { uid, prompt, params, session } = await provider.interactionDetails(ctx.req, ctx.res);
-      const client = await provider.Client.find(params.client_id);
+      const client = await provider.Client.find(params.client_id as string);
 
       assert.equal(prompt.name, 'login');
 
@@ -101,9 +101,9 @@ export const setupRouts = (provider: Provider, router: Router, config: Config) =
         });
       }
 
-      const result = {
+      const result: InteractionResults = {
         login: {
-          account: account.accountId,
+          accountId: account.accountId,
         },
         consent: { // skipping confirm step, Scopes and Claims need to be implemented manually
           rejectedScopes: [], // < uncomment and add rejections here

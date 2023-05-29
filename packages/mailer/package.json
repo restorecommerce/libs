@@ -15,33 +15,33 @@
     "commerce"
   ],
   "dependencies": {
-    "nodemailer": "^6.9.1",
+    "nodemailer": "^6.9.3",
     "nodemailer-html-to-text": "^3.2.0",
     "nodemailer-mandrill-transport": "^1.2.0",
     "nodemailer-stub-transport": "^1.1.0",
     "nodemailer-wellknown": "^0.2.3",
-    "winston": "^3.8.2"
+    "winston": "^3.9.0"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.1",
-    "@types/node": "^18.13.0",
-    "@types/nodemailer": "^6.4.7",
+    "@types/node": "^20.2.5",
+    "@types/nodemailer": "^6.4.8",
     "@types/nodemailer-html-to-text": "^3.1.0",
-    "@types/nodemailer-stub-transport": "^1.1.5",
-    "@typescript-eslint/eslint-plugin": "^5.52.0",
-    "@typescript-eslint/eslint-plugin-tslint": "^5.52.0",
-    "@typescript-eslint/parser": "^5.52.0",
+    "@types/nodemailer-stub-transport": "^1.1.6",
+    "@typescript-eslint/eslint-plugin": "^5.59.7",
+    "@typescript-eslint/eslint-plugin-tslint": "^5.59.7",
+    "@typescript-eslint/parser": "^5.59.7",
     "assert": "^2.0.0",
     "co-mocha": "^1.2.2",
     "coveralls": "^3.1.1",
-    "eslint": "^8.34.0",
+    "eslint": "^8.41.0",
     "eslint-plugin-prefer-arrow-functions": "^3.1.4",
     "is-generator": "^1.0.3",
     "mocha": "^10.2.0",
     "npm-run-all": "^4.1.5",
     "nyc": "^15.1.0",
     "should": "^13.2.3",
-    "typescript": "^4.9.5"
+    "typescript": "^5.0.4"
   },
   "scripts": {
     "lint": "eslint src --ext .ts ",

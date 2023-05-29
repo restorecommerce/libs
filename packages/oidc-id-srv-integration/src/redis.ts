@@ -10,5 +10,5 @@ export const getRedisInstance = (dbIndex?: number): RedisClientType<any, any> =>
   const clientInstance = createClient(redisCfg);
   clientInstance.on('error', (err) => console.log('Redis Client Error in oidc store', err));
   clientInstance.connect().then((val) => console.log('Redis client connection successful for oidc'));
-  return clientInstance;
+  return clientInstance as RedisClientType;
 };

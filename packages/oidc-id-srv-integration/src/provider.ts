@@ -254,7 +254,7 @@ class OIDCProvider {
       throw new errors.InvalidClient('client not set');
     }
 
-    ctx.body = await this.performPasswordGrant(ctx, client.clientId, 'name', params.username, params.password);
+    ctx.body = await this.performPasswordGrant(ctx, client.clientId, 'name', params.username as string, params.password as string);
 
     await next();
   };

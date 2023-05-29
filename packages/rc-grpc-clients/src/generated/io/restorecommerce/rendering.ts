@@ -79,7 +79,7 @@ export interface RenderRequest {
 export interface RenderResponse {
   id: string;
   /** error or HTML contents */
-  response: Any[];
+  responses: Any[];
 }
 
 function createBasePayload(): Payload {
@@ -258,7 +258,7 @@ export const RenderRequest = {
 };
 
 function createBaseRenderResponse(): RenderResponse {
-  return { id: "", response: [] };
+  return { id: "", responses: [] };
 }
 
 export const RenderResponse = {
@@ -266,7 +266,7 @@ export const RenderResponse = {
     if (message.id !== "") {
       writer.uint32(10).string(message.id);
     }
-    for (const v of message.response) {
+    for (const v of message.responses) {
       Any.encode(v!, writer.uint32(18).fork()).ldelim();
     }
     return writer;
@@ -283,7 +283,7 @@ export const RenderResponse = {
           message.id = reader.string();
           break;
         case 2:
-          message.response.push(Any.decode(reader, reader.uint32()));
+          message.responses.push(Any.decode(reader, reader.uint32()));
           break;
         default:
           reader.skipType(tag & 7);
@@ -296,17 +296,17 @@ export const RenderResponse = {
   fromJSON(object: any): RenderResponse {
     return {
       id: isSet(object.id) ? String(object.id) : "",
-      response: Array.isArray(object?.response) ? object.response.map((e: any) => Any.fromJSON(e)) : [],
+      responses: Array.isArray(object?.responses) ? object.responses.map((e: any) => Any.fromJSON(e)) : [],
     };
   },
 
   toJSON(message: RenderResponse): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    if (message.response) {
-      obj.response = message.response.map((e) => e ? Any.toJSON(e) : undefined);
+    if (message.responses) {
+      obj.responses = message.responses.map((e) => e ? Any.toJSON(e) : undefined);
     } else {
-      obj.response = [];
+      obj.responses = [];
     }
     return obj;
   },
@@ -318,7 +318,7 @@ export const RenderResponse = {
   fromPartial(object: DeepPartial<RenderResponse>): RenderResponse {
     const message = createBaseRenderResponse();
     message.id = object.id ?? "";
-    message.response = object.response?.map((e) => Any.fromPartial(e)) || [];
+    message.responses = object.responses?.map((e) => Any.fromPartial(e)) || [];
     return message;
   },
 };
@@ -494,7 +494,7 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "response",
+        "name": "responses",
         "number": 2,
         "label": 3,
         "type": 11,
@@ -502,7 +502,7 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "response",
+        "jsonName": "responses",
         "options": undefined,
         "proto3Optional": false,
       }],
@@ -576,7 +576,7 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 2, 2, 1],
-        "span": [32, 2, 44],
+        "span": [32, 2, 45],
         "leadingComments": "",
         "trailingComments": " error or HTML contents\n",
         "leadingDetachedComments": [],

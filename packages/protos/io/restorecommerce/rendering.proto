@@ -30,5 +30,5 @@ message RenderRequest {
 
 message RenderResponse {
   string id = 1;
-  repeated google.protobuf.Any response = 2;  // error or HTML contents
+  repeated google.protobuf.Any responses = 2;  // error or HTML contents
 }

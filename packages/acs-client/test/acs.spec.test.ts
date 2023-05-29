@@ -24,9 +24,9 @@ let mockServer: Server;
 const permitRule = {
   id: 'permit_rule_id',
   target: {
-    action: [],
+    actions: [],
     resources: [{ id: 'urn:restorecommerce:acs:names:model:entity', value: 'urn:test:acs:model:Test.Test' }],
-    subject: [
+    subjects: [
       {
         id: 'urn:restorecommerce:acs:names:role',
         value: 'test-role'
@@ -46,9 +46,9 @@ const permitRule = {
 const denyRule = {
   id: 'deny_rule_id',
   target: {
-    action: [],
+    actions: [],
     resources: [{ id: 'urn:restorecommerce:acs:names:model:entity', value: 'urn:test:acs:model:Test.Test' }],
-    subject: [{ id: 'urn:restorecommerce:acs:names:role', value: 'test-role' }]
+    subjects: [{ id: 'urn:restorecommerce:acs:names:role', value: 'test-role' }]
   },
   effect: Effect.DENY
 };
@@ -63,12 +63,12 @@ let policySetRQ = {
           combining_algorithm: 'urn:oasis:names:tc:xacml:3.0:rule-combining-algorithm:permit-overrides',
           id: 'test_policy_id',
           target: {
-            action: [],
+            actions: [],
             resources: [{
               id: 'urn:restorecommerce:acs:names:model:entity',
               value: 'urn:test:acs:model:Test.Test'
             }],
-            subject: []
+            subjects: []
           }, effect: Effect.PERMIT,
           rules: [ // permit or deny rule will be added
           ],
@@ -227,7 +227,7 @@ describe('testing acs-client', () => {
         name: 'Test',
         description: 'This is a test description',
         meta: {
-          owner: []
+          owners: []
         }
       }];
       let subject = {
@@ -235,7 +235,7 @@ describe('testing acs-client', () => {
         scope: 'targetScope',
         unauthenticated: true,
         meta: {
-          owner: []
+          owners: []
         }
       };
       testResource = updateMetaData(testResource);
@@ -260,7 +260,7 @@ describe('testing acs-client', () => {
         name: 'Test',
         description: 'This is a test description',
         meta: {
-          owner: []
+          owners: []
         }
       }];
       // user ctx data updated in session
@@ -295,7 +295,7 @@ describe('testing acs-client', () => {
       let input: CtxResource[] = [{
         id: 'test_id',
         meta: {
-          owner: []
+          owners: []
         }
       }];
       let subject = {
@@ -327,7 +327,7 @@ describe('testing acs-client', () => {
       let input: CtxResource[] = [{
         id: 'test_id',
         meta: {
-          owner: []
+          owners: []
         }
       }];
         // user ctx data updated in session
@@ -370,8 +370,8 @@ describe('testing acs-client', () => {
       readResponse.filters[0].resource.should.equal('Test');
       const filterEntityMap = readResponse.filters;
       const filters = filterEntityMap[0].filters;
-      filters[0].filter[0].should.deepEqual(expectedFilterResponse[0]);
-      filters[0].filter[1].should.deepEqual(expectedFilterResponse[1]);
+      filters[0].filters[0].should.deepEqual(expectedFilterResponse[0]);
+      filters[0].filters[1].should.deepEqual(expectedFilterResponse[1]);
     });
     it('Should PERMIT reading Test resource (PERMIT rule) with HR scoping enabled and verify input filter ' +
       'is extended to enforce applicable policies', async () => {
@@ -385,7 +385,7 @@ describe('testing acs-client', () => {
       let input: CtxResource[] = [{
         id: 'test_id',
         meta: {
-          owner: []
+          owners: []
         }
       }];
         // user ctx data updated in session
@@ -430,7 +430,7 @@ describe('testing acs-client', () => {
       readResponse.filters[0].resource.should.equal('Test');
       const filterEntityMap = readResponse.filters;
       const filters = filterEntityMap[0].filters;
-      filters[0].filter[0].should.deepEqual(expectedFilterResponse);
+      filters[0].filters[0].should.deepEqual(expectedFilterResponse);
     });
     it('Should DENY reading Test resource (PERMIT rule) with HR scoping disabled', async () => {
       const cacheEnabled = process.env.CACHE_ENABLED;
@@ -439,7 +439,7 @@ describe('testing acs-client', () => {
       }
       // PolicySet contains PERMIT rule
       // disable HR scoping for permitRule
-      permitRule.target.subject[2].value = 'false';
+      permitRule.target.subjects[2].value = 'false';
       policySetRQ.policy_sets[0].policies[0].rules[0] = permitRule;
       await startGrpcMockServer({
         isAllowed: async (): Promise<DeepPartial<Response>> => ({}),
@@ -449,7 +449,7 @@ describe('testing acs-client', () => {
       let input: CtxResource[] = [{
         id: 'test_id',
         meta: {
-          owner: []
+          owners: []
         }
       }];
       // user ctx data updated in session
@@ -489,7 +489,7 @@ describe('testing acs-client', () => {
       readResponse.operation_status.code.should.equal(403);
       readResponse.operation_status.message.should.equal('Access not allowed for request with subject:test_user_id, resource:Test, action:READ, target_scope:targetSubScope; the response was DENY');
       // enable HR scoping for permitRule
-      permitRule.target.subject[2].value = 'true';
+      permitRule.target.subjects[2].value = 'true';
     });
   });
   describe('Test isAllowed', () => {
@@ -501,8 +501,8 @@ describe('testing acs-client', () => {
       const isAllowedReqUnauth = {
         target:
         {
-          action: createAction,
-          subject: unauthenticatedSubject,
+          actions: createAction,
+          subjects: unauthenticatedSubject,
           resources
         },
         context: {}
@@ -521,8 +521,8 @@ describe('testing acs-client', () => {
       const isAllowedReqAuth = {
         target:
         {
-          action: createAction,
-          subject: authenticatedSubject,
+          actions: createAction,
+          subjects: authenticatedSubject,
           resources
         },
         context: {
@@ -549,8 +549,8 @@ describe('testing acs-client', () => {
       const whatIsAllowedReqAuth = {
         target:
         {
-          action: readAction,
-          subject: authenticatedSubject,
+          actions: readAction,
+          subjects: authenticatedSubject,
           resources
         },
         context: {

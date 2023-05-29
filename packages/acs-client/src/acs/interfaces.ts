@@ -38,7 +38,7 @@ export interface CtxResource {
     created?: number;
     modified?: number;
     modified_by?: string;
-    owner: Attribute[]; // id owner is mandatory in resource others are optional
+    owners: Attribute[]; // id owner is mandatory in resource others are optional
   };
   [key: string]: any;
 }
@@ -226,15 +226,15 @@ export interface RuleRQ extends AccessControlObjectInterface { }
 
 export interface AttributeTarget {
   // each map is an attribute with (key, value) pairs
-  subject: Attribute[];
+  subjects: Attribute[];
   resources: Attribute[];
-  action: Attribute[];
+  actions: Attribute[];
 }
 
 export interface TargetReq {
-  subject: Attribute[];
+  subjects: Attribute[];
   resources: Attribute[];
-  action: Attribute[];
+  actions: Attribute[];
 }
 
 export interface Context {

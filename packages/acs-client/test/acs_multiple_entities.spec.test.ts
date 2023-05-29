@@ -161,14 +161,14 @@ describe('testing acs-client with multiple entities', () => {
         name: 'Location',
         description: 'Location description',
         meta: {
-          owner: []
+          owners: []
         }
       }, {
         id: 'address_id',
         name: 'Address',
         description: 'Address description',
         meta: {
-          owner: []
+          owners: []
         }
       }];
       testResource = updateMetaData(testResource);
@@ -195,14 +195,14 @@ describe('testing acs-client with multiple entities', () => {
         name: 'Location',
         description: 'Location description',
         meta: {
-          owner: []
+          owners: []
         }
       }, {
         id: 'address_id',
         name: 'Address',
         description: 'Address description',
         meta: {
-          owner: []
+          owners: []
         }
       }];
       testResource = updateMetaData(testResource);
@@ -236,14 +236,14 @@ describe('testing acs-client with multiple entities', () => {
         name: 'Location',
         description: 'Location description',
         meta: {
-          owner: []
+          owners: []
         }
       }, {
         id: 'address_id',
         name: 'Address',
         description: 'Address description',
         meta: {
-          owner: []
+          owners: []
         }
       }];
       testResource = updateMetaData(testResource);
@@ -259,12 +259,12 @@ describe('testing acs-client with multiple entities', () => {
       const entityFilters = response.filters;
       // validate location filters
       entityFilters[0].resource.should.equal('Location');
-      entityFilters[0].filters[0].filter[0].value.should.equal('targetScope');
-      entityFilters[0].filters[0].filter[1].value.should.equal('targetSubScope');
+      entityFilters[0].filters[0].filters[0].value.should.equal('targetScope');
+      entityFilters[0].filters[0].filters[1].value.should.equal('targetSubScope');
       // validate address filters
       entityFilters[1].resource.should.equal('Address');
-      entityFilters[1].filters[0].filter[0].value.should.equal('targetScope');
-      entityFilters[1].filters[0].filter[1].value.should.equal('targetSubScope');
+      entityFilters[1].filters[0].filters[0].value.should.equal('targetScope');
+      entityFilters[1].filters[0].filters[1].value.should.equal('targetSubScope');
     });
     it(`ArangoDB - Should PERMIT Reading Location and Address resource for
       whatIsAllowed operation and return applicable custom query and arguments
@@ -283,14 +283,14 @@ describe('testing acs-client with multiple entities', () => {
         name: 'Location',
         description: 'Location description',
         meta: {
-          owner: []
+          owners: []
         }
       }, {
         id: 'address_id',
         name: 'Address',
         description: 'Address description',
         meta: {
-          owner: []
+          owners: []
         }
       }];
       testResource = updateMetaData(testResource);
@@ -324,14 +324,14 @@ describe('testing acs-client with multiple entities', () => {
         name: 'Location',
         description: 'Location description',
         meta: {
-          owner: []
+          owners: []
         }
       }, {
         id: 'address_id',
         name: 'Address',
         description: 'Address description',
         meta: {
-          owner: []
+          owners: []
         }
       }];
       subject.scope = 'invalidTargetScope'; // set invalid target scope
@@ -358,14 +358,14 @@ describe('testing acs-client with multiple entities', () => {
         name: 'Location',
         description: 'Location description',
         meta: {
-          owner: []
+          owners: []
         }
       }, {
         id: 'address_id',
         name: 'Address',
         description: 'Address description',
         meta: {
-          owner: []
+          owners: []
         }
       }];
       testResource = updateMetaData(testResource);
@@ -396,14 +396,14 @@ describe('testing acs-client with multiple entities', () => {
         name: 'Location',
         description: 'Location description',
         meta: {
-          owner: []
+          owners: []
         }
       }, {
         id: 'address_id',
         name: 'Address',
         description: 'Address description',
         meta: {
-          owner: []
+          owners: []
         }
       }];
       testResource = updateMetaData(testResource);
@@ -432,14 +432,14 @@ describe('testing acs-client with multiple entities', () => {
         name: 'Location',
         description: 'Location description',
         meta: {
-          owner: []
+          owners: []
         }
       }, {
         id: 'address_id',
         name: 'Address',
         description: 'Address description',
         meta: {
-          owner: []
+          owners: []
         }
       }];
       testResource = updateMetaData(testResource);
@@ -465,13 +465,13 @@ describe('testing acs-client with multiple entities', () => {
         id: 'location_id',
         name: 'Location',
         meta: {
-          owner: []
+          owners: []
         }
       }, {
         id: 'address_id',
         name: 'Address',
         meta: {
-          owner: []
+          owners: []
         }
       }];
       testResource = updateMetaData(testResource);
@@ -497,14 +497,14 @@ describe('testing acs-client with multiple entities', () => {
         name: 'Location',
         description: 'Location description',
         meta: {
-          owner: []
+          owners: []
         }
       }, {
         id: 'address_id',
         name: 'Address',
         description: 'Address description',
         meta: {
-          owner: []
+          owners: []
         }
       }];
       testResource = updateMetaData(testResource);
@@ -526,7 +526,7 @@ describe('testing acs-client with multiple entities', () => {
       // Address permit and fallback rule
       policySetRQ.policy_sets[0].policies[1].rules = [permitAddressRuleProperty, fallbackRule];
       // Add Obligation to mock response
-      policySetRQ.obligation = addressAndLocationObligation;
+      policySetRQ.obligations = addressAndLocationObligation;
       await startGrpcMockServer({
         isAllowed: async (): Promise<DeepPartial<Response>> => ({ decision: Response_Decision.PERMIT, operation_status: { code: 200, message: 'success' }}),
         whatIsAllowed: async (): Promise<DeepPartial<ReverseQuery>> => policySetRQ
@@ -537,14 +537,14 @@ describe('testing acs-client with multiple entities', () => {
         name: 'Location',
         description: 'Location description',
         meta: {
-          owner: []
+          owners: []
         }
       }, {
         id: 'address_id',
         name: 'Address',
         description: 'Address description',
         meta: {
-          owner: []
+          owners: []
         }
       }];
       testResource = updateMetaData(testResource);
@@ -580,14 +580,14 @@ describe('testing acs-client with multiple entities', () => {
         name: 'Location',
         description: 'Location description',
         meta: {
-          owner: []
+          owners: []
         }
       }, {
         id: 'address_id',
         name: 'Address',
         description: 'Address description',
         meta: {
-          owner: []
+          owners: []
         }
       }];
       testResource = updateMetaData(testResource);
@@ -611,8 +611,8 @@ describe('testing acs-client with multiple entities', () => {
         const isAllowedReqUnauth = {
           target:
           {
-            subject: unauthenticatedSubject,
-            action: createAction,
+            subjects: unauthenticatedSubject,
+            actions: createAction,
             resources: locationAddressResources
           },
           context: {}
@@ -631,9 +631,9 @@ describe('testing acs-client with multiple entities', () => {
         const isAllowedReqAuth = {
           target:
           {
-            subject: authenticatedSubject,
+            subjects: authenticatedSubject,
             resources: locationAddressResources,
-            action: createAction
+            actions: createAction
           },
           context: {
             // Need to send encoded subject and resources in context
@@ -661,9 +661,9 @@ describe('testing acs-client with multiple entities', () => {
         const whatIsAllowedReqAuth = {
           target:
           {
-            subject: authenticatedSubject,
+            subjects: authenticatedSubject,
             resources: locationAddressResources,
-            action: readAction
+            actions: readAction
           },
           context: {
             // Need to send encoded subject and resources in context

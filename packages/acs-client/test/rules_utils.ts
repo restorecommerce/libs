@@ -4,7 +4,7 @@ import { ReverseQuery, DeepPartial } from '@restorecommerce/rc-grpc-clients/dist
 export const permitLocationRule = {
   id: 'location_rule_id',
   target: {
-    subject: [
+    subjects: [
       {
         id: 'urn:restorecommerce:acs:names:role',
         value: 'test-role'
@@ -21,7 +21,7 @@ export const permitLocationRule = {
       id: 'urn:restorecommerce:acs:names:model:entity',
       value: 'urn:test:acs:model:Location.Location'
     }],
-    action: []
+    actions: []
   },
   effect: Effect.PERMIT
 };
@@ -29,7 +29,7 @@ export const permitLocationRule = {
 export const permitLocationRuleProperty = {
   id: 'location_rule_id',
   target: {
-    subject: [
+    subjects: [
       {
         id: 'urn:restorecommerce:acs:names:role',
         value: 'test-role'
@@ -52,7 +52,7 @@ export const permitLocationRuleProperty = {
       id: 'urn:restorecommerce:acs:names:model:property',
       value: 'urn:test:acs:model:Location.Location#description'
     }],
-    action: []
+    actions: []
   },
   effect: Effect.PERMIT
 };
@@ -60,9 +60,9 @@ export const permitLocationRuleProperty = {
 export const fallbackRule = {
   id: 'deny_rule_id',
   target: {
-    action: [],
+    actions: [],
     resources: [],
-    subject: []
+    subjects: []
   },
   effect: Effect.DENY
 };
@@ -70,7 +70,7 @@ export const fallbackRule = {
 export const permitAddressRule = {
   id: 'address_rule_id',
   target: {
-    subject: [
+    subjects: [
       {
         id: 'urn:restorecommerce:acs:names:role',
         value: 'test-role'
@@ -87,7 +87,7 @@ export const permitAddressRule = {
       id: 'urn:restorecommerce:acs:names:model:entity',
       value: 'urn:test:acs:model:Address.Address'
     }],
-    action: []
+    actions: []
   },
   effect: Effect.PERMIT
 };
@@ -95,7 +95,7 @@ export const permitAddressRule = {
 export const permitAddressRuleProperty = {
   id: 'address_rule_id',
   target: {
-    subject: [
+    subjects: [
       {
         id: 'urn:restorecommerce:acs:names:role',
         value: 'test-role'
@@ -118,7 +118,7 @@ export const permitAddressRuleProperty = {
       id: 'urn:restorecommerce:acs:names:model:property',
       value: 'urn:test:acs:model:Address.Address#description'
     }],
-    action: []
+    actions: []
   },
   effect: Effect.PERMIT
 };
@@ -126,7 +126,7 @@ export const permitAddressRuleProperty = {
 export const addressAndLocationObligation = [{
   id: 'urn:restorecommerce:acs:names:model:entity',
   value: 'urn:restorecommerce:acs:model:Location.Location',
-  attribute: [
+  attributes: [
     {
       id: 'urn:restorecommerce:acs:names:obligation:maskedProperty',
       value: 'urn:restorecommerce:acs:model:Location.Location#name'
@@ -140,7 +140,7 @@ export const addressAndLocationObligation = [{
 {
   id: 'urn:restorecommerce:acs:names:model:entity',
   value: 'urn:restorecommerce:acs:model:Address.Address',
-  attribute: [
+  attributes: [
     {
       id: 'urn:restorecommerce:acs:names:obligation:maskedProperty',
       value: 'urn:restorecommerce:acs:model:Address.Address#name'
@@ -163,12 +163,12 @@ export let policySetRQ: DeepPartial<ReverseQuery> = {
           combining_algorithm: 'urn:oasis:names:tc:xacml:3.0:rule-combining-algorithm:permit-overrides',
           id: 'location_policy_id',
           target: {
-            action: [],
+            actions: [],
             resources: [{
               id: 'urn:restorecommerce:acs:names:model:entity',
               value: 'urn:test:acs:model:Location.Location'
             }],
-            subject: []
+            subjects: []
           }, effect: Effect.PERMIT,
           rules: [ // permit or deny rule will be added
           ],
@@ -178,19 +178,19 @@ export let policySetRQ: DeepPartial<ReverseQuery> = {
           combining_algorithm: 'urn:oasis:names:tc:xacml:3.0:rule-combining-algorithm:permit-overrides',
           id: 'address_policy_id',
           target: {
-            action: [],
+            actions: [],
             resources: [{
               id: 'urn:restorecommerce:acs:names:model:entity',
               value: 'urn:test:acs:model:Address.Address'
             }],
-            subject: []
+            subjects: []
           }, effect: Effect.PERMIT,
           rules: [ // permit or deny rule will be added
           ],
           has_rules: true
         }]
     }],
-  obligation: [],
+  obligations: [],
   operation_status: {
     code: 200,
     message: 'success'

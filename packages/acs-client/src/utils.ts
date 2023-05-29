@@ -17,7 +17,7 @@ import {
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/auth';
 import { Attribute } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/attribute';
 import {
-  Filter_Operation, FilterOp_Operator
+  Filter_Operation, FilterOp_Operator, FilterOp, FieldFilter
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base';
 import {
   Response_Decision
@@ -191,7 +191,7 @@ const validateCondition = (condition: string, request: any): any => {
 const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
   userTotalScope: string[], urns: any, scopingUpdated, reqResources,
   condition?: string, reqSubject?: DeepPartial<Subject>, database?: string): QueryParams => {
-  const { subject, resources } = target;
+  const { subjects, resources } = target;
   let ruleCondition = false;
   let filter = [];
   const query: QueryParams = {};
@@ -228,7 +228,7 @@ const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
         if (filterId && !scopingUpdated) {
           // verify if the returned filterId is same as the targetID
           if (reqResources && reqResources[0] && reqResources[0].filters && reqResources[0].filters.length > 0) {
-            const targetId = reqResources[0]?.filters[0]?.filter[0]?.value;
+            const targetId = reqResources[0]?.filters[0]?.filters[0]?.value;
             if (targetId && targetId === filterId) {
               ruleCondition = true;
               filter.push({
@@ -248,8 +248,8 @@ const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
         }
       } else if (typeof filterId === 'object') { // prebuilt filter
         // handle array
-        if (filterId.filter && _.isArray(filterId.filter)) {
-          filter.push(...filterId.filter);
+        if (filterId.filters && _.isArray(filterId.filters)) {
+          filter.push(...filterId.filters);
           // map filter operator if its returned from condition
           if (filterId?.operator) {
             filterOperator = filterId.operator;
@@ -275,7 +275,7 @@ const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
       return;
     }
   }
-  const scopingAttribute = _.find(subject, (attribute: Attribute) =>
+  const scopingAttribute = _.find(subjects, (attribute: Attribute) =>
     attribute.id == urns.roleScopingEntity);
   if (!!scopingAttribute && effect == Effect.PERMIT && database === 'arangoDB' && !ruleCondition) { // note: there is currently no query to exclude scopes
     // userTotalScope is an array accumulated scopes for each rule
@@ -289,15 +289,15 @@ const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
     };
     scopingUpdated = true;
   } else if (database && database === 'postgres' && effect == Effect.PERMIT) {
-    query['filter'] = [];
+    query['filters'] = [];
     const filterParamKey = cfg.get('authorization:filterParamKey');
     for (let eachScope of userTotalScope) {
-      query['filter'].push({ field: filterParamKey, operation: 'eq', value: eachScope });
+      query['filters'].push({ field: filterParamKey, operation: 'eq', value: eachScope });
     }
     // apply filter from condition
     for (let eachFilter of filter) {
       if (eachFilter && eachFilter.value) {
-        query['filter'].push({ field: filterParamKey, operation: 'eq', value: eachFilter.value });
+        query['filters'].push({ field: filterParamKey, operation: 'eq', value: eachFilter.value });
         filter = [];
       }
     }
@@ -321,10 +321,10 @@ const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
       // add ID filter
     } else if (attribute.id == urns.property) {
       // add fields filter
-      if (!query['field']) {
-        query['field'] = [];
+      if (!query['fields']) {
+        query['fields'] = [];
       }
-      query['field'].push({
+      query['fields'].push({
         name: attribute.value.split('#')[1],
         include: effect == Effect.PERMIT
       });
@@ -332,8 +332,8 @@ const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
   }
 
   const key = effect == Effect.PERMIT ? FilterOp_Operator.or : FilterOp_Operator.and;
-  if (query.filter && !query.filters) {
-    query.filters = { filter: query['filter'] };
+  if (query.filters) {
+    // query.filters = { filter: query['filter'] };
     // and or operator comparision
     query.filters.operator = key;
     // override the operator if its returned from rule condition
@@ -342,9 +342,7 @@ const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
     }
     delete query['filter'];
   } else if (!_.isEmpty(filter) || key == FilterOp_Operator.or) {
-    query['filters'] = {
-      filter
-    };
+    query['filters'] = filter;
     // override the operator if its returned from rule condition
     if (filterOperator) {
       query.filters.operator = filterOperator;
@@ -383,9 +381,7 @@ export const buildFilterPermissions = async (policySet: PolicySetRQ,
   Object.assign(subject, { hierarchical_scopes, role_associations });
   const urns = cfg.get('authorization:urns');
   let query: any = {
-    filters: {
-      filter: []
-    }
+    filters: []
   };
 
   const pSetAlgorithm = policySet.combining_algorithm;
@@ -397,8 +393,8 @@ export const buildFilterPermissions = async (policySet: PolicySetRQ,
       if (policy.has_rules) {
         const algorithm = policy.combining_algorithm;
         // iterate through policy_set and check subject in policy and Rule:
-        if (policy.target && policy.target.subject) {
-          let userSubjectMatched = checkSubjectMatch(subject, policy.target.subject);
+        if (policy.target && policy.target.subjects) {
+          let userSubjectMatched = checkSubjectMatch(subject, policy.target.subjects);
           if (!userSubjectMatched) {
             logger.debug(`Skipping policy as policy subject and user subject don't match`);
             continue;
@@ -421,8 +417,8 @@ export const buildFilterPermissions = async (policySet: PolicySetRQ,
         let scopingUpdated = false;
         for (let rule of policy.rules) {
           let reducedUserScope = [];
-          if (rule.target && rule.target.subject) {
-            let userSubjectMatched = checkSubjectMatch(subject, rule.target.subject, reducedUserScope);
+          if (rule.target && rule.target.subjects) {
+            let userSubjectMatched = checkSubjectMatch(subject, rule.target.subjects, reducedUserScope);
             if (!userSubjectMatched) {
               logger.debug(`Skipping rule as user subject and rule subject don't match`);
               continue;
@@ -482,11 +478,11 @@ export const buildFilterPermissions = async (policySet: PolicySetRQ,
         aqlQueryFilters = true;
       }
     }
-    if (policy.filters && policy.filters.filter && !aqlQueryFilters) {
-      filterList = policy.filters.filter;
+    if (policy.filters && !aqlQueryFilters) {
+      filterList = policy.filters;
     }
     for (let filter of filterList) {
-      query.filters.filter.push(filter);
+      query.filters.push(filter);
     }
     if (_.isArray(filterList) && filterList.length > 0) {
       query.filters.operator = key;
@@ -496,22 +492,23 @@ export const buildFilterPermissions = async (policySet: PolicySetRQ,
       }
     }
     if (policy.field) {
-      if (!query['field']) {
-        query['field'] = policy.field;
+      if (!query['fields']) {
+        query['fields'] = policy.fields;
       } else {
-        query['field'] = policy.field.concat(query['field']);
+        query['fields'] = policy.fields.concat(query['fields']);
       }
     }
   }
 
-  if (aqlQueryFilters && query?.filters?.filter?.length > 0) {
-    query.filters.filter = [];
+  if (aqlQueryFilters && query?.filters?.length > 0) {
+    query.filters = [];
   }
 
-  if (!_.isEmpty(query) && (!_.isNil(query.filters) || !_.isEmpty(query['field']) || !_.isEmpty(query['custom_query']))) {
+  if (!_.isEmpty(query) && (!_.isNil(query.filters) || !_.isEmpty(query['fields']) || !_.isEmpty(query['custom_query']))) {
     if (query['custom_arguments']) {
       query['custom_arguments'] = { value: Buffer.from(JSON.stringify(query['custom_arguments'])) };
     }
+    query.filters = [{ filters: query.filters }];
     return query;
   }
   return undefined;
@@ -521,7 +518,7 @@ interface QueryParams {
   scope?: any;
   filter?: any;
   filters?: any;
-  field?: any[];
+  fields?: FieldFilter[];
   scopingUpdated?: boolean;
   ruleCondition?: boolean;
 }

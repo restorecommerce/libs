@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 import * as ps from 'promise-streams';
 import { Readable } from 'stream';
 import * as through2 from 'through2';
-import * as readdirp from 'readdirp';
+import readdirp from 'readdirp';
 import * as path from 'path';
 import { EventEmitter } from 'events';
 import { stringToChalk, processResponse } from './utils';

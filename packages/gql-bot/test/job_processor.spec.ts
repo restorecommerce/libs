@@ -1,6 +1,6 @@
 import * as fs from 'fs';
-import * as nock from 'nock';
-import * as should from 'should';
+import nock from 'nock';
+import should from 'should';
 
 import { GraphQLProcessor, JobProcessor, Job } from '../src';
 

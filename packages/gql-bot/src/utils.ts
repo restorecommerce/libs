@@ -1,5 +1,5 @@
 import ColorHash from 'color-hash';
-import * as chalk from 'chalk';
+const chalk = require('chalk');
 
 const colorHash = new ColorHash({
   lightness: [0.45, 0.6, 0.75]

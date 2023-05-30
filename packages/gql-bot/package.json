@@ -50,7 +50,8 @@
   },
   "scripts": {
     "pretest": "npm run lint",
-    "test": "mocha --full-trace --exit",
+    "test": "nyc npm run mocha",
+    "mocha": "mocha --full-trace --exit --timeout 20000",
     "lint": "eslint './src/**/*.ts'",
     "build:tsc": "tsc -d",
     "build:clean": "rimraf lib",

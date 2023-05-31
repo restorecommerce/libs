@@ -72,9 +72,9 @@ const updateMetadata = (docMeta: DocumentMetadata, newDoc: BaseDocument): BaseDo
     throw new errors.InvalidArgument(`Update request holds no valid metadata for document ${newDoc.id}`);
   }
 
-  if (!_.isEmpty(newDoc.meta.owner)) {
+  if (!_.isEmpty(newDoc.meta.owners)) {
     // if ownership is meant to be updated
-    docMeta.owner = newDoc.meta.owner;
+    docMeta.owners = newDoc.meta.owners;
   }
 
   docMeta.modified_by = newDoc.meta.modified_by;
@@ -159,8 +159,8 @@ export class ResourcesAPIBase {
           startingValue = redisClient.get(`${collectionName}:${field}`).then((val) => val);
           if (!startingValue) {
             if (strategyCfg[field].startingValue) {
-              startingValue = Number(strategyCfg[field].startingValue) != NaN ?
-                strategyCfg[field].startingValue : '0';
+              startingValue = Number.isNaN(strategyCfg[field].startingValue) ?
+                '0' : strategyCfg[field].startingValue;
             }
             else {
               startingValue = '0';

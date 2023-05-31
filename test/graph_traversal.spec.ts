@@ -13,8 +13,8 @@ import { createLogger } from '@restorecommerce/logger';
 import * as should from 'should';
 import * as _ from 'lodash';
 import {
-  ServiceDefinition,
-  ServiceClient,
+  GraphServiceDefinition,
+  GraphServiceClient,
   TraversalRequest,
   Filter_Operation as FilterOperation,
   Filters_Operator as OperatorType,
@@ -65,8 +65,8 @@ const testProvider = (providerCfg) => {
   describe('GraphServiceBase', () => {
     let db: any;
     let channel: Channel;
-    let testService: ServiceClient;
-    let testResourceBaseService: ServiceClient;
+    let testService: GraphServiceClient;
+    let testResourceBaseService: GraphServiceClient;
     let graphCfg;
     let resourcesList;
     before(async () => {
@@ -74,8 +74,8 @@ const testProvider = (providerCfg) => {
       // graph Service
       const graphAPIService = new GraphResourcesServiceBase(db,
         cfg.get('fieldHandlers:bufferFields'), createLogger(cfg.get('server:logger')));
-      let z: chassis.grpc.BindConfig<ServiceDefinition> = {
-        service: ServiceDefinition,
+      let z: chassis.grpc.BindConfig<GraphServiceDefinition> = {
+        service: GraphServiceDefinition,
         implementation: graphAPIService as any
       };
       await server.bind('graphsTestService', z);
@@ -86,7 +86,7 @@ const testProvider = (providerCfg) => {
       testService = createClient({
         ...cfg.get('client:graphsTestService'),
         logger: server.logger
-      }, ServiceDefinition, channel);
+      }, GraphServiceDefinition, channel);
 
       // Start resource base server for the graph services
       graphCfg = cfg.get('graph');
@@ -96,7 +96,7 @@ const testProvider = (providerCfg) => {
       testResourceBaseService = createClient({
         ...cfg.get('client:test'),
         logger: server.logger
-      }, ServiceDefinition, channel);
+      }, GraphServiceDefinition, channel);
     });
     after(async () => {
       // drop DB
@@ -169,7 +169,7 @@ const testProvider = (providerCfg) => {
       // test error handling
       it('should throw an error for graph traversal for missing collection name / start_vertex', async () => {
         // missing collection name in vertices
-        let result = testService.traversal({ vertices: { start_vertex_id: ['a'] } });
+        let result = testService.traversal({ vertices: { start_vertex_ids: ['a'] } });
         for await (const partResp of result) {
           partResp.operation_status.code.should.equal(500);
           partResp.operation_status.message.should.equal('missing collection name for vertex id a');
@@ -194,7 +194,7 @@ const testProvider = (providerCfg) => {
         const traversalRequest = TraversalRequest.fromPartial({
           vertices: {
             collection_name: 'persons',
-            start_vertex_id: ['a']
+            start_vertex_ids: ['a']
           },
           opts: { direction: Direction.OUTBOUND },
           path: false
@@ -215,7 +215,7 @@ const testProvider = (providerCfg) => {
         const traversalRequest = TraversalRequest.fromPartial({
           vertices: {
             collection_name: 'persons',
-            start_vertex_id: ['a']
+            start_vertex_ids: ['a']
           },
           opts: { direction: Direction.OUTBOUND },
           path: true
@@ -236,9 +236,9 @@ const testProvider = (providerCfg) => {
         const traversalRequest = TraversalRequest.fromPartial({
           vertices: {
             collection_name: 'persons',
-            start_vertex_id: ['a']
+            start_vertex_ids: ['a']
           },
-          opts: { direction: Direction.OUTBOUND, include_vertex: ['cars'] },
+          opts: { direction: Direction.OUTBOUND, include_vertexs: ['cars'] },
           path: true
         });
         const expectedVertices = [
@@ -254,9 +254,9 @@ const testProvider = (providerCfg) => {
         const traversalRequest = TraversalRequest.fromPartial({
           vertices: {
             collection_name: 'persons',
-            start_vertex_id: ['a']
+            start_vertex_ids: ['a']
           },
-          opts: { direction: Direction.OUTBOUND, exclude_vertex: ['cars'] },
+          opts: { direction: Direction.OUTBOUND, exclude_vertexs: ['cars'] },
           path: true
         });
         const expectedVertices = [
@@ -274,9 +274,9 @@ const testProvider = (providerCfg) => {
         const traversalRequest = TraversalRequest.fromPartial({
           vertices: {
             collection_name: 'persons',
-            start_vertex_id: ['a']
+            start_vertex_ids: ['a']
           },
-          opts: { direction: Direction.OUTBOUND, include_edge: ['has'] },
+          opts: { direction: Direction.OUTBOUND, include_edges: ['has'] },
           path: true
         });
         const expectedVertices = [
@@ -292,9 +292,9 @@ const testProvider = (providerCfg) => {
         const traversalRequest = TraversalRequest.fromPartial({
           vertices: {
             collection_name: 'persons',
-            start_vertex_id: ['a']
+            start_vertex_ids: ['a']
           },
-          opts: { direction: Direction.OUTBOUND, exclude_edge: ['belongs'] },
+          opts: { direction: Direction.OUTBOUND, exclude_edges: ['belongs'] },
           path: true
         });
         const expectedVertices = [
@@ -312,9 +312,9 @@ const testProvider = (providerCfg) => {
         const traversalRequest = TraversalRequest.fromPartial({
           vertices: {
             collection_name: 'persons',
-            start_vertex_id: ['a']
+            start_vertex_ids: ['a']
           },
-          opts: { direction: Direction.OUTBOUND, exclude_edge: ['resides'], include_edge: ['lives'] },
+          opts: { direction: Direction.OUTBOUND, exclude_edges: ['resides'], include_edges: ['lives'] },
           path: true
         });
         const expectedVertices = [
@@ -359,10 +359,10 @@ const testProvider = (providerCfg) => {
           },
           opts: { direction: Direction.OUTBOUND },
           filters: [{
-            filter: [{ field: 'car', operation: FilterOperation.eq, value: 'bmw' }],
+            filters: [{ field: 'car', operation: FilterOperation.eq, value: 'bmw' }],
             entity: 'cars'
           }, {
-            filter: [{ field: 'place', operation: FilterOperation.eq, value: 'Munich' }],
+            filters: [{ field: 'place', operation: FilterOperation.eq, value: 'Munich' }],
             operator: OperatorType.or,
             entity: 'places'
           }],
@@ -387,9 +387,9 @@ const testProvider = (providerCfg) => {
           collection: {
             collection_name: 'persons'
           },
-          opts: { direction: Direction.OUTBOUND, include_vertex: ['cars'] },
+          opts: { direction: Direction.OUTBOUND, include_vertexs: ['cars'] },
           filters: [{
-            filter: [{ field: 'car', operation: FilterOperation.eq, value: 'bmw' }, { field: 'car', operation: FilterOperation.eq, value: 'vw' }],
+            filters: [{ field: 'car', operation: FilterOperation.eq, value: 'bmw' }, { field: 'car', operation: FilterOperation.eq, value: 'vw' }],
             operator: OperatorType.or,
             entity: 'cars'
           }],
@@ -412,9 +412,9 @@ const testProvider = (providerCfg) => {
           collection: {
             collection_name: 'persons'
           },
-          opts: { direction: Direction.OUTBOUND, exclude_vertex: ['cars'] },
+          opts: { direction: Direction.OUTBOUND, exclude_vertexs: ['cars'] },
           filters: [{
-            filter: [{ field: 'state', operation: FilterOperation.eq, value: 'BW' }, { field: 'state', operation: FilterOperation.eq, value: 'Hessen' }],
+            filters: [{ field: 'state', operation: FilterOperation.eq, value: 'BW' }, { field: 'state', operation: FilterOperation.eq, value: 'Hessen' }],
             operator: OperatorType.or, // Default is AND operation
             entity: 'state'
           }],
@@ -440,9 +440,9 @@ const testProvider = (providerCfg) => {
           collection: {
             collection_name: 'persons'
           },
-          opts: { direction: Direction.OUTBOUND, exclude_edge: ['resides'] },
+          opts: { direction: Direction.OUTBOUND, exclude_edges: ['resides'] },
           filters: [{
-            filter: [{ field: 'state', operation: FilterOperation.eq, value: 'BW' }, { field: 'state', operation: FilterOperation.eq, value: 'Hessen' }],
+            filters: [{ field: 'state', operation: FilterOperation.eq, value: 'BW' }, { field: 'state', operation: FilterOperation.eq, value: 'Hessen' }],
             operator: OperatorType.or, // Default is AND operation
             edge: 'lives'
           }],
@@ -468,9 +468,9 @@ const testProvider = (providerCfg) => {
           collection: {
             collection_name: 'persons'
           },
-          opts: { direction: Direction.OUTBOUND, include_edge: ['has', 'lives'] },
+          opts: { direction: Direction.OUTBOUND, include_edges: ['has', 'lives'] },
           filters: [{
-            filter: [{ field: 'state', operation: FilterOperation.eq, value: 'BW' }, { field: 'state', operation: FilterOperation.eq, value: 'Hessen' }],
+            filters: [{ field: 'state', operation: FilterOperation.eq, value: 'BW' }, { field: 'state', operation: FilterOperation.eq, value: 'Hessen' }],
             operator: OperatorType.or, // Default is AND operation
             edge: 'lives'
           }],
@@ -536,7 +536,7 @@ const testProvider = (providerCfg) => {
         const traversalRequest = TraversalRequest.fromPartial({
           vertices: {
             collection_name: 'persons',
-            start_vertex_id: ['a', 'b']
+            start_vertex_ids: ['a', 'b']
           },
           opts: { direction: Direction.OUTBOUND },
           path: true
@@ -562,7 +562,7 @@ const testProvider = (providerCfg) => {
         const traversalRequest = TraversalRequest.fromPartial({
           vertices: {
             collection_name: 'cars',
-            start_vertex_id: ['c']
+            start_vertex_ids: ['c']
           },
           opts: { direction: Direction.OUTBOUND },
           path: true
@@ -602,7 +602,7 @@ const testProvider = (providerCfg) => {
         const traversalRequest = TraversalRequest.fromPartial({
           vertices: {
             collection_name: 'places',
-            start_vertex_id: ['e']
+            start_vertex_ids: ['e']
           },
           opts: { direction: Direction.INBOUND },
           path: true
@@ -642,7 +642,7 @@ const testProvider = (providerCfg) => {
         const traversalRequest = TraversalRequest.fromPartial({
           collection: {
             collection_name: 'persons',
-            sort: [{ field: 'name', order: Sort_SortOrder.DESCENDING }]
+            sorts: [{ field: 'name', order: Sort_SortOrder.DESCENDING }]
           },
           opts: { direction: Direction.OUTBOUND },
           path: true
@@ -685,9 +685,9 @@ const testProvider = (providerCfg) => {
         const traversalRequest = TraversalRequest.fromPartial({
           vertices: {
             collection_name: 'persons',
-            start_vertex_id: ['a']
+            start_vertex_ids: ['a']
           },
-          opts: { direction: Direction.OUTBOUND, include_vertex: ['cars'] },
+          opts: { direction: Direction.OUTBOUND, include_vertexs: ['cars'] },
           path: true
         });
         const expectedVertices = [
@@ -701,9 +701,9 @@ const testProvider = (providerCfg) => {
         const traversalRequest1 = TraversalRequest.fromPartial({
           vertices: {
             collection_name: 'persons',
-            start_vertex_id: ['b']
+            start_vertex_ids: ['b']
           },
-          opts: { direction: Direction.OUTBOUND, include_vertex: ['cars'] },
+          opts: { direction: Direction.OUTBOUND, include_vertexs: ['cars'] },
           path: true
         });
         const expectedVertices1 = [
@@ -733,9 +733,9 @@ const testProvider = (providerCfg) => {
         const traversalRequest = TraversalRequest.fromPartial({
           vertices: {
             collection_name: 'persons',
-            start_vertex_id: ['a']
+            start_vertex_ids: ['a']
           },
-          opts: { direction: Direction.OUTBOUND, include_vertex: ['cars'] },
+          opts: { direction: Direction.OUTBOUND, include_vertexs: ['cars'] },
           path: true
         });
         const expectedVertices = [
@@ -749,7 +749,7 @@ const testProvider = (providerCfg) => {
         const traversalRequest1 = TraversalRequest.fromPartial({
           vertices: {
             collection_name: 'persons',
-            start_vertex_id: ['newPersonID']
+            start_vertex_ids: ['newPersonID']
           },
           opts: { direction: Direction.OUTBOUND },
           path: true

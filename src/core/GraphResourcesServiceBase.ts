@@ -5,7 +5,7 @@ import { Logger } from 'winston';
 import { Stream } from 'stream';
 import {
   DeepPartial, ServerStreamingMethodResult,
-  ServiceServiceImplementation,
+  GraphServiceImplementation,
   TraversalRequest,
   TraversalResponse
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/graph';
@@ -14,7 +14,7 @@ import {
  * Graph Resource API base provides functions for graph Operations such as
  * creating or modifying Vertices/Edges, graph traversal etc.
  */
-export class GraphResourcesServiceBase implements ServiceServiceImplementation {
+export class GraphResourcesServiceBase implements GraphServiceImplementation {
   bufferedCollections: any;
   dateTimeFieldcfg: any;
   logger: Logger;
@@ -74,9 +74,9 @@ export class GraphResourcesServiceBase implements ServiceServiceImplementation {
       let traversalCursor: DBTraversalResponse;
 
       let sort;
-      if (collection && !_.isEmpty(collection.sort)) {
+      if (collection && !_.isEmpty(collection.sorts)) {
         sort = {};
-        _.forEach(collection.sort, (s: any) => {
+        _.forEach(collection.sorts, (s: any) => {
           switch (s.order) {
             case 'ASCENDING':
             case 1:

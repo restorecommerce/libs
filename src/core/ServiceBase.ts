@@ -10,7 +10,7 @@ import {
   ReadRequest,
   ResourceList,
   ResourceListResponse,
-  ServiceServiceImplementation,
+  ServiceImplementation,
   Sort_SortOrder
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base';
 
@@ -31,7 +31,7 @@ const arangoHttpErrCodeMap = new Map([
  * A microservice chassis ready class which provides endpoints for
  * CRUD resource operations.
  */
-export class ServiceBase<T extends ResourceListResponse, M extends ResourceList> implements ServiceServiceImplementation {
+export class ServiceBase<T extends ResourceListResponse, M extends ResourceList> implements ServiceImplementation {
   logger: Logger;
   name: string;
   events: any;
@@ -76,9 +76,9 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
     try {
       let objectEntities = [];
       let sort;
-      if (!_.isEmpty(request.sort)) {
+      if (!_.isEmpty(request.sorts)) {
         sort = {};
-        _.forEach(request.sort, (s) => {
+        _.forEach(request.sorts, (s) => {
           switch (s.order) {
             case Sort_SortOrder.ASCENDING:
               sort[s.field] = 'ASC';
@@ -101,7 +101,7 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
         filter = toObject(request.filters);
       }
       const field = {};
-      _.forEach(request.field, (f) => {
+      _.forEach(request.fields, (f) => {
         if (f.include) {
           field[f.name] = 1;
           return;

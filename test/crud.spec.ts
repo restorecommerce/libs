@@ -1,6 +1,6 @@
 'use strict';
 
-import { ResourcesAPIBase, ServiceBase, toObject } from '../lib';
+import { ResourcesAPIBase, ServiceBase, toObject, convertToObject } from '../lib';
 import * as chassis from '@restorecommerce/chassis-srv';
 import { Channel, createChannel, createClient } from '@restorecommerce/grpc-client';
 import { Events, registerProtoMeta, Topic } from '@restorecommerce/kafka-client';
@@ -36,7 +36,7 @@ describe('converting to filter to object', () => {
     const protoFilter =
     {
       filters: [{
-        filter: [
+        filters: [
           {
             field: 'device_id',
             operation: 'eq',
@@ -55,8 +55,8 @@ describe('converting to filter to object', () => {
             type: 'BOOLEAN'
           },
           {
-            filters: {
-              filter: [{
+            filters: [{
+              filters: [{
                 field: 'firstname',
                 operation: 'eq',
                 value: 'test_first'
@@ -70,49 +70,43 @@ describe('converting to filter to object', () => {
                 value: 'test_middle'
               }],
               operator: 'and'
-            },
+            }],
           }
         ], // Default And case
         operator: 'or'
       }]
     };
     /* eslint-disable */
-    const expectedDBObject = { "$or": [{ "device_id": "12345" }, { "overall_status": { "$in": ["BAD", "GOOD"] } }, { "device_active": true }, { "$and": [{ "firstname": "test_first" }, { "lastname": "test_last" }, { "middleName": "test_middle" }] }] };
-    const dbFilter = toObject(protoFilter);
-    dbFilter.should.deepEqual(expectedDBObject);
-  });
+  const expectedDBObject = { "$or": [{ "device_id": "12345" }, { "overall_status": { "$in": ["BAD", "GOOD"] } }, { "device_active": true }, { "$and": [{ "firstname": "test_first" }, { "lastname": "test_last" }, { "middleName": "test_middle" }] }] };
+  const dbFilter = toObject(protoFilter);
+  should.exist(dbFilter);
+  dbFilter.should.deepEqual(expectedDBObject);
+});
 
   it('should convert nested proto filter to valid DB filter object', () => {
     const protoFilter =
     {
       filters: [
         {
-          filter: [
+          filters: [
             {
               filters: [
                 {
-                  filter: [
+                  filters: [
                     {
                       field: 'user_type',
                       operation: 'neq',
                       value: 'TECHNICAL_USER'
                     },
                     {
-                      filters: {
-                        filter: [
-                          {
-                            field: 'first_name',
-                            operation: 'iLike',
-                            value: '%test%'
-                          },
-                          {
-                            field: 'last_name',
-                            operation: 'iLike',
-                            value: '%test%'
-                          }
-                        ],
-                        operator: 'or'
-                      }
+                      field: 'first_name',
+                      operation: 'iLike',
+                      value: '%test%'
+                    },
+                    {
+                      field: 'last_name',
+                      operation: 'iLike',
+                      value: '%test%'
                     }
                   ],
                   operator: 'and'
@@ -122,7 +116,7 @@ describe('converting to filter to object', () => {
             {
               filters: [
                 {
-                  filter: [
+                  filters: [
                     {
                       field: 'state',
                       operation: 'eq',
@@ -144,8 +138,9 @@ describe('converting to filter to object', () => {
       ]
     };
     /* eslint-disable */
-    const expectedDBObject = { "$or": [{ "$and": [{ "user_type": { "$not": { "$eq": "TECHNICAL_USER" } } }, { "$or": [{ "first_name": { "$iLike": "%test%" } }, { "last_name": { "$iLike": "%test%" } }] }] }, { "$and": [{ "state": "BW" }, { "city": "Stuttgart" }] }] }
+    const expectedDBObject = { "$or": [{ "$and": [{ "user_type": { "$not": { "$eq": "TECHNICAL_USER" } } }, { "first_name": { "$iLike": "%test%" } }, { "last_name": { "$iLike": "%test%" } } ] }, { "$and": [{ "state": "BW" }, { "city": "Stuttgart" }] }] }
     const dbFilter = toObject(protoFilter);
+    should.exist(dbFilter);
     dbFilter.should.deepEqual(expectedDBObject);
   });
 
@@ -154,7 +149,7 @@ describe('converting to filter to object', () => {
     {
       filters: [
         {
-          filter: [
+          filters: [
             {
               field: 'id',
               operation: 'in',
@@ -164,7 +159,7 @@ describe('converting to filter to object', () => {
           operator: 'and'
         },
         {
-          filter: [
+          filters: [
             {
               field: 'id',
               operation: 'eq',
@@ -178,6 +173,7 @@ describe('converting to filter to object', () => {
     /* eslint-disable */
     const expectedDBObject = [{ "$and": [{ "id": { "$in": "test1" } }] }, { "$or": [{ "id": "test2" }] }]
     const dbFilter = toObject(protoFilter);
+    should.exist(dbFilter);
     dbFilter.should.deepEqual(expectedDBObject);
   });
 
@@ -185,17 +181,17 @@ describe('converting to filter to object', () => {
 
 const now = Date.now();
 let meta = {
-  acl: [],
+  acls: [],
   created: now,
   modified: now,
   modified_by: 'Admin',
-  owner: [{
-    attribute: [],
+  owners: [{
+    attributes: [],
     id: 'urn:restorecommerce:acs:names:ownerIndicatoryEntity',
     value: 'urn:restorecommerce:acs:model:user.User'
   },
   {
-    attribute: [],
+    attributes: [],
     id: 'urn:restorecommerce:acs:names:ownerInstance',
     value: 'Admin'
   }]
@@ -339,7 +335,7 @@ describe('ServiceBase', () => {
       });
       it('should return elements sorted', async () => {
         const result = await testService.read({
-          sort: [{
+          sorts: [{
             field: 'id',
             order: Sort_SortOrder.DESCENDING,
           }],
@@ -369,7 +365,7 @@ describe('ServiceBase', () => {
       });
       it('should return only resources with value higher than 10', async () => {
         const filters = [{
-          filter: [{
+          filters: [{
             field: 'value',
             operation: Filter_Operation.gt,
             value: '10',
@@ -391,7 +387,7 @@ describe('ServiceBase', () => {
       });
       it('should return only resources with string filter value equal to id', async () => {
         const filters = [{
-          filter: [{
+          filters: [{
             field: 'id',
             operation: Filter_Operation.eq,
             value: 'test_xy'
@@ -412,7 +408,7 @@ describe('ServiceBase', () => {
       });
       it('should return only resources matching boolean filter', async () => {
         const filters = [{
-          filter: [{
+          filters: [{
             field: 'active',
             operation: Filter_Operation.eq,
             value: 'true',
@@ -434,7 +430,7 @@ describe('ServiceBase', () => {
       });
       it('should return resources matching date filter', async () => {
         const filters = [{
-          filter: [{
+          filters: [{
             field: 'created',
             operation: Filter_Operation.lt,
             value: today.toString(),
@@ -462,7 +458,7 @@ describe('ServiceBase', () => {
       });
       it('should return resources matching array filter', async () => {
         const filters = [{
-          filter: [{
+          filters: [{
             field: 'status',
             operation: Filter_Operation.in,
             value: '["BAD", "UNKNOWN"]',
@@ -490,7 +486,7 @@ describe('ServiceBase', () => {
       });
       it('should return only resources with not equal filter', async () => {
         const filters = [{
-          filter: [{
+          filters: [{
             field: 'id',
             operation: Filter_Operation.neq,
             value: 'test_xy',
@@ -517,7 +513,7 @@ describe('ServiceBase', () => {
       }).timeout(4000);
       it('should return elements only with field value', async () => {
         const result = await testService.read({
-          field: [{
+          fields: [{
             name: 'value',
             include: true,
           }],
@@ -543,7 +539,7 @@ describe('ServiceBase', () => {
       });
       it('should apply a custom filter', async () => {
         const result = await testService.read({
-          field: [{
+          fields: [{
             name: 'value',
             include: true,
           }],

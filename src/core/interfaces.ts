@@ -46,7 +46,7 @@ export interface DocumentMetadata {
   created?: number;
   modified?: number;
   modified_by?: string;
-  owner: { id: string; value: string }[];
+  owners: { id?: string; value?: string }[];
 }
 
 export enum Direction {

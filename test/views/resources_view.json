@@ -4,6 +4,7 @@
       "viewName": "resources_view",
       "similarityThreshold": 0.1,
       "options": {
+        "type": "arangosearch",
         "links": {
           "resources": {
             "includeAllFields": true,

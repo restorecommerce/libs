@@ -116,27 +116,6 @@ const convertFilterToObject = (object, operatorKey, filter) => {
 };
 
 /**
- * finds the nested object key position
- * @param entireObj Object in which the postion for key is to be found
- * @param keyToFind key to be found in Object
- * @returns value of the object at found key
- */
-const findNestedObj = (entireObj, keyToFind) => {
-  let keys = Object.keys(entireObj);
-  if (keys && keys.length > 0) {
-    for (let key of keys) {
-      if (key === keyToFind) {
-        return entireObj[key];
-      } else if (Object.keys(entireObj[key])) {
-        if (_.isArray(Object.keys(entireObj))) {
-          findNestedObj(entireObj[key], keyToFind);
-        }
-      }
-    }
-  }
-};
-
-/**
  * convertToObject takes input contained in the proto structure defined in resource_base proto
  * and converts it into Object understandable by the underlying DB implementation in chassis-srv
  * @param {*} input Original filter input object
@@ -152,43 +131,39 @@ export const convertToObject = (input: any, obj?: any, currentOperator?: string)
     filters = input;
   }
   // by default use 'and' operator if no operator is specified
-  if (filters && _.isArray(filters.filter) && !filters.operator) {
+  if (filters && _.isArray(filters.filters) && !filters.operator) {
     filters.operator = 'and';
   }
   if (!obj) {
     obj = {};
   }
-  if (_.isArray(filters.filter)) {
-    let operatorValue;
-    if (typeof filters.operator === 'string' || filters.operator instanceof String) {
-      operatorValue = filters.operator;
-    } else if (Number.isInteger(filters.operator)) {
-      operatorValue = filterOperatorMap.get(filters.operator);
-    }
-    const newOperator = `$${operatorValue}`;
-    if (newOperator && !currentOperator) {
-      // insert obj with new operator
-      Object.assign(obj, { [newOperator]: [] });
-    } else if (newOperator && currentOperator) {
-      // find the currentOperator and add newOperator under currentOperator of Obj
-      let t = findNestedObj(obj, currentOperator);
-      if (_.isArray(t)) {
-        t.push({ [newOperator]: [] });
-      } else {
-        Object.assign(t, { [newOperator]: [] });
-      }
-    } else {
-      obj[newOperator] = [];
-    }
-    // pass newOperator and obj recursively
-    convertToObject(filters.filter, obj, newOperator);
-  } else if (_.isArray(filters)) {
+  if (_.isArray(filters)) {
     for (let filterObj of filters) {
-      convertToObject(filterObj, obj, currentOperator);
+      let operatorValue;
+      if (typeof filterObj.operator === 'string' || filterObj.operator instanceof String) {
+        operatorValue = filterObj.operator;
+      } else if (Number.isInteger(filterObj.operator)) {
+        operatorValue = filterOperatorMap.get(filterObj.operator);
+      }
+      // default to and operator
+      if (!operatorValue) {
+        operatorValue = 'and';
+      }
+      const newOperator = `$${operatorValue}`;
+      if (newOperator && !currentOperator) {
+        // insert obj with new operator
+        Object.assign(obj, { [newOperator]: [] });
+      }
+      convertToObject(filterObj, obj, newOperator);
     }
   } else if (filters.field && (filters.operation || filters.operation === 0) && filters.value != undefined) {
     // object contains field, operation and value, update it on obj using convertFilterToObject()
     obj = convertFilterToObject(obj, currentOperator, filters);
+  } else if (filters.filters && _.isArray(filters.filters)) {
+    for (let filterObj of filters.filters) {
+      let operator = filters.operator ? filters.operator : 'and';
+      convertToObject(filterObj, obj, operator);
+    }
   }
   return obj;
 };
@@ -210,7 +185,7 @@ export const toObject = (input) => {
     }
     for (let filterArr of filtersArr) {
       let convertedObject = [];
-      let filterObj = filterArr?.filter;
+      let filterObj = filterArr?.filters;
       let operatorValue;
       if (typeof filterArr?.operator === 'string' || filterArr?.operator instanceof String) {
         operatorValue = filterArr?.operator;

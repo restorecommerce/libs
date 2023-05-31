@@ -92,7 +92,7 @@ export class GraphResourcesServiceBase implements GraphServiceImplementation {
               break;
           }
         });
-        (collection as any).sort = sort;
+        (collection as any).sorts = sort;
       }
 
       try {

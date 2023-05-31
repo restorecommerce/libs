@@ -1,6 +1,6 @@
 {
     "extension": ["ts"],
-    "spec": "test/**/graph_traversal.spec.ts",
+    "spec": "test/**/*.spec.ts",
     "require": "ts-node/register"
   }
   

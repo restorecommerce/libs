@@ -1,6 +1,10 @@
+### 1.2.0 (May 31st, 2023)
+
+- updated dependencies (includes chassis-srv updates for updated ArangoJs), pluralize protos and meta owner changes
+
 ### 1.1.1 (October 14th, 2022)
 
-- updated dependencies 
+- updated dependencies
 
 ### 1.1.0 (October 5th, 2022)
 

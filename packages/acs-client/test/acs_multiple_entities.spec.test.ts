@@ -555,14 +555,14 @@ describe('testing acs-client with multiple entities', () => {
         [{ resource: 'Location', id: 'location_id', property: ['name', 'description'] }, { resource: 'Address', id: 'address_id', property: ['name', 'description'] }],
         AuthZAction.READ, ctx, Operation.whatIsAllowed) as PolicySetRQResponse;
       // validate mapped obligation object from acs-client
-      should.exist(response.obligation);
-      response.obligation.should.be.length(2);
-      response.obligation[0].resource.should.equal('Location');
-      response.obligation[0].property[0].should.equal('name');
-      response.obligation[0].property[1].should.equal('description');
-      response.obligation[1].resource.should.equal('Address');
-      response.obligation[1].property[0].should.equal('name');
-      response.obligation[1].property[1].should.equal('description');
+      should.exist(response.obligations);
+      response.obligations.should.be.length(2);
+      response.obligations[0].resource.should.equal('Location');
+      response.obligations[0].property[0].should.equal('name');
+      response.obligations[0].property[1].should.equal('description');
+      response.obligations[1].resource.should.equal('Address');
+      response.obligations[1].property[0].should.equal('name');
+      response.obligations[1].property[1].should.equal('description');
     });
 
     it(`postgres DB - Should DENY Reading Location and Address resource for whatIsAllowed operation, due to description property`, async () => {

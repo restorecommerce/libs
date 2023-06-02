@@ -79,7 +79,7 @@ export interface Obligation {
 
 export interface DecisionResponse {
   decision: Response_Decision;
-  obligation?: Obligation[];
+  obligations?: Obligation[];
   operation_status: {
     code?: number;
     message?: string;
@@ -87,9 +87,9 @@ export interface DecisionResponse {
 };
 
 export interface Target<TSubject, TResource, TAction> {
-  subject: TSubject;
-  resource: TResource;
-  action: TAction;
+  subjects: TSubject;
+  resources: TResource;
+  actions: TAction;
 }
 
 export interface Request<TTarget, TContext> {
@@ -208,7 +208,7 @@ export interface PolicySetRQResponse extends AccessControlObjectInterface {
   policy_sets?: PolicySetRQ[];
   filters?: ResourceFilterMap[];
   custom_query_args?: CustomQueryArgs[];
-  obligation?: Obligation[];
+  obligations?: Obligation[];
   decision: Response_Decision;
   operation_status: {
     code: number;

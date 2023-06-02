@@ -23,8 +23,8 @@ const subjectIsUnauthenticated = (subject: any): subject is UnauthenticatedConte
     && 'unauthenticated' in subject && subject['unauthenticated'];
 };
 
-const whatIsAllowedRequest = async (subject: DeepPartial<Subject>, resource: Resource[],
-  action: AuthZAction, ctx: ACSClientContext, useCache: boolean) => {
+const whatIsAllowedRequest = async (subject: DeepPartial<Subject>, resources: Resource[],
+  actions: AuthZAction, ctx: ACSClientContext, useCache: boolean) => {
   if (subjectIsUnauthenticated(subject)) {
     const grpcConfig = cfg.get('client:acs-srv');
     const channel = createChannel(grpcConfig.address);
@@ -34,7 +34,7 @@ const whatIsAllowedRequest = async (subject: DeepPartial<Subject>, resource: Res
     }, AccessControlServiceDefinition, channel);
     return await new UnAuthZ(acsClient).whatIsAllowed({
       target: {
-        subject: (subject as UnauthenticatedData), resource, action
+        subjects: (subject as UnauthenticatedData), resources, actions
       },
       context: {
         security: {}
@@ -46,16 +46,16 @@ const whatIsAllowedRequest = async (subject: DeepPartial<Subject>, resource: Res
         security: {}
       },
       target: {
-        subject: subject as Subject,
-        resource,
-        action
+        subjects: subject as Subject,
+        resources,
+        actions
       }
     }, ctx, useCache);
   }
 };
 
 export const isAllowedRequest = async (subject: Subject,
-  resource: Resource[], action: AuthZAction, ctx: ACSClientContext, useCache: boolean): Promise<DecisionResponse> => {
+  resources: Resource[], actions: AuthZAction, ctx: ACSClientContext, useCache: boolean): Promise<DecisionResponse> => {
   if (subjectIsUnauthenticated(subject)) {
     const grpcConfig = cfg.get('client:acs-srv');
     const channel = createChannel(grpcConfig.address);
@@ -65,7 +65,7 @@ export const isAllowedRequest = async (subject: Subject,
     }, AccessControlServiceDefinition, channel);
     return await new UnAuthZ(acsClient).isAllowed({
       target: {
-        subject: (subject as UnauthenticatedData), resource, action
+        subjects: (subject as UnauthenticatedData), resources, actions
       },
       context: {
         security: {}
@@ -77,9 +77,9 @@ export const isAllowedRequest = async (subject: Subject,
         security: {}
       },
       target: {
-        subject,
-        resource,
-        action
+        subjects: subject,
+        resources,
+        actions
       }
     }, ctx, useCache);
   }
@@ -294,7 +294,7 @@ export const isAllowed = async (request: Request, authZ: ACSAuthZ): Promise<Deci
     const isAllowedResponse = await authZ.acs.isAllowed(request);
     response = {
       decision: isAllowedResponse.decision,
-      obligation: mapResourceURNObligationProperties(isAllowedResponse.obligations),
+      obligations: mapResourceURNObligationProperties(isAllowedResponse.obligations),
       operation_status: isAllowedResponse.operation_status
     };
   } catch (err) {
@@ -317,9 +317,9 @@ export const whatIsAllowed = async (request: Request, authZ: ACSAuthZ): Promise<
   try {
     const whatIsAllowedResponse = await authZ.acs.whatIsAllowed(request);
     response = {
-      ...whatIsAllowedResponse,
-      obligation: mapResourceURNObligationProperties(whatIsAllowedResponse.obligations)
+      ...whatIsAllowedResponse
     } as any; // TODO Decision?
+    response.obligations = mapResourceURNObligationProperties(whatIsAllowedResponse.obligations);
   } catch (err) {
     logger.error('Error invoking acs-srv whatIsAllowed method', { code: err.code, message: err.message, stack: err.stack });
     return { decision: Response_Decision.DENY, policy_sets: [], operation_status: generateOperationStatus(err.code, err.message) };

@@ -200,12 +200,12 @@ export class UnAuthZ implements IAuthZ {
   async isAllowed(request: Request<NoAuthTarget, AuthZContext>, ctx: ACSClientContext, useCache: boolean): Promise<DecisionResponse> {
     const authZRequest = {
       target: {
-        action: createActionTarget(request.target.action),
-        subject: createSubjectTarget(request.target.subject),
-        resources: createResourceTarget(request.target.resource, request.target.action)
+        actions: createActionTarget(request.target.actions),
+        subjects: createSubjectTarget(request.target.subjects),
+        resources: createResourceTarget(request.target.resources, request.target.actions)
       },
       context: {
-        subject: this.encode(request.target.subject),
+        subject: this.encode(request.target.subjects),
         resources: this.encode(ctx.resources)
       }
     };
@@ -218,7 +218,7 @@ export class UnAuthZ implements IAuthZ {
 
       response = {
         decision: isAllowed.decision,
-        obligation: mapResourceURNObligationProperties(isAllowed.obligations),
+        obligations: mapResourceURNObligationProperties(isAllowed.obligations),
         operation_status: isAllowed.operation_status
       };
     } catch (err) {
@@ -247,12 +247,12 @@ export class UnAuthZ implements IAuthZ {
     ctx: ACSClientContext, useCache: boolean): Promise<PolicySetRQResponse> {
     const authZRequest = {
       target: {
-        action: createActionTarget(request.target.action),
-        subject: createSubjectTarget(request.target.subject),
-        resources: createResourceTarget(request.target.resource, request.target.action)
+        actions: createActionTarget(request.target.actions),
+        subjects: createSubjectTarget(request.target.subjects),
+        resources: createResourceTarget(request.target.resources, request.target.actions)
       },
       context: {
-        subject: this.encode(request.target.subject),
+        subject: this.encode(request.target.subjects),
         resources: this.encode(ctx.resources)
       }
     };
@@ -264,7 +264,7 @@ export class UnAuthZ implements IAuthZ {
 
       response = {
         ...whatIsAllowed,
-        obligation: mapResourceURNObligationProperties(whatIsAllowed.obligations)
+        obligations: mapResourceURNObligationProperties(whatIsAllowed.obligations)
       } as any; // TODO Decision?
     } catch (err) {
       logger.error('Error invoking access-control-srv whatIsAllowed operation',  { code: err.code, message: err.message, stack: err.stack });
@@ -314,11 +314,11 @@ export class ACSAuthZ implements IAuthZ {
       resources: [],
       security: this.encode(request.context.security)
     };
-    const subject = { token: request.target.subject.token };
+    const subject = { token: request.target.subjects.token };
     let cachePrefix = 'ACSAuthZ';
 
-    if (request.target.subject.id !== undefined) {
-      cachePrefix = request.target.subject.id + ':' + cachePrefix;
+    if (request.target.subjects.id !== undefined) {
+      cachePrefix = request.target.subjects.id + ':' + cachePrefix;
     }
 
     authZRequest.context.subject = this.encode(subject);
@@ -338,7 +338,7 @@ export class ACSAuthZ implements IAuthZ {
 
       response = {
         decision: isAllowed.decision,
-        obligation: mapResourceURNObligationProperties(isAllowed.obligations),
+        obligations: mapResourceURNObligationProperties(isAllowed.obligations),
         operation_status: isAllowed.operation_status
       };
     } catch (err) {
@@ -375,12 +375,12 @@ export class ACSAuthZ implements IAuthZ {
       resources: [],
       security: this.encode(request.context.security)
     };
-    const subject = { token: request.target.subject.token };
+    const subject = { token: request.target.subjects.token };
 
     let cachePrefix = 'ACSAuthZ';
 
-    if (request.target.subject.id !== undefined) {
-      cachePrefix = request.target.subject.id + ':' + cachePrefix;
+    if (request.target.subjects.id !== undefined) {
+      cachePrefix = request.target.subjects.id + ':' + cachePrefix;
     }
 
     authZRequest.context.subject = this.encode(subject);
@@ -394,7 +394,7 @@ export class ACSAuthZ implements IAuthZ {
 
       response = {
         ...whatIsAllowed,
-        obligation: mapResourceURNObligationProperties(whatIsAllowed.obligations)
+        obligations: mapResourceURNObligationProperties(whatIsAllowed.obligations)
       } as any; // TODO Decision?
     } catch (err) {
       logger.error('Error invoking access-control-srv whatIsAllowed operation',  { code: err.code, message: err.message, stack: err.stack });
@@ -430,14 +430,14 @@ export class ACSAuthZ implements IAuthZ {
   }
 
   prepareRequest(request: Request<AuthZTarget | AuthZWhatIsAllowedTarget, AuthZContext>): any {
-    let { subject, resource, action } = request.target;
+    let { subjects, resources, actions } = request.target;
     const authZRequest: any = {
       target: {
-        action: createActionTarget(action),
-        subject: createSubjectTarget(subject),
+        actions: createActionTarget(actions),
+        subjects: createSubjectTarget(subjects),
       },
     };
-    authZRequest.target.resources = createResourceTarget(resource, action);
+    authZRequest.target.resources = createResourceTarget(resources, actions);
     return authZRequest;
   }
 }

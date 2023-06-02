@@ -720,10 +720,10 @@ export const createResourceFilterMap = async (resource: Resource[],
  * to property[].
  *
  */
-export const mapResourceURNObligationProperties = (obligation: Attribute[]): Obligation[] => {
+export const mapResourceURNObligationProperties = (obligations: Attribute[]): Obligation[] => {
   let mappedResourceObligation: Obligation[] = [];
   const urns = cfg.get('authorization:urns');
-  for (let obligationObj of obligation) {
+  for (let obligationObj of obligations) {
     if (obligationObj.id === urns.entity) {
       const resourceValueURN = obligationObj.value;
       const resourceNameSpace = resourceValueURN.substring(resourceValueURN.lastIndexOf(':') + 1);

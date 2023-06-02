@@ -14,7 +14,11 @@ import {
 import * as jose from 'jose';
 
 const Router = eval('require("koa-router")');
-const bodyParser = eval('require("koa-body")');
+let bodyParser = eval('require("koa-body")');
+
+if (typeof bodyParser !== 'function') {
+  bodyParser = bodyParser.default;
+}
 
 export const createOAuth = (): KoaRouter<{}, IdentityContext> => {
   const router = new Router() as KoaRouter<{}, IdentityContext>;

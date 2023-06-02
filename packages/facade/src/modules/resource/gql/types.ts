@@ -10,6 +10,7 @@ import { protoMetadata as metaPackageIoRestorecommerceOrganization } from "@rest
 import { protoMetadata as metaPackageIoRestorecommerceTax } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/tax";
 import { protoMetadata as metaPackageIoRestorecommerceTax_type } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/tax_type";
 import { protoMetadata as metaPackageIoRestorecommerceCommand } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/command";
+import { protoMetadata as metaPackageIoRestorecommerceCode } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/code";
 import { ProtoMetadata, registerPackagesRecursive } from '../../../gql/protos';
 
 export function registerTypings() {
@@ -28,5 +29,6 @@ export const subServices: ProtoMetadata[] = [
   metaPackageIoRestorecommerceOrganization,
   metaPackageIoRestorecommerceTax_type,
   metaPackageIoRestorecommerceTax,
-  metaPackageIoRestorecommerceCommand
+  metaPackageIoRestorecommerceCommand,
+  metaPackageIoRestorecommerceCode
 ];

@@ -23,6 +23,7 @@ export async function generateSchemaTypings({schema, outputFile, typescript, typ
       // returns the string output, rather than writing to a file
       filename: outputFile,
       schemaAst: schema,
+      documents: [],
       plugins: [
         {
           typescript: {

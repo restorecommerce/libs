@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+package io.restorecommerce.code;
+
+import "io/restorecommerce/resource_base.proto";
+import "io/restorecommerce/meta.proto";
+import "io/restorecommerce/auth.proto";
+import "io/restorecommerce/status.proto";
+import "io/restorecommerce/options.proto";
+
+service CodeService {
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (CodeListResponse) {
+    option (io.restorecommerce.options.is_query) = true;
+  };
+  rpc Create (CodeList) returns (CodeListResponse);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
+  rpc Update (CodeList) returns (CodeListResponse);
+  rpc Upsert (CodeList) returns (CodeListResponse);
+}
+
+message CodeList {
+  repeated Code items = 1;
+  optional uint32 total_count = 2;
+  io.restorecommerce.auth.Subject subject = 3;
+}
+
+message CodeListResponse {
+  repeated CodeResponse items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.status.OperationStatus operation_status = 3;
+}
+
+message CodeResponse {
+  Code payload = 1;
+  io.restorecommerce.status.Status status = 2;
+}
+
+message Code {
+  optional string id = 1;
+  optional io.restorecommerce.meta.Meta meta = 2;
+  optional Status status = 3;
+  optional string common_code = 4;
+  optional string name = 5;
+  optional string description = 6;
+  optional string level_category = 7;
+  optional string symbol = 8;
+  optional string conversion_factor = 9;
+  optional string group_number = 10;
+  optional Sector sector = 11;
+  optional string group_id = 12;
+  optional string quantity = 13;
+}
+
+enum Status {
+  ADDED = 0;
+  CHANGED_NAME = 1;
+  CHANGED_CHARACTERISTIC = 2;
+  DEPRECATED = 3;
+  MARKED_AS_DELETED = 4;
+  REINSTATED = 5;
+}
+
+enum Sector {
+  UNKNOWN = 0;
+  ACOUSTICS = 1;
+  ATOMIC_AND_NUCLEAR_PHYSICS = 2;
+  CHARACTERISTIC_NUMBERS = 3;
+  ELECTRICITY_AND_MAGNETISM = 4;
+  HEAT = 5;
+  LIGHT_AND_RELATED_ELECTROMAGNETIC_RADIATIONS = 6;
+  MECHANICS = 7;
+  MISCELLANEOUS = 8;
+  NUCLEAR_REACTIONS_AND_IONIZING_RADIATIONS = 9;
+  PERIODIC_AND_RELATED_PHASES = 10;
+  PHYSICAL_CHEMISTRY_AND_MOLECULAR_PHYSICS = 11;
+  SOLID_STATE_PHYSICS = 12;
+  SPACE_AND_TIME = 13;
+}

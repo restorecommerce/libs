@@ -38,6 +38,7 @@
     "typescript": "^5.0.4"
   },
   "scripts": {
+    "prebuild": "npm run generate",
     "build": "npm-run-all build:clean build:compile",
     "build:clean": "rimraf -rf ./dist",
     "build:compile": "tsc -p tsconfig.lib.json",

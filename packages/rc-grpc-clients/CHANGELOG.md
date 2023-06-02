@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.1.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/rc-grpc-clients@3.0.1...@restorecommerce/rc-grpc-clients@3.1.0) (2023-06-02)
+
+
+### Features
+
+* add unit codes ([95b4d36](https://github.com/restorecommerce/libs/commit/95b4d3635a4ef8670f3400271a9ccfb92b7fcf98))
+
+
+
+
+
 ## [3.0.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/rc-grpc-clients@3.0.0...@restorecommerce/rc-grpc-clients@3.0.1) (2023-05-29)
 
 

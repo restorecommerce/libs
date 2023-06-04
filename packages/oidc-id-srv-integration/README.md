@@ -1,1 +1,1 @@
-# oidc-id-srv-integration
+# oidc-id-srv-integration (DEPRECATED)

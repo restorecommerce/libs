@@ -24,7 +24,7 @@ This interface describes the following gRPC endpoints for a generic resource of 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| id | string | required | identifier for the resource |
+| id | string | optional | identifier for the resource |
 | meta | io.restorecommerce.meta.Meta meta | optional | Meta information common to all Restore Commerce resources |
 | value | number | optional | value for the resource |
 | text | string | optional | textual data for the resource |
@@ -48,12 +48,34 @@ If there is a [graph configuration](test/cfg/config.json#L11) specified for the 
 This operation returns resources based on provided filter and options.
 Requests are performed using `io.restorecommerce.resourcebase.ReadRequest` and responses are a list of resources.
 
-`google.protobuf.Struct`
+`io.restorecommerce.resourcebase.ReadRequest`
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| fields | map<string, Value> | optional | Unordered map of dynamically typed values. |
+| offset | number | optional | offset of the resource |
+| limit | number | optional | limit, default value is `1000` |
+| filters | `io.restorecommerce.filter.FilterOp` | optional | nested filters based on field values, multiple filters can be combined with `AND` and `OR` operators  |
+| sorts | [ ]`io.restorecommerce.resourcebase.Sort` | optional | sort the resources |
+| fields | [ ] `io.restorecommerce.resourcebase.FieldFilter` | optional | fields selector, list of fields to be included or excluded, by default we get all the fields |
+| search | [ ]string | optional | word search, not yet implemeneted |
+| locales_limiter | [ ]string | optional | querying based on locales, not yet implemented |
 
+`io.restorecommerce.filter.FilterOp`
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| filters | `io.restorecommerce.filter.Filter` | optional | nested filters |
+| operator | enum | optional | operator `and`, or `or` |
+
+`io.restorecommerce.graph.Filter`
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| field | string | required | filter based on field |
+| operation | enum | optional | operator `eq`, `lt`, `lte`, `gt`, `gte`, `isEmpty`, `ilike`, `in`, `neq`, default value is `eq` |
+| value | string | required | filter based on value |
+| type | enum | optional | value type `STRING`, `NUMBER`, `BOOLEAN`, `DATE` or `ARRAY`, default value is `STRING` |
+| filters | [ ] `io.restorecommerce.filter.FilterOp` | required | nested filters |
 
 `io.restorecommerce.resourcebase.Sort`
 
@@ -62,35 +84,12 @@ Requests are performed using `io.restorecommerce.resourcebase.ReadRequest` and r
 | field | string | optional | field to be sorted upon |
 | SortOrder | enum | optional | sorting order, `UNSORTED`, `ASCENDING` or `DESCENDING` |
 
-
 `io.restorecommerce.resourcebase.FieldFilter`
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | name | string | optional | field name |
 | include | bool | optional | include or exclude field |
-
-
-`io.restorecommerce.resourcebase.ScopeFilter`
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| scope | string | optional | scope to operate on |
-| instance | string | optional | value to compare |
-
-
-`io.restorecommerce.resourcebase.ReadRequest`
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| offset | number | optional | offset of the resource |
-| limit | number | optional | limit, default value is `1000` |
-| filter | google.protobuf.Struct | optional | filter based on field values, multiple filters can be combined with `AND` and `OR` operators  |
-| sort | [ ]`io.restorecommerce.resourcebase.Sort` | optional | sort the resources |
-| field | [ ] `io.restorecommerce.resourcebase.FieldFilter` | optional | fields selector, list of fields to be included or excluded, by default we get all the fields |
-| search | [ ]string | optional | word search, not yet implemeneted |
-| locales_limiter | [ ]string | optional | querying based on locales, not yet implemented |
-| scope | `io.restorecommerce.resourcebase.ScopeFilter` | optional | scope to operate on, not yet implemented |
 
 ### Update
 
@@ -113,7 +112,7 @@ If a graph vertex is deleted, all connected edges are also deleted.
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| collection | string | required | Name of the target collection |
+| collection | string | optional | Name of the target collection |
 | ids | [ ]string | optional | List of resource identifiers to be deleted; if empty or not provided, the whole collection is truncated |
 
 ### Traversal
@@ -125,71 +124,54 @@ Requests are performed using `io.restorecommerce.graph.TraversalRequest` and res
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| start_vertex | string | required | this can be either the `_id` or the `_key` of a vertex in the collection |
+| vertices | [ ]`io.restorecommerce.graph.Vertices` | optional | list of vertices for traversal |
+| collection | `io.restorecommerce.graph.Collection` | optional | collection data for traversal |
 | opts | `io.restorecommerce.graph.Options` | optional | List of options for graph traversal |
-| collection_name | string | optional | starting vertex's Collection name |
-| edge_name | string | optional | edge name for traversal |
-| data | bool | optional | if set to `true` only the vertices data is returned |
 | path | bool | optional | if set to `true` only the traversed paths are returned |
-| aql | bool | optional | if set to `true` traversal is executed as an AQL query |
+| subject | `io.restorecommerce.auth.Subject` | required | Subject details |
+| filters | `io.restorecommerce.graph.Filters` | optional | filters |
+
+`io.restorecommerce.graph.Vertices`
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| collection_name | string | required | collection name |
+| start_vertex_ids | [ ] string | required | list of start vertex ids |
+
+`io.restorecommerce.graph.Collection`
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| collection_name | string | required | collection name |
+| limit | [ ] number | optional | limit |
+| sorts | [ ] `io.restorecommerce.resourcebase.Sort` | optional | sorting based on fields |
+
+`io.restorecommerce.graph.Filters`
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| entity | string | optional | entity name |
+| edge | string | optional | edge name |
+| filters | `io.restorecommerce.graph.Filter` | optional | Filter |
+| operator | enum | optional | operator, `and` or `or`, default is `and` |
 
 `io.restorecommerce.graph.Options`
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| direction | string | optional | Graph traversal direction, possible values are `outbound` or `inbound`, if not provided by default it is `outbound` traversal |
-| filter | [ ] `io.restorecommerce.graph.Filter` | optional | List Vertexes to be filtered out, i.e. these vertices are not traversed |
-| expander | [ ] `io.restorecommerce.graph.Expander` | optional | List of edges to be included in the traversal, by default all edges are included in traversal |
-| sort | string | optional | JS code of custom comparison function for the edges |
-| min_depth | uint32 | optional | visits only vertices in atleast the give depth |
-| start_vertex | string | optional | id of the start vertex |
-| visitor | string | optional | JS code of custom visitor function |
-| init | string | optional | JS code of custom result initialization function |
-| item_order | string | optional | item iteration order, possible values are either `forward` or `backward` |
-| strategy | string | optional | traversal strategy, possible values are either `depthfirst` or `breadthfirst` |
-| max_iterations | uint32 | optional | maximum number of iterations in each traversal, this is used to prevent endless loops in cyclic graphs |
-| max_depth | uint32 | optional | visits nodes in at most the given depth |
-| uniqueness | `io.restorecommerce.graph.Uniqueness` | optional | specifiy uniqueness for vertices and edges visited |
-| order | string | optional | traversal order, possible values are `preorder`, `postorder` or `preorder-expander` |
-| graph_name | string | optional | name of graph that contain the edges |
-| edge_collection | string | optional | name of the collection that contains the edges |
-
-`io.restorecommerce.graph.Filter`
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| vertex | string | optional | vertex would be excluded on traversal |
-
-`io.restorecommerce.graph.Expander`
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| edge | string | optional | expand this edge |
-| direction | string | optional | direction of traversal, either `outbound` or `inbound` |
-
-`io.restorecommerce.graph.Uniqueness`
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| vertices | string | optional | specifies uniqueness for vertices visited, possible values are `none`, `global` or `path` |
-| edges | string | optional | specifies uniqueness for edges visited, possible values are `none`, `global` or `path` |
+| include_vertexs | [ ] string | optional | list of vertex's to be included in traversal |
+| exclude_vertexs | [ ] string | optional | list of vertex's to be excluded in traversal |
+| include_edges | [ ] string | optional | list of edge's to be included in traversal |
+| exclude_edges | [ ] string | optional | list of edge's to be excluded in traversal |
+| direction | enum | optional | direction of traversal, `OUTBOUND` or `INBOUND`, default is `OUTBOUND` |
 
 `io.restorecommerce.graph.TraversalResponse`
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| vertex_fields | [ ] `io.restorecommerce.graph.VertexFields` | required | Object containing vertex metadata: `id`, `_id`, `_key` and `_rev` values |
 | paths | `google.protobuf.Any` | required | buffered data, contains the list of visited paths |
 | data | `google.protobuf.Any` | required | buffered data, contains all the data from the visited vertices |
-
-`io.restorecommerce.graph.VertexFields`
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| _id | string | required | vertex document handle |
-| _key | string | required | vertex document unique key |
-| _rev | string | required | revision or vertex document ETag |
-| id | string | required | id of the vertex collection |
+| operation_status | `io.restorecommerce.status.OperationStatus` | required | operation status |
 
 ## Kafka Events
 

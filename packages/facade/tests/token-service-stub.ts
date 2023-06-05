@@ -1,5 +1,6 @@
-import { Any, TokenService } from '@restorecommerce/rc-grpc-clients';
-import LRU from 'lru-cache';
+import { Any } from '@restorecommerce/rc-grpc-clients';
+import {TokenServiceImplementation} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/token'
+import { LRUCache } from 'lru-cache';
 import { AdapterPayload } from 'oidc-provider';
 import { epochTime, marshallProtobufAny, unmarshallProtobufAny } from './utils';
 
@@ -37,9 +38,9 @@ export interface RevokeByGrantIdRequest {
 //   revokeByGrantId(args: RevokeByGrantIdRequest): Promise<void>;
 // }
 
-export class TokenServiceStub implements TokenService {
-  tokenStorage = new LRU<string, AdapterPayload>({});
-  grantIdStorage = new LRU<string, string[]>({});
+export class TokenServiceStub implements TokenServiceImplementation {
+  tokenStorage = new LRUCache<string, AdapterPayload>({ max: 1000 });
+  grantIdStorage = new LRUCache<string, string[]>({ max: 1000 });
 
   private key(type: string, id: string) {
     return `${type}:${id}`;
@@ -57,7 +58,7 @@ export class TokenServiceStub implements TokenService {
   }
   async destroy({ type, id }: DestroyRequest): Promise<Any> {
     console.log('[ids] destroy', ...arguments);
-    this.tokenStorage.del(this.key(type, id));
+    this.tokenStorage.delete(this.key(type, id));
     return {
       typeUrl: '',
       value: Buffer.from('{}')
@@ -87,7 +88,7 @@ export class TokenServiceStub implements TokenService {
         grant.push(key);
       }
     }
-    this.tokenStorage.set(key, payload, expiresIn * 1000);
+    this.tokenStorage.set(key, payload, { ttl: expiresIn * 1000 });
     return {
       typeUrl: '',
       value: Buffer.from('{}')
@@ -97,8 +98,8 @@ export class TokenServiceStub implements TokenService {
     console.log('[ids] revokeByGrantId', ...arguments);
     const grant = this.grantIdStorage.get(grantId);
     if (grant) {
-      grant.forEach((token: string) => this.tokenStorage.del(token));
-      this.grantIdStorage.del(grantId);
+      grant.forEach((token: string) => this.tokenStorage.delete(token));
+      this.grantIdStorage.delete(grantId);
     }
     return {
       typeUrl: '',

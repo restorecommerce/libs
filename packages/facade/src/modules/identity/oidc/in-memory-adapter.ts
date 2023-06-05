@@ -1,14 +1,14 @@
 import { Adapter, AdapterPayload } from 'oidc-provider';
-import LRU from 'lru-cache';
+import { LRUCache } from 'lru-cache';
 import { epochTime } from './utils';
 
 export class InMemoryAdapter implements Adapter {
 
-  constructor(private type: string) {}
+  constructor(private type: string) { }
 
-  private tokenStorage = new LRU<string, AdapterPayload>({max: 1000});
-  private sessionStorage = new LRU<string, string>({max: 1000});
-  private grantIdStorage = new LRU<string, string[]>({max: 1000});
+  private tokenStorage = new LRUCache<string, AdapterPayload>({ max: 1000 });
+  private sessionStorage = new LRUCache<string, string>({ max: 1000 });
+  private grantIdStorage = new LRUCache<string, string[]>({ max: 1000 });
 
   private key(id: string) {
     return `${this.type}:${id}`;
@@ -61,13 +61,13 @@ export class InMemoryAdapter implements Adapter {
     }
   }
   async destroy(id: string): Promise<void | undefined> {
-    this.tokenStorage.del(this.key(id));
+    this.tokenStorage.delete(this.key(id));
   }
   async revokeByGrantId(grantId: string): Promise<void | undefined> {
     const grant = this.grantIdStorage.get(grantId);
     if (grant) {
-      grant.forEach((token: string) => this.tokenStorage.del(token));
-      this.grantIdStorage.del(grantId);
+      grant.forEach((token: string) => this.tokenStorage.delete(token));
+      this.grantIdStorage.delete(grantId);
     }
   }
 }

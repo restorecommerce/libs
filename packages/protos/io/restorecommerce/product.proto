@@ -16,6 +16,9 @@ import "io/restorecommerce/options.proto";
 
 // Used by resolvers
 import "io/restorecommerce/manufacturer.proto";
+import "io/restorecommerce/product_prototype.proto";
+import "io/restorecommerce/product_category.proto";
+import "io/restorecommerce/shop.proto";
 
 service ProductService {
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ProductListResponse) {
@@ -48,16 +51,6 @@ message Association {
   google.protobuf.Any data = 4;
 }
 
-message Appendix {
-  optional int64 index = 1;
-  optional string name = 2;
-  optional string description = 3;
-  repeated string tags = 4;
-  optional string url = 5;
-  optional string content_type = 6;
-  optional io.restorecommerce.image.Image thumbnail = 7;
-}
-
 // Product resource entity
 message Product {
   option (restorecommerce.options.kafka_subscriber) = {
@@ -77,7 +70,7 @@ message Product {
   optional string shop_id = 5 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.shop.Shop",
-      target_service: "resource",
+      target_service: "master_data",
       target_sub_service: "shop",
       target_method: "Read",
       field_name: "shop",

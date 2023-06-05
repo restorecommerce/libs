@@ -1,5 +1,4 @@
 /* eslint-disable */
-import * as Long from "long";
 import type { CallContext, CallOptions } from "nice-grpc-common";
 import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
@@ -75,16 +74,6 @@ export interface Association {
   type: AssociationType;
   tags: string[];
   data?: Any;
-}
-
-export interface Appendix {
-  index?: number | undefined;
-  name?: string | undefined;
-  description?: string | undefined;
-  tags: string[];
-  url?: string | undefined;
-  content_type?: string | undefined;
-  thumbnail?: Image | undefined;
 }
 
 /** Product resource entity */
@@ -294,157 +283,6 @@ export const Association = {
     message.type = object.type ?? AssociationType.Miscellaneous;
     message.tags = object.tags?.map((e) => e) || [];
     message.data = (object.data !== undefined && object.data !== null) ? Any.fromPartial(object.data) : undefined;
-    return message;
-  },
-};
-
-function createBaseAppendix(): Appendix {
-  return {
-    index: undefined,
-    name: undefined,
-    description: undefined,
-    tags: [],
-    url: undefined,
-    content_type: undefined,
-    thumbnail: undefined,
-  };
-}
-
-export const Appendix = {
-  encode(message: Appendix, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.index !== undefined) {
-      writer.uint32(8).int64(message.index);
-    }
-    if (message.name !== undefined) {
-      writer.uint32(18).string(message.name);
-    }
-    if (message.description !== undefined) {
-      writer.uint32(26).string(message.description);
-    }
-    for (const v of message.tags) {
-      writer.uint32(34).string(v!);
-    }
-    if (message.url !== undefined) {
-      writer.uint32(42).string(message.url);
-    }
-    if (message.content_type !== undefined) {
-      writer.uint32(50).string(message.content_type);
-    }
-    if (message.thumbnail !== undefined) {
-      Image.encode(message.thumbnail, writer.uint32(58).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): Appendix {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseAppendix();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 8) {
-            break;
-          }
-
-          message.index = longToNumber(reader.int64() as Long);
-          continue;
-        case 2:
-          if (tag !== 18) {
-            break;
-          }
-
-          message.name = reader.string();
-          continue;
-        case 3:
-          if (tag !== 26) {
-            break;
-          }
-
-          message.description = reader.string();
-          continue;
-        case 4:
-          if (tag !== 34) {
-            break;
-          }
-
-          message.tags.push(reader.string());
-          continue;
-        case 5:
-          if (tag !== 42) {
-            break;
-          }
-
-          message.url = reader.string();
-          continue;
-        case 6:
-          if (tag !== 50) {
-            break;
-          }
-
-          message.content_type = reader.string();
-          continue;
-        case 7:
-          if (tag !== 58) {
-            break;
-          }
-
-          message.thumbnail = Image.decode(reader, reader.uint32());
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): Appendix {
-    return {
-      index: isSet(object.index) ? Number(object.index) : undefined,
-      name: isSet(object.name) ? String(object.name) : undefined,
-      description: isSet(object.description) ? String(object.description) : undefined,
-      tags: Array.isArray(object?.tags) ? object.tags.map((e: any) => String(e)) : [],
-      url: isSet(object.url) ? String(object.url) : undefined,
-      content_type: isSet(object.content_type) ? String(object.content_type) : undefined,
-      thumbnail: isSet(object.thumbnail) ? Image.fromJSON(object.thumbnail) : undefined,
-    };
-  },
-
-  toJSON(message: Appendix): unknown {
-    const obj: any = {};
-    message.index !== undefined && (obj.index = Math.round(message.index));
-    message.name !== undefined && (obj.name = message.name);
-    message.description !== undefined && (obj.description = message.description);
-    if (message.tags) {
-      obj.tags = message.tags.map((e) => e);
-    } else {
-      obj.tags = [];
-    }
-    message.url !== undefined && (obj.url = message.url);
-    message.content_type !== undefined && (obj.content_type = message.content_type);
-    message.thumbnail !== undefined &&
-      (obj.thumbnail = message.thumbnail ? Image.toJSON(message.thumbnail) : undefined);
-    return obj;
-  },
-
-  create(base?: DeepPartial<Appendix>): Appendix {
-    return Appendix.fromPartial(base ?? {});
-  },
-
-  fromPartial(object: DeepPartial<Appendix>): Appendix {
-    const message = createBaseAppendix();
-    message.index = object.index ?? undefined;
-    message.name = object.name ?? undefined;
-    message.description = object.description ?? undefined;
-    message.tags = object.tags?.map((e) => e) || [];
-    message.url = object.url ?? undefined;
-    message.content_type = object.content_type ?? undefined;
-    message.thumbnail = (object.thumbnail !== undefined && object.thumbnail !== null)
-      ? Image.fromPartial(object.thumbnail)
-      : undefined;
     return message;
   },
 };
@@ -2219,108 +2057,6 @@ export const protoMetadata: ProtoMetadata = {
       "reservedRange": [],
       "reservedName": [],
     }, {
-      "name": "Appendix",
-      "field": [{
-        "name": "index",
-        "number": 1,
-        "label": 1,
-        "type": 3,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "index",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
-        "name": "name",
-        "number": 2,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 1,
-        "jsonName": "name",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
-        "name": "description",
-        "number": 3,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 2,
-        "jsonName": "description",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
-        "name": "tags",
-        "number": 4,
-        "label": 3,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "tags",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "url",
-        "number": 5,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 3,
-        "jsonName": "url",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
-        "name": "content_type",
-        "number": 6,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 4,
-        "jsonName": "contentType",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
-        "name": "thumbnail",
-        "number": 7,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.image.Image",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 5,
-        "jsonName": "thumbnail",
-        "options": undefined,
-        "proto3Optional": true,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [
-        { "name": "_index", "options": undefined },
-        { "name": "_name", "options": undefined },
-        { "name": "_description", "options": undefined },
-        { "name": "_url", "options": undefined },
-        { "name": "_content_type", "options": undefined },
-        { "name": "_thumbnail", "options": undefined },
-      ],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
       "name": "Product",
       "field": [{
         "name": "id",
@@ -3409,14 +3145,14 @@ export const protoMetadata: ProtoMetadata = {
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 2],
-        "span": [60, 0, 79, 1],
+        "path": [4, 1],
+        "span": [50, 0, 69, 1],
         "leadingComments": " Product resource entity\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 13, 2, 3],
-        "span": [205, 2, 32],
+        "path": [4, 12, 2, 3],
+        "span": [195, 2, 32],
         "leadingComments": "",
         "trailingComments": "Discount in relation to the bundle price\n",
         "leadingDetachedComments": [],
@@ -3427,7 +3163,6 @@ export const protoMetadata: ProtoMetadata = {
   references: {
     ".io.restorecommerce.product.AssociationType": AssociationType,
     ".io.restorecommerce.product.Association": Association,
-    ".io.restorecommerce.product.Appendix": Appendix,
     ".io.restorecommerce.product.Product": Product,
     ".io.restorecommerce.product.IndividualProduct": IndividualProduct,
     ".io.restorecommerce.product.PhysicalProduct": PhysicalProduct,
@@ -3524,45 +3259,12 @@ export const protoMetadata: ProtoMetadata = {
   },
 };
 
-declare var self: any | undefined;
-declare var window: any | undefined;
-declare var global: any | undefined;
-var tsProtoGlobalThis: any = (() => {
-  if (typeof globalThis !== "undefined") {
-    return globalThis;
-  }
-  if (typeof self !== "undefined") {
-    return self;
-  }
-  if (typeof window !== "undefined") {
-    return window;
-  }
-  if (typeof global !== "undefined") {
-    return global;
-  }
-  throw "Unable to locate global object";
-})();
-
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
 export type DeepPartial<T> = T extends Builtin ? T
   : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
   : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
-
-function longToNumber(long: Long): number {
-  if (long.gt(Number.MAX_SAFE_INTEGER)) {
-    throw new tsProtoGlobalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
-  }
-  return long.toNumber();
-}
-
-// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
-// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
-if (_m0.util.Long !== Long) {
-  _m0.util.Long = Long as any;
-  _m0.configure();
-}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

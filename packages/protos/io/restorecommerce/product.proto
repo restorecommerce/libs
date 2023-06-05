@@ -47,16 +47,6 @@ message Association {
   google.protobuf.Any data = 4;
 }
 
-message Appendix {
-  optional int64 index = 1;
-  optional string name = 2;
-  optional string description = 3;
-  repeated string tags = 4;
-  optional string url = 5;
-  optional string content_type = 6;
-  optional io.restorecommerce.image.Image thumbnail = 7;
-}
-
 // Product resource entity
 message Product {
   option (restorecommerce.options.kafka_subscriber) = {

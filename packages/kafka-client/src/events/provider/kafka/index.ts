@@ -431,7 +431,7 @@ export class Topic {
         eventName, message);
       if (decodedMsg) {
         decodedMsg = _.pick(decodedMsg, _.keys(decodedMsg)); // hack around messy protobuf.js object
-        this.provider.logger.debug(`kafka received event with topic ${context.topic} and event name ${eventName}`, { message });
+        this.provider.logger.debug(`kafka received event with topic ${context.topic} and event name ${eventName}`, { decodedMsg });
         this.emitter.emit(eventName, decodedMsg, context,
           this.config, eventName);
       }

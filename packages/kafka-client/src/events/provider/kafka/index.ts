@@ -615,7 +615,7 @@ export class Kafka {
     try {
       return decodeMessage(msg, config[eventName].messageObject);
     } catch (err) {
-      this.logger.error(`error on decoding message with event ${eventName}`, { message: msg, errorCode: err.code, errorMessage: err.message, errorStack: err.stack });
+      this.logger.error(`error on decoding message with event ${eventName}`, { errorCode: err.code, errorMessage: err.message, errorStack: err.stack });
     }
   }
 

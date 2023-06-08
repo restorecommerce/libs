@@ -12,9 +12,12 @@ import { createLogger } from '@restorecommerce/logger';
 import { generateResolver, generateSchema, registerResolverFunction, registerResolverSchema } from '../src/gql/protos/index.js';
 import { GraphQLString, printSchema } from 'graphql';
 import { buildSubgraphSchema } from '@apollo/federation';
-import gql from 'graphql-tag';
+import { gql } from 'graphql-tag';
 import path from 'node:path';
 import * as url from 'node:url';
+import { jest } from '@jest/globals';
+
+jest.useFakeTimers();
 
 const CONFIG_PATH = path.dirname(url.fileURLToPath(import.meta.url));
 

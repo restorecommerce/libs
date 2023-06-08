@@ -1,20 +1,20 @@
-import Koa from 'koa';
+import type Koa from 'koa';
 import {
-  TokenResponseBody,
+  type TokenResponseBody,
   InvalidPasswordGrant,
-  OIDCPasswordGrantTypeConfig,
-  Claims,
-  LoginFnResponse
-} from './interfaces';
-import { nanoid, epochTime } from './utils';
+  type OIDCPasswordGrantTypeConfig,
+  type Claims,
+  type LoginFnResponse
+} from './interfaces.js';
+import { nanoid, epochTime } from './utils.js';
 import * as useragent from 'useragent';
 import * as uuid from 'uuid';
 import * as requestIp from 'request-ip';
 import {
   AuthenticationLog,
   AuthenticationLogList
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/authentication_log';
-import { Subject } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/auth';
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/authentication_log.js';
+import { Subject } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/auth.js';
 
 export const registerPasswordGrantType = (config: OIDCPasswordGrantTypeConfig) => {
   const performPasswordGrant = async (ctx: Koa.Context, clientId: string, identifier: string, password: string, key: string): Promise<TokenResponseBody> => {
@@ -51,7 +51,7 @@ export const registerPasswordGrantType = (config: OIDCPasswordGrantTypeConfig) =
     const claims: Claims = {
       sub: account.user.id,
       data: account.user
-    }
+    };
 
     const {AccessToken} = ctx.oidc.provider;
     // for interactive login (to update user data in arangodb with token name)
@@ -81,7 +81,7 @@ export const registerPasswordGrantType = (config: OIDCPasswordGrantTypeConfig) =
       claims.data = {
         ...claims.data,
         tokens: []
-      }
+      };
     }
 
     const generateIdToken = async (ctx: Koa.Context, clientId: string, expiresIn: number, claims: Claims): Promise<string> => {
@@ -156,7 +156,7 @@ export const registerPasswordGrantType = (config: OIDCPasswordGrantTypeConfig) =
           date: new Date().getTime(),
           activity: 'login',
           tokenName: token_name
-        })
+        });
 
         await config.authLogService.create(AuthenticationLogList.fromPartial({
           items: [authLogItem],

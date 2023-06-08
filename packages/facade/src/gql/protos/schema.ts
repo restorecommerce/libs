@@ -1,18 +1,18 @@
-import { MethodDescriptorProto, ServiceDescriptorProto } from 'ts-proto-descriptors';
-import { ProtoMetadata, ServiceConfig, SubSpaceServiceConfig } from './types';
+import { type MethodDescriptorProto, type ServiceDescriptorProto } from 'ts-proto-descriptors';
+import { type ProtoMetadata, type ServiceConfig, type SubSpaceServiceConfig } from './types.js';
 import {
   GraphQLSchema,
   GraphQLNonNull,
   GraphQLObjectType,
   GraphQLString,
-  ThunkObjMap,
+  type ThunkObjMap,
   GraphQLInputObjectType, GraphQLEnumType
 } from 'graphql';
 import flat from 'array.prototype.flat';
-import { getWhitelistBlacklistConfig, Mutate } from './graphql';
-import { GraphQLFieldConfig, GraphQLFieldConfigArgumentMap, GraphQLFieldConfigMap } from 'graphql/type/definition';
-import { capitalize, capitalizeProtoName, useSubscriptions, getServiceName } from './utils';
-import { getTyping } from './registry';
+import { getWhitelistBlacklistConfig, Mutate } from './graphql.js';
+import { type GraphQLFieldConfig, type GraphQLFieldConfigArgumentMap, type GraphQLFieldConfigMap } from 'graphql/type/definition.js';
+import { capitalize, capitalizeProtoName, useSubscriptions, getServiceName } from './utils.js';
+import { getTyping } from './registry.js';
 
 const typeCache = new Map<string, GraphQLObjectType>();
 
@@ -38,11 +38,11 @@ const subscriptionOutput = new GraphQLObjectType({
       type: GraphQLString
     }
   }
-})
+});
 
 export const getGQLSchema = <TSource, TContext>
 (method: MethodDescriptorProto): GraphQLFieldConfig<TSource, TContext> => {
-  const fields: any = {}
+  const fields: any = {};
 
   const responseTyping = getTyping(method.outputType!);
   if (!responseTyping) {
@@ -52,7 +52,7 @@ export const getGQLSchema = <TSource, TContext>
   if (method.outputType! !== '.google.protobuf.Empty') {
     fields['details'] = {
       type: responseTyping.output,
-    }
+    };
   }
 
   const outName = 'Proto' + capitalizeProtoName(method.outputType!);
@@ -78,15 +78,15 @@ export const getGQLSchema = <TSource, TContext>
         type: new GraphQLNonNull(typing.input!)
       }
     }
-  }
-}
+  };
+};
 
 export const getGQLSchemas = <TSource, TContext>(service: ServiceDescriptorProto): GraphQLFieldConfigMap<TSource, TContext> => {
   return service.method?.reduce((obj, method) => {
     obj[method.name!] = getGQLSchema(method);
     return obj;
   }, {} as any);
-}
+};
 
 type SchemaBaseOrSub =
   ThunkObjMap<GraphQLFieldConfig<any, any>>
@@ -95,7 +95,7 @@ const namespaceResolverSchemaRegistry = new Map<string, Map<boolean, Map<string,
 
 const subscriptionFields: GraphQLFieldConfigMap<any, GraphQLFieldConfig<any, any>> = {};
 
-export const registerResolverSchema = (namespace: string, name: string, schema: SchemaBaseOrSub, mutation: boolean = false, subspace: string | undefined = undefined, config: ServiceConfig) => {
+export const registerResolverSchema = (namespace: string, name: string, schema: SchemaBaseOrSub, mutation = false, subspace: string | undefined = undefined, config: ServiceConfig) => {
   if (!namespaceResolverSchemaRegistry.has(namespace)) {
     namespaceResolverSchemaRegistry.set(namespace, new Map());
   }
@@ -132,15 +132,15 @@ export const registerResolverSchema = (namespace: string, name: string, schema: 
     name = 'Mutate';
   }
   space.set(name, schema);
-}
+};
 
-export const generateSchema = (setup: { prefix: string, namespace: string }[]) => {
+export const generateSchema = (setup: { prefix: string; namespace: string }[]) => {
   const queryFields: GraphQLFieldConfigMap<any, any> = {};
   const mutationFields: GraphQLFieldConfigMap<any, any> = {};
 
   setup.forEach(s => {
     if (!namespaceResolverSchemaRegistry.has(s.namespace)) {
-      throw new Error(`Namespace "${s.namespace}" has no registered schemas`)
+      throw new Error(`Namespace "${s.namespace}" has no registered schemas`);
     }
 
     if (namespaceResolverSchemaRegistry.get(s.namespace)!.has(false)) {
@@ -190,7 +190,7 @@ export const generateSchema = (setup: { prefix: string, namespace: string }[]) =
           name: s.prefix + 'Mutation',
           fields
         }))
-      }
+      };
     }
   });
 
@@ -220,20 +220,20 @@ export const generateSchema = (setup: { prefix: string, namespace: string }[]) =
   return new GraphQLSchema({
     ...config,
   });
-}
+};
 
 export const generateSubServiceSchemas = (subServices: ProtoMetadata[], config: SubSpaceServiceConfig, namespace: string, prefix: string): GraphQLSchema => {
   subServices.forEach((meta) => {
     meta.fileDescriptor.service.forEach(service => {
       if (service.name) {
         const subName = getServiceName(service.name);
-        const {mutations, queries} = getWhitelistBlacklistConfig(service, config, meta, subName)
+        const {mutations, queries} = getWhitelistBlacklistConfig(service, config, meta, subName);
 
         const schemas = getGQLSchemas(service);
 
         Object.keys(schemas).forEach(key => {
-          registerResolverSchema(config.root ? subName : namespace, key, schemas[key] as any, !queries.has(key) && mutations.has(key), config.root ? undefined : subName, config)
-        })
+          registerResolverSchema(config.root ? subName : namespace, key, schemas[key] as any, !queries.has(key) && mutations.has(key), config.root ? undefined : subName, config);
+        });
       }
     });
 
@@ -249,7 +249,7 @@ export const generateSubServiceSchemas = (subServices: ProtoMetadata[], config: 
               // type: typing?.output!,
               type: subscriptionOutput,
               args: subscriptionInput
-            }
+            };
           }
         }
       });
@@ -273,4 +273,4 @@ export const generateSubServiceSchemas = (subServices: ProtoMetadata[], config: 
   }
 
   return generateSchema([{prefix, namespace}]);
-}
+};

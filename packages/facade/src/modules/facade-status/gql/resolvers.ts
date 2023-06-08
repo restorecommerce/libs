@@ -1,12 +1,10 @@
-import { Resolvers  } from './schema.generated';
+import { type Resolvers  } from './schema.generated.js';
 
 export const resolvers: Resolvers = {
   Query: {
 
-    async status(_, __, ctx) {
-      return {
-        running: ctx.facade.listening
-      }
-    }
+    status: async (_: any, __: any, ctx: any) => ({
+      running: ctx.facade.listening
+    })
   }
-}
+};

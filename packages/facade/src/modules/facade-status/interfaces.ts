@@ -1,4 +1,4 @@
-import { FacadeModule, FacadeContext } from "../../interfaces";
+import { type FacadeModule, type FacadeContext } from '../../interfaces.js';
 
 export interface FacadeStatusContext extends FacadeContext { }
 

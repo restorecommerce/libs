@@ -15,13 +15,14 @@ import {
   ostorageModule,
   paymentModule,
   schedulingModule
-} from './src';
-import { join } from 'path';
+} from './src/index.js';
+import { join, dirname } from 'node:path';
+import * as url from 'node:url';
 
-const CONFIG_PATH = __dirname;
-const jwks = require('./tests/jwks.json');
+const CONFIG_PATH = dirname(url.fileURLToPath(import.meta.url));
+import jwks from './tests/jwks.json' assert { type: 'json' };
 
-function createTestFacade() {
+const createTestFacade = () => {
   const serviceConfig = createServiceConfig(join(CONFIG_PATH, 'tests'));
 
   const logger = createLogger(serviceConfig.get('logger'));
@@ -66,7 +67,7 @@ function createTestFacade() {
     .useModule(paymentModule({config: serviceConfig.get('payment')}))
     .useModule(schedulingModule({config: serviceConfig.get('scheduling')}))
     .useMiddleware(reqResLogger({logger}));
-}
+};
 
 const facade = createTestFacade();
 

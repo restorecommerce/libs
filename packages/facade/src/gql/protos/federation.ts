@@ -1,16 +1,16 @@
 import {
-  FederatedSchemaWithResolvers,
-  GraphQLResolverMap,
-  ProtoMetadata,
-  ServiceClient,
-  SubSpaceServiceConfig
-} from './types';
+  type FederatedSchemaWithResolvers,
+  type GraphQLResolverMap,
+  type ProtoMetadata,
+  type ServiceClient,
+  type SubSpaceServiceConfig
+} from './types.js';
 import { buildSubgraphSchema } from '@apollo/federation';
-import gql from 'graphql-tag';
-import { GraphQLSchema, printSchema } from 'graphql/index';
+import { gql } from 'graphql-tag';
+import { type GraphQLSchema, printSchema } from 'graphql/index.js';
 import { GraphQLObjectType } from 'graphql';
-import { GraphQLList, GraphQLScalarType } from 'graphql/type/definition';
-import { generateSubServiceResolvers } from './resolvers';
+import { GraphQLList, GraphQLScalarType } from 'graphql/type/definition.js';
+import { generateSubServiceResolvers } from './resolvers.js';
 
 export const buildFederatedSubscriptionSchema = <T, M extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, M>>(subServices: ProtoMetadata[], config: SubSpaceServiceConfig, namespace: string, schema: GraphQLSchema): FederatedSchemaWithResolvers => {
   const resolvers: GraphQLResolverMap<any> = generateSubServiceResolvers(subServices, config, namespace);
@@ -25,8 +25,8 @@ export const buildFederatedSubscriptionSchema = <T, M extends Record<string, any
   return {
     federatedSchema,
     resolvers
-  }
-}
+  };
+};
 
 export const mergeSubscribeIntoSchema = (schema: GraphQLObjectType | GraphQLList<any> | null | undefined, resolvers: GraphQLResolverMap<any>[string]) => {
   if (!schema || !resolvers) {
@@ -57,4 +57,4 @@ export const mergeSubscribeIntoSchema = (schema: GraphQLObjectType | GraphQLList
       mergeSubscribeIntoSchema(fieldType, val);
     }
   });
-}
+};

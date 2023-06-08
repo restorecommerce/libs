@@ -1,8 +1,11 @@
-import path from 'path';
-import fs from 'fs';
-import { IdentityContext } from '../interfaces';
+import path from 'node:path';
+import fs from 'node:fs';
+import { IdentityContext } from '../interfaces.js';
 import hbs from 'handlebars';
-import { OIDCHbsTemplates } from './interfaces';
+import { type OIDCHbsTemplates } from './interfaces.js';
+import * as url from 'node:url';
+
+const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 
 export interface OIDCTemplateError {
   key: string;
@@ -12,7 +15,7 @@ export interface OIDCTemplateError {
 export interface OIDCTemplateContext {
   title: string;
   error?: OIDCTemplateError;
-  dev: boolean,
+  dev: boolean;
   dbg: {
     session?: any;
     params?: any;
@@ -33,7 +36,7 @@ export interface OIDCTemplateLoginContext extends OIDCTemplateContext {
 
 hbs.registerHelper('json', (object) => {
   return `<pre>${JSON.stringify(object, null, 2)}</pre>`;
-})
+});
 
 export class OIDCTemplateEngine {
 

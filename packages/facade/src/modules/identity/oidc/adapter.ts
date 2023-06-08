@@ -1,9 +1,9 @@
-import { Logger } from 'winston';
-import { Adapter, AdapterConstructor, AdapterPayload } from 'oidc-provider';
-import { marshallProtobufAny, unmarshallProtobufAny } from './utils';
-import { Subject } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/auth';
-import { InMemoryAdapter } from './in-memory-adapter';
-import { TokenServiceClient as tokenService } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/token";
+import { type Logger } from 'winston';
+import { type Adapter, type AdapterConstructor, type AdapterPayload } from 'oidc-provider';
+import { marshallProtobufAny, unmarshallProtobufAny } from './utils.js';
+import { Subject } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/auth.js';
+import { InMemoryAdapter } from './in-memory-adapter.js';
+import { type TokenServiceClient as tokenService } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/token.js';
 
 const delegateToRemoteService = (type: string) => ['AccessToken', 'RefreshToken'].includes(type);
 
@@ -116,5 +116,5 @@ export function createIdentityServiceAdapterClass(remoteTokenService: tokenServi
         }
       }
     }
-  }
+  };
 }

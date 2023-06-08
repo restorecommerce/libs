@@ -1,6 +1,6 @@
-import { PaymentSrvGrpcClient } from "./grpc";
-import { ServiceConfig } from "../../gql/protos";
-import { FacadeModule, FacadeContext } from "../../interfaces";
+import { type PaymentSrvGrpcClient } from './grpc/index.js';
+import { type ServiceConfig } from '../../gql/protos/index.js';
+import { type FacadeModule, type FacadeContext } from '../../interfaces.js';
 
 export interface PaymentServiceConfig extends ServiceConfig {
   root: boolean;
@@ -13,7 +13,7 @@ export interface PaymentConfig {
 export interface PaymentContext extends FacadeContext {
   payment: {
     client: PaymentSrvGrpcClient;
-  }
+  };
 }
 
 export type PaymentModule = FacadeModule<PaymentContext>;

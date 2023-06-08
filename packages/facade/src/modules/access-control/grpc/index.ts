@@ -1,21 +1,21 @@
 import { RestoreCommerceGrpcClient } from '@restorecommerce/rc-grpc-clients';
 import {
-  AccessControlServiceClient,
+  type AccessControlServiceClient,
   AccessControlServiceDefinition
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/access_control';
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/access_control.js';
 import {
-  PolicyServiceClient,
+  type PolicyServiceClient,
   PolicyServiceDefinition
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/policy';
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/policy.js';
 import {
-  RuleServiceClient,
+  type RuleServiceClient,
   RuleServiceDefinition
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/rule';
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/rule.js';
 import {
-  PolicySetServiceClient,
+  type PolicySetServiceClient,
   PolicySetServiceDefinition
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/policy_set';
-import { GrpcClientConfig } from '@restorecommerce/grpc-client';
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/policy_set.js';
+import { type GrpcClientConfig } from '@restorecommerce/grpc-client';
 
 export class AccessControlSrvGrpcClient extends RestoreCommerceGrpcClient {
 

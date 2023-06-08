@@ -1,7 +1,7 @@
-import { FederatedOstorageSchema } from './gql/federation';
-import { namespace, OstorageConfig, OstorageModule } from "./interfaces";
-import { OstorageSrvGrpcClient } from "./grpc";
-import { createFacadeModuleFactory } from "../../utils";
+import { FederatedOstorageSchema } from './gql/federation.js';
+import { namespace, type OstorageConfig, type OstorageModule } from './interfaces.js';
+import { OstorageSrvGrpcClient } from './grpc/index.js';
+import { createFacadeModuleFactory } from '../../utils.js';
 
 export const ostorageModule = createFacadeModuleFactory<OstorageConfig, OstorageModule>(namespace, (facade, config) => {
   const ostorage = {

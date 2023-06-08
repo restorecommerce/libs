@@ -1,14 +1,14 @@
 import * as uuid from 'uuid';
-import { Logger } from 'winston';
-import Application from "koa";
+import { type Logger } from 'winston';
+import type Application from 'koa';
 import { Events, registerProtoMeta } from '@restorecommerce/kafka-client';
 import { createServiceConfig } from '@restorecommerce/service-config';
-import { protoMetadata as commandInterfaceMeta } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/commandinterface';
+import { protoMetadata as commandInterfaceMeta } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/commandinterface.js';
 
 // const Router = require('koa-router');
 
 import Router from 'koa-router';
-// import controller from './controller';
+// import controller from './controller/index.js';
 
 const router = new Router();
 // router.get('/getVisibleZones', controller.getVisibleZones);
@@ -83,7 +83,7 @@ const exectueSetAPIKeyCommand = async (apiKey: string, logger: Logger): Promise<
     logger.info('Kafka configuration missing for sync ApiKey');
     return {
       responses: [{ response: 'Api Key not synced' }]
-    }
+    };
   }
 };
 
@@ -102,8 +102,8 @@ const initApiKey = (logger: Logger, apiKey: boolean | string) => {
 };
 
 export const setupApiKey = ({ apiKey, logger }: APIParams): {
-  router: any,
-  app: Application.Middleware<any>
+  router: any;
+  app: Application.Middleware<any>;
 } | undefined => {
   const router = new Router();
 

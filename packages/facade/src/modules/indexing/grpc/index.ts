@@ -1,9 +1,9 @@
 import { RestoreCommerceGrpcClient } from '@restorecommerce/rc-grpc-clients';
 import {
-  SearchServiceClient,
+  type SearchServiceClient,
   SearchServiceDefinition
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/search';
-import { GrpcClientConfig } from '@restorecommerce/grpc-client';
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/search.js';
+import { type GrpcClientConfig } from '@restorecommerce/grpc-client';
 
 export class IndexingSrvGrpcClient extends RestoreCommerceGrpcClient {
 

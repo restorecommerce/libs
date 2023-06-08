@@ -1,7 +1,7 @@
-import { FederatedInvoicingSchema } from './gql/federation';
-import { namespace, InvoicingConfig, InvoicingModule } from "./interfaces";
-import { InvoicingSrvGrpcClient } from "./grpc";
-import { createFacadeModuleFactory } from "../../utils";
+import { FederatedInvoicingSchema } from './gql/federation.js';
+import { namespace, type InvoicingConfig, type InvoicingModule } from './interfaces.js';
+import { InvoicingSrvGrpcClient } from './grpc/index.js';
+import { createFacadeModuleFactory } from '../../utils.js';
 
 export const invoicingModule = createFacadeModuleFactory<InvoicingConfig, InvoicingModule>(namespace, (facade, config) => {
   const invoicing = {

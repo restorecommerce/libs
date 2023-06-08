@@ -1,19 +1,21 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
-import { SchedulingContext } from '../interfaces';
+import { SchedulingContext } from '../interfaces.js';
 export type Maybe<T> = T | null | undefined;
 export type InputMaybe<T> = T | null | undefined;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: string;
-  String: string;
-  Boolean: boolean;
-  Int: number;
-  Float: number;
-  GoogleProtobufAnyValue: any;
+  ID: { input: string | number; output: string; }
+  String: { input: string; output: string; }
+  Boolean: { input: boolean; output: boolean; }
+  Int: { input: number; output: number; }
+  Float: { input: number; output: number; }
+  GoogleProtobufAnyValue: { input: any; output: any; }
 };
 
 export type Query = {
@@ -44,7 +46,7 @@ export type ProtoIoRestorecommerceJobJobListResponse = {
 export type IoRestorecommerceJobJobListResponse = {
   __typename?: 'IoRestorecommerceJobJobListResponse';
   items?: Maybe<Array<IoRestorecommerceJobJobResponse>>;
-  totalCount?: Maybe<Scalars['Int']>;
+  totalCount?: Maybe<Scalars['Int']['output']>;
   operationStatus?: Maybe<IoRestorecommerceStatusOperationStatus>;
 };
 
@@ -56,10 +58,10 @@ export type IoRestorecommerceJobJobResponse = {
 
 export type IoRestorecommerceJobJob = {
   __typename?: 'IoRestorecommerceJobJob';
-  id?: Maybe<Scalars['String']>;
-  type?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']['output']>;
+  type?: Maybe<Scalars['String']['output']>;
   data?: Maybe<IoRestorecommerceJobData>;
-  when?: Maybe<Scalars['String']>;
+  when?: Maybe<Scalars['String']['output']>;
   options?: Maybe<IoRestorecommerceJobJobOptions>;
 };
 
@@ -67,28 +69,28 @@ export type IoRestorecommerceJobData = {
   __typename?: 'IoRestorecommerceJobData';
   payload?: Maybe<GoogleProtobufAny>;
   meta?: Maybe<IoRestorecommerceMetaMeta>;
-  subjectId?: Maybe<Scalars['String']>;
+  subjectId?: Maybe<Scalars['String']['output']>;
 };
 
 export type GoogleProtobufAny = {
   __typename?: 'GoogleProtobufAny';
-  typeUrl?: Maybe<Scalars['String']>;
-  value?: Maybe<Scalars['GoogleProtobufAnyValue']>;
+  typeUrl?: Maybe<Scalars['String']['output']>;
+  value?: Maybe<Scalars['GoogleProtobufAnyValue']['output']>;
 };
 
 export type IoRestorecommerceMetaMeta = {
   __typename?: 'IoRestorecommerceMetaMeta';
-  created?: Maybe<Scalars['Float']>;
-  modified?: Maybe<Scalars['Float']>;
-  modifiedBy?: Maybe<Scalars['String']>;
+  created?: Maybe<Scalars['Float']['output']>;
+  modified?: Maybe<Scalars['Float']['output']>;
+  modifiedBy?: Maybe<Scalars['String']['output']>;
   owners?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
   acls?: Maybe<Array<IoRestorecommerceAttributeAttributeObj>>;
 };
 
 export type IoRestorecommerceAttributeAttribute = {
   __typename?: 'IoRestorecommerceAttributeAttribute';
-  id?: Maybe<Scalars['String']>;
-  value?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']['output']>;
+  value?: Maybe<Scalars['String']['output']>;
   attributes?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
 };
 
@@ -100,12 +102,12 @@ export type IoRestorecommerceAttributeAttributeObj = {
 export type IoRestorecommerceJobJobOptions = {
   __typename?: 'IoRestorecommerceJobJobOptions';
   priority?: Maybe<IoRestorecommerceJobJobOptionsPriority>;
-  attempts?: Maybe<Scalars['Int']>;
+  attempts?: Maybe<Scalars['Int']['output']>;
   backoff?: Maybe<IoRestorecommerceJobBackoff>;
-  timeout?: Maybe<Scalars['Int']>;
+  timeout?: Maybe<Scalars['Int']['output']>;
   repeat?: Maybe<IoRestorecommerceJobRepeat>;
-  jobId?: Maybe<Scalars['String']>;
-  removeOnComplete?: Maybe<Scalars['Boolean']>;
+  jobId?: Maybe<Scalars['String']['output']>;
+  removeOnComplete?: Maybe<Scalars['Boolean']['output']>;
 };
 
 export enum IoRestorecommerceJobJobOptionsPriority {
@@ -118,7 +120,7 @@ export enum IoRestorecommerceJobJobOptionsPriority {
 
 export type IoRestorecommerceJobBackoff = {
   __typename?: 'IoRestorecommerceJobBackoff';
-  delay?: Maybe<Scalars['Float']>;
+  delay?: Maybe<Scalars['Float']['output']>;
   type?: Maybe<IoRestorecommerceJobBackoffType>;
 };
 
@@ -129,35 +131,35 @@ export enum IoRestorecommerceJobBackoffType {
 
 export type IoRestorecommerceJobRepeat = {
   __typename?: 'IoRestorecommerceJobRepeat';
-  every?: Maybe<Scalars['Int']>;
-  cron?: Maybe<Scalars['String']>;
-  startDate?: Maybe<Scalars['String']>;
-  endDate?: Maybe<Scalars['String']>;
-  count?: Maybe<Scalars['Int']>;
-  jobId?: Maybe<Scalars['String']>;
-  tz?: Maybe<Scalars['String']>;
+  every?: Maybe<Scalars['Int']['output']>;
+  cron?: Maybe<Scalars['String']['output']>;
+  startDate?: Maybe<Scalars['String']['output']>;
+  endDate?: Maybe<Scalars['String']['output']>;
+  count?: Maybe<Scalars['Int']['output']>;
+  jobId?: Maybe<Scalars['String']['output']>;
+  tz?: Maybe<Scalars['String']['output']>;
 };
 
 export type IoRestorecommerceStatusStatus = {
   __typename?: 'IoRestorecommerceStatusStatus';
-  id?: Maybe<Scalars['String']>;
-  code?: Maybe<Scalars['Int']>;
-  message?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']['output']>;
+  code?: Maybe<Scalars['Int']['output']>;
+  message?: Maybe<Scalars['String']['output']>;
 };
 
 export type IoRestorecommerceStatusOperationStatus = {
   __typename?: 'IoRestorecommerceStatusOperationStatus';
-  code?: Maybe<Scalars['Int']>;
-  message?: Maybe<Scalars['String']>;
+  code?: Maybe<Scalars['Int']['output']>;
+  message?: Maybe<Scalars['String']['output']>;
 };
 
 export type IIoRestorecommerceJobJobReadRequest = {
-  limit?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
   sort?: InputMaybe<IoRestorecommerceJobJobReadRequestSortOrder>;
   filter?: InputMaybe<IIoRestorecommerceJobJobFilter>;
   fields?: InputMaybe<Array<IIoRestorecommerceResourcebaseFieldFilter>>;
   /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
+  scope?: InputMaybe<Scalars['String']['input']>;
 };
 
 export enum IoRestorecommerceJobJobReadRequestSortOrder {
@@ -167,13 +169,13 @@ export enum IoRestorecommerceJobJobReadRequestSortOrder {
 }
 
 export type IIoRestorecommerceJobJobFilter = {
-  jobIds?: InputMaybe<Array<Scalars['String']>>;
-  type?: InputMaybe<Scalars['String']>;
+  jobIds?: InputMaybe<Array<Scalars['String']['input']>>;
+  type?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type IIoRestorecommerceResourcebaseFieldFilter = {
-  name?: InputMaybe<Scalars['String']>;
-  include?: InputMaybe<Scalars['Boolean']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  include?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type Mutation = {
@@ -204,42 +206,42 @@ export type SchedulingJobMutationDeleteArgs = {
 
 export type IIoRestorecommerceJobJobList = {
   items?: InputMaybe<Array<IIoRestorecommerceJobJob>>;
-  totalCount?: InputMaybe<Scalars['Int']>;
+  totalCount?: InputMaybe<Scalars['Int']['input']>;
   mode?: InputMaybe<ModeType>;
   /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
+  scope?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type IIoRestorecommerceJobJob = {
-  id?: InputMaybe<Scalars['String']>;
-  type?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  type?: InputMaybe<Scalars['String']['input']>;
   data?: InputMaybe<IIoRestorecommerceJobData>;
-  when?: InputMaybe<Scalars['String']>;
+  when?: InputMaybe<Scalars['String']['input']>;
   options?: InputMaybe<IIoRestorecommerceJobJobOptions>;
 };
 
 export type IIoRestorecommerceJobData = {
   payload?: InputMaybe<IGoogleProtobufAny>;
   meta?: InputMaybe<IIoRestorecommerceMetaMeta>;
-  subjectId?: InputMaybe<Scalars['String']>;
+  subjectId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type IGoogleProtobufAny = {
-  typeUrl?: InputMaybe<Scalars['String']>;
-  value?: InputMaybe<Scalars['GoogleProtobufAnyValue']>;
+  typeUrl?: InputMaybe<Scalars['String']['input']>;
+  value?: InputMaybe<Scalars['GoogleProtobufAnyValue']['input']>;
 };
 
 export type IIoRestorecommerceMetaMeta = {
-  created?: InputMaybe<Scalars['Float']>;
-  modified?: InputMaybe<Scalars['Float']>;
-  modifiedBy?: InputMaybe<Scalars['String']>;
+  created?: InputMaybe<Scalars['Float']['input']>;
+  modified?: InputMaybe<Scalars['Float']['input']>;
+  modifiedBy?: InputMaybe<Scalars['String']['input']>;
   owners?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
   acls?: InputMaybe<Array<IIoRestorecommerceAttributeAttributeObj>>;
 };
 
 export type IIoRestorecommerceAttributeAttribute = {
-  id?: InputMaybe<Scalars['String']>;
-  value?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  value?: InputMaybe<Scalars['String']['input']>;
   attributes?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
 };
 
@@ -249,27 +251,27 @@ export type IIoRestorecommerceAttributeAttributeObj = {
 
 export type IIoRestorecommerceJobJobOptions = {
   priority?: InputMaybe<IoRestorecommerceJobJobOptionsPriority>;
-  attempts?: InputMaybe<Scalars['Int']>;
+  attempts?: InputMaybe<Scalars['Int']['input']>;
   backoff?: InputMaybe<IIoRestorecommerceJobBackoff>;
-  timeout?: InputMaybe<Scalars['Int']>;
+  timeout?: InputMaybe<Scalars['Int']['input']>;
   repeat?: InputMaybe<IIoRestorecommerceJobRepeat>;
-  jobId?: InputMaybe<Scalars['String']>;
-  removeOnComplete?: InputMaybe<Scalars['Boolean']>;
+  jobId?: InputMaybe<Scalars['String']['input']>;
+  removeOnComplete?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type IIoRestorecommerceJobBackoff = {
-  delay?: InputMaybe<Scalars['Float']>;
+  delay?: InputMaybe<Scalars['Float']['input']>;
   type?: InputMaybe<IoRestorecommerceJobBackoffType>;
 };
 
 export type IIoRestorecommerceJobRepeat = {
-  every?: InputMaybe<Scalars['Int']>;
-  cron?: InputMaybe<Scalars['String']>;
-  startDate?: InputMaybe<Scalars['String']>;
-  endDate?: InputMaybe<Scalars['String']>;
-  count?: InputMaybe<Scalars['Int']>;
-  jobId?: InputMaybe<Scalars['String']>;
-  tz?: InputMaybe<Scalars['String']>;
+  every?: InputMaybe<Scalars['Int']['input']>;
+  cron?: InputMaybe<Scalars['String']['input']>;
+  startDate?: InputMaybe<Scalars['String']['input']>;
+  endDate?: InputMaybe<Scalars['String']['input']>;
+  count?: InputMaybe<Scalars['Int']['input']>;
+  jobId?: InputMaybe<Scalars['String']['input']>;
+  tz?: InputMaybe<Scalars['String']['input']>;
 };
 
 export enum ModeType {
@@ -290,12 +292,12 @@ export type IoRestorecommerceResourcebaseDeleteResponse = {
 };
 
 export type IIoRestorecommerceResourcebaseDeleteRequest = {
-  collection?: InputMaybe<Scalars['Boolean']>;
-  ids?: InputMaybe<Array<Scalars['String']>>;
-  views?: InputMaybe<Array<Scalars['String']>>;
-  analyzers?: InputMaybe<Array<Scalars['String']>>;
+  collection?: InputMaybe<Scalars['Boolean']['input']>;
+  ids?: InputMaybe<Array<Scalars['String']['input']>>;
+  views?: InputMaybe<Array<Scalars['String']['input']>>;
+  analyzers?: InputMaybe<Array<Scalars['String']['input']>>;
   /** target scope */
-  scope?: InputMaybe<Scalars['String']>;
+  scope?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type Subscription = {
@@ -334,7 +336,7 @@ export type SubscriptionFulfillmentFulfillment_ProductsArgs = {
 
 export type SubscriptionOutput = {
   __typename?: 'SubscriptionOutput';
-  id?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']['output']>;
 };
 
 export enum SubscriptionAction {
@@ -411,6 +413,8 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
   info: GraphQLResolveInfo
 ) => TResult | Promise<TResult>;
 
+
+
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>;
@@ -420,21 +424,21 @@ export type ResolversTypes = ResolversObject<{
   IoRestorecommerceJobJobListResponse: ResolverTypeWrapper<IoRestorecommerceJobJobListResponse>;
   IoRestorecommerceJobJobResponse: ResolverTypeWrapper<IoRestorecommerceJobJobResponse>;
   IoRestorecommerceJobJob: ResolverTypeWrapper<IoRestorecommerceJobJob>;
-  String: ResolverTypeWrapper<Scalars['String']>;
+  String: ResolverTypeWrapper<Scalars['String']['output']>;
   IoRestorecommerceJobData: ResolverTypeWrapper<IoRestorecommerceJobData>;
   GoogleProtobufAny: ResolverTypeWrapper<GoogleProtobufAny>;
-  GoogleProtobufAnyValue: ResolverTypeWrapper<Scalars['GoogleProtobufAnyValue']>;
+  GoogleProtobufAnyValue: ResolverTypeWrapper<Scalars['GoogleProtobufAnyValue']['output']>;
   IoRestorecommerceMetaMeta: ResolverTypeWrapper<IoRestorecommerceMetaMeta>;
-  Float: ResolverTypeWrapper<Scalars['Float']>;
+  Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   IoRestorecommerceAttributeAttribute: ResolverTypeWrapper<IoRestorecommerceAttributeAttribute>;
   IoRestorecommerceAttributeAttributeObj: ResolverTypeWrapper<IoRestorecommerceAttributeAttributeObj>;
   IoRestorecommerceJobJobOptions: ResolverTypeWrapper<IoRestorecommerceJobJobOptions>;
   IoRestorecommerceJobJobOptionsPriority: IoRestorecommerceJobJobOptionsPriority;
-  Int: ResolverTypeWrapper<Scalars['Int']>;
+  Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   IoRestorecommerceJobBackoff: ResolverTypeWrapper<IoRestorecommerceJobBackoff>;
   IoRestorecommerceJobBackoffType: IoRestorecommerceJobBackoffType;
   IoRestorecommerceJobRepeat: ResolverTypeWrapper<IoRestorecommerceJobRepeat>;
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   IoRestorecommerceStatusStatus: ResolverTypeWrapper<IoRestorecommerceStatusStatus>;
   IoRestorecommerceStatusOperationStatus: ResolverTypeWrapper<IoRestorecommerceStatusOperationStatus>;
   IIoRestorecommerceJobJobReadRequest: IIoRestorecommerceJobJobReadRequest;
@@ -472,19 +476,19 @@ export type ResolversParentTypes = ResolversObject<{
   IoRestorecommerceJobJobListResponse: IoRestorecommerceJobJobListResponse;
   IoRestorecommerceJobJobResponse: IoRestorecommerceJobJobResponse;
   IoRestorecommerceJobJob: IoRestorecommerceJobJob;
-  String: Scalars['String'];
+  String: Scalars['String']['output'];
   IoRestorecommerceJobData: IoRestorecommerceJobData;
   GoogleProtobufAny: GoogleProtobufAny;
-  GoogleProtobufAnyValue: Scalars['GoogleProtobufAnyValue'];
+  GoogleProtobufAnyValue: Scalars['GoogleProtobufAnyValue']['output'];
   IoRestorecommerceMetaMeta: IoRestorecommerceMetaMeta;
-  Float: Scalars['Float'];
+  Float: Scalars['Float']['output'];
   IoRestorecommerceAttributeAttribute: IoRestorecommerceAttributeAttribute;
   IoRestorecommerceAttributeAttributeObj: IoRestorecommerceAttributeAttributeObj;
   IoRestorecommerceJobJobOptions: IoRestorecommerceJobJobOptions;
-  Int: Scalars['Int'];
+  Int: Scalars['Int']['output'];
   IoRestorecommerceJobBackoff: IoRestorecommerceJobBackoff;
   IoRestorecommerceJobRepeat: IoRestorecommerceJobRepeat;
-  Boolean: Scalars['Boolean'];
+  Boolean: Scalars['Boolean']['output'];
   IoRestorecommerceStatusStatus: IoRestorecommerceStatusStatus;
   IoRestorecommerceStatusOperationStatus: IoRestorecommerceStatusOperationStatus;
   IIoRestorecommerceJobJobReadRequest: IIoRestorecommerceJobJobReadRequest;

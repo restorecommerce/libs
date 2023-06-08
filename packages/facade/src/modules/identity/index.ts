@@ -1,15 +1,14 @@
-import { createFacadeModuleFactory } from "../../utils";
-import { FederatedResourceSchema } from './gql/federation';
-import { createOIDC } from './oidc';
-import { IdentityConfig, IdentityModule } from './interfaces';
-import { setupApiKey } from "./api-key/api-key";
-import { IdentitySrvGrpcClient } from "./grpc";
-import { createOAuth } from "./oauth/oauth";
+import { createFacadeModuleFactory } from '../../utils.js';
+import { FederatedResourceSchema } from './gql/federation.js';
+import { createOIDC } from './oidc/index.js';
+import { type IdentityConfig, type IdentityModule } from './interfaces.js';
+import { setupApiKey } from './api-key/api-key.js';
+import { IdentitySrvGrpcClient } from './grpc/index.js';
+import { createOAuth } from './oauth/oauth.js';
+import mount from 'koa-mount';
 
-export { OIDCConfig } from './oidc';
-export { IdentityModule, IdentityConfig, IdentityContext } from './interfaces';
-
-const mount = eval('require("koa-mount")');
+export { type OIDCConfig } from './oidc/index.js';
+export type { IdentityModule, IdentityConfig, IdentityContext } from './interfaces.js';
 
 export const identityModule = createFacadeModuleFactory<IdentityConfig, IdentityModule>('identity', (facade, config) => {
   const identitySrvClient = new IdentitySrvGrpcClient(config.config.client.address, {

@@ -1,7 +1,7 @@
-import { FederatedPaymentSchema } from './gql/federation';
-import { namespace, PaymentConfig, PaymentModule } from "./interfaces";
-import { PaymentSrvGrpcClient } from "./grpc";
-import { createFacadeModuleFactory } from "../../utils";
+import { FederatedPaymentSchema } from './gql/federation.js';
+import { namespace, type PaymentConfig, type PaymentModule } from './interfaces.js';
+import { PaymentSrvGrpcClient } from './grpc/index.js';
+import { createFacadeModuleFactory } from '../../utils.js';
 
 export const paymentModule = createFacadeModuleFactory<PaymentConfig, PaymentModule>(namespace, (facade, config) => {
   const payment = {

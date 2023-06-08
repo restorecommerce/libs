@@ -1,1 +1,1 @@
-export * from './req-res-logger/index';
+export * from './req-res-logger/index.js';

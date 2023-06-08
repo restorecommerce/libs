@@ -1,7 +1,7 @@
 import _debug from 'debug';
-import * as koa from 'koa';
+import type * as koa from 'koa';
 import { createLogger, RestoreLoggerOptions } from '@restorecommerce/logger';
-import { Logger } from 'winston';
+import { type Logger } from 'winston';
 
 const debug = _debug('@restorecommerce/koa-req-res-logger');
 
@@ -11,6 +11,24 @@ export interface ReqResLoggerOptions {
   logGraphQLVariables?: boolean;
   logResBody?: boolean;
 }
+
+const getGraphQLData = (opts: ReqResLoggerOptions, body: any) => {
+  if (typeof body !== 'object' || !body) {
+    return;
+  }
+
+  const line = {};
+  if ('operationName' in body) {
+    Object.assign(line, { operationName: body.operationName });
+  }
+  if ('query' in body) {
+    Object.assign(line, { query: body.query });
+  }
+  if (opts.logGraphQLVariables === true && 'variables' in body) {
+    Object.assign(line, { variables: body.variables });
+  }
+  return line;
+};
 
 /**
  Middleware that logs incoming request and outgoing response
@@ -86,21 +104,3 @@ export const reqResLogger = (opts: ReqResLoggerOptions) => {
 
   return fn;
 };
-
-function getGraphQLData(opts: ReqResLoggerOptions, body: any) {
-  if (typeof body !== 'object' || !body) {
-    return;
-  }
-
-  const line = {};
-  if ('operationName' in body) {
-    Object.assign(line, { operationName: body.operationName });
-  }
-  if ('query' in body) {
-    Object.assign(line, { query: body.query });
-  }
-  if (opts.logGraphQLVariables === true && 'variables' in body) {
-    Object.assign(line, { variables: body.variables });
-  }
-  return line;
-}

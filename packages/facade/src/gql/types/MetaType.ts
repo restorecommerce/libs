@@ -2,8 +2,8 @@ import {
   GraphQLObjectType, GraphQLString,
   GraphQLList, GraphQLNonNull
 } from 'graphql';
-import { DateType } from './DateType';
-import { AttributeType } from './AccessControlTypes';
+import { DateType } from './DateType.js';
+import { AttributeType } from './AccessControlTypes.js';
 
 export const MetaType = new GraphQLObjectType({
   name: 'MetaType',

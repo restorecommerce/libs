@@ -1,16 +1,16 @@
 import Provider from 'oidc-provider';
 import helmet from 'koa-helmet';
-import { Logger } from 'winston';
-import { IdentityContext } from '../interfaces';
-import { OIDCConfig } from './interfaces';
-import { createOIDCRouter } from './router';
-import { createIdentityServiceAdapterClass } from './adapter';
-import { findUserById, loginUserBody, loginUserCredentials } from './user';
-import { IdentitySrvGrpcClient } from "../grpc";
-import { registerPasswordGrantType } from "./password-grant";
+import { type Logger } from 'winston';
+import { type IdentityContext } from '../interfaces.js';
+import type { OIDCConfig } from './interfaces.js';
+import { createOIDCRouter } from './router.js';
+import { createIdentityServiceAdapterClass } from './adapter.js';
+import { findUserById, loginUserBody, loginUserCredentials } from './user.js';
+import { type IdentitySrvGrpcClient } from '../grpc/index.js';
+import { registerPasswordGrantType } from './password-grant.js';
 
-export { OIDCConfig };
-export { createOIDCRouter, CreateOIDCRouterArgs } from './router';
+export type { OIDCConfig };
+export { createOIDCRouter, type CreateOIDCRouterArgs } from './router.js';
 
 export interface CreateOIDCArgs {
   logger: Logger;
@@ -20,23 +20,23 @@ export interface CreateOIDCArgs {
 }
 
 export function createOIDC({
-                             identitySrvClient,
-                             env,
-                             logger,
-                             config: {
-                               loginFn,
-                               post_logout_redirect_uris,
-                               localTokenServiceFactory,
-                               remoteTokenService,
-                               cookies,
-                               redirect_uris,
-                               client_id,
-                               client_secret,
-                               issuer,
-                               jwks,
-                               templates
-                             }
-                           }: CreateOIDCArgs) {
+  identitySrvClient,
+  env,
+  logger,
+  config: {
+    loginFn,
+    post_logout_redirect_uris,
+    localTokenServiceFactory,
+    remoteTokenService,
+    cookies,
+    redirect_uris,
+    client_id,
+    client_secret,
+    issuer,
+    jwks,
+    templates
+  }
+}: CreateOIDCArgs) {
   const adapterClass = createIdentityServiceAdapterClass(remoteTokenService ?? identitySrvClient.token, logger, localTokenServiceFactory);
   const provider = new Provider(issuer, {
     adapter: adapterClass,
@@ -59,7 +59,7 @@ export function createOIDC({
     // },
     jwks,
     ttl: {
-       Session: (1 * 24 * 60 * 60) * 1000
+      Session: (1 * 24 * 60 * 60) * 1000
     },
     cookies: {
       long: {signed: false}, // 1 day in ms
@@ -117,9 +117,7 @@ export function createOIDC({
     // don't run into weird issues with multiple interactions open
     // at a time.
     interactions: {
-      url(ctx: any) {
-        return `/interaction/${(ctx.oidc as any).uid}`;
-      },
+      url: (ctx: any) => `/interaction/${(ctx.oidc as any).uid}`,
     },
     features: {
       introspection: {
@@ -150,7 +148,7 @@ export function createOIDC({
     authLogService: identitySrvClient.authentication_log,
     authenticate: loginUserCredentials,
     provider
-  })
+  });
 
   // Disable forbidding redirect to http/localhost in dev mode
   if (env === 'development') {

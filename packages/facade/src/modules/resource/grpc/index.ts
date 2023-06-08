@@ -1,57 +1,57 @@
 import { RestoreCommerceGrpcClient } from '@restorecommerce/rc-grpc-clients';
 import {
-  AddressServiceClient,
+  type AddressServiceClient,
   AddressServiceDefinition,
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/address';
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/address.js';
 import {
-  CountryServiceClient,
+  type CountryServiceClient,
   CountryServiceDefinition
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/country';
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/country.js';
 import {
-  TimezoneServiceClient,
+  type TimezoneServiceClient,
   TimezoneServiceDefinition
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/timezone';
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/timezone.js';
 import {
-  ContactPointTypeServiceClient,
+  type ContactPointTypeServiceClient,
   ContactPointTypeServiceDefinition
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/contact_point_type';
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/contact_point_type.js';
 import {
-  CustomerServiceClient,
+  type CustomerServiceClient,
   CustomerServiceDefinition
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/customer';
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/customer.js';
 import {
-  ContactPointServiceClient,
+  type ContactPointServiceClient,
   ContactPointServiceDefinition
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/contact_point';
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/contact_point.js';
 import {
-  LocaleServiceClient,
+  type LocaleServiceClient,
   LocaleServiceDefinition
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/locale';
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/locale.js';
 import {
-  LocationServiceClient,
+  type LocationServiceClient,
   LocationServiceDefinition
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/location';
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/location.js';
 import {
-  OrganizationServiceClient,
+  type OrganizationServiceClient,
   OrganizationServiceDefinition
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/organization';
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/organization.js';
 import {
-  TaxServiceClient,
+  type TaxServiceClient,
   TaxServiceDefinition
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/tax';
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/tax.js';
 import {
-  TaxTypeServiceClient,
+  type TaxTypeServiceClient,
   TaxTypeServiceDefinition
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/tax_type';
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/tax_type.js';
 import {
   CommandServiceClient,
   CommandServiceDefinition
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/command';
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/command.js';
 import {
-  CodeServiceClient,
+  type CodeServiceClient,
   CodeServiceDefinition
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/code';
-import { GrpcClientConfig } from '@restorecommerce/grpc-client';
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/code.js';
+import { type GrpcClientConfig } from '@restorecommerce/grpc-client';
 
 export class ResourceSrvGrpcClient extends RestoreCommerceGrpcClient {
 

@@ -1,22 +1,32 @@
 import {
   GraphQLBoolean,
-  GraphQLEnumTypeConfig, GraphQLEnumValueConfigMap,
-  GraphQLFieldConfigMap, GraphQLFloat, GraphQLInputFieldConfigMap,
-  GraphQLInputObjectTypeConfig, GraphQLInputType, GraphQLInt, GraphQLList, GraphQLNonNull,
+  type GraphQLEnumTypeConfig,
+  type GraphQLEnumValueConfigMap,
+  type GraphQLFieldConfigMap,
+  GraphQLFloat,
+  type GraphQLInputFieldConfigMap,
+  type GraphQLInputObjectTypeConfig,
+  type GraphQLInputType,
+  GraphQLInt,
+  GraphQLList,
+  GraphQLNonNull,
+  type GraphQLNullableType,
   GraphQLObjectType,
-  GraphQLObjectTypeConfig, GraphQLOutputType, GraphQLString, GraphQLUnionType, validate
-} from "graphql";
-import { GraphQLEnumType, GraphQLInputObjectType, GraphQLScalarType } from "graphql/type/definition";
-const GraphQLUpload = require('graphql-upload/GraphQLUpload.js');
-import { capitalizeProtoName } from "./utils";
-import { authSubjectType, ProtoMetadata, ProtoMetaMessageOptions } from './types';
+  type GraphQLObjectTypeConfig,
+  type GraphQLOutputType,
+  GraphQLString,
+} from 'graphql';
+import { GraphQLEnumType, GraphQLInputObjectType, GraphQLScalarType } from 'graphql/type/definition.js';
+import GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
+import { capitalizeProtoName } from './utils.js';
+import { authSubjectType, type ProtoMetadata, type ProtoMetaMessageOptions } from './types.js';
 import {
-  DescriptorProto,
-  EnumDescriptorProto,
-  FieldDescriptorProto, FieldDescriptorProto_Label,
-  FieldDescriptorProto_Type, MethodDescriptorProto
-} from "ts-proto-descriptors";
-import type { Resolver } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/options';
+  type DescriptorProto,
+  type EnumDescriptorProto,
+  type FieldDescriptorProto, FieldDescriptorProto_Label,
+  FieldDescriptorProto_Type, type MethodDescriptorProto
+} from 'ts-proto-descriptors';
+import type { Resolver } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/options.js';
 
 export interface TypingData {
   output: GraphQLObjectType | GraphQLEnumType | GraphQLScalarType;
@@ -82,37 +92,16 @@ const CRUD_TRAVERSAL_OP_NAMES = ['Cretae', 'Update', 'Upsert', 'Delete', 'Read',
 const TodoScalar = new GraphQLScalarType({
   name: 'TodoScalar',
   serialize: () => {
-    throw Error("Not Implemented!")
+    throw Error('Not Implemented!');
   },
   parseValue: () => {
-    throw Error("Not Implemented!")
+    throw Error('Not Implemented!');
   }
 });
 
 export const clearRegistry = () => {
   registeredTypings.clear();
-}
-
-export const registerPackagesRecursive = (...protoMetadata: ProtoMetadata[]) => {
-  protoMetadata.forEach(meta => {
-    meta.dependencies && registerPackagesRecursive(...meta.dependencies);
-
-    meta.fileDescriptor.messageType && registerMessageTypesRecursive(
-      meta.fileDescriptor.package!,
-      meta.fileDescriptor.service[0]?.method,
-      meta.options,
-      ...meta.fileDescriptor.messageType
-    );
-
-    meta.fileDescriptor.enumType?.forEach((m) => {
-      registerEnumTyping(meta.fileDescriptor.package!, m);
-    });
-
-    Object.keys(meta.references).forEach(key => {
-      registeredTypings.get(key)!.processor = meta.references[key];
-    });
-  });
-}
+};
 
 export const getRegisteredEnumTypings = (): string[] => {
   return registeredEnumTypes;
@@ -120,6 +109,10 @@ export const getRegisteredEnumTypings = (): string[] => {
 
 export const getNameSpaceTypeName = (typeName: string): string | undefined => {
   return typeNameAndNameSpaceMapping.get(typeName);
+};
+
+export const getTyping = (type: string): TypingData | undefined => {
+  return registeredTypings.get(type);
 };
 
 // Iterate through the object and collect list of all enum types with their keys / paths
@@ -160,26 +153,109 @@ export const recursiveEnumCheck = (typeName: string, enumMap: Map<string, string
   return enumMap;
 };
 
-const registerMessageTypesRecursive = (
-  packageName: string,
-  methodDef: MethodDescriptorProto[],
-  options: ProtoMetadata['options'] | undefined,
-  ...types: DescriptorProto[]
-) => {
-  types.forEach(m => {
-    registerTyping(packageName, m, methodDef, undefined, undefined, options && options.messages && options.messages[m.name]);
+const resolveMeta = <T extends GraphQLOutputType | GraphQLInputType>(
+  key: string,
+  field: Pick<FieldDescriptorProto, 'type' | 'typeName' | 'label'>,
+  rootObjType: string,
+  objName: string,
+  input: boolean
+): T | null => {
+  let result: GraphQLNullableType;
 
-    if (m.enumType) {
-      m.enumType.forEach((enumType) => {
-        registerEnumTyping(packageName + '.' + m.name, enumType);
-      });
-    }
+  switch (field.type) {
+    case FieldDescriptorProto_Type.TYPE_BOOL:
+      result = GraphQLBoolean;
+      break;
+    case FieldDescriptorProto_Type.TYPE_STRING:
+      result = GraphQLString;
+      break;
+    case FieldDescriptorProto_Type.TYPE_ENUM:
+    case FieldDescriptorProto_Type.TYPE_MESSAGE:
+      const objType = field.typeName!;
 
-    if (m.nestedType) {
-      registerMessageTypesRecursive(packageName + '.' + m.name, methodDef, options, ...m.nestedType);
-    }
-  });
-}
+      if (objType === googleProtobufAnyName) {
+        if (input) {
+          result = IGoogleProtobufAny;
+          break;
+        }
+        result = GoogleProtobufAny;
+        break;
+      }
+
+      if (objType === googleProtobufTimestampName) {
+        if (input) {
+          result = IDateTime;
+          break;
+        }
+        result = DateTime;
+        break;
+      }
+
+      if (!registeredTypings.has(objType)) {
+        throw new Error('Typing \'' + objType + '\' not registered for key \'' + key + '\' in object: ' + objName);
+      }
+
+      let typingData = registeredTypings.get(objType)!;
+      let mapEntry = false;
+      if ((typingData.meta as DescriptorProto).options) {
+        mapEntry = !!(typingData.meta as DescriptorProto).options?.mapEntry;
+      }
+
+      // TODO Actually unroll maps into entries
+      if (mapEntry) {
+        return MapScalar as any;
+      }
+
+      if (!input) {
+        result = typingData.output;
+        break;
+      }
+
+      if (objType === authSubjectType) {
+        return null;
+      }
+
+      result = typingData.input;
+      break;
+    case FieldDescriptorProto_Type.TYPE_BYTES:
+      if (input) {
+        // TODO Why can't it be nullable?
+        result = GraphQLUpload as any;
+        break;
+      }
+      // TODO Output Buffer
+      result = TodoScalar;
+      break;
+    case FieldDescriptorProto_Type.TYPE_INT32:
+    case FieldDescriptorProto_Type.TYPE_UINT32:
+    case FieldDescriptorProto_Type.TYPE_INT64:
+    case FieldDescriptorProto_Type.TYPE_UINT64:
+    case FieldDescriptorProto_Type.TYPE_SINT32:
+    case FieldDescriptorProto_Type.TYPE_SINT64:
+      result = GraphQLInt;
+      break;
+    case FieldDescriptorProto_Type.TYPE_DOUBLE:
+    case FieldDescriptorProto_Type.TYPE_FLOAT:
+    case FieldDescriptorProto_Type.TYPE_FIXED64:
+    case FieldDescriptorProto_Type.TYPE_FIXED32:
+    case FieldDescriptorProto_Type.TYPE_SFIXED32:
+    case FieldDescriptorProto_Type.TYPE_SFIXED64:
+      result = GraphQLFloat;
+      break;
+    default:
+      throw new Error('unknown typing type \'' + field.type! + '\' for key \'' + key + '\' in: ' + objName);
+  }
+
+  if (field.label === FieldDescriptorProto_Label.LABEL_REPEATED) {
+    result = new GraphQLList(new GraphQLNonNull(result));
+  }
+
+  if (field.label === FieldDescriptorProto_Label.LABEL_REQUIRED) {
+    result = new GraphQLNonNull(result);
+  }
+
+  return result as any;
+};
 
 const ModeType = new GraphQLEnumType({
   name: 'ModeType',
@@ -328,7 +404,7 @@ export const registerTyping = (
     input: resultInputObj,
     meta: message
   });
-}
+};
 
 export const registerEnumTyping = <T = { [key: string]: any }>(
   protoPackage: string,
@@ -363,111 +439,47 @@ export const registerEnumTyping = <T = { [key: string]: any }>(
     input: result,
     meta: message
   });
-}
+};
 
-export const getTyping = (type: string): TypingData | undefined => {
-  return registeredTypings.get(type);
-}
+const registerMessageTypesRecursive = (
+  packageName: string,
+  methodDef: MethodDescriptorProto[],
+  options: ProtoMetadata['options'] | undefined,
+  ...types: DescriptorProto[]
+) => {
+  types.forEach(m => {
+    registerTyping(packageName, m, methodDef, undefined, undefined, options && options.messages && options.messages[m.name]);
 
-const resolveMeta = <T extends GraphQLOutputType | GraphQLInputType>(
-  key: string,
-  field: Pick<FieldDescriptorProto, 'type' | 'typeName' | 'label'>,
-  rootObjType: string,
-  objName: string,
-  input: boolean
-): T | null => {
-  let result;
+    if (m.enumType) {
+      m.enumType.forEach((enumType) => {
+        registerEnumTyping(packageName + '.' + m.name, enumType);
+      });
+    }
 
-  switch (field.type) {
-    case FieldDescriptorProto_Type.TYPE_BOOL:
-      result = GraphQLBoolean;
-      break;
-    case FieldDescriptorProto_Type.TYPE_STRING:
-      result = GraphQLString;
-      break;
-    case FieldDescriptorProto_Type.TYPE_ENUM:
-    case FieldDescriptorProto_Type.TYPE_MESSAGE:
-      const objType = field.typeName!;
+    if (m.nestedType) {
+      registerMessageTypesRecursive(packageName + '.' + m.name, methodDef, options, ...m.nestedType);
+    }
+  });
+};
 
-      if (objType === googleProtobufAnyName) {
-        if (input) {
-          result = IGoogleProtobufAny;
-          break;
-        }
-        result = GoogleProtobufAny;
-        break;
-      }
+export const registerPackagesRecursive = (...protoMetadata: ProtoMetadata[]) => {
+  protoMetadata.forEach(meta => {
+    meta.dependencies && registerPackagesRecursive(...meta.dependencies);
 
-      if (objType === googleProtobufTimestampName) {
-        if (input) {
-          result = IDateTime;
-          break;
-        }
-        result = DateTime;
-        break;
-      }
+    meta.fileDescriptor.messageType && registerMessageTypesRecursive(
+      meta.fileDescriptor.package!,
+      meta.fileDescriptor.service[0]?.method,
+      meta.options,
+      ...meta.fileDescriptor.messageType
+    );
 
-      if (!registeredTypings.has(objType)) {
-        throw new Error("Typing '" + objType + "' not registered for key '" + key + "' in object: " + objName);
-      }
+    meta.fileDescriptor.enumType?.forEach((m) => {
+      registerEnumTyping(meta.fileDescriptor.package!, m);
+    });
 
-      let typingData = registeredTypings.get(objType)!;
-      let mapEntry = false;
-      if ((typingData.meta as DescriptorProto).options) {
-        mapEntry = !!(typingData.meta as DescriptorProto).options?.mapEntry;
-      }
+    Object.keys(meta.references).forEach(key => {
+      registeredTypings.get(key)!.processor = meta.references[key];
+    });
+  });
+};
 
-      // TODO Actually unroll maps into entries
-      if (mapEntry) {
-        return MapScalar as any;
-      }
-
-      if (!input) {
-        result = typingData.output;
-        break;
-      }
-
-      if (objType === authSubjectType) {
-        return null;
-      }
-
-      result = typingData.input;
-      break;
-    case FieldDescriptorProto_Type.TYPE_BYTES:
-      if (input) {
-        result = GraphQLUpload;
-        break;
-      }
-      // TODO Output Buffer
-      result = TodoScalar;
-      break;
-    case FieldDescriptorProto_Type.TYPE_INT32:
-    case FieldDescriptorProto_Type.TYPE_UINT32:
-    case FieldDescriptorProto_Type.TYPE_INT64:
-    case FieldDescriptorProto_Type.TYPE_UINT64:
-    case FieldDescriptorProto_Type.TYPE_SINT32:
-    case FieldDescriptorProto_Type.TYPE_SINT64:
-      result = GraphQLInt;
-      break;
-    case FieldDescriptorProto_Type.TYPE_DOUBLE:
-    case FieldDescriptorProto_Type.TYPE_FLOAT:
-    case FieldDescriptorProto_Type.TYPE_FIXED64:
-    case FieldDescriptorProto_Type.TYPE_FIXED32:
-    case FieldDescriptorProto_Type.TYPE_SFIXED32:
-    case FieldDescriptorProto_Type.TYPE_SFIXED64:
-      result = GraphQLFloat;
-      break;
-    default:
-      throw new Error("unknown typing type '" + field.type! + "' for key '" + key + "' in: " + objName)
-  }
-
-  if (field.label === FieldDescriptorProto_Label.LABEL_REPEATED) {
-    result = new GraphQLList(new GraphQLNonNull(result));
-  }
-
-  if (field.label === FieldDescriptorProto_Label.LABEL_REQUIRED) {
-    result = new GraphQLNonNull(result);
-  }
-
-  return result as any;
-}

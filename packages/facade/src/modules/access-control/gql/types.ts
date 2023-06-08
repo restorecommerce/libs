@@ -1,12 +1,8 @@
-import { protoMetadata as metaPackageIoRestorecommercePolicy } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/policy";
-import { protoMetadata as metaPackageIoRestorecommerceRule } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/rule";
-import { protoMetadata as metaPackageIoRestorecommercePolicy_set } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/policy_set";
-import { protoMetadata as metaPackageIoRestorecommerceAccess_control } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/access_control";
-import { ProtoMetadata, registerPackagesRecursive } from '../../../gql/protos';
-
-export function registerTypings() {
-  registerPackagesRecursive(...subServices);
-}
+import { protoMetadata as metaPackageIoRestorecommercePolicy } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/policy.js';
+import { protoMetadata as metaPackageIoRestorecommerceRule } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/rule.js';
+import { protoMetadata as metaPackageIoRestorecommercePolicy_set } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/policy_set.js';
+import { protoMetadata as metaPackageIoRestorecommerceAccess_control } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/access_control.js';
+import { type ProtoMetadata, registerPackagesRecursive } from '../../../gql/protos/index.js';
 
 export const subServices: ProtoMetadata[] = [
   metaPackageIoRestorecommerceAccess_control,
@@ -14,3 +10,7 @@ export const subServices: ProtoMetadata[] = [
   metaPackageIoRestorecommerceRule,
   metaPackageIoRestorecommercePolicy_set
 ];
+
+export const registerTypings = () => {
+  registerPackagesRecursive(...subServices);
+};

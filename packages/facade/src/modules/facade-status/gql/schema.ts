@@ -1,5 +1,5 @@
-import { GraphQLObjectType, GraphQLSchema } from "graphql";
-import { FacadeStatusType } from "./types";
+import { GraphQLObjectType, GraphQLSchema } from 'graphql';
+import { FacadeStatusType } from './types.js';
 
 export const FacadeStatusQueryType = new GraphQLObjectType({
   name: 'Query',

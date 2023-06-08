@@ -1,18 +1,20 @@
 import { GraphQLResolveInfo } from 'graphql';
-import { PaymentContext } from '../interfaces';
+import { PaymentContext } from '../interfaces.js';
 export type Maybe<T> = T | null | undefined;
 export type InputMaybe<T> = T | null | undefined;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: string;
-  String: string;
-  Boolean: boolean;
-  Int: number;
-  Float: number;
+  ID: { input: string | number; output: string; }
+  String: { input: string; output: string; }
+  Boolean: { input: boolean; output: boolean; }
+  Int: { input: number; output: number; }
+  Float: { input: number; output: number; }
 };
 
 export type Mutation = {
@@ -78,43 +80,43 @@ export type IoRestorecommercePaymentSetupPayloadStatus = {
 
 export type IoRestorecommercePaymentSetupPayload = {
   __typename?: 'IoRestorecommercePaymentSetupPayload';
-  token?: Maybe<Scalars['String']>;
-  confirmInitiationUrl?: Maybe<Scalars['String']>;
-  initiatedOn?: Maybe<Scalars['String']>;
+  token?: Maybe<Scalars['String']['output']>;
+  confirmInitiationUrl?: Maybe<Scalars['String']['output']>;
+  initiatedOn?: Maybe<Scalars['String']['output']>;
 };
 
 export type IoRestorecommerceStatusStatus = {
   __typename?: 'IoRestorecommerceStatusStatus';
-  id?: Maybe<Scalars['String']>;
-  code?: Maybe<Scalars['Int']>;
-  message?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']['output']>;
+  code?: Maybe<Scalars['Int']['output']>;
+  message?: Maybe<Scalars['String']['output']>;
 };
 
 export type IoRestorecommerceStatusOperationStatus = {
   __typename?: 'IoRestorecommerceStatusOperationStatus';
-  code?: Maybe<Scalars['Int']>;
-  message?: Maybe<Scalars['String']>;
+  code?: Maybe<Scalars['Int']['output']>;
+  message?: Maybe<Scalars['String']['output']>;
 };
 
 export type IIoRestorecommercePaymentSetupRequest = {
-  ip?: InputMaybe<Scalars['String']>;
+  ip?: InputMaybe<Scalars['String']['input']>;
   items?: InputMaybe<Array<IIoRestorecommercePaymentItem>>;
-  subtotal?: InputMaybe<Scalars['Int']>;
-  shipping?: InputMaybe<Scalars['Int']>;
-  handling?: InputMaybe<Scalars['Int']>;
-  tax?: InputMaybe<Scalars['Int']>;
-  currency?: InputMaybe<Scalars['String']>;
-  returnUrl?: InputMaybe<Scalars['String']>;
-  cancelReturnUrl?: InputMaybe<Scalars['String']>;
-  allowGuestCheckout?: InputMaybe<Scalars['Boolean']>;
+  subtotal?: InputMaybe<Scalars['Int']['input']>;
+  shipping?: InputMaybe<Scalars['Int']['input']>;
+  handling?: InputMaybe<Scalars['Int']['input']>;
+  tax?: InputMaybe<Scalars['Int']['input']>;
+  currency?: InputMaybe<Scalars['String']['input']>;
+  returnUrl?: InputMaybe<Scalars['String']['input']>;
+  cancelReturnUrl?: InputMaybe<Scalars['String']['input']>;
+  allowGuestCheckout?: InputMaybe<Scalars['Boolean']['input']>;
   provider?: InputMaybe<IoRestorecommercePaymentProvider>;
 };
 
 export type IIoRestorecommercePaymentItem = {
-  name?: InputMaybe<Scalars['String']>;
-  description?: InputMaybe<Scalars['String']>;
-  quantity?: InputMaybe<Scalars['Int']>;
-  amount?: InputMaybe<Scalars['Int']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  quantity?: InputMaybe<Scalars['Int']['input']>;
+  amount?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export enum IoRestorecommercePaymentProvider {
@@ -286,24 +288,24 @@ export type IoRestorecommercePaymentPaymentPayloadStatus = {
 
 export type IoRestorecommercePaymentPaymentPayload = {
   __typename?: 'IoRestorecommercePaymentPaymentPayload';
-  paymentId?: Maybe<Scalars['String']>;
-  executedOn?: Maybe<Scalars['String']>;
+  paymentId?: Maybe<Scalars['String']['output']>;
+  executedOn?: Maybe<Scalars['String']['output']>;
 };
 
 export type IIoRestorecommercePaymentPaymentRequest = {
   provider?: InputMaybe<IoRestorecommercePaymentProvider>;
-  paymentSum?: InputMaybe<Scalars['Int']>;
-  currency?: InputMaybe<Scalars['String']>;
-  paymentId?: InputMaybe<Scalars['String']>;
-  payerId?: InputMaybe<Scalars['String']>;
-  token?: InputMaybe<Scalars['String']>;
+  paymentSum?: InputMaybe<Scalars['Int']['input']>;
+  currency?: InputMaybe<Scalars['String']['input']>;
+  paymentId?: InputMaybe<Scalars['String']['input']>;
+  payerId?: InputMaybe<Scalars['String']['input']>;
+  token?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type IIoRestorecommercePaymentCaptureRequest = {
   provider?: InputMaybe<IoRestorecommercePaymentProvider>;
-  paymentSum?: InputMaybe<Scalars['Int']>;
-  currency?: InputMaybe<Scalars['String']>;
-  paymentId?: InputMaybe<Scalars['String']>;
+  paymentSum?: InputMaybe<Scalars['Int']['input']>;
+  currency?: InputMaybe<Scalars['String']['input']>;
+  paymentId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type Subscription = {
@@ -318,7 +320,7 @@ export type SubscriptionOrderingOrdersArgs = {
 
 export type SubscriptionOutput = {
   __typename?: 'SubscriptionOutput';
-  id?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']['output']>;
 };
 
 export enum SubscriptionAction {
@@ -395,6 +397,8 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
   info: GraphQLResolveInfo
 ) => TResult | Promise<TResult>;
 
+
+
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
   Mutation: ResolverTypeWrapper<{}>;
@@ -404,13 +408,13 @@ export type ResolversTypes = ResolversObject<{
   IoRestorecommercePaymentSetupResponse: ResolverTypeWrapper<IoRestorecommercePaymentSetupResponse>;
   IoRestorecommercePaymentSetupPayloadStatus: ResolverTypeWrapper<IoRestorecommercePaymentSetupPayloadStatus>;
   IoRestorecommercePaymentSetupPayload: ResolverTypeWrapper<IoRestorecommercePaymentSetupPayload>;
-  String: ResolverTypeWrapper<Scalars['String']>;
+  String: ResolverTypeWrapper<Scalars['String']['output']>;
   IoRestorecommerceStatusStatus: ResolverTypeWrapper<IoRestorecommerceStatusStatus>;
-  Int: ResolverTypeWrapper<Scalars['Int']>;
+  Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   IoRestorecommerceStatusOperationStatus: ResolverTypeWrapper<IoRestorecommerceStatusOperationStatus>;
   IIoRestorecommercePaymentSetupRequest: IIoRestorecommercePaymentSetupRequest;
   IIoRestorecommercePaymentItem: IIoRestorecommercePaymentItem;
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   IoRestorecommercePaymentProvider: IoRestorecommercePaymentProvider;
   ProtoIoRestorecommercePaymentPaymentResponse: ResolverTypeWrapper<ProtoIoRestorecommercePaymentPaymentResponse>;
   IoRestorecommercePaymentPaymentResponse: ResolverTypeWrapper<IoRestorecommercePaymentPaymentResponse>;
@@ -432,13 +436,13 @@ export type ResolversParentTypes = ResolversObject<{
   IoRestorecommercePaymentSetupResponse: IoRestorecommercePaymentSetupResponse;
   IoRestorecommercePaymentSetupPayloadStatus: IoRestorecommercePaymentSetupPayloadStatus;
   IoRestorecommercePaymentSetupPayload: IoRestorecommercePaymentSetupPayload;
-  String: Scalars['String'];
+  String: Scalars['String']['output'];
   IoRestorecommerceStatusStatus: IoRestorecommerceStatusStatus;
-  Int: Scalars['Int'];
+  Int: Scalars['Int']['output'];
   IoRestorecommerceStatusOperationStatus: IoRestorecommerceStatusOperationStatus;
   IIoRestorecommercePaymentSetupRequest: IIoRestorecommercePaymentSetupRequest;
   IIoRestorecommercePaymentItem: IIoRestorecommercePaymentItem;
-  Boolean: Scalars['Boolean'];
+  Boolean: Scalars['Boolean']['output'];
   ProtoIoRestorecommercePaymentPaymentResponse: ProtoIoRestorecommercePaymentPaymentResponse;
   IoRestorecommercePaymentPaymentResponse: IoRestorecommercePaymentPaymentResponse;
   IoRestorecommercePaymentPaymentPayloadStatus: IoRestorecommercePaymentPaymentPayloadStatus;

@@ -1,7 +1,7 @@
-import { FederatedNotificationSchema } from './gql/federation';
-import { namespace, NotificationConfig, NotificationModule } from "./interfaces";
-import { NotificationSrvGrpcClient } from "./grpc";
-import { createFacadeModuleFactory } from "../../utils";
+import { FederatedNotificationSchema } from './gql/federation.js';
+import { namespace, type NotificationConfig, type NotificationModule } from './interfaces.js';
+import { NotificationSrvGrpcClient } from './grpc/index.js';
+import { createFacadeModuleFactory } from '../../utils.js';
 
 export const notificationModule = createFacadeModuleFactory<NotificationConfig, NotificationModule>(namespace, (facade, config) => {
   const notification = {

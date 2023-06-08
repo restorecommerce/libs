@@ -1,7 +1,7 @@
-import { FederatedCatalogSchema } from './gql/federation';
-import { namespace, CatalogConfig, CatalogModule } from "./interfaces";
-import { CatalogSrvGrpcClient } from "./grpc";
-import { createFacadeModuleFactory } from "../../utils";
+import { FederatedCatalogSchema } from './gql/federation.js';
+import { namespace, type CatalogConfig, type CatalogModule } from './interfaces.js';
+import { CatalogSrvGrpcClient } from './grpc/index.js';
+import { createFacadeModuleFactory } from '../../utils.js';
 
 export const catalogModule = createFacadeModuleFactory<CatalogConfig, CatalogModule>(namespace, (facade, config) => {
   const catalog = {

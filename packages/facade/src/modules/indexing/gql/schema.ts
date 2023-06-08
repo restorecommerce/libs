@@ -1,6 +1,6 @@
-import { registerTypings, subServices } from "./types";
-import { generateSubServiceSchemas, SubSpaceServiceConfig } from "../../../gql/protos";
-import { namespace } from "../interfaces";
+import { registerTypings, subServices } from './types.js';
+import { generateSubServiceSchemas, type SubSpaceServiceConfig } from '../../../gql/protos/index.js';
+import { namespace } from '../interfaces.js';
 
 registerTypings();
 

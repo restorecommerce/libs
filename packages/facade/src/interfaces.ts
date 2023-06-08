@@ -1,7 +1,7 @@
-import Koa from 'koa';
-import { Logger } from 'winston';
-import { Server } from 'http';
-import { AddressInfo } from 'net';
+import type Koa from 'koa';
+import { type Logger } from 'winston';
+import { type Server } from 'node:http';
+import { type AddressInfo } from 'node:net';
 
 type RequireAtLeastOne<T, Keys extends keyof T> =
   Pick<T, Exclude<keyof T, Keys>> & {
@@ -28,25 +28,25 @@ export interface FacadeModuleFactory<TConfig = any, TContext extends FacadeBaseC
 // Extract module context
 export type ExtractModuleContext<TModule> =
     TModule extends FacadeModuleFactory<infer TConfig, infer TContext> ? TContext :
-    TModule extends FacadeModule<infer TContext> ? TContext :
-    never;
+      TModule extends FacadeModule<infer TContext> ? TContext :
+        never;
 
 export type FacadeModulesContext<T extends FacadeModuleBase[]> = (T[0] extends FacadeModuleBase ? ExtractModuleContext<T[0]> : FacadeBaseContext) &
-                                                                 (T[1] extends FacadeModuleBase ? ExtractModuleContext<T[1]> : FacadeBaseContext) &
-                                                                 (T[2] extends FacadeModuleBase ? ExtractModuleContext<T[2]> : FacadeBaseContext) &
-                                                                 (T[3] extends FacadeModuleBase ? ExtractModuleContext<T[3]> : FacadeBaseContext) &
-                                                                 (T[4] extends FacadeModuleBase ? ExtractModuleContext<T[4]> : FacadeBaseContext) &
-                                                                 (T[5] extends FacadeModuleBase ? ExtractModuleContext<T[5]> : FacadeBaseContext) &
-                                                                 (T[6] extends FacadeModuleBase ? ExtractModuleContext<T[6]> : FacadeBaseContext) &
-                                                                 (T[7] extends FacadeModuleBase ? ExtractModuleContext<T[7]> : FacadeBaseContext) &
-                                                                 (T[8] extends FacadeModuleBase ? ExtractModuleContext<T[8]> : FacadeBaseContext) &
-                                                                 (T[9] extends FacadeModuleBase ? ExtractModuleContext<T[9]> : FacadeBaseContext);
+(T[1] extends FacadeModuleBase ? ExtractModuleContext<T[1]> : FacadeBaseContext) &
+(T[2] extends FacadeModuleBase ? ExtractModuleContext<T[2]> : FacadeBaseContext) &
+(T[3] extends FacadeModuleBase ? ExtractModuleContext<T[3]> : FacadeBaseContext) &
+(T[4] extends FacadeModuleBase ? ExtractModuleContext<T[4]> : FacadeBaseContext) &
+(T[5] extends FacadeModuleBase ? ExtractModuleContext<T[5]> : FacadeBaseContext) &
+(T[6] extends FacadeModuleBase ? ExtractModuleContext<T[6]> : FacadeBaseContext) &
+(T[7] extends FacadeModuleBase ? ExtractModuleContext<T[7]> : FacadeBaseContext) &
+(T[8] extends FacadeModuleBase ? ExtractModuleContext<T[8]> : FacadeBaseContext) &
+(T[9] extends FacadeModuleBase ? ExtractModuleContext<T[9]> : FacadeBaseContext);
 
 
 export type FacadeContext<T extends FacadeModuleBase[] | Facade<any> = []> =
   T extends FacadeModuleBase[] ? FacadeModulesContext<T> :
-  T extends Facade<infer TFacadeModules> ? FacadeModulesContext<TFacadeModules> :
-  FacadeBaseContext;
+    T extends Facade<infer TFacadeModules> ? FacadeModulesContext<TFacadeModules> :
+      FacadeBaseContext;
 
 export interface Facade<TModules extends FacadeModuleBase[] = []> {
   readonly logger: Logger;
@@ -59,12 +59,12 @@ export interface Facade<TModules extends FacadeModuleBase[] = []> {
   onStart(fn: () => Promise<void>): void;
   onStop(fn: () => Promise<void>): void;
   stop(): Promise<void>;
-  addApolloService({name, schema, url}: RequireAtLeastOne<{name: string, url: string, schema: any}, 'url' | 'schema'>): void;
+  addApolloService({name, schema, url}: RequireAtLeastOne<{name: string; url: string; schema: any}, 'url' | 'schema'>): void;
   useMiddleware<TNewState extends object = {}, TNewContext extends object = {}>(middleware: Koa.Middleware<TNewState, TNewContext & FacadeModulesContext<TModules>>):
-    Facade<TModules>;
-  useModule<TNewModule extends FacadeModule>(module: TNewModule):
-    Facade<[...TModules, TNewModule]>;
-  supportsModule<TSupportedModule extends FacadeModuleBase>(module: TSupportedModule):
+  Facade<TModules>;
+  useModule<TNewModule extends FacadeModule>(mod: TNewModule):
+  Facade<[...TModules, TNewModule]>;
+  supportsModule<TSupportedModule extends FacadeModuleBase>(mod: TSupportedModule):
     this is Facade<[TSupportedModule, ...TModules]> /* Required for type completion */ & Facade<[...TModules]>;
 }
 

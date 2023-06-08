@@ -1,7 +1,7 @@
-import { FederatedAccessControlSchema } from './gql/federation';
-import { namespace, AccessControlConfig, AccessControlModule } from "./interfaces";
-import { AccessControlSrvGrpcClient } from "./grpc";
-import { createFacadeModuleFactory } from "../../utils";
+import { FederatedAccessControlSchema } from './gql/federation.js';
+import { namespace, type AccessControlConfig, type AccessControlModule } from './interfaces.js';
+import { AccessControlSrvGrpcClient } from './grpc/index.js';
+import { createFacadeModuleFactory } from '../../utils.js';
 
 export const accessControlModule = createFacadeModuleFactory<AccessControlConfig, AccessControlModule>(namespace, (facade, config) => {
   const accessControl = {

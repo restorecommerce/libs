@@ -1,10 +1,10 @@
-import { OIDCBodyLoginFn, AuthUserKeyWhitelist, AuthUser, OIDCLoginFn, OIDCBodyLoginCredentials } from './interfaces';
+import { type OIDCBodyLoginFn, type AuthUserKeyWhitelist, type AuthUser, type OIDCLoginFn, type OIDCBodyLoginCredentials } from './interfaces.js';
 import {
-  UserServiceClient as userService,
+  type UserServiceClient as userService,
   LoginRequest,
   FindRequest,
-  User
-} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/user";
+  type User
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/user.js';
 
 const KEY_WHITELIST: Array<AuthUserKeyWhitelist> = [
   'id',
@@ -19,16 +19,13 @@ const KEY_WHITELIST: Array<AuthUserKeyWhitelist> = [
   'tokens'
 ];
 
-export const loginUserBody: OIDCBodyLoginFn = async (ctx, body) => {
-  const identifier = typeof body?.identifier === 'string' ? body.identifier : undefined;
-  const password = typeof body?.password === 'string' ? body.password : undefined;
-  const remember = !!(body?.remember);
-  return loginUser(ctx, identifier, password, remember);
-}
-
-export const loginUserCredentials: OIDCBodyLoginCredentials = async (ctx, credentials) => {
-  return loginUser(ctx, credentials.identifier, credentials.password || credentials.token);
-}
+const pick = (obj: User, keys: (keyof User)[]): Pick<User, keyof User> => {
+  const ret: any = {};
+  keys.forEach(key => {
+    ret[key] = obj[key];
+  });
+  return ret;
+};
 
 export const loginUser: OIDCLoginFn = async (ctx, identifier, password, remember) => {
   if (!identifier || !password) {
@@ -39,7 +36,7 @@ export const loginUser: OIDCLoginFn = async (ctx, identifier, password, remember
         key: 'MISSING_IDENTIFIER_OR_PASSWORD',
         message: 'Missing identifier or password'
       }
-    }
+    };
   }
 
   try {
@@ -54,24 +51,35 @@ export const loginUser: OIDCLoginFn = async (ctx, identifier, password, remember
           key: 'INVALID_IDENTIFIER_OR_PASSWORD',
           message: 'Invalid identifier or password'
         }
-      }
+      };
     }
     return {
       user: pick(result, KEY_WHITELIST),
       identifier,
       remember
-    }
+    };
   } catch (error: any) {
     return {
       error: {
         key: 'ERROR',
         message: error?.toString() ?? 'Error'
       }
-    }
+    };
   }
-}
+};
 
-export async function findUserById(service: userService, id: string): Promise<AuthUser> {
+export const loginUserBody: OIDCBodyLoginFn = async (ctx, body) => {
+  const identifier = typeof body?.identifier === 'string' ? body.identifier : undefined;
+  const password = typeof body?.password === 'string' ? body.password : undefined;
+  const remember = !!(body?.remember);
+  return loginUser(ctx, identifier, password, remember);
+};
+
+export const loginUserCredentials: OIDCBodyLoginCredentials = async (ctx, credentials) => {
+  return loginUser(ctx, credentials.identifier, credentials.password || credentials.token);
+};
+
+export const findUserById = async (service: userService, id: string): Promise<AuthUser> => {
   const result = await service.find(FindRequest.fromPartial({
     id,
   }));
@@ -87,13 +95,4 @@ export async function findUserById(service: userService, id: string): Promise<Au
   }
 
   return pick(user, KEY_WHITELIST);
-}
-
-
-function pick(obj: User, keys: (keyof User)[]): Pick<User, keyof User> {
-  const ret: any = {};
-  keys.forEach(key => {
-    ret[key] = obj[key];
-  })
-  return ret;
-}
+};

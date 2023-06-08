@@ -1,6 +1,6 @@
-import { ResourceSrvGrpcClient } from "./grpc";
-import { ServiceConfig } from "../../gql/protos";
-import { FacadeModule, FacadeContext } from "../../interfaces";
+import { type ResourceSrvGrpcClient } from './grpc/index.js';
+import { type ServiceConfig } from '../../gql/protos/index.js';
+import { type FacadeModule, type FacadeContext } from '../../interfaces.js';
 
 export interface ResourceServiceConfig extends ServiceConfig {
   root: boolean;
@@ -13,7 +13,7 @@ export interface ResourceConfig {
 export interface ResourceContext extends FacadeContext {
   resource: {
     client: ResourceSrvGrpcClient;
-  }
+  };
 }
 
 export type ResourceModule = FacadeModule<ResourceContext>;

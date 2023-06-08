@@ -1,7 +1,7 @@
-import { Any, TokenService } from '@restorecommerce/rc-grpc-clients';
+import { type Any, type TokenService } from '@restorecommerce/rc-grpc-clients';
 import LRU from 'lru-cache';
-import { AdapterPayload } from 'oidc-provider';
-import { epochTime, marshallProtobufAny, unmarshallProtobufAny } from './utils';
+import { type AdapterPayload } from 'oidc-provider';
+import { epochTime, marshallProtobufAny, unmarshallProtobufAny } from './utils.js';
 
 export interface FindRequest {
   type: string;
@@ -53,7 +53,7 @@ export class TokenServiceStub implements TokenService {
     return {
       typeUrl: '',
       value: Buffer.from('{}')
-    }
+    };
   }
   async destroy({ type, id }: DestroyRequest): Promise<Any> {
     console.log('[ids] destroy', ...arguments);
@@ -61,7 +61,7 @@ export class TokenServiceStub implements TokenService {
     return {
       typeUrl: '',
       value: Buffer.from('{}')
-    }
+    };
 
   }
   async find({ type, id }: FindRequest): Promise<Any | undefined> {
@@ -91,7 +91,7 @@ export class TokenServiceStub implements TokenService {
     return {
       typeUrl: '',
       value: Buffer.from('{}')
-    }
+    };
   }
   async revokeByGrantId({ grantId }: RevokeByGrantIdRequest): Promise<Any> {
     console.log('[ids] revokeByGrantId', ...arguments);
@@ -103,7 +103,7 @@ export class TokenServiceStub implements TokenService {
     return {
       typeUrl: '',
       value: Buffer.from('{}')
-    }
+    };
   }
 
 }

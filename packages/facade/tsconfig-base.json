@@ -4,6 +4,8 @@
     "typeRoots": [
       "./node_modules/@types"
     ],
+    "allowJs": true,
+    "maxNodeModuleJsDepth": 10,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "declaration": true,

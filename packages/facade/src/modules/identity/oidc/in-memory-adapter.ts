@@ -1,6 +1,6 @@
-import { Adapter, AdapterPayload } from 'oidc-provider';
+import { type Adapter, type AdapterPayload } from 'oidc-provider';
 import { LRUCache } from 'lru-cache';
-import { epochTime } from './utils';
+import { epochTime } from './utils.js';
 
 export class InMemoryAdapter implements Adapter {
 

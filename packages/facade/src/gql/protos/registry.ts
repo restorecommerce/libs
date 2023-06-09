@@ -17,7 +17,8 @@ import {
   GraphQLString,
 } from 'graphql';
 import { GraphQLEnumType, GraphQLInputObjectType, GraphQLScalarType } from 'graphql/type/definition.js';
-import GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
+// import GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
+import GraphQLUpload from 'graphql-upload/GraphQLUpload.mjs';
 import { capitalizeProtoName } from './utils.js';
 import { authSubjectType, type ProtoMetadata, type ProtoMetaMessageOptions } from './types.js';
 import {

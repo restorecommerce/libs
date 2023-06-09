@@ -35,7 +35,7 @@
     "debug": "^4.3.4",
     "federation-subscription-tools": "^0.2.1",
     "graphql": "^16.6.0",
-    "graphql-upload": "^15.0.2",
+    "graphql-upload": "^16.0.2",
     "graphql-ws": "^5.13.1",
     "handlebars": "^4.7.7",
     "jose": "^4.14.4",

@@ -2,7 +2,7 @@ import { FederatedOstorageSchema } from './gql/federation.js';
 import { namespace, OstorageConfig, OstorageModule } from "./interfaces.js";
 import { OstorageSrvGrpcClient } from "./grpc/index.js";
 import { createFacadeModuleFactory } from "../../utils.js";
-import { handleGetFile } from './objectDownloadReqHandler';
+import { handleGetFile } from './objectDownloadReqHandler.js';
 import Router from 'koa-router';
 import bodyParser from 'koa-bodyparser';
 
@@ -21,7 +21,7 @@ export const ostorageModule = createFacadeModuleFactory<OstorageConfig, Ostorage
 
   const router = new Router();
 
-  router.use(bodyParser({ multipart: true }));
+  router.use(bodyParser());
   router.get(/^\/storage\/([^/]+)\/(.+)/, async (ctx: any, next: any) => {
 
     const authToken = ctx.request.header['authorization'];

@@ -29,6 +29,7 @@ import { type KafkaProviderConfig } from '@restorecommerce/kafka-client';
 import { setUseSubscriptions } from './gql/protos/utils.js';
 import bodyParser from 'koa-bodyparser';
 import cors from '@koa/cors';
+import graphqlUploadKoa from 'graphql-upload/graphqlUploadKoa.mjs';
 
 export * from './modules/index.js';
 export * from './middlewares/index.js';
@@ -293,6 +294,13 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
 
     await gqlServer.start();
 
+    // TODO set maxFile size and maximum files via config
+    this.koa.use(
+      graphqlUploadKoa({
+        maxFileSize: 10000000,
+        maxFiles: 20,
+      })
+    );
     this.koa.use(cors());
     this.koa.use(bodyParser());
     this.koa.use(

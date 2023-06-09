@@ -1,15 +1,15 @@
-import * as _ from 'lodash';
-import { TypingData, scalarTypes, recursiveEnumCheck, getNameSpaceTypeName, getTyping } from './registry';
-import { GraphQLInputObjectType } from 'graphql';
+import _ from 'lodash';
+import { type TypingData, scalarTypes, recursiveEnumCheck, getNameSpaceTypeName, getTyping } from './registry.js';
+import { type GraphQLInputObjectType } from 'graphql';
 
 export const capitalizeProtoName = (name: string): string => {
   return name.replace(/(?:\.|^|_)(\w)/g, v => v.toUpperCase()).replace(/[._]/g, '');
-}
+};
 
 // converts camelcase entity name to snake case
 export const convertyCamelToSnakeCase = (entity: string): string => {
   return entity.replace(/(?:^|\.?)([A-Z])/g, (x, y) => { return '_' + y.toLowerCase(); }).replace(/^_/, '');
-}
+};
 
 export const getKeys = (obj: any): string[] => {
   let set = new Set<string>();
@@ -64,9 +64,9 @@ const updateJSON = (id: string, value: any, obj: any) => {
     if (k === id) {
       const foundObj = value.find((e: any) => e.name === obj[k]);
       if (foundObj) {
-          obj[k] = foundObj.number;
+        obj[k] = foundObj.number;
       }
-    } else if (typeof v === "object") {
+    } else if (typeof v === 'object') {
       updateJSON(id, value, v);
     }
   }
@@ -115,6 +115,9 @@ export const convertEnumToInt = (inputTyping: TypingData, req: any): any => {
   return req;
 };
 
+export const capitalize = (s: string): string => {
+  return s.substring(0, 1).toUpperCase() + s.substring(1);
+};
 
 export const snakeToCamel = (s: string): string => {
   return s
@@ -128,7 +131,7 @@ export const snakeToCamel = (s: string): string => {
       }
     })
     .join('');
-}
+};
 
 export const camelToSnake = (serviceName: string) => {
   // convert camel case to snake case
@@ -140,13 +143,7 @@ export const getServiceName = (serviceName: string) => {
   return serviceName.endsWith('Service') ? camelToSnake(serviceName.substr(0, serviceName.length - 7)) : camelToSnake(serviceName);
 };
 
-export const capitalize = (s: string): string => {
-  return s.substring(0, 1).toUpperCase() + s.substring(1);
-}
-
-export function camelCase(s: string): string {
-  return s.substring(0, 1).toLowerCase() + s.substring(1);
-}
+export const camelCase = (s: string): string => s.substring(0, 1).toLowerCase() + s.substring(1);
 
 export let useSubscriptions = false;
 

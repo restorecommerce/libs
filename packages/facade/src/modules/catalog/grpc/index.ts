@@ -1,25 +1,25 @@
 import { RestoreCommerceGrpcClient } from '@restorecommerce/rc-grpc-clients';
 import {
-  ProductServiceClient,
+  type ProductServiceClient,
   ProductServiceDefinition
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/product';
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/product.js';
 import {
-  ProductPrototypeServiceClient,
+  type ProductPrototypeServiceClient,
   ProductPrototypeServiceDefinition
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/product_prototype';
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/product_prototype.js';
 import {
-  ProductCategoryServiceClient,
+  type ProductCategoryServiceClient,
   ProductCategoryServiceDefinition
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/product_category';
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/product_category.js';
 import {
-  PriceGroupServiceClient,
+  type PriceGroupServiceClient,
   PriceGroupServiceDefinition
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/price_group';
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/price_group.js';
 import {
-  ManufacturerServiceClient,
+  type ManufacturerServiceClient,
   ManufacturerServiceDefinition
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/manufacturer';
-import { GrpcClientConfig } from '@restorecommerce/grpc-client';
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/manufacturer.js';
+import { type GrpcClientConfig } from '@restorecommerce/grpc-client';
 
 export class CatalogSrvGrpcClient extends RestoreCommerceGrpcClient {
 

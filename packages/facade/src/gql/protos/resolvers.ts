@@ -1,10 +1,10 @@
-import { authSubjectType, ProtoMetadata, ServiceClient, ServiceConfig, SubSpaceServiceConfig } from './types';
+import { authSubjectType, type ProtoMetadata, type ServiceClient, type ServiceConfig, type SubSpaceServiceConfig } from './types.js';
 import flat from 'array.prototype.flat';
-import { getTyping } from './registry';
+import { getTyping } from './registry.js';
 import {
   getWhitelistBlacklistConfig, Mutate, postProcessGQLValue,
   preprocessGQLInput,
-} from './graphql';
+} from './graphql.js';
 import {
   camelCase,
   capitalize,
@@ -14,24 +14,21 @@ import {
   snakeToCamel,
   useSubscriptions,
   getServiceName
-} from './utils';
+} from './utils.js';
 import {
-  KafkaSubscription,
-  Resolver
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/options';
+  type KafkaSubscription,
+  type Resolver
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/options.js';
 import { ReadRequest } from '@restorecommerce/rc-grpc-clients';
 import {
   Filter_Operation,
   Filter_ValueType, FilterOp_Operator
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/resource_base';
-import { DescriptorProto, ServiceDescriptorProto } from 'ts-proto-descriptors';
-import { GraphQLResolveInfo } from 'graphql';
-import * as stream from 'stream';
-import * as _ from 'lodash';
-import { GraphQLFieldConfig, GraphQLFieldConfigMap } from 'graphql/type/definition';
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/resource_base.js';
+import { type DescriptorProto, type ServiceDescriptorProto } from 'ts-proto-descriptors';
+import { type GraphQLResolveInfo } from 'graphql';
+import * as stream from 'node:stream';
+import _ from 'lodash';
 import { Events } from '@restorecommerce/kafka-client';
-import * as Stream from 'stream';
-import { Observable } from 'rxjs';
 
 const inputMethodType = new Map<string, string>();
 
@@ -199,14 +196,14 @@ export const getGQLResolverFunctions =
             let items = decodeBufferFields(result.items, bufferFields);
             return {
               details: {
-                items: items, // items includes both payload and individual status
+                items, // items includes both payload and individual status
                 operationStatus: result.operationStatus // overall status
               },
             };
           } else {
             return {
               details: decodeBufferFields([result], bufferFields)[0]
-            }
+            };
           }
         } catch (error: any) {
           console.error(error);
@@ -218,12 +215,12 @@ export const getGQLResolverFunctions =
                 message: error.message
               }
             }
-          }
+          };
         }
       };
       return obj;
     }, {} as { [key in keyof SRV]: R });
-  }
+  };
 
 type ResolverBaseOrSub =
   ResolverFn<any, any, ServiceClient<any, any, any>, any>
@@ -232,12 +229,12 @@ const namespaceResolverRegistry = new Map<string, Map<boolean, Map<string, Resol
 
 const subscriptionResolvers: Record<string, {
   resolve?: ResolverFn<any, any, ServiceClient<any, any, any>, any>;
-  subscribe: ResolverFn<any, any, any, any>
+  subscribe: ResolverFn<any, any, any, any>;
 }> = {};
 
 export const registerResolverFunction = <T extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, T>>
 (namespace: string, name: string, func: ResolverFn<any, any, ServiceClient<CTX, keyof CTX, T>, any>,
- mutation: boolean = false, subspace: string | undefined = undefined, service?: ServiceDescriptorProto) => {
+  mutation = false, subspace: string | undefined = undefined, service?: ServiceDescriptorProto) => {
   if (!namespaceResolverRegistry.has(namespace)) {
     namespaceResolverRegistry.set(namespace, new Map());
   }
@@ -269,7 +266,7 @@ export const registerResolverFunction = <T extends Record<string, any>, CTX exte
     }
   }
   space.set(name, func);
-}
+};
 
 export const generateResolver = (...namespaces: string[]) => {
   const queryResolvers: any = {};
@@ -277,7 +274,7 @@ export const generateResolver = (...namespaces: string[]) => {
 
   namespaces.forEach(ns => {
     if (!namespaceResolverRegistry.has(ns)) {
-      throw new Error(`Namespace "${ns}" has no registered functions`)
+      throw new Error(`Namespace "${ns}" has no registered functions`);
     }
 
     if (namespaceResolverRegistry.get(ns)!.has(false)) {
@@ -285,7 +282,7 @@ export const generateResolver = (...namespaces: string[]) => {
 
       namespaceResolverRegistry.get(ns)!.get(false)!.forEach((value, key) => {
         if (value instanceof Map) {
-          res[key] = Object.fromEntries(value)
+          res[key] = Object.fromEntries(value);
         } else {
           res[key] = value;
         }
@@ -299,7 +296,7 @@ export const generateResolver = (...namespaces: string[]) => {
 
       namespaceResolverRegistry.get(ns)!.get(true)!.forEach((value, key) => {
         if (value instanceof Map) {
-          res[key] = Object.fromEntries(value)
+          res[key] = Object.fromEntries(value);
         } else {
           res[key] = value;
         }
@@ -324,7 +321,7 @@ export const generateResolver = (...namespaces: string[]) => {
   }
 
   return resolvers;
-}
+};
 
 export const generateSubServiceResolvers = <T, M extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, M>>(subServices: ProtoMetadata[], config: SubSpaceServiceConfig, namespace: string): T => {
   subServices.forEach((meta) => {
@@ -410,7 +407,7 @@ export const generateSubServiceResolvers = <T, M extends Record<string, any>, CT
                   [Symbol.asyncIterator]() {
                     return this;
                   },
-                  async next() {
+                  next: async () => {
                     if (pending.length) {
                       return {value: {[fieldName]: pending.shift()!}};
                     }
@@ -421,16 +418,16 @@ export const generateSubServiceResolvers = <T, M extends Record<string, any>, CT
                       ? {done: true, value: undefined}
                       : {value: {[fieldName]: pending.shift()!}};
                   },
-                  async throw(err: Error) {
+                  throw: async (err: Error) => {
                     throw err;
                   },
-                  async return() {
+                  return: async () => {
                     await events.stop();
                     return {done: true, value: undefined};
                   },
                 };
               }
-            }
+            };
           }
         }
       });
@@ -507,8 +504,8 @@ export const generateSubServiceResolvers = <T, M extends Record<string, any>, CT
                       }
                     }
 
-                    return undefined
-                  }
+                    return undefined;
+                  };
                 }
               }
               finalResolver[typing.output.name] = result;
@@ -516,8 +513,8 @@ export const generateSubServiceResolvers = <T, M extends Record<string, any>, CT
           }
         }
       }
-    })
+    });
   });
 
   return finalResolver;
-}
+};

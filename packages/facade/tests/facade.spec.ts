@@ -1,7 +1,10 @@
-import { AddressInfo } from 'net';
-import { facade } from './facade';
+import { type AddressInfo } from 'node:net';
+import { facade } from './facade.js';
+import { jest } from '@jest/globals';
 
-let url
+jest.useFakeTimers();
+
+let url;
 
 beforeAll(async () => {
   await facade.start();

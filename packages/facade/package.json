@@ -15,6 +15,7 @@
     "commerce",
     "facade"
   ],
+  "type": "module",
   "dependencies": {
     "@apollo/federation": "^0.38.1",
     "@apollo/gateway": "^2.4.7",
@@ -90,12 +91,14 @@
     "@types/useragent": "^2.3.1",
     "@types/uuid": "^9.0.1",
     "@types/ws": "^8.5.4",
-    "jest": "^29.4.3",
-    "nodemon": "^2.0.22",
+    "eslint": "^8.42.0",
+    "jest": "^29.5.0",
+    "nodemon": "^2.0.20",
     "npm-run-all": "^4.1.5",
     "rimraf": "^5.0.1",
     "supertest": "^6.3.3",
-    "ts-jest": "^29.0.5",
+    "ts-jest": "~29.1.0",
+    "ts-jest-resolver": "^2.0.1",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.1.3"
@@ -108,16 +111,18 @@
     "build:codegen:compile": "tsc -p tsconfig.codegen.json",
     "dev": "npm-run-all build:clean dev:compile",
     "dev:compile": "tsc -w -p tsconfig.json",
-    "test": "jest --runInBand --testTimeout=30000",
+    "pretest": "rm -rf ./node_modules/@josephg/resolvable/index.ts",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest --runInBand --testTimeout=30000",
     "test:watch": "jest --watch",
     "dev:serve": "TS_NODE_PROJECT=tsconfig.test.json nodemon -e ts,hbs -w ./tests -w ./src -x node --inspect=7000 -r ts-node/register tests/server.ts",
-    "generate": "ts-node --project tsconfig.generate.json -r tsconfig-paths/register generate.ts",
+    "generate": "ts-node-esm --project tsconfig.generate.json -r tsconfig-paths/register generate.ts",
     "prepublishOnly": "npm run build",
-    "debug-run": "ts-node --project tsconfig.debug.json debug-run.ts",
-    "copyhbs": "sh copy-hbs.sh"
+    "debug-run": "ts-node-esm --project tsconfig.debug.json debug-run.ts",
+    "copyhbs": "sh copy-hbs.sh",
+    "lint": "eslint './**/*.ts'"
   },
   "engines": {
-    "node": ">= 12.18.0"
+    "node": ">=16"
   },
   "publishConfig": {
     "access": "public"

@@ -1,9 +1,9 @@
 import { RestoreCommerceGrpcClient } from '@restorecommerce/rc-grpc-clients';
 import {
-  PaymentServiceClient,
+  type PaymentServiceClient,
   PaymentServiceDefinition
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/payment';
-import { GrpcClientConfig } from '@restorecommerce/grpc-client';
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/payment.js';
+import { type GrpcClientConfig } from '@restorecommerce/grpc-client';
 
 export class PaymentSrvGrpcClient extends RestoreCommerceGrpcClient {
 

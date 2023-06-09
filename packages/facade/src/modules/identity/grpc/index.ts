@@ -1,25 +1,25 @@
 import { RestoreCommerceGrpcClient } from '@restorecommerce/rc-grpc-clients';
 import {
-  UserServiceClient,
+  type UserServiceClient,
   UserServiceDefinition
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/user';
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/user.js';
 import {
-  RoleServiceClient,
+  type RoleServiceClient,
   RoleServiceDefinition
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/role';
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/role.js';
 import {
-  AuthenticationLogServiceClient,
+  type AuthenticationLogServiceClient,
   AuthenticationLogServiceDefinition
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/authentication_log';
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/authentication_log.js';
 import {
-  TokenServiceClient,
+  type TokenServiceClient,
   TokenServiceDefinition
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/token';
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/token.js';
 import {
-  OAuthServiceClient,
+  type OAuthServiceClient,
   OAuthServiceDefinition
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/oauth';
-import { GrpcClientConfig } from '@restorecommerce/grpc-client';
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/oauth.js';
+import { type GrpcClientConfig } from '@restorecommerce/grpc-client';
 
 export class IdentitySrvGrpcClient extends RestoreCommerceGrpcClient {
 

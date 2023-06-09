@@ -1,9 +1,9 @@
 import { RestoreCommerceGrpcClient } from '@restorecommerce/rc-grpc-clients';
 import {
-  OrderServiceClient,
+  type OrderServiceClient,
   OrderServiceDefinition
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/order';
-import { GrpcClientConfig } from '@restorecommerce/grpc-client';
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/order.js';
+import { type GrpcClientConfig } from '@restorecommerce/grpc-client';
 
 export class OrderingSrvGrpcClient extends RestoreCommerceGrpcClient {
 

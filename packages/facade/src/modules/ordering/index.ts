@@ -1,7 +1,7 @@
-import { FederatedOrderingSchema } from './gql/federation';
-import { namespace, OrderingConfig, OrderingModule } from "./interfaces";
-import { OrderingSrvGrpcClient } from "./grpc";
-import { createFacadeModuleFactory } from "../../utils";
+import { FederatedOrderingSchema } from './gql/federation.js';
+import { namespace, type OrderingConfig, type OrderingModule } from './interfaces.js';
+import { OrderingSrvGrpcClient } from './grpc/index.js';
+import { createFacadeModuleFactory } from '../../utils.js';
 
 export const orderingModule = createFacadeModuleFactory<OrderingConfig, OrderingModule>(namespace, (facade, config) => {
   const ordering = {

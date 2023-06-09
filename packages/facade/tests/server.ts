@@ -1,6 +1,6 @@
-import { facade } from './facade';
+import { facade } from './facade.js';
 
 facade.start();
-process.on('SIGINT', function() {
+process.on('SIGINT', () => {
   process.exit();
 });

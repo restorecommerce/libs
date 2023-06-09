@@ -1,20 +1,25 @@
 import {
   createFacade,
   createFacadeModuleFactory,
-  Facade,
-  FacadeContext,
-  FacadeModule,
+  type Facade,
+  type FacadeContext,
+  type FacadeModule,
   reqResLogger
-} from '../src/index';
-import { agent, SuperAgentTest } from 'supertest';
+} from '../src/index.js';
+import { agent, type SuperAgentTest } from 'supertest';
 import { createServiceConfig } from '@restorecommerce/service-config';
-import { createLogger } from "@restorecommerce/logger";
-import { generateResolver, generateSchema, registerResolverFunction, registerResolverSchema } from "../src/gql/protos";
-import { GraphQLString, printSchema } from "graphql";
-import { buildSubgraphSchema } from "@apollo/federation";
-import gql from "graphql-tag";
+import { createLogger } from '@restorecommerce/logger';
+import { generateResolver, generateSchema, registerResolverFunction, registerResolverSchema } from '../src/gql/protos/index.js';
+import { GraphQLString, printSchema } from 'graphql';
+import { buildSubgraphSchema } from '@apollo/federation';
+import { gql } from 'graphql-tag';
+import path from 'node:path';
+import * as url from 'node:url';
+import { jest } from '@jest/globals';
 
-const CONFIG_PATH = __dirname;
+jest.useFakeTimers();
+
+const CONFIG_PATH = path.dirname(url.fileURLToPath(import.meta.url));
 
 const customFunction = 'customFunction';
 const customResponse = 'Hello World';
@@ -30,7 +35,7 @@ export interface CustomContext extends FacadeContext {
 
 export type CustomModule = FacadeModule<CustomContext>;
 
-function createTestFacade() {
+const createTestFacade = () => {
   const serviceConfig = createServiceConfig(CONFIG_PATH);
 
   const cfg = {
@@ -68,7 +73,7 @@ function createTestFacade() {
   })
     .useModule(customStuff({message: customResponse}))
     .useMiddleware(reqResLogger({logger}));
-}
+};
 
 describe('extend', () => {
   let facade: Facade<any>;
@@ -77,13 +82,13 @@ describe('extend', () => {
   beforeAll(async () => {
     facade = createTestFacade();
     await facade.start();
-    request = agent(facade.server)
+    request = agent(facade.server);
     // await new Promise(resolve => setTimeout(resolve, 20000))
   });
 
   afterAll(async () => {
     await facade && await facade.stop();
-  })
+  });
 
   it('should start the facade', () => {
     expect(facade).toBeTruthy();
@@ -92,12 +97,12 @@ describe('extend', () => {
 
   it('should call custom function', (done) => {
     request
-      .post("/graphql")
+      .post('/graphql')
       .send({
         query: `{ custom { customFunction } }`,
       })
-      .set("Accept", "application/json")
-      .expect("Content-Type", /json/)
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
       .expect(200)
       .end((err, res) => {
         if (err) {

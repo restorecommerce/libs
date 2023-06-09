@@ -1,14 +1,17 @@
-import { createFacade, reqResLogger, FacadeContext, identityModule } from '../src/index';
+import { createFacade, reqResLogger, type FacadeContext, identityModule } from '../src/index.js';
 import { createServiceConfig } from '@restorecommerce/service-config';
 import { createLogger } from '@restorecommerce/logger';
 
-import { ResourceSrvGrpcClient } from "../src/modules/resource/grpc";
+import { ResourceSrvGrpcClient } from '../src/modules/resource/grpc/index.js';
+import path from 'node:path';
+import * as url from 'node:url';
+import * as fs from 'node:fs';
 
-const jwks = require('./jwks.json');
+const jwks = JSON.parse(fs.readFileSync('./tests/jwks.json').toString());
 
-const CONFIG_PATH = __dirname;
+const CONFIG_PATH = path.dirname(url.fileURLToPath(import.meta.url));
 
-function createTestFacade() {
+const createTestFacade = () => {
   const serviceConfig = createServiceConfig(CONFIG_PATH);
 
   const cfg = {

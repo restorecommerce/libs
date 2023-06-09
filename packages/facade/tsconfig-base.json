@@ -8,6 +8,14 @@
     "allowSyntheticDefaultImports": true,
     "declaration": true,
     "strict": true,
+    "target": "ES6",
+    "module": "ESNext",
+    "moduleResolution": "Node16",
     "skipLibCheck": true // temp work around for kafka-client typings
+  },
+  "ts-node": {
+    "transpileOnly": true,
+    "files": true,
+    "experimentalResolver": true
   }
 }

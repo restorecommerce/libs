@@ -1,9 +1,9 @@
 import { RestoreCommerceGrpcClient } from '@restorecommerce/rc-grpc-clients';
 import {
-  NotificationServiceClient,
+  type NotificationServiceClient,
   NotificationServiceDefinition
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/notification';
-import { GrpcClientConfig } from '@restorecommerce/grpc-client';
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/notification.js';
+import { type GrpcClientConfig } from '@restorecommerce/grpc-client';
 
 export class NotificationSrvGrpcClient extends RestoreCommerceGrpcClient {
 

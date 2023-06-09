@@ -1,5 +1,5 @@
-import { Any } from '@restorecommerce/rc-grpc-clients';
-import { AdapterPayload } from 'oidc-provider';
+import { type Any } from '@restorecommerce/rc-grpc-clients';
+import { type AdapterPayload } from 'oidc-provider';
 import { customAlphabet } from 'nanoid';
 
 export const epochTime = (date = Date.now()) => Math.floor(date / 1000);

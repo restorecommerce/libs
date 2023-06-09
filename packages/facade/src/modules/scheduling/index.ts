@@ -1,7 +1,7 @@
-import { FederatedSchedulingSchema } from './gql/federation';
-import { namespace, SchedulingConfig, SchedulingModule } from "./interfaces";
-import { SchedulingSrvGrpcClient } from "./grpc";
-import { createFacadeModuleFactory } from "../../utils";
+import { FederatedSchedulingSchema } from './gql/federation.js';
+import { namespace, type SchedulingConfig, type SchedulingModule } from './interfaces.js';
+import { SchedulingSrvGrpcClient } from './grpc/index.js';
+import { createFacadeModuleFactory } from '../../utils.js';
 
 export const schedulingModule = createFacadeModuleFactory<SchedulingConfig, SchedulingModule>(namespace, (facade, config) => {
   const scheduling = {

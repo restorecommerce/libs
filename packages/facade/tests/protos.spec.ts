@@ -1,10 +1,10 @@
 import {
   protoMetadata,
-} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/order";
-import { GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLScalarType } from "graphql";
-import { getTyping, registerPackagesRecursive } from "../src/gql/protos";
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/order.js';
+import { GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLScalarType } from 'graphql';
+import { getTyping, registerPackagesRecursive } from '../src/gql/protos/index.js';
 
-describe("proto-meta", () => {
+describe('proto-meta', () => {
   it('should register typings', () => {
     registerPackagesRecursive(
       protoMetadata
@@ -17,7 +17,7 @@ describe("proto-meta", () => {
 
     const output = obj!.output;
 
-    expect(output).toBeInstanceOf(GraphQLObjectType)
+    expect(output).toBeInstanceOf(GraphQLObjectType);
     expect(output.name).toEqual('IoRestorecommerceOrderOrder');
 
     const fields = (output as GraphQLObjectType).getFields();
@@ -32,7 +32,7 @@ describe("proto-meta", () => {
     expect(fields.items.type).toBeInstanceOf(GraphQLList);
     expect((fields.items.type as GraphQLList<any>).ofType).toBeInstanceOf(GraphQLNonNull);
     expect(((fields.items.type as GraphQLList<any>).ofType as GraphQLNonNull<any>).ofType).toBeInstanceOf(GraphQLObjectType);
-    expect(((fields.items.type as GraphQLList<any>).ofType as GraphQLNonNull<any>).ofType).toEqual(getTyping('.io.restorecommerce.order.OrderItem')!.output)
+    expect(((fields.items.type as GraphQLList<any>).ofType as GraphQLNonNull<any>).ofType).toEqual(getTyping('.io.restorecommerce.order.OrderItem')!.output);
 
     expect(fields.meta.type).toEqual(getTyping('.io.restorecommerce.meta.Meta')!.output);
   });

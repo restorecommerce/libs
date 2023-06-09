@@ -1,7 +1,7 @@
-import { FederatedFulfillmentSchema } from './gql/federation';
-import { namespace, FulfillmentConfig, FulfillmentModule } from "./interfaces";
-import { FulfillmentSrvGrpcClient } from "./grpc";
-import { createFacadeModuleFactory } from "../../utils";
+import { FederatedFulfillmentSchema } from './gql/federation.js';
+import { namespace, type FulfillmentConfig, type FulfillmentModule } from './interfaces.js';
+import { FulfillmentSrvGrpcClient } from './grpc/index.js';
+import { createFacadeModuleFactory } from '../../utils.js';
 
 export const fulfillmentModule = createFacadeModuleFactory<FulfillmentConfig, FulfillmentModule>(namespace, (facade, config) => {
   const fulfillment = {

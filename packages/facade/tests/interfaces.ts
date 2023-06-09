@@ -1,2 +1,2 @@
-// This reexports 
-export type TestFacadeContext = import('./facade').TestFacadeContext;
+// This reexports
+export type { TestFacadeContext } from './facade.js';

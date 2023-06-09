@@ -1,13 +1,13 @@
 import { RestoreCommerceGrpcClient } from '@restorecommerce/rc-grpc-clients';
 import {
-  FulfillmentServiceClient,
+  type FulfillmentServiceClient,
   FulfillmentServiceDefinition
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/fulfillment';
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/fulfillment.js';
 import {
-  FulfillmentCourierServiceClient,
+  type FulfillmentCourierServiceClient,
   FulfillmentCourierServiceDefinition
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/fulfillment_courier';
-import { GrpcClientConfig } from '@restorecommerce/grpc-client';
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/fulfillment_courier.js';
+import { type GrpcClientConfig } from '@restorecommerce/grpc-client';
 
 export class FulfillmentSrvGrpcClient extends RestoreCommerceGrpcClient {
 

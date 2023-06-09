@@ -1,19 +1,19 @@
 import {
-  GraphQLInputField,
+  type GraphQLInputField,
   GraphQLList,
   GraphQLNonNull,
   GraphQLObjectType,
-  GraphQLOutputType,
+  type GraphQLOutputType,
 } from 'graphql';
 import {
   GraphQLEnumType,
   GraphQLInputObjectType,
-  GraphQLInputType,
+  type GraphQLInputType,
   GraphQLScalarType,
-} from 'graphql/type/definition';
-import { ProtoMetadata, ServiceConfig } from './types';
-import { Readable } from 'stream';
-import { ServiceDescriptorProto } from 'ts-proto-descriptors';
+} from 'graphql/type/definition.js';
+import { type ProtoMetadata, type ServiceConfig } from './types.js';
+import { type Readable } from 'node:stream';
+import { type ServiceDescriptorProto } from 'ts-proto-descriptors';
 
 export const Mutate = ['Create', 'Update', 'Upsert'];
 
@@ -77,7 +77,7 @@ export const preprocessGQLInput = async (data: any, model: GraphQLInputObjectTyp
 
         const chunks: any[] = [];
         for await (let chunk of stream) {
-          chunks.push(chunk)
+          chunks.push(chunk);
         }
 
         return Buffer.concat(chunks);
@@ -85,7 +85,7 @@ export const preprocessGQLInput = async (data: any, model: GraphQLInputObjectTyp
   }
 
   return data;
-}
+};
 
 export const postProcessGQLValue = (data: any, model: GraphQLOutputType): any => {
   if (model instanceof GraphQLEnumType) {
@@ -123,14 +123,14 @@ export const postProcessGQLValue = (data: any, model: GraphQLOutputType): any =>
   }
 
   return data;
-}
+};
 
 export const getWhitelistBlacklistConfig = (
   metaService: ServiceDescriptorProto,
   config: ServiceConfig,
   meta: ProtoMetadata,
   entity: string
-): { queries: Set<string>, mutations: Set<string> } => {
+): { queries: Set<string>; mutations: Set<string> } => {
   const queryList: string[] = [];
   if (meta.options && meta.options.services && meta.options!.services[metaService.name] && meta.options!.services[metaService.name].methods) {
     const methods = meta.options!.services[metaService.name].methods!;
@@ -141,8 +141,8 @@ export const getWhitelistBlacklistConfig = (
     }
   }
 
-  const mut: Set<string> = new Set(metaService.method!.map(m => m.name!).filter(key => queryList.indexOf(key) < 0) as any)
-  const que: Set<string> = new Set(metaService.method!.map(m => m.name!).filter(key => queryList.indexOf(key) >= 0) as any)
+  const mut: Set<string> = new Set(metaService.method!.map(m => m.name!).filter(key => queryList.indexOf(key) < 0) as any);
+  const que: Set<string> = new Set(metaService.method!.map(m => m.name!).filter(key => queryList.indexOf(key) >= 0) as any);
 
   if (config[entity]) {
     if (config[entity]?.methods?.whitelist) {
@@ -165,7 +165,7 @@ export const getWhitelistBlacklistConfig = (
 
       if (whitelist.size > 0) {
         // TODO Log error that whitelist contains methods that don't exist
-        console.error('Whitelist contains undefined methods:', whitelist)
+        console.error('Whitelist contains undefined methods:', whitelist);
       }
     } else if (config[entity]?.methods?.blacklist) {
       const blacklist = new Set(config[entity].methods.blacklist);
@@ -185,7 +185,7 @@ export const getWhitelistBlacklistConfig = (
 
       if (blacklist.size > 0) {
         // TODO Log error that blacklist contains methods that don't exist
-        console.error('Blacklist contains undefined methods:', blacklist)
+        console.error('Blacklist contains undefined methods:', blacklist);
       }
     }
   }
@@ -198,4 +198,4 @@ export const getWhitelistBlacklistConfig = (
     mutations: mut,
     queries: que
   };
-}
+};

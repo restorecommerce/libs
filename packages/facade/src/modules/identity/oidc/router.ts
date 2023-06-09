@@ -1,12 +1,13 @@
-import KoaRouter from 'koa-router';
-import { InteractionResults } from 'oidc-provider';
-import Provider from 'oidc-provider';
-import { Logger } from 'winston';
-import { IdentityContext } from '../interfaces';
-import { OIDCTemplateEngine, OIDCTemplateError } from './templates';
-// import { AuthUser, loginUser } from './user';
-import { OIDCError, OIDCHbsTemplates, OIDCBodyLoginFn } from './interfaces';
+import type KoaRouter from 'koa-router';
+import { type InteractionResults } from 'oidc-provider';
+import type Provider from 'oidc-provider';
+import { type Logger } from 'winston';
+import { type IdentityContext } from '../interfaces.js';
+import { OIDCTemplateEngine, OIDCTemplateError } from './templates.js';
+// import { AuthUser, loginUser } from './user/index.js';
+import { type OIDCError, type OIDCHbsTemplates, type OIDCBodyLoginFn } from './interfaces.js';
 import { koaBody } from 'koa-body';
+import Router from 'koa-router';
 
 export interface CreateOIDCRouterArgs {
   logger: Logger;
@@ -16,9 +17,7 @@ export interface CreateOIDCRouterArgs {
   loginFn: OIDCBodyLoginFn;
 }
 
-const Router = eval('require("koa-router")');
-
-export function createOIDCRouter({logger, loginFn, provider, env, templates }: CreateOIDCRouterArgs): KoaRouter<{}, IdentityContext> {
+export const createOIDCRouter = ({logger, loginFn, provider, env, templates }: CreateOIDCRouterArgs): KoaRouter<{}, IdentityContext> => {
 
   const dev = env === 'development';
 
@@ -108,7 +107,7 @@ export function createOIDCRouter({logger, loginFn, provider, env, templates }: C
       throw new Error('INVALID_PROMPT');
     }
 
-    const render = async ({error, identifier, remember}: {error?: OIDCError, identifier?: string, remember?: boolean} = {}) => {
+    const render = async ({error, identifier, remember}: {error?: OIDCError; identifier?: string; remember?: boolean} = {}) => {
       ctx.response.type = 'html';
       ctx.response.body = await tplEngine.login({
         title: 'Login',
@@ -127,7 +126,7 @@ export function createOIDCRouter({logger, loginFn, provider, env, templates }: C
         }
       });
       return;
-    }
+    };
 
     const body = typeof ctx.request.body === 'object' && ctx.request.body ? ctx.request.body : undefined;
 
@@ -155,7 +154,7 @@ export function createOIDCRouter({logger, loginFn, provider, env, templates }: C
         },
         identifier,
         remember
-      })
+      });
     }
 
     const result: InteractionResults = {
@@ -198,4 +197,4 @@ export function createOIDCRouter({logger, loginFn, provider, env, templates }: C
   // });
 
   return router;
-};
+};;

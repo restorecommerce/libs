@@ -1,9 +1,9 @@
 import { RestoreCommerceGrpcClient } from '@restorecommerce/rc-grpc-clients';
 import {
-  InvoiceServiceClient,
+  type InvoiceServiceClient,
   InvoiceServiceDefinition
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/invoice';
-import { GrpcClientConfig } from '@restorecommerce/grpc-client';
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/invoice.js';
+import { type GrpcClientConfig } from '@restorecommerce/grpc-client';
 
 export class InvoicingSrvGrpcClient extends RestoreCommerceGrpcClient {
 

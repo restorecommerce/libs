@@ -1,7 +1,7 @@
-import { FederatedIndexingSchema } from './gql/federation';
-import { namespace, IndexingConfig, IndexingModule } from "./interfaces";
-import { IndexingSrvGrpcClient } from "./grpc";
-import { createFacadeModuleFactory } from "../../utils";
+import { FederatedIndexingSchema } from './gql/federation.js';
+import { namespace, type IndexingConfig, type IndexingModule } from './interfaces.js';
+import { IndexingSrvGrpcClient } from './grpc/index.js';
+import { createFacadeModuleFactory } from '../../utils.js';
 
 export const indexingModule = createFacadeModuleFactory<IndexingConfig, IndexingModule>(namespace, (facade, config) => {
   const indexing = {

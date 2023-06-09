@@ -1,7 +1,7 @@
-import { FederatedResourceSchema } from './gql/federation';
-import { namespace, ResourceConfig, ResourceModule } from "./interfaces";
-import { ResourceSrvGrpcClient } from "./grpc";
-import { createFacadeModuleFactory } from "../../utils";
+import { FederatedResourceSchema } from './gql/federation.js';
+import { namespace, type ResourceConfig, type ResourceModule } from './interfaces.js';
+import { ResourceSrvGrpcClient } from './grpc/index.js';
+import { createFacadeModuleFactory } from '../../utils.js';
 
 export const resourceModule = createFacadeModuleFactory<ResourceConfig, ResourceModule>(namespace, (facade, config) => {
   const resource = {

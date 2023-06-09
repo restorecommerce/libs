@@ -1,24 +1,102 @@
-import KoaRouter from "koa-router";
-import { IdentityContext } from "../interfaces";
-import { IdentitySrvGrpcClient } from "../grpc";
-import { readFile } from "fs";
-import { resolve as resolvePath } from "path";
-import hbs from "handlebars";
-import { marshallProtobufAny } from "../oidc/utils";
+import type KoaRouter from 'koa-router';
+import { type IdentityContext } from '../interfaces.js';
+import { type IdentitySrvGrpcClient } from '../grpc/index.js';
+import { readFile } from 'node:fs';
+import path, { resolve as resolvePath } from 'node:path';
+import hbs from 'handlebars';
+import { marshallProtobufAny } from '../oidc/utils.js';
 import * as uuid from 'uuid';
 import {
   RegisterRequest,
-  User,
+  type User,
   UserType
-} from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/user";
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/user.js';
 import * as jose from 'jose';
+import * as url from 'node:url';
+import Router from 'koa-router';
+import { koaBody as bodyParser } from 'koa-body';
 
-const Router = eval('require("koa-router")');
-let bodyParser = eval('require("koa-body")');
+const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 
-if (typeof bodyParser !== 'function') {
-  bodyParser = bodyParser.default;
-}
+const upsertUserToken = async (ids: IdentitySrvGrpcClient, accountId: string | undefined): Promise<string> => {
+  const token = new jose.UnsecuredJWT({})
+    .setIssuedAt()
+    .setExpirationTime('30d')
+    .encode();
+
+  // 1 Month
+  const expiresIn = Date.now() + (1000 * 60 * 60 * 24 * 30);
+
+  await ids.token.upsert({
+    id: uuid.v4().replace(/-/g, ''),
+    type: 'access_token',
+    expiresIn,
+    payload: marshallProtobufAny({
+      accountId,
+      exp: expiresIn,
+      jti: token
+    })
+  });
+
+  return token;
+};
+
+let layoutHbs: HandlebarsTemplateDelegate;
+export const layout = async (context: { body: string; title: string }) => {
+  if (!layoutHbs) {
+    const layoutTpl = await new Promise<string>((resolve, reject) => {
+      readFile(resolvePath(__dirname, 'views/layout.hbs'), (err, data) => err ? reject(err) : resolve(data.toString()));
+    });
+    layoutHbs = hbs.compile(layoutTpl);
+  }
+  return layoutHbs(context);
+};
+
+let registerHbs: HandlebarsTemplateDelegate;
+export const register = async (email: string) => {
+  if (!registerHbs) {
+    const registerTpl = await new Promise<string>((resolve, reject) => {
+      readFile(resolvePath(__dirname, 'views/register.hbs'), (err, data) => err ? reject(err) : resolve(data.toString()));
+    });
+    registerHbs = hbs.compile(registerTpl);
+  }
+
+  return layout({
+    title: 'Register',
+    body: registerHbs({email})
+  });
+};
+
+let loginHbs: HandlebarsTemplateDelegate;
+export const login = async (links: any) => {
+  if (!loginHbs) {
+    const loginTpl = await new Promise<string>((resolve, reject) => {
+      readFile(resolvePath(__dirname, 'views/login.hbs'), (err, data) => err ? reject(err) : resolve(data.toString()));
+    });
+    loginHbs = hbs.compile(loginTpl);
+  }
+
+  return layout({
+    title: 'Login',
+    body: loginHbs({links})
+  });
+};
+
+let accountHbs: HandlebarsTemplateDelegate;
+export const account = async (user: User) => {
+  if (!accountHbs) {
+    const accountTpl = await new Promise<string>((resolve, reject) => {
+      readFile(resolvePath(__dirname, 'views/account.hbs'), (err, data) => err ? reject(err) : resolve(data.toString()));
+    });
+    accountHbs = hbs.compile(accountTpl);
+  }
+
+  return layout({
+    title: 'Account',
+    body: accountHbs({user})
+  });
+};
+
 
 export const createOAuth = (): KoaRouter<{}, IdentityContext> => {
   const router = new Router() as KoaRouter<{}, IdentityContext>;
@@ -54,7 +132,7 @@ export const createOAuth = (): KoaRouter<{}, IdentityContext> => {
     const ids = ctx.identitySrvClient as IdentitySrvGrpcClient;
 
     const user = await ids.user.findByToken({
-      token: token
+      token
     });
 
     if (!user || !user.payload) {
@@ -121,83 +199,4 @@ export const createOAuth = (): KoaRouter<{}, IdentityContext> => {
   });
 
   return router;
-}
-
-const upsertUserToken = async (ids: IdentitySrvGrpcClient, accountId: string | undefined): Promise<string> => {
-  const token = new jose.UnsecuredJWT({})
-    .setIssuedAt()
-    .setExpirationTime('30d')
-    .encode();
-
-  // 1 Month
-  const expiresIn = Date.now() + (1000 * 60 * 60 * 24 * 30);
-
-  await ids.token.upsert({
-    id: uuid.v4().replace(/-/g, ''),
-    type: 'access_token',
-    expiresIn: expiresIn,
-    payload: marshallProtobufAny({
-      accountId: accountId,
-      exp: expiresIn,
-      jti: token
-    })
-  });
-
-  return token;
-}
-
-let layoutHbs: HandlebarsTemplateDelegate;
-export const layout = async (context: { body: string; title: string }) => {
-  if (!layoutHbs) {
-    const layoutTpl = await new Promise<string>((resolve, reject) => {
-      readFile(resolvePath(__dirname, 'views/layout.hbs'), (err, data) => err ? reject(err) : resolve(data.toString()));
-    });
-    layoutHbs = hbs.compile(layoutTpl);
-  }
-  return layoutHbs(context);
-}
-
-let registerHbs: HandlebarsTemplateDelegate;
-export const register = async (email: string) => {
-  if (!registerHbs) {
-    const registerTpl = await new Promise<string>((resolve, reject) => {
-      readFile(resolvePath(__dirname, 'views/register.hbs'), (err, data) => err ? reject(err) : resolve(data.toString()));
-    });
-    registerHbs = hbs.compile(registerTpl);
-  }
-
-  return layout({
-    title: 'Register',
-    body: registerHbs({email})
-  });
-}
-
-let loginHbs: HandlebarsTemplateDelegate;
-export const login = async (links: any) => {
-  if (!loginHbs) {
-    const loginTpl = await new Promise<string>((resolve, reject) => {
-      readFile(resolvePath(__dirname, 'views/login.hbs'), (err, data) => err ? reject(err) : resolve(data.toString()));
-    });
-    loginHbs = hbs.compile(loginTpl);
-  }
-
-  return layout({
-    title: 'Login',
-    body: loginHbs({links})
-  });
-}
-
-let accountHbs: HandlebarsTemplateDelegate;
-export const account = async (user: User) => {
-  if (!accountHbs) {
-    const accountTpl = await new Promise<string>((resolve, reject) => {
-      readFile(resolvePath(__dirname, 'views/account.hbs'), (err, data) => err ? reject(err) : resolve(data.toString()));
-    });
-    accountHbs = hbs.compile(accountTpl);
-  }
-
-  return layout({
-    title: 'Account',
-    body: accountHbs({user})
-  });
-}
+};

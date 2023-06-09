@@ -1,12 +1,12 @@
-import gql from "graphql-tag";
-import { buildSubgraphSchema } from "@apollo/federation";
-import { schema } from "./schema";
-import { generateSubServiceResolvers, SubSpaceServiceConfig } from '../../../gql/protos';
-import { IndexingSrvGrpcClient } from "../grpc";
-import { IndexingContext, namespace } from "../interfaces";
-import { printSchema } from "graphql";
-import { Resolvers } from './schema.generated';
-import { subServices } from '../../access-control/gql/types';
+import { gql } from 'graphql-tag';
+import { buildSubgraphSchema } from '@apollo/federation';
+import { schema } from './schema.js';
+import { generateSubServiceResolvers, type SubSpaceServiceConfig } from '../../../gql/protos/index.js';
+import { type IndexingSrvGrpcClient } from '../grpc/index.js';
+import { type IndexingContext, namespace } from '../interfaces.js';
+import { printSchema } from 'graphql';
+import { type Resolvers } from './schema.generated.js';
+import { subServices } from '../../access-control/gql/types.js';
 
 // TODO There is currently no way of building a federated schema from GraphQLSchema Object
 // See https://github.com/apollographql/apollo-server/pull/4310

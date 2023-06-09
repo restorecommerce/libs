@@ -1,8 +1,8 @@
-import { GrpcClientConfig } from '@restorecommerce/grpc-client';
-import { FacadeContext, FacadeModule } from '../../interfaces';
-import { OIDCConfig } from './oidc';
-import { ServiceConfig } from "../../gql/protos";
-import { IdentitySrvGrpcClient } from "./grpc";
+import { type GrpcClientConfig } from '@restorecommerce/grpc-client';
+import { type FacadeContext, type FacadeModule } from '../../interfaces.js';
+import { type OIDCConfig } from './oidc/index.js';
+import { type ServiceConfig } from '../../gql/protos/index.js';
+import { type IdentitySrvGrpcClient } from './grpc/index.js';
 
 export interface IdentityServiceConfig extends ServiceConfig {
   root: boolean;
@@ -13,13 +13,13 @@ export interface IdentityConfig  {
   identitySrvClientConfig: GrpcClientConfig;
   oidc?: OIDCConfig;
   apiKey?: boolean | string;
-  oauth?: boolean
+  oauth?: boolean;
 }
 
 export interface IdentityContext extends FacadeContext {
   identity: {
     client: IdentitySrvGrpcClient;
-  }
+  };
 }
 
 export type IdentityModule = FacadeModule<IdentityContext>;

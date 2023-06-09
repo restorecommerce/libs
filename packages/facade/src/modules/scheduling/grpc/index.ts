@@ -1,9 +1,9 @@
 import { RestoreCommerceGrpcClient } from '@restorecommerce/rc-grpc-clients';
 import {
-  JobServiceClient,
+  type JobServiceClient,
   JobServiceDefinition
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/job';
-import { GrpcClientConfig } from '@restorecommerce/grpc-client';
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/job.js';
+import { type GrpcClientConfig } from '@restorecommerce/grpc-client';
 
 export class SchedulingSrvGrpcClient extends RestoreCommerceGrpcClient {
 

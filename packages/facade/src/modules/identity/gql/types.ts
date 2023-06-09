@@ -1,15 +1,10 @@
-import { protoMetadata as metaPackageIoRestorecommerceUser } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/user";
-import { protoMetadata as metaPackageIoRestorecommerceRole } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/role";
-import { protoMetadata as metaPackageIoRestorecommerceAuthentication_log } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/authentication_log";
-import { protoMetadata as metaPackageIoRestorecommerceToken } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/token";
-import { protoMetadata as metaPackageIoRestorecommerceOauth } from "@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/oauth";
-import { ProtoMetadata, registerPackagesRecursive } from '../../../gql/protos';
+import { protoMetadata as metaPackageIoRestorecommerceUser } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/user.js';
+import { protoMetadata as metaPackageIoRestorecommerceRole } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/role.js';
+import { protoMetadata as metaPackageIoRestorecommerceAuthentication_log } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/authentication_log.js';
+import { protoMetadata as metaPackageIoRestorecommerceToken } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/token.js';
+import { protoMetadata as metaPackageIoRestorecommerceOauth } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/oauth.js';
+import { type ProtoMetadata, registerPackagesRecursive } from '../../../gql/protos/index.js';
 import { registerProtoMeta } from '@restorecommerce/kafka-client';
-
-export function registerTypings() {
-  registerPackagesRecursive(...subServices);
-  registerProtoMeta(...subServices);
-}
 
 export const subServices: ProtoMetadata[] = [
   metaPackageIoRestorecommerceUser,
@@ -18,3 +13,8 @@ export const subServices: ProtoMetadata[] = [
   metaPackageIoRestorecommerceToken,
   metaPackageIoRestorecommerceOauth,
 ];
+
+export const registerTypings = () => {
+  registerPackagesRecursive(...subServices);
+  registerProtoMeta(...subServices);
+};

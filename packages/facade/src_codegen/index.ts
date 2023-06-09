@@ -1,5 +1,5 @@
 
-import * as fs from 'fs';
+import * as fs from 'node:fs';
 import * as typescriptPlugin from '@graphql-codegen/typescript';
 import * as typescriptResolversPlugin from '@graphql-codegen/typescript-resolvers';
 import { codegen } from '@graphql-codegen/core';
@@ -9,14 +9,14 @@ export interface GenerateSchemaTypingsArgs {
   outputFile: string;
   typescript?: {
     [key: string]: any;
-  },
+  };
   typescriptResolvers?: {
     contextType?: string;
     [key: string]: any;
   };
 }
 
-export async function generateSchemaTypings({schema, outputFile, typescript, typescriptResolvers}: GenerateSchemaTypingsArgs) {
+export const generateSchemaTypings = async ({schema, outputFile, typescript, typescriptResolvers}: GenerateSchemaTypingsArgs) => {
   try {
     const codegenConfig: any /* typings wrong?  */ = {
       // used by a plugin internally, although the 'typescript' plugin currently
@@ -45,6 +45,7 @@ export async function generateSchemaTypings({schema, outputFile, typescript, typ
         typescript: typescriptPlugin,
         typescriptResolvers: typescriptResolversPlugin,
       },
+      emitLegacyCommonJSImports: false
     };
 
     const output = await codegen(codegenConfig);
@@ -53,4 +54,4 @@ export async function generateSchemaTypings({schema, outputFile, typescript, typ
   } catch(ex) {
     console.error(ex);
   }
-}
+};

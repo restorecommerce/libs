@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.2.0...@restorecommerce/facade@1.3.0) (2023-06-12)
+
+
+### Bug Fixes
+
+* **facade:** move tests to esm ([a580de7](https://github.com/restorecommerce/libs/commit/a580de7b9e3e29c2856d3f4811e47c3fddcc5856))
+
+
+
+
+
 # [1.2.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.1.6...@restorecommerce/facade@1.2.0) (2023-06-02)
 
 

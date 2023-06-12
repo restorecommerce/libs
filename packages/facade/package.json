@@ -111,7 +111,7 @@
     "build:codegen:compile": "tsc -p tsconfig.codegen.json",
     "dev": "npm-run-all build:clean dev:compile",
     "dev:compile": "tsc -w -p tsconfig.json",
-    "pretest": "rm -rf ./node_modules/@josephg/resolvable/index.ts",
+    "postinstall": "rm -rf ./node_modules/@josephg/resolvable/index.ts",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest --runInBand --testTimeout=30000",
     "test:watch": "jest --watch",
     "dev:serve": "TS_NODE_PROJECT=tsconfig.test.json nodemon -e ts,hbs -w ./tests -w ./src -x node --inspect=7000 -r ts-node/register tests/server.ts",

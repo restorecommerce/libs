@@ -75,7 +75,7 @@ message Private {
 }
 
 message Commercial {
-  optional string organization_id = 2 [
+  optional string organization_id = 1 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.organization.Organization",
       target_service: "master_data",

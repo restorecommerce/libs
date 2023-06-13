@@ -41,7 +41,7 @@ export interface ContactPoint {
   physicalAddressId?: string | undefined;
   website?: string | undefined;
   email?: string | undefined;
-  contactPointTypeIds?: string | undefined;
+  contactPointTypeIds: string[];
   telephone?: string | undefined;
   timezoneId?: string | undefined;
   localeId?: string | undefined;
@@ -328,7 +328,7 @@ function createBaseContactPoint(): ContactPoint {
     physicalAddressId: undefined,
     website: undefined,
     email: undefined,
-    contactPointTypeIds: undefined,
+    contactPointTypeIds: [],
     telephone: undefined,
     timezoneId: undefined,
     localeId: undefined,
@@ -354,8 +354,8 @@ export const ContactPoint = {
     if (message.email !== undefined) {
       writer.uint32(50).string(message.email);
     }
-    if (message.contactPointTypeIds !== undefined) {
-      writer.uint32(58).string(message.contactPointTypeIds);
+    for (const v of message.contactPointTypeIds) {
+      writer.uint32(58).string(v!);
     }
     if (message.telephone !== undefined) {
       writer.uint32(66).string(message.telephone);
@@ -398,7 +398,7 @@ export const ContactPoint = {
           message.email = reader.string();
           break;
         case 7:
-          message.contactPointTypeIds = reader.string();
+          message.contactPointTypeIds.push(reader.string());
           break;
         case 8:
           message.telephone = reader.string();
@@ -430,7 +430,9 @@ export const ContactPoint = {
       physicalAddressId: isSet(object.physicalAddressId) ? String(object.physicalAddressId) : undefined,
       website: isSet(object.website) ? String(object.website) : undefined,
       email: isSet(object.email) ? String(object.email) : undefined,
-      contactPointTypeIds: isSet(object.contactPointTypeIds) ? String(object.contactPointTypeIds) : undefined,
+      contactPointTypeIds: Array.isArray(object?.contactPointTypeIds)
+        ? object.contactPointTypeIds.map((e: any) => String(e))
+        : [],
       telephone: isSet(object.telephone) ? String(object.telephone) : undefined,
       timezoneId: isSet(object.timezoneId) ? String(object.timezoneId) : undefined,
       localeId: isSet(object.localeId) ? String(object.localeId) : undefined,
@@ -446,7 +448,11 @@ export const ContactPoint = {
     message.physicalAddressId !== undefined && (obj.physicalAddressId = message.physicalAddressId);
     message.website !== undefined && (obj.website = message.website);
     message.email !== undefined && (obj.email = message.email);
-    message.contactPointTypeIds !== undefined && (obj.contactPointTypeIds = message.contactPointTypeIds);
+    if (message.contactPointTypeIds) {
+      obj.contactPointTypeIds = message.contactPointTypeIds.map((e) => e);
+    } else {
+      obj.contactPointTypeIds = [];
+    }
     message.telephone !== undefined && (obj.telephone = message.telephone);
     message.timezoneId !== undefined && (obj.timezoneId = message.timezoneId);
     message.localeId !== undefined && (obj.localeId = message.localeId);
@@ -466,7 +472,7 @@ export const ContactPoint = {
     message.physicalAddressId = object.physicalAddressId ?? undefined;
     message.website = object.website ?? undefined;
     message.email = object.email ?? undefined;
-    message.contactPointTypeIds = object.contactPointTypeIds ?? undefined;
+    message.contactPointTypeIds = object.contactPointTypeIds?.map((e) => e) || [];
     message.telephone = object.telephone ?? undefined;
     message.timezoneId = object.timezoneId ?? undefined;
     message.localeId = object.localeId ?? undefined;
@@ -821,12 +827,12 @@ export const protoMetadata: ProtoMetadata = {
       }, {
         "name": "contact_point_type_ids",
         "number": 7,
-        "label": 1,
+        "label": 3,
         "type": 9,
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 5,
+        "oneofIndex": 0,
         "jsonName": "contactPointTypeIds",
         "options": {
           "ctype": 0,
@@ -837,7 +843,7 @@ export const protoMetadata: ProtoMetadata = {
           "weak": false,
           "uninterpretedOption": [],
         },
-        "proto3Optional": true,
+        "proto3Optional": false,
       }, {
         "name": "telephone",
         "number": 8,
@@ -846,7 +852,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 6,
+        "oneofIndex": 5,
         "jsonName": "telephone",
         "options": undefined,
         "proto3Optional": true,
@@ -858,7 +864,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 7,
+        "oneofIndex": 6,
         "jsonName": "timezoneId",
         "options": {
           "ctype": 0,
@@ -878,7 +884,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 8,
+        "oneofIndex": 7,
         "jsonName": "localeId",
         "options": {
           "ctype": 0,
@@ -898,7 +904,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 9,
+        "oneofIndex": 8,
         "jsonName": "name",
         "options": undefined,
         "proto3Optional": true,
@@ -910,7 +916,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 10,
+        "oneofIndex": 9,
         "jsonName": "description",
         "options": undefined,
         "proto3Optional": true,
@@ -925,7 +931,6 @@ export const protoMetadata: ProtoMetadata = {
         { "name": "_physical_address_id", "options": undefined },
         { "name": "_website", "options": undefined },
         { "name": "_email", "options": undefined },
-        { "name": "_contact_point_type_ids", "options": undefined },
         { "name": "_telephone", "options": undefined },
         { "name": "_timezone_id", "options": undefined },
         { "name": "_locale_id", "options": undefined },

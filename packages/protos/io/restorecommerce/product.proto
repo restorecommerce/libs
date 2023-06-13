@@ -63,10 +63,19 @@ message Product {
     IndividualProduct product = 3;
     Bundle bundle = 4;
   }
-  optional bool active = 5;
-  repeated string tags = 6;
-  repeated Association associations = 7;
-  google.protobuf.Any data = 8;
+  optional string shop_id = 5 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.shop.Shop",
+      target_service: "resource",
+      target_sub_service: "shop",
+      target_method: "Read",
+      field_name: "shop",
+    }
+  ];
+  optional bool active = 6;
+  repeated string tags = 7;
+  repeated Association associations = 8;
+  google.protobuf.Any data = 9;
 }
 
 message IndividualProduct {

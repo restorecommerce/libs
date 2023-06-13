@@ -83,13 +83,16 @@ message Invoice {
   optional string document = 10;
   optional string invoice_number = 11;
   optional string customer_remark = 12;
-}
-
-/**
-* List of Invoice Positions data
-*/
-message InvoicesPositionsData {
-  repeated InvoicePositions invoice_positions = 1;
+  repeated InvoicePositions invoice_positions = 13;
+  repeated string order_ids = 14 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.order.Order",
+      target_service: "ordering-srv",
+      target_sub_service: "order",
+      target_method: "Read",
+      field_name: "orders",
+    }
+  ];
 }
 
 message InvoicePositions {
@@ -107,7 +110,7 @@ message InvoicePositions {
 }
 
 message RecipientCustomer {
-  optional string id = 1; // customer id - used to store the resource in DB
+  optional string customer_id = 1; // customer id - used to store the resource in DB
   optional string customer_number = 2; // displayed in invoice
 }
 

@@ -10,7 +10,6 @@ import "io/restorecommerce/options.proto";
 
 // Used by resolvers
 import "io/restorecommerce/user.proto";
-import "io/restorecommerce/address.proto";
 import "io/restorecommerce/contact_point.proto";
 import "io/restorecommerce/organization.proto";
 
@@ -47,14 +46,15 @@ message CustomerResponse {
 message Customer {
   optional string id = 1;
   optional io.restorecommerce.meta.Meta meta = 2;
-  oneof customer {
-    IndividualUser individual_user = 3;
-    OrgUser org_user = 4;
-    Guest guest = 5;
-  }
+  optional string customer_number = 3;
+  oneof type {
+    Private private = 4;
+    Commercial commercial = 5;
+    PublicSector public_sector = 6;
+  };
 }
 
-message IndividualUser {
+message Private {
   optional string user_id = 1 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.user.User",
@@ -64,16 +64,7 @@ message IndividualUser {
       field_name: "user",
     }
   ];
-  optional string address_id = 2 [
-    (io.restorecommerce.options.resolver) = {
-      target_type: ".io.restorecommerce.address.Address",
-      target_service: "master_data",
-      target_sub_service: "address",
-      target_method: "Read",
-      field_name: "address",
-    }
-  ];
-  repeated string contact_point_ids = 3 [
+  repeated string contact_point_ids = 2 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.contact_point.ContactPoint",
       target_service: "master_data",
@@ -84,17 +75,8 @@ message IndividualUser {
   ];
 }
 
-message OrgUser {
-  optional string user_id = 1 [
-    (io.restorecommerce.options.resolver) = {
-      target_type: ".io.restorecommerce.user.User",
-      target_service: "identity",
-      target_sub_service: "user",
-      target_method: "Read",
-      field_name: "user",
-    }
-  ];
-  optional string organization_id = 2 [
+message Commercial {
+  optional string organization_id = 1 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.organization.Organization",
       target_service: "master_data",
@@ -105,24 +87,14 @@ message OrgUser {
   ];
 }
 
-message Guest {
-  bool guest = 1;
-  optional string address_id = 2 [
+message PublicSector {
+  optional string organization_id = 1 [
     (io.restorecommerce.options.resolver) = {
-      target_type: ".io.restorecommerce.address.Address",
+      target_type: ".io.restorecommerce.organization.Organization",
       target_service: "master_data",
-      target_sub_service: "address",
+      target_sub_service: "organization",
       target_method: "Read",
-      field_name: "address",
-    }
-  ];
-  repeated string contact_point_ids = 3 [
-    (io.restorecommerce.options.resolver) = {
-      target_type: ".io.restorecommerce.contact_point.ContactPoint",
-      target_service: "master_data",
-      target_sub_service: "contact_point",
-      target_method: "Read",
-      field_name: "contactPoints",
+      field_name: "organization",
     }
   ];
 }

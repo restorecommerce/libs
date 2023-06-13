@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+package io.restorecommerce.vendor;
+
+import "io/restorecommerce/resource_base.proto";
+import "io/restorecommerce/meta.proto";
+import "io/restorecommerce/auth.proto";
+import "io/restorecommerce/status.proto";
+import "io/restorecommerce/options.proto";
+
+// Used by resolvers
+import "io/restorecommerce/user.proto";
+import "io/restorecommerce/address.proto";
+import "io/restorecommerce/contact_point.proto";
+import "io/restorecommerce/organization.proto";
+
+/*
+Microservice definition.
+*/
+service ShopService {
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ShopListResponse) {
+    option (io.restorecommerce.options.is_query) = true;
+  };
+  rpc Create (ShopList) returns (ShopListResponse);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
+  rpc Update (ShopList) returns (ShopListResponse);
+  rpc Upsert (ShopList) returns (ShopListResponse);
+}
+
+message ShopList {
+  repeated Shop items = 1;
+  optional uint32 total_count = 2;
+  io.restorecommerce.auth.Subject subject = 3;
+}
+
+message ShopListResponse {
+  repeated ShopResponse items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.status.OperationStatus operation_status = 3;
+}
+
+message ShopResponse {
+  Shop payload = 1;
+  io.restorecommerce.status.Status status = 2;
+}
+
+message Shop {
+  optional string id = 1;
+  optional io.restorecommerce.meta.Meta meta = 2;
+  optional string shop_number = 3;
+  optional string name = 4;
+  optional string description = 5;
+  optional string domain = 6;
+  optional string organization_id = 7 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.organization.Organization",
+      target_service: "resource",
+      target_sub_service: "organization",
+      target_method: "Read",
+      field_name: "organization",
+    }
+  ];
+}

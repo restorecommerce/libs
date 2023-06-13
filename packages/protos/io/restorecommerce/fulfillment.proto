@@ -124,6 +124,9 @@ message Packaging {
   optional io.restorecommerce.address.ShippingAddress sender = 3;
   optional io.restorecommerce.address.ShippingAddress receiver = 4;
   optional string notify = 5;
+  optional string export_type = 6;
+  optional string export_description = 7;
+  optional string invoice_number = 8;
 }
 
 message Event {
@@ -153,13 +156,13 @@ message Fulfillment {
   };
 
   optional string id = 1;
-  optional Packaging packaging = 2; //filled by user
+  optional Packaging packaging = 2; //set by user
   optional io.restorecommerce.meta.Meta meta = 3;
-  repeated Label labels = 4; //filled by service
-  repeated Tracking trackings = 5; //filled by service
-  optional State state = 6; //filled by service
-  optional double total_price = 7;
-  optional double total_vat = 8;
+  repeated Label labels = 4; //set by service
+  repeated Tracking trackings = 5; //set by service
+  optional double total_price = 6; //set by service
+  optional double total_vat = 7; //set by service
+  optional State state = 8; //set by service
 }
 
 message FulfillmentList {

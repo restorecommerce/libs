@@ -21,11 +21,6 @@ service TaxTypeService {
   rpc Upsert (TaxTypeList) returns (TaxTypeListResponse);
 }
 
-enum Behavior {
-  NONE = 0;
-  ADDITIVE_ON_GROSS = 1;
-}
-
 message Deleted {
   optional string id = 1;
 }
@@ -52,5 +47,4 @@ message TaxType {
   optional io.restorecommerce.meta.Meta meta = 2;
   optional string type = 3;
   optional string description = 4;
-  optional Behavior behavior = 5;
 }

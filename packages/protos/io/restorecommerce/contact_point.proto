@@ -59,15 +59,7 @@ message ContactPoint {
   ];
   optional string website = 5;
   optional string email = 6;
-  optional string contact_point_type_id = 7 [
-    (io.restorecommerce.options.resolver) = {
-      target_type: ".io.restorecommerce.contact_point_type.ContactPointType",
-      target_service: "resource",
-      target_sub_service: "contact_point_type",
-      target_method: "Read",
-      field_name: "contactPointType",
-    }
-  ];
+  repeated string contact_point_type_ids = 7;
   optional string telephone = 8;
   optional string timezone_id = 9 [
     (io.restorecommerce.options.resolver) = {
@@ -87,4 +79,6 @@ message ContactPoint {
       field_name: "locale",
     }
   ];
+  optional string name = 11;
+  optional string description = 12;
 }

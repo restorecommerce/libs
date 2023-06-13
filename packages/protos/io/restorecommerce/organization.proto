@@ -53,15 +53,6 @@ message OrganizationResponse {
 message Organization {
   optional string id = 1; /// Organization ID, unique, key
   optional io.restorecommerce.meta.Meta meta = 2;
-  optional string address_id = 3 [
-    (io.restorecommerce.options.resolver) = {
-      target_type: ".io.restorecommerce.address.Address",
-      target_service: "resource",
-      target_sub_service: "address",
-      target_method: "Read",
-      field_name: "address",
-    }
-  ]; /// Address for the organization
   optional string parent_id = 4 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.organization.Organization",

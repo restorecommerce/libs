@@ -47,14 +47,15 @@ message CustomerResponse {
 message Customer {
   optional string id = 1;
   optional io.restorecommerce.meta.Meta meta = 2;
-  oneof customer {
-    IndividualUser individual_user = 3;
-    OrgUser org_user = 4;
-    Guest guest = 5;
-  }
+  optional string customer_number = 3;
+  oneof type {
+    Private private = 4;
+    Commercial commercial = 5;
+    PublicSector public_sector = 6;
+  };
 }
 
-message IndividualUser {
+message Private {
   optional string user_id = 1 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.user.User",
@@ -64,16 +65,7 @@ message IndividualUser {
       field_name: "user",
     }
   ];
-  optional string address_id = 2 [
-    (io.restorecommerce.options.resolver) = {
-      target_type: ".io.restorecommerce.address.Address",
-      target_service: "resource",
-      target_sub_service: "address",
-      target_method: "Read",
-      field_name: "address",
-    }
-  ];
-  repeated string contact_point_ids = 3 [
+  repeated string contact_point_ids = 2 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.contact_point.ContactPoint",
       target_service: "resource",
@@ -84,7 +76,7 @@ message IndividualUser {
   ];
 }
 
-message OrgUser {
+message Commercial {
   optional string user_id = 1 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.user.User",
@@ -105,24 +97,23 @@ message OrgUser {
   ];
 }
 
-message Guest {
-  bool guest = 1;
-  optional string address_id = 2 [
+message PublicSector {
+  optional string user_id = 1 [
     (io.restorecommerce.options.resolver) = {
-      target_type: ".io.restorecommerce.address.Address",
-      target_service: "resource",
-      target_sub_service: "address",
+      target_type: ".io.restorecommerce.user.User",
+      target_service: "identity",
+      target_sub_service: "user",
       target_method: "Read",
-      field_name: "address",
+      field_name: "user",
     }
   ];
-  repeated string contact_point_ids = 3 [
+  optional string organization_id = 2 [
     (io.restorecommerce.options.resolver) = {
-      target_type: ".io.restorecommerce.contact_point.ContactPoint",
+      target_type: ".io.restorecommerce.organization.Organization",
       target_service: "resource",
-      target_sub_service: "contact_point",
+      target_sub_service: "organization",
       target_method: "Read",
-      field_name: "contactPoints",
+      field_name: "organization",
     }
   ];
 }

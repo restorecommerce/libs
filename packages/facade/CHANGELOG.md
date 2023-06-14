@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.3.1...@restorecommerce/facade@1.3.2) (2023-06-14)
+
+
+### Bug Fixes
+
+* **facade:** dev:serve script ([b971bec](https://github.com/restorecommerce/libs/commit/b971bec598a388ccbe273d41f68560c16f0ba1c3))
+
+
+
+
+
 ## [1.3.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.3.0...@restorecommerce/facade@1.3.1) (2023-06-12)
 
 

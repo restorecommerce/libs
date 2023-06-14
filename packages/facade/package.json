@@ -18,7 +18,7 @@
   "type": "module",
   "dependencies": {
     "@apollo/federation": "^0.38.1",
-    "@apollo/gateway": "^2.4.7",
+    "@apollo/gateway": "<2.4.0",
     "@apollo/server": "^4.7.1",
     "@as-integrations/koa": "^1.1.0",
     "@cloudnative/health": "^2.1.2",

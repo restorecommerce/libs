@@ -85,6 +85,10 @@
   "ostorage": {
     "client": {
       "address": "127.0.0.1:50066"
+    },
+    "fileUploadOptions": {
+      "maxFileSize": 10000,
+      "maxFiles": 20
     }
   }
 }

@@ -30,6 +30,7 @@ import { setUseSubscriptions } from './gql/protos/utils.js';
 import bodyParser from 'koa-bodyparser';
 import cors from '@koa/cors';
 import graphqlUploadKoa from 'graphql-upload/graphqlUploadKoa.mjs';
+import helmet from 'koa-helmet';
 
 export * from './modules/index.js';
 export * from './middlewares/index.js';
@@ -294,7 +295,7 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
 
     await gqlServer.start();
 
-    // TODO set maxFile size and maximum files via config
+    // TODO set maxFile size and maximum files via Facade config of `createFacade`
     this.koa.use(
       graphqlUploadKoa({
         maxFileSize: 10000000,

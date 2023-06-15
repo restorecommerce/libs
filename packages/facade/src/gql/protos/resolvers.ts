@@ -46,6 +46,12 @@ export type SubscribeResolverFn<TResult, TParent, TContext, TArgs> = (
   info: GraphQLResolveInfo
 ) => AsyncGenerator<TResult>;
 
+const toAsync = async function* <T>(requests: any): AsyncIterable<any> {
+  for (const request of requests) {
+    yield request;
+  }
+};
+
 export const getGQLResolverFunctions =
   <T extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, T>, SRV = any, R = ResolverFn<any, any, ServiceClient<CTX, keyof CTX, T>, any>, B extends keyof T = any, NS extends keyof CTX = any>
   (service: ServiceDescriptorProto, key: NS, serviceKey: B, cfg: ServiceConfig): { [key in keyof SRV]: R } => {
@@ -98,7 +104,7 @@ export const getGQLResolverFunctions =
 
       (obj as any)[methodName] = async (args: any, context: ServiceClient<CTX, keyof CTX, T>) => {
         const client = context[key].client;
-        const service = client[serviceKey];
+        const service = client[key as any];
         try {
           const converted = await preprocessGQLInput(args.input, typing.input);
           const scope = args?.input?.scope;
@@ -135,6 +141,9 @@ export const getGQLResolverFunctions =
           }
 
           const methodFunc = service[camelCase(realMethod)] || service[realMethod];
+          if(method.clientStreaming) {
+            req = toAsync([req]);
+          }
           const rawResult = await methodFunc(req);
           const result = postProcessGQLValue(rawResult, outputTyping.output);
 

@@ -5,7 +5,7 @@ import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptor
 import { protoMetadata as protoMetadata6, ShippingAddress } from "./address";
 import { Attribute, protoMetadata as protoMetadata5 } from "./attribute";
 import { protoMetadata as protoMetadata3, Subject } from "./auth";
-import { FulfillmentItem, Parcel, protoMetadata as protoMetadata10 } from "./fulfillment";
+import { Item, Parcel, protoMetadata as protoMetadata10 } from "./fulfillment";
 import { protoMetadata as protoMetadata9 } from "./fulfillment_courier";
 import { BoundingBox3D, protoMetadata as protoMetadata8 } from "./geometry";
 import { Meta, protoMetadata as protoMetadata2 } from "./meta";
@@ -25,7 +25,7 @@ export interface Preferences {
 export interface ProductQuery {
   sender?: ShippingAddress | undefined;
   receiver?: ShippingAddress | undefined;
-  items: FulfillmentItem[];
+  items: Item[];
   preferences?: Preferences | undefined;
   referenceId?: string | undefined;
 }
@@ -85,6 +85,7 @@ export interface PackingSolution {
 }
 
 export interface PackingSolutionResponse {
+  /** forigner_key: use the following pattern: `${collection}/${id}` */
   referenceId?: string | undefined;
   solutions: PackingSolution[];
   status?: Status | undefined;
@@ -116,31 +117,22 @@ export const Preferences = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Preferences {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePreferences();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.couriers.push(Attribute.decode(reader, reader.uint32()));
-          continue;
+          break;
         case 2:
-          if (tag !== 18) {
-            break;
-          }
-
           message.options.push(Attribute.decode(reader, reader.uint32()));
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -192,7 +184,7 @@ export const ProductQuery = {
       ShippingAddress.encode(message.receiver, writer.uint32(18).fork()).ldelim();
     }
     for (const v of message.items) {
-      FulfillmentItem.encode(v!, writer.uint32(26).fork()).ldelim();
+      Item.encode(v!, writer.uint32(26).fork()).ldelim();
     }
     if (message.preferences !== undefined) {
       Preferences.encode(message.preferences, writer.uint32(34).fork()).ldelim();
@@ -204,52 +196,31 @@ export const ProductQuery = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): ProductQuery {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseProductQuery();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.sender = ShippingAddress.decode(reader, reader.uint32());
-          continue;
+          break;
         case 2:
-          if (tag !== 18) {
-            break;
-          }
-
           message.receiver = ShippingAddress.decode(reader, reader.uint32());
-          continue;
+          break;
         case 3:
-          if (tag !== 26) {
-            break;
-          }
-
-          message.items.push(FulfillmentItem.decode(reader, reader.uint32()));
-          continue;
+          message.items.push(Item.decode(reader, reader.uint32()));
+          break;
         case 4:
-          if (tag !== 34) {
-            break;
-          }
-
           message.preferences = Preferences.decode(reader, reader.uint32());
-          continue;
+          break;
         case 5:
-          if (tag !== 42) {
-            break;
-          }
-
           message.referenceId = reader.string();
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -258,7 +229,7 @@ export const ProductQuery = {
     return {
       sender: isSet(object.sender) ? ShippingAddress.fromJSON(object.sender) : undefined,
       receiver: isSet(object.receiver) ? ShippingAddress.fromJSON(object.receiver) : undefined,
-      items: Array.isArray(object?.items) ? object.items.map((e: any) => FulfillmentItem.fromJSON(e)) : [],
+      items: Array.isArray(object?.items) ? object.items.map((e: any) => Item.fromJSON(e)) : [],
       preferences: isSet(object.preferences) ? Preferences.fromJSON(object.preferences) : undefined,
       referenceId: isSet(object.referenceId) ? String(object.referenceId) : undefined,
     };
@@ -270,7 +241,7 @@ export const ProductQuery = {
     message.receiver !== undefined &&
       (obj.receiver = message.receiver ? ShippingAddress.toJSON(message.receiver) : undefined);
     if (message.items) {
-      obj.items = message.items.map((e) => e ? FulfillmentItem.toJSON(e) : undefined);
+      obj.items = message.items.map((e) => e ? Item.toJSON(e) : undefined);
     } else {
       obj.items = [];
     }
@@ -292,7 +263,7 @@ export const ProductQuery = {
     message.receiver = (object.receiver !== undefined && object.receiver !== null)
       ? ShippingAddress.fromPartial(object.receiver)
       : undefined;
-    message.items = object.items?.map((e) => FulfillmentItem.fromPartial(e)) || [];
+    message.items = object.items?.map((e) => Item.fromPartial(e)) || [];
     message.preferences = (object.preferences !== undefined && object.preferences !== null)
       ? Preferences.fromPartial(object.preferences)
       : undefined;
@@ -320,38 +291,25 @@ export const ProductQueryList = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): ProductQueryList {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseProductQueryList();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.items.push(ProductQuery.decode(reader, reader.uint32()));
-          continue;
+          break;
         case 2:
-          if (tag !== 16) {
-            break;
-          }
-
           message.totalCount = reader.uint32();
-          continue;
+          break;
         case 3:
-          if (tag !== 26) {
-            break;
-          }
-
           message.subject = Subject.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -442,87 +400,46 @@ export const FulfillmentProduct = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): FulfillmentProduct {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseFulfillmentProduct();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.id = reader.string();
-          continue;
+          break;
         case 2:
-          if (tag !== 18) {
-            break;
-          }
-
           message.name = reader.string();
-          continue;
+          break;
         case 3:
-          if (tag !== 26) {
-            break;
-          }
-
           message.description = reader.string();
-          continue;
+          break;
         case 4:
-          if (tag !== 34) {
-            break;
-          }
-
           message.courierId = reader.string();
-          continue;
+          break;
         case 6:
-          if (tag !== 50) {
-            break;
-          }
-
           message.startZones.push(reader.string());
-          continue;
+          break;
         case 8:
-          if (tag !== 66) {
-            break;
-          }
-
           message.destinationZones.push(reader.string());
-          continue;
+          break;
         case 9:
-          if (tag !== 74) {
-            break;
-          }
-
           message.taxIds.push(reader.string());
-          continue;
+          break;
         case 10:
-          if (tag !== 82) {
-            break;
-          }
-
           message.attributes.push(Attribute.decode(reader, reader.uint32()));
-          continue;
+          break;
         case 11:
-          if (tag !== 90) {
-            break;
-          }
-
           message.variants.push(Variant.decode(reader, reader.uint32()));
-          continue;
+          break;
         case 12:
-          if (tag !== 98) {
-            break;
-          }
-
           message.meta = Meta.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -634,59 +551,34 @@ export const Variant = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Variant {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseVariant();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.id = reader.string();
-          continue;
+          break;
         case 2:
-          if (tag !== 18) {
-            break;
-          }
-
           message.name = reader.string();
-          continue;
+          break;
         case 3:
-          if (tag !== 26) {
-            break;
-          }
-
           message.description = reader.string();
-          continue;
+          break;
         case 4:
-          if (tag !== 33) {
-            break;
-          }
-
           message.price = reader.double();
-          continue;
+          break;
         case 6:
-          if (tag !== 50) {
-            break;
-          }
-
           message.maxSize = BoundingBox3D.decode(reader, reader.uint32());
-          continue;
+          break;
         case 7:
-          if (tag !== 57) {
-            break;
-          }
-
           message.maxWeight = reader.double();
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -751,38 +643,25 @@ export const FulfillmentProductList = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): FulfillmentProductList {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseFulfillmentProductList();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.items.push(FulfillmentProduct.decode(reader, reader.uint32()));
-          continue;
+          break;
         case 2:
-          if (tag !== 16) {
-            break;
-          }
-
           message.totalCount = reader.uint32();
-          continue;
+          break;
         case 3:
-          if (tag !== 26) {
-            break;
-          }
-
           message.subject = Subject.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -838,31 +717,22 @@ export const FulfillmentProductResponse = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): FulfillmentProductResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseFulfillmentProductResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.payload = FulfillmentProduct.decode(reader, reader.uint32());
-          continue;
+          break;
         case 2:
-          if (tag !== 18) {
-            break;
-          }
-
           message.status = Status.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -917,38 +787,25 @@ export const FulfillmentProductListResponse = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): FulfillmentProductListResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseFulfillmentProductListResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.items.push(FulfillmentProductResponse.decode(reader, reader.uint32()));
-          continue;
+          break;
         case 2:
-          if (tag !== 16) {
-            break;
-          }
-
           message.totalCount = reader.uint32();
-          continue;
+          break;
         case 3:
-          if (tag !== 26) {
-            break;
-          }
-
           message.operationStatus = OperationStatus.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -1017,59 +874,34 @@ export const PackingSolution = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): PackingSolution {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePackingSolution();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 9) {
-            break;
-          }
-
           message.price = reader.double();
-          continue;
+          break;
         case 2:
-          if (tag !== 17) {
-            break;
-          }
-
           message.compactness = reader.double();
-          continue;
+          break;
         case 3:
-          if (tag !== 25) {
-            break;
-          }
-
           message.homogeneity = reader.double();
-          continue;
+          break;
         case 4:
-          if (tag !== 33) {
-            break;
-          }
-
           message.score = reader.double();
-          continue;
+          break;
         case 5:
-          if (tag !== 42) {
-            break;
-          }
-
           message.parcels.push(Parcel.decode(reader, reader.uint32()));
-          continue;
+          break;
         case 6:
-          if (tag !== 50) {
-            break;
-          }
-
           message.vats.push(VAT.decode(reader, reader.uint32()));
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -1139,38 +971,25 @@ export const PackingSolutionResponse = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): PackingSolutionResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePackingSolutionResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.referenceId = reader.string();
-          continue;
+          break;
         case 2:
-          if (tag !== 18) {
-            break;
-          }
-
           message.solutions.push(PackingSolution.decode(reader, reader.uint32()));
-          continue;
+          break;
         case 3:
-          if (tag !== 26) {
-            break;
-          }
-
           message.status = Status.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -1229,38 +1048,25 @@ export const PackingSolutionListResponse = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): PackingSolutionListResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePackingSolutionListResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.items.push(PackingSolutionResponse.decode(reader, reader.uint32()));
-          continue;
+          break;
         case 2:
-          if (tag !== 16) {
-            break;
-          }
-
           message.totalCount = reader.uint32();
-          continue;
+          break;
         case 3:
-          if (tag !== 26) {
-            break;
-          }
-
           message.operationStatus = OperationStatus.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -1314,24 +1120,19 @@ export const Deleted = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Deleted {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDeleted();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.id = reader.string();
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -1368,7 +1169,7 @@ export const FulfillmentProductServiceDefinition = {
       requestStream: false,
       responseType: FulfillmentProductListResponse,
       responseStream: false,
-      options: { _unknownFields: { 248008: [Buffer.from([1])] } },
+      options: {},
     },
     find: {
       name: "Find",
@@ -1376,7 +1177,7 @@ export const FulfillmentProductServiceDefinition = {
       requestStream: false,
       responseType: PackingSolutionListResponse,
       responseStream: false,
-      options: { _unknownFields: { 248008: [Buffer.from([1])] } },
+      options: {},
     },
     create: {
       name: "Create",
@@ -1567,7 +1368,7 @@ export const protoMetadata: ProtoMetadata = {
         "number": 3,
         "label": 3,
         "type": 11,
-        "typeName": ".io.restorecommerce.fulfillment.FulfillmentItem",
+        "typeName": ".io.restorecommerce.fulfillment.Item",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
@@ -2288,6 +2089,12 @@ export const protoMetadata: ProtoMetadata = {
         "leadingComments": "",
         "trailingComments": "ID, name or type\n",
         "leadingDetachedComments": [],
+      }, {
+        "path": [4, 9, 2, 0],
+        "span": [117, 2, 35],
+        "leadingComments": "",
+        "trailingComments": " forigner_key: use the following pattern: `${collection}/${id}`\n",
+        "leadingDetachedComments": [],
       }],
     },
     "syntax": "proto3",
@@ -2334,7 +2141,7 @@ export const protoMetadata: ProtoMetadata = {
           "courier_id": {
             "resolver": Resolver.decode(
               Buffer.from(
-                "CjouaW8ucmVzdG9yZWNvbW1lcmNlLmZ1bGZpbGxtZW50X2NvdXJpZXIuRnVsZmlsbG1lbnRDb3VyaWVyEghyZXNvdXJjZRoTZnVsZmlsbG1lbnRfY291cmllciIEUmVhZCoHY291cmllcg==",
+                "CjouaW8ucmVzdG9yZWNvbW1lcmNlLmZ1bGZpbGxtZW50X2NvdXJpZXIuRnVsZmlsbG1lbnRDb3VyaWVyEgtmdWxmaWxsbWVudBoTZnVsZmlsbG1lbnRfY291cmllciIEUmVhZCoHY291cmllcg==",
                 "base64",
               ),
             ),

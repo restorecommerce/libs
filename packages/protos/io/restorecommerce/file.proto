@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package io.restorecommerce.file;
 
+import "io/restorecommerce/image.proto";
+
 message File {
   optional string id = 1;
   optional int64 index = 2;
@@ -11,6 +13,7 @@ message File {
   optional string url = 6;
   optional int64 bytes = 7;
   repeated string tags = 8;
+  optional io.restorecommerce.image.Image thumbnail = 9;
 }
 
 message FileList {

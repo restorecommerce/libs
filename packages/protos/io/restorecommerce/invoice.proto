@@ -2,16 +2,20 @@ syntax = "proto3";
 
 package io.restorecommerce.invoice;
 
+import "google/protobuf/any.proto";
 import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/organization.proto";
 import "io/restorecommerce/auth.proto";
-import "google/protobuf/any.proto";
 import "io/restorecommerce/status.proto";
 import "io/restorecommerce/options.proto";
+import "io/restorecommerce/address.proto";
+import "io/restorecommerce/tax.proto";
 
 // Used by resolvers
+import "io/restorecommerce/user.proto";
 import "io/restorecommerce/customer.proto";
+import "io/restorecommerce/shop.proto";
 
 /*
 * Microservice definition.
@@ -21,10 +25,31 @@ service InvoiceService {
     option (io.restorecommerce.options.is_query) = true;
   };
   rpc Create (InvoiceList) returns (InvoiceListResponse);
-  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
   rpc Update (InvoiceList) returns (InvoiceListResponse);
   rpc Upsert (InvoiceList) returns (InvoiceListResponse);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
+
+  /*
+  * Render invoices as PDF to ostorage. (creates if not exist, updates if id is given)
+  */
+  rpc Render (InvoiceList) returns (InvoiceListResponse);
+
+  /*
+  * Triggers notification-srv (sends invoice per email for instance) 
+  */
+  rpc Send (InvoiceNotificationList) returns (io.restorecommerce.status.StatusListResponse);
   rpc GenerateInvoiceNumber(RequestInvoiceNumber) returns (InvoiceNumberResponse);
+}
+
+enum State {
+  FAILED = 0;
+  INVALID = 1;
+  CREATED = 2;
+  RENDERED = 3;
+  SENT = 4;
+  PAYED = 5;
+  WITHDRAWN = 6;
+  CANCELLED = 7;
 }
 
 message RequestInvoiceNumber {
@@ -33,16 +58,13 @@ message RequestInvoiceNumber {
 }
 
 message InvoiceNumberResponse {
- string invoice_no = 1;
+ string invoice_number = 1;
 }
 
 message Deleted {
   string id = 1;
 }
 
-/*
-* For multiple invoices
-*/
 message InvoiceList {
   repeated Invoice items = 1;
   optional uint32 total_count = 2;
@@ -60,87 +82,111 @@ message InvoiceResponse {
   io.restorecommerce.status.Status status = 2;
 }
 
+message InvoiceNotification {
+  optional string id = 1;
+  repeated string channel_ids = 2;
+  optional google.protobuf.Any options = 3;
+  optional io.restorecommerce.auth.Subject subject = 4;
+}
+
+message InvoiceNotificationList {
+  repeated InvoiceNotification items = 1;
+  optional uint32 total_count = 2;
+  io.restorecommerce.auth.Subject subject = 3;
+}
+
 /*
-* A simple invoice.
+* The Invoice recource, stored in DB.
 */
 message Invoice {
-  optional string id = 1;
+  option (restorecommerce.options.kafka_subscriber) = {
+    plural: "invoices"
+    topic: "io.restorecommerce.invoice.resource"
+    created: "invoiceCreated"
+    updated: "invoiceUpdated"
+    deleted: "invoiceDeleted"
+  };
+
+  optional string id = 1; // invoice_number
   optional io.restorecommerce.meta.Meta meta = 2;
-  optional string timestamp = 4;
-  optional string customer_number = 5;
-  optional string payment_status = 6;
-  optional double total_amount = 7;
-  optional double net_amount = 8;
-  optional double vat_amount = 9; // difference between net and total
-  optional string document = 10;
-  optional string invoice_number = 11;
-  optional string customer_remark = 12;
-  repeated InvoicePositions invoice_positions = 13;
-  repeated string order_ids = 14 [
+  /*
+  * A forigner_key using the following pattern: `${collection}/${id}`.
+  * most likly an order_id or fulfillment_id.
+  */
+  optional string reference_id = 3; 
+  optional string user_id = 4 [
     (io.restorecommerce.options.resolver) = {
-      target_type: ".io.restorecommerce.order.Order",
-      target_service: "ordering-srv",
-      target_sub_service: "order",
+      target_type: ".io.restorecommerce.user.User",
+      target_service: "identity",
+      target_sub_service: "user",
       target_method: "Read",
-      field_name: "orders",
+      field_name: "user",
     }
   ];
+  optional string customer_id = 5 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.customer.Customer",
+      target_service: "resource",
+      target_sub_service: "customer",
+      target_method: "Read",
+      field_name: "customer",
+    }
+  ]; // customer_number ref. to recipent orga
+  optional string shop_id = 6 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.shop.Shop",
+      target_service: "resource",
+      target_sub_service: "shop",
+      target_method: "Read",
+      field_name: "shop",
+    }
+  ]; // shop_number --- ref. to sender orga
+  optional double timestamp = 7;
+  optional State state = 8;
+  optional io.restorecommerce.address.BillingAddress sender = 9;
+  optional io.restorecommerce.address.BillingAddress recipient = 10;
+  repeated Position positions = 11;
+  repeated io.restorecommerce.tax.Amount total_amounts = 12;
+  optional google.protobuf.Any payment_method_details = 13; // is there no better type for that?
+  repeated io.restorecommerce.file.File documents = 14; // url to rendered PDFs
+  optional string customer_remark = 15;
+  optional double from_date = 16; // value performance from date
+  optional double to_date = 17; // value performance to date
 }
 
-message InvoicePositions {
-  optional string id = 1; // contract or customer identifier
-  repeated InvoicePosition invoice_positions = 2;
-  optional RecipientCustomer recipient_customer = 3;
-  optional BillingAddress recipient_billing_address = 4;
-  optional BillingAddress sender_billing_address = 5;
-  optional io.restorecommerce.organization.Organization recipient_organization = 6;
-  optional io.restorecommerce.organization.Organization sender_organization = 7;
-  optional google.protobuf.Any payment_method_details = 8;
-  optional string invoice_no = 9; // optional invoice number if not it will be generated by service
-  optional double from_date = 10; // value performance from date
-  optional double to_date = 11; // value performance to date
+message Position {
+  optional string id = 1;
+  repeated Row invoice_rows = 3;
+  repeated io.restorecommerce.tax.Amount amounts = 5; // repeated in case of multiple currencies?
 }
 
-message RecipientCustomer {
-  optional string customer_id = 1; // customer id - used to store the resource in DB
-  optional string customer_number = 2; // displayed in invoice
+message Row {
+  optional string id = 1;
+  oneof entry_type {
+    ProductEntry product = 2;
+    ManualEntry manual = 3;
+  }
+  optional double unit_price = 4;
+  optional uint32 quantity = 5;
+  optional io.restorecommerce.tax.Amount amount = 6;
+  optional double contract_start_date = 7; // if there is any contract associated with product
 }
 
-message BillingAddress {
-  optional string email = 1;
-  optional string website = 2;
-  optional string street = 3;
-  optional string building_number = 4;
-  optional string postcode = 5;
-  optional string region = 6;
-  optional string country_name = 7;
-  optional string telephone = 9;
-  optional string timezone = 10;
-  optional string economic_area = 11;
-  optional string locality = 12;
-  optional string organization_name = 13;
+message ProductEntry {
+  optional string product_id = 1 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.product.Product",
+      target_service: "catalog",
+      target_sub_service: "product",
+      target_method: "Read",
+      field_name: "product",
+    }
+  ];
+  optional string variant_id = 2;
 }
 
-message InvoicePosition {
-  optional string currency = 1;
-  repeated InvoiceRow invoiceRows = 2;
-  optional InvoicePrice totalPrice = 3;
-}
-
-message InvoiceRow {
-  optional string product = 1;
-  optional double pricePerUnit = 2;
-  optional uint32 quantity = 3;
-  optional string vat = 4;
-  optional double amount = 5;
-  optional double contract_start_date = 6; // if there is any contract associated with product
-}
-
-message InvoicePrice {
-  optional double gross = 1;
-  optional double net = 2;
-}
-
-message TriggerInvoices {
-  repeated string ids = 1; // list of id referring to contract_ids or customer_ids
+message ManualEntry {
+  optional string article_number = 1;
+  optional string name = 2;
+  optional string descritpion = 3;
 }

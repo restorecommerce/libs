@@ -10,51 +10,6 @@ import { OperationStatus, protoMetadata as protoMetadata4, Status } from "./stat
 
 export const protobufPackage = "io.restorecommerce.tax_type";
 
-export enum Behavior {
-  NONE = "NONE",
-  ADDITIVE_ON_GROSS = "ADDITIVE_ON_GROSS",
-  UNRECOGNIZED = "UNRECOGNIZED",
-}
-
-export function behaviorFromJSON(object: any): Behavior {
-  switch (object) {
-    case 0:
-    case "NONE":
-      return Behavior.NONE;
-    case 1:
-    case "ADDITIVE_ON_GROSS":
-      return Behavior.ADDITIVE_ON_GROSS;
-    case -1:
-    case "UNRECOGNIZED":
-    default:
-      return Behavior.UNRECOGNIZED;
-  }
-}
-
-export function behaviorToJSON(object: Behavior): string {
-  switch (object) {
-    case Behavior.NONE:
-      return "NONE";
-    case Behavior.ADDITIVE_ON_GROSS:
-      return "ADDITIVE_ON_GROSS";
-    case Behavior.UNRECOGNIZED:
-    default:
-      return "UNRECOGNIZED";
-  }
-}
-
-export function behaviorToNumber(object: Behavior): number {
-  switch (object) {
-    case Behavior.NONE:
-      return 0;
-    case Behavior.ADDITIVE_ON_GROSS:
-      return 1;
-    case Behavior.UNRECOGNIZED:
-    default:
-      return -1;
-  }
-}
-
 export interface Deleted {
   id?: string | undefined;
 }
@@ -81,7 +36,6 @@ export interface TaxType {
   meta?: Meta | undefined;
   type?: string | undefined;
   description?: string | undefined;
-  behavior?: Behavior | undefined;
 }
 
 function createBaseDeleted(): Deleted {
@@ -97,24 +51,19 @@ export const Deleted = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Deleted {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDeleted();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.id = reader.string();
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -159,38 +108,25 @@ export const TaxTypeList = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): TaxTypeList {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTaxTypeList();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.items.push(TaxType.decode(reader, reader.uint32()));
-          continue;
+          break;
         case 2:
-          if (tag !== 16) {
-            break;
-          }
-
           message.total_count = reader.uint32();
-          continue;
+          break;
         case 3:
-          if (tag !== 26) {
-            break;
-          }
-
           message.subject = Subject.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -249,38 +185,25 @@ export const TaxTypeListResponse = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): TaxTypeListResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTaxTypeListResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.items.push(TaxTypeResponse.decode(reader, reader.uint32()));
-          continue;
+          break;
         case 2:
-          if (tag !== 16) {
-            break;
-          }
-
           message.total_count = reader.uint32();
-          continue;
+          break;
         case 3:
-          if (tag !== 26) {
-            break;
-          }
-
           message.operation_status = OperationStatus.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -337,31 +260,22 @@ export const TaxTypeResponse = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): TaxTypeResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTaxTypeResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.payload = TaxType.decode(reader, reader.uint32());
-          continue;
+          break;
         case 3:
-          if (tag !== 26) {
-            break;
-          }
-
           message.status = Status.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -397,7 +311,7 @@ export const TaxTypeResponse = {
 };
 
 function createBaseTaxType(): TaxType {
-  return { id: undefined, meta: undefined, type: undefined, description: undefined, behavior: undefined };
+  return { id: undefined, meta: undefined, type: undefined, description: undefined };
 }
 
 export const TaxType = {
@@ -414,59 +328,32 @@ export const TaxType = {
     if (message.description !== undefined) {
       writer.uint32(34).string(message.description);
     }
-    if (message.behavior !== undefined) {
-      writer.uint32(40).int32(behaviorToNumber(message.behavior));
-    }
     return writer;
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): TaxType {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTaxType();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.id = reader.string();
-          continue;
+          break;
         case 2:
-          if (tag !== 18) {
-            break;
-          }
-
           message.meta = Meta.decode(reader, reader.uint32());
-          continue;
+          break;
         case 3:
-          if (tag !== 26) {
-            break;
-          }
-
           message.type = reader.string();
-          continue;
+          break;
         case 4:
-          if (tag !== 34) {
-            break;
-          }
-
           message.description = reader.string();
-          continue;
-        case 5:
-          if (tag !== 40) {
-            break;
-          }
-
-          message.behavior = behaviorFromJSON(reader.int32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -477,7 +364,6 @@ export const TaxType = {
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
       type: isSet(object.type) ? String(object.type) : undefined,
       description: isSet(object.description) ? String(object.description) : undefined,
-      behavior: isSet(object.behavior) ? behaviorFromJSON(object.behavior) : undefined,
     };
   },
 
@@ -487,8 +373,6 @@ export const TaxType = {
     message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.type !== undefined && (obj.type = message.type);
     message.description !== undefined && (obj.description = message.description);
-    message.behavior !== undefined &&
-      (obj.behavior = message.behavior !== undefined ? behaviorToJSON(message.behavior) : undefined);
     return obj;
   },
 
@@ -502,7 +386,6 @@ export const TaxType = {
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
     message.type = object.type ?? undefined;
     message.description = object.description ?? undefined;
-    message.behavior = object.behavior ?? undefined;
     return message;
   },
 };
@@ -519,7 +402,7 @@ export const TaxTypeServiceDefinition = {
       requestStream: false,
       responseType: TaxTypeListResponse,
       responseStream: false,
-      options: { _unknownFields: { 248008: [Buffer.from([1])] } },
+      options: {},
     },
     create: {
       name: "Create",
@@ -808,45 +691,20 @@ export const protoMetadata: ProtoMetadata = {
         "jsonName": "description",
         "options": undefined,
         "proto3Optional": true,
-      }, {
-        "name": "behavior",
-        "number": 5,
-        "label": 1,
-        "type": 14,
-        "typeName": ".io.restorecommerce.tax_type.Behavior",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 4,
-        "jsonName": "behavior",
-        "options": undefined,
-        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [
-        { "name": "_id", "options": undefined },
-        { "name": "_meta", "options": undefined },
-        { "name": "_type", "options": undefined },
-        { "name": "_description", "options": undefined },
-        { "name": "_behavior", "options": undefined },
-      ],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }],
-    "enumType": [{
-      "name": "Behavior",
-      "value": [{ "name": "NONE", "number": 0, "options": undefined }, {
-        "name": "ADDITIVE_ON_GROSS",
-        "number": 1,
+      "oneofDecl": [{ "name": "_id", "options": undefined }, { "name": "_meta", "options": undefined }, {
+        "name": "_type",
         "options": undefined,
-      }],
+      }, { "name": "_description", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
     }],
+    "enumType": [],
     "service": [{
       "name": "TaxTypeService",
       "method": [{
@@ -901,7 +759,6 @@ export const protoMetadata: ProtoMetadata = {
     "syntax": "proto3",
   }),
   references: {
-    ".io.restorecommerce.tax_type.Behavior": Behavior,
     ".io.restorecommerce.tax_type.Deleted": Deleted,
     ".io.restorecommerce.tax_type.TaxTypeList": TaxTypeList,
     ".io.restorecommerce.tax_type.TaxTypeListResponse": TaxTypeListResponse,

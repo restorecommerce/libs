@@ -35,6 +35,10 @@ message NotificationReq {
   optional string transport = 5; /// 'email', 'log', ... default == 'log'
   optional string provider = 6; /// specific transport provider, eg: 'console' for transport == 'log'
   repeated Attachment attachments = 7;
+  /*
+  * A forigner_key using the following pattern: `${collection}/${id}`
+  */
+  optional string reference_id = 8;
 }
 
 message Email {

@@ -39,7 +39,7 @@
       "address": "127.0.0.1:50078"
     }
   },
-  "resource": {
+  "master_data": {
     "client": {
       "address": "127.0.0.1:50053"
     },

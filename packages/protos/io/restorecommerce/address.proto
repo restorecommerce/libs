@@ -79,7 +79,7 @@ message Address {
   optional string country_id = 4 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.country.Country",
-      target_service: "resource",
+      target_service: "master_data",
       target_sub_service: "country",
       target_method: "Read",
       field_name: "country",

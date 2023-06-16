@@ -1258,7 +1258,7 @@ export const protoMetadata: ProtoMetadata = {
           "address_id": {
             "resolver": Resolver.decode(
               Buffer.from(
-                "CiMuaW8ucmVzdG9yZWNvbW1lcmNlLmFkZHJlc3MuQWRkcmVzcxIIcmVzb3VyY2UaB2FkZHJlc3MiBFJlYWQqB2FkZHJlc3M=",
+                "CiMuaW8ucmVzdG9yZWNvbW1lcmNlLmFkZHJlc3MuQWRkcmVzcxILbWFzdGVyX2RhdGEaB2FkZHJlc3MiBFJlYWQqB2FkZHJlc3M=",
                 "base64",
               ),
             ),
@@ -1266,7 +1266,7 @@ export const protoMetadata: ProtoMetadata = {
           "contact_point_ids": {
             "resolver": Resolver.decode(
               Buffer.from(
-                "Ci4uaW8ucmVzdG9yZWNvbW1lcmNlLmNvbnRhY3RfcG9pbnQuQ29udGFjdFBvaW50EghyZXNvdXJjZRoNY29udGFjdF9wb2ludCIEUmVhZCoNY29udGFjdFBvaW50cw==",
+                "Ci4uaW8ucmVzdG9yZWNvbW1lcmNlLmNvbnRhY3RfcG9pbnQuQ29udGFjdFBvaW50EgttYXN0ZXJfZGF0YRoNY29udGFjdF9wb2ludCIEUmVhZCoNY29udGFjdFBvaW50cw==",
                 "base64",
               ),
             ),
@@ -1283,7 +1283,7 @@ export const protoMetadata: ProtoMetadata = {
           "organization_id": {
             "resolver": Resolver.decode(
               Buffer.from(
-                "Ci0uaW8ucmVzdG9yZWNvbW1lcmNlLm9yZ2FuaXphdGlvbi5Pcmdhbml6YXRpb24SCHJlc291cmNlGgxvcmdhbml6YXRpb24iBFJlYWQqDG9yZ2FuaXphdGlvbg==",
+                "Ci0uaW8ucmVzdG9yZWNvbW1lcmNlLm9yZ2FuaXphdGlvbi5Pcmdhbml6YXRpb24SC21hc3Rlcl9kYXRhGgxvcmdhbml6YXRpb24iBFJlYWQqDG9yZ2FuaXphdGlvbg==",
                 "base64",
               ),
             ),
@@ -1295,7 +1295,7 @@ export const protoMetadata: ProtoMetadata = {
           "address_id": {
             "resolver": Resolver.decode(
               Buffer.from(
-                "CiMuaW8ucmVzdG9yZWNvbW1lcmNlLmFkZHJlc3MuQWRkcmVzcxIIcmVzb3VyY2UaB2FkZHJlc3MiBFJlYWQqB2FkZHJlc3M=",
+                "CiMuaW8ucmVzdG9yZWNvbW1lcmNlLmFkZHJlc3MuQWRkcmVzcxILbWFzdGVyX2RhdGEaB2FkZHJlc3MiBFJlYWQqB2FkZHJlc3M=",
                 "base64",
               ),
             ),
@@ -1303,7 +1303,7 @@ export const protoMetadata: ProtoMetadata = {
           "contact_point_ids": {
             "resolver": Resolver.decode(
               Buffer.from(
-                "Ci4uaW8ucmVzdG9yZWNvbW1lcmNlLmNvbnRhY3RfcG9pbnQuQ29udGFjdFBvaW50EghyZXNvdXJjZRoNY29udGFjdF9wb2ludCIEUmVhZCoNY29udGFjdFBvaW50cw==",
+                "Ci4uaW8ucmVzdG9yZWNvbW1lcmNlLmNvbnRhY3RfcG9pbnQuQ29udGFjdFBvaW50EgttYXN0ZXJfZGF0YRoNY29udGFjdF9wb2ludCIEUmVhZCoNY29udGFjdFBvaW50cw==",
                 "base64",
               ),
             ),

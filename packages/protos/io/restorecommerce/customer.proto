@@ -67,7 +67,7 @@ message IndividualUser {
   optional string address_id = 2 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.address.Address",
-      target_service: "resource",
+      target_service: "master_data",
       target_sub_service: "address",
       target_method: "Read",
       field_name: "address",
@@ -76,7 +76,7 @@ message IndividualUser {
   repeated string contact_point_ids = 3 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.contact_point.ContactPoint",
-      target_service: "resource",
+      target_service: "master_data",
       target_sub_service: "contact_point",
       target_method: "Read",
       field_name: "contactPoints",
@@ -97,7 +97,7 @@ message OrgUser {
   optional string organization_id = 2 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.organization.Organization",
-      target_service: "resource",
+      target_service: "master_data",
       target_sub_service: "organization",
       target_method: "Read",
       field_name: "organization",
@@ -110,7 +110,7 @@ message Guest {
   optional string address_id = 2 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.address.Address",
-      target_service: "resource",
+      target_service: "master_data",
       target_sub_service: "address",
       target_method: "Read",
       field_name: "address",
@@ -119,7 +119,7 @@ message Guest {
   repeated string contact_point_ids = 3 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.contact_point.ContactPoint",
-      target_service: "resource",
+      target_service: "master_data",
       target_sub_service: "contact_point",
       target_method: "Read",
       field_name: "contactPoints",

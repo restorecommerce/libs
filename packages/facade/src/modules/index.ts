@@ -2,7 +2,7 @@ export * from './facade-status/index.js';
 export * from './identity/index.js';
 export * from './ordering/index.js';
 export * from './payment/index.js';
-export * from './resource/index.js';
+export * from './master_data/index.js';
 export * from './catalog/index.js';
 export * from './invoicing/index.js';
 export * from './fulfillment/index.js';

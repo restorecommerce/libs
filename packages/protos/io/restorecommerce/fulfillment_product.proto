@@ -65,7 +65,7 @@ message FulfillmentProduct {
   optional string courier_id = 4 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.fulfillment_courier.FulfillmentCourier",
-      target_service: "resource",
+      target_service: "master_data",
       target_sub_service: "fulfillment_courier",
       target_method: "Read",
       field_name: "courier",

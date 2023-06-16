@@ -70,7 +70,7 @@ message Invoice {
   optional string customer_id = 5 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.customer.Customer",
-      target_service: "resource",
+      target_service: "master_data",
       target_sub_service: "customer",
       target_method: "Read",
       field_name: "customer",

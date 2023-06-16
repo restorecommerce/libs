@@ -1044,7 +1044,7 @@ export const protoMetadata: ProtoMetadata = {
           "physical_address_id": {
             "resolver": Resolver.decode(
               Buffer.from(
-                "CiMuaW8ucmVzdG9yZWNvbW1lcmNlLmFkZHJlc3MuQWRkcmVzcxIIcmVzb3VyY2UaB2FkZHJlc3MiBFJlYWQqD3BoeXNpY2FsQWRkcmVzcw==",
+                "CiMuaW8ucmVzdG9yZWNvbW1lcmNlLmFkZHJlc3MuQWRkcmVzcxILbWFzdGVyX2RhdGEaB2FkZHJlc3MiBFJlYWQqD3BoeXNpY2FsQWRkcmVzcw==",
                 "base64",
               ),
             ),
@@ -1052,7 +1052,7 @@ export const protoMetadata: ProtoMetadata = {
           "contact_point_type_id": {
             "resolver": Resolver.decode(
               Buffer.from(
-                "CjcuaW8ucmVzdG9yZWNvbW1lcmNlLmNvbnRhY3RfcG9pbnRfdHlwZS5Db250YWN0UG9pbnRUeXBlEghyZXNvdXJjZRoSY29udGFjdF9wb2ludF90eXBlIgRSZWFkKhBjb250YWN0UG9pbnRUeXBl",
+                "CjcuaW8ucmVzdG9yZWNvbW1lcmNlLmNvbnRhY3RfcG9pbnRfdHlwZS5Db250YWN0UG9pbnRUeXBlEgttYXN0ZXJfZGF0YRoSY29udGFjdF9wb2ludF90eXBlIgRSZWFkKhBjb250YWN0UG9pbnRUeXBl",
                 "base64",
               ),
             ),
@@ -1060,7 +1060,7 @@ export const protoMetadata: ProtoMetadata = {
           "timezone_id": {
             "resolver": Resolver.decode(
               Buffer.from(
-                "CiUuaW8ucmVzdG9yZWNvbW1lcmNlLnRpbWV6b25lLlRpbWV6b25lEghyZXNvdXJjZRoIdGltZXpvbmUiBFJlYWQqCHRpbWV6b25l",
+                "CiUuaW8ucmVzdG9yZWNvbW1lcmNlLnRpbWV6b25lLlRpbWV6b25lEgttYXN0ZXJfZGF0YRoIdGltZXpvbmUiBFJlYWQqCHRpbWV6b25l",
                 "base64",
               ),
             ),
@@ -1068,7 +1068,7 @@ export const protoMetadata: ProtoMetadata = {
           "locale_id": {
             "resolver": Resolver.decode(
               Buffer.from(
-                "CiEuaW8ucmVzdG9yZWNvbW1lcmNlLmxvY2FsZS5Mb2NhbGUSCHJlc291cmNlGgZsb2NhbGUiBFJlYWQqBmxvY2FsZQ==",
+                "CiEuaW8ucmVzdG9yZWNvbW1lcmNlLmxvY2FsZS5Mb2NhbGUSC21hc3Rlcl9kYXRhGgZsb2NhbGUiBFJlYWQqBmxvY2FsZQ==",
                 "base64",
               ),
             ),

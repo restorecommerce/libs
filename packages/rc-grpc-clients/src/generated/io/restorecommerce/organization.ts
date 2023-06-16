@@ -46,10 +46,6 @@ export interface Organization {
   meta?:
     | Meta
     | undefined;
-  /** / Address for the organization */
-  addressId?:
-    | string
-    | undefined;
   /** Hierarchically superior organization; may be null */
   parentId?:
     | string
@@ -85,24 +81,19 @@ export const Deleted = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Deleted {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDeleted();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.id = reader.string();
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -147,38 +138,25 @@ export const DeleteOrgData = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): DeleteOrgData {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDeleteOrgData();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.orgIds.push(reader.string());
-          continue;
+          break;
         case 2:
-          if (tag !== 18) {
-            break;
-          }
-
           message.userIds.push(reader.string());
-          continue;
+          break;
         case 3:
-          if (tag !== 26) {
-            break;
-          }
-
           message.subject = Subject.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -241,38 +219,25 @@ export const OrganizationList = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): OrganizationList {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseOrganizationList();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.items.push(Organization.decode(reader, reader.uint32()));
-          continue;
+          break;
         case 2:
-          if (tag !== 16) {
-            break;
-          }
-
           message.totalCount = reader.uint32();
-          continue;
+          break;
         case 3:
-          if (tag !== 26) {
-            break;
-          }
-
           message.subject = Subject.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -331,38 +296,25 @@ export const OrganizationListResponse = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): OrganizationListResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseOrganizationListResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.items.push(OrganizationResponse.decode(reader, reader.uint32()));
-          continue;
+          break;
         case 2:
-          if (tag !== 16) {
-            break;
-          }
-
           message.totalCount = reader.uint32();
-          continue;
+          break;
         case 3:
-          if (tag !== 26) {
-            break;
-          }
-
           message.operationStatus = OperationStatus.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -419,31 +371,22 @@ export const OrganizationResponse = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): OrganizationResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseOrganizationResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.payload = Organization.decode(reader, reader.uint32());
-          continue;
+          break;
         case 2:
-          if (tag !== 18) {
-            break;
-          }
-
           message.status = Status.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -482,7 +425,6 @@ function createBaseOrganization(): Organization {
   return {
     id: undefined,
     meta: undefined,
-    addressId: undefined,
     parentId: undefined,
     contactPointIds: [],
     website: undefined,
@@ -505,9 +447,6 @@ export const Organization = {
     }
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
-    }
-    if (message.addressId !== undefined) {
-      writer.uint32(26).string(message.addressId);
     }
     if (message.parentId !== undefined) {
       writer.uint32(34).string(message.parentId);
@@ -549,122 +488,58 @@ export const Organization = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Organization {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseOrganization();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.id = reader.string();
-          continue;
+          break;
         case 2:
-          if (tag !== 18) {
-            break;
-          }
-
           message.meta = Meta.decode(reader, reader.uint32());
-          continue;
-        case 3:
-          if (tag !== 26) {
-            break;
-          }
-
-          message.addressId = reader.string();
-          continue;
+          break;
         case 4:
-          if (tag !== 34) {
-            break;
-          }
-
           message.parentId = reader.string();
-          continue;
+          break;
         case 6:
-          if (tag !== 50) {
-            break;
-          }
-
           message.contactPointIds.push(reader.string());
-          continue;
+          break;
         case 7:
-          if (tag !== 58) {
-            break;
-          }
-
           message.website = reader.string();
-          continue;
+          break;
         case 8:
-          if (tag !== 66) {
-            break;
-          }
-
           message.email = reader.string();
-          continue;
+          break;
         case 9:
-          if (tag !== 74) {
-            break;
-          }
-
           message.logo = reader.string();
-          continue;
+          break;
         case 10:
-          if (tag !== 82) {
-            break;
-          }
-
           message.vatId = reader.string();
-          continue;
+          break;
         case 11:
-          if (tag !== 90) {
-            break;
-          }
-
           message.isicV4 = reader.string();
-          continue;
+          break;
         case 12:
-          if (tag !== 98) {
-            break;
-          }
-
           message.registration = reader.string();
-          continue;
+          break;
         case 13:
-          if (tag !== 106) {
-            break;
-          }
-
           message.registrationCourt = reader.string();
-          continue;
+          break;
         case 14:
-          if (tag !== 114) {
-            break;
-          }
-
           message.name = reader.string();
-          continue;
+          break;
         case 15:
-          if (tag !== 122) {
-            break;
-          }
-
           message.paymentMethodIds.push(reader.string());
-          continue;
+          break;
         case 16:
-          if (tag !== 130) {
-            break;
-          }
-
           message.data = Any.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -673,7 +548,6 @@ export const Organization = {
     return {
       id: isSet(object.id) ? String(object.id) : undefined,
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
-      addressId: isSet(object.addressId) ? String(object.addressId) : undefined,
       parentId: isSet(object.parentId) ? String(object.parentId) : undefined,
       contactPointIds: Array.isArray(object?.contactPointIds) ? object.contactPointIds.map((e: any) => String(e)) : [],
       website: isSet(object.website) ? String(object.website) : undefined,
@@ -695,7 +569,6 @@ export const Organization = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
-    message.addressId !== undefined && (obj.addressId = message.addressId);
     message.parentId !== undefined && (obj.parentId = message.parentId);
     if (message.contactPointIds) {
       obj.contactPointIds = message.contactPointIds.map((e) => e);
@@ -727,7 +600,6 @@ export const Organization = {
     const message = createBaseOrganization();
     message.id = object.id ?? undefined;
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
-    message.addressId = object.addressId ?? undefined;
     message.parentId = object.parentId ?? undefined;
     message.contactPointIds = object.contactPointIds?.map((e) => e) || [];
     message.website = object.website ?? undefined;
@@ -755,7 +627,7 @@ export const OrganizationServiceDefinition = {
       requestStream: false,
       responseType: OrganizationListResponse,
       responseStream: false,
-      options: { _unknownFields: { 248008: [Buffer.from([1])] } },
+      options: {},
     },
     create: {
       name: "Create",
@@ -1089,26 +961,6 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "address_id",
-        "number": 3,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 2,
-        "jsonName": "addressId",
-        "options": {
-          "ctype": 0,
-          "packed": false,
-          "jstype": 0,
-          "lazy": false,
-          "deprecated": false,
-          "weak": false,
-          "uninterpretedOption": [],
-        },
-        "proto3Optional": true,
-      }, {
         "name": "parent_id",
         "number": 4,
         "label": 1,
@@ -1116,7 +968,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 3,
+        "oneofIndex": 2,
         "jsonName": "parentId",
         "options": {
           "ctype": 0,
@@ -1156,7 +1008,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 4,
+        "oneofIndex": 3,
         "jsonName": "website",
         "options": undefined,
         "proto3Optional": true,
@@ -1168,7 +1020,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 5,
+        "oneofIndex": 4,
         "jsonName": "email",
         "options": undefined,
         "proto3Optional": true,
@@ -1180,7 +1032,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 6,
+        "oneofIndex": 5,
         "jsonName": "logo",
         "options": undefined,
         "proto3Optional": true,
@@ -1192,7 +1044,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 7,
+        "oneofIndex": 6,
         "jsonName": "vatId",
         "options": undefined,
         "proto3Optional": true,
@@ -1204,7 +1056,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 8,
+        "oneofIndex": 7,
         "jsonName": "isicV4",
         "options": undefined,
         "proto3Optional": true,
@@ -1216,7 +1068,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 9,
+        "oneofIndex": 8,
         "jsonName": "registration",
         "options": undefined,
         "proto3Optional": true,
@@ -1228,7 +1080,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 10,
+        "oneofIndex": 9,
         "jsonName": "registrationCourt",
         "options": undefined,
         "proto3Optional": true,
@@ -1240,7 +1092,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 11,
+        "oneofIndex": 10,
         "jsonName": "name",
         "options": undefined,
         "proto3Optional": true,
@@ -1264,7 +1116,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".google.protobuf.Any",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 12,
+        "oneofIndex": 11,
         "jsonName": "data",
         "options": undefined,
         "proto3Optional": true,
@@ -1276,7 +1128,6 @@ export const protoMetadata: ProtoMetadata = {
       "oneofDecl": [
         { "name": "_id", "options": undefined },
         { "name": "_meta", "options": undefined },
-        { "name": "_address_id", "options": undefined },
         { "name": "_parent_id", "options": undefined },
         { "name": "_website", "options": undefined },
         { "name": "_email", "options": undefined },
@@ -1352,29 +1203,23 @@ export const protoMetadata: ProtoMetadata = {
         "path": [4, 5, 2, 2],
         "span": [55, 2, 63, 4],
         "leadingComments": "",
-        "trailingComments": "/ Address for the organization\n",
+        "trailingComments": "  Hierarchically superior organization; may be null\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 5, 2, 3],
         "span": [64, 2, 72, 4],
         "leadingComments": "",
-        "trailingComments": "  Hierarchically superior organization; may be null\n",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 5, 2, 4],
-        "span": [73, 2, 81, 4],
-        "leadingComments": "",
         "trailingComments": " list of possible legal addresses of different types\n",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 5, 2, 7],
-        "span": [84, 2, 27],
+        "path": [4, 5, 2, 6],
+        "span": [75, 2, 27],
         "leadingComments": "",
         "trailingComments": " base64; arangoDB does not support blob storage\n",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 5, 2, 14],
-        "span": [91, 2, 41],
+        "path": [4, 5, 2, 13],
+        "span": [82, 2, 41],
         "leadingComments": "",
         "trailingComments": "/ additional data\n",
         "leadingDetachedComments": [],
@@ -1404,14 +1249,6 @@ export const protoMetadata: ProtoMetadata = {
     messages: {
       "Organization": {
         fields: {
-          "address_id": {
-            "resolver": Resolver.decode(
-              Buffer.from(
-                "CiMuaW8ucmVzdG9yZWNvbW1lcmNlLmFkZHJlc3MuQWRkcmVzcxILbWFzdGVyX2RhdGEaB2FkZHJlc3MiBFJlYWQqB2FkZHJlc3M=",
-                "base64",
-              ),
-            ),
-          },
           "parent_id": {
             "resolver": Resolver.decode(
               Buffer.from(

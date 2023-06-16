@@ -2,6 +2,7 @@
 import * as Long from "long";
 import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
+import { Image, protoMetadata as protoMetadata1 } from "./image";
 
 export const protobufPackage = "io.restorecommerce.file";
 
@@ -14,6 +15,7 @@ export interface File {
   url?: string | undefined;
   bytes?: number | undefined;
   tags: string[];
+  thumbnail?: Image | undefined;
 }
 
 export interface FileList {
@@ -35,6 +37,7 @@ function createBaseFile(): File {
     url: undefined,
     bytes: undefined,
     tags: [],
+    thumbnail: undefined,
   };
 }
 
@@ -64,77 +67,50 @@ export const File = {
     for (const v of message.tags) {
       writer.uint32(66).string(v!);
     }
+    if (message.thumbnail !== undefined) {
+      Image.encode(message.thumbnail, writer.uint32(74).fork()).ldelim();
+    }
     return writer;
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): File {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseFile();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.id = reader.string();
-          continue;
+          break;
         case 2:
-          if (tag !== 16) {
-            break;
-          }
-
           message.index = longToNumber(reader.int64() as Long);
-          continue;
+          break;
         case 3:
-          if (tag !== 26) {
-            break;
-          }
-
           message.caption = reader.string();
-          continue;
+          break;
         case 4:
-          if (tag !== 34) {
-            break;
-          }
-
           message.filename = reader.string();
-          continue;
+          break;
         case 5:
-          if (tag !== 42) {
-            break;
-          }
-
           message.content_type = reader.string();
-          continue;
+          break;
         case 6:
-          if (tag !== 50) {
-            break;
-          }
-
           message.url = reader.string();
-          continue;
+          break;
         case 7:
-          if (tag !== 56) {
-            break;
-          }
-
           message.bytes = longToNumber(reader.int64() as Long);
-          continue;
+          break;
         case 8:
-          if (tag !== 66) {
-            break;
-          }
-
           message.tags.push(reader.string());
-          continue;
+          break;
+        case 9:
+          message.thumbnail = Image.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -149,6 +125,7 @@ export const File = {
       url: isSet(object.url) ? String(object.url) : undefined,
       bytes: isSet(object.bytes) ? Number(object.bytes) : undefined,
       tags: Array.isArray(object?.tags) ? object.tags.map((e: any) => String(e)) : [],
+      thumbnail: isSet(object.thumbnail) ? Image.fromJSON(object.thumbnail) : undefined,
     };
   },
 
@@ -166,6 +143,8 @@ export const File = {
     } else {
       obj.tags = [];
     }
+    message.thumbnail !== undefined &&
+      (obj.thumbnail = message.thumbnail ? Image.toJSON(message.thumbnail) : undefined);
     return obj;
   },
 
@@ -183,6 +162,9 @@ export const File = {
     message.url = object.url ?? undefined;
     message.bytes = object.bytes ?? undefined;
     message.tags = object.tags?.map((e) => e) || [];
+    message.thumbnail = (object.thumbnail !== undefined && object.thumbnail !== null)
+      ? Image.fromPartial(object.thumbnail)
+      : undefined;
     return message;
   },
 };
@@ -203,31 +185,22 @@ export const FileList = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): FileList {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseFileList();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.items.push(File.decode(reader, reader.uint32()));
-          continue;
+          break;
         case 2:
-          if (tag !== 16) {
-            break;
-          }
-
           message.total_count = reader.uint32();
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -275,24 +248,19 @@ export const Deleted = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Deleted {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDeleted();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.id = reader.string();
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -343,7 +311,7 @@ export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto1.fromPartial({
     "name": "io/restorecommerce/file.proto",
     "package": "io.restorecommerce.file",
-    "dependency": [],
+    "dependency": ["io/restorecommerce/image.proto"],
     "publicDependency": [],
     "weakDependency": [],
     "messageType": [{
@@ -444,6 +412,18 @@ export const protoMetadata: ProtoMetadata = {
         "jsonName": "tags",
         "options": undefined,
         "proto3Optional": false,
+      }, {
+        "name": "thumbnail",
+        "number": 9,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.image.Image",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 7,
+        "jsonName": "thumbnail",
+        "options": undefined,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
@@ -457,6 +437,7 @@ export const protoMetadata: ProtoMetadata = {
         { "name": "_content_type", "options": undefined },
         { "name": "_url", "options": undefined },
         { "name": "_bytes", "options": undefined },
+        { "name": "_thumbnail", "options": undefined },
       ],
       "options": undefined,
       "reservedRange": [],
@@ -532,7 +513,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.file.FileList": FileList,
     ".io.restorecommerce.file.Deleted": Deleted,
   },
-  dependencies: [],
+  dependencies: [protoMetadata1],
 };
 
 declare var self: any | undefined;

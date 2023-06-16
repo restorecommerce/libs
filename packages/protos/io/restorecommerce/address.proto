@@ -110,3 +110,9 @@ message ShippingAddress {
   optional Contact contact = 2;
   optional string comments = 3;
 }
+
+message BillingAddress {
+  optional Address address = 1;
+  optional Contact contact = 2;
+  optional string comments = 3;
+}

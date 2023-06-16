@@ -12,6 +12,7 @@ import "io/restorecommerce/country.proto";
 import "io/restorecommerce/product.proto";
 import "io/restorecommerce/options.proto";
 import "io/restorecommerce/tax.proto";
+import "io/restorecommerce/invoice.proto";
 
 /**
 Microservice definition.
@@ -68,20 +69,30 @@ service FulfillmentService {
   Delete a batch of fulfillments from the database
   */
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
+
+  /**
+  Requires Invoice Service
+  */
+  rpc CreateInvoice (InvoiceRequestList) returns (io.restorecommerce.invoice.InvoiceListResponse);
+
+  /**
+  Requires Invoice Service
+  */
+  rpc TriggerInvoice (InvoiceRequestList) returns (io.restorecommerce.status.StatusListResponse);
 }
 
 enum State {
-  Created = 0;
-  Invalid = 1;
-  Failed = 2;
-  Submitted = 3;
-  InTransit = 4;
-  Fulfilled = 5;
-  Withdrawn = 6;
-  Cancelled = 7;
+  FAILED = 0;
+  INVALID = 1;
+  CREATED = 2;
+  SUBMITTED = 3;
+  IN_TRANSIT = 4;
+  FULFILLED = 5;
+  WITHDRAWN = 6;
+  CANCELLED = 7;
 }
 
-message FulfillmentItem {
+message Item {
   optional string product_id = 1;
   optional string variant_id = 2;
   optional int32 quantity = 3;
@@ -100,7 +111,7 @@ message Parcel {
     }
   ];
   optional string variant_id = 3;
-  optional FulfillmentItem item = 4;
+  optional Item item = 4;
   optional double price = 5;
   repeated io.restorecommerce.tax.VAT vats = 6; //Set by service
   optional io.restorecommerce.product.Package package = 7;
@@ -119,10 +130,14 @@ message Label {
 }
 
 message Packaging {
+  /*
+  * A forigner_key using the following pattern: `${collection}/${id}`
+  * most likly an order_id or fulfillment_id.
+  */
   optional string reference_id = 1;
   repeated Parcel parcels = 2;
   optional io.restorecommerce.address.ShippingAddress sender = 3;
-  optional io.restorecommerce.address.ShippingAddress receiver = 4;
+  optional io.restorecommerce.address.ShippingAddress recipient = 4;
   optional string notify = 5;
   optional string export_type = 6;
   optional string export_description = 7;
@@ -197,4 +212,16 @@ message FulfillmentIdList {
 
 message Deleted {
   string id = 1;
+}
+
+message InvoiceRequest {
+  optional string invoice_number = 1; // if given
+  optional string fulfillment_id = 2;
+  repeated string included_parcels = 3; // includes all on empty
+}
+
+message InvoiceRequestList {
+  repeated InvoiceRequest items = 1;
+  optional uint32 total_count = 2;
+  io.restorecommerce.auth.Subject subject = 3;
 }

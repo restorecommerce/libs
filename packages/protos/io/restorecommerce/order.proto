@@ -14,6 +14,7 @@ import "io/restorecommerce/tax.proto";
 import "io/restorecommerce/country.proto";
 import "io/restorecommerce/fulfillment.proto";
 import "io/restorecommerce/fulfillment_product.proto";
+import "io/restorecommerce/invoice.proto";
 
 
 service OrderService {
@@ -37,25 +38,25 @@ service OrderService {
   rpc TriggerFulfillment (FulfillmentRequestList) returns (io.restorecommerce.status.StatusListResponse);
 
   // Requires Invoice Service
-  //rpc CreateInvoice (InvoiceRequestList) returns (io.restorecommerce.invoice.InvoiceListResponse);
+  rpc CreateInvoice (InvoiceRequestList) returns (io.restorecommerce.invoice.InvoiceListResponse);
   // Requires Invoice Service
-  //rpc TriggerInvoice (InvoiceRequestList) returns (io.restorecommerce.status.StatusListResponse);
+  rpc TriggerInvoice (InvoiceRequestList) returns (io.restorecommerce.status.StatusListResponse);
 }
 
-enum OrderState {
-  Created = 0;
-  Submitted = 1;
-  Confirmed = 2;
-  Invalid = 3;
-  Shipping = 4;
-  Failed = 5;
-  Done = 6;
-  Withdrawn = 7;
-  Cancelled = 8;
+enum State {
+  FAILED = 0;
+  INVALID = 1;
+  CREATED = 2;
+  SUBMITTED = 3;
+  IN_PROCESS = 4;
+  DONE = 5;
+  WITHDRAWN = 6;
+  CANCELLED = 7;
 }
 
-message OrderItem {
-  optional string product_id = 1 [
+message Item {
+  optional string id = 1;
+  optional string product_id = 2 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.product.Product",
       target_service: "catalog",
@@ -63,12 +64,11 @@ message OrderItem {
       target_method: "Read",
       field_name: "product",
     }
-  ];;
-  optional string variant_id = 2;
-  optional int32 quantity = 3;
-  optional double unit_amount = 4; //Set by service
-  optional double amount = 5; //Set by service
-  repeated io.restorecommerce.tax.VAT vats = 6; //Set by service
+  ];
+  optional string variant_id = 3;
+  optional int32 quantity = 4;
+  optional double unit_price = 5; //Set by service
+  optional io.restorecommerce.tax.Amount amount = 6; //Set by service
 }
 
 /**
@@ -85,7 +85,15 @@ message Order {
 
   optional string id = 1;
   optional io.restorecommerce.meta.Meta meta = 2;
-  optional OrderState state = 3;
+  optional string user_id = 3 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.customer.Customer",
+      target_service: "resource",
+      target_sub_service: "customer",
+      target_method: "Read",
+      field_name: "customer",
+    }
+  ];
   optional string customer_id = 4 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.customer.Customer",
@@ -104,14 +112,18 @@ message Order {
       field_name: "shop",
     }
   ];
-  repeated OrderItem items = 6;
-  optional double total_amount = 7; //set by service
-  repeated io.restorecommerce.tax.VAT total_vats = 8; //set by service
-  optional io.restorecommerce.address.ShippingAddress shipping_address = 9;
-  optional io.restorecommerce.address.ShippingAddress billing_address = 10;
-  optional string billing_email = 11;
-  optional string notification_email = 12;
-  optional io.restorecommerce.fulfillment_product.Preferences packaging_preferences = 13;
+  repeated Item items = 6;
+  optional State order_state = 7;                                         // Set by service
+  optional io.restorecommerce.fulfillment.State fulfillment_state = 8;    // Set by kafka
+  optional io.restorecommerce.invoice.State invoice_state = 9;            // Set by kafka
+  repeated io.restorecommerce.tax.Amount total_amounts = 10;                // Set by service --- repeated in case of variant currency?
+  optional io.restorecommerce.address.ShippingAddress shipping_address = 11;
+  optional io.restorecommerce.address.BillingAddress billing_address = 12;
+  optional string billing_email = 13;
+  optional string notification_email = 14;
+  optional string customer_order_nr = 15;
+  optional string customer_remark = 16;
+  optional io.restorecommerce.fulfillment_product.Preferences packaging_preferences = 17;
 }
 
 message OrderIdList {
@@ -140,22 +152,31 @@ message Deleted {
   string id = 1;
 }
 
-message ShippingDetails {
-  optional string export_type = 1;
-  optional string export_description = 2;
-  optional string invoice_number = 3;
-  optional io.restorecommerce.address.ShippingAddress sender_address = 4;
-  google.protobuf.Any data = 5;
-
-}
-
 message FulfillmentRequest {
   optional string order_id = 1;
-  optional ShippingDetails shipping_details = 2;
+  optional string export_type = 2; // @TODO: not used!
+  optional string export_description = 3; // @TODO: not used!
+  optional string invoice_number = 4; // @TODO: not used!
+  optional io.restorecommerce.address.ShippingAddress sender_address = 5;
+  repeated string include_items = 6; // includes all if empty
+  google.protobuf.Any data = 7;
 }
 
 message FulfillmentRequestList {
   repeated FulfillmentRequest items = 1;
+  optional uint32 total_count = 2;
+  io.restorecommerce.auth.Subject subject = 3;
+}
+
+message InvoiceRequest {
+  optional string invoice_number = 1; // if given
+  optional string order_id = 2;
+  repeated string included_items = 3; // includes all on empty
+  optional string included_fulfillments = 4; // includes all on empty
+}
+
+message InvoiceRequestList {
+  repeated InvoiceRequest items = 1;
   optional uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
 }

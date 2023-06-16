@@ -46,11 +46,10 @@ message CustomerResponse {
 message Customer {
   optional string id = 1;
   optional io.restorecommerce.meta.Meta meta = 2;
-  optional string customer_number = 3;
   oneof type {
-    Private private = 4;
-    Commercial commercial = 5;
-    PublicSector public_sector = 6;
+    Private private = 3;
+    Commercial commercial = 4;
+    PublicSector public_sector = 5;
   };
 }
 

@@ -2,12 +2,11 @@
 import type { CallContext, CallOptions } from "nice-grpc-common";
 import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import { protoMetadata as protoMetadata7 } from "./address";
 import { protoMetadata as protoMetadata3, Subject } from "./auth";
-import { protoMetadata as protoMetadata8 } from "./contact_point";
+import { protoMetadata as protoMetadata7 } from "./contact_point";
 import { Meta, protoMetadata as protoMetadata2 } from "./meta";
 import { protoMetadata as protoMetadata5, Resolver } from "./options";
-import { protoMetadata as protoMetadata9 } from "./organization";
+import { protoMetadata as protoMetadata8 } from "./organization";
 import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata1, ReadRequest } from "./resource_base";
 import { OperationStatus, protoMetadata as protoMetadata4, Status } from "./status";
 import { protoMetadata as protoMetadata6 } from "./user";
@@ -34,26 +33,22 @@ export interface CustomerResponse {
 export interface Customer {
   id?: string | undefined;
   meta?: Meta | undefined;
-  individual_user?: IndividualUser | undefined;
-  org_user?: OrgUser | undefined;
-  guest?: Guest | undefined;
+  private?: Private | undefined;
+  commercial?: Commercial | undefined;
+  public_sector?: PublicSector | undefined;
 }
 
-export interface IndividualUser {
+export interface Private {
   user_id?: string | undefined;
-  address_id?: string | undefined;
   contact_point_ids: string[];
 }
 
-export interface OrgUser {
-  user_id?: string | undefined;
+export interface Commercial {
   organization_id?: string | undefined;
 }
 
-export interface Guest {
-  guest: boolean;
-  address_id?: string | undefined;
-  contact_point_ids: string[];
+export interface PublicSector {
+  organization_id?: string | undefined;
 }
 
 function createBaseCustomerList(): CustomerList {
@@ -75,38 +70,25 @@ export const CustomerList = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): CustomerList {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseCustomerList();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.items.push(Customer.decode(reader, reader.uint32()));
-          continue;
+          break;
         case 2:
-          if (tag !== 16) {
-            break;
-          }
-
           message.total_count = reader.uint32();
-          continue;
+          break;
         case 3:
-          if (tag !== 26) {
-            break;
-          }
-
           message.subject = Subject.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -165,38 +147,25 @@ export const CustomerListResponse = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): CustomerListResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseCustomerListResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.items.push(CustomerResponse.decode(reader, reader.uint32()));
-          continue;
+          break;
         case 2:
-          if (tag !== 16) {
-            break;
-          }
-
           message.total_count = reader.uint32();
-          continue;
+          break;
         case 3:
-          if (tag !== 26) {
-            break;
-          }
-
           message.operation_status = OperationStatus.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -253,31 +222,22 @@ export const CustomerResponse = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): CustomerResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseCustomerResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.payload = Customer.decode(reader, reader.uint32());
-          continue;
+          break;
         case 2:
-          if (tag !== 18) {
-            break;
-          }
-
           message.status = Status.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -313,7 +273,7 @@ export const CustomerResponse = {
 };
 
 function createBaseCustomer(): Customer {
-  return { id: undefined, meta: undefined, individual_user: undefined, org_user: undefined, guest: undefined };
+  return { id: undefined, meta: undefined, private: undefined, commercial: undefined, public_sector: undefined };
 }
 
 export const Customer = {
@@ -324,65 +284,44 @@ export const Customer = {
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
-    if (message.individual_user !== undefined) {
-      IndividualUser.encode(message.individual_user, writer.uint32(26).fork()).ldelim();
+    if (message.private !== undefined) {
+      Private.encode(message.private, writer.uint32(26).fork()).ldelim();
     }
-    if (message.org_user !== undefined) {
-      OrgUser.encode(message.org_user, writer.uint32(34).fork()).ldelim();
+    if (message.commercial !== undefined) {
+      Commercial.encode(message.commercial, writer.uint32(34).fork()).ldelim();
     }
-    if (message.guest !== undefined) {
-      Guest.encode(message.guest, writer.uint32(42).fork()).ldelim();
+    if (message.public_sector !== undefined) {
+      PublicSector.encode(message.public_sector, writer.uint32(42).fork()).ldelim();
     }
     return writer;
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Customer {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseCustomer();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.id = reader.string();
-          continue;
+          break;
         case 2:
-          if (tag !== 18) {
-            break;
-          }
-
           message.meta = Meta.decode(reader, reader.uint32());
-          continue;
+          break;
         case 3:
-          if (tag !== 26) {
-            break;
-          }
-
-          message.individual_user = IndividualUser.decode(reader, reader.uint32());
-          continue;
+          message.private = Private.decode(reader, reader.uint32());
+          break;
         case 4:
-          if (tag !== 34) {
-            break;
-          }
-
-          message.org_user = OrgUser.decode(reader, reader.uint32());
-          continue;
+          message.commercial = Commercial.decode(reader, reader.uint32());
+          break;
         case 5:
-          if (tag !== 42) {
-            break;
-          }
-
-          message.guest = Guest.decode(reader, reader.uint32());
-          continue;
+          message.public_sector = PublicSector.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -391,9 +330,9 @@ export const Customer = {
     return {
       id: isSet(object.id) ? String(object.id) : undefined,
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
-      individual_user: isSet(object.individual_user) ? IndividualUser.fromJSON(object.individual_user) : undefined,
-      org_user: isSet(object.org_user) ? OrgUser.fromJSON(object.org_user) : undefined,
-      guest: isSet(object.guest) ? Guest.fromJSON(object.guest) : undefined,
+      private: isSet(object.private) ? Private.fromJSON(object.private) : undefined,
+      commercial: isSet(object.commercial) ? Commercial.fromJSON(object.commercial) : undefined,
+      public_sector: isSet(object.public_sector) ? PublicSector.fromJSON(object.public_sector) : undefined,
     };
   },
 
@@ -401,10 +340,11 @@ export const Customer = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
-    message.individual_user !== undefined &&
-      (obj.individual_user = message.individual_user ? IndividualUser.toJSON(message.individual_user) : undefined);
-    message.org_user !== undefined && (obj.org_user = message.org_user ? OrgUser.toJSON(message.org_user) : undefined);
-    message.guest !== undefined && (obj.guest = message.guest ? Guest.toJSON(message.guest) : undefined);
+    message.private !== undefined && (obj.private = message.private ? Private.toJSON(message.private) : undefined);
+    message.commercial !== undefined &&
+      (obj.commercial = message.commercial ? Commercial.toJSON(message.commercial) : undefined);
+    message.public_sector !== undefined &&
+      (obj.public_sector = message.public_sector ? PublicSector.toJSON(message.public_sector) : undefined);
     return obj;
   },
 
@@ -416,86 +356,67 @@ export const Customer = {
     const message = createBaseCustomer();
     message.id = object.id ?? undefined;
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
-    message.individual_user = (object.individual_user !== undefined && object.individual_user !== null)
-      ? IndividualUser.fromPartial(object.individual_user)
+    message.private = (object.private !== undefined && object.private !== null)
+      ? Private.fromPartial(object.private)
       : undefined;
-    message.org_user = (object.org_user !== undefined && object.org_user !== null)
-      ? OrgUser.fromPartial(object.org_user)
+    message.commercial = (object.commercial !== undefined && object.commercial !== null)
+      ? Commercial.fromPartial(object.commercial)
       : undefined;
-    message.guest = (object.guest !== undefined && object.guest !== null) ? Guest.fromPartial(object.guest) : undefined;
+    message.public_sector = (object.public_sector !== undefined && object.public_sector !== null)
+      ? PublicSector.fromPartial(object.public_sector)
+      : undefined;
     return message;
   },
 };
 
-function createBaseIndividualUser(): IndividualUser {
-  return { user_id: undefined, address_id: undefined, contact_point_ids: [] };
+function createBasePrivate(): Private {
+  return { user_id: undefined, contact_point_ids: [] };
 }
 
-export const IndividualUser = {
-  encode(message: IndividualUser, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const Private = {
+  encode(message: Private, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.user_id !== undefined) {
       writer.uint32(10).string(message.user_id);
     }
-    if (message.address_id !== undefined) {
-      writer.uint32(18).string(message.address_id);
-    }
     for (const v of message.contact_point_ids) {
-      writer.uint32(26).string(v!);
+      writer.uint32(18).string(v!);
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): IndividualUser {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): Private {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseIndividualUser();
+    const message = createBasePrivate();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.user_id = reader.string();
-          continue;
+          break;
         case 2:
-          if (tag !== 18) {
-            break;
-          }
-
-          message.address_id = reader.string();
-          continue;
-        case 3:
-          if (tag !== 26) {
-            break;
-          }
-
           message.contact_point_ids.push(reader.string());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
 
-  fromJSON(object: any): IndividualUser {
+  fromJSON(object: any): Private {
     return {
       user_id: isSet(object.user_id) ? String(object.user_id) : undefined,
-      address_id: isSet(object.address_id) ? String(object.address_id) : undefined,
       contact_point_ids: Array.isArray(object?.contact_point_ids)
         ? object.contact_point_ids.map((e: any) => String(e))
         : [],
     };
   },
 
-  toJSON(message: IndividualUser): unknown {
+  toJSON(message: Private): unknown {
     const obj: any = {};
     message.user_id !== undefined && (obj.user_id = message.user_id);
-    message.address_id !== undefined && (obj.address_id = message.address_id);
     if (message.contact_point_ids) {
       obj.contact_point_ids = message.contact_point_ids.map((e) => e);
     } else {
@@ -504,176 +425,116 @@ export const IndividualUser = {
     return obj;
   },
 
-  create(base?: DeepPartial<IndividualUser>): IndividualUser {
-    return IndividualUser.fromPartial(base ?? {});
+  create(base?: DeepPartial<Private>): Private {
+    return Private.fromPartial(base ?? {});
   },
 
-  fromPartial(object: DeepPartial<IndividualUser>): IndividualUser {
-    const message = createBaseIndividualUser();
+  fromPartial(object: DeepPartial<Private>): Private {
+    const message = createBasePrivate();
     message.user_id = object.user_id ?? undefined;
-    message.address_id = object.address_id ?? undefined;
     message.contact_point_ids = object.contact_point_ids?.map((e) => e) || [];
     return message;
   },
 };
 
-function createBaseOrgUser(): OrgUser {
-  return { user_id: undefined, organization_id: undefined };
+function createBaseCommercial(): Commercial {
+  return { organization_id: undefined };
 }
 
-export const OrgUser = {
-  encode(message: OrgUser, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.user_id !== undefined) {
-      writer.uint32(10).string(message.user_id);
-    }
+export const Commercial = {
+  encode(message: Commercial, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.organization_id !== undefined) {
-      writer.uint32(18).string(message.organization_id);
+      writer.uint32(10).string(message.organization_id);
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): OrgUser {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): Commercial {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseOrgUser();
+    const message = createBaseCommercial();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
-          message.user_id = reader.string();
-          continue;
-        case 2:
-          if (tag !== 18) {
-            break;
-          }
-
           message.organization_id = reader.string();
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
 
-  fromJSON(object: any): OrgUser {
-    return {
-      user_id: isSet(object.user_id) ? String(object.user_id) : undefined,
-      organization_id: isSet(object.organization_id) ? String(object.organization_id) : undefined,
-    };
+  fromJSON(object: any): Commercial {
+    return { organization_id: isSet(object.organization_id) ? String(object.organization_id) : undefined };
   },
 
-  toJSON(message: OrgUser): unknown {
+  toJSON(message: Commercial): unknown {
     const obj: any = {};
-    message.user_id !== undefined && (obj.user_id = message.user_id);
     message.organization_id !== undefined && (obj.organization_id = message.organization_id);
     return obj;
   },
 
-  create(base?: DeepPartial<OrgUser>): OrgUser {
-    return OrgUser.fromPartial(base ?? {});
+  create(base?: DeepPartial<Commercial>): Commercial {
+    return Commercial.fromPartial(base ?? {});
   },
 
-  fromPartial(object: DeepPartial<OrgUser>): OrgUser {
-    const message = createBaseOrgUser();
-    message.user_id = object.user_id ?? undefined;
+  fromPartial(object: DeepPartial<Commercial>): Commercial {
+    const message = createBaseCommercial();
     message.organization_id = object.organization_id ?? undefined;
     return message;
   },
 };
 
-function createBaseGuest(): Guest {
-  return { guest: false, address_id: undefined, contact_point_ids: [] };
+function createBasePublicSector(): PublicSector {
+  return { organization_id: undefined };
 }
 
-export const Guest = {
-  encode(message: Guest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.guest === true) {
-      writer.uint32(8).bool(message.guest);
-    }
-    if (message.address_id !== undefined) {
-      writer.uint32(18).string(message.address_id);
-    }
-    for (const v of message.contact_point_ids) {
-      writer.uint32(26).string(v!);
+export const PublicSector = {
+  encode(message: PublicSector, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.organization_id !== undefined) {
+      writer.uint32(10).string(message.organization_id);
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): Guest {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): PublicSector {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGuest();
+    const message = createBasePublicSector();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 8) {
-            break;
-          }
-
-          message.guest = reader.bool();
-          continue;
-        case 2:
-          if (tag !== 18) {
-            break;
-          }
-
-          message.address_id = reader.string();
-          continue;
-        case 3:
-          if (tag !== 26) {
-            break;
-          }
-
-          message.contact_point_ids.push(reader.string());
-          continue;
+          message.organization_id = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
 
-  fromJSON(object: any): Guest {
-    return {
-      guest: isSet(object.guest) ? Boolean(object.guest) : false,
-      address_id: isSet(object.address_id) ? String(object.address_id) : undefined,
-      contact_point_ids: Array.isArray(object?.contact_point_ids)
-        ? object.contact_point_ids.map((e: any) => String(e))
-        : [],
-    };
+  fromJSON(object: any): PublicSector {
+    return { organization_id: isSet(object.organization_id) ? String(object.organization_id) : undefined };
   },
 
-  toJSON(message: Guest): unknown {
+  toJSON(message: PublicSector): unknown {
     const obj: any = {};
-    message.guest !== undefined && (obj.guest = message.guest);
-    message.address_id !== undefined && (obj.address_id = message.address_id);
-    if (message.contact_point_ids) {
-      obj.contact_point_ids = message.contact_point_ids.map((e) => e);
-    } else {
-      obj.contact_point_ids = [];
-    }
+    message.organization_id !== undefined && (obj.organization_id = message.organization_id);
     return obj;
   },
 
-  create(base?: DeepPartial<Guest>): Guest {
-    return Guest.fromPartial(base ?? {});
+  create(base?: DeepPartial<PublicSector>): PublicSector {
+    return PublicSector.fromPartial(base ?? {});
   },
 
-  fromPartial(object: DeepPartial<Guest>): Guest {
-    const message = createBaseGuest();
-    message.guest = object.guest ?? false;
-    message.address_id = object.address_id ?? undefined;
-    message.contact_point_ids = object.contact_point_ids?.map((e) => e) || [];
+  fromPartial(object: DeepPartial<PublicSector>): PublicSector {
+    const message = createBasePublicSector();
+    message.organization_id = object.organization_id ?? undefined;
     return message;
   },
 };
@@ -690,7 +551,7 @@ export const CustomerServiceDefinition = {
       requestStream: false,
       responseType: CustomerListResponse,
       responseStream: false,
-      options: { _unknownFields: { 248008: [Buffer.from([1])] } },
+      options: {},
     },
     create: {
       name: "Create",
@@ -775,7 +636,6 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/status.proto",
       "io/restorecommerce/options.proto",
       "io/restorecommerce/user.proto",
-      "io/restorecommerce/address.proto",
       "io/restorecommerce/contact_point.proto",
       "io/restorecommerce/organization.proto",
     ],
@@ -937,39 +797,39 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "individual_user",
+        "name": "private",
         "number": 3,
         "label": 1,
         "type": 11,
-        "typeName": ".io.restorecommerce.customer.IndividualUser",
+        "typeName": ".io.restorecommerce.customer.Private",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "individualUser",
+        "jsonName": "private",
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "org_user",
+        "name": "commercial",
         "number": 4,
         "label": 1,
         "type": 11,
-        "typeName": ".io.restorecommerce.customer.OrgUser",
+        "typeName": ".io.restorecommerce.customer.Commercial",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "orgUser",
+        "jsonName": "commercial",
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "guest",
+        "name": "public_sector",
         "number": 5,
         "label": 1,
         "type": 11,
-        "typeName": ".io.restorecommerce.customer.Guest",
+        "typeName": ".io.restorecommerce.customer.PublicSector",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "guest",
+        "jsonName": "publicSector",
         "options": undefined,
         "proto3Optional": false,
       }],
@@ -977,7 +837,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [{ "name": "customer", "options": undefined }, { "name": "_id", "options": undefined }, {
+      "oneofDecl": [{ "name": "type", "options": undefined }, { "name": "_id", "options": undefined }, {
         "name": "_meta",
         "options": undefined,
       }],
@@ -985,7 +845,7 @@ export const protoMetadata: ProtoMetadata = {
       "reservedRange": [],
       "reservedName": [],
     }, {
-      "name": "IndividualUser",
+      "name": "Private",
       "field": [{
         "name": "user_id",
         "number": 1,
@@ -1007,28 +867,8 @@ export const protoMetadata: ProtoMetadata = {
         },
         "proto3Optional": true,
       }, {
-        "name": "address_id",
-        "number": 2,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 1,
-        "jsonName": "addressId",
-        "options": {
-          "ctype": 0,
-          "packed": false,
-          "jstype": 0,
-          "lazy": false,
-          "deprecated": false,
-          "weak": false,
-          "uninterpretedOption": [],
-        },
-        "proto3Optional": true,
-      }, {
         "name": "contact_point_ids",
-        "number": 3,
+        "number": 2,
         "label": 3,
         "type": 9,
         "typeName": "",
@@ -1051,14 +891,14 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [{ "name": "_user_id", "options": undefined }, { "name": "_address_id", "options": undefined }],
+      "oneofDecl": [{ "name": "_user_id", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
     }, {
-      "name": "OrgUser",
+      "name": "Commercial",
       "field": [{
-        "name": "user_id",
+        "name": "organization_id",
         "number": 1,
         "label": 1,
         "type": 9,
@@ -1066,26 +906,6 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "userId",
-        "options": {
-          "ctype": 0,
-          "packed": false,
-          "jstype": 0,
-          "lazy": false,
-          "deprecated": false,
-          "weak": false,
-          "uninterpretedOption": [],
-        },
-        "proto3Optional": true,
-      }, {
-        "name": "organization_id",
-        "number": 2,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 1,
         "jsonName": "organizationId",
         "options": {
           "ctype": 0,
@@ -1102,34 +922,22 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [{ "name": "_user_id", "options": undefined }, { "name": "_organization_id", "options": undefined }],
+      "oneofDecl": [{ "name": "_organization_id", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
     }, {
-      "name": "Guest",
+      "name": "PublicSector",
       "field": [{
-        "name": "guest",
+        "name": "organization_id",
         "number": 1,
-        "label": 1,
-        "type": 8,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "guest",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "address_id",
-        "number": 2,
         "label": 1,
         "type": 9,
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "addressId",
+        "jsonName": "organizationId",
         "options": {
           "ctype": 0,
           "packed": false,
@@ -1140,32 +948,12 @@ export const protoMetadata: ProtoMetadata = {
           "uninterpretedOption": [],
         },
         "proto3Optional": true,
-      }, {
-        "name": "contact_point_ids",
-        "number": 3,
-        "label": 3,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "contactPointIds",
-        "options": {
-          "ctype": 0,
-          "packed": false,
-          "jstype": 0,
-          "lazy": false,
-          "deprecated": false,
-          "weak": false,
-          "uninterpretedOption": [],
-        },
-        "proto3Optional": false,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [{ "name": "_address_id", "options": undefined }],
+      "oneofDecl": [{ "name": "_organization_id", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1222,7 +1010,7 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0],
-        "span": [19, 0, 27, 1],
+        "span": [18, 0, 26, 1],
         "leadingComments": "\nMicroservice definition.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
@@ -1235,9 +1023,9 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.customer.CustomerListResponse": CustomerListResponse,
     ".io.restorecommerce.customer.CustomerResponse": CustomerResponse,
     ".io.restorecommerce.customer.Customer": Customer,
-    ".io.restorecommerce.customer.IndividualUser": IndividualUser,
-    ".io.restorecommerce.customer.OrgUser": OrgUser,
-    ".io.restorecommerce.customer.Guest": Guest,
+    ".io.restorecommerce.customer.Private": Private,
+    ".io.restorecommerce.customer.Commercial": Commercial,
+    ".io.restorecommerce.customer.PublicSector": PublicSector,
   },
   dependencies: [
     protoMetadata1,
@@ -1248,23 +1036,14 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata6,
     protoMetadata7,
     protoMetadata8,
-    protoMetadata9,
   ],
   options: {
     messages: {
-      "IndividualUser": {
+      "Private": {
         fields: {
           "user_id": {
             "resolver": Resolver.decode(
               Buffer.from("Ch0uaW8ucmVzdG9yZWNvbW1lcmNlLnVzZXIuVXNlchIIaWRlbnRpdHkaBHVzZXIiBFJlYWQqBHVzZXI=", "base64"),
-            ),
-          },
-          "address_id": {
-            "resolver": Resolver.decode(
-              Buffer.from(
-                "CiMuaW8ucmVzdG9yZWNvbW1lcmNlLmFkZHJlc3MuQWRkcmVzcxILbWFzdGVyX2RhdGEaB2FkZHJlc3MiBFJlYWQqB2FkZHJlc3M=",
-                "base64",
-              ),
             ),
           },
           "contact_point_ids": {
@@ -1277,13 +1056,8 @@ export const protoMetadata: ProtoMetadata = {
           },
         },
       },
-      "OrgUser": {
+      "Commercial": {
         fields: {
-          "user_id": {
-            "resolver": Resolver.decode(
-              Buffer.from("Ch0uaW8ucmVzdG9yZWNvbW1lcmNlLnVzZXIuVXNlchIIaWRlbnRpdHkaBHVzZXIiBFJlYWQqBHVzZXI=", "base64"),
-            ),
-          },
           "organization_id": {
             "resolver": Resolver.decode(
               Buffer.from(
@@ -1294,20 +1068,12 @@ export const protoMetadata: ProtoMetadata = {
           },
         },
       },
-      "Guest": {
+      "PublicSector": {
         fields: {
-          "address_id": {
+          "organization_id": {
             "resolver": Resolver.decode(
               Buffer.from(
-                "CiMuaW8ucmVzdG9yZWNvbW1lcmNlLmFkZHJlc3MuQWRkcmVzcxILbWFzdGVyX2RhdGEaB2FkZHJlc3MiBFJlYWQqB2FkZHJlc3M=",
-                "base64",
-              ),
-            ),
-          },
-          "contact_point_ids": {
-            "resolver": Resolver.decode(
-              Buffer.from(
-                "Ci4uaW8ucmVzdG9yZWNvbW1lcmNlLmNvbnRhY3RfcG9pbnQuQ29udGFjdFBvaW50EgttYXN0ZXJfZGF0YRoNY29udGFjdF9wb2ludCIEUmVhZCoNY29udGFjdFBvaW50cw==",
+                "Ci0uaW8ucmVzdG9yZWNvbW1lcmNlLm9yZ2FuaXphdGlvbi5Pcmdhbml6YXRpb24SC21hc3Rlcl9kYXRhGgxvcmdhbml6YXRpb24iBFJlYWQqDG9yZ2FuaXphdGlvbg==",
                 "base64",
               ),
             ),

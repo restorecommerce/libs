@@ -82,6 +82,7 @@ export interface Product {
   meta?: Meta;
   product?: IndividualProduct | undefined;
   bundle?: Bundle | undefined;
+  shopId?: string | undefined;
   active?: boolean | undefined;
   tags: string[];
   associations: Association[];
@@ -208,45 +209,28 @@ export const Association = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Association {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseAssociation();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.productId = reader.string();
-          continue;
+          break;
         case 2:
-          if (tag !== 16) {
-            break;
-          }
-
           message.type = associationTypeFromJSON(reader.int32());
-          continue;
+          break;
         case 3:
-          if (tag !== 26) {
-            break;
-          }
-
           message.tags.push(reader.string());
-          continue;
+          break;
         case 4:
-          if (tag !== 34) {
-            break;
-          }
-
           message.data = Any.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -293,6 +277,7 @@ function createBaseProduct(): Product {
     meta: undefined,
     product: undefined,
     bundle: undefined,
+    shopId: undefined,
     active: undefined,
     tags: [],
     associations: [],
@@ -314,89 +299,62 @@ export const Product = {
     if (message.bundle !== undefined) {
       Bundle.encode(message.bundle, writer.uint32(34).fork()).ldelim();
     }
+    if (message.shopId !== undefined) {
+      writer.uint32(42).string(message.shopId);
+    }
     if (message.active !== undefined) {
-      writer.uint32(40).bool(message.active);
+      writer.uint32(48).bool(message.active);
     }
     for (const v of message.tags) {
-      writer.uint32(50).string(v!);
+      writer.uint32(58).string(v!);
     }
     for (const v of message.associations) {
-      Association.encode(v!, writer.uint32(58).fork()).ldelim();
+      Association.encode(v!, writer.uint32(66).fork()).ldelim();
     }
     if (message.data !== undefined) {
-      Any.encode(message.data, writer.uint32(66).fork()).ldelim();
+      Any.encode(message.data, writer.uint32(74).fork()).ldelim();
     }
     return writer;
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Product {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseProduct();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.id = reader.string();
-          continue;
+          break;
         case 2:
-          if (tag !== 18) {
-            break;
-          }
-
           message.meta = Meta.decode(reader, reader.uint32());
-          continue;
+          break;
         case 3:
-          if (tag !== 26) {
-            break;
-          }
-
           message.product = IndividualProduct.decode(reader, reader.uint32());
-          continue;
+          break;
         case 4:
-          if (tag !== 34) {
-            break;
-          }
-
           message.bundle = Bundle.decode(reader, reader.uint32());
-          continue;
+          break;
         case 5:
-          if (tag !== 40) {
-            break;
-          }
-
-          message.active = reader.bool();
-          continue;
+          message.shopId = reader.string();
+          break;
         case 6:
-          if (tag !== 50) {
-            break;
-          }
-
-          message.tags.push(reader.string());
-          continue;
+          message.active = reader.bool();
+          break;
         case 7:
-          if (tag !== 58) {
-            break;
-          }
-
-          message.associations.push(Association.decode(reader, reader.uint32()));
-          continue;
+          message.tags.push(reader.string());
+          break;
         case 8:
-          if (tag !== 66) {
-            break;
-          }
-
+          message.associations.push(Association.decode(reader, reader.uint32()));
+          break;
+        case 9:
           message.data = Any.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -407,6 +365,7 @@ export const Product = {
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
       product: isSet(object.product) ? IndividualProduct.fromJSON(object.product) : undefined,
       bundle: isSet(object.bundle) ? Bundle.fromJSON(object.bundle) : undefined,
+      shopId: isSet(object.shopId) ? String(object.shopId) : undefined,
       active: isSet(object.active) ? Boolean(object.active) : undefined,
       tags: Array.isArray(object?.tags) ? object.tags.map((e: any) => String(e)) : [],
       associations: Array.isArray(object?.associations)
@@ -423,6 +382,7 @@ export const Product = {
     message.product !== undefined &&
       (obj.product = message.product ? IndividualProduct.toJSON(message.product) : undefined);
     message.bundle !== undefined && (obj.bundle = message.bundle ? Bundle.toJSON(message.bundle) : undefined);
+    message.shopId !== undefined && (obj.shopId = message.shopId);
     message.active !== undefined && (obj.active = message.active);
     if (message.tags) {
       obj.tags = message.tags.map((e) => e);
@@ -452,6 +412,7 @@ export const Product = {
     message.bundle = (object.bundle !== undefined && object.bundle !== null)
       ? Bundle.fromPartial(object.bundle)
       : undefined;
+    message.shopId = object.shopId ?? undefined;
     message.active = object.active ?? undefined;
     message.tags = object.tags?.map((e) => e) || [];
     message.associations = object.associations?.map((e) => Association.fromPartial(e)) || [];
@@ -511,87 +472,46 @@ export const IndividualProduct = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): IndividualProduct {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseIndividualProduct();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.name = reader.string();
-          continue;
+          break;
         case 2:
-          if (tag !== 18) {
-            break;
-          }
-
           message.description = reader.string();
-          continue;
+          break;
         case 3:
-          if (tag !== 26) {
-            break;
-          }
-
           message.manufacturerId = reader.string();
-          continue;
+          break;
         case 4:
-          if (tag !== 34) {
-            break;
-          }
-
           message.taricCode = reader.string();
-          continue;
+          break;
         case 5:
-          if (tag !== 42) {
-            break;
-          }
-
           message.prototypeId = reader.string();
-          continue;
+          break;
         case 6:
-          if (tag !== 50) {
-            break;
-          }
-
           message.categoryId = reader.string();
-          continue;
+          break;
         case 7:
-          if (tag !== 58) {
-            break;
-          }
-
           message.taxIds.push(reader.string());
-          continue;
+          break;
         case 8:
-          if (tag !== 66) {
-            break;
-          }
-
           message.gtin = reader.string();
-          continue;
+          break;
         case 9:
-          if (tag !== 74) {
-            break;
-          }
-
           message.physical = PhysicalProduct.decode(reader, reader.uint32());
-          continue;
+          break;
         case 10:
-          if (tag !== 82) {
-            break;
-          }
-
           message.virtual = VirtualProduct.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -669,24 +589,19 @@ export const PhysicalProduct = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): PhysicalProduct {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePhysicalProduct();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.variants.push(PhysicalVariant.decode(reader, reader.uint32()));
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -731,24 +646,19 @@ export const VirtualProduct = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): VirtualProduct {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseVirtualProduct();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.variants.push(VirtualVariant.decode(reader, reader.uint32()));
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -799,38 +709,25 @@ export const ProductList = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): ProductList {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseProductList();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.items.push(Product.decode(reader, reader.uint32()));
-          continue;
+          break;
         case 2:
-          if (tag !== 16) {
-            break;
-          }
-
           message.totalCount = reader.uint32();
-          continue;
+          break;
         case 3:
-          if (tag !== 26) {
-            break;
-          }
-
           message.subject = Subject.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -889,38 +786,25 @@ export const ProductListResponse = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): ProductListResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseProductListResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.items.push(ProductResponse.decode(reader, reader.uint32()));
-          continue;
+          break;
         case 2:
-          if (tag !== 16) {
-            break;
-          }
-
           message.totalCount = reader.uint32();
-          continue;
+          break;
         case 3:
-          if (tag !== 26) {
-            break;
-          }
-
           message.operationStatus = OperationStatus.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -977,31 +861,22 @@ export const ProductResponse = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): ProductResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseProductResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.payload = Product.decode(reader, reader.uint32());
-          continue;
+          break;
         case 3:
-          if (tag !== 26) {
-            break;
-          }
-
           message.status = Status.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -1055,38 +930,25 @@ export const Package = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Package {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePackage();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.sizeInCm = BoundingBox3D.decode(reader, reader.uint32());
-          continue;
+          break;
         case 2:
-          if (tag !== 17) {
-            break;
-          }
-
           message.weightInKg = reader.double();
-          continue;
+          break;
         case 3:
-          if (tag !== 24) {
-            break;
-          }
-
           message.rotatable = reader.bool();
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -1186,108 +1048,55 @@ export const PhysicalVariant = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): PhysicalVariant {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBasePhysicalVariant();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.id = reader.string();
-          continue;
+          break;
         case 2:
-          if (tag !== 18) {
-            break;
-          }
-
           message.name = reader.string();
-          continue;
+          break;
         case 3:
-          if (tag !== 26) {
-            break;
-          }
-
           message.description = reader.string();
-          continue;
+          break;
         case 4:
-          if (tag !== 32) {
-            break;
-          }
-
           message.stockLevel = reader.int32();
-          continue;
+          break;
         case 5:
-          if (tag !== 41) {
-            break;
-          }
-
           message.price = reader.double();
-          continue;
+          break;
         case 6:
-          if (tag !== 48) {
-            break;
-          }
-
           message.sale = reader.bool();
-          continue;
+          break;
         case 7:
-          if (tag !== 57) {
-            break;
-          }
-
           message.salePrice = reader.double();
-          continue;
+          break;
         case 8:
-          if (tag !== 66) {
-            break;
-          }
-
           message.images.push(Image.decode(reader, reader.uint32()));
-          continue;
+          break;
         case 9:
-          if (tag !== 74) {
-            break;
-          }
-
           message.files.push(File.decode(reader, reader.uint32()));
-          continue;
+          break;
         case 10:
-          if (tag !== 82) {
-            break;
-          }
-
           message.stockKeepingUnit = reader.string();
-          continue;
+          break;
         case 11:
-          if (tag !== 90) {
-            break;
-          }
-
           message.templateVariant = reader.string();
-          continue;
+          break;
         case 12:
-          if (tag !== 98) {
-            break;
-          }
-
           message.package = Package.decode(reader, reader.uint32());
-          continue;
+          break;
         case 13:
-          if (tag !== 106) {
-            break;
-          }
-
           message.attributes.push(Attribute.decode(reader, reader.uint32()));
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -1424,101 +1233,52 @@ export const VirtualVariant = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): VirtualVariant {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseVirtualVariant();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.id = reader.string();
-          continue;
+          break;
         case 2:
-          if (tag !== 18) {
-            break;
-          }
-
           message.name = reader.string();
-          continue;
+          break;
         case 3:
-          if (tag !== 26) {
-            break;
-          }
-
           message.description = reader.string();
-          continue;
+          break;
         case 4:
-          if (tag !== 32) {
-            break;
-          }
-
           message.stockLevel = reader.int32();
-          continue;
+          break;
         case 5:
-          if (tag !== 41) {
-            break;
-          }
-
           message.price = reader.double();
-          continue;
+          break;
         case 6:
-          if (tag !== 48) {
-            break;
-          }
-
           message.sale = reader.bool();
-          continue;
+          break;
         case 7:
-          if (tag !== 57) {
-            break;
-          }
-
           message.salePrice = reader.double();
-          continue;
+          break;
         case 8:
-          if (tag !== 66) {
-            break;
-          }
-
           message.images.push(Image.decode(reader, reader.uint32()));
-          continue;
+          break;
         case 9:
-          if (tag !== 74) {
-            break;
-          }
-
           message.files.push(File.decode(reader, reader.uint32()));
-          continue;
+          break;
         case 10:
-          if (tag !== 82) {
-            break;
-          }
-
           message.stockKeepingUnit = reader.string();
-          continue;
+          break;
         case 11:
-          if (tag !== 90) {
-            break;
-          }
-
           message.templateVariant = reader.string();
-          continue;
+          break;
         case 12:
-          if (tag !== 98) {
-            break;
-          }
-
           message.attributes.push(Attribute.decode(reader, reader.uint32()));
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -1626,59 +1386,34 @@ export const Bundle = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Bundle {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseBundle();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.name = reader.string();
-          continue;
+          break;
         case 2:
-          if (tag !== 18) {
-            break;
-          }
-
           message.description = reader.string();
-          continue;
+          break;
         case 3:
-          if (tag !== 26) {
-            break;
-          }
-
           message.images.push(Image.decode(reader, reader.uint32()));
-          continue;
+          break;
         case 4:
-          if (tag !== 34) {
-            break;
-          }
-
           message.products.push(BundleProduct.decode(reader, reader.uint32()));
-          continue;
+          break;
         case 5:
-          if (tag !== 41) {
-            break;
-          }
-
           message.price = reader.double();
-          continue;
+          break;
         case 6:
-          if (tag !== 50) {
-            break;
-          }
-
           message.prePackaged = Package.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -1754,45 +1489,28 @@ export const BundleProduct = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): BundleProduct {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseBundleProduct();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.productId = reader.string();
-          continue;
+          break;
         case 2:
-          if (tag !== 18) {
-            break;
-          }
-
           message.variantId = reader.string();
-          continue;
+          break;
         case 3:
-          if (tag !== 24) {
-            break;
-          }
-
           message.quantity = reader.uint32();
-          continue;
+          break;
         case 4:
-          if (tag !== 33) {
-            break;
-          }
-
           message.taxRatio = reader.double();
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -1842,24 +1560,19 @@ export const Deleted = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Deleted {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDeleted();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.id = reader.string();
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -1896,7 +1609,7 @@ export const ProductServiceDefinition = {
       requestStream: false,
       responseType: ProductListResponse,
       responseStream: false,
-      options: { _unknownFields: { 248008: [Buffer.from([1])] } },
+      options: {},
     },
     create: {
       name: "Create",
@@ -2107,20 +1820,40 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "active",
+        "name": "shop_id",
         "number": 5,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 2,
+        "jsonName": "shopId",
+        "options": {
+          "ctype": 0,
+          "packed": false,
+          "jstype": 0,
+          "lazy": false,
+          "deprecated": false,
+          "weak": false,
+          "uninterpretedOption": [],
+        },
+        "proto3Optional": true,
+      }, {
+        "name": "active",
+        "number": 6,
         "label": 1,
         "type": 8,
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 2,
+        "oneofIndex": 3,
         "jsonName": "active",
         "options": undefined,
         "proto3Optional": true,
       }, {
         "name": "tags",
-        "number": 6,
+        "number": 7,
         "label": 3,
         "type": 9,
         "typeName": "",
@@ -2132,7 +1865,7 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": false,
       }, {
         "name": "associations",
-        "number": 7,
+        "number": 8,
         "label": 3,
         "type": 11,
         "typeName": ".io.restorecommerce.product.Association",
@@ -2144,7 +1877,7 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": false,
       }, {
         "name": "data",
-        "number": 8,
+        "number": 9,
         "label": 1,
         "type": 11,
         "typeName": ".google.protobuf.Any",
@@ -2160,9 +1893,9 @@ export const protoMetadata: ProtoMetadata = {
       "enumType": [],
       "extensionRange": [],
       "oneofDecl": [{ "name": "product_type", "options": undefined }, { "name": "_id", "options": undefined }, {
-        "name": "_active",
+        "name": "_shop_id",
         "options": undefined,
-      }],
+      }, { "name": "_active", "options": undefined }],
       "options": {
         "messageSetWireFormat": false,
         "noStandardDescriptorAccessor": false,
@@ -3146,13 +2879,13 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1],
-        "span": [50, 0, 69, 1],
+        "span": [50, 0, 78, 1],
         "leadingComments": " Product resource entity\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 12, 2, 3],
-        "span": [195, 2, 32],
+        "span": [204, 2, 32],
         "leadingComments": "",
         "trailingComments": "Discount in relation to the bundle price\n",
         "leadingDetachedComments": [],
@@ -3212,6 +2945,13 @@ export const protoMetadata: ProtoMetadata = {
               "base64",
             ),
           ),
+        },
+        fields: {
+          "shop_id": {
+            "resolver": Resolver.decode(
+              Buffer.from("Ch0uaW8ucmVzdG9yZWNvbW1lcmNlLnNob3AuU2hvcBIIcmVzb3VyY2UaBHNob3AiBFJlYWQqBHNob3A=", "base64"),
+            ),
+          },
         },
       },
       "IndividualProduct": {

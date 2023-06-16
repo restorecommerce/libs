@@ -2,16 +2,114 @@
 import type { CallContext, CallOptions } from "nice-grpc-common";
 import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import { Any, protoMetadata as protoMetadata5 } from "../../google/protobuf/any";
-import { protoMetadata as protoMetadata4, Subject } from "./auth";
-import { protoMetadata as protoMetadata8 } from "./customer";
-import { Meta, protoMetadata as protoMetadata2 } from "./meta";
-import { protoMetadata as protoMetadata7, Resolver } from "./options";
-import { Organization, protoMetadata as protoMetadata3 } from "./organization";
-import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata1, ReadRequest } from "./resource_base";
-import { OperationStatus, protoMetadata as protoMetadata6, Status } from "./status";
+import { Any, protoMetadata as protoMetadata1 } from "../../google/protobuf/any";
+import { BillingAddress, protoMetadata as protoMetadata8 } from "./address";
+import { protoMetadata as protoMetadata5, Subject } from "./auth";
+import { protoMetadata as protoMetadata12 } from "./customer";
+import { File, protoMetadata as protoMetadata10 } from "./file";
+import { Meta, protoMetadata as protoMetadata3 } from "./meta";
+import { KafkaSubscription, protoMetadata as protoMetadata7, Resolver } from "./options";
+import { protoMetadata as protoMetadata4 } from "./organization";
+import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata2, ReadRequest } from "./resource_base";
+import { protoMetadata as protoMetadata13 } from "./shop";
+import { OperationStatus, protoMetadata as protoMetadata6, Status, StatusListResponse } from "./status";
+import { Amount, protoMetadata as protoMetadata9 } from "./tax";
+import { protoMetadata as protoMetadata11 } from "./user";
 
 export const protobufPackage = "io.restorecommerce.invoice";
+
+export enum State {
+  FAILED = "FAILED",
+  INVALID = "INVALID",
+  CREATED = "CREATED",
+  RENDERED = "RENDERED",
+  SENT = "SENT",
+  PAYED = "PAYED",
+  WITHDRAWN = "WITHDRAWN",
+  CANCELLED = "CANCELLED",
+  UNRECOGNIZED = "UNRECOGNIZED",
+}
+
+export function stateFromJSON(object: any): State {
+  switch (object) {
+    case 0:
+    case "FAILED":
+      return State.FAILED;
+    case 1:
+    case "INVALID":
+      return State.INVALID;
+    case 2:
+    case "CREATED":
+      return State.CREATED;
+    case 3:
+    case "RENDERED":
+      return State.RENDERED;
+    case 4:
+    case "SENT":
+      return State.SENT;
+    case 5:
+    case "PAYED":
+      return State.PAYED;
+    case 6:
+    case "WITHDRAWN":
+      return State.WITHDRAWN;
+    case 7:
+    case "CANCELLED":
+      return State.CANCELLED;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return State.UNRECOGNIZED;
+  }
+}
+
+export function stateToJSON(object: State): string {
+  switch (object) {
+    case State.FAILED:
+      return "FAILED";
+    case State.INVALID:
+      return "INVALID";
+    case State.CREATED:
+      return "CREATED";
+    case State.RENDERED:
+      return "RENDERED";
+    case State.SENT:
+      return "SENT";
+    case State.PAYED:
+      return "PAYED";
+    case State.WITHDRAWN:
+      return "WITHDRAWN";
+    case State.CANCELLED:
+      return "CANCELLED";
+    case State.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
+
+export function stateToNumber(object: State): number {
+  switch (object) {
+    case State.FAILED:
+      return 0;
+    case State.INVALID:
+      return 1;
+    case State.CREATED:
+      return 2;
+    case State.RENDERED:
+      return 3;
+    case State.SENT:
+      return 4;
+    case State.PAYED:
+      return 5;
+    case State.WITHDRAWN:
+      return 6;
+    case State.CANCELLED:
+      return 7;
+    case State.UNRECOGNIZED:
+    default:
+      return -1;
+  }
+}
 
 export interface RequestInvoiceNumber {
   context?: Any;
@@ -19,14 +117,13 @@ export interface RequestInvoiceNumber {
 }
 
 export interface InvoiceNumberResponse {
-  invoice_no: string;
+  invoice_number: string;
 }
 
 export interface Deleted {
   id: string;
 }
 
-/** For multiple invoices */
 export interface InvoiceList {
   items: Invoice[];
   total_count?: number | undefined;
@@ -44,43 +141,53 @@ export interface InvoiceResponse {
   status?: Status;
 }
 
-/** A simple invoice. */
+export interface InvoiceNotification {
+  id?: string | undefined;
+  channel_ids: string[];
+  options?: Any | undefined;
+  subject?: Subject | undefined;
+}
+
+export interface InvoiceNotificationList {
+  items: InvoiceNotification[];
+  total_count?: number | undefined;
+  subject?: Subject;
+}
+
+/** The Invoice recource, stored in DB. */
 export interface Invoice {
+  /** invoice_number */
   id?: string | undefined;
-  meta?: Meta | undefined;
-  timestamp?: string | undefined;
-  customer_id?: string | undefined;
-  payment_status?: string | undefined;
-  total_amount?: number | undefined;
-  net_amount?:
-    | number
+  meta?:
+    | Meta
     | undefined;
-  /** difference between net and total */
-  vat_amount?: number | undefined;
-  document?: string | undefined;
-  invoice_number?: string | undefined;
-  customer_remark?: string | undefined;
-}
-
-/** List of Invoice Positions data */
-export interface InvoicesPositionsData {
-  invoice_positions: InvoicePositions[];
-}
-
-export interface InvoicePositions {
-  /** contract or customer identifier */
-  id?: string | undefined;
-  invoice_positions: InvoicePosition[];
-  recipient_customer?: RecipientCustomer | undefined;
-  recipient_billing_address?: BillingAddress | undefined;
-  sender_billing_address?: BillingAddress | undefined;
-  recipient_organization?: Organization | undefined;
-  sender_organization?: Organization | undefined;
+  /**
+   * A forigner_key using the following pattern: `${collection}/${id}`.
+   * most likly an order_id or fulfillment_id.
+   */
+  reference_id?: string | undefined;
+  user_id?:
+    | string
+    | undefined;
+  /** customer_number ref. to recipent orga */
+  customer_id?:
+    | string
+    | undefined;
+  /** shop_number --- ref. to sender orga */
+  shop_id?: string | undefined;
+  timestamp?: number | undefined;
+  state?: State | undefined;
+  sender?: BillingAddress | undefined;
+  recipient?: BillingAddress | undefined;
+  positions: Position[];
+  total_amounts: Amount[];
+  /** is there no better type for that? */
   payment_method_details?:
     | Any
     | undefined;
-  /** optional invoice number if not it will be generated by service */
-  invoice_no?:
+  /** url to rendered PDFs */
+  documents: File[];
+  customer_remark?:
     | string
     | undefined;
   /** value performance from date */
@@ -91,56 +198,35 @@ export interface InvoicePositions {
   to_date?: number | undefined;
 }
 
-export interface RecipientCustomer {
-  /** customer id - used to store the resource in DB */
-  id?:
-    | string
-    | undefined;
-  /** displayed in invoice */
-  customer_number?: string | undefined;
+export interface Position {
+  id?: string | undefined;
+  invoice_rows: Row[];
+  /** repeated in case of multiple currencies? */
+  amounts: Amount[];
 }
 
-export interface BillingAddress {
-  email?: string | undefined;
-  website?: string | undefined;
-  street?: string | undefined;
-  building_number?: string | undefined;
-  postcode?: string | undefined;
-  region?: string | undefined;
-  country_name?: string | undefined;
-  telephone?: string | undefined;
-  timezone?: string | undefined;
-  economic_area?: string | undefined;
-  locality?: string | undefined;
-  organization_name?: string | undefined;
-}
-
-export interface InvoicePosition {
-  currency?: string | undefined;
-  invoiceRows: InvoiceRow[];
-  totalPrice?: InvoicePrice | undefined;
-}
-
-export interface InvoiceRow {
-  product?: string | undefined;
-  pricePerUnit?: number | undefined;
+export interface Row {
+  id?: string | undefined;
+  product?: ProductEntry | undefined;
+  manual?: ManualEntry | undefined;
+  unit_price?: number | undefined;
   quantity?: number | undefined;
-  vat?: string | undefined;
   amount?:
-    | number
+    | Amount
     | undefined;
   /** if there is any contract associated with product */
   contract_start_date?: number | undefined;
 }
 
-export interface InvoicePrice {
-  gross?: number | undefined;
-  net?: number | undefined;
+export interface ProductEntry {
+  product_id?: string | undefined;
+  variant_id?: string | undefined;
 }
 
-export interface TriggerInvoices {
-  /** list of id referring to contract_ids or customer_ids */
-  ids: string[];
+export interface ManualEntry {
+  article_number?: string | undefined;
+  name?: string | undefined;
+  descritpion?: string | undefined;
 }
 
 function createBaseRequestInvoiceNumber(): RequestInvoiceNumber {
@@ -159,31 +245,22 @@ export const RequestInvoiceNumber = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): RequestInvoiceNumber {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseRequestInvoiceNumber();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.context = Any.decode(reader, reader.uint32());
-          continue;
+          break;
         case 3:
-          if (tag !== 26) {
-            break;
-          }
-
           message.subject = Subject.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -219,47 +296,42 @@ export const RequestInvoiceNumber = {
 };
 
 function createBaseInvoiceNumberResponse(): InvoiceNumberResponse {
-  return { invoice_no: "" };
+  return { invoice_number: "" };
 }
 
 export const InvoiceNumberResponse = {
   encode(message: InvoiceNumberResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.invoice_no !== "") {
-      writer.uint32(10).string(message.invoice_no);
+    if (message.invoice_number !== "") {
+      writer.uint32(10).string(message.invoice_number);
     }
     return writer;
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): InvoiceNumberResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseInvoiceNumberResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
-          message.invoice_no = reader.string();
-          continue;
+          message.invoice_number = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
 
   fromJSON(object: any): InvoiceNumberResponse {
-    return { invoice_no: isSet(object.invoice_no) ? String(object.invoice_no) : "" };
+    return { invoice_number: isSet(object.invoice_number) ? String(object.invoice_number) : "" };
   },
 
   toJSON(message: InvoiceNumberResponse): unknown {
     const obj: any = {};
-    message.invoice_no !== undefined && (obj.invoice_no = message.invoice_no);
+    message.invoice_number !== undefined && (obj.invoice_number = message.invoice_number);
     return obj;
   },
 
@@ -269,7 +341,7 @@ export const InvoiceNumberResponse = {
 
   fromPartial(object: DeepPartial<InvoiceNumberResponse>): InvoiceNumberResponse {
     const message = createBaseInvoiceNumberResponse();
-    message.invoice_no = object.invoice_no ?? "";
+    message.invoice_number = object.invoice_number ?? "";
     return message;
   },
 };
@@ -287,24 +359,19 @@ export const Deleted = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Deleted {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDeleted();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.id = reader.string();
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -349,38 +416,25 @@ export const InvoiceList = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): InvoiceList {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseInvoiceList();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.items.push(Invoice.decode(reader, reader.uint32()));
-          continue;
+          break;
         case 2:
-          if (tag !== 16) {
-            break;
-          }
-
           message.total_count = reader.uint32();
-          continue;
+          break;
         case 3:
-          if (tag !== 26) {
-            break;
-          }
-
           message.subject = Subject.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -439,38 +493,25 @@ export const InvoiceListResponse = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): InvoiceListResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseInvoiceListResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.items.push(InvoiceResponse.decode(reader, reader.uint32()));
-          continue;
+          break;
         case 2:
-          if (tag !== 16) {
-            break;
-          }
-
           message.total_count = reader.uint32();
-          continue;
+          break;
         case 3:
-          if (tag !== 26) {
-            break;
-          }
-
           message.operation_status = OperationStatus.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -527,31 +568,22 @@ export const InvoiceResponse = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): InvoiceResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseInvoiceResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.payload = Invoice.decode(reader, reader.uint32());
-          continue;
+          break;
         case 2:
-          if (tag !== 18) {
-            break;
-          }
-
           message.status = Status.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -586,19 +618,190 @@ export const InvoiceResponse = {
   },
 };
 
+function createBaseInvoiceNotification(): InvoiceNotification {
+  return { id: undefined, channel_ids: [], options: undefined, subject: undefined };
+}
+
+export const InvoiceNotification = {
+  encode(message: InvoiceNotification, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.id !== undefined) {
+      writer.uint32(10).string(message.id);
+    }
+    for (const v of message.channel_ids) {
+      writer.uint32(18).string(v!);
+    }
+    if (message.options !== undefined) {
+      Any.encode(message.options, writer.uint32(26).fork()).ldelim();
+    }
+    if (message.subject !== undefined) {
+      Subject.encode(message.subject, writer.uint32(34).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): InvoiceNotification {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseInvoiceNotification();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.id = reader.string();
+          break;
+        case 2:
+          message.channel_ids.push(reader.string());
+          break;
+        case 3:
+          message.options = Any.decode(reader, reader.uint32());
+          break;
+        case 4:
+          message.subject = Subject.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): InvoiceNotification {
+    return {
+      id: isSet(object.id) ? String(object.id) : undefined,
+      channel_ids: Array.isArray(object?.channel_ids) ? object.channel_ids.map((e: any) => String(e)) : [],
+      options: isSet(object.options) ? Any.fromJSON(object.options) : undefined,
+      subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
+    };
+  },
+
+  toJSON(message: InvoiceNotification): unknown {
+    const obj: any = {};
+    message.id !== undefined && (obj.id = message.id);
+    if (message.channel_ids) {
+      obj.channel_ids = message.channel_ids.map((e) => e);
+    } else {
+      obj.channel_ids = [];
+    }
+    message.options !== undefined && (obj.options = message.options ? Any.toJSON(message.options) : undefined);
+    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    return obj;
+  },
+
+  create(base?: DeepPartial<InvoiceNotification>): InvoiceNotification {
+    return InvoiceNotification.fromPartial(base ?? {});
+  },
+
+  fromPartial(object: DeepPartial<InvoiceNotification>): InvoiceNotification {
+    const message = createBaseInvoiceNotification();
+    message.id = object.id ?? undefined;
+    message.channel_ids = object.channel_ids?.map((e) => e) || [];
+    message.options = (object.options !== undefined && object.options !== null)
+      ? Any.fromPartial(object.options)
+      : undefined;
+    message.subject = (object.subject !== undefined && object.subject !== null)
+      ? Subject.fromPartial(object.subject)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseInvoiceNotificationList(): InvoiceNotificationList {
+  return { items: [], total_count: undefined, subject: undefined };
+}
+
+export const InvoiceNotificationList = {
+  encode(message: InvoiceNotificationList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    for (const v of message.items) {
+      InvoiceNotification.encode(v!, writer.uint32(10).fork()).ldelim();
+    }
+    if (message.total_count !== undefined) {
+      writer.uint32(16).uint32(message.total_count);
+    }
+    if (message.subject !== undefined) {
+      Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): InvoiceNotificationList {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseInvoiceNotificationList();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.items.push(InvoiceNotification.decode(reader, reader.uint32()));
+          break;
+        case 2:
+          message.total_count = reader.uint32();
+          break;
+        case 3:
+          message.subject = Subject.decode(reader, reader.uint32());
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): InvoiceNotificationList {
+    return {
+      items: Array.isArray(object?.items) ? object.items.map((e: any) => InvoiceNotification.fromJSON(e)) : [],
+      total_count: isSet(object.total_count) ? Number(object.total_count) : undefined,
+      subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
+    };
+  },
+
+  toJSON(message: InvoiceNotificationList): unknown {
+    const obj: any = {};
+    if (message.items) {
+      obj.items = message.items.map((e) => e ? InvoiceNotification.toJSON(e) : undefined);
+    } else {
+      obj.items = [];
+    }
+    message.total_count !== undefined && (obj.total_count = Math.round(message.total_count));
+    message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
+    return obj;
+  },
+
+  create(base?: DeepPartial<InvoiceNotificationList>): InvoiceNotificationList {
+    return InvoiceNotificationList.fromPartial(base ?? {});
+  },
+
+  fromPartial(object: DeepPartial<InvoiceNotificationList>): InvoiceNotificationList {
+    const message = createBaseInvoiceNotificationList();
+    message.items = object.items?.map((e) => InvoiceNotification.fromPartial(e)) || [];
+    message.total_count = object.total_count ?? undefined;
+    message.subject = (object.subject !== undefined && object.subject !== null)
+      ? Subject.fromPartial(object.subject)
+      : undefined;
+    return message;
+  },
+};
+
 function createBaseInvoice(): Invoice {
   return {
     id: undefined,
     meta: undefined,
-    timestamp: undefined,
+    reference_id: undefined,
+    user_id: undefined,
     customer_id: undefined,
-    payment_status: undefined,
-    total_amount: undefined,
-    net_amount: undefined,
-    vat_amount: undefined,
-    document: undefined,
-    invoice_number: undefined,
+    shop_id: undefined,
+    timestamp: undefined,
+    state: undefined,
+    sender: undefined,
+    recipient: undefined,
+    positions: [],
+    total_amounts: [],
+    payment_method_details: undefined,
+    documents: [],
     customer_remark: undefined,
+    from_date: undefined,
+    to_date: undefined,
   };
 }
 
@@ -610,125 +813,116 @@ export const Invoice = {
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
-    if (message.timestamp !== undefined) {
-      writer.uint32(34).string(message.timestamp);
+    if (message.reference_id !== undefined) {
+      writer.uint32(26).string(message.reference_id);
+    }
+    if (message.user_id !== undefined) {
+      writer.uint32(34).string(message.user_id);
     }
     if (message.customer_id !== undefined) {
       writer.uint32(42).string(message.customer_id);
     }
-    if (message.payment_status !== undefined) {
-      writer.uint32(50).string(message.payment_status);
+    if (message.shop_id !== undefined) {
+      writer.uint32(50).string(message.shop_id);
     }
-    if (message.total_amount !== undefined) {
-      writer.uint32(57).double(message.total_amount);
+    if (message.timestamp !== undefined) {
+      writer.uint32(57).double(message.timestamp);
     }
-    if (message.net_amount !== undefined) {
-      writer.uint32(65).double(message.net_amount);
+    if (message.state !== undefined) {
+      writer.uint32(64).int32(stateToNumber(message.state));
     }
-    if (message.vat_amount !== undefined) {
-      writer.uint32(73).double(message.vat_amount);
+    if (message.sender !== undefined) {
+      BillingAddress.encode(message.sender, writer.uint32(74).fork()).ldelim();
     }
-    if (message.document !== undefined) {
-      writer.uint32(82).string(message.document);
+    if (message.recipient !== undefined) {
+      BillingAddress.encode(message.recipient, writer.uint32(82).fork()).ldelim();
     }
-    if (message.invoice_number !== undefined) {
-      writer.uint32(90).string(message.invoice_number);
+    for (const v of message.positions) {
+      Position.encode(v!, writer.uint32(90).fork()).ldelim();
+    }
+    for (const v of message.total_amounts) {
+      Amount.encode(v!, writer.uint32(98).fork()).ldelim();
+    }
+    if (message.payment_method_details !== undefined) {
+      Any.encode(message.payment_method_details, writer.uint32(106).fork()).ldelim();
+    }
+    for (const v of message.documents) {
+      File.encode(v!, writer.uint32(114).fork()).ldelim();
     }
     if (message.customer_remark !== undefined) {
-      writer.uint32(98).string(message.customer_remark);
+      writer.uint32(122).string(message.customer_remark);
+    }
+    if (message.from_date !== undefined) {
+      writer.uint32(129).double(message.from_date);
+    }
+    if (message.to_date !== undefined) {
+      writer.uint32(137).double(message.to_date);
     }
     return writer;
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Invoice {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseInvoice();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.id = reader.string();
-          continue;
+          break;
         case 2:
-          if (tag !== 18) {
-            break;
-          }
-
           message.meta = Meta.decode(reader, reader.uint32());
-          continue;
+          break;
+        case 3:
+          message.reference_id = reader.string();
+          break;
         case 4:
-          if (tag !== 34) {
-            break;
-          }
-
-          message.timestamp = reader.string();
-          continue;
+          message.user_id = reader.string();
+          break;
         case 5:
-          if (tag !== 42) {
-            break;
-          }
-
           message.customer_id = reader.string();
-          continue;
+          break;
         case 6:
-          if (tag !== 50) {
-            break;
-          }
-
-          message.payment_status = reader.string();
-          continue;
+          message.shop_id = reader.string();
+          break;
         case 7:
-          if (tag !== 57) {
-            break;
-          }
-
-          message.total_amount = reader.double();
-          continue;
+          message.timestamp = reader.double();
+          break;
         case 8:
-          if (tag !== 65) {
-            break;
-          }
-
-          message.net_amount = reader.double();
-          continue;
+          message.state = stateFromJSON(reader.int32());
+          break;
         case 9:
-          if (tag !== 73) {
-            break;
-          }
-
-          message.vat_amount = reader.double();
-          continue;
+          message.sender = BillingAddress.decode(reader, reader.uint32());
+          break;
         case 10:
-          if (tag !== 82) {
-            break;
-          }
-
-          message.document = reader.string();
-          continue;
+          message.recipient = BillingAddress.decode(reader, reader.uint32());
+          break;
         case 11:
-          if (tag !== 90) {
-            break;
-          }
-
-          message.invoice_number = reader.string();
-          continue;
+          message.positions.push(Position.decode(reader, reader.uint32()));
+          break;
         case 12:
-          if (tag !== 98) {
-            break;
-          }
-
+          message.total_amounts.push(Amount.decode(reader, reader.uint32()));
+          break;
+        case 13:
+          message.payment_method_details = Any.decode(reader, reader.uint32());
+          break;
+        case 14:
+          message.documents.push(File.decode(reader, reader.uint32()));
+          break;
+        case 15:
           message.customer_remark = reader.string();
-          continue;
+          break;
+        case 16:
+          message.from_date = reader.double();
+          break;
+        case 17:
+          message.to_date = reader.double();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -737,15 +931,25 @@ export const Invoice = {
     return {
       id: isSet(object.id) ? String(object.id) : undefined,
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
-      timestamp: isSet(object.timestamp) ? String(object.timestamp) : undefined,
+      reference_id: isSet(object.reference_id) ? String(object.reference_id) : undefined,
+      user_id: isSet(object.user_id) ? String(object.user_id) : undefined,
       customer_id: isSet(object.customer_id) ? String(object.customer_id) : undefined,
-      payment_status: isSet(object.payment_status) ? String(object.payment_status) : undefined,
-      total_amount: isSet(object.total_amount) ? Number(object.total_amount) : undefined,
-      net_amount: isSet(object.net_amount) ? Number(object.net_amount) : undefined,
-      vat_amount: isSet(object.vat_amount) ? Number(object.vat_amount) : undefined,
-      document: isSet(object.document) ? String(object.document) : undefined,
-      invoice_number: isSet(object.invoice_number) ? String(object.invoice_number) : undefined,
+      shop_id: isSet(object.shop_id) ? String(object.shop_id) : undefined,
+      timestamp: isSet(object.timestamp) ? Number(object.timestamp) : undefined,
+      state: isSet(object.state) ? stateFromJSON(object.state) : undefined,
+      sender: isSet(object.sender) ? BillingAddress.fromJSON(object.sender) : undefined,
+      recipient: isSet(object.recipient) ? BillingAddress.fromJSON(object.recipient) : undefined,
+      positions: Array.isArray(object?.positions) ? object.positions.map((e: any) => Position.fromJSON(e)) : [],
+      total_amounts: Array.isArray(object?.total_amounts)
+        ? object.total_amounts.map((e: any) => Amount.fromJSON(e))
+        : [],
+      payment_method_details: isSet(object.payment_method_details)
+        ? Any.fromJSON(object.payment_method_details)
+        : undefined,
+      documents: Array.isArray(object?.documents) ? object.documents.map((e: any) => File.fromJSON(e)) : [],
       customer_remark: isSet(object.customer_remark) ? String(object.customer_remark) : undefined,
+      from_date: isSet(object.from_date) ? Number(object.from_date) : undefined,
+      to_date: isSet(object.to_date) ? Number(object.to_date) : undefined,
     };
   },
 
@@ -753,15 +957,36 @@ export const Invoice = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
-    message.timestamp !== undefined && (obj.timestamp = message.timestamp);
+    message.reference_id !== undefined && (obj.reference_id = message.reference_id);
+    message.user_id !== undefined && (obj.user_id = message.user_id);
     message.customer_id !== undefined && (obj.customer_id = message.customer_id);
-    message.payment_status !== undefined && (obj.payment_status = message.payment_status);
-    message.total_amount !== undefined && (obj.total_amount = message.total_amount);
-    message.net_amount !== undefined && (obj.net_amount = message.net_amount);
-    message.vat_amount !== undefined && (obj.vat_amount = message.vat_amount);
-    message.document !== undefined && (obj.document = message.document);
-    message.invoice_number !== undefined && (obj.invoice_number = message.invoice_number);
+    message.shop_id !== undefined && (obj.shop_id = message.shop_id);
+    message.timestamp !== undefined && (obj.timestamp = message.timestamp);
+    message.state !== undefined && (obj.state = message.state !== undefined ? stateToJSON(message.state) : undefined);
+    message.sender !== undefined && (obj.sender = message.sender ? BillingAddress.toJSON(message.sender) : undefined);
+    message.recipient !== undefined &&
+      (obj.recipient = message.recipient ? BillingAddress.toJSON(message.recipient) : undefined);
+    if (message.positions) {
+      obj.positions = message.positions.map((e) => e ? Position.toJSON(e) : undefined);
+    } else {
+      obj.positions = [];
+    }
+    if (message.total_amounts) {
+      obj.total_amounts = message.total_amounts.map((e) => e ? Amount.toJSON(e) : undefined);
+    } else {
+      obj.total_amounts = [];
+    }
+    message.payment_method_details !== undefined && (obj.payment_method_details = message.payment_method_details
+      ? Any.toJSON(message.payment_method_details)
+      : undefined);
+    if (message.documents) {
+      obj.documents = message.documents.map((e) => e ? File.toJSON(e) : undefined);
+    } else {
+      obj.documents = [];
+    }
     message.customer_remark !== undefined && (obj.customer_remark = message.customer_remark);
+    message.from_date !== undefined && (obj.from_date = message.from_date);
+    message.to_date !== undefined && (obj.to_date = message.to_date);
     return obj;
   },
 
@@ -773,963 +998,361 @@ export const Invoice = {
     const message = createBaseInvoice();
     message.id = object.id ?? undefined;
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
-    message.timestamp = object.timestamp ?? undefined;
+    message.reference_id = object.reference_id ?? undefined;
+    message.user_id = object.user_id ?? undefined;
     message.customer_id = object.customer_id ?? undefined;
-    message.payment_status = object.payment_status ?? undefined;
-    message.total_amount = object.total_amount ?? undefined;
-    message.net_amount = object.net_amount ?? undefined;
-    message.vat_amount = object.vat_amount ?? undefined;
-    message.document = object.document ?? undefined;
-    message.invoice_number = object.invoice_number ?? undefined;
-    message.customer_remark = object.customer_remark ?? undefined;
-    return message;
-  },
-};
-
-function createBaseInvoicesPositionsData(): InvoicesPositionsData {
-  return { invoice_positions: [] };
-}
-
-export const InvoicesPositionsData = {
-  encode(message: InvoicesPositionsData, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    for (const v of message.invoice_positions) {
-      InvoicePositions.encode(v!, writer.uint32(10).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): InvoicesPositionsData {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseInvoicesPositionsData();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 10) {
-            break;
-          }
-
-          message.invoice_positions.push(InvoicePositions.decode(reader, reader.uint32()));
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): InvoicesPositionsData {
-    return {
-      invoice_positions: Array.isArray(object?.invoice_positions)
-        ? object.invoice_positions.map((e: any) => InvoicePositions.fromJSON(e))
-        : [],
-    };
-  },
-
-  toJSON(message: InvoicesPositionsData): unknown {
-    const obj: any = {};
-    if (message.invoice_positions) {
-      obj.invoice_positions = message.invoice_positions.map((e) => e ? InvoicePositions.toJSON(e) : undefined);
-    } else {
-      obj.invoice_positions = [];
-    }
-    return obj;
-  },
-
-  create(base?: DeepPartial<InvoicesPositionsData>): InvoicesPositionsData {
-    return InvoicesPositionsData.fromPartial(base ?? {});
-  },
-
-  fromPartial(object: DeepPartial<InvoicesPositionsData>): InvoicesPositionsData {
-    const message = createBaseInvoicesPositionsData();
-    message.invoice_positions = object.invoice_positions?.map((e) => InvoicePositions.fromPartial(e)) || [];
-    return message;
-  },
-};
-
-function createBaseInvoicePositions(): InvoicePositions {
-  return {
-    id: undefined,
-    invoice_positions: [],
-    recipient_customer: undefined,
-    recipient_billing_address: undefined,
-    sender_billing_address: undefined,
-    recipient_organization: undefined,
-    sender_organization: undefined,
-    payment_method_details: undefined,
-    invoice_no: undefined,
-    from_date: undefined,
-    to_date: undefined,
-  };
-}
-
-export const InvoicePositions = {
-  encode(message: InvoicePositions, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== undefined) {
-      writer.uint32(10).string(message.id);
-    }
-    for (const v of message.invoice_positions) {
-      InvoicePosition.encode(v!, writer.uint32(18).fork()).ldelim();
-    }
-    if (message.recipient_customer !== undefined) {
-      RecipientCustomer.encode(message.recipient_customer, writer.uint32(26).fork()).ldelim();
-    }
-    if (message.recipient_billing_address !== undefined) {
-      BillingAddress.encode(message.recipient_billing_address, writer.uint32(34).fork()).ldelim();
-    }
-    if (message.sender_billing_address !== undefined) {
-      BillingAddress.encode(message.sender_billing_address, writer.uint32(42).fork()).ldelim();
-    }
-    if (message.recipient_organization !== undefined) {
-      Organization.encode(message.recipient_organization, writer.uint32(50).fork()).ldelim();
-    }
-    if (message.sender_organization !== undefined) {
-      Organization.encode(message.sender_organization, writer.uint32(58).fork()).ldelim();
-    }
-    if (message.payment_method_details !== undefined) {
-      Any.encode(message.payment_method_details, writer.uint32(66).fork()).ldelim();
-    }
-    if (message.invoice_no !== undefined) {
-      writer.uint32(74).string(message.invoice_no);
-    }
-    if (message.from_date !== undefined) {
-      writer.uint32(81).double(message.from_date);
-    }
-    if (message.to_date !== undefined) {
-      writer.uint32(89).double(message.to_date);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): InvoicePositions {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseInvoicePositions();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 10) {
-            break;
-          }
-
-          message.id = reader.string();
-          continue;
-        case 2:
-          if (tag !== 18) {
-            break;
-          }
-
-          message.invoice_positions.push(InvoicePosition.decode(reader, reader.uint32()));
-          continue;
-        case 3:
-          if (tag !== 26) {
-            break;
-          }
-
-          message.recipient_customer = RecipientCustomer.decode(reader, reader.uint32());
-          continue;
-        case 4:
-          if (tag !== 34) {
-            break;
-          }
-
-          message.recipient_billing_address = BillingAddress.decode(reader, reader.uint32());
-          continue;
-        case 5:
-          if (tag !== 42) {
-            break;
-          }
-
-          message.sender_billing_address = BillingAddress.decode(reader, reader.uint32());
-          continue;
-        case 6:
-          if (tag !== 50) {
-            break;
-          }
-
-          message.recipient_organization = Organization.decode(reader, reader.uint32());
-          continue;
-        case 7:
-          if (tag !== 58) {
-            break;
-          }
-
-          message.sender_organization = Organization.decode(reader, reader.uint32());
-          continue;
-        case 8:
-          if (tag !== 66) {
-            break;
-          }
-
-          message.payment_method_details = Any.decode(reader, reader.uint32());
-          continue;
-        case 9:
-          if (tag !== 74) {
-            break;
-          }
-
-          message.invoice_no = reader.string();
-          continue;
-        case 10:
-          if (tag !== 81) {
-            break;
-          }
-
-          message.from_date = reader.double();
-          continue;
-        case 11:
-          if (tag !== 89) {
-            break;
-          }
-
-          message.to_date = reader.double();
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): InvoicePositions {
-    return {
-      id: isSet(object.id) ? String(object.id) : undefined,
-      invoice_positions: Array.isArray(object?.invoice_positions)
-        ? object.invoice_positions.map((e: any) => InvoicePosition.fromJSON(e))
-        : [],
-      recipient_customer: isSet(object.recipient_customer)
-        ? RecipientCustomer.fromJSON(object.recipient_customer)
-        : undefined,
-      recipient_billing_address: isSet(object.recipient_billing_address)
-        ? BillingAddress.fromJSON(object.recipient_billing_address)
-        : undefined,
-      sender_billing_address: isSet(object.sender_billing_address)
-        ? BillingAddress.fromJSON(object.sender_billing_address)
-        : undefined,
-      recipient_organization: isSet(object.recipient_organization)
-        ? Organization.fromJSON(object.recipient_organization)
-        : undefined,
-      sender_organization: isSet(object.sender_organization)
-        ? Organization.fromJSON(object.sender_organization)
-        : undefined,
-      payment_method_details: isSet(object.payment_method_details)
-        ? Any.fromJSON(object.payment_method_details)
-        : undefined,
-      invoice_no: isSet(object.invoice_no) ? String(object.invoice_no) : undefined,
-      from_date: isSet(object.from_date) ? Number(object.from_date) : undefined,
-      to_date: isSet(object.to_date) ? Number(object.to_date) : undefined,
-    };
-  },
-
-  toJSON(message: InvoicePositions): unknown {
-    const obj: any = {};
-    message.id !== undefined && (obj.id = message.id);
-    if (message.invoice_positions) {
-      obj.invoice_positions = message.invoice_positions.map((e) => e ? InvoicePosition.toJSON(e) : undefined);
-    } else {
-      obj.invoice_positions = [];
-    }
-    message.recipient_customer !== undefined && (obj.recipient_customer = message.recipient_customer
-      ? RecipientCustomer.toJSON(message.recipient_customer)
-      : undefined);
-    message.recipient_billing_address !== undefined &&
-      (obj.recipient_billing_address = message.recipient_billing_address
-        ? BillingAddress.toJSON(message.recipient_billing_address)
-        : undefined);
-    message.sender_billing_address !== undefined && (obj.sender_billing_address = message.sender_billing_address
-      ? BillingAddress.toJSON(message.sender_billing_address)
-      : undefined);
-    message.recipient_organization !== undefined && (obj.recipient_organization = message.recipient_organization
-      ? Organization.toJSON(message.recipient_organization)
-      : undefined);
-    message.sender_organization !== undefined && (obj.sender_organization = message.sender_organization
-      ? Organization.toJSON(message.sender_organization)
-      : undefined);
-    message.payment_method_details !== undefined && (obj.payment_method_details = message.payment_method_details
-      ? Any.toJSON(message.payment_method_details)
-      : undefined);
-    message.invoice_no !== undefined && (obj.invoice_no = message.invoice_no);
-    message.from_date !== undefined && (obj.from_date = message.from_date);
-    message.to_date !== undefined && (obj.to_date = message.to_date);
-    return obj;
-  },
-
-  create(base?: DeepPartial<InvoicePositions>): InvoicePositions {
-    return InvoicePositions.fromPartial(base ?? {});
-  },
-
-  fromPartial(object: DeepPartial<InvoicePositions>): InvoicePositions {
-    const message = createBaseInvoicePositions();
-    message.id = object.id ?? undefined;
-    message.invoice_positions = object.invoice_positions?.map((e) => InvoicePosition.fromPartial(e)) || [];
-    message.recipient_customer = (object.recipient_customer !== undefined && object.recipient_customer !== null)
-      ? RecipientCustomer.fromPartial(object.recipient_customer)
+    message.shop_id = object.shop_id ?? undefined;
+    message.timestamp = object.timestamp ?? undefined;
+    message.state = object.state ?? undefined;
+    message.sender = (object.sender !== undefined && object.sender !== null)
+      ? BillingAddress.fromPartial(object.sender)
       : undefined;
-    message.recipient_billing_address =
-      (object.recipient_billing_address !== undefined && object.recipient_billing_address !== null)
-        ? BillingAddress.fromPartial(object.recipient_billing_address)
-        : undefined;
-    message.sender_billing_address =
-      (object.sender_billing_address !== undefined && object.sender_billing_address !== null)
-        ? BillingAddress.fromPartial(object.sender_billing_address)
-        : undefined;
-    message.recipient_organization =
-      (object.recipient_organization !== undefined && object.recipient_organization !== null)
-        ? Organization.fromPartial(object.recipient_organization)
-        : undefined;
-    message.sender_organization = (object.sender_organization !== undefined && object.sender_organization !== null)
-      ? Organization.fromPartial(object.sender_organization)
+    message.recipient = (object.recipient !== undefined && object.recipient !== null)
+      ? BillingAddress.fromPartial(object.recipient)
       : undefined;
+    message.positions = object.positions?.map((e) => Position.fromPartial(e)) || [];
+    message.total_amounts = object.total_amounts?.map((e) => Amount.fromPartial(e)) || [];
     message.payment_method_details =
       (object.payment_method_details !== undefined && object.payment_method_details !== null)
         ? Any.fromPartial(object.payment_method_details)
         : undefined;
-    message.invoice_no = object.invoice_no ?? undefined;
+    message.documents = object.documents?.map((e) => File.fromPartial(e)) || [];
+    message.customer_remark = object.customer_remark ?? undefined;
     message.from_date = object.from_date ?? undefined;
     message.to_date = object.to_date ?? undefined;
     return message;
   },
 };
 
-function createBaseRecipientCustomer(): RecipientCustomer {
-  return { id: undefined, customer_number: undefined };
+function createBasePosition(): Position {
+  return { id: undefined, invoice_rows: [], amounts: [] };
 }
 
-export const RecipientCustomer = {
-  encode(message: RecipientCustomer, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const Position = {
+  encode(message: Position, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
-    if (message.customer_number !== undefined) {
-      writer.uint32(18).string(message.customer_number);
+    for (const v of message.invoice_rows) {
+      Row.encode(v!, writer.uint32(26).fork()).ldelim();
+    }
+    for (const v of message.amounts) {
+      Amount.encode(v!, writer.uint32(42).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): RecipientCustomer {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): Position {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseRecipientCustomer();
+    const message = createBasePosition();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.id = reader.string();
-          continue;
-        case 2:
-          if (tag !== 18) {
-            break;
-          }
-
-          message.customer_number = reader.string();
-          continue;
+          break;
+        case 3:
+          message.invoice_rows.push(Row.decode(reader, reader.uint32()));
+          break;
+        case 5:
+          message.amounts.push(Amount.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
 
-  fromJSON(object: any): RecipientCustomer {
+  fromJSON(object: any): Position {
     return {
       id: isSet(object.id) ? String(object.id) : undefined,
-      customer_number: isSet(object.customer_number) ? String(object.customer_number) : undefined,
+      invoice_rows: Array.isArray(object?.invoice_rows) ? object.invoice_rows.map((e: any) => Row.fromJSON(e)) : [],
+      amounts: Array.isArray(object?.amounts) ? object.amounts.map((e: any) => Amount.fromJSON(e)) : [],
     };
   },
 
-  toJSON(message: RecipientCustomer): unknown {
+  toJSON(message: Position): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.customer_number !== undefined && (obj.customer_number = message.customer_number);
-    return obj;
-  },
-
-  create(base?: DeepPartial<RecipientCustomer>): RecipientCustomer {
-    return RecipientCustomer.fromPartial(base ?? {});
-  },
-
-  fromPartial(object: DeepPartial<RecipientCustomer>): RecipientCustomer {
-    const message = createBaseRecipientCustomer();
-    message.id = object.id ?? undefined;
-    message.customer_number = object.customer_number ?? undefined;
-    return message;
-  },
-};
-
-function createBaseBillingAddress(): BillingAddress {
-  return {
-    email: undefined,
-    website: undefined,
-    street: undefined,
-    building_number: undefined,
-    postcode: undefined,
-    region: undefined,
-    country_name: undefined,
-    telephone: undefined,
-    timezone: undefined,
-    economic_area: undefined,
-    locality: undefined,
-    organization_name: undefined,
-  };
-}
-
-export const BillingAddress = {
-  encode(message: BillingAddress, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.email !== undefined) {
-      writer.uint32(10).string(message.email);
-    }
-    if (message.website !== undefined) {
-      writer.uint32(18).string(message.website);
-    }
-    if (message.street !== undefined) {
-      writer.uint32(26).string(message.street);
-    }
-    if (message.building_number !== undefined) {
-      writer.uint32(34).string(message.building_number);
-    }
-    if (message.postcode !== undefined) {
-      writer.uint32(42).string(message.postcode);
-    }
-    if (message.region !== undefined) {
-      writer.uint32(50).string(message.region);
-    }
-    if (message.country_name !== undefined) {
-      writer.uint32(58).string(message.country_name);
-    }
-    if (message.telephone !== undefined) {
-      writer.uint32(74).string(message.telephone);
-    }
-    if (message.timezone !== undefined) {
-      writer.uint32(82).string(message.timezone);
-    }
-    if (message.economic_area !== undefined) {
-      writer.uint32(90).string(message.economic_area);
-    }
-    if (message.locality !== undefined) {
-      writer.uint32(98).string(message.locality);
-    }
-    if (message.organization_name !== undefined) {
-      writer.uint32(106).string(message.organization_name);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): BillingAddress {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseBillingAddress();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 10) {
-            break;
-          }
-
-          message.email = reader.string();
-          continue;
-        case 2:
-          if (tag !== 18) {
-            break;
-          }
-
-          message.website = reader.string();
-          continue;
-        case 3:
-          if (tag !== 26) {
-            break;
-          }
-
-          message.street = reader.string();
-          continue;
-        case 4:
-          if (tag !== 34) {
-            break;
-          }
-
-          message.building_number = reader.string();
-          continue;
-        case 5:
-          if (tag !== 42) {
-            break;
-          }
-
-          message.postcode = reader.string();
-          continue;
-        case 6:
-          if (tag !== 50) {
-            break;
-          }
-
-          message.region = reader.string();
-          continue;
-        case 7:
-          if (tag !== 58) {
-            break;
-          }
-
-          message.country_name = reader.string();
-          continue;
-        case 9:
-          if (tag !== 74) {
-            break;
-          }
-
-          message.telephone = reader.string();
-          continue;
-        case 10:
-          if (tag !== 82) {
-            break;
-          }
-
-          message.timezone = reader.string();
-          continue;
-        case 11:
-          if (tag !== 90) {
-            break;
-          }
-
-          message.economic_area = reader.string();
-          continue;
-        case 12:
-          if (tag !== 98) {
-            break;
-          }
-
-          message.locality = reader.string();
-          continue;
-        case 13:
-          if (tag !== 106) {
-            break;
-          }
-
-          message.organization_name = reader.string();
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): BillingAddress {
-    return {
-      email: isSet(object.email) ? String(object.email) : undefined,
-      website: isSet(object.website) ? String(object.website) : undefined,
-      street: isSet(object.street) ? String(object.street) : undefined,
-      building_number: isSet(object.building_number) ? String(object.building_number) : undefined,
-      postcode: isSet(object.postcode) ? String(object.postcode) : undefined,
-      region: isSet(object.region) ? String(object.region) : undefined,
-      country_name: isSet(object.country_name) ? String(object.country_name) : undefined,
-      telephone: isSet(object.telephone) ? String(object.telephone) : undefined,
-      timezone: isSet(object.timezone) ? String(object.timezone) : undefined,
-      economic_area: isSet(object.economic_area) ? String(object.economic_area) : undefined,
-      locality: isSet(object.locality) ? String(object.locality) : undefined,
-      organization_name: isSet(object.organization_name) ? String(object.organization_name) : undefined,
-    };
-  },
-
-  toJSON(message: BillingAddress): unknown {
-    const obj: any = {};
-    message.email !== undefined && (obj.email = message.email);
-    message.website !== undefined && (obj.website = message.website);
-    message.street !== undefined && (obj.street = message.street);
-    message.building_number !== undefined && (obj.building_number = message.building_number);
-    message.postcode !== undefined && (obj.postcode = message.postcode);
-    message.region !== undefined && (obj.region = message.region);
-    message.country_name !== undefined && (obj.country_name = message.country_name);
-    message.telephone !== undefined && (obj.telephone = message.telephone);
-    message.timezone !== undefined && (obj.timezone = message.timezone);
-    message.economic_area !== undefined && (obj.economic_area = message.economic_area);
-    message.locality !== undefined && (obj.locality = message.locality);
-    message.organization_name !== undefined && (obj.organization_name = message.organization_name);
-    return obj;
-  },
-
-  create(base?: DeepPartial<BillingAddress>): BillingAddress {
-    return BillingAddress.fromPartial(base ?? {});
-  },
-
-  fromPartial(object: DeepPartial<BillingAddress>): BillingAddress {
-    const message = createBaseBillingAddress();
-    message.email = object.email ?? undefined;
-    message.website = object.website ?? undefined;
-    message.street = object.street ?? undefined;
-    message.building_number = object.building_number ?? undefined;
-    message.postcode = object.postcode ?? undefined;
-    message.region = object.region ?? undefined;
-    message.country_name = object.country_name ?? undefined;
-    message.telephone = object.telephone ?? undefined;
-    message.timezone = object.timezone ?? undefined;
-    message.economic_area = object.economic_area ?? undefined;
-    message.locality = object.locality ?? undefined;
-    message.organization_name = object.organization_name ?? undefined;
-    return message;
-  },
-};
-
-function createBaseInvoicePosition(): InvoicePosition {
-  return { currency: undefined, invoiceRows: [], totalPrice: undefined };
-}
-
-export const InvoicePosition = {
-  encode(message: InvoicePosition, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.currency !== undefined) {
-      writer.uint32(10).string(message.currency);
-    }
-    for (const v of message.invoiceRows) {
-      InvoiceRow.encode(v!, writer.uint32(18).fork()).ldelim();
-    }
-    if (message.totalPrice !== undefined) {
-      InvoicePrice.encode(message.totalPrice, writer.uint32(26).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): InvoicePosition {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseInvoicePosition();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 10) {
-            break;
-          }
-
-          message.currency = reader.string();
-          continue;
-        case 2:
-          if (tag !== 18) {
-            break;
-          }
-
-          message.invoiceRows.push(InvoiceRow.decode(reader, reader.uint32()));
-          continue;
-        case 3:
-          if (tag !== 26) {
-            break;
-          }
-
-          message.totalPrice = InvoicePrice.decode(reader, reader.uint32());
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): InvoicePosition {
-    return {
-      currency: isSet(object.currency) ? String(object.currency) : undefined,
-      invoiceRows: Array.isArray(object?.invoiceRows) ? object.invoiceRows.map((e: any) => InvoiceRow.fromJSON(e)) : [],
-      totalPrice: isSet(object.totalPrice) ? InvoicePrice.fromJSON(object.totalPrice) : undefined,
-    };
-  },
-
-  toJSON(message: InvoicePosition): unknown {
-    const obj: any = {};
-    message.currency !== undefined && (obj.currency = message.currency);
-    if (message.invoiceRows) {
-      obj.invoiceRows = message.invoiceRows.map((e) => e ? InvoiceRow.toJSON(e) : undefined);
+    if (message.invoice_rows) {
+      obj.invoice_rows = message.invoice_rows.map((e) => e ? Row.toJSON(e) : undefined);
     } else {
-      obj.invoiceRows = [];
+      obj.invoice_rows = [];
     }
-    message.totalPrice !== undefined &&
-      (obj.totalPrice = message.totalPrice ? InvoicePrice.toJSON(message.totalPrice) : undefined);
+    if (message.amounts) {
+      obj.amounts = message.amounts.map((e) => e ? Amount.toJSON(e) : undefined);
+    } else {
+      obj.amounts = [];
+    }
     return obj;
   },
 
-  create(base?: DeepPartial<InvoicePosition>): InvoicePosition {
-    return InvoicePosition.fromPartial(base ?? {});
+  create(base?: DeepPartial<Position>): Position {
+    return Position.fromPartial(base ?? {});
   },
 
-  fromPartial(object: DeepPartial<InvoicePosition>): InvoicePosition {
-    const message = createBaseInvoicePosition();
-    message.currency = object.currency ?? undefined;
-    message.invoiceRows = object.invoiceRows?.map((e) => InvoiceRow.fromPartial(e)) || [];
-    message.totalPrice = (object.totalPrice !== undefined && object.totalPrice !== null)
-      ? InvoicePrice.fromPartial(object.totalPrice)
-      : undefined;
+  fromPartial(object: DeepPartial<Position>): Position {
+    const message = createBasePosition();
+    message.id = object.id ?? undefined;
+    message.invoice_rows = object.invoice_rows?.map((e) => Row.fromPartial(e)) || [];
+    message.amounts = object.amounts?.map((e) => Amount.fromPartial(e)) || [];
     return message;
   },
 };
 
-function createBaseInvoiceRow(): InvoiceRow {
+function createBaseRow(): Row {
   return {
+    id: undefined,
     product: undefined,
-    pricePerUnit: undefined,
+    manual: undefined,
+    unit_price: undefined,
     quantity: undefined,
-    vat: undefined,
     amount: undefined,
     contract_start_date: undefined,
   };
 }
 
-export const InvoiceRow = {
-  encode(message: InvoiceRow, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.product !== undefined) {
-      writer.uint32(10).string(message.product);
+export const Row = {
+  encode(message: Row, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.id !== undefined) {
+      writer.uint32(10).string(message.id);
     }
-    if (message.pricePerUnit !== undefined) {
-      writer.uint32(17).double(message.pricePerUnit);
+    if (message.product !== undefined) {
+      ProductEntry.encode(message.product, writer.uint32(18).fork()).ldelim();
+    }
+    if (message.manual !== undefined) {
+      ManualEntry.encode(message.manual, writer.uint32(26).fork()).ldelim();
+    }
+    if (message.unit_price !== undefined) {
+      writer.uint32(33).double(message.unit_price);
     }
     if (message.quantity !== undefined) {
-      writer.uint32(24).uint32(message.quantity);
-    }
-    if (message.vat !== undefined) {
-      writer.uint32(34).string(message.vat);
+      writer.uint32(40).uint32(message.quantity);
     }
     if (message.amount !== undefined) {
-      writer.uint32(41).double(message.amount);
+      Amount.encode(message.amount, writer.uint32(50).fork()).ldelim();
     }
     if (message.contract_start_date !== undefined) {
-      writer.uint32(49).double(message.contract_start_date);
+      writer.uint32(57).double(message.contract_start_date);
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): InvoiceRow {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): Row {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseInvoiceRow();
+    const message = createBaseRow();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
-          message.product = reader.string();
-          continue;
+          message.id = reader.string();
+          break;
         case 2:
-          if (tag !== 17) {
-            break;
-          }
-
-          message.pricePerUnit = reader.double();
-          continue;
+          message.product = ProductEntry.decode(reader, reader.uint32());
+          break;
         case 3:
-          if (tag !== 24) {
-            break;
-          }
-
-          message.quantity = reader.uint32();
-          continue;
+          message.manual = ManualEntry.decode(reader, reader.uint32());
+          break;
         case 4:
-          if (tag !== 34) {
-            break;
-          }
-
-          message.vat = reader.string();
-          continue;
+          message.unit_price = reader.double();
+          break;
         case 5:
-          if (tag !== 41) {
-            break;
-          }
-
-          message.amount = reader.double();
-          continue;
+          message.quantity = reader.uint32();
+          break;
         case 6:
-          if (tag !== 49) {
-            break;
-          }
-
+          message.amount = Amount.decode(reader, reader.uint32());
+          break;
+        case 7:
           message.contract_start_date = reader.double();
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
 
-  fromJSON(object: any): InvoiceRow {
+  fromJSON(object: any): Row {
     return {
-      product: isSet(object.product) ? String(object.product) : undefined,
-      pricePerUnit: isSet(object.pricePerUnit) ? Number(object.pricePerUnit) : undefined,
+      id: isSet(object.id) ? String(object.id) : undefined,
+      product: isSet(object.product) ? ProductEntry.fromJSON(object.product) : undefined,
+      manual: isSet(object.manual) ? ManualEntry.fromJSON(object.manual) : undefined,
+      unit_price: isSet(object.unit_price) ? Number(object.unit_price) : undefined,
       quantity: isSet(object.quantity) ? Number(object.quantity) : undefined,
-      vat: isSet(object.vat) ? String(object.vat) : undefined,
-      amount: isSet(object.amount) ? Number(object.amount) : undefined,
+      amount: isSet(object.amount) ? Amount.fromJSON(object.amount) : undefined,
       contract_start_date: isSet(object.contract_start_date) ? Number(object.contract_start_date) : undefined,
     };
   },
 
-  toJSON(message: InvoiceRow): unknown {
+  toJSON(message: Row): unknown {
     const obj: any = {};
-    message.product !== undefined && (obj.product = message.product);
-    message.pricePerUnit !== undefined && (obj.pricePerUnit = message.pricePerUnit);
+    message.id !== undefined && (obj.id = message.id);
+    message.product !== undefined && (obj.product = message.product ? ProductEntry.toJSON(message.product) : undefined);
+    message.manual !== undefined && (obj.manual = message.manual ? ManualEntry.toJSON(message.manual) : undefined);
+    message.unit_price !== undefined && (obj.unit_price = message.unit_price);
     message.quantity !== undefined && (obj.quantity = Math.round(message.quantity));
-    message.vat !== undefined && (obj.vat = message.vat);
-    message.amount !== undefined && (obj.amount = message.amount);
+    message.amount !== undefined && (obj.amount = message.amount ? Amount.toJSON(message.amount) : undefined);
     message.contract_start_date !== undefined && (obj.contract_start_date = message.contract_start_date);
     return obj;
   },
 
-  create(base?: DeepPartial<InvoiceRow>): InvoiceRow {
-    return InvoiceRow.fromPartial(base ?? {});
+  create(base?: DeepPartial<Row>): Row {
+    return Row.fromPartial(base ?? {});
   },
 
-  fromPartial(object: DeepPartial<InvoiceRow>): InvoiceRow {
-    const message = createBaseInvoiceRow();
-    message.product = object.product ?? undefined;
-    message.pricePerUnit = object.pricePerUnit ?? undefined;
+  fromPartial(object: DeepPartial<Row>): Row {
+    const message = createBaseRow();
+    message.id = object.id ?? undefined;
+    message.product = (object.product !== undefined && object.product !== null)
+      ? ProductEntry.fromPartial(object.product)
+      : undefined;
+    message.manual = (object.manual !== undefined && object.manual !== null)
+      ? ManualEntry.fromPartial(object.manual)
+      : undefined;
+    message.unit_price = object.unit_price ?? undefined;
     message.quantity = object.quantity ?? undefined;
-    message.vat = object.vat ?? undefined;
-    message.amount = object.amount ?? undefined;
+    message.amount = (object.amount !== undefined && object.amount !== null)
+      ? Amount.fromPartial(object.amount)
+      : undefined;
     message.contract_start_date = object.contract_start_date ?? undefined;
     return message;
   },
 };
 
-function createBaseInvoicePrice(): InvoicePrice {
-  return { gross: undefined, net: undefined };
+function createBaseProductEntry(): ProductEntry {
+  return { product_id: undefined, variant_id: undefined };
 }
 
-export const InvoicePrice = {
-  encode(message: InvoicePrice, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.gross !== undefined) {
-      writer.uint32(9).double(message.gross);
+export const ProductEntry = {
+  encode(message: ProductEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.product_id !== undefined) {
+      writer.uint32(10).string(message.product_id);
     }
-    if (message.net !== undefined) {
-      writer.uint32(17).double(message.net);
+    if (message.variant_id !== undefined) {
+      writer.uint32(18).string(message.variant_id);
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): InvoicePrice {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): ProductEntry {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseInvoicePrice();
+    const message = createBaseProductEntry();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 9) {
-            break;
-          }
-
-          message.gross = reader.double();
-          continue;
+          message.product_id = reader.string();
+          break;
         case 2:
-          if (tag !== 17) {
-            break;
-          }
-
-          message.net = reader.double();
-          continue;
+          message.variant_id = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
 
-  fromJSON(object: any): InvoicePrice {
+  fromJSON(object: any): ProductEntry {
     return {
-      gross: isSet(object.gross) ? Number(object.gross) : undefined,
-      net: isSet(object.net) ? Number(object.net) : undefined,
+      product_id: isSet(object.product_id) ? String(object.product_id) : undefined,
+      variant_id: isSet(object.variant_id) ? String(object.variant_id) : undefined,
     };
   },
 
-  toJSON(message: InvoicePrice): unknown {
+  toJSON(message: ProductEntry): unknown {
     const obj: any = {};
-    message.gross !== undefined && (obj.gross = message.gross);
-    message.net !== undefined && (obj.net = message.net);
+    message.product_id !== undefined && (obj.product_id = message.product_id);
+    message.variant_id !== undefined && (obj.variant_id = message.variant_id);
     return obj;
   },
 
-  create(base?: DeepPartial<InvoicePrice>): InvoicePrice {
-    return InvoicePrice.fromPartial(base ?? {});
+  create(base?: DeepPartial<ProductEntry>): ProductEntry {
+    return ProductEntry.fromPartial(base ?? {});
   },
 
-  fromPartial(object: DeepPartial<InvoicePrice>): InvoicePrice {
-    const message = createBaseInvoicePrice();
-    message.gross = object.gross ?? undefined;
-    message.net = object.net ?? undefined;
+  fromPartial(object: DeepPartial<ProductEntry>): ProductEntry {
+    const message = createBaseProductEntry();
+    message.product_id = object.product_id ?? undefined;
+    message.variant_id = object.variant_id ?? undefined;
     return message;
   },
 };
 
-function createBaseTriggerInvoices(): TriggerInvoices {
-  return { ids: [] };
+function createBaseManualEntry(): ManualEntry {
+  return { article_number: undefined, name: undefined, descritpion: undefined };
 }
 
-export const TriggerInvoices = {
-  encode(message: TriggerInvoices, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    for (const v of message.ids) {
-      writer.uint32(10).string(v!);
+export const ManualEntry = {
+  encode(message: ManualEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.article_number !== undefined) {
+      writer.uint32(10).string(message.article_number);
+    }
+    if (message.name !== undefined) {
+      writer.uint32(18).string(message.name);
+    }
+    if (message.descritpion !== undefined) {
+      writer.uint32(26).string(message.descritpion);
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): TriggerInvoices {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+  decode(input: _m0.Reader | Uint8Array, length?: number): ManualEntry {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseTriggerInvoices();
+    const message = createBaseManualEntry();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
-          message.ids.push(reader.string());
-          continue;
+          message.article_number = reader.string();
+          break;
+        case 2:
+          message.name = reader.string();
+          break;
+        case 3:
+          message.descritpion = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
 
-  fromJSON(object: any): TriggerInvoices {
-    return { ids: Array.isArray(object?.ids) ? object.ids.map((e: any) => String(e)) : [] };
+  fromJSON(object: any): ManualEntry {
+    return {
+      article_number: isSet(object.article_number) ? String(object.article_number) : undefined,
+      name: isSet(object.name) ? String(object.name) : undefined,
+      descritpion: isSet(object.descritpion) ? String(object.descritpion) : undefined,
+    };
   },
 
-  toJSON(message: TriggerInvoices): unknown {
+  toJSON(message: ManualEntry): unknown {
     const obj: any = {};
-    if (message.ids) {
-      obj.ids = message.ids.map((e) => e);
-    } else {
-      obj.ids = [];
-    }
+    message.article_number !== undefined && (obj.article_number = message.article_number);
+    message.name !== undefined && (obj.name = message.name);
+    message.descritpion !== undefined && (obj.descritpion = message.descritpion);
     return obj;
   },
 
-  create(base?: DeepPartial<TriggerInvoices>): TriggerInvoices {
-    return TriggerInvoices.fromPartial(base ?? {});
+  create(base?: DeepPartial<ManualEntry>): ManualEntry {
+    return ManualEntry.fromPartial(base ?? {});
   },
 
-  fromPartial(object: DeepPartial<TriggerInvoices>): TriggerInvoices {
-    const message = createBaseTriggerInvoices();
-    message.ids = object.ids?.map((e) => e) || [];
+  fromPartial(object: DeepPartial<ManualEntry>): ManualEntry {
+    const message = createBaseManualEntry();
+    message.article_number = object.article_number ?? undefined;
+    message.name = object.name ?? undefined;
+    message.descritpion = object.descritpion ?? undefined;
     return message;
   },
 };
@@ -1746,21 +1369,13 @@ export const InvoiceServiceDefinition = {
       requestStream: false,
       responseType: InvoiceListResponse,
       responseStream: false,
-      options: { _unknownFields: { 248008: [Buffer.from([1])] } },
+      options: {},
     },
     create: {
       name: "Create",
       requestType: InvoiceList,
       requestStream: false,
       responseType: InvoiceListResponse,
-      responseStream: false,
-      options: {},
-    },
-    delete: {
-      name: "Delete",
-      requestType: DeleteRequest,
-      requestStream: false,
-      responseType: DeleteResponse,
       responseStream: false,
       options: {},
     },
@@ -1780,6 +1395,32 @@ export const InvoiceServiceDefinition = {
       responseStream: false,
       options: {},
     },
+    delete: {
+      name: "Delete",
+      requestType: DeleteRequest,
+      requestStream: false,
+      responseType: DeleteResponse,
+      responseStream: false,
+      options: {},
+    },
+    /** Render invoices as PDF to ostorage. (creates if not exist, updates if id is given) */
+    render: {
+      name: "Render",
+      requestType: InvoiceList,
+      requestStream: false,
+      responseType: InvoiceListResponse,
+      responseStream: false,
+      options: {},
+    },
+    /** Triggers notification-srv (sends invoice per email for instance) */
+    send: {
+      name: "Send",
+      requestType: InvoiceNotificationList,
+      requestStream: false,
+      responseType: StatusListResponse,
+      responseStream: false,
+      options: {},
+    },
     generateInvoiceNumber: {
       name: "GenerateInvoiceNumber",
       requestType: RequestInvoiceNumber,
@@ -1794,9 +1435,16 @@ export const InvoiceServiceDefinition = {
 export interface InvoiceServiceImplementation<CallContextExt = {}> {
   read(request: ReadRequest, context: CallContext & CallContextExt): Promise<DeepPartial<InvoiceListResponse>>;
   create(request: InvoiceList, context: CallContext & CallContextExt): Promise<DeepPartial<InvoiceListResponse>>;
-  delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;
   update(request: InvoiceList, context: CallContext & CallContextExt): Promise<DeepPartial<InvoiceListResponse>>;
   upsert(request: InvoiceList, context: CallContext & CallContextExt): Promise<DeepPartial<InvoiceListResponse>>;
+  delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;
+  /** Render invoices as PDF to ostorage. (creates if not exist, updates if id is given) */
+  render(request: InvoiceList, context: CallContext & CallContextExt): Promise<DeepPartial<InvoiceListResponse>>;
+  /** Triggers notification-srv (sends invoice per email for instance) */
+  send(
+    request: InvoiceNotificationList,
+    context: CallContext & CallContextExt,
+  ): Promise<DeepPartial<StatusListResponse>>;
   generateInvoiceNumber(
     request: RequestInvoiceNumber,
     context: CallContext & CallContextExt,
@@ -1806,9 +1454,16 @@ export interface InvoiceServiceImplementation<CallContextExt = {}> {
 export interface InvoiceServiceClient<CallOptionsExt = {}> {
   read(request: DeepPartial<ReadRequest>, options?: CallOptions & CallOptionsExt): Promise<InvoiceListResponse>;
   create(request: DeepPartial<InvoiceList>, options?: CallOptions & CallOptionsExt): Promise<InvoiceListResponse>;
-  delete(request: DeepPartial<DeleteRequest>, options?: CallOptions & CallOptionsExt): Promise<DeleteResponse>;
   update(request: DeepPartial<InvoiceList>, options?: CallOptions & CallOptionsExt): Promise<InvoiceListResponse>;
   upsert(request: DeepPartial<InvoiceList>, options?: CallOptions & CallOptionsExt): Promise<InvoiceListResponse>;
+  delete(request: DeepPartial<DeleteRequest>, options?: CallOptions & CallOptionsExt): Promise<DeleteResponse>;
+  /** Render invoices as PDF to ostorage. (creates if not exist, updates if id is given) */
+  render(request: DeepPartial<InvoiceList>, options?: CallOptions & CallOptionsExt): Promise<InvoiceListResponse>;
+  /** Triggers notification-srv (sends invoice per email for instance) */
+  send(
+    request: DeepPartial<InvoiceNotificationList>,
+    options?: CallOptions & CallOptionsExt,
+  ): Promise<StatusListResponse>;
   generateInvoiceNumber(
     request: DeepPartial<RequestInvoiceNumber>,
     options?: CallOptions & CallOptionsExt,
@@ -1841,14 +1496,19 @@ export const protoMetadata: ProtoMetadata = {
     "name": "io/restorecommerce/invoice.proto",
     "package": "io.restorecommerce.invoice",
     "dependency": [
+      "google/protobuf/any.proto",
       "io/restorecommerce/resource_base.proto",
       "io/restorecommerce/meta.proto",
       "io/restorecommerce/organization.proto",
       "io/restorecommerce/auth.proto",
-      "google/protobuf/any.proto",
       "io/restorecommerce/status.proto",
       "io/restorecommerce/options.proto",
+      "io/restorecommerce/address.proto",
+      "io/restorecommerce/tax.proto",
+      "io/restorecommerce/file.proto",
+      "io/restorecommerce/user.proto",
       "io/restorecommerce/customer.proto",
+      "io/restorecommerce/shop.proto",
     ],
     "publicDependency": [],
     "weakDependency": [],
@@ -1890,7 +1550,7 @@ export const protoMetadata: ProtoMetadata = {
     }, {
       "name": "InvoiceNumberResponse",
       "field": [{
-        "name": "invoice_no",
+        "name": "invoice_number",
         "number": 1,
         "label": 1,
         "type": 9,
@@ -1898,7 +1558,7 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "invoiceNo",
+        "jsonName": "invoiceNumber",
         "options": undefined,
         "proto3Optional": false,
       }],
@@ -2063,6 +1723,115 @@ export const protoMetadata: ProtoMetadata = {
       "reservedRange": [],
       "reservedName": [],
     }, {
+      "name": "InvoiceNotification",
+      "field": [{
+        "name": "id",
+        "number": 1,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "id",
+        "options": undefined,
+        "proto3Optional": true,
+      }, {
+        "name": "channel_ids",
+        "number": 2,
+        "label": 3,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "channelIds",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "options",
+        "number": 3,
+        "label": 1,
+        "type": 11,
+        "typeName": ".google.protobuf.Any",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 1,
+        "jsonName": "options",
+        "options": undefined,
+        "proto3Optional": true,
+      }, {
+        "name": "subject",
+        "number": 4,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.auth.Subject",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 2,
+        "jsonName": "subject",
+        "options": undefined,
+        "proto3Optional": true,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [{ "name": "_id", "options": undefined }, { "name": "_options", "options": undefined }, {
+        "name": "_subject",
+        "options": undefined,
+      }],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "InvoiceNotificationList",
+      "field": [{
+        "name": "items",
+        "number": 1,
+        "label": 3,
+        "type": 11,
+        "typeName": ".io.restorecommerce.invoice.InvoiceNotification",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "items",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "total_count",
+        "number": 2,
+        "label": 1,
+        "type": 13,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "totalCount",
+        "options": undefined,
+        "proto3Optional": true,
+      }, {
+        "name": "subject",
+        "number": 3,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.auth.Subject",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "subject",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [{ "name": "_total_count", "options": undefined }],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
       "name": "Invoice",
       "field": [{
         "name": "id",
@@ -2089,16 +1858,36 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "timestamp",
-        "number": 4,
+        "name": "reference_id",
+        "number": 3,
         "label": 1,
         "type": 9,
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 2,
-        "jsonName": "timestamp",
+        "jsonName": "referenceId",
         "options": undefined,
+        "proto3Optional": true,
+      }, {
+        "name": "user_id",
+        "number": 4,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 3,
+        "jsonName": "userId",
+        "options": {
+          "ctype": 0,
+          "packed": false,
+          "jstype": 0,
+          "lazy": false,
+          "deprecated": false,
+          "weak": false,
+          "uninterpretedOption": [],
+        },
         "proto3Optional": true,
       }, {
         "name": "customer_id",
@@ -2108,7 +1897,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 3,
+        "oneofIndex": 4,
         "jsonName": "customerId",
         "options": {
           "ctype": 0,
@@ -2121,264 +1910,154 @@ export const protoMetadata: ProtoMetadata = {
         },
         "proto3Optional": true,
       }, {
-        "name": "payment_status",
+        "name": "shop_id",
         "number": 6,
         "label": 1,
         "type": 9,
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 4,
-        "jsonName": "paymentStatus",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
-        "name": "total_amount",
-        "number": 7,
-        "label": 1,
-        "type": 1,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
         "oneofIndex": 5,
-        "jsonName": "totalAmount",
-        "options": undefined,
+        "jsonName": "shopId",
+        "options": {
+          "ctype": 0,
+          "packed": false,
+          "jstype": 0,
+          "lazy": false,
+          "deprecated": false,
+          "weak": false,
+          "uninterpretedOption": [],
+        },
         "proto3Optional": true,
       }, {
-        "name": "net_amount",
-        "number": 8,
+        "name": "timestamp",
+        "number": 7,
         "label": 1,
         "type": 1,
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 6,
-        "jsonName": "netAmount",
+        "jsonName": "timestamp",
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "vat_amount",
-        "number": 9,
+        "name": "state",
+        "number": 8,
         "label": 1,
-        "type": 1,
-        "typeName": "",
+        "type": 14,
+        "typeName": ".io.restorecommerce.invoice.State",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 7,
-        "jsonName": "vatAmount",
+        "jsonName": "state",
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "document",
-        "number": 10,
+        "name": "sender",
+        "number": 9,
         "label": 1,
-        "type": 9,
-        "typeName": "",
+        "type": 11,
+        "typeName": ".io.restorecommerce.address.BillingAddress",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 8,
-        "jsonName": "document",
+        "jsonName": "sender",
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "invoice_number",
-        "number": 11,
+        "name": "recipient",
+        "number": 10,
         "label": 1,
-        "type": 9,
-        "typeName": "",
+        "type": 11,
+        "typeName": ".io.restorecommerce.address.BillingAddress",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 9,
-        "jsonName": "invoiceNumber",
+        "jsonName": "recipient",
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "customer_remark",
+        "name": "positions",
+        "number": 11,
+        "label": 3,
+        "type": 11,
+        "typeName": ".io.restorecommerce.invoice.Position",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "positions",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "total_amounts",
         "number": 12,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 10,
-        "jsonName": "customerRemark",
-        "options": undefined,
-        "proto3Optional": true,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [
-        { "name": "_id", "options": undefined },
-        { "name": "_meta", "options": undefined },
-        { "name": "_timestamp", "options": undefined },
-        { "name": "_customer_id", "options": undefined },
-        { "name": "_payment_status", "options": undefined },
-        { "name": "_total_amount", "options": undefined },
-        { "name": "_net_amount", "options": undefined },
-        { "name": "_vat_amount", "options": undefined },
-        { "name": "_document", "options": undefined },
-        { "name": "_invoice_number", "options": undefined },
-        { "name": "_customer_remark", "options": undefined },
-      ],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "InvoicesPositionsData",
-      "field": [{
-        "name": "invoice_positions",
-        "number": 1,
         "label": 3,
         "type": 11,
-        "typeName": ".io.restorecommerce.invoice.InvoicePositions",
+        "typeName": ".io.restorecommerce.tax.Amount",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "invoicePositions",
+        "jsonName": "totalAmounts",
         "options": undefined,
         "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "InvoicePositions",
-      "field": [{
-        "name": "id",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "id",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
-        "name": "invoice_positions",
-        "number": 2,
-        "label": 3,
-        "type": 11,
-        "typeName": ".io.restorecommerce.invoice.InvoicePosition",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "invoicePositions",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
-        "name": "recipient_customer",
-        "number": 3,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.invoice.RecipientCustomer",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 1,
-        "jsonName": "recipientCustomer",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
-        "name": "recipient_billing_address",
-        "number": 4,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.invoice.BillingAddress",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 2,
-        "jsonName": "recipientBillingAddress",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
-        "name": "sender_billing_address",
-        "number": 5,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.invoice.BillingAddress",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 3,
-        "jsonName": "senderBillingAddress",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
-        "name": "recipient_organization",
-        "number": 6,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.organization.Organization",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 4,
-        "jsonName": "recipientOrganization",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
-        "name": "sender_organization",
-        "number": 7,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.organization.Organization",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 5,
-        "jsonName": "senderOrganization",
-        "options": undefined,
-        "proto3Optional": true,
       }, {
         "name": "payment_method_details",
-        "number": 8,
+        "number": 13,
         "label": 1,
         "type": 11,
         "typeName": ".google.protobuf.Any",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 6,
+        "oneofIndex": 10,
         "jsonName": "paymentMethodDetails",
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "invoice_no",
-        "number": 9,
+        "name": "documents",
+        "number": 14,
+        "label": 3,
+        "type": 11,
+        "typeName": ".io.restorecommerce.file.File",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "documents",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "customer_remark",
+        "number": 15,
         "label": 1,
         "type": 9,
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 7,
-        "jsonName": "invoiceNo",
+        "oneofIndex": 11,
+        "jsonName": "customerRemark",
         "options": undefined,
         "proto3Optional": true,
       }, {
         "name": "from_date",
-        "number": 10,
+        "number": 16,
         "label": 1,
         "type": 1,
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 8,
+        "oneofIndex": 12,
         "jsonName": "fromDate",
         "options": undefined,
         "proto3Optional": true,
       }, {
         "name": "to_date",
-        "number": 11,
+        "number": 17,
         "label": 1,
         "type": 1,
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 9,
+        "oneofIndex": 13,
         "jsonName": "toDate",
         "options": undefined,
         "proto3Optional": true,
@@ -2389,21 +2068,31 @@ export const protoMetadata: ProtoMetadata = {
       "extensionRange": [],
       "oneofDecl": [
         { "name": "_id", "options": undefined },
-        { "name": "_recipient_customer", "options": undefined },
-        { "name": "_recipient_billing_address", "options": undefined },
-        { "name": "_sender_billing_address", "options": undefined },
-        { "name": "_recipient_organization", "options": undefined },
-        { "name": "_sender_organization", "options": undefined },
+        { "name": "_meta", "options": undefined },
+        { "name": "_reference_id", "options": undefined },
+        { "name": "_user_id", "options": undefined },
+        { "name": "_customer_id", "options": undefined },
+        { "name": "_shop_id", "options": undefined },
+        { "name": "_timestamp", "options": undefined },
+        { "name": "_state", "options": undefined },
+        { "name": "_sender", "options": undefined },
+        { "name": "_recipient", "options": undefined },
         { "name": "_payment_method_details", "options": undefined },
-        { "name": "_invoice_no", "options": undefined },
+        { "name": "_customer_remark", "options": undefined },
         { "name": "_from_date", "options": undefined },
         { "name": "_to_date", "options": undefined },
       ],
-      "options": undefined,
+      "options": {
+        "messageSetWireFormat": false,
+        "noStandardDescriptorAccessor": false,
+        "deprecated": false,
+        "mapEntry": false,
+        "uninterpretedOption": [],
+      },
       "reservedRange": [],
       "reservedName": [],
     }, {
-      "name": "RecipientCustomer",
+      "name": "Position",
       "field": [{
         "name": "id",
         "number": 1,
@@ -2417,214 +2106,11 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "customer_number",
-        "number": 2,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 1,
-        "jsonName": "customerNumber",
-        "options": undefined,
-        "proto3Optional": true,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [{ "name": "_id", "options": undefined }, { "name": "_customer_number", "options": undefined }],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "BillingAddress",
-      "field": [{
-        "name": "email",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "email",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
-        "name": "website",
-        "number": 2,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 1,
-        "jsonName": "website",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
-        "name": "street",
+        "name": "invoice_rows",
         "number": 3,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 2,
-        "jsonName": "street",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
-        "name": "building_number",
-        "number": 4,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 3,
-        "jsonName": "buildingNumber",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
-        "name": "postcode",
-        "number": 5,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 4,
-        "jsonName": "postcode",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
-        "name": "region",
-        "number": 6,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 5,
-        "jsonName": "region",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
-        "name": "country_name",
-        "number": 7,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 6,
-        "jsonName": "countryName",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
-        "name": "telephone",
-        "number": 9,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 7,
-        "jsonName": "telephone",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
-        "name": "timezone",
-        "number": 10,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 8,
-        "jsonName": "timezone",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
-        "name": "economic_area",
-        "number": 11,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 9,
-        "jsonName": "economicArea",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
-        "name": "locality",
-        "number": 12,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 10,
-        "jsonName": "locality",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
-        "name": "organization_name",
-        "number": 13,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 11,
-        "jsonName": "organizationName",
-        "options": undefined,
-        "proto3Optional": true,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [
-        { "name": "_email", "options": undefined },
-        { "name": "_website", "options": undefined },
-        { "name": "_street", "options": undefined },
-        { "name": "_building_number", "options": undefined },
-        { "name": "_postcode", "options": undefined },
-        { "name": "_region", "options": undefined },
-        { "name": "_country_name", "options": undefined },
-        { "name": "_telephone", "options": undefined },
-        { "name": "_timezone", "options": undefined },
-        { "name": "_economic_area", "options": undefined },
-        { "name": "_locality", "options": undefined },
-        { "name": "_organization_name", "options": undefined },
-      ],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "InvoicePosition",
-      "field": [{
-        "name": "currency",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "currency",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
-        "name": "invoiceRows",
-        "number": 2,
         "label": 3,
         "type": 11,
-        "typeName": ".io.restorecommerce.invoice.InvoiceRow",
+        "typeName": ".io.restorecommerce.invoice.Row",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
@@ -2632,82 +2118,94 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "totalPrice",
-        "number": 3,
-        "label": 1,
+        "name": "amounts",
+        "number": 5,
+        "label": 3,
         "type": 11,
-        "typeName": ".io.restorecommerce.invoice.InvoicePrice",
+        "typeName": ".io.restorecommerce.tax.Amount",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 1,
-        "jsonName": "totalPrice",
+        "oneofIndex": 0,
+        "jsonName": "amounts",
         "options": undefined,
-        "proto3Optional": true,
+        "proto3Optional": false,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [{ "name": "_currency", "options": undefined }, { "name": "_totalPrice", "options": undefined }],
+      "oneofDecl": [{ "name": "_id", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
     }, {
-      "name": "InvoiceRow",
+      "name": "Row",
       "field": [{
-        "name": "product",
+        "name": "id",
         "number": 1,
         "label": 1,
         "type": 9,
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "product",
+        "oneofIndex": 1,
+        "jsonName": "id",
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "pricePerUnit",
+        "name": "product",
         "number": 2,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.invoice.ProductEntry",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "product",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "manual",
+        "number": 3,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.invoice.ManualEntry",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "manual",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "unit_price",
+        "number": 4,
         "label": 1,
         "type": 1,
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 1,
-        "jsonName": "pricePerUnit",
+        "oneofIndex": 2,
+        "jsonName": "unitPrice",
         "options": undefined,
         "proto3Optional": true,
       }, {
         "name": "quantity",
-        "number": 3,
+        "number": 5,
         "label": 1,
         "type": 13,
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 2,
+        "oneofIndex": 3,
         "jsonName": "quantity",
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "vat",
-        "number": 4,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 3,
-        "jsonName": "vat",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
         "name": "amount",
-        "number": 5,
+        "number": 6,
         "label": 1,
-        "type": 1,
-        "typeName": "",
+        "type": 11,
+        "typeName": ".io.restorecommerce.tax.Amount",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 4,
@@ -2716,7 +2214,7 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": true,
       }, {
         "name": "contract_start_date",
-        "number": 6,
+        "number": 7,
         "label": 1,
         "type": 1,
         "typeName": "",
@@ -2732,10 +2230,10 @@ export const protoMetadata: ProtoMetadata = {
       "enumType": [],
       "extensionRange": [],
       "oneofDecl": [
-        { "name": "_product", "options": undefined },
-        { "name": "_pricePerUnit", "options": undefined },
+        { "name": "entry_type", "options": undefined },
+        { "name": "_id", "options": undefined },
+        { "name": "_unit_price", "options": undefined },
         { "name": "_quantity", "options": undefined },
-        { "name": "_vat", "options": undefined },
         { "name": "_amount", "options": undefined },
         { "name": "_contract_start_date", "options": undefined },
       ],
@@ -2743,65 +2241,115 @@ export const protoMetadata: ProtoMetadata = {
       "reservedRange": [],
       "reservedName": [],
     }, {
-      "name": "InvoicePrice",
+      "name": "ProductEntry",
       "field": [{
-        "name": "gross",
+        "name": "product_id",
         "number": 1,
         "label": 1,
-        "type": 1,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "gross",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
-        "name": "net",
-        "number": 2,
-        "label": 1,
-        "type": 1,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 1,
-        "jsonName": "net",
-        "options": undefined,
-        "proto3Optional": true,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [{ "name": "_gross", "options": undefined }, { "name": "_net", "options": undefined }],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "TriggerInvoices",
-      "field": [{
-        "name": "ids",
-        "number": 1,
-        "label": 3,
         "type": 9,
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "ids",
+        "jsonName": "productId",
+        "options": {
+          "ctype": 0,
+          "packed": false,
+          "jstype": 0,
+          "lazy": false,
+          "deprecated": false,
+          "weak": false,
+          "uninterpretedOption": [],
+        },
+        "proto3Optional": true,
+      }, {
+        "name": "variant_id",
+        "number": 2,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 1,
+        "jsonName": "variantId",
         "options": undefined,
-        "proto3Optional": false,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_product_id", "options": undefined }, { "name": "_variant_id", "options": undefined }],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "ManualEntry",
+      "field": [{
+        "name": "article_number",
+        "number": 1,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "articleNumber",
+        "options": undefined,
+        "proto3Optional": true,
+      }, {
+        "name": "name",
+        "number": 2,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 1,
+        "jsonName": "name",
+        "options": undefined,
+        "proto3Optional": true,
+      }, {
+        "name": "descritpion",
+        "number": 3,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 2,
+        "jsonName": "descritpion",
+        "options": undefined,
+        "proto3Optional": true,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [{ "name": "_article_number", "options": undefined }, { "name": "_name", "options": undefined }, {
+        "name": "_descritpion",
+        "options": undefined,
+      }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
     }],
-    "enumType": [],
+    "enumType": [{
+      "name": "State",
+      "value": [
+        { "name": "FAILED", "number": 0, "options": undefined },
+        { "name": "INVALID", "number": 1, "options": undefined },
+        { "name": "CREATED", "number": 2, "options": undefined },
+        { "name": "RENDERED", "number": 3, "options": undefined },
+        { "name": "SENT", "number": 4, "options": undefined },
+        { "name": "PAYED", "number": 5, "options": undefined },
+        { "name": "WITHDRAWN", "number": 6, "options": undefined },
+        { "name": "CANCELLED", "number": 7, "options": undefined },
+      ],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }],
     "service": [{
       "name": "InvoiceService",
       "method": [{
@@ -2815,13 +2363,6 @@ export const protoMetadata: ProtoMetadata = {
         "name": "Create",
         "inputType": ".io.restorecommerce.invoice.InvoiceList",
         "outputType": ".io.restorecommerce.invoice.InvoiceListResponse",
-        "options": undefined,
-        "clientStreaming": false,
-        "serverStreaming": false,
-      }, {
-        "name": "Delete",
-        "inputType": ".io.restorecommerce.resourcebase.DeleteRequest",
-        "outputType": ".io.restorecommerce.resourcebase.DeleteResponse",
         "options": undefined,
         "clientStreaming": false,
         "serverStreaming": false,
@@ -2840,6 +2381,27 @@ export const protoMetadata: ProtoMetadata = {
         "clientStreaming": false,
         "serverStreaming": false,
       }, {
+        "name": "Delete",
+        "inputType": ".io.restorecommerce.resourcebase.DeleteRequest",
+        "outputType": ".io.restorecommerce.resourcebase.DeleteResponse",
+        "options": undefined,
+        "clientStreaming": false,
+        "serverStreaming": false,
+      }, {
+        "name": "Render",
+        "inputType": ".io.restorecommerce.invoice.InvoiceList",
+        "outputType": ".io.restorecommerce.invoice.InvoiceListResponse",
+        "options": undefined,
+        "clientStreaming": false,
+        "serverStreaming": false,
+      }, {
+        "name": "Send",
+        "inputType": ".io.restorecommerce.invoice.InvoiceNotificationList",
+        "outputType": ".io.restorecommerce.status.StatusListResponse",
+        "options": undefined,
+        "clientStreaming": false,
+        "serverStreaming": false,
+      }, {
         "name": "GenerateInvoiceNumber",
         "inputType": ".io.restorecommerce.invoice.RequestInvoiceNumber",
         "outputType": ".io.restorecommerce.invoice.InvoiceNumberResponse",
@@ -2853,109 +2415,115 @@ export const protoMetadata: ProtoMetadata = {
     "options": undefined,
     "sourceCodeInfo": {
       "location": [{
-        "path": [3, 7],
-        "span": [13, 0, 43],
+        "path": [3, 10],
+        "span": [16, 0, 39],
         "leadingComments": " Used by resolvers\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0],
-        "span": [18, 0, 27, 1],
+        "span": [23, 0, 42, 1],
         "leadingComments": "\n Microservice definition.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 3],
-        "span": [45, 0, 49, 1],
-        "leadingComments": "\n For multiple invoices\n",
+        "path": [6, 0, 2, 5],
+        "span": [35, 2, 57],
+        "leadingComments": "\n Render invoices as PDF to ostorage. (creates if not exist, updates if id is given)\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 6],
-        "span": [65, 0, 85, 1],
-        "leadingComments": "\n A simple invoice.\n",
+        "path": [6, 0, 2, 6],
+        "span": [40, 2, 92],
+        "leadingComments": "\n Triggers notification-srv (sends invoice per email for instance) \n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 6, 2, 7],
-        "span": [81, 2, 33],
-        "leadingComments": "",
-        "trailingComments": " difference between net and total\n",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 7],
-        "span": [90, 0, 92, 1],
-        "leadingComments": "*\n List of Invoice Positions data\n",
+        "path": [4, 8],
+        "span": [101, 0, 155, 1],
+        "leadingComments": "\n The Invoice recource, stored in DB.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 8, 2, 0],
-        "span": [95, 2, 25],
+        "span": [110, 2, 25],
         "leadingComments": "",
-        "trailingComments": " contract or customer identifier\n",
+        "trailingComments": " invoice_number\n",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 8, 2, 8],
-        "span": [103, 2, 33],
-        "leadingComments": "",
-        "trailingComments": " optional invoice number if not it will be generated by service\n",
+        "path": [4, 8, 2, 2],
+        "span": [116, 2, 35],
+        "leadingComments":
+          "\n A forigner_key using the following pattern: `${collection}/${id}`.\n most likly an order_id or fulfillment_id.\n",
+        "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 8, 2, 9],
-        "span": [104, 2, 33],
+        "path": [4, 8, 2, 4],
+        "span": [126, 2, 134, 4],
+        "leadingComments": "",
+        "trailingComments": " customer_number ref. to recipent orga\n",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 8, 2, 5],
+        "span": [135, 2, 143, 4],
+        "leadingComments": "",
+        "trailingComments": " shop_number --- ref. to sender orga\n",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 8, 2, 12],
+        "span": [150, 2, 59],
+        "leadingComments": "",
+        "trailingComments": " is there no better type for that?\n",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 8, 2, 13],
+        "span": [151, 2, 55],
+        "leadingComments": "",
+        "trailingComments": " url to rendered PDFs\n",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 8, 2, 15],
+        "span": [153, 2, 33],
         "leadingComments": "",
         "trailingComments": " value performance from date\n",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 8, 2, 10],
-        "span": [105, 2, 31],
+        "path": [4, 8, 2, 16],
+        "span": [154, 2, 31],
         "leadingComments": "",
         "trailingComments": " value performance to date\n",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 9, 2, 0],
-        "span": [109, 2, 25],
+        "path": [4, 9, 2, 2],
+        "span": [160, 2, 53],
         "leadingComments": "",
-        "trailingComments": " customer id - used to store the resource in DB\n",
+        "trailingComments": " repeated in case of multiple currencies?\n",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 9, 2, 1],
-        "span": [110, 2, 38],
-        "leadingComments": "",
-        "trailingComments": " displayed in invoice\n",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 12, 2, 5],
-        "span": [140, 2, 42],
+        "path": [4, 10, 2, 6],
+        "span": [172, 2, 42],
         "leadingComments": "",
         "trailingComments": " if there is any contract associated with product\n",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 14, 2, 0],
-        "span": [149, 2, 26],
-        "leadingComments": "",
-        "trailingComments": " list of id referring to contract_ids or customer_ids\n",
         "leadingDetachedComments": [],
       }],
     },
     "syntax": "proto3",
   }),
   references: {
+    ".io.restorecommerce.invoice.State": State,
     ".io.restorecommerce.invoice.RequestInvoiceNumber": RequestInvoiceNumber,
     ".io.restorecommerce.invoice.InvoiceNumberResponse": InvoiceNumberResponse,
     ".io.restorecommerce.invoice.Deleted": Deleted,
     ".io.restorecommerce.invoice.InvoiceList": InvoiceList,
     ".io.restorecommerce.invoice.InvoiceListResponse": InvoiceListResponse,
     ".io.restorecommerce.invoice.InvoiceResponse": InvoiceResponse,
+    ".io.restorecommerce.invoice.InvoiceNotification": InvoiceNotification,
+    ".io.restorecommerce.invoice.InvoiceNotificationList": InvoiceNotificationList,
     ".io.restorecommerce.invoice.Invoice": Invoice,
-    ".io.restorecommerce.invoice.InvoicesPositionsData": InvoicesPositionsData,
-    ".io.restorecommerce.invoice.InvoicePositions": InvoicePositions,
-    ".io.restorecommerce.invoice.RecipientCustomer": RecipientCustomer,
-    ".io.restorecommerce.invoice.BillingAddress": BillingAddress,
-    ".io.restorecommerce.invoice.InvoicePosition": InvoicePosition,
-    ".io.restorecommerce.invoice.InvoiceRow": InvoiceRow,
-    ".io.restorecommerce.invoice.InvoicePrice": InvoicePrice,
-    ".io.restorecommerce.invoice.TriggerInvoices": TriggerInvoices,
+    ".io.restorecommerce.invoice.Position": Position,
+    ".io.restorecommerce.invoice.Row": Row,
+    ".io.restorecommerce.invoice.ProductEntry": ProductEntry,
+    ".io.restorecommerce.invoice.ManualEntry": ManualEntry,
   },
   dependencies: [
     protoMetadata1,
@@ -2966,15 +2534,50 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata6,
     protoMetadata7,
     protoMetadata8,
+    protoMetadata9,
+    protoMetadata10,
+    protoMetadata11,
+    protoMetadata12,
+    protoMetadata13,
   ],
   options: {
     messages: {
       "Invoice": {
+        options: {
+          "kafka_subscriber": KafkaSubscription.decode(
+            Buffer.from(
+              "CghpbnZvaWNlcxIjaW8ucmVzdG9yZWNvbW1lcmNlLmludm9pY2UucmVzb3VyY2UaDmludm9pY2VDcmVhdGVkIg5pbnZvaWNlVXBkYXRlZCoOaW52b2ljZURlbGV0ZWQ=",
+              "base64",
+            ),
+          ),
+        },
         fields: {
+          "user_id": {
+            "resolver": Resolver.decode(
+              Buffer.from("Ch0uaW8ucmVzdG9yZWNvbW1lcmNlLnVzZXIuVXNlchIIaWRlbnRpdHkaBHVzZXIiBFJlYWQqBHVzZXI=", "base64"),
+            ),
+          },
           "customer_id": {
             "resolver": Resolver.decode(
               Buffer.from(
-                "CiUuaW8ucmVzdG9yZWNvbW1lcmNlLmN1c3RvbWVyLkN1c3RvbWVyEgttYXN0ZXJfZGF0YRoIY3VzdG9tZXIiBFJlYWQqCGN1c3RvbWVy",
+                "CiUuaW8ucmVzdG9yZWNvbW1lcmNlLmN1c3RvbWVyLkN1c3RvbWVyEghyZXNvdXJjZRoIY3VzdG9tZXIiBFJlYWQqCGN1c3RvbWVy",
+                "base64",
+              ),
+            ),
+          },
+          "shop_id": {
+            "resolver": Resolver.decode(
+              Buffer.from("Ch0uaW8ucmVzdG9yZWNvbW1lcmNlLnNob3AuU2hvcBIIcmVzb3VyY2UaBHNob3AiBFJlYWQqBHNob3A=", "base64"),
+            ),
+          },
+        },
+      },
+      "ProductEntry": {
+        fields: {
+          "product_id": {
+            "resolver": Resolver.decode(
+              Buffer.from(
+                "CiMuaW8ucmVzdG9yZWNvbW1lcmNlLnByb2R1Y3QuUHJvZHVjdBIHY2F0YWxvZxoHcHJvZHVjdCIEUmVhZCoHcHJvZHVjdA==",
                 "base64",
               ),
             ),

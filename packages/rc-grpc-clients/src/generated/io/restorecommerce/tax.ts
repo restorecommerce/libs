@@ -47,6 +47,14 @@ export interface VAT {
   vat?: number | undefined;
 }
 
+export interface Amount {
+  /** missing resource entity! */
+  currency?: string | undefined;
+  gross?: number | undefined;
+  net?: number | undefined;
+  vats: VAT[];
+}
+
 function createBaseDeleted(): Deleted {
   return { id: "" };
 }
@@ -60,24 +68,19 @@ export const Deleted = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Deleted {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDeleted();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.id = reader.string();
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -122,38 +125,25 @@ export const TaxList = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): TaxList {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTaxList();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.items.push(Tax.decode(reader, reader.uint32()));
-          continue;
+          break;
         case 2:
-          if (tag !== 16) {
-            break;
-          }
-
           message.totalCount = reader.uint32();
-          continue;
+          break;
         case 3:
-          if (tag !== 26) {
-            break;
-          }
-
           message.subject = Subject.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -212,38 +202,25 @@ export const TaxListResponse = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): TaxListResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTaxListResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.items.push(TaxResponse.decode(reader, reader.uint32()));
-          continue;
+          break;
         case 2:
-          if (tag !== 16) {
-            break;
-          }
-
           message.totalCount = reader.uint32();
-          continue;
+          break;
         case 3:
-          if (tag !== 26) {
-            break;
-          }
-
           message.operationStatus = OperationStatus.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -300,31 +277,22 @@ export const TaxResponse = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): TaxResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTaxResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.payload = Tax.decode(reader, reader.uint32());
-          continue;
+          break;
         case 2:
-          if (tag !== 18) {
-            break;
-          }
-
           message.status = Status.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -394,59 +362,34 @@ export const Tax = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Tax {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseTax();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.id = reader.string();
-          continue;
+          break;
         case 2:
-          if (tag !== 18) {
-            break;
-          }
-
           message.meta = Meta.decode(reader, reader.uint32());
-          continue;
+          break;
         case 3:
-          if (tag !== 26) {
-            break;
-          }
-
           message.countryId = reader.string();
-          continue;
+          break;
         case 4:
-          if (tag !== 33) {
-            break;
-          }
-
           message.rate = reader.double();
-          continue;
+          break;
         case 5:
-          if (tag !== 42) {
-            break;
-          }
-
           message.variant = reader.string();
-          continue;
+          break;
         case 6:
-          if (tag !== 50) {
-            break;
-          }
-
           message.typeId = reader.string();
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -505,31 +448,22 @@ export const VAT = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): VAT {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseVAT();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.taxId = reader.string();
-          continue;
+          break;
         case 2:
-          if (tag !== 17) {
-            break;
-          }
-
           message.vat = reader.double();
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -560,6 +494,90 @@ export const VAT = {
   },
 };
 
+function createBaseAmount(): Amount {
+  return { currency: undefined, gross: undefined, net: undefined, vats: [] };
+}
+
+export const Amount = {
+  encode(message: Amount, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.currency !== undefined) {
+      writer.uint32(10).string(message.currency);
+    }
+    if (message.gross !== undefined) {
+      writer.uint32(17).double(message.gross);
+    }
+    if (message.net !== undefined) {
+      writer.uint32(25).double(message.net);
+    }
+    for (const v of message.vats) {
+      VAT.encode(v!, writer.uint32(34).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): Amount {
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseAmount();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          message.currency = reader.string();
+          break;
+        case 2:
+          message.gross = reader.double();
+          break;
+        case 3:
+          message.net = reader.double();
+          break;
+        case 4:
+          message.vats.push(VAT.decode(reader, reader.uint32()));
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
+      }
+    }
+    return message;
+  },
+
+  fromJSON(object: any): Amount {
+    return {
+      currency: isSet(object.currency) ? String(object.currency) : undefined,
+      gross: isSet(object.gross) ? Number(object.gross) : undefined,
+      net: isSet(object.net) ? Number(object.net) : undefined,
+      vats: Array.isArray(object?.vats) ? object.vats.map((e: any) => VAT.fromJSON(e)) : [],
+    };
+  },
+
+  toJSON(message: Amount): unknown {
+    const obj: any = {};
+    message.currency !== undefined && (obj.currency = message.currency);
+    message.gross !== undefined && (obj.gross = message.gross);
+    message.net !== undefined && (obj.net = message.net);
+    if (message.vats) {
+      obj.vats = message.vats.map((e) => e ? VAT.toJSON(e) : undefined);
+    } else {
+      obj.vats = [];
+    }
+    return obj;
+  },
+
+  create(base?: DeepPartial<Amount>): Amount {
+    return Amount.fromPartial(base ?? {});
+  },
+
+  fromPartial(object: DeepPartial<Amount>): Amount {
+    const message = createBaseAmount();
+    message.currency = object.currency ?? undefined;
+    message.gross = object.gross ?? undefined;
+    message.net = object.net ?? undefined;
+    message.vats = object.vats?.map((e) => VAT.fromPartial(e)) || [];
+    return message;
+  },
+};
+
 /** Microservice definition. */
 export type TaxServiceDefinition = typeof TaxServiceDefinition;
 export const TaxServiceDefinition = {
@@ -572,7 +590,7 @@ export const TaxServiceDefinition = {
       requestStream: false,
       responseType: TaxListResponse,
       responseStream: false,
-      options: { _unknownFields: { 248008: [Buffer.from([1])] } },
+      options: {},
     },
     create: {
       name: "Create",
@@ -954,6 +972,68 @@ export const protoMetadata: ProtoMetadata = {
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
+    }, {
+      "name": "Amount",
+      "field": [{
+        "name": "currency",
+        "number": 1,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "currency",
+        "options": undefined,
+        "proto3Optional": true,
+      }, {
+        "name": "gross",
+        "number": 2,
+        "label": 1,
+        "type": 1,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 1,
+        "jsonName": "gross",
+        "options": undefined,
+        "proto3Optional": true,
+      }, {
+        "name": "net",
+        "number": 3,
+        "label": 1,
+        "type": 1,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 2,
+        "jsonName": "net",
+        "options": undefined,
+        "proto3Optional": true,
+      }, {
+        "name": "vats",
+        "number": 4,
+        "label": 3,
+        "type": 11,
+        "typeName": ".io.restorecommerce.tax.VAT",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "vats",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [{ "name": "_currency", "options": undefined }, { "name": "_gross", "options": undefined }, {
+        "name": "_net",
+        "options": undefined,
+      }],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
     }],
     "enumType": [],
     "service": [{
@@ -1011,6 +1091,12 @@ export const protoMetadata: ProtoMetadata = {
         "leadingComments": "\n Microservice definition.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
+      }, {
+        "path": [4, 6, 2, 0],
+        "span": [79, 2, 31],
+        "leadingComments": "",
+        "trailingComments": " missing resource entity!\n",
+        "leadingDetachedComments": [],
       }],
     },
     "syntax": "proto3",
@@ -1022,6 +1108,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.tax.TaxResponse": TaxResponse,
     ".io.restorecommerce.tax.Tax": Tax,
     ".io.restorecommerce.tax.VAT": VAT,
+    ".io.restorecommerce.tax.Amount": Amount,
   },
   dependencies: [
     protoMetadata1,

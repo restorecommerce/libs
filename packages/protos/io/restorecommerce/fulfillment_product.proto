@@ -39,8 +39,12 @@ message Preferences {
 message ProductQuery {
   optional io.restorecommerce.address.ShippingAddress sender = 1;
   optional io.restorecommerce.address.ShippingAddress receiver = 2;
-  repeated io.restorecommerce.fulfillment.FulfillmentItem items = 3;
+  repeated io.restorecommerce.fulfillment.Item items = 3;
   optional Preferences preferences = 4;
+  /*
+  * A forigner_key using the following pattern: `${collection}/${id}`
+  * most likly an order_id or fulfillment_id.
+  */
   optional string reference_id = 5;
 }
 
@@ -65,7 +69,7 @@ message FulfillmentProduct {
   optional string courier_id = 4 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.fulfillment_courier.FulfillmentCourier",
-      target_service: "master_data",
+      target_service: "fulfillment",
       target_sub_service: "fulfillment_courier",
       target_method: "Read",
       field_name: "courier",
@@ -115,7 +119,7 @@ message PackingSolution {
 }
 
 message PackingSolutionResponse {
-  optional string reference_id = 1;
+  optional string reference_id = 1; // forigner_key: use the following pattern: `${collection}/${id}`
   repeated PackingSolution solutions = 2;
   optional io.restorecommerce.status.Status status = 3;
 }

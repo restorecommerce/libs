@@ -41,10 +41,12 @@ export interface ContactPoint {
   physical_address_id?: string | undefined;
   website?: string | undefined;
   email?: string | undefined;
-  contact_point_type_id?: string | undefined;
+  contact_point_type_ids: string[];
   telephone?: string | undefined;
   timezone_id?: string | undefined;
   locale_id?: string | undefined;
+  name?: string | undefined;
+  description?: string | undefined;
 }
 
 function createBaseDeleted(): Deleted {
@@ -60,24 +62,19 @@ export const Deleted = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Deleted {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDeleted();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.id = reader.string();
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -122,38 +119,25 @@ export const ContactPointList = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): ContactPointList {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseContactPointList();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.items.push(ContactPoint.decode(reader, reader.uint32()));
-          continue;
+          break;
         case 2:
-          if (tag !== 16) {
-            break;
-          }
-
           message.total_count = reader.uint32();
-          continue;
+          break;
         case 3:
-          if (tag !== 26) {
-            break;
-          }
-
           message.subject = Subject.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -212,38 +196,25 @@ export const ContactPointListResponse = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): ContactPointListResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseContactPointListResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.items.push(ContactPointResponse.decode(reader, reader.uint32()));
-          continue;
+          break;
         case 2:
-          if (tag !== 16) {
-            break;
-          }
-
           message.total_count = reader.uint32();
-          continue;
+          break;
         case 3:
-          if (tag !== 26) {
-            break;
-          }
-
           message.operation_status = OperationStatus.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -300,31 +271,22 @@ export const ContactPointResponse = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): ContactPointResponse {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseContactPointResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.payload = ContactPoint.decode(reader, reader.uint32());
-          continue;
+          break;
         case 2:
-          if (tag !== 18) {
-            break;
-          }
-
           message.status = Status.decode(reader, reader.uint32());
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -366,10 +328,12 @@ function createBaseContactPoint(): ContactPoint {
     physical_address_id: undefined,
     website: undefined,
     email: undefined,
-    contact_point_type_id: undefined,
+    contact_point_type_ids: [],
     telephone: undefined,
     timezone_id: undefined,
     locale_id: undefined,
+    name: undefined,
+    description: undefined,
   };
 }
 
@@ -390,8 +354,8 @@ export const ContactPoint = {
     if (message.email !== undefined) {
       writer.uint32(50).string(message.email);
     }
-    if (message.contact_point_type_id !== undefined) {
-      writer.uint32(58).string(message.contact_point_type_id);
+    for (const v of message.contact_point_type_ids) {
+      writer.uint32(58).string(v!);
     }
     if (message.telephone !== undefined) {
       writer.uint32(66).string(message.telephone);
@@ -402,84 +366,59 @@ export const ContactPoint = {
     if (message.locale_id !== undefined) {
       writer.uint32(82).string(message.locale_id);
     }
+    if (message.name !== undefined) {
+      writer.uint32(90).string(message.name);
+    }
+    if (message.description !== undefined) {
+      writer.uint32(98).string(message.description);
+    }
     return writer;
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): ContactPoint {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseContactPoint();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.id = reader.string();
-          continue;
+          break;
         case 2:
-          if (tag !== 18) {
-            break;
-          }
-
           message.meta = Meta.decode(reader, reader.uint32());
-          continue;
+          break;
         case 3:
-          if (tag !== 26) {
-            break;
-          }
-
           message.physical_address_id = reader.string();
-          continue;
+          break;
         case 5:
-          if (tag !== 42) {
-            break;
-          }
-
           message.website = reader.string();
-          continue;
+          break;
         case 6:
-          if (tag !== 50) {
-            break;
-          }
-
           message.email = reader.string();
-          continue;
+          break;
         case 7:
-          if (tag !== 58) {
-            break;
-          }
-
-          message.contact_point_type_id = reader.string();
-          continue;
+          message.contact_point_type_ids.push(reader.string());
+          break;
         case 8:
-          if (tag !== 66) {
-            break;
-          }
-
           message.telephone = reader.string();
-          continue;
+          break;
         case 9:
-          if (tag !== 74) {
-            break;
-          }
-
           message.timezone_id = reader.string();
-          continue;
+          break;
         case 10:
-          if (tag !== 82) {
-            break;
-          }
-
           message.locale_id = reader.string();
-          continue;
+          break;
+        case 11:
+          message.name = reader.string();
+          break;
+        case 12:
+          message.description = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -491,10 +430,14 @@ export const ContactPoint = {
       physical_address_id: isSet(object.physical_address_id) ? String(object.physical_address_id) : undefined,
       website: isSet(object.website) ? String(object.website) : undefined,
       email: isSet(object.email) ? String(object.email) : undefined,
-      contact_point_type_id: isSet(object.contact_point_type_id) ? String(object.contact_point_type_id) : undefined,
+      contact_point_type_ids: Array.isArray(object?.contact_point_type_ids)
+        ? object.contact_point_type_ids.map((e: any) => String(e))
+        : [],
       telephone: isSet(object.telephone) ? String(object.telephone) : undefined,
       timezone_id: isSet(object.timezone_id) ? String(object.timezone_id) : undefined,
       locale_id: isSet(object.locale_id) ? String(object.locale_id) : undefined,
+      name: isSet(object.name) ? String(object.name) : undefined,
+      description: isSet(object.description) ? String(object.description) : undefined,
     };
   },
 
@@ -505,10 +448,16 @@ export const ContactPoint = {
     message.physical_address_id !== undefined && (obj.physical_address_id = message.physical_address_id);
     message.website !== undefined && (obj.website = message.website);
     message.email !== undefined && (obj.email = message.email);
-    message.contact_point_type_id !== undefined && (obj.contact_point_type_id = message.contact_point_type_id);
+    if (message.contact_point_type_ids) {
+      obj.contact_point_type_ids = message.contact_point_type_ids.map((e) => e);
+    } else {
+      obj.contact_point_type_ids = [];
+    }
     message.telephone !== undefined && (obj.telephone = message.telephone);
     message.timezone_id !== undefined && (obj.timezone_id = message.timezone_id);
     message.locale_id !== undefined && (obj.locale_id = message.locale_id);
+    message.name !== undefined && (obj.name = message.name);
+    message.description !== undefined && (obj.description = message.description);
     return obj;
   },
 
@@ -523,10 +472,12 @@ export const ContactPoint = {
     message.physical_address_id = object.physical_address_id ?? undefined;
     message.website = object.website ?? undefined;
     message.email = object.email ?? undefined;
-    message.contact_point_type_id = object.contact_point_type_id ?? undefined;
+    message.contact_point_type_ids = object.contact_point_type_ids?.map((e) => e) || [];
     message.telephone = object.telephone ?? undefined;
     message.timezone_id = object.timezone_id ?? undefined;
     message.locale_id = object.locale_id ?? undefined;
+    message.name = object.name ?? undefined;
+    message.description = object.description ?? undefined;
     return message;
   },
 };
@@ -542,7 +493,7 @@ export const ContactPointServiceDefinition = {
       requestStream: false,
       responseType: ContactPointListResponse,
       responseStream: false,
-      options: { _unknownFields: { 248008: [Buffer.from([1])] } },
+      options: {},
     },
     create: {
       name: "Create",
@@ -874,15 +825,15 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "contact_point_type_id",
+        "name": "contact_point_type_ids",
         "number": 7,
-        "label": 1,
+        "label": 3,
         "type": 9,
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 5,
-        "jsonName": "contactPointTypeId",
+        "oneofIndex": 0,
+        "jsonName": "contactPointTypeIds",
         "options": {
           "ctype": 0,
           "packed": false,
@@ -892,7 +843,7 @@ export const protoMetadata: ProtoMetadata = {
           "weak": false,
           "uninterpretedOption": [],
         },
-        "proto3Optional": true,
+        "proto3Optional": false,
       }, {
         "name": "telephone",
         "number": 8,
@@ -901,7 +852,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 6,
+        "oneofIndex": 5,
         "jsonName": "telephone",
         "options": undefined,
         "proto3Optional": true,
@@ -913,7 +864,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 7,
+        "oneofIndex": 6,
         "jsonName": "timezoneId",
         "options": {
           "ctype": 0,
@@ -933,7 +884,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 8,
+        "oneofIndex": 7,
         "jsonName": "localeId",
         "options": {
           "ctype": 0,
@@ -944,6 +895,30 @@ export const protoMetadata: ProtoMetadata = {
           "weak": false,
           "uninterpretedOption": [],
         },
+        "proto3Optional": true,
+      }, {
+        "name": "name",
+        "number": 11,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 8,
+        "jsonName": "name",
+        "options": undefined,
+        "proto3Optional": true,
+      }, {
+        "name": "description",
+        "number": 12,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 9,
+        "jsonName": "description",
+        "options": undefined,
         "proto3Optional": true,
       }],
       "extension": [],
@@ -956,10 +931,11 @@ export const protoMetadata: ProtoMetadata = {
         { "name": "_physical_address_id", "options": undefined },
         { "name": "_website", "options": undefined },
         { "name": "_email", "options": undefined },
-        { "name": "_contact_point_type_id", "options": undefined },
         { "name": "_telephone", "options": undefined },
         { "name": "_timezone_id", "options": undefined },
         { "name": "_locale_id", "options": undefined },
+        { "name": "_name", "options": undefined },
+        { "name": "_description", "options": undefined },
       ],
       "options": undefined,
       "reservedRange": [],
@@ -1049,7 +1025,7 @@ export const protoMetadata: ProtoMetadata = {
               ),
             ),
           },
-          "contact_point_type_id": {
+          "contact_point_type_ids": {
             "resolver": Resolver.decode(
               Buffer.from(
                 "CjcuaW8ucmVzdG9yZWNvbW1lcmNlLmNvbnRhY3RfcG9pbnRfdHlwZS5Db250YWN0UG9pbnRUeXBlEgttYXN0ZXJfZGF0YRoSY29udGFjdF9wb2ludF90eXBlIgRSZWFkKhBjb250YWN0UG9pbnRUeXBl",

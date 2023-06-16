@@ -42,6 +42,8 @@ export interface NotificationReq {
   /** / specific transport provider, eg: 'console' for transport == 'log' */
   provider?: string | undefined;
   attachments: Attachment[];
+  /** A forigner_key using the following pattern: `${collection}/${id}` */
+  reference_id?: string | undefined;
 }
 
 export interface Email {
@@ -102,73 +104,40 @@ export const Attachment = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Attachment {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseAttachment();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.filename = reader.string();
-          continue;
+          break;
         case 2:
-          if (tag !== 18) {
-            break;
-          }
-
           message.text = reader.string();
-          continue;
+          break;
         case 3:
-          if (tag !== 26) {
-            break;
-          }
-
           message.buffer = reader.bytes() as Buffer;
-          continue;
+          break;
         case 4:
-          if (tag !== 34) {
-            break;
-          }
-
           message.path = reader.string();
-          continue;
+          break;
         case 5:
-          if (tag !== 42) {
-            break;
-          }
-
           message.content_type = reader.string();
-          continue;
+          break;
         case 6:
-          if (tag !== 50) {
-            break;
-          }
-
           message.content_disposition = reader.string();
-          continue;
+          break;
         case 7:
-          if (tag !== 58) {
-            break;
-          }
-
           message.cid = reader.string();
-          continue;
+          break;
         case 8:
-          if (tag !== 66) {
-            break;
-          }
-
           message.encoding = reader.string();
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -227,6 +196,7 @@ function createBaseNotificationReq(): NotificationReq {
     transport: undefined,
     provider: undefined,
     attachments: [],
+    reference_id: undefined,
   };
 }
 
@@ -253,70 +223,47 @@ export const NotificationReq = {
     for (const v of message.attachments) {
       Attachment.encode(v!, writer.uint32(58).fork()).ldelim();
     }
+    if (message.reference_id !== undefined) {
+      writer.uint32(66).string(message.reference_id);
+    }
     return writer;
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): NotificationReq {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseNotificationReq();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.email = Email.decode(reader, reader.uint32());
-          continue;
+          break;
         case 2:
-          if (tag !== 18) {
-            break;
-          }
-
           message.log = Log.decode(reader, reader.uint32());
-          continue;
+          break;
         case 3:
-          if (tag !== 26) {
-            break;
-          }
-
           message.subject = reader.string();
-          continue;
+          break;
         case 4:
-          if (tag !== 34) {
-            break;
-          }
-
           message.body = reader.string();
-          continue;
+          break;
         case 5:
-          if (tag !== 42) {
-            break;
-          }
-
           message.transport = reader.string();
-          continue;
+          break;
         case 6:
-          if (tag !== 50) {
-            break;
-          }
-
           message.provider = reader.string();
-          continue;
+          break;
         case 7:
-          if (tag !== 58) {
-            break;
-          }
-
           message.attachments.push(Attachment.decode(reader, reader.uint32()));
-          continue;
+          break;
+        case 8:
+          message.reference_id = reader.string();
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -330,6 +277,7 @@ export const NotificationReq = {
       transport: isSet(object.transport) ? String(object.transport) : undefined,
       provider: isSet(object.provider) ? String(object.provider) : undefined,
       attachments: Array.isArray(object?.attachments) ? object.attachments.map((e: any) => Attachment.fromJSON(e)) : [],
+      reference_id: isSet(object.reference_id) ? String(object.reference_id) : undefined,
     };
   },
 
@@ -346,6 +294,7 @@ export const NotificationReq = {
     } else {
       obj.attachments = [];
     }
+    message.reference_id !== undefined && (obj.reference_id = message.reference_id);
     return obj;
   },
 
@@ -362,6 +311,7 @@ export const NotificationReq = {
     message.transport = object.transport ?? undefined;
     message.provider = object.provider ?? undefined;
     message.attachments = object.attachments?.map((e) => Attachment.fromPartial(e)) || [];
+    message.reference_id = object.reference_id ?? undefined;
     return message;
   },
 };
@@ -388,45 +338,28 @@ export const Email = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Email {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseEmail();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.to.push(reader.string());
-          continue;
+          break;
         case 2:
-          if (tag !== 18) {
-            break;
-          }
-
           message.cc.push(reader.string());
-          continue;
+          break;
         case 3:
-          if (tag !== 26) {
-            break;
-          }
-
           message.bcc.push(reader.string());
-          continue;
+          break;
         case 4:
-          if (tag !== 34) {
-            break;
-          }
-
           message.replyto = reader.string();
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -488,24 +421,19 @@ export const Log = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Log {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseLog();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 10) {
-            break;
-          }
-
           message.level = reader.string();
-          continue;
+          break;
+        default:
+          reader.skipType(tag & 7);
+          break;
       }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -788,6 +716,18 @@ export const protoMetadata: ProtoMetadata = {
         "jsonName": "attachments",
         "options": undefined,
         "proto3Optional": false,
+      }, {
+        "name": "reference_id",
+        "number": 8,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 5,
+        "jsonName": "referenceId",
+        "options": undefined,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
@@ -799,6 +739,7 @@ export const protoMetadata: ProtoMetadata = {
         { "name": "_body", "options": undefined },
         { "name": "_transport", "options": undefined },
         { "name": "_provider", "options": undefined },
+        { "name": "_reference_id", "options": undefined },
       ],
       "options": undefined,
       "reservedRange": [],
@@ -928,7 +869,7 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1],
-        "span": [27, 0, 37, 1],
+        "span": [27, 0, 41, 1],
         "leadingComments": " sendEmail NotificationReq event\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
@@ -951,26 +892,32 @@ export const protoMetadata: ProtoMetadata = {
         "trailingComments": "/ specific transport provider, eg: 'console' for transport == 'log'\n",
         "leadingDetachedComments": [],
       }, {
+        "path": [4, 1, 2, 7],
+        "span": [40, 2, 35],
+        "leadingComments": "\n A forigner_key using the following pattern: `${collection}/${id}`\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
         "path": [4, 2, 2, 0],
-        "span": [40, 2, 25],
+        "span": [44, 2, 25],
         "leadingComments": "",
         "trailingComments": " array of to email list\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 2, 2, 1],
-        "span": [41, 2, 26],
+        "span": [45, 2, 26],
         "leadingComments": "",
         "trailingComments": " array of cc email list\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 2, 2, 2],
-        "span": [42, 2, 26],
+        "span": [46, 2, 26],
         "leadingComments": "",
         "trailingComments": " array of bcc email list\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 2, 2, 3],
-        "span": [43, 2, 30],
+        "span": [47, 2, 30],
         "leadingComments": "",
         "trailingComments": " if set, the outgoing mail will have this replyTo header set\n",
         "leadingDetachedComments": [],

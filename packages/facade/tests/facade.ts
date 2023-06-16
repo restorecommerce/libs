@@ -2,7 +2,7 @@ import { createFacade, reqResLogger, type FacadeContext, identityModule } from '
 import { createServiceConfig } from '@restorecommerce/service-config';
 import { createLogger } from '@restorecommerce/logger';
 
-import { ResourceSrvGrpcClient } from '../src/modules/resource/grpc/index.js';
+import { ResourceSrvGrpcClient } from '../src/modules/master_data/grpc/index.js';
 import path from 'node:path';
 import * as url from 'node:url';
 import * as fs from 'node:fs';

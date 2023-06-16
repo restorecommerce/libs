@@ -56,7 +56,7 @@ message Organization {
   optional string parent_id = 4 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.organization.Organization",
-      target_service: "resource",
+      target_service: "master_data",
       target_sub_service: "organization",
       target_method: "Read",
       field_name: "parent",
@@ -65,7 +65,7 @@ message Organization {
   repeated string contact_point_ids = 6 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.contact_point.ContactPoint",
-      target_service: "resource",
+      target_service: "master_data",
       target_sub_service: "contact_point",
       target_method: "Read",
       field_name: "contactPoints",

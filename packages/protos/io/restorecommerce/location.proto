@@ -55,7 +55,7 @@ message Location {
   optional string organization_id = 5 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.organization.Organization",
-      target_service: "resource",
+      target_service: "master_data",
       target_sub_service: "organization",
       target_method: "Read",
       field_name: "organization",
@@ -64,7 +64,7 @@ message Location {
   optional string parent_id = 6 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.location.Location",
-      target_service: "resource",
+      target_service: "master_data",
       target_sub_service: "location",
       target_method: "Read",
       field_name: "parent",
@@ -73,7 +73,7 @@ message Location {
   optional string address_id = 8 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.address.Address",
-      target_service: "resource",
+      target_service: "master_data",
       target_sub_service: "address",
       target_method: "Read",
       field_name: "address",

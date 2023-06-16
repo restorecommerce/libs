@@ -10,7 +10,6 @@ import "io/restorecommerce/options.proto";
 
 // Used by resolvers
 import "io/restorecommerce/user.proto";
-import "io/restorecommerce/address.proto";
 import "io/restorecommerce/contact_point.proto";
 import "io/restorecommerce/organization.proto";
 
@@ -67,7 +66,7 @@ message Private {
   repeated string contact_point_ids = 2 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.contact_point.ContactPoint",
-      target_service: "resource",
+      target_service: "master_data",
       target_sub_service: "contact_point",
       target_method: "Read",
       field_name: "contactPoints",
@@ -79,7 +78,7 @@ message Commercial {
   optional string organization_id = 2 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.organization.Organization",
-      target_service: "resource",
+      target_service: "master_data",
       target_sub_service: "organization",
       target_method: "Read",
       field_name: "organization",
@@ -88,10 +87,10 @@ message Commercial {
 }
 
 message PublicSector {
-  optional string organization_id = 2 [
+  optional string organization_id = 1 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.organization.Organization",
-      target_service: "resource",
+      target_service: "master_data",
       target_sub_service: "organization",
       target_method: "Read",
       field_name: "organization",

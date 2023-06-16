@@ -18,4 +18,4 @@ export interface ResourceContext extends FacadeContext {
 
 export type ResourceModule = FacadeModule<ResourceContext>;
 
-export const namespace = 'resource';
+export const namespace = 'master_data';

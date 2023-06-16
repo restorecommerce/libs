@@ -52,7 +52,7 @@ message Tax {
   optional string country_id = 3 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.country.Country",
-      target_service: "resource",
+      target_service: "master_data",
       target_sub_service: "country",
       target_method: "Read",
       field_name: "country",
@@ -63,7 +63,7 @@ message Tax {
   optional string type_id = 6 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.tax_type.TaxType",
-      target_service: "resource",
+      target_service: "master_data",
       target_sub_service: "tax_type",
       target_method: "Read",
       field_name: "type",

@@ -2008,7 +2008,7 @@ export const protoMetadata: ProtoMetadata = {
           "country_id": {
             "resolver": Resolver.decode(
               Buffer.from(
-                "CiMuaW8ucmVzdG9yZWNvbW1lcmNlLmNvdW50cnkuQ291bnRyeRIIcmVzb3VyY2UaB2NvdW50cnkiBFJlYWQqB2NvdW50cnk=",
+                "CiMuaW8ucmVzdG9yZWNvbW1lcmNlLmNvdW50cnkuQ291bnRyeRILbWFzdGVyX2RhdGEaB2NvdW50cnkiBFJlYWQqB2NvdW50cnk=",
                 "base64",
               ),
             ),

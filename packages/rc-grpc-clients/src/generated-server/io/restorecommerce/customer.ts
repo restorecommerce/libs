@@ -2,12 +2,11 @@
 import type { CallContext, CallOptions } from "nice-grpc-common";
 import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import { protoMetadata as protoMetadata7 } from "./address";
 import { protoMetadata as protoMetadata3, Subject } from "./auth";
-import { protoMetadata as protoMetadata8 } from "./contact_point";
+import { protoMetadata as protoMetadata7 } from "./contact_point";
 import { Meta, protoMetadata as protoMetadata2 } from "./meta";
 import { protoMetadata as protoMetadata5, Resolver } from "./options";
-import { protoMetadata as protoMetadata9 } from "./organization";
+import { protoMetadata as protoMetadata8 } from "./organization";
 import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata1, ReadRequest } from "./resource_base";
 import { OperationStatus, protoMetadata as protoMetadata4, Status } from "./status";
 import { protoMetadata as protoMetadata6 } from "./user";
@@ -496,7 +495,7 @@ function createBasePublicSector(): PublicSector {
 export const PublicSector = {
   encode(message: PublicSector, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.organization_id !== undefined) {
-      writer.uint32(18).string(message.organization_id);
+      writer.uint32(10).string(message.organization_id);
     }
     return writer;
   },
@@ -508,7 +507,7 @@ export const PublicSector = {
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
-        case 2:
+        case 1:
           message.organization_id = reader.string();
           break;
         default:
@@ -637,7 +636,6 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/status.proto",
       "io/restorecommerce/options.proto",
       "io/restorecommerce/user.proto",
-      "io/restorecommerce/address.proto",
       "io/restorecommerce/contact_point.proto",
       "io/restorecommerce/organization.proto",
     ],
@@ -932,7 +930,7 @@ export const protoMetadata: ProtoMetadata = {
       "name": "PublicSector",
       "field": [{
         "name": "organization_id",
-        "number": 2,
+        "number": 1,
         "label": 1,
         "type": 9,
         "typeName": "",
@@ -1012,7 +1010,7 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0],
-        "span": [19, 0, 27, 1],
+        "span": [18, 0, 26, 1],
         "leadingComments": "\nMicroservice definition.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
@@ -1038,7 +1036,6 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata6,
     protoMetadata7,
     protoMetadata8,
-    protoMetadata9,
   ],
   options: {
     messages: {
@@ -1052,7 +1049,7 @@ export const protoMetadata: ProtoMetadata = {
           "contact_point_ids": {
             "resolver": Resolver.decode(
               Buffer.from(
-                "Ci4uaW8ucmVzdG9yZWNvbW1lcmNlLmNvbnRhY3RfcG9pbnQuQ29udGFjdFBvaW50EghyZXNvdXJjZRoNY29udGFjdF9wb2ludCIEUmVhZCoNY29udGFjdFBvaW50cw==",
+                "Ci4uaW8ucmVzdG9yZWNvbW1lcmNlLmNvbnRhY3RfcG9pbnQuQ29udGFjdFBvaW50EgttYXN0ZXJfZGF0YRoNY29udGFjdF9wb2ludCIEUmVhZCoNY29udGFjdFBvaW50cw==",
                 "base64",
               ),
             ),
@@ -1064,7 +1061,7 @@ export const protoMetadata: ProtoMetadata = {
           "organization_id": {
             "resolver": Resolver.decode(
               Buffer.from(
-                "Ci0uaW8ucmVzdG9yZWNvbW1lcmNlLm9yZ2FuaXphdGlvbi5Pcmdhbml6YXRpb24SCHJlc291cmNlGgxvcmdhbml6YXRpb24iBFJlYWQqDG9yZ2FuaXphdGlvbg==",
+                "Ci0uaW8ucmVzdG9yZWNvbW1lcmNlLm9yZ2FuaXphdGlvbi5Pcmdhbml6YXRpb24SC21hc3Rlcl9kYXRhGgxvcmdhbml6YXRpb24iBFJlYWQqDG9yZ2FuaXphdGlvbg==",
                 "base64",
               ),
             ),
@@ -1076,7 +1073,7 @@ export const protoMetadata: ProtoMetadata = {
           "organization_id": {
             "resolver": Resolver.decode(
               Buffer.from(
-                "Ci0uaW8ucmVzdG9yZWNvbW1lcmNlLm9yZ2FuaXphdGlvbi5Pcmdhbml6YXRpb24SCHJlc291cmNlGgxvcmdhbml6YXRpb24iBFJlYWQqDG9yZ2FuaXphdGlvbg==",
+                "Ci0uaW8ucmVzdG9yZWNvbW1lcmNlLm9yZ2FuaXphdGlvbi5Pcmdhbml6YXRpb24SC21hc3Rlcl9kYXRhGgxvcmdhbml6YXRpb24iBFJlYWQqDG9yZ2FuaXphdGlvbg==",
                 "base64",
               ),
             ),

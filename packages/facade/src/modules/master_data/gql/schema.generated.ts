@@ -20,7 +20,7 @@ export type Scalars = {
 
 export type Query = {
   __typename?: 'Query';
-  resource: ResourceQuery;
+  master_data: ResourceQuery;
 };
 
 export type ResourceQuery = {
@@ -903,7 +903,7 @@ export enum IoRestorecommerceCodeSector {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  resource: ResourceMutation;
+  master_data: ResourceMutation;
 };
 
 export type ResourceMutation = {
@@ -1896,7 +1896,7 @@ export type ResolversParentTypes = ResolversObject<{
 }>;
 
 export type QueryResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
-  resource?: Resolver<ResolversTypes['ResourceQuery'], ParentType, ContextType>;
+  master_data?: Resolver<ResolversTypes['ResourceQuery'], ParentType, ContextType>;
 }>;
 
 export type ResourceQueryResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ResourceQuery'] = ResolversParentTypes['ResourceQuery']> = ResolversObject<{
@@ -2578,7 +2578,7 @@ export type IoRestorecommerceCodeStatusResolvers = { ADDED: 0, CHANGED_NAME: 1, 
 export type IoRestorecommerceCodeSectorResolvers = { UNKNOWN: 0, ACOUSTICS: 1, ATOMIC_AND_NUCLEAR_PHYSICS: 2, CHARACTERISTIC_NUMBERS: 3, ELECTRICITY_AND_MAGNETISM: 4, HEAT: 5, LIGHT_AND_RELATED_ELECTROMAGNETIC_RADIATIONS: 6, MECHANICS: 7, MISCELLANEOUS: 8, NUCLEAR_REACTIONS_AND_IONIZING_RADIATIONS: 9, PERIODIC_AND_RELATED_PHASES: 10, PHYSICAL_CHEMISTRY_AND_MOLECULAR_PHYSICS: 11, SOLID_STATE_PHYSICS: 12, SPACE_AND_TIME: 13 };
 
 export type MutationResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
-  resource?: Resolver<ResolversTypes['ResourceMutation'], ParentType, ContextType>;
+  master_data?: Resolver<ResolversTypes['ResourceMutation'], ParentType, ContextType>;
 }>;
 
 export type ResourceMutationResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ResourceMutation'] = ResolversParentTypes['ResourceMutation']> = ResolversObject<{

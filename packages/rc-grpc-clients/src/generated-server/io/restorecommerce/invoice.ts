@@ -2614,7 +2614,7 @@ export const protoMetadata: ProtoMetadata = {
           "customer_id": {
             "resolver": Resolver.decode(
               Buffer.from(
-                "CiUuaW8ucmVzdG9yZWNvbW1lcmNlLmN1c3RvbWVyLkN1c3RvbWVyEghyZXNvdXJjZRoIY3VzdG9tZXIiBFJlYWQqCGN1c3RvbWVy",
+                "CiUuaW8ucmVzdG9yZWNvbW1lcmNlLmN1c3RvbWVyLkN1c3RvbWVyEgttYXN0ZXJfZGF0YRoIY3VzdG9tZXIiBFJlYWQqCGN1c3RvbWVy",
                 "base64",
               ),
             ),

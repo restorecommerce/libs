@@ -278,7 +278,7 @@ message User {
   optional string timezone_id = 13 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.timezone.Timezone",
-      target_service: "resource",
+      target_service: "master_data",
       target_sub_service: "timezone",
       target_method: "Read",
       field_name: "timezone",
@@ -287,7 +287,7 @@ message User {
   optional string locale_id = 14 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.locale.Locale",
-      target_service: "resource",
+      target_service: "master_data",
       target_sub_service: "locale",
       target_method: "Read",
       field_name: "locale",
@@ -326,7 +326,7 @@ message UserRole {
   string timezone_id = 13 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.timezone.Timezone",
-      target_service: "resource",
+      target_service: "master_data",
       target_sub_service: "timezone",
       target_method: "Read",
       field_name: "timezone",
@@ -335,7 +335,7 @@ message UserRole {
   string locale_id = 14 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.locale.Locale",
-      target_service: "resource",
+      target_service: "master_data",
       target_sub_service: "locale",
       target_method: "Read",
       field_name: "locale",

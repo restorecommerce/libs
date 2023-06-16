@@ -997,7 +997,7 @@ export const protoMetadata: ProtoMetadata = {
           "organization_id": {
             "resolver": Resolver.decode(
               Buffer.from(
-                "Ci0uaW8ucmVzdG9yZWNvbW1lcmNlLm9yZ2FuaXphdGlvbi5Pcmdhbml6YXRpb24SCHJlc291cmNlGgxvcmdhbml6YXRpb24iBFJlYWQqDG9yZ2FuaXphdGlvbg==",
+                "Ci0uaW8ucmVzdG9yZWNvbW1lcmNlLm9yZ2FuaXphdGlvbi5Pcmdhbml6YXRpb24SC21hc3Rlcl9kYXRhGgxvcmdhbml6YXRpb24iBFJlYWQqDG9yZ2FuaXphdGlvbg==",
                 "base64",
               ),
             ),
@@ -1005,7 +1005,7 @@ export const protoMetadata: ProtoMetadata = {
           "parent_id": {
             "resolver": Resolver.decode(
               Buffer.from(
-                "CiUuaW8ucmVzdG9yZWNvbW1lcmNlLmxvY2F0aW9uLkxvY2F0aW9uEghyZXNvdXJjZRoIbG9jYXRpb24iBFJlYWQqBnBhcmVudA==",
+                "CiUuaW8ucmVzdG9yZWNvbW1lcmNlLmxvY2F0aW9uLkxvY2F0aW9uEgttYXN0ZXJfZGF0YRoIbG9jYXRpb24iBFJlYWQqBnBhcmVudA==",
                 "base64",
               ),
             ),
@@ -1013,7 +1013,7 @@ export const protoMetadata: ProtoMetadata = {
           "address_id": {
             "resolver": Resolver.decode(
               Buffer.from(
-                "CiMuaW8ucmVzdG9yZWNvbW1lcmNlLmFkZHJlc3MuQWRkcmVzcxIIcmVzb3VyY2UaB2FkZHJlc3MiBFJlYWQqB2FkZHJlc3M=",
+                "CiMuaW8ucmVzdG9yZWNvbW1lcmNlLmFkZHJlc3MuQWRkcmVzcxILbWFzdGVyX2RhdGEaB2FkZHJlc3MiBFJlYWQqB2FkZHJlc3M=",
                 "base64",
               ),
             ),

@@ -7,8 +7,8 @@ import { namespace as orderingNamespace } from './src/modules/ordering/interface
 import { schema as paymentSchema } from './src/modules/payment/gql/schema.js';
 import { namespace as paymentNamespace } from './src/modules/payment/interfaces.js';
 
-import { schema as resourceSchema } from './src/modules/resource/gql/schema.js';
-import { namespace as resourceNamespace } from './src/modules/resource/interfaces.js';
+import { schema as resourceSchema } from './src/modules/master_data/gql/schema.js';
+import { namespace as resourceNamespace } from './src/modules/master_data/interfaces.js';
 
 import { schema as catalogSchema } from './src/modules/catalog/gql/schema.js';
 import { namespace as catalogNamespace } from './src/modules/catalog/interfaces.js';
@@ -72,7 +72,7 @@ generateSchemaTypings({
 
 generateSchemaTypings({
   schema: resourceSchema(cfg.get(resourceNamespace)),
-  outputFile: './src/modules/resource/gql/schema.generated.ts',
+  outputFile: './src/modules/master_data/gql/schema.generated.ts',
   typescriptResolvers: {
     contextType: '../interfaces.js#ResourceContext'
   }

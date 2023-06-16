@@ -68,4 +68,12 @@ export interface Facade<TModules extends FacadeModuleBase[] = []> {
     this is Facade<[TSupportedModule, ...TModules]> /* Required for type completion */ & Facade<[...TModules]>;
 }
 
+export interface FileUploadOptionsConfig {
+  fileUploadOptions: FileUploadOptions
+};
+
+interface FileUploadOptions {
+  maxFileSize: number;
+  maxFiles: number;
+};
 

@@ -9,7 +9,7 @@ import { type AddressInfo } from 'node:net';
 import { GraphQLSchema, printSchema } from 'graphql';
 import { ApolloGateway, LocalGraphQLDataSource, RemoteGraphQLDataSource, IntrospectAndCompose } from '@apollo/gateway';
 import { facadeStatusModule } from './modules/index.js';
-import { type Facade, type FacadeBaseContext, type FacadeModule, type FacadeModuleBase, type FacadeModulesContext } from './interfaces.js';
+import { type Facade, type FacadeBaseContext, type FacadeModule, type FacadeModuleBase, type FacadeModulesContext, FileUploadOptionsConfig } from './interfaces.js';
 /* eslint-disable */
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
 /* eslint-disable */
@@ -45,6 +45,7 @@ interface RestoreCommerceFacadeImplConfig {
   hostname?: string;
   env?: string;
   kafka?: KafkaProviderConfig['kafka'];
+  fileUploadOptions?: FileUploadOptionsConfig['fileUploadOptions'];
 }
 
 interface FacadeApolloServiceMap {
@@ -68,17 +69,19 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
   readonly env: string;
   readonly modules: FacadeModule[] = [];
   readonly kafkaConfig?: KafkaProviderConfig['kafka'];
+  readonly fileUploadOptionsConfig?:  FileUploadOptionsConfig['fileUploadOptions'];
 
   private startFns: Array<(() => Promise<void>)> = [];
   private stopFns: Array<(() => Promise<void>)> = [];
 
-  constructor({ koa, logger, port, hostname, env, kafka }: RestoreCommerceFacadeImplConfig) {
+  constructor({ koa, logger, port, hostname, env, kafka, fileUploadOptions }: RestoreCommerceFacadeImplConfig) {
     this.logger = logger;
     this.port = port ?? 5000;
     this.hostname = hostname ?? '127.0.0.1';
     this.koa = koa;
     this.env = env ?? 'development';
     this.kafkaConfig = kafka;
+    this.fileUploadOptionsConfig = fileUploadOptions;
 
     setUseSubscriptions(!!kafka);
   }
@@ -295,11 +298,13 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
 
     await gqlServer.start();
 
-    // TODO set maxFile size and maximum files via Facade config of `createFacade`
+    // set maxFile size and maximum files via Facade config of `createFacade`
+    const maxFileSize = this.fileUploadOptionsConfig?.maxFileSize ? this.fileUploadOptionsConfig.maxFileSize : 10000000;
+    const maxFiles = this.fileUploadOptionsConfig?.maxFiles ? this.fileUploadOptionsConfig.maxFiles : 20;
     this.koa.use(
       graphqlUploadKoa({
-        maxFileSize: 10000000,
-        maxFiles: 20,
+        maxFileSize,
+        maxFiles
       })
     );
     this.koa.use(cors());
@@ -319,6 +324,7 @@ export interface FacadeConfig {
   env?: string;
   keys?: string[];
   kafka?: KafkaProviderConfig['kafka'];
+  fileUploadOptions?: FileUploadOptionsConfig['fileUploadOptions'];
 }
 
 export const createFacade = (config: FacadeConfig): Facade => {
@@ -349,6 +355,7 @@ export const createFacade = (config: FacadeConfig): Facade => {
     port: config.port,
     hostname: config.hostname,
     env: config.env,
-    kafka: config.kafka
+    kafka: config.kafka,
+    fileUploadOptions: config.fileUploadOptions,
   }).useModule(facadeStatusModule);
 };

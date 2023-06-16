@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.3.3...@restorecommerce/facade@1.3.4) (2023-06-16)
+
+
+### Bug Fixes
+
+* **facade:** convert stream to async iterable so that file is read in chunksand passed ([d73ebf6](https://github.com/restorecommerce/libs/commit/d73ebf6d1d8b5c8d32b30968074aa4e89ca08c0d))
+* **facade:** service client and async iterable for file upload request ([a0759b8](https://github.com/restorecommerce/libs/commit/a0759b86a5efd4dbad0e68af67a7d42889f228ef))
+
+
+
+
+
 ## [1.3.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.3.2...@restorecommerce/facade@1.3.3) (2023-06-14)
 
 **Note:** Version bump only for package @restorecommerce/facade

@@ -74,13 +74,7 @@ export const preprocessGQLInput = async (data: any, model: GraphQLInputObjectTyp
         let fileData = await data;
         const upload = await fileData.promise;
         const stream: Readable = upload.createReadStream();
-
-        const chunks: any[] = [];
-        for await (let chunk of stream) {
-          chunks.push(chunk);
-        }
-
-        return Buffer.concat(chunks);
+        return stream;
     }
   }
 

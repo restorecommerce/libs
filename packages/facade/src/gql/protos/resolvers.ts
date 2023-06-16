@@ -29,6 +29,7 @@ import { type GraphQLResolveInfo } from 'graphql';
 import * as stream from 'node:stream';
 import _ from 'lodash';
 import { Events } from '@restorecommerce/kafka-client';
+import S2A from './stream-to-async-iterator.js';
 
 const inputMethodType = new Map<string, string>();
 
@@ -46,11 +47,12 @@ export type SubscribeResolverFn<TResult, TParent, TContext, TArgs> = (
   info: GraphQLResolveInfo
 ) => AsyncGenerator<TResult>;
 
-const toAsync = async function* <T>(requests: any): AsyncIterable<any> {
-  for (const request of requests) {
-    yield request;
+const streamToAsyncIterable = async function* (request: any, readableStreamKey: string): AsyncIterable<any> {
+  const readStream = _.clone(request[readableStreamKey]);
+  for await (const chunk of new S2A(readStream)) {
+    yield Object.assign({}, request, { [readableStreamKey] : chunk });
   }
-};
+}
 
 export const getGQLResolverFunctions =
   <T extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, T>, SRV = any, R = ResolverFn<any, any, ServiceClient<CTX, keyof CTX, T>, any>, B extends keyof T = any, NS extends keyof CTX = any>
@@ -141,8 +143,15 @@ export const getGQLResolverFunctions =
           }
 
           const methodFunc = service[camelCase(realMethod)] || service[realMethod];
-          if(method.clientStreaming) {
-            req = toAsync([req]);
+          if (method.clientStreaming) {
+            const readableStreamKey = Object.keys(req).filter((key) => {
+              if (req[key] instanceof stream.Stream.Readable) {
+                return key;
+              }
+            });
+            if(readableStreamKey.length > 0) {
+              req = streamToAsyncIterable(req, readableStreamKey[0]);
+            }
           }
           const rawResult = await methodFunc(req);
           const result = postProcessGQLValue(rawResult, outputTyping.output);

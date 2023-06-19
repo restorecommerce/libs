@@ -1,3 +1,8 @@
+### 1.2.1 (June 19th, 2023)
+
+- extended resource base to support for nested buffer fields
+- updated depeendencies
+
 ### 1.2.0 (May 31st, 2023)
 
 - updated dependencies (includes chassis-srv updates for updated ArangoJs), pluralize protos and meta owner changes

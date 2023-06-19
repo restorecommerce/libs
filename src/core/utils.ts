@@ -22,7 +22,7 @@ const updateObject = (obj: any, path: string, value: any, encodeOrDecode: string
   }
 };
 
-const setNestedPath = (object: any, fieldPath: string, encodeOrDecode?: string) => {
+const setNestedPath = (object: any, fieldPath: string, encodeOrDecode: string) => {
   const prefix = fieldPath?.substring(0, fieldPath.indexOf('.['));
   const suffix = fieldPath?.substring(fieldPath.indexOf('].') + 2);
   let setRecursive = false;
@@ -39,7 +39,7 @@ const setNestedPath = (object: any, fieldPath: string, encodeOrDecode?: string) 
       }
       // recursive call
       if (fieldExists && setRecursive) {
-        setNestedPath(obj, suffix);
+        setNestedPath(obj, suffix, encodeOrDecode);
       }
     });
   }
@@ -67,7 +67,7 @@ export const encodeOrDecodeIfExists = (obj: any, fieldPath: string, encodeOrDeco
   // only if the configured field exist check recursively for all entries in object
   if (fieldExists && array) {
     // use setNestedPath
-    setNestedPath(obj, fieldPath);
+    setNestedPath(obj, fieldPath, encodeOrDecode);
   } else if (fieldExists) {
     // use normal set and return
     updateObject(obj, fieldPath, fieldExists, encodeOrDecode);

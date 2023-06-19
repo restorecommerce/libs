@@ -6,6 +6,7 @@ import { BaseDocument, DocumentMetadata } from './interfaces';
 import { DatabaseProvider, GraphDatabaseProvider } from '@restorecommerce/chassis-srv';
 import { DeepPartial } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/attribute';
 import { Search } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base';
+import { encodeOrDecodeIfExists } from './utils';
 
 let redisClient: any;
 
@@ -84,29 +85,6 @@ const updateMetadata = (docMeta: DocumentMetadata, newDoc: BaseDocument): BaseDo
 
   newDoc.meta = docMeta;
   return newDoc;
-};
-
-const decodeBufferObj = (document: BaseDocument, bufferField: string): BaseDocument => {
-  if (bufferField in document && !_.isEmpty(document[bufferField])) {
-    const encodedBufferObj = document[bufferField].value;
-    // By default it was encoded in utf8 so decoding by default from utf8
-    let decodedMsg = Buffer.from(encodedBufferObj).toString();
-    // store as object in DB
-    decodedMsg = JSON.parse(decodedMsg);
-    document[bufferField] = decodedMsg;
-  }
-  return document;
-};
-
-const encodeMsgObj = (document: any, bufferField: string): any => {
-  if (bufferField in document && document[bufferField]) {
-    const decodedMsg = document[bufferField];
-    // convert the Msg obj to Buffer Obj
-    const encodedBufferObj = Buffer.from(JSON.stringify(decodedMsg));
-    document[bufferField] = {};
-    document[bufferField].value = encodedBufferObj;
-  }
-  return document;
 };
 
 /**
@@ -198,14 +176,9 @@ export class ResourcesAPIBase {
       search
     };
     let entities: BaseDocument[] = await this.db.find(this.collectionName, filter, options);
-    if (this.bufferField) {
+    if (this.bufferField && entities?.length > 0) {
       // encode the msg obj back to buffer obj and send it back
-      entities.forEach(element => {
-        if (element[this.bufferField]) {
-          element = encodeMsgObj(element, this.bufferField);
-          return element;
-        }
-      });
+      entities = entities?.map((obj) => encodeOrDecodeIfExists(obj, this.bufferField, 'encode'));
     }
     // config fix to be removed after ts-proto is used
     entities = this.convertmsToSecondsNanos(entities);
@@ -231,16 +204,13 @@ export class ResourcesAPIBase {
         result = requiredFieldsResult.result;
       }
 
-      toInsert = await Promise.all(documents.map(async (doc) => {
-        doc = await setDefaults(doc, collection);
-        // decode the buffer and store it to DB
-        if (this.bufferField) {
-          return (decodeBufferObj(_.cloneDeep(doc), this.bufferField));
-        } else {
-          return doc;
-        }
+      documents = await Promise.all(documents.map(async (doc) => {
+        return await setDefaults(doc, collection);
       }));
 
+      if (this.bufferField && documents?.length > 0) {
+        toInsert = documents.map((obj) => encodeOrDecodeIfExists(obj, this.bufferField, 'decode'));
+      }
       // config fix to be removed after ts-proto is used
       documents = this.convertSecondsNanosToms(documents);
       if (this.isGraphDB(this.db)) {
@@ -417,7 +387,9 @@ export class ResourcesAPIBase {
       let updateDocuments = [];
       let dispatch = [];
       dispatch = await Promise.all(documents.map(async (doc) => {
-        decodeBufferObj(doc, this.bufferField);
+        if (this.bufferField && doc) {
+          doc = encodeOrDecodeIfExists(doc, this.bufferField, 'decode');
+        }
         let foundDocs;
         if (doc && doc.id) {
           foundDocs = await this.db.find(this.collectionName, { id: doc.id }, {
@@ -459,8 +431,8 @@ export class ResourcesAPIBase {
       result = this.convertmsToSecondsNanos(result);
       await Promise.all(dispatch);
 
-      if (this.bufferField) {
-        return _.map(result, doc => encodeMsgObj(doc, this.bufferField));
+      if (this.bufferField && result?.length > 0) {
+        result = result?.map((obj) => encodeOrDecodeIfExists(obj, this.bufferField, 'encode'));
       }
 
       return result;
@@ -486,8 +458,8 @@ export class ResourcesAPIBase {
     try {
       const collectionName = this.collectionName;
       let docsWithUpMetadata = await Promise.all(documents.map(async (doc) => {
-        if (this.bufferField) {
-          doc = decodeBufferObj(_.cloneDeep(doc), this.bufferField);
+        if (this.bufferField && doc) {
+          doc = encodeOrDecodeIfExists(_.cloneDeep(doc), this.bufferField, 'decode');
         }
         const foundDocs = await this.db.find(collectionName, { id: doc.id });
         let dbDoc;
@@ -552,8 +524,8 @@ export class ResourcesAPIBase {
       docsWithUpMetadata = this.convertSecondsNanosToms(docsWithUpMetadata);
       updateResponse = await this.db.update(collectionName, docsWithUpMetadata);
       updateResponse = this.convertmsToSecondsNanos(updateResponse);
-      if (this.bufferField) {
-        updateResponse = _.map(updateResponse, patch => encodeMsgObj(patch, this.bufferField));
+      if (this.bufferField && updateResponse?.length > 0) {
+        updateResponse = updateResponse.map((obj) => encodeOrDecodeIfExists(obj, this.bufferField, 'encode'));
       }
       return updateResponse;
     } catch (e) {

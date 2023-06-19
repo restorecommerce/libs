@@ -224,13 +224,14 @@ describe('ServiceBase', () => {
     db.registerCustomQuery('testFilter', 'filter node.value < @testParam', 'filter');
 
     const bufferHandlerConfig: any = cfg.get('fieldHandlers:bufferFields');
+    const entitiesNames = Object.keys(bufferHandlerConfig);
     const requiredFieldsConfig: any = cfg.get('fieldHandlers:requiredFields');
     let resourceFieldConfig: any;
-    if (bufferHandlerConfig && ('testBufferedData' in bufferHandlerConfig)) {
+    if (bufferHandlerConfig && entitiesNames.includes(resourceName)) {
       if (!resourceFieldConfig) {
         resourceFieldConfig = {};
       }
-      resourceFieldConfig['bufferField'] = bufferHandlerConfig['testBufferedData'];
+      resourceFieldConfig['bufferField'] = bufferHandlerConfig[resourceName];
     }
     if (requiredFieldsConfig && (resourceName in requiredFieldsConfig)) {
       if (!resourceFieldConfig) {
@@ -253,9 +254,17 @@ describe('ServiceBase', () => {
       implementation: service as any
     });
 
+    const bufferResourceName = 'testBufferedData';
+    if (bufferHandlerConfig && entitiesNames.includes(bufferResourceName)) {
+      if (!resourceFieldConfig) {
+        resourceFieldConfig = {};
+      }
+      resourceFieldConfig['bufferField'] = bufferHandlerConfig[bufferResourceName];
+    }
+
     // Create buffered service and bind it to gRPC server
-    const resourceBufferAPI: ResourcesAPIBase = new ResourcesAPIBase(db, 'testBufferedDatas', resourceFieldConfig);
-    const bufferService = new ServiceBase<any, any>('testBufferedData', testEvents,
+    const resourceBufferAPI: ResourcesAPIBase = new ResourcesAPIBase(db, `${bufferResourceName}s`, resourceFieldConfig);
+    const bufferService = new ServiceBase<any, any>(bufferResourceName, testEvents,
       bufferedServer.logger, resourceBufferAPI, isEventsEnabled);
     await bufferedServer.bind('testBufferedService', {
       service: CRUDDefinition,

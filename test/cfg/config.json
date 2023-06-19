@@ -257,7 +257,8 @@
   "fieldHandlers": {
     "fieldGenerators": {},
     "bufferFields": {
-      "testBufferedData": "data"
+      "testBufferedData": "data",
+      "resource": "data"
     },
     "requiredFields": {
       "resource": [

@@ -320,9 +320,9 @@ export interface ReadRequest {
   offset?: number | undefined;
   limit?: number | undefined;
   sorts: Sort[];
-  /** / Filter based on fieldName|operation, value|list */
+  /** Filter based on fieldName|operation, value|list */
   filters: FilterOp[];
-  /** / Fields selector */
+  /** Fields selector */
   fields: FieldFilter[];
   /**
    * Check the query parameters of HTTP request.
@@ -340,11 +340,11 @@ export interface ReadRequest {
 }
 
 export interface DeleteRequest {
-  /** / Request to purge the whole collection */
+  /** Request to purge the whole collection */
   collection?:
     | boolean
     | undefined;
-  /** / Delete specified documents */
+  /** Delete specified documents */
   ids: string[];
   subject?: Subject;
   /** list of views to be dropped */
@@ -358,7 +358,7 @@ export interface DeleteResponse {
   operation_status?: OperationStatus;
 }
 
-/** / List of resources */
+/** List of resources */
 export interface ResourceList {
   items: Resource[];
   total_count?: number | undefined;
@@ -2231,13 +2231,13 @@ export const protoMetadata: ProtoMetadata = {
       }, {
         "path": [4, 5, 2, 3],
         "span": [80, 2, 32],
-        "leadingComments": "/ Filter based on fieldName|operation, value|list\n",
+        "leadingComments": " Filter based on fieldName|operation, value|list\n",
         "trailingComments": " repeated filters\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 5, 2, 4],
         "span": [83, 2, 34],
-        "leadingComments": "/ Fields selector\n",
+        "leadingComments": " Fields selector\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
@@ -2250,13 +2250,13 @@ export const protoMetadata: ProtoMetadata = {
       }, {
         "path": [4, 6, 2, 0],
         "span": [102, 2, 31],
-        "leadingComments": "/ Request to purge the whole collection\n",
+        "leadingComments": " Request to purge the whole collection\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 6, 2, 1],
         "span": [104, 2, 26],
-        "leadingComments": "/ Delete specified documents\n",
+        "leadingComments": " Delete specified documents\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
@@ -2274,7 +2274,7 @@ export const protoMetadata: ProtoMetadata = {
       }, {
         "path": [4, 8],
         "span": [116, 0, 120, 1],
-        "leadingComments": "/ List of resources\n",
+        "leadingComments": " List of resources\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {

@@ -77,10 +77,10 @@ message ReadRequest {
   optional uint32 limit = 2;
   repeated Sort sorts = 3;
 
-  /// Filter based on fieldName|operation, value|list
+  // Filter based on fieldName|operation, value|list
   repeated FilterOp filters = 4; // repeated filters
 
-  /// Fields selector
+  // Fields selector
   repeated FieldFilter fields = 5;
 
   /** Check the query parameters of HTTP request.
@@ -99,9 +99,9 @@ message ReadRequest {
 }
 
 message DeleteRequest {
-  /// Request to purge the whole collection
+  // Request to purge the whole collection
   optional bool collection = 1;
-  /// Delete specified documents
+  // Delete specified documents
   repeated string ids = 2;
   io.restorecommerce.auth.Subject subject = 3;
   repeated string views = 4; // list of views to be dropped
@@ -113,7 +113,7 @@ message DeleteResponse {
   io.restorecommerce.status.OperationStatus operation_status = 2;
 }
 
-/// List of resources
+// List of resources
 message ResourceList {
   repeated Resource items = 1;
   optional uint32 total_count = 2;

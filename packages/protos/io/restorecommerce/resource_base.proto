@@ -133,7 +133,7 @@ message ResourceResponse {
   io.restorecommerce.status.Status status = 2;
 }
 
-/// Example resource
+// Example resource
 message Resource {
   optional string id = 1;
   optional io.restorecommerce.meta.Meta meta = 2;

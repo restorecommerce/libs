@@ -3,6 +3,7 @@ syntax = "proto3";
 package io.restorecommerce.notification_req;
 
 import "io/restorecommerce/status.proto";
+import "io/restorecommerce/reference.proto";
 
 service NotificationReqService {
   // direct notifications
@@ -35,10 +36,7 @@ message NotificationReq {
   optional string transport = 5; /// 'email', 'log', ... default == 'log'
   optional string provider = 6; /// specific transport provider, eg: 'console' for transport == 'log'
   repeated Attachment attachments = 7;
-  /*
-  * A forigner_key using the following pattern: `${collection}/${id}`
-  */
-  optional string reference_id = 8;
+  optional io.restorecommerce.reference.Reference reference = 8;
 }
 
 message Email {

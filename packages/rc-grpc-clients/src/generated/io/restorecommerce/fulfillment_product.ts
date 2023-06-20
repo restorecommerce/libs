@@ -2,17 +2,18 @@
 import type { CallContext, CallOptions } from "nice-grpc-common";
 import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import { protoMetadata as protoMetadata6, ShippingAddress } from "./address";
-import { Attribute, protoMetadata as protoMetadata5 } from "./attribute";
-import { protoMetadata as protoMetadata3, Subject } from "./auth";
-import { Item, Parcel, protoMetadata as protoMetadata10 } from "./fulfillment";
-import { protoMetadata as protoMetadata9 } from "./fulfillment_courier";
-import { BoundingBox3D, protoMetadata as protoMetadata8 } from "./geometry";
-import { Meta, protoMetadata as protoMetadata2 } from "./meta";
-import { KafkaSubscription, protoMetadata as protoMetadata11, Resolver } from "./options";
-import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata1, ReadRequest } from "./resource_base";
-import { OperationStatus, protoMetadata as protoMetadata4, Status } from "./status";
-import { protoMetadata as protoMetadata7, VAT } from "./tax";
+import { protoMetadata as protoMetadata7, ShippingAddress } from "./address";
+import { Amount, protoMetadata as protoMetadata8 } from "./amount";
+import { Attribute, protoMetadata as protoMetadata6 } from "./attribute";
+import { protoMetadata as protoMetadata4, Subject } from "./auth";
+import { Item, Parcel, protoMetadata as protoMetadata11 } from "./fulfillment";
+import { protoMetadata as protoMetadata10 } from "./fulfillment_courier";
+import { BoundingBox3D, protoMetadata as protoMetadata9 } from "./geometry";
+import { Meta, protoMetadata as protoMetadata3 } from "./meta";
+import { KafkaSubscription, protoMetadata as protoMetadata12, Resolver } from "./options";
+import { protoMetadata as protoMetadata1, Reference } from "./reference";
+import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata2, ReadRequest } from "./resource_base";
+import { OperationStatus, protoMetadata as protoMetadata5, Status } from "./status";
 
 export const protobufPackage = "io.restorecommerce.fulfillment_product";
 
@@ -26,7 +27,13 @@ export interface ProductQuery {
   sender?: ShippingAddress | undefined;
   receiver?: ShippingAddress | undefined;
   items: Item[];
-  preferences?: Preferences | undefined;
+  preferences?:
+    | Preferences
+    | undefined;
+  /**
+   * A forigner_key using the following pattern: `${collection}/${id}`
+   * most likly an order_id or fulfillment_id.
+   */
   referenceId?: string | undefined;
 }
 
@@ -76,17 +83,15 @@ export interface FulfillmentProductListResponse {
 }
 
 export interface PackingSolution {
-  price?: number | undefined;
+  amount?: Amount | undefined;
   compactness?: number | undefined;
   homogeneity?: number | undefined;
   score?: number | undefined;
   parcels: Parcel[];
-  vats: VAT[];
 }
 
 export interface PackingSolutionResponse {
-  /** forigner_key: use the following pattern: `${collection}/${id}` */
-  referenceId?: string | undefined;
+  reference?: Reference | undefined;
   solutions: PackingSolution[];
   status?: Status | undefined;
 }
@@ -847,13 +852,13 @@ export const FulfillmentProductListResponse = {
 };
 
 function createBasePackingSolution(): PackingSolution {
-  return { price: undefined, compactness: undefined, homogeneity: undefined, score: undefined, parcels: [], vats: [] };
+  return { amount: undefined, compactness: undefined, homogeneity: undefined, score: undefined, parcels: [] };
 }
 
 export const PackingSolution = {
   encode(message: PackingSolution, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.price !== undefined) {
-      writer.uint32(9).double(message.price);
+    if (message.amount !== undefined) {
+      Amount.encode(message.amount, writer.uint32(10).fork()).ldelim();
     }
     if (message.compactness !== undefined) {
       writer.uint32(17).double(message.compactness);
@@ -867,9 +872,6 @@ export const PackingSolution = {
     for (const v of message.parcels) {
       Parcel.encode(v!, writer.uint32(42).fork()).ldelim();
     }
-    for (const v of message.vats) {
-      VAT.encode(v!, writer.uint32(50).fork()).ldelim();
-    }
     return writer;
   },
 
@@ -881,7 +883,7 @@ export const PackingSolution = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.price = reader.double();
+          message.amount = Amount.decode(reader, reader.uint32());
           break;
         case 2:
           message.compactness = reader.double();
@@ -895,9 +897,6 @@ export const PackingSolution = {
         case 5:
           message.parcels.push(Parcel.decode(reader, reader.uint32()));
           break;
-        case 6:
-          message.vats.push(VAT.decode(reader, reader.uint32()));
-          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -908,18 +907,17 @@ export const PackingSolution = {
 
   fromJSON(object: any): PackingSolution {
     return {
-      price: isSet(object.price) ? Number(object.price) : undefined,
+      amount: isSet(object.amount) ? Amount.fromJSON(object.amount) : undefined,
       compactness: isSet(object.compactness) ? Number(object.compactness) : undefined,
       homogeneity: isSet(object.homogeneity) ? Number(object.homogeneity) : undefined,
       score: isSet(object.score) ? Number(object.score) : undefined,
       parcels: Array.isArray(object?.parcels) ? object.parcels.map((e: any) => Parcel.fromJSON(e)) : [],
-      vats: Array.isArray(object?.vats) ? object.vats.map((e: any) => VAT.fromJSON(e)) : [],
     };
   },
 
   toJSON(message: PackingSolution): unknown {
     const obj: any = {};
-    message.price !== undefined && (obj.price = message.price);
+    message.amount !== undefined && (obj.amount = message.amount ? Amount.toJSON(message.amount) : undefined);
     message.compactness !== undefined && (obj.compactness = message.compactness);
     message.homogeneity !== undefined && (obj.homogeneity = message.homogeneity);
     message.score !== undefined && (obj.score = message.score);
@@ -927,11 +925,6 @@ export const PackingSolution = {
       obj.parcels = message.parcels.map((e) => e ? Parcel.toJSON(e) : undefined);
     } else {
       obj.parcels = [];
-    }
-    if (message.vats) {
-      obj.vats = message.vats.map((e) => e ? VAT.toJSON(e) : undefined);
-    } else {
-      obj.vats = [];
     }
     return obj;
   },
@@ -942,24 +935,25 @@ export const PackingSolution = {
 
   fromPartial(object: DeepPartial<PackingSolution>): PackingSolution {
     const message = createBasePackingSolution();
-    message.price = object.price ?? undefined;
+    message.amount = (object.amount !== undefined && object.amount !== null)
+      ? Amount.fromPartial(object.amount)
+      : undefined;
     message.compactness = object.compactness ?? undefined;
     message.homogeneity = object.homogeneity ?? undefined;
     message.score = object.score ?? undefined;
     message.parcels = object.parcels?.map((e) => Parcel.fromPartial(e)) || [];
-    message.vats = object.vats?.map((e) => VAT.fromPartial(e)) || [];
     return message;
   },
 };
 
 function createBasePackingSolutionResponse(): PackingSolutionResponse {
-  return { referenceId: undefined, solutions: [], status: undefined };
+  return { reference: undefined, solutions: [], status: undefined };
 }
 
 export const PackingSolutionResponse = {
   encode(message: PackingSolutionResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.referenceId !== undefined) {
-      writer.uint32(10).string(message.referenceId);
+    if (message.reference !== undefined) {
+      Reference.encode(message.reference, writer.uint32(10).fork()).ldelim();
     }
     for (const v of message.solutions) {
       PackingSolution.encode(v!, writer.uint32(18).fork()).ldelim();
@@ -978,7 +972,7 @@ export const PackingSolutionResponse = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.referenceId = reader.string();
+          message.reference = Reference.decode(reader, reader.uint32());
           break;
         case 2:
           message.solutions.push(PackingSolution.decode(reader, reader.uint32()));
@@ -996,7 +990,7 @@ export const PackingSolutionResponse = {
 
   fromJSON(object: any): PackingSolutionResponse {
     return {
-      referenceId: isSet(object.referenceId) ? String(object.referenceId) : undefined,
+      reference: isSet(object.reference) ? Reference.fromJSON(object.reference) : undefined,
       solutions: Array.isArray(object?.solutions) ? object.solutions.map((e: any) => PackingSolution.fromJSON(e)) : [],
       status: isSet(object.status) ? Status.fromJSON(object.status) : undefined,
     };
@@ -1004,7 +998,8 @@ export const PackingSolutionResponse = {
 
   toJSON(message: PackingSolutionResponse): unknown {
     const obj: any = {};
-    message.referenceId !== undefined && (obj.referenceId = message.referenceId);
+    message.reference !== undefined &&
+      (obj.reference = message.reference ? Reference.toJSON(message.reference) : undefined);
     if (message.solutions) {
       obj.solutions = message.solutions.map((e) => e ? PackingSolution.toJSON(e) : undefined);
     } else {
@@ -1020,7 +1015,9 @@ export const PackingSolutionResponse = {
 
   fromPartial(object: DeepPartial<PackingSolutionResponse>): PackingSolutionResponse {
     const message = createBasePackingSolutionResponse();
-    message.referenceId = object.referenceId ?? undefined;
+    message.reference = (object.reference !== undefined && object.reference !== null)
+      ? Reference.fromPartial(object.reference)
+      : undefined;
     message.solutions = object.solutions?.map((e) => PackingSolution.fromPartial(e)) || [];
     message.status = (object.status !== undefined && object.status !== null)
       ? Status.fromPartial(object.status)
@@ -1288,13 +1285,14 @@ export const protoMetadata: ProtoMetadata = {
     "name": "io/restorecommerce/fulfillment_product.proto",
     "package": "io.restorecommerce.fulfillment_product",
     "dependency": [
+      "io/restorecommerce/reference.proto",
       "io/restorecommerce/resource_base.proto",
       "io/restorecommerce/meta.proto",
       "io/restorecommerce/auth.proto",
       "io/restorecommerce/status.proto",
       "io/restorecommerce/attribute.proto",
       "io/restorecommerce/address.proto",
-      "io/restorecommerce/tax.proto",
+      "io/restorecommerce/amount.proto",
       "io/restorecommerce/geometry.proto",
       "io/restorecommerce/fulfillment_courier.proto",
       "io/restorecommerce/fulfillment.proto",
@@ -1831,15 +1829,15 @@ export const protoMetadata: ProtoMetadata = {
     }, {
       "name": "PackingSolution",
       "field": [{
-        "name": "price",
+        "name": "amount",
         "number": 1,
         "label": 1,
-        "type": 1,
-        "typeName": "",
+        "type": 11,
+        "typeName": ".io.restorecommerce.amount.Amount",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "price",
+        "jsonName": "amount",
         "options": undefined,
         "proto3Optional": true,
       }, {
@@ -1890,24 +1888,12 @@ export const protoMetadata: ProtoMetadata = {
         "jsonName": "parcels",
         "options": undefined,
         "proto3Optional": false,
-      }, {
-        "name": "vats",
-        "number": 6,
-        "label": 3,
-        "type": 11,
-        "typeName": ".io.restorecommerce.tax.VAT",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "vats",
-        "options": undefined,
-        "proto3Optional": false,
       }],
       "extension": [],
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [{ "name": "_price", "options": undefined }, { "name": "_compactness", "options": undefined }, {
+      "oneofDecl": [{ "name": "_amount", "options": undefined }, { "name": "_compactness", "options": undefined }, {
         "name": "_homogeneity",
         "options": undefined,
       }, { "name": "_score", "options": undefined }],
@@ -1917,15 +1903,15 @@ export const protoMetadata: ProtoMetadata = {
     }, {
       "name": "PackingSolutionResponse",
       "field": [{
-        "name": "reference_id",
+        "name": "reference",
         "number": 1,
         "label": 1,
-        "type": 9,
-        "typeName": "",
+        "type": 11,
+        "typeName": ".io.restorecommerce.reference.Reference",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "referenceId",
+        "jsonName": "reference",
         "options": undefined,
         "proto3Optional": true,
       }, {
@@ -1957,7 +1943,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [{ "name": "_reference_id", "options": undefined }, { "name": "_status", "options": undefined }],
+      "oneofDecl": [{ "name": "_reference", "options": undefined }, { "name": "_status", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -2085,15 +2071,16 @@ export const protoMetadata: ProtoMetadata = {
     "sourceCodeInfo": {
       "location": [{
         "path": [4, 0, 2, 0],
-        "span": [34, 2, 63],
+        "span": [35, 2, 63],
         "leadingComments": "",
         "trailingComments": "ID, name or type\n",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 9, 2, 0],
-        "span": [117, 2, 35],
-        "leadingComments": "",
-        "trailingComments": " forigner_key: use the following pattern: `${collection}/${id}`\n",
+        "path": [4, 1, 2, 4],
+        "span": [48, 2, 35],
+        "leadingComments":
+          "\n A forigner_key using the following pattern: `${collection}/${id}`\n most likly an order_id or fulfillment_id.\n",
+        "trailingComments": "",
         "leadingDetachedComments": [],
       }],
     },
@@ -2125,6 +2112,7 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata9,
     protoMetadata10,
     protoMetadata11,
+    protoMetadata12,
   ],
   options: {
     messages: {

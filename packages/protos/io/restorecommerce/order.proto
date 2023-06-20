@@ -10,7 +10,7 @@ import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
 import "io/restorecommerce/options.proto";
 import "io/restorecommerce/address.proto";
-import "io/restorecommerce/tax.proto";
+import "io/restorecommerce/amount.proto";
 import "io/restorecommerce/country.proto";
 import "io/restorecommerce/fulfillment.proto";
 import "io/restorecommerce/fulfillment_product.proto";
@@ -68,7 +68,7 @@ message Item {
   optional string variant_id = 3;
   optional int32 quantity = 4;
   optional double unit_price = 5; //Set by service
-  optional io.restorecommerce.tax.Amount amount = 6; //Set by service
+  optional io.restorecommerce.amount.Amount amount = 6; //Set by service
 }
 
 /**
@@ -115,8 +115,8 @@ message Order {
   repeated Item items = 6;
   optional State order_state = 7;                                         // Set by service
   optional io.restorecommerce.fulfillment.State fulfillment_state = 8;    // Set by kafka
-  optional io.restorecommerce.invoice.State invoice_state = 9;            // Set by kafka
-  repeated io.restorecommerce.tax.Amount total_amounts = 10;                // Set by service --- repeated in case of variant currency?
+  optional io.restorecommerce.invoice.PaymentState payment_state = 9;            // Set by kafka
+  repeated io.restorecommerce.amount.Amount total_amounts = 10;                // Set by service --- repeated in case of variant currency?
   optional io.restorecommerce.address.ShippingAddress shipping_address = 11;
   optional io.restorecommerce.address.BillingAddress billing_address = 12;
   optional string billing_email = 13;

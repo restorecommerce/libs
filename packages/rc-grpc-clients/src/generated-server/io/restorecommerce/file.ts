@@ -2,6 +2,7 @@
 import * as Long from "long";
 import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
+import { Image, protoMetadata as protoMetadata1 } from "./image";
 
 export const protobufPackage = "io.restorecommerce.file";
 
@@ -14,6 +15,7 @@ export interface File {
   url?: string | undefined;
   bytes?: number | undefined;
   tags: string[];
+  thumbnail?: Image | undefined;
 }
 
 export interface FileList {
@@ -35,6 +37,7 @@ function createBaseFile(): File {
     url: undefined,
     bytes: undefined,
     tags: [],
+    thumbnail: undefined,
   };
 }
 
@@ -63,6 +66,9 @@ export const File = {
     }
     for (const v of message.tags) {
       writer.uint32(66).string(v!);
+    }
+    if (message.thumbnail !== undefined) {
+      Image.encode(message.thumbnail, writer.uint32(74).fork()).ldelim();
     }
     return writer;
   },
@@ -98,6 +104,9 @@ export const File = {
         case 8:
           message.tags.push(reader.string());
           break;
+        case 9:
+          message.thumbnail = Image.decode(reader, reader.uint32());
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -116,6 +125,7 @@ export const File = {
       url: isSet(object.url) ? String(object.url) : undefined,
       bytes: isSet(object.bytes) ? Number(object.bytes) : undefined,
       tags: Array.isArray(object?.tags) ? object.tags.map((e: any) => String(e)) : [],
+      thumbnail: isSet(object.thumbnail) ? Image.fromJSON(object.thumbnail) : undefined,
     };
   },
 
@@ -133,6 +143,8 @@ export const File = {
     } else {
       obj.tags = [];
     }
+    message.thumbnail !== undefined &&
+      (obj.thumbnail = message.thumbnail ? Image.toJSON(message.thumbnail) : undefined);
     return obj;
   },
 
@@ -150,6 +162,9 @@ export const File = {
     message.url = object.url ?? undefined;
     message.bytes = object.bytes ?? undefined;
     message.tags = object.tags?.map((e) => e) || [];
+    message.thumbnail = (object.thumbnail !== undefined && object.thumbnail !== null)
+      ? Image.fromPartial(object.thumbnail)
+      : undefined;
     return message;
   },
 };
@@ -296,7 +311,7 @@ export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto1.fromPartial({
     "name": "io/restorecommerce/file.proto",
     "package": "io.restorecommerce.file",
-    "dependency": [],
+    "dependency": ["io/restorecommerce/image.proto"],
     "publicDependency": [],
     "weakDependency": [],
     "messageType": [{
@@ -397,6 +412,18 @@ export const protoMetadata: ProtoMetadata = {
         "jsonName": "tags",
         "options": undefined,
         "proto3Optional": false,
+      }, {
+        "name": "thumbnail",
+        "number": 9,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.image.Image",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 7,
+        "jsonName": "thumbnail",
+        "options": undefined,
+        "proto3Optional": true,
       }],
       "extension": [],
       "nestedType": [],
@@ -410,6 +437,7 @@ export const protoMetadata: ProtoMetadata = {
         { "name": "_content_type", "options": undefined },
         { "name": "_url", "options": undefined },
         { "name": "_bytes", "options": undefined },
+        { "name": "_thumbnail", "options": undefined },
       ],
       "options": undefined,
       "reservedRange": [],
@@ -485,7 +513,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.file.FileList": FileList,
     ".io.restorecommerce.file.Deleted": Deleted,
   },
-  dependencies: [],
+  dependencies: [protoMetadata1],
 };
 
 declare var self: any | undefined;

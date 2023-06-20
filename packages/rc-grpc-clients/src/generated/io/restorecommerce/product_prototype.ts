@@ -4,7 +4,8 @@ import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
 import { protoMetadata as protoMetadata3, Subject } from "./auth";
 import { Meta, protoMetadata as protoMetadata2 } from "./meta";
-import { protoMetadata as protoMetadata5 } from "./options";
+import { protoMetadata as protoMetadata5, Resolver } from "./options";
+import { protoMetadata as protoMetadata6 } from "./product_category";
 import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata1, ReadRequest } from "./resource_base";
 import { OperationStatus, protoMetadata as protoMetadata4, Status } from "./status";
 
@@ -535,6 +536,7 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/auth.proto",
       "io/restorecommerce/status.proto",
       "io/restorecommerce/options.proto",
+      "io/restorecommerce/product_category.proto",
     ],
     "publicDependency": [],
     "weakDependency": [],
@@ -610,7 +612,15 @@ export const protoMetadata: ProtoMetadata = {
         "defaultValue": "",
         "oneofIndex": 5,
         "jsonName": "categoryId",
-        "options": undefined,
+        "options": {
+          "ctype": 0,
+          "packed": false,
+          "jstype": 0,
+          "lazy": false,
+          "deprecated": false,
+          "weak": false,
+          "uninterpretedOption": [],
+        },
         "proto3Optional": true,
       }],
       "extension": [],
@@ -826,8 +836,14 @@ export const protoMetadata: ProtoMetadata = {
     "options": undefined,
     "sourceCodeInfo": {
       "location": [{
+        "path": [3, 5],
+        "span": [11, 0, 51],
+        "leadingComments": " For resolver\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
         "path": [4, 0],
-        "span": [11, 0, 18, 1],
+        "span": [14, 0, 29, 1],
         "leadingComments": " ProductPrototype resource\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
@@ -842,8 +858,22 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.product_prototype.ProductPrototypeResponse": ProductPrototypeResponse,
     ".io.restorecommerce.product_prototype.Deleted": Deleted,
   },
-  dependencies: [protoMetadata1, protoMetadata2, protoMetadata3, protoMetadata4, protoMetadata5],
+  dependencies: [protoMetadata1, protoMetadata2, protoMetadata3, protoMetadata4, protoMetadata5, protoMetadata6],
   options: {
+    messages: {
+      "ProductPrototype": {
+        fields: {
+          "category_id": {
+            "resolver": Resolver.decode(
+              Buffer.from(
+                "CjQuaW8ucmVzdG9yZWNvbW1lcmNlLnByb2R1Y3RfY2F0ZWdvcnkuUHJvZHVjdENhdGVnb3J5EgdjYXRhbG9nGhBwcm9kdWN0X2NhdGVnb3J5IgRSZWFkKghjYXRlZ29yeQ==",
+                "base64",
+              ),
+            ),
+          },
+        },
+      },
+    },
     services: { "ProductPrototypeService": { options: undefined, methods: { "Read": { "is_query": true } } } },
   },
 };

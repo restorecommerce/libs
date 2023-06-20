@@ -11,6 +11,7 @@ import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
 import "io/restorecommerce/attribute.proto";
 import "io/restorecommerce/geometry.proto";
+import "io/restorecommerce/price.proto";
 import "io/restorecommerce/options.proto";
 
 // Used by resolvers
@@ -122,10 +123,11 @@ message IndividualProduct {
     ];
   }
   repeated string tax_ids = 7;
-  optional string gtin = 8;
+  optional string currency_id = 8;
+  optional string gtin = 9;
   oneof nature {
-    PhysicalProduct physical = 9;
-    VirtualProduct virtual = 10;
+    PhysicalProduct physical = 10;
+    VirtualProduct virtual = 11;
   };
 }
 
@@ -165,15 +167,13 @@ message PhysicalVariant {
   optional string name = 2;
   optional string description = 3;
   optional int32 stock_level = 4;
-  optional double price = 5;
-  optional bool sale = 6;
-  optional double sale_price = 7;
-  repeated io.restorecommerce.image.Image images = 8;
-  repeated io.restorecommerce.file.File files = 9;
-  optional string stock_keeping_unit = 10;
-  optional string template_variant = 11;
-  optional Package package = 12;
-  repeated io.restorecommerce.attribute.Attribute attributes = 13;
+  optional io.restorecommerce.price.Price price = 5;
+  repeated io.restorecommerce.image.Image images = 6;
+  repeated io.restorecommerce.file.File files = 7;
+  optional string stock_keeping_unit = 8;
+  optional string template_variant = 9;
+  optional Package package = 10;
+  repeated io.restorecommerce.attribute.Attribute attributes = 11;
 }
 
 message VirtualVariant {
@@ -181,14 +181,12 @@ message VirtualVariant {
   optional string name = 2;
   optional string description = 3;
   optional int32 stock_level = 4;
-  optional double price = 5;
-  optional bool sale = 6;
-  optional double sale_price = 7;
-  repeated io.restorecommerce.image.Image images = 8;
-  repeated io.restorecommerce.file.File files = 9;
-  optional string stock_keeping_unit = 10;
-  optional string template_variant = 11;
-  repeated io.restorecommerce.attribute.Attribute attributes = 12;
+  optional io.restorecommerce.price.Price price = 5;
+  repeated io.restorecommerce.image.Image images = 6;
+  repeated io.restorecommerce.file.File files = 7;
+  optional string stock_keeping_unit = 8;
+  optional string template_variant = 9;
+  repeated io.restorecommerce.attribute.Attribute attributes = 10;
 }
 
 message Bundle {
@@ -196,7 +194,7 @@ message Bundle {
   optional string description = 2;
   repeated io.restorecommerce.image.Image images = 3;
   repeated BundleProduct products = 4;
-  optional double price = 5;
+  optional io.restorecommerce.price.Price price = 5;
   optional Package pre_packaged = 6;
 }
 
@@ -212,7 +210,7 @@ message BundleProduct {
   ];
   optional string variant_id = 2;
   optional uint32 quantity = 3;
-  optional double tax_ratio = 4; //Discount in relation to the bundle price
+  optional double price_ratio = 4; //Price ratio in relation to the bundle price
 }
 
 message Deleted {

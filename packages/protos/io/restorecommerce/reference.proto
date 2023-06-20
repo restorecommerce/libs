@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package io.restorecommerce.reference;
+
+message Reference {
+  optional string instance_type = 1;
+  optional string instance_id = 2;
+}

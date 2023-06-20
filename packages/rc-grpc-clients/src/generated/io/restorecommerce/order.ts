@@ -4,30 +4,30 @@ import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
 import { Any, protoMetadata as protoMetadata1 } from "../../google/protobuf/any";
 import { BillingAddress, protoMetadata as protoMetadata7, ShippingAddress } from "./address";
+import { Amount, protoMetadata as protoMetadata8 } from "./amount";
 import { protoMetadata as protoMetadata4, Subject } from "./auth";
 import { protoMetadata as protoMetadata9 } from "./country";
 import {
   FulfillmentListResponse,
   protoMetadata as protoMetadata10,
   State as State13,
-  stateFromJSON as stateFromJSON17,
-  stateToJSON as stateToJSON19,
-  stateToNumber as stateToNumber15,
+  stateFromJSON as stateFromJSON15,
+  stateToJSON as stateToJSON16,
+  stateToNumber as stateToNumber14,
 } from "./fulfillment";
 import { PackingSolutionListResponse, Preferences, protoMetadata as protoMetadata11 } from "./fulfillment_product";
 import {
   InvoiceListResponse,
+  PaymentState,
+  paymentStateFromJSON,
+  paymentStateToJSON,
+  paymentStateToNumber,
   protoMetadata as protoMetadata12,
-  State as State14,
-  stateFromJSON as stateFromJSON18,
-  stateToJSON as stateToJSON20,
-  stateToNumber as stateToNumber16,
 } from "./invoice";
 import { Meta, protoMetadata as protoMetadata3 } from "./meta";
 import { KafkaSubscription, protoMetadata as protoMetadata6, Resolver } from "./options";
 import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata2, ReadRequest } from "./resource_base";
 import { OperationStatus, protoMetadata as protoMetadata5, Status, StatusListResponse } from "./status";
-import { protoMetadata as protoMetadata8, VAT } from "./tax";
 
 export const protobufPackage = "io.restorecommerce.order";
 
@@ -136,15 +136,7 @@ export interface Item {
     | number
     | undefined;
   /** Set by service */
-  gross?:
-    | number
-    | undefined;
-  /** Set by service */
-  net?:
-    | number
-    | undefined;
-  /** Set by service */
-  vats: VAT[];
+  amount?: Amount | undefined;
 }
 
 /** Database Entity */
@@ -164,19 +156,11 @@ export interface Order {
     | State13
     | undefined;
   /** Set by kafka */
-  invoiceState?:
-    | State14
+  paymentState?:
+    | PaymentState
     | undefined;
-  /** Set by service */
-  totalGross?:
-    | number
-    | undefined;
-  /** Set by service */
-  totalNet?:
-    | number
-    | undefined;
-  /** Set by service */
-  totalVats: VAT[];
+  /** Set by service --- repeated in case of variant currency? */
+  totalAmounts: Amount[];
   shippingAddress?: ShippingAddress | undefined;
   billingAddress?: BillingAddress | undefined;
   billingEmail?: string | undefined;
@@ -265,9 +249,7 @@ function createBaseItem(): Item {
     variantId: undefined,
     quantity: undefined,
     unitPrice: undefined,
-    gross: undefined,
-    net: undefined,
-    vats: [],
+    amount: undefined,
   };
 }
 
@@ -288,14 +270,8 @@ export const Item = {
     if (message.unitPrice !== undefined) {
       writer.uint32(41).double(message.unitPrice);
     }
-    if (message.gross !== undefined) {
-      writer.uint32(49).double(message.gross);
-    }
-    if (message.net !== undefined) {
-      writer.uint32(57).double(message.net);
-    }
-    for (const v of message.vats) {
-      VAT.encode(v!, writer.uint32(66).fork()).ldelim();
+    if (message.amount !== undefined) {
+      Amount.encode(message.amount, writer.uint32(50).fork()).ldelim();
     }
     return writer;
   },
@@ -323,13 +299,7 @@ export const Item = {
           message.unitPrice = reader.double();
           break;
         case 6:
-          message.gross = reader.double();
-          break;
-        case 7:
-          message.net = reader.double();
-          break;
-        case 8:
-          message.vats.push(VAT.decode(reader, reader.uint32()));
+          message.amount = Amount.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -346,9 +316,7 @@ export const Item = {
       variantId: isSet(object.variantId) ? String(object.variantId) : undefined,
       quantity: isSet(object.quantity) ? Number(object.quantity) : undefined,
       unitPrice: isSet(object.unitPrice) ? Number(object.unitPrice) : undefined,
-      gross: isSet(object.gross) ? Number(object.gross) : undefined,
-      net: isSet(object.net) ? Number(object.net) : undefined,
-      vats: Array.isArray(object?.vats) ? object.vats.map((e: any) => VAT.fromJSON(e)) : [],
+      amount: isSet(object.amount) ? Amount.fromJSON(object.amount) : undefined,
     };
   },
 
@@ -359,13 +327,7 @@ export const Item = {
     message.variantId !== undefined && (obj.variantId = message.variantId);
     message.quantity !== undefined && (obj.quantity = Math.round(message.quantity));
     message.unitPrice !== undefined && (obj.unitPrice = message.unitPrice);
-    message.gross !== undefined && (obj.gross = message.gross);
-    message.net !== undefined && (obj.net = message.net);
-    if (message.vats) {
-      obj.vats = message.vats.map((e) => e ? VAT.toJSON(e) : undefined);
-    } else {
-      obj.vats = [];
-    }
+    message.amount !== undefined && (obj.amount = message.amount ? Amount.toJSON(message.amount) : undefined);
     return obj;
   },
 
@@ -380,9 +342,9 @@ export const Item = {
     message.variantId = object.variantId ?? undefined;
     message.quantity = object.quantity ?? undefined;
     message.unitPrice = object.unitPrice ?? undefined;
-    message.gross = object.gross ?? undefined;
-    message.net = object.net ?? undefined;
-    message.vats = object.vats?.map((e) => VAT.fromPartial(e)) || [];
+    message.amount = (object.amount !== undefined && object.amount !== null)
+      ? Amount.fromPartial(object.amount)
+      : undefined;
     return message;
   },
 };
@@ -397,10 +359,8 @@ function createBaseOrder(): Order {
     items: [],
     orderState: undefined,
     fulfillmentState: undefined,
-    invoiceState: undefined,
-    totalGross: undefined,
-    totalNet: undefined,
-    totalVats: [],
+    paymentState: undefined,
+    totalAmounts: [],
     shippingAddress: undefined,
     billingAddress: undefined,
     billingEmail: undefined,
@@ -435,40 +395,34 @@ export const Order = {
       writer.uint32(56).int32(stateToNumber(message.orderState));
     }
     if (message.fulfillmentState !== undefined) {
-      writer.uint32(64).int32(stateToNumber15(message.fulfillmentState));
+      writer.uint32(64).int32(stateToNumber14(message.fulfillmentState));
     }
-    if (message.invoiceState !== undefined) {
-      writer.uint32(72).int32(stateToNumber16(message.invoiceState));
+    if (message.paymentState !== undefined) {
+      writer.uint32(72).int32(paymentStateToNumber(message.paymentState));
     }
-    if (message.totalGross !== undefined) {
-      writer.uint32(81).double(message.totalGross);
-    }
-    if (message.totalNet !== undefined) {
-      writer.uint32(89).double(message.totalNet);
-    }
-    for (const v of message.totalVats) {
-      VAT.encode(v!, writer.uint32(98).fork()).ldelim();
+    for (const v of message.totalAmounts) {
+      Amount.encode(v!, writer.uint32(82).fork()).ldelim();
     }
     if (message.shippingAddress !== undefined) {
-      ShippingAddress.encode(message.shippingAddress, writer.uint32(106).fork()).ldelim();
+      ShippingAddress.encode(message.shippingAddress, writer.uint32(90).fork()).ldelim();
     }
     if (message.billingAddress !== undefined) {
-      BillingAddress.encode(message.billingAddress, writer.uint32(114).fork()).ldelim();
+      BillingAddress.encode(message.billingAddress, writer.uint32(98).fork()).ldelim();
     }
     if (message.billingEmail !== undefined) {
-      writer.uint32(122).string(message.billingEmail);
+      writer.uint32(106).string(message.billingEmail);
     }
     if (message.notificationEmail !== undefined) {
-      writer.uint32(130).string(message.notificationEmail);
+      writer.uint32(114).string(message.notificationEmail);
     }
     if (message.customerOrderNr !== undefined) {
-      writer.uint32(138).string(message.customerOrderNr);
+      writer.uint32(122).string(message.customerOrderNr);
     }
     if (message.customerRemark !== undefined) {
-      writer.uint32(146).string(message.customerRemark);
+      writer.uint32(130).string(message.customerRemark);
     }
     if (message.packagingPreferences !== undefined) {
-      Preferences.encode(message.packagingPreferences, writer.uint32(154).fork()).ldelim();
+      Preferences.encode(message.packagingPreferences, writer.uint32(138).fork()).ldelim();
     }
     return writer;
   },
@@ -502,39 +456,33 @@ export const Order = {
           message.orderState = stateFromJSON(reader.int32());
           break;
         case 8:
-          message.fulfillmentState = stateFromJSON17(reader.int32());
+          message.fulfillmentState = stateFromJSON15(reader.int32());
           break;
         case 9:
-          message.invoiceState = stateFromJSON18(reader.int32());
+          message.paymentState = paymentStateFromJSON(reader.int32());
           break;
         case 10:
-          message.totalGross = reader.double();
+          message.totalAmounts.push(Amount.decode(reader, reader.uint32()));
           break;
         case 11:
-          message.totalNet = reader.double();
-          break;
-        case 12:
-          message.totalVats.push(VAT.decode(reader, reader.uint32()));
-          break;
-        case 13:
           message.shippingAddress = ShippingAddress.decode(reader, reader.uint32());
           break;
-        case 14:
+        case 12:
           message.billingAddress = BillingAddress.decode(reader, reader.uint32());
           break;
-        case 15:
+        case 13:
           message.billingEmail = reader.string();
           break;
-        case 16:
+        case 14:
           message.notificationEmail = reader.string();
           break;
-        case 17:
+        case 15:
           message.customerOrderNr = reader.string();
           break;
-        case 18:
+        case 16:
           message.customerRemark = reader.string();
           break;
-        case 19:
+        case 17:
           message.packagingPreferences = Preferences.decode(reader, reader.uint32());
           break;
         default:
@@ -554,11 +502,9 @@ export const Order = {
       shopId: isSet(object.shopId) ? String(object.shopId) : undefined,
       items: Array.isArray(object?.items) ? object.items.map((e: any) => Item.fromJSON(e)) : [],
       orderState: isSet(object.orderState) ? stateFromJSON(object.orderState) : undefined,
-      fulfillmentState: isSet(object.fulfillmentState) ? stateFromJSON17(object.fulfillmentState) : undefined,
-      invoiceState: isSet(object.invoiceState) ? stateFromJSON18(object.invoiceState) : undefined,
-      totalGross: isSet(object.totalGross) ? Number(object.totalGross) : undefined,
-      totalNet: isSet(object.totalNet) ? Number(object.totalNet) : undefined,
-      totalVats: Array.isArray(object?.totalVats) ? object.totalVats.map((e: any) => VAT.fromJSON(e)) : [],
+      fulfillmentState: isSet(object.fulfillmentState) ? stateFromJSON15(object.fulfillmentState) : undefined,
+      paymentState: isSet(object.paymentState) ? paymentStateFromJSON(object.paymentState) : undefined,
+      totalAmounts: Array.isArray(object?.totalAmounts) ? object.totalAmounts.map((e: any) => Amount.fromJSON(e)) : [],
       shippingAddress: isSet(object.shippingAddress) ? ShippingAddress.fromJSON(object.shippingAddress) : undefined,
       billingAddress: isSet(object.billingAddress) ? BillingAddress.fromJSON(object.billingAddress) : undefined,
       billingEmail: isSet(object.billingEmail) ? String(object.billingEmail) : undefined,
@@ -586,16 +532,14 @@ export const Order = {
     message.orderState !== undefined &&
       (obj.orderState = message.orderState !== undefined ? stateToJSON(message.orderState) : undefined);
     message.fulfillmentState !== undefined && (obj.fulfillmentState = message.fulfillmentState !== undefined
-      ? stateToJSON19(message.fulfillmentState)
+      ? stateToJSON16(message.fulfillmentState)
       : undefined);
-    message.invoiceState !== undefined &&
-      (obj.invoiceState = message.invoiceState !== undefined ? stateToJSON20(message.invoiceState) : undefined);
-    message.totalGross !== undefined && (obj.totalGross = message.totalGross);
-    message.totalNet !== undefined && (obj.totalNet = message.totalNet);
-    if (message.totalVats) {
-      obj.totalVats = message.totalVats.map((e) => e ? VAT.toJSON(e) : undefined);
+    message.paymentState !== undefined &&
+      (obj.paymentState = message.paymentState !== undefined ? paymentStateToJSON(message.paymentState) : undefined);
+    if (message.totalAmounts) {
+      obj.totalAmounts = message.totalAmounts.map((e) => e ? Amount.toJSON(e) : undefined);
     } else {
-      obj.totalVats = [];
+      obj.totalAmounts = [];
     }
     message.shippingAddress !== undefined &&
       (obj.shippingAddress = message.shippingAddress ? ShippingAddress.toJSON(message.shippingAddress) : undefined);
@@ -625,10 +569,8 @@ export const Order = {
     message.items = object.items?.map((e) => Item.fromPartial(e)) || [];
     message.orderState = object.orderState ?? undefined;
     message.fulfillmentState = object.fulfillmentState ?? undefined;
-    message.invoiceState = object.invoiceState ?? undefined;
-    message.totalGross = object.totalGross ?? undefined;
-    message.totalNet = object.totalNet ?? undefined;
-    message.totalVats = object.totalVats?.map((e) => VAT.fromPartial(e)) || [];
+    message.paymentState = object.paymentState ?? undefined;
+    message.totalAmounts = object.totalAmounts?.map((e) => Amount.fromPartial(e)) || [];
     message.shippingAddress = (object.shippingAddress !== undefined && object.shippingAddress !== null)
       ? ShippingAddress.fromPartial(object.shippingAddress)
       : undefined;
@@ -1578,7 +1520,7 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/status.proto",
       "io/restorecommerce/options.proto",
       "io/restorecommerce/address.proto",
-      "io/restorecommerce/tax.proto",
+      "io/restorecommerce/amount.proto",
       "io/restorecommerce/country.proto",
       "io/restorecommerce/fulfillment.proto",
       "io/restorecommerce/fulfillment_product.proto",
@@ -1657,41 +1599,17 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "gross",
+        "name": "amount",
         "number": 6,
         "label": 1,
-        "type": 1,
-        "typeName": "",
+        "type": 11,
+        "typeName": ".io.restorecommerce.amount.Amount",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 5,
-        "jsonName": "gross",
+        "jsonName": "amount",
         "options": undefined,
         "proto3Optional": true,
-      }, {
-        "name": "net",
-        "number": 7,
-        "label": 1,
-        "type": 1,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 6,
-        "jsonName": "net",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
-        "name": "vats",
-        "number": 8,
-        "label": 3,
-        "type": 11,
-        "typeName": ".io.restorecommerce.tax.VAT",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "vats",
-        "options": undefined,
-        "proto3Optional": false,
       }],
       "extension": [],
       "nestedType": [],
@@ -1703,8 +1621,7 @@ export const protoMetadata: ProtoMetadata = {
         { "name": "_variant_id", "options": undefined },
         { "name": "_quantity", "options": undefined },
         { "name": "_unit_price", "options": undefined },
-        { "name": "_gross", "options": undefined },
-        { "name": "_net", "options": undefined },
+        { "name": "_amount", "options": undefined },
       ],
       "options": undefined,
       "reservedRange": [],
@@ -1832,79 +1749,79 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "invoice_state",
+        "name": "payment_state",
         "number": 9,
         "label": 1,
         "type": 14,
-        "typeName": ".io.restorecommerce.invoice.State",
+        "typeName": ".io.restorecommerce.invoice.PaymentState",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 7,
-        "jsonName": "invoiceState",
+        "jsonName": "paymentState",
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "total_gross",
+        "name": "total_amounts",
         "number": 10,
-        "label": 1,
-        "type": 1,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 8,
-        "jsonName": "totalGross",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
-        "name": "total_net",
-        "number": 11,
-        "label": 1,
-        "type": 1,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 9,
-        "jsonName": "totalNet",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
-        "name": "total_vats",
-        "number": 12,
         "label": 3,
         "type": 11,
-        "typeName": ".io.restorecommerce.tax.VAT",
+        "typeName": ".io.restorecommerce.amount.Amount",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "totalVats",
+        "jsonName": "totalAmounts",
         "options": undefined,
         "proto3Optional": false,
       }, {
         "name": "shipping_address",
-        "number": 13,
+        "number": 11,
         "label": 1,
         "type": 11,
         "typeName": ".io.restorecommerce.address.ShippingAddress",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 10,
+        "oneofIndex": 8,
         "jsonName": "shippingAddress",
         "options": undefined,
         "proto3Optional": true,
       }, {
         "name": "billing_address",
-        "number": 14,
+        "number": 12,
         "label": 1,
         "type": 11,
         "typeName": ".io.restorecommerce.address.BillingAddress",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 11,
+        "oneofIndex": 9,
         "jsonName": "billingAddress",
         "options": undefined,
         "proto3Optional": true,
       }, {
         "name": "billing_email",
+        "number": 13,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 10,
+        "jsonName": "billingEmail",
+        "options": undefined,
+        "proto3Optional": true,
+      }, {
+        "name": "notification_email",
+        "number": 14,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 11,
+        "jsonName": "notificationEmail",
+        "options": undefined,
+        "proto3Optional": true,
+      }, {
+        "name": "customer_order_nr",
         "number": 15,
         "label": 1,
         "type": 9,
@@ -1912,11 +1829,11 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 12,
-        "jsonName": "billingEmail",
+        "jsonName": "customerOrderNr",
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "notification_email",
+        "name": "customer_remark",
         "number": 16,
         "label": 1,
         "type": 9,
@@ -1924,42 +1841,18 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 13,
-        "jsonName": "notificationEmail",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
-        "name": "customer_order_nr",
-        "number": 17,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 14,
-        "jsonName": "customerOrderNr",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
-        "name": "customer_remark",
-        "number": 18,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 15,
         "jsonName": "customerRemark",
         "options": undefined,
         "proto3Optional": true,
       }, {
         "name": "packaging_preferences",
-        "number": 19,
+        "number": 17,
         "label": 1,
         "type": 11,
         "typeName": ".io.restorecommerce.fulfillment_product.Preferences",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 16,
+        "oneofIndex": 14,
         "jsonName": "packagingPreferences",
         "options": undefined,
         "proto3Optional": true,
@@ -1976,9 +1869,7 @@ export const protoMetadata: ProtoMetadata = {
         { "name": "_shop_id", "options": undefined },
         { "name": "_order_state", "options": undefined },
         { "name": "_fulfillment_state", "options": undefined },
-        { "name": "_invoice_state", "options": undefined },
-        { "name": "_total_gross", "options": undefined },
-        { "name": "_total_net", "options": undefined },
+        { "name": "_payment_state", "options": undefined },
         { "name": "_shipping_address", "options": undefined },
         { "name": "_billing_address", "options": undefined },
         { "name": "_billing_email", "options": undefined },
@@ -2602,103 +2493,79 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 0, 2, 5],
-        "span": [70, 2, 28],
-        "leadingComments": "",
-        "trailingComments": "Set by service\n",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 0, 2, 6],
-        "span": [71, 2, 26],
-        "leadingComments": "",
-        "trailingComments": "Set by service\n",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 0, 2, 7],
-        "span": [72, 2, 47],
+        "span": [70, 2, 55],
         "leadingComments": "",
         "trailingComments": "Set by service\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1],
-        "span": [78, 0, 130, 1],
+        "span": [76, 0, 126, 1],
         "leadingComments": "*\nDatabase Entity\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 6],
-        "span": [117, 2, 33],
+        "span": [115, 2, 33],
         "leadingComments": "",
         "trailingComments": " Set by service\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 7],
-        "span": [118, 2, 70],
+        "span": [116, 2, 70],
         "leadingComments": "",
         "trailingComments": " Set by kafka\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 8],
-        "span": [119, 2, 62],
+        "span": [117, 2, 69],
         "leadingComments": "",
         "trailingComments": " Set by kafka\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 9],
-        "span": [120, 2, 35],
+        "span": [118, 2, 63],
         "leadingComments": "",
-        "trailingComments": " Set by service\n",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 1, 2, 10],
-        "span": [121, 2, 33],
-        "leadingComments": "",
-        "trailingComments": " Set by service\n",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 1, 2, 11],
-        "span": [122, 2, 54],
-        "leadingComments": "",
-        "trailingComments": " Set by service\n",
+        "trailingComments": " Set by service --- repeated in case of variant currency?\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 7, 2, 1],
-        "span": [160, 2, 34],
+        "span": [156, 2, 34],
         "leadingComments": "",
         "trailingComments": " @TODO: not used!\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 7, 2, 2],
-        "span": [161, 2, 41],
+        "span": [157, 2, 41],
         "leadingComments": "",
         "trailingComments": " @TODO: not used!\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 7, 2, 3],
-        "span": [162, 2, 37],
+        "span": [158, 2, 37],
         "leadingComments": "",
         "trailingComments": " @TODO: not used!\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 7, 2, 5],
-        "span": [164, 2, 36],
+        "span": [160, 2, 36],
         "leadingComments": "",
         "trailingComments": " includes all if empty\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 9, 2, 0],
-        "span": [175, 2, 37],
+        "span": [171, 2, 37],
         "leadingComments": "",
         "trailingComments": " if given\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 9, 2, 2],
-        "span": [177, 2, 37],
+        "span": [173, 2, 37],
         "leadingComments": "",
         "trailingComments": " includes all on empty\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 9, 2, 3],
-        "span": [178, 2, 44],
+        "span": [174, 2, 44],
         "leadingComments": "",
         "trailingComments": " includes all on empty\n",
         "leadingDetachedComments": [],

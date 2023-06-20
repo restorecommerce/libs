@@ -378,7 +378,7 @@ export interface ResourceResponse {
   status?: Status;
 }
 
-/** / Example resource */
+/** Example resource */
 export interface Resource {
   id?: string | undefined;
   meta?: Meta | undefined;
@@ -2292,7 +2292,7 @@ export const protoMetadata: ProtoMetadata = {
       }, {
         "path": [4, 11],
         "span": [136, 0, 139, 1],
-        "leadingComments": "/ Example resource\n",
+        "leadingComments": " Example resource\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }],

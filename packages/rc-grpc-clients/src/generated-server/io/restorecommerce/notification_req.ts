@@ -2,6 +2,7 @@
 import type { CallContext, CallOptions } from "nice-grpc-common";
 import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
+import { protoMetadata as protoMetadata2, Reference } from "./reference";
 import { OperationStatusObj, protoMetadata as protoMetadata1 } from "./status";
 
 export const protobufPackage = "io.restorecommerce.notification_req";
@@ -42,8 +43,7 @@ export interface NotificationReq {
   /** / specific transport provider, eg: 'console' for transport == 'log' */
   provider?: string | undefined;
   attachments: Attachment[];
-  /** A forigner_key using the following pattern: `${collection}/${id}` */
-  reference_id?: string | undefined;
+  reference?: Reference | undefined;
 }
 
 export interface Email {
@@ -196,7 +196,7 @@ function createBaseNotificationReq(): NotificationReq {
     transport: undefined,
     provider: undefined,
     attachments: [],
-    reference_id: undefined,
+    reference: undefined,
   };
 }
 
@@ -223,8 +223,8 @@ export const NotificationReq = {
     for (const v of message.attachments) {
       Attachment.encode(v!, writer.uint32(58).fork()).ldelim();
     }
-    if (message.reference_id !== undefined) {
-      writer.uint32(66).string(message.reference_id);
+    if (message.reference !== undefined) {
+      Reference.encode(message.reference, writer.uint32(66).fork()).ldelim();
     }
     return writer;
   },
@@ -258,7 +258,7 @@ export const NotificationReq = {
           message.attachments.push(Attachment.decode(reader, reader.uint32()));
           break;
         case 8:
-          message.reference_id = reader.string();
+          message.reference = Reference.decode(reader, reader.uint32());
           break;
         default:
           reader.skipType(tag & 7);
@@ -277,7 +277,7 @@ export const NotificationReq = {
       transport: isSet(object.transport) ? String(object.transport) : undefined,
       provider: isSet(object.provider) ? String(object.provider) : undefined,
       attachments: Array.isArray(object?.attachments) ? object.attachments.map((e: any) => Attachment.fromJSON(e)) : [],
-      reference_id: isSet(object.reference_id) ? String(object.reference_id) : undefined,
+      reference: isSet(object.reference) ? Reference.fromJSON(object.reference) : undefined,
     };
   },
 
@@ -294,7 +294,8 @@ export const NotificationReq = {
     } else {
       obj.attachments = [];
     }
-    message.reference_id !== undefined && (obj.reference_id = message.reference_id);
+    message.reference !== undefined &&
+      (obj.reference = message.reference ? Reference.toJSON(message.reference) : undefined);
     return obj;
   },
 
@@ -311,7 +312,9 @@ export const NotificationReq = {
     message.transport = object.transport ?? undefined;
     message.provider = object.provider ?? undefined;
     message.attachments = object.attachments?.map((e) => Attachment.fromPartial(e)) || [];
-    message.reference_id = object.reference_id ?? undefined;
+    message.reference = (object.reference !== undefined && object.reference !== null)
+      ? Reference.fromPartial(object.reference)
+      : undefined;
     return message;
   },
 };
@@ -511,7 +514,7 @@ export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto1.fromPartial({
     "name": "io/restorecommerce/notification_req.proto",
     "package": "io.restorecommerce.notification_req",
-    "dependency": ["io/restorecommerce/status.proto"],
+    "dependency": ["io/restorecommerce/status.proto", "io/restorecommerce/reference.proto"],
     "publicDependency": [],
     "weakDependency": [],
     "messageType": [{
@@ -717,15 +720,15 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "reference_id",
+        "name": "reference",
         "number": 8,
         "label": 1,
-        "type": 9,
-        "typeName": "",
+        "type": 11,
+        "typeName": ".io.restorecommerce.reference.Reference",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 5,
-        "jsonName": "referenceId",
+        "jsonName": "reference",
         "options": undefined,
         "proto3Optional": true,
       }],
@@ -739,7 +742,7 @@ export const protoMetadata: ProtoMetadata = {
         { "name": "_body", "options": undefined },
         { "name": "_transport", "options": undefined },
         { "name": "_provider", "options": undefined },
-        { "name": "_reference_id", "options": undefined },
+        { "name": "_reference", "options": undefined },
       ],
       "options": undefined,
       "reservedRange": [],
@@ -845,79 +848,73 @@ export const protoMetadata: ProtoMetadata = {
     "sourceCodeInfo": {
       "location": [{
         "path": [6, 0, 2, 0],
-        "span": [8, 2, 84],
+        "span": [9, 2, 84],
         "leadingComments": " direct notifications\n",
         "trailingComments": "/ generic fallback\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 0],
-        "span": [12, 0, 24, 1],
+        "span": [13, 0, 25, 1],
         "leadingComments": " mimics nodemailer properties for easy configuration\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 0, 2, 1],
-        "span": [16, 2, 27],
+        "span": [17, 2, 27],
         "leadingComments": ' the "content" may be on of the following:\n',
         "trailingComments": " for textual data\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 0, 2, 2],
-        "span": [17, 2, 28],
+        "span": [18, 2, 28],
         "leadingComments": "",
         "trailingComments": " for binary data, eg.: images\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1],
-        "span": [27, 0, 41, 1],
+        "span": [28, 0, 39, 1],
         "leadingComments": " sendEmail NotificationReq event\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 3],
-        "span": [33, 2, 27],
+        "span": [34, 2, 27],
         "leadingComments": "",
         "trailingComments": " text/HTML content\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 4],
-        "span": [34, 2, 32],
+        "span": [35, 2, 32],
         "leadingComments": "",
         "trailingComments": "/ 'email', 'log', ... default == 'log'\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 5],
-        "span": [35, 2, 31],
+        "span": [36, 2, 31],
         "leadingComments": "",
         "trailingComments": "/ specific transport provider, eg: 'console' for transport == 'log'\n",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 1, 2, 7],
-        "span": [40, 2, 35],
-        "leadingComments": "\n A forigner_key using the following pattern: `${collection}/${id}`\n",
-        "trailingComments": "",
-        "leadingDetachedComments": [],
-      }, {
         "path": [4, 2, 2, 0],
-        "span": [44, 2, 25],
+        "span": [42, 2, 25],
         "leadingComments": "",
         "trailingComments": " array of to email list\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 2, 2, 1],
-        "span": [45, 2, 26],
+        "span": [43, 2, 26],
         "leadingComments": "",
         "trailingComments": " array of cc email list\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 2, 2, 2],
-        "span": [46, 2, 26],
+        "span": [44, 2, 26],
         "leadingComments": "",
         "trailingComments": " array of bcc email list\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 2, 2, 3],
-        "span": [47, 2, 30],
+        "span": [45, 2, 30],
         "leadingComments": "",
         "trailingComments": " if set, the outgoing mail will have this replyTo header set\n",
         "leadingDetachedComments": [],
@@ -931,7 +928,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.notification_req.Email": Email,
     ".io.restorecommerce.notification_req.Log": Log,
   },
-  dependencies: [protoMetadata1],
+  dependencies: [protoMetadata1, protoMetadata2],
 };
 
 declare var self: any | undefined;

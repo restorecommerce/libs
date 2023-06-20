@@ -8,9 +8,10 @@ import { protoMetadata as protoMetadata6, Subject } from "./auth";
 import { File, protoMetadata as protoMetadata5 } from "./file";
 import { BoundingBox3D, protoMetadata as protoMetadata9 } from "./geometry";
 import { Image, protoMetadata as protoMetadata4 } from "./image";
-import { protoMetadata as protoMetadata11 } from "./manufacturer";
+import { protoMetadata as protoMetadata12 } from "./manufacturer";
 import { Meta, protoMetadata as protoMetadata3 } from "./meta";
-import { KafkaSubscription, protoMetadata as protoMetadata10, Resolver } from "./options";
+import { KafkaSubscription, protoMetadata as protoMetadata11, Resolver } from "./options";
+import { Price, protoMetadata as protoMetadata10 } from "./price";
 import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata2, ReadRequest } from "./resource_base";
 import { OperationStatus, protoMetadata as protoMetadata7, Status } from "./status";
 
@@ -97,6 +98,7 @@ export interface IndividualProduct {
   prototypeId?: string | undefined;
   categoryId?: string | undefined;
   taxIds: string[];
+  currencyId?: string | undefined;
   gtin?: string | undefined;
   physical?: PhysicalProduct | undefined;
   virtual?: VirtualProduct | undefined;
@@ -138,9 +140,7 @@ export interface PhysicalVariant {
   name?: string | undefined;
   description?: string | undefined;
   stockLevel?: number | undefined;
-  price?: number | undefined;
-  sale?: boolean | undefined;
-  salePrice?: number | undefined;
+  price?: Price | undefined;
   images: Image[];
   files: File[];
   stockKeepingUnit?: string | undefined;
@@ -154,9 +154,7 @@ export interface VirtualVariant {
   name?: string | undefined;
   description?: string | undefined;
   stockLevel?: number | undefined;
-  price?: number | undefined;
-  sale?: boolean | undefined;
-  salePrice?: number | undefined;
+  price?: Price | undefined;
   images: Image[];
   files: File[];
   stockKeepingUnit?: string | undefined;
@@ -169,7 +167,7 @@ export interface Bundle {
   description?: string | undefined;
   images: Image[];
   products: BundleProduct[];
-  price?: number | undefined;
+  price?: Price | undefined;
   prePackaged?: Package | undefined;
 }
 
@@ -179,8 +177,8 @@ export interface BundleProduct {
   quantity?:
     | number
     | undefined;
-  /** Discount in relation to the bundle price */
-  taxRatio?: number | undefined;
+  /** Price ratio in relation to the bundle price */
+  priceRatio?: number | undefined;
 }
 
 export interface Deleted {
@@ -430,6 +428,7 @@ function createBaseIndividualProduct(): IndividualProduct {
     prototypeId: undefined,
     categoryId: undefined,
     taxIds: [],
+    currencyId: undefined,
     gtin: undefined,
     physical: undefined,
     virtual: undefined,
@@ -459,14 +458,17 @@ export const IndividualProduct = {
     for (const v of message.taxIds) {
       writer.uint32(58).string(v!);
     }
+    if (message.currencyId !== undefined) {
+      writer.uint32(66).string(message.currencyId);
+    }
     if (message.gtin !== undefined) {
-      writer.uint32(66).string(message.gtin);
+      writer.uint32(74).string(message.gtin);
     }
     if (message.physical !== undefined) {
-      PhysicalProduct.encode(message.physical, writer.uint32(74).fork()).ldelim();
+      PhysicalProduct.encode(message.physical, writer.uint32(82).fork()).ldelim();
     }
     if (message.virtual !== undefined) {
-      VirtualProduct.encode(message.virtual, writer.uint32(82).fork()).ldelim();
+      VirtualProduct.encode(message.virtual, writer.uint32(90).fork()).ldelim();
     }
     return writer;
   },
@@ -500,12 +502,15 @@ export const IndividualProduct = {
           message.taxIds.push(reader.string());
           break;
         case 8:
-          message.gtin = reader.string();
+          message.currencyId = reader.string();
           break;
         case 9:
-          message.physical = PhysicalProduct.decode(reader, reader.uint32());
+          message.gtin = reader.string();
           break;
         case 10:
+          message.physical = PhysicalProduct.decode(reader, reader.uint32());
+          break;
+        case 11:
           message.virtual = VirtualProduct.decode(reader, reader.uint32());
           break;
         default:
@@ -525,6 +530,7 @@ export const IndividualProduct = {
       prototypeId: isSet(object.prototypeId) ? String(object.prototypeId) : undefined,
       categoryId: isSet(object.categoryId) ? String(object.categoryId) : undefined,
       taxIds: Array.isArray(object?.taxIds) ? object.taxIds.map((e: any) => String(e)) : [],
+      currencyId: isSet(object.currencyId) ? String(object.currencyId) : undefined,
       gtin: isSet(object.gtin) ? String(object.gtin) : undefined,
       physical: isSet(object.physical) ? PhysicalProduct.fromJSON(object.physical) : undefined,
       virtual: isSet(object.virtual) ? VirtualProduct.fromJSON(object.virtual) : undefined,
@@ -544,6 +550,7 @@ export const IndividualProduct = {
     } else {
       obj.taxIds = [];
     }
+    message.currencyId !== undefined && (obj.currencyId = message.currencyId);
     message.gtin !== undefined && (obj.gtin = message.gtin);
     message.physical !== undefined &&
       (obj.physical = message.physical ? PhysicalProduct.toJSON(message.physical) : undefined);
@@ -565,6 +572,7 @@ export const IndividualProduct = {
     message.prototypeId = object.prototypeId ?? undefined;
     message.categoryId = object.categoryId ?? undefined;
     message.taxIds = object.taxIds?.map((e) => e) || [];
+    message.currencyId = object.currencyId ?? undefined;
     message.gtin = object.gtin ?? undefined;
     message.physical = (object.physical !== undefined && object.physical !== null)
       ? PhysicalProduct.fromPartial(object.physical)
@@ -992,8 +1000,6 @@ function createBasePhysicalVariant(): PhysicalVariant {
     description: undefined,
     stockLevel: undefined,
     price: undefined,
-    sale: undefined,
-    salePrice: undefined,
     images: [],
     files: [],
     stockKeepingUnit: undefined,
@@ -1018,31 +1024,25 @@ export const PhysicalVariant = {
       writer.uint32(32).int32(message.stockLevel);
     }
     if (message.price !== undefined) {
-      writer.uint32(41).double(message.price);
-    }
-    if (message.sale !== undefined) {
-      writer.uint32(48).bool(message.sale);
-    }
-    if (message.salePrice !== undefined) {
-      writer.uint32(57).double(message.salePrice);
+      Price.encode(message.price, writer.uint32(42).fork()).ldelim();
     }
     for (const v of message.images) {
-      Image.encode(v!, writer.uint32(66).fork()).ldelim();
+      Image.encode(v!, writer.uint32(50).fork()).ldelim();
     }
     for (const v of message.files) {
-      File.encode(v!, writer.uint32(74).fork()).ldelim();
+      File.encode(v!, writer.uint32(58).fork()).ldelim();
     }
     if (message.stockKeepingUnit !== undefined) {
-      writer.uint32(82).string(message.stockKeepingUnit);
+      writer.uint32(66).string(message.stockKeepingUnit);
     }
     if (message.templateVariant !== undefined) {
-      writer.uint32(90).string(message.templateVariant);
+      writer.uint32(74).string(message.templateVariant);
     }
     if (message.package !== undefined) {
-      Package.encode(message.package, writer.uint32(98).fork()).ldelim();
+      Package.encode(message.package, writer.uint32(82).fork()).ldelim();
     }
     for (const v of message.attributes) {
-      Attribute.encode(v!, writer.uint32(106).fork()).ldelim();
+      Attribute.encode(v!, writer.uint32(90).fork()).ldelim();
     }
     return writer;
   },
@@ -1067,30 +1067,24 @@ export const PhysicalVariant = {
           message.stockLevel = reader.int32();
           break;
         case 5:
-          message.price = reader.double();
+          message.price = Price.decode(reader, reader.uint32());
           break;
         case 6:
-          message.sale = reader.bool();
-          break;
-        case 7:
-          message.salePrice = reader.double();
-          break;
-        case 8:
           message.images.push(Image.decode(reader, reader.uint32()));
           break;
-        case 9:
+        case 7:
           message.files.push(File.decode(reader, reader.uint32()));
           break;
-        case 10:
+        case 8:
           message.stockKeepingUnit = reader.string();
           break;
-        case 11:
+        case 9:
           message.templateVariant = reader.string();
           break;
-        case 12:
+        case 10:
           message.package = Package.decode(reader, reader.uint32());
           break;
-        case 13:
+        case 11:
           message.attributes.push(Attribute.decode(reader, reader.uint32()));
           break;
         default:
@@ -1107,9 +1101,7 @@ export const PhysicalVariant = {
       name: isSet(object.name) ? String(object.name) : undefined,
       description: isSet(object.description) ? String(object.description) : undefined,
       stockLevel: isSet(object.stockLevel) ? Number(object.stockLevel) : undefined,
-      price: isSet(object.price) ? Number(object.price) : undefined,
-      sale: isSet(object.sale) ? Boolean(object.sale) : undefined,
-      salePrice: isSet(object.salePrice) ? Number(object.salePrice) : undefined,
+      price: isSet(object.price) ? Price.fromJSON(object.price) : undefined,
       images: Array.isArray(object?.images) ? object.images.map((e: any) => Image.fromJSON(e)) : [],
       files: Array.isArray(object?.files) ? object.files.map((e: any) => File.fromJSON(e)) : [],
       stockKeepingUnit: isSet(object.stockKeepingUnit) ? String(object.stockKeepingUnit) : undefined,
@@ -1125,9 +1117,7 @@ export const PhysicalVariant = {
     message.name !== undefined && (obj.name = message.name);
     message.description !== undefined && (obj.description = message.description);
     message.stockLevel !== undefined && (obj.stockLevel = Math.round(message.stockLevel));
-    message.price !== undefined && (obj.price = message.price);
-    message.sale !== undefined && (obj.sale = message.sale);
-    message.salePrice !== undefined && (obj.salePrice = message.salePrice);
+    message.price !== undefined && (obj.price = message.price ? Price.toJSON(message.price) : undefined);
     if (message.images) {
       obj.images = message.images.map((e) => e ? Image.toJSON(e) : undefined);
     } else {
@@ -1159,9 +1149,7 @@ export const PhysicalVariant = {
     message.name = object.name ?? undefined;
     message.description = object.description ?? undefined;
     message.stockLevel = object.stockLevel ?? undefined;
-    message.price = object.price ?? undefined;
-    message.sale = object.sale ?? undefined;
-    message.salePrice = object.salePrice ?? undefined;
+    message.price = (object.price !== undefined && object.price !== null) ? Price.fromPartial(object.price) : undefined;
     message.images = object.images?.map((e) => Image.fromPartial(e)) || [];
     message.files = object.files?.map((e) => File.fromPartial(e)) || [];
     message.stockKeepingUnit = object.stockKeepingUnit ?? undefined;
@@ -1181,8 +1169,6 @@ function createBaseVirtualVariant(): VirtualVariant {
     description: undefined,
     stockLevel: undefined,
     price: undefined,
-    sale: undefined,
-    salePrice: undefined,
     images: [],
     files: [],
     stockKeepingUnit: undefined,
@@ -1206,28 +1192,22 @@ export const VirtualVariant = {
       writer.uint32(32).int32(message.stockLevel);
     }
     if (message.price !== undefined) {
-      writer.uint32(41).double(message.price);
-    }
-    if (message.sale !== undefined) {
-      writer.uint32(48).bool(message.sale);
-    }
-    if (message.salePrice !== undefined) {
-      writer.uint32(57).double(message.salePrice);
+      Price.encode(message.price, writer.uint32(42).fork()).ldelim();
     }
     for (const v of message.images) {
-      Image.encode(v!, writer.uint32(66).fork()).ldelim();
+      Image.encode(v!, writer.uint32(50).fork()).ldelim();
     }
     for (const v of message.files) {
-      File.encode(v!, writer.uint32(74).fork()).ldelim();
+      File.encode(v!, writer.uint32(58).fork()).ldelim();
     }
     if (message.stockKeepingUnit !== undefined) {
-      writer.uint32(82).string(message.stockKeepingUnit);
+      writer.uint32(66).string(message.stockKeepingUnit);
     }
     if (message.templateVariant !== undefined) {
-      writer.uint32(90).string(message.templateVariant);
+      writer.uint32(74).string(message.templateVariant);
     }
     for (const v of message.attributes) {
-      Attribute.encode(v!, writer.uint32(98).fork()).ldelim();
+      Attribute.encode(v!, writer.uint32(82).fork()).ldelim();
     }
     return writer;
   },
@@ -1252,27 +1232,21 @@ export const VirtualVariant = {
           message.stockLevel = reader.int32();
           break;
         case 5:
-          message.price = reader.double();
+          message.price = Price.decode(reader, reader.uint32());
           break;
         case 6:
-          message.sale = reader.bool();
-          break;
-        case 7:
-          message.salePrice = reader.double();
-          break;
-        case 8:
           message.images.push(Image.decode(reader, reader.uint32()));
           break;
-        case 9:
+        case 7:
           message.files.push(File.decode(reader, reader.uint32()));
           break;
-        case 10:
+        case 8:
           message.stockKeepingUnit = reader.string();
           break;
-        case 11:
+        case 9:
           message.templateVariant = reader.string();
           break;
-        case 12:
+        case 10:
           message.attributes.push(Attribute.decode(reader, reader.uint32()));
           break;
         default:
@@ -1289,9 +1263,7 @@ export const VirtualVariant = {
       name: isSet(object.name) ? String(object.name) : undefined,
       description: isSet(object.description) ? String(object.description) : undefined,
       stockLevel: isSet(object.stockLevel) ? Number(object.stockLevel) : undefined,
-      price: isSet(object.price) ? Number(object.price) : undefined,
-      sale: isSet(object.sale) ? Boolean(object.sale) : undefined,
-      salePrice: isSet(object.salePrice) ? Number(object.salePrice) : undefined,
+      price: isSet(object.price) ? Price.fromJSON(object.price) : undefined,
       images: Array.isArray(object?.images) ? object.images.map((e: any) => Image.fromJSON(e)) : [],
       files: Array.isArray(object?.files) ? object.files.map((e: any) => File.fromJSON(e)) : [],
       stockKeepingUnit: isSet(object.stockKeepingUnit) ? String(object.stockKeepingUnit) : undefined,
@@ -1306,9 +1278,7 @@ export const VirtualVariant = {
     message.name !== undefined && (obj.name = message.name);
     message.description !== undefined && (obj.description = message.description);
     message.stockLevel !== undefined && (obj.stockLevel = Math.round(message.stockLevel));
-    message.price !== undefined && (obj.price = message.price);
-    message.sale !== undefined && (obj.sale = message.sale);
-    message.salePrice !== undefined && (obj.salePrice = message.salePrice);
+    message.price !== undefined && (obj.price = message.price ? Price.toJSON(message.price) : undefined);
     if (message.images) {
       obj.images = message.images.map((e) => e ? Image.toJSON(e) : undefined);
     } else {
@@ -1339,9 +1309,7 @@ export const VirtualVariant = {
     message.name = object.name ?? undefined;
     message.description = object.description ?? undefined;
     message.stockLevel = object.stockLevel ?? undefined;
-    message.price = object.price ?? undefined;
-    message.sale = object.sale ?? undefined;
-    message.salePrice = object.salePrice ?? undefined;
+    message.price = (object.price !== undefined && object.price !== null) ? Price.fromPartial(object.price) : undefined;
     message.images = object.images?.map((e) => Image.fromPartial(e)) || [];
     message.files = object.files?.map((e) => File.fromPartial(e)) || [];
     message.stockKeepingUnit = object.stockKeepingUnit ?? undefined;
@@ -1377,7 +1345,7 @@ export const Bundle = {
       BundleProduct.encode(v!, writer.uint32(34).fork()).ldelim();
     }
     if (message.price !== undefined) {
-      writer.uint32(41).double(message.price);
+      Price.encode(message.price, writer.uint32(42).fork()).ldelim();
     }
     if (message.prePackaged !== undefined) {
       Package.encode(message.prePackaged, writer.uint32(50).fork()).ldelim();
@@ -1405,7 +1373,7 @@ export const Bundle = {
           message.products.push(BundleProduct.decode(reader, reader.uint32()));
           break;
         case 5:
-          message.price = reader.double();
+          message.price = Price.decode(reader, reader.uint32());
           break;
         case 6:
           message.prePackaged = Package.decode(reader, reader.uint32());
@@ -1424,7 +1392,7 @@ export const Bundle = {
       description: isSet(object.description) ? String(object.description) : undefined,
       images: Array.isArray(object?.images) ? object.images.map((e: any) => Image.fromJSON(e)) : [],
       products: Array.isArray(object?.products) ? object.products.map((e: any) => BundleProduct.fromJSON(e)) : [],
-      price: isSet(object.price) ? Number(object.price) : undefined,
+      price: isSet(object.price) ? Price.fromJSON(object.price) : undefined,
       prePackaged: isSet(object.prePackaged) ? Package.fromJSON(object.prePackaged) : undefined,
     };
   },
@@ -1443,7 +1411,7 @@ export const Bundle = {
     } else {
       obj.products = [];
     }
-    message.price !== undefined && (obj.price = message.price);
+    message.price !== undefined && (obj.price = message.price ? Price.toJSON(message.price) : undefined);
     message.prePackaged !== undefined &&
       (obj.prePackaged = message.prePackaged ? Package.toJSON(message.prePackaged) : undefined);
     return obj;
@@ -1459,7 +1427,7 @@ export const Bundle = {
     message.description = object.description ?? undefined;
     message.images = object.images?.map((e) => Image.fromPartial(e)) || [];
     message.products = object.products?.map((e) => BundleProduct.fromPartial(e)) || [];
-    message.price = object.price ?? undefined;
+    message.price = (object.price !== undefined && object.price !== null) ? Price.fromPartial(object.price) : undefined;
     message.prePackaged = (object.prePackaged !== undefined && object.prePackaged !== null)
       ? Package.fromPartial(object.prePackaged)
       : undefined;
@@ -1468,7 +1436,7 @@ export const Bundle = {
 };
 
 function createBaseBundleProduct(): BundleProduct {
-  return { productId: undefined, variantId: undefined, quantity: undefined, taxRatio: undefined };
+  return { productId: undefined, variantId: undefined, quantity: undefined, priceRatio: undefined };
 }
 
 export const BundleProduct = {
@@ -1482,8 +1450,8 @@ export const BundleProduct = {
     if (message.quantity !== undefined) {
       writer.uint32(24).uint32(message.quantity);
     }
-    if (message.taxRatio !== undefined) {
-      writer.uint32(33).double(message.taxRatio);
+    if (message.priceRatio !== undefined) {
+      writer.uint32(33).double(message.priceRatio);
     }
     return writer;
   },
@@ -1505,7 +1473,7 @@ export const BundleProduct = {
           message.quantity = reader.uint32();
           break;
         case 4:
-          message.taxRatio = reader.double();
+          message.priceRatio = reader.double();
           break;
         default:
           reader.skipType(tag & 7);
@@ -1520,7 +1488,7 @@ export const BundleProduct = {
       productId: isSet(object.productId) ? String(object.productId) : undefined,
       variantId: isSet(object.variantId) ? String(object.variantId) : undefined,
       quantity: isSet(object.quantity) ? Number(object.quantity) : undefined,
-      taxRatio: isSet(object.taxRatio) ? Number(object.taxRatio) : undefined,
+      priceRatio: isSet(object.priceRatio) ? Number(object.priceRatio) : undefined,
     };
   },
 
@@ -1529,7 +1497,7 @@ export const BundleProduct = {
     message.productId !== undefined && (obj.productId = message.productId);
     message.variantId !== undefined && (obj.variantId = message.variantId);
     message.quantity !== undefined && (obj.quantity = Math.round(message.quantity));
-    message.taxRatio !== undefined && (obj.taxRatio = message.taxRatio);
+    message.priceRatio !== undefined && (obj.priceRatio = message.priceRatio);
     return obj;
   },
 
@@ -1542,7 +1510,7 @@ export const BundleProduct = {
     message.productId = object.productId ?? undefined;
     message.variantId = object.variantId ?? undefined;
     message.quantity = object.quantity ?? undefined;
-    message.taxRatio = object.taxRatio ?? undefined;
+    message.priceRatio = object.priceRatio ?? undefined;
     return message;
   },
 };
@@ -1697,6 +1665,7 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/status.proto",
       "io/restorecommerce/attribute.proto",
       "io/restorecommerce/geometry.proto",
+      "io/restorecommerce/price.proto",
       "io/restorecommerce/options.proto",
       "io/restorecommerce/manufacturer.proto",
     ],
@@ -2016,7 +1985,7 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "gtin",
+        "name": "currency_id",
         "number": 8,
         "label": 1,
         "type": 9,
@@ -2024,12 +1993,24 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 6,
+        "jsonName": "currencyId",
+        "options": undefined,
+        "proto3Optional": true,
+      }, {
+        "name": "gtin",
+        "number": 9,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 7,
         "jsonName": "gtin",
         "options": undefined,
         "proto3Optional": true,
       }, {
         "name": "physical",
-        "number": 9,
+        "number": 10,
         "label": 1,
         "type": 11,
         "typeName": ".io.restorecommerce.product.PhysicalProduct",
@@ -2041,7 +2022,7 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": false,
       }, {
         "name": "virtual",
-        "number": 10,
+        "number": 11,
         "label": 1,
         "type": 11,
         "typeName": ".io.restorecommerce.product.VirtualProduct",
@@ -2063,6 +2044,7 @@ export const protoMetadata: ProtoMetadata = {
         { "name": "_description", "options": undefined },
         { "name": "_manufacturer_id", "options": undefined },
         { "name": "_taric_code", "options": undefined },
+        { "name": "_currency_id", "options": undefined },
         { "name": "_gtin", "options": undefined },
       ],
       "options": undefined,
@@ -2348,8 +2330,8 @@ export const protoMetadata: ProtoMetadata = {
         "name": "price",
         "number": 5,
         "label": 1,
-        "type": 1,
-        "typeName": "",
+        "type": 11,
+        "typeName": ".io.restorecommerce.price.Price",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 4,
@@ -2357,32 +2339,8 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "sale",
-        "number": 6,
-        "label": 1,
-        "type": 8,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 5,
-        "jsonName": "sale",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
-        "name": "sale_price",
-        "number": 7,
-        "label": 1,
-        "type": 1,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 6,
-        "jsonName": "salePrice",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
         "name": "images",
-        "number": 8,
+        "number": 6,
         "label": 3,
         "type": 11,
         "typeName": ".io.restorecommerce.image.Image",
@@ -2394,7 +2352,7 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": false,
       }, {
         "name": "files",
-        "number": 9,
+        "number": 7,
         "label": 3,
         "type": 11,
         "typeName": ".io.restorecommerce.file.File",
@@ -2406,43 +2364,43 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": false,
       }, {
         "name": "stock_keeping_unit",
-        "number": 10,
+        "number": 8,
         "label": 1,
         "type": 9,
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 7,
+        "oneofIndex": 5,
         "jsonName": "stockKeepingUnit",
         "options": undefined,
         "proto3Optional": true,
       }, {
         "name": "template_variant",
-        "number": 11,
+        "number": 9,
         "label": 1,
         "type": 9,
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 8,
+        "oneofIndex": 6,
         "jsonName": "templateVariant",
         "options": undefined,
         "proto3Optional": true,
       }, {
         "name": "package",
-        "number": 12,
+        "number": 10,
         "label": 1,
         "type": 11,
         "typeName": ".io.restorecommerce.product.Package",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 9,
+        "oneofIndex": 7,
         "jsonName": "package",
         "options": undefined,
         "proto3Optional": true,
       }, {
         "name": "attributes",
-        "number": 13,
+        "number": 11,
         "label": 3,
         "type": 11,
         "typeName": ".io.restorecommerce.attribute.Attribute",
@@ -2463,8 +2421,6 @@ export const protoMetadata: ProtoMetadata = {
         { "name": "_description", "options": undefined },
         { "name": "_stock_level", "options": undefined },
         { "name": "_price", "options": undefined },
-        { "name": "_sale", "options": undefined },
-        { "name": "_sale_price", "options": undefined },
         { "name": "_stock_keeping_unit", "options": undefined },
         { "name": "_template_variant", "options": undefined },
         { "name": "_package", "options": undefined },
@@ -2526,8 +2482,8 @@ export const protoMetadata: ProtoMetadata = {
         "name": "price",
         "number": 5,
         "label": 1,
-        "type": 1,
-        "typeName": "",
+        "type": 11,
+        "typeName": ".io.restorecommerce.price.Price",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 4,
@@ -2535,32 +2491,8 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "sale",
-        "number": 6,
-        "label": 1,
-        "type": 8,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 5,
-        "jsonName": "sale",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
-        "name": "sale_price",
-        "number": 7,
-        "label": 1,
-        "type": 1,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 6,
-        "jsonName": "salePrice",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
         "name": "images",
-        "number": 8,
+        "number": 6,
         "label": 3,
         "type": 11,
         "typeName": ".io.restorecommerce.image.Image",
@@ -2572,7 +2504,7 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": false,
       }, {
         "name": "files",
-        "number": 9,
+        "number": 7,
         "label": 3,
         "type": 11,
         "typeName": ".io.restorecommerce.file.File",
@@ -2584,31 +2516,31 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": false,
       }, {
         "name": "stock_keeping_unit",
-        "number": 10,
+        "number": 8,
         "label": 1,
         "type": 9,
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 7,
+        "oneofIndex": 5,
         "jsonName": "stockKeepingUnit",
         "options": undefined,
         "proto3Optional": true,
       }, {
         "name": "template_variant",
-        "number": 11,
+        "number": 9,
         "label": 1,
         "type": 9,
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 8,
+        "oneofIndex": 6,
         "jsonName": "templateVariant",
         "options": undefined,
         "proto3Optional": true,
       }, {
         "name": "attributes",
-        "number": 12,
+        "number": 10,
         "label": 3,
         "type": 11,
         "typeName": ".io.restorecommerce.attribute.Attribute",
@@ -2629,8 +2561,6 @@ export const protoMetadata: ProtoMetadata = {
         { "name": "_description", "options": undefined },
         { "name": "_stock_level", "options": undefined },
         { "name": "_price", "options": undefined },
-        { "name": "_sale", "options": undefined },
-        { "name": "_sale_price", "options": undefined },
         { "name": "_stock_keeping_unit", "options": undefined },
         { "name": "_template_variant", "options": undefined },
       ],
@@ -2691,8 +2621,8 @@ export const protoMetadata: ProtoMetadata = {
         "name": "price",
         "number": 5,
         "label": 1,
-        "type": 1,
-        "typeName": "",
+        "type": 11,
+        "typeName": ".io.restorecommerce.price.Price",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 2,
@@ -2770,7 +2700,7 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "tax_ratio",
+        "name": "price_ratio",
         "number": 4,
         "label": 1,
         "type": 1,
@@ -2778,7 +2708,7 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 3,
-        "jsonName": "taxRatio",
+        "jsonName": "priceRatio",
         "options": undefined,
         "proto3Optional": true,
       }],
@@ -2789,7 +2719,7 @@ export const protoMetadata: ProtoMetadata = {
       "oneofDecl": [{ "name": "_product_id", "options": undefined }, { "name": "_variant_id", "options": undefined }, {
         "name": "_quantity",
         "options": undefined,
-      }, { "name": "_tax_ratio", "options": undefined }],
+      }, { "name": "_price_ratio", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -2872,22 +2802,22 @@ export const protoMetadata: ProtoMetadata = {
     "options": undefined,
     "sourceCodeInfo": {
       "location": [{
-        "path": [3, 10],
-        "span": [16, 0, 47],
+        "path": [3, 11],
+        "span": [17, 0, 47],
         "leadingComments": " Used by resolvers\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1],
-        "span": [50, 0, 78, 1],
+        "span": [51, 0, 79, 1],
         "leadingComments": " Product resource entity\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 12, 2, 3],
-        "span": [204, 2, 32],
+        "span": [202, 2, 34],
         "leadingComments": "",
-        "trailingComments": "Discount in relation to the bundle price\n",
+        "trailingComments": "Price ratio in relation to the bundle price\n",
         "leadingDetachedComments": [],
       }],
     },
@@ -2922,6 +2852,7 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata9,
     protoMetadata10,
     protoMetadata11,
+    protoMetadata12,
   ],
   options: {
     messages: {

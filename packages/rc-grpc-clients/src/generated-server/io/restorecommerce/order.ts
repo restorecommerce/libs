@@ -4,30 +4,30 @@ import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
 import { Any, protoMetadata as protoMetadata1 } from "../../google/protobuf/any";
 import { BillingAddress, protoMetadata as protoMetadata7, ShippingAddress } from "./address";
+import { Amount, protoMetadata as protoMetadata8 } from "./amount";
 import { protoMetadata as protoMetadata4, Subject } from "./auth";
 import { protoMetadata as protoMetadata9 } from "./country";
 import {
   FulfillmentListResponse,
   protoMetadata as protoMetadata10,
   State as State13,
-  stateFromJSON as stateFromJSON17,
-  stateToJSON as stateToJSON19,
-  stateToNumber as stateToNumber15,
+  stateFromJSON as stateFromJSON15,
+  stateToJSON as stateToJSON16,
+  stateToNumber as stateToNumber14,
 } from "./fulfillment";
 import { PackingSolutionListResponse, Preferences, protoMetadata as protoMetadata11 } from "./fulfillment_product";
 import {
   InvoiceListResponse,
+  PaymentState,
+  paymentStateFromJSON,
+  paymentStateToJSON,
+  paymentStateToNumber,
   protoMetadata as protoMetadata12,
-  State as State14,
-  stateFromJSON as stateFromJSON18,
-  stateToJSON as stateToJSON20,
-  stateToNumber as stateToNumber16,
 } from "./invoice";
 import { Meta, protoMetadata as protoMetadata3 } from "./meta";
 import { KafkaSubscription, protoMetadata as protoMetadata6, Resolver } from "./options";
 import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata2, ReadRequest } from "./resource_base";
 import { OperationStatus, protoMetadata as protoMetadata5, Status, StatusListResponse } from "./status";
-import { Amount, protoMetadata as protoMetadata8 } from "./tax";
 
 export const protobufPackage = "io.restorecommerce.order";
 
@@ -156,8 +156,8 @@ export interface Order {
     | State13
     | undefined;
   /** Set by kafka */
-  invoice_state?:
-    | State14
+  payment_state?:
+    | PaymentState
     | undefined;
   /** Set by service --- repeated in case of variant currency? */
   total_amounts: Amount[];
@@ -359,7 +359,7 @@ function createBaseOrder(): Order {
     items: [],
     order_state: undefined,
     fulfillment_state: undefined,
-    invoice_state: undefined,
+    payment_state: undefined,
     total_amounts: [],
     shipping_address: undefined,
     billing_address: undefined,
@@ -395,10 +395,10 @@ export const Order = {
       writer.uint32(56).int32(stateToNumber(message.order_state));
     }
     if (message.fulfillment_state !== undefined) {
-      writer.uint32(64).int32(stateToNumber15(message.fulfillment_state));
+      writer.uint32(64).int32(stateToNumber14(message.fulfillment_state));
     }
-    if (message.invoice_state !== undefined) {
-      writer.uint32(72).int32(stateToNumber16(message.invoice_state));
+    if (message.payment_state !== undefined) {
+      writer.uint32(72).int32(paymentStateToNumber(message.payment_state));
     }
     for (const v of message.total_amounts) {
       Amount.encode(v!, writer.uint32(82).fork()).ldelim();
@@ -456,10 +456,10 @@ export const Order = {
           message.order_state = stateFromJSON(reader.int32());
           break;
         case 8:
-          message.fulfillment_state = stateFromJSON17(reader.int32());
+          message.fulfillment_state = stateFromJSON15(reader.int32());
           break;
         case 9:
-          message.invoice_state = stateFromJSON18(reader.int32());
+          message.payment_state = paymentStateFromJSON(reader.int32());
           break;
         case 10:
           message.total_amounts.push(Amount.decode(reader, reader.uint32()));
@@ -502,8 +502,8 @@ export const Order = {
       shop_id: isSet(object.shop_id) ? String(object.shop_id) : undefined,
       items: Array.isArray(object?.items) ? object.items.map((e: any) => Item.fromJSON(e)) : [],
       order_state: isSet(object.order_state) ? stateFromJSON(object.order_state) : undefined,
-      fulfillment_state: isSet(object.fulfillment_state) ? stateFromJSON17(object.fulfillment_state) : undefined,
-      invoice_state: isSet(object.invoice_state) ? stateFromJSON18(object.invoice_state) : undefined,
+      fulfillment_state: isSet(object.fulfillment_state) ? stateFromJSON15(object.fulfillment_state) : undefined,
+      payment_state: isSet(object.payment_state) ? paymentStateFromJSON(object.payment_state) : undefined,
       total_amounts: Array.isArray(object?.total_amounts)
         ? object.total_amounts.map((e: any) => Amount.fromJSON(e))
         : [],
@@ -534,10 +534,10 @@ export const Order = {
     message.order_state !== undefined &&
       (obj.order_state = message.order_state !== undefined ? stateToJSON(message.order_state) : undefined);
     message.fulfillment_state !== undefined && (obj.fulfillment_state = message.fulfillment_state !== undefined
-      ? stateToJSON19(message.fulfillment_state)
+      ? stateToJSON16(message.fulfillment_state)
       : undefined);
-    message.invoice_state !== undefined &&
-      (obj.invoice_state = message.invoice_state !== undefined ? stateToJSON20(message.invoice_state) : undefined);
+    message.payment_state !== undefined &&
+      (obj.payment_state = message.payment_state !== undefined ? paymentStateToJSON(message.payment_state) : undefined);
     if (message.total_amounts) {
       obj.total_amounts = message.total_amounts.map((e) => e ? Amount.toJSON(e) : undefined);
     } else {
@@ -571,7 +571,7 @@ export const Order = {
     message.items = object.items?.map((e) => Item.fromPartial(e)) || [];
     message.order_state = object.order_state ?? undefined;
     message.fulfillment_state = object.fulfillment_state ?? undefined;
-    message.invoice_state = object.invoice_state ?? undefined;
+    message.payment_state = object.payment_state ?? undefined;
     message.total_amounts = object.total_amounts?.map((e) => Amount.fromPartial(e)) || [];
     message.shipping_address = (object.shipping_address !== undefined && object.shipping_address !== null)
       ? ShippingAddress.fromPartial(object.shipping_address)
@@ -1523,7 +1523,7 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/status.proto",
       "io/restorecommerce/options.proto",
       "io/restorecommerce/address.proto",
-      "io/restorecommerce/tax.proto",
+      "io/restorecommerce/amount.proto",
       "io/restorecommerce/country.proto",
       "io/restorecommerce/fulfillment.proto",
       "io/restorecommerce/fulfillment_product.proto",
@@ -1606,7 +1606,7 @@ export const protoMetadata: ProtoMetadata = {
         "number": 6,
         "label": 1,
         "type": 11,
-        "typeName": ".io.restorecommerce.tax.Amount",
+        "typeName": ".io.restorecommerce.amount.Amount",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 5,
@@ -1752,15 +1752,15 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "invoice_state",
+        "name": "payment_state",
         "number": 9,
         "label": 1,
         "type": 14,
-        "typeName": ".io.restorecommerce.invoice.State",
+        "typeName": ".io.restorecommerce.invoice.PaymentState",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 7,
-        "jsonName": "invoiceState",
+        "jsonName": "paymentState",
         "options": undefined,
         "proto3Optional": true,
       }, {
@@ -1768,7 +1768,7 @@ export const protoMetadata: ProtoMetadata = {
         "number": 10,
         "label": 3,
         "type": 11,
-        "typeName": ".io.restorecommerce.tax.Amount",
+        "typeName": ".io.restorecommerce.amount.Amount",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
@@ -1872,7 +1872,7 @@ export const protoMetadata: ProtoMetadata = {
         { "name": "_shop_id", "options": undefined },
         { "name": "_order_state", "options": undefined },
         { "name": "_fulfillment_state", "options": undefined },
-        { "name": "_invoice_state", "options": undefined },
+        { "name": "_payment_state", "options": undefined },
         { "name": "_shipping_address", "options": undefined },
         { "name": "_billing_address", "options": undefined },
         { "name": "_billing_email", "options": undefined },
@@ -2496,7 +2496,7 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 0, 2, 5],
-        "span": [70, 2, 52],
+        "span": [70, 2, 55],
         "leadingComments": "",
         "trailingComments": "Set by service\n",
         "leadingDetachedComments": [],
@@ -2520,13 +2520,13 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 8],
-        "span": [117, 2, 62],
+        "span": [117, 2, 69],
         "leadingComments": "",
         "trailingComments": " Set by kafka\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 9],
-        "span": [118, 2, 60],
+        "span": [118, 2, 63],
         "leadingComments": "",
         "trailingComments": " Set by service --- repeated in case of variant currency?\n",
         "leadingDetachedComments": [],

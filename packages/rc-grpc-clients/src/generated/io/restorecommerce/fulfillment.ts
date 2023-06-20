@@ -4,16 +4,17 @@ import type { CallContext, CallOptions } from "nice-grpc-common";
 import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
 import { Any, protoMetadata as protoMetadata1 } from "../../google/protobuf/any";
-import { protoMetadata as protoMetadata6, ShippingAddress } from "./address";
-import { protoMetadata as protoMetadata3, Subject } from "./auth";
-import { protoMetadata as protoMetadata7 } from "./country";
-import { InvoiceListResponse, protoMetadata as protoMetadata11 } from "./invoice";
-import { Meta, protoMetadata as protoMetadata5 } from "./meta";
-import { KafkaSubscription, protoMetadata as protoMetadata9, Resolver } from "./options";
-import { Package, protoMetadata as protoMetadata8 } from "./product";
-import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata2, ReadRequest } from "./resource_base";
-import { OperationStatus, protoMetadata as protoMetadata4, Status, StatusListResponse } from "./status";
-import { protoMetadata as protoMetadata10, VAT } from "./tax";
+import { protoMetadata as protoMetadata7, ShippingAddress } from "./address";
+import { Amount, protoMetadata as protoMetadata11 } from "./amount";
+import { protoMetadata as protoMetadata4, Subject } from "./auth";
+import { protoMetadata as protoMetadata8 } from "./country";
+import { InvoiceListResponse, protoMetadata as protoMetadata12 } from "./invoice";
+import { Meta, protoMetadata as protoMetadata6 } from "./meta";
+import { KafkaSubscription, protoMetadata as protoMetadata10, Resolver } from "./options";
+import { Package, protoMetadata as protoMetadata9 } from "./product";
+import { protoMetadata as protoMetadata2, Reference } from "./reference";
+import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata3, ReadRequest } from "./resource_base";
+import { OperationStatus, protoMetadata as protoMetadata5, Status, StatusListResponse } from "./status";
 
 export const protobufPackage = "io.restorecommerce.fulfillment";
 
@@ -122,11 +123,7 @@ export interface Parcel {
   productId?: string | undefined;
   variantId?: string | undefined;
   item?: Item | undefined;
-  price?:
-    | number
-    | undefined;
-  /** Set by service */
-  vats: VAT[];
+  amount?: Amount | undefined;
   package?: Package | undefined;
 }
 
@@ -150,11 +147,7 @@ export interface Label {
 }
 
 export interface Packaging {
-  /**
-   * A forigner_key using the following pattern: `${collection}/${id}`
-   * most likly an order_id or fulfillment_id.
-   */
-  referenceId?: string | undefined;
+  reference?: Reference | undefined;
   parcels: Parcel[];
   sender?: ShippingAddress | undefined;
   recipient?: ShippingAddress | undefined;
@@ -345,8 +338,7 @@ function createBaseParcel(): Parcel {
     productId: undefined,
     variantId: undefined,
     item: undefined,
-    price: undefined,
-    vats: [],
+    amount: undefined,
     package: undefined,
   };
 }
@@ -365,11 +357,8 @@ export const Parcel = {
     if (message.item !== undefined) {
       Item.encode(message.item, writer.uint32(34).fork()).ldelim();
     }
-    if (message.price !== undefined) {
-      writer.uint32(41).double(message.price);
-    }
-    for (const v of message.vats) {
-      VAT.encode(v!, writer.uint32(50).fork()).ldelim();
+    if (message.amount !== undefined) {
+      Amount.encode(message.amount, writer.uint32(42).fork()).ldelim();
     }
     if (message.package !== undefined) {
       Package.encode(message.package, writer.uint32(58).fork()).ldelim();
@@ -397,10 +386,7 @@ export const Parcel = {
           message.item = Item.decode(reader, reader.uint32());
           break;
         case 5:
-          message.price = reader.double();
-          break;
-        case 6:
-          message.vats.push(VAT.decode(reader, reader.uint32()));
+          message.amount = Amount.decode(reader, reader.uint32());
           break;
         case 7:
           message.package = Package.decode(reader, reader.uint32());
@@ -419,8 +405,7 @@ export const Parcel = {
       productId: isSet(object.productId) ? String(object.productId) : undefined,
       variantId: isSet(object.variantId) ? String(object.variantId) : undefined,
       item: isSet(object.item) ? Item.fromJSON(object.item) : undefined,
-      price: isSet(object.price) ? Number(object.price) : undefined,
-      vats: Array.isArray(object?.vats) ? object.vats.map((e: any) => VAT.fromJSON(e)) : [],
+      amount: isSet(object.amount) ? Amount.fromJSON(object.amount) : undefined,
       package: isSet(object.package) ? Package.fromJSON(object.package) : undefined,
     };
   },
@@ -431,12 +416,7 @@ export const Parcel = {
     message.productId !== undefined && (obj.productId = message.productId);
     message.variantId !== undefined && (obj.variantId = message.variantId);
     message.item !== undefined && (obj.item = message.item ? Item.toJSON(message.item) : undefined);
-    message.price !== undefined && (obj.price = message.price);
-    if (message.vats) {
-      obj.vats = message.vats.map((e) => e ? VAT.toJSON(e) : undefined);
-    } else {
-      obj.vats = [];
-    }
+    message.amount !== undefined && (obj.amount = message.amount ? Amount.toJSON(message.amount) : undefined);
     message.package !== undefined && (obj.package = message.package ? Package.toJSON(message.package) : undefined);
     return obj;
   },
@@ -451,8 +431,9 @@ export const Parcel = {
     message.productId = object.productId ?? undefined;
     message.variantId = object.variantId ?? undefined;
     message.item = (object.item !== undefined && object.item !== null) ? Item.fromPartial(object.item) : undefined;
-    message.price = object.price ?? undefined;
-    message.vats = object.vats?.map((e) => VAT.fromPartial(e)) || [];
+    message.amount = (object.amount !== undefined && object.amount !== null)
+      ? Amount.fromPartial(object.amount)
+      : undefined;
     message.package = (object.package !== undefined && object.package !== null)
       ? Package.fromPartial(object.package)
       : undefined;
@@ -579,7 +560,7 @@ export const Label = {
 
 function createBasePackaging(): Packaging {
   return {
-    referenceId: undefined,
+    reference: undefined,
     parcels: [],
     sender: undefined,
     recipient: undefined,
@@ -592,8 +573,8 @@ function createBasePackaging(): Packaging {
 
 export const Packaging = {
   encode(message: Packaging, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.referenceId !== undefined) {
-      writer.uint32(10).string(message.referenceId);
+    if (message.reference !== undefined) {
+      Reference.encode(message.reference, writer.uint32(10).fork()).ldelim();
     }
     for (const v of message.parcels) {
       Parcel.encode(v!, writer.uint32(18).fork()).ldelim();
@@ -627,7 +608,7 @@ export const Packaging = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.referenceId = reader.string();
+          message.reference = Reference.decode(reader, reader.uint32());
           break;
         case 2:
           message.parcels.push(Parcel.decode(reader, reader.uint32()));
@@ -660,7 +641,7 @@ export const Packaging = {
 
   fromJSON(object: any): Packaging {
     return {
-      referenceId: isSet(object.referenceId) ? String(object.referenceId) : undefined,
+      reference: isSet(object.reference) ? Reference.fromJSON(object.reference) : undefined,
       parcels: Array.isArray(object?.parcels) ? object.parcels.map((e: any) => Parcel.fromJSON(e)) : [],
       sender: isSet(object.sender) ? ShippingAddress.fromJSON(object.sender) : undefined,
       recipient: isSet(object.recipient) ? ShippingAddress.fromJSON(object.recipient) : undefined,
@@ -673,7 +654,8 @@ export const Packaging = {
 
   toJSON(message: Packaging): unknown {
     const obj: any = {};
-    message.referenceId !== undefined && (obj.referenceId = message.referenceId);
+    message.reference !== undefined &&
+      (obj.reference = message.reference ? Reference.toJSON(message.reference) : undefined);
     if (message.parcels) {
       obj.parcels = message.parcels.map((e) => e ? Parcel.toJSON(e) : undefined);
     } else {
@@ -695,7 +677,9 @@ export const Packaging = {
 
   fromPartial(object: DeepPartial<Packaging>): Packaging {
     const message = createBasePackaging();
-    message.referenceId = object.referenceId ?? undefined;
+    message.reference = (object.reference !== undefined && object.reference !== null)
+      ? Reference.fromPartial(object.reference)
+      : undefined;
     message.parcels = object.parcels?.map((e) => Parcel.fromPartial(e)) || [];
     message.sender = (object.sender !== undefined && object.sender !== null)
       ? ShippingAddress.fromPartial(object.sender)
@@ -1866,6 +1850,7 @@ export const protoMetadata: ProtoMetadata = {
     "package": "io.restorecommerce.fulfillment",
     "dependency": [
       "google/protobuf/any.proto",
+      "io/restorecommerce/reference.proto",
       "io/restorecommerce/resource_base.proto",
       "io/restorecommerce/auth.proto",
       "io/restorecommerce/status.proto",
@@ -1874,7 +1859,7 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/country.proto",
       "io/restorecommerce/product.proto",
       "io/restorecommerce/options.proto",
-      "io/restorecommerce/tax.proto",
+      "io/restorecommerce/amount.proto",
       "io/restorecommerce/invoice.proto",
     ],
     "publicDependency": [],
@@ -2000,29 +1985,17 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "price",
+        "name": "amount",
         "number": 5,
         "label": 1,
-        "type": 1,
-        "typeName": "",
+        "type": 11,
+        "typeName": ".io.restorecommerce.amount.Amount",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 4,
-        "jsonName": "price",
+        "jsonName": "amount",
         "options": undefined,
         "proto3Optional": true,
-      }, {
-        "name": "vats",
-        "number": 6,
-        "label": 3,
-        "type": 11,
-        "typeName": ".io.restorecommerce.tax.VAT",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "vats",
-        "options": undefined,
-        "proto3Optional": false,
       }, {
         "name": "package",
         "number": 7,
@@ -2045,7 +2018,7 @@ export const protoMetadata: ProtoMetadata = {
         { "name": "_product_id", "options": undefined },
         { "name": "_variant_id", "options": undefined },
         { "name": "_item", "options": undefined },
-        { "name": "_price", "options": undefined },
+        { "name": "_amount", "options": undefined },
         { "name": "_package", "options": undefined },
       ],
       "options": undefined,
@@ -2155,15 +2128,15 @@ export const protoMetadata: ProtoMetadata = {
     }, {
       "name": "Packaging",
       "field": [{
-        "name": "reference_id",
+        "name": "reference",
         "number": 1,
         "label": 1,
-        "type": 9,
-        "typeName": "",
+        "type": 11,
+        "typeName": ".io.restorecommerce.reference.Reference",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "referenceId",
+        "jsonName": "reference",
         "options": undefined,
         "proto3Optional": true,
       }, {
@@ -2256,7 +2229,7 @@ export const protoMetadata: ProtoMetadata = {
       "enumType": [],
       "extensionRange": [],
       "oneofDecl": [
-        { "name": "_reference_id", "options": undefined },
+        { "name": "_reference", "options": undefined },
         { "name": "_sender", "options": undefined },
         { "name": "_recipient", "options": undefined },
         { "name": "_notify", "options": undefined },
@@ -2981,87 +2954,81 @@ export const protoMetadata: ProtoMetadata = {
     "sourceCodeInfo": {
       "location": [{
         "path": [6, 0],
-        "span": [19, 0, 81, 1],
+        "span": [20, 0, 82, 1],
         "leadingComments": "*\nMicroservice definition.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 0],
-        "span": [23, 2, 25, 3],
+        "span": [24, 2, 26, 3],
         "leadingComments": "*\nReturns a list of shipment IDs.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 1],
-        "span": [30, 2, 65],
+        "span": [31, 2, 65],
         "leadingComments": "*\nCreates fulfillment orders\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 2],
-        "span": [35, 2, 65],
+        "span": [36, 2, 65],
         "leadingComments": "*\nUpdates fulfillment orders unless Status is beyond Submit\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 3],
-        "span": [40, 2, 65],
+        "span": [41, 2, 65],
         "leadingComments": "*\nCreates or Updates fulfillment orders unless Status is beyond Submit\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 4],
-        "span": [45, 2, 67],
+        "span": [46, 2, 67],
         "leadingComments": "*\nEvaluate fulfillment for correctness\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 5],
-        "span": [50, 2, 65],
+        "span": [51, 2, 65],
         "leadingComments": "*\nCreates, Submits and Updates fulfillment orders against API\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 6],
-        "span": [55, 2, 66],
+        "span": [56, 2, 66],
         "leadingComments": "*\nTrack a batch of fulfillments\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 7],
-        "span": [60, 2, 69],
+        "span": [61, 2, 69],
         "leadingComments": "*\nWithdraw a batch of fulfillments and request for cancelation\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 8],
-        "span": [65, 2, 67],
+        "span": [66, 2, 67],
         "leadingComments": "*\nCancel a batch of fulfillments\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 9],
-        "span": [70, 2, 118],
+        "span": [71, 2, 118],
         "leadingComments": "*\nDelete a batch of fulfillments from the database\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 10],
-        "span": [75, 2, 98],
+        "span": [76, 2, 98],
         "leadingComments": "*\nRequires Invoice Service\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 11],
-        "span": [80, 2, 97],
+        "span": [81, 2, 97],
         "leadingComments": "*\nRequires Invoice Service\n",
         "trailingComments": "",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 1, 2, 5],
-        "span": [115, 2, 47],
-        "leadingComments": "",
-        "trailingComments": "Set by service\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 2, 2, 4],
@@ -3082,69 +3049,62 @@ export const protoMetadata: ProtoMetadata = {
         "trailingComments": "API status\n",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 3, 2, 0],
-        "span": [136, 2, 35],
-        "leadingComments":
-          "\n A forigner_key using the following pattern: `${collection}/${id}`\n most likly an order_id or fulfillment_id.\n",
-        "trailingComments": "",
-        "leadingDetachedComments": [],
-      }, {
         "path": [4, 6],
-        "span": [163, 0, 180, 1],
+        "span": [159, 0, 176, 1],
         "leadingComments": "*\nThis is the message of how it get stored to the database\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 6, 2, 1],
-        "span": [173, 2, 35],
+        "span": [169, 2, 35],
         "leadingComments": "",
         "trailingComments": "set by user\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 6, 2, 3],
-        "span": [175, 2, 28],
+        "span": [171, 2, 28],
         "leadingComments": "",
         "trailingComments": "set by service\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 6, 2, 4],
-        "span": [176, 2, 34],
+        "span": [172, 2, 34],
         "leadingComments": "",
         "trailingComments": "set by service\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 6, 2, 5],
-        "span": [177, 2, 34],
+        "span": [173, 2, 34],
         "leadingComments": "",
         "trailingComments": "set by service\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 6, 2, 6],
-        "span": [178, 2, 32],
+        "span": [174, 2, 32],
         "leadingComments": "",
         "trailingComments": "set by service\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 6, 2, 7],
-        "span": [179, 2, 27],
+        "span": [175, 2, 27],
         "leadingComments": "",
         "trailingComments": "set by service\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 10, 2, 1],
-        "span": [201, 2, 39],
+        "span": [197, 2, 39],
         "leadingComments": "",
         "trailingComments": "optional\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 13, 2, 0],
-        "span": [217, 2, 37],
+        "span": [213, 2, 37],
         "leadingComments": "",
         "trailingComments": " if given\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 13, 2, 2],
-        "span": [219, 2, 39],
+        "span": [215, 2, 39],
         "leadingComments": "",
         "trailingComments": " includes all on empty\n",
         "leadingDetachedComments": [],
@@ -3182,6 +3142,7 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata9,
     protoMetadata10,
     protoMetadata11,
+    protoMetadata12,
   ],
   options: {
     messages: {

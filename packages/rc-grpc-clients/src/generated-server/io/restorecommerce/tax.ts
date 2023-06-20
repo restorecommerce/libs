@@ -42,19 +42,6 @@ export interface Tax {
   type_id?: string | undefined;
 }
 
-export interface VAT {
-  tax_id?: string | undefined;
-  vat?: number | undefined;
-}
-
-export interface Amount {
-  /** missing resource entity! */
-  currency?: string | undefined;
-  gross?: number | undefined;
-  net?: number | undefined;
-  vats: VAT[];
-}
-
 function createBaseDeleted(): Deleted {
   return { id: "" };
 }
@@ -432,152 +419,6 @@ export const Tax = {
   },
 };
 
-function createBaseVAT(): VAT {
-  return { tax_id: undefined, vat: undefined };
-}
-
-export const VAT = {
-  encode(message: VAT, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.tax_id !== undefined) {
-      writer.uint32(10).string(message.tax_id);
-    }
-    if (message.vat !== undefined) {
-      writer.uint32(17).double(message.vat);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): VAT {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseVAT();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.tax_id = reader.string();
-          break;
-        case 2:
-          message.vat = reader.double();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): VAT {
-    return {
-      tax_id: isSet(object.tax_id) ? String(object.tax_id) : undefined,
-      vat: isSet(object.vat) ? Number(object.vat) : undefined,
-    };
-  },
-
-  toJSON(message: VAT): unknown {
-    const obj: any = {};
-    message.tax_id !== undefined && (obj.tax_id = message.tax_id);
-    message.vat !== undefined && (obj.vat = message.vat);
-    return obj;
-  },
-
-  create(base?: DeepPartial<VAT>): VAT {
-    return VAT.fromPartial(base ?? {});
-  },
-
-  fromPartial(object: DeepPartial<VAT>): VAT {
-    const message = createBaseVAT();
-    message.tax_id = object.tax_id ?? undefined;
-    message.vat = object.vat ?? undefined;
-    return message;
-  },
-};
-
-function createBaseAmount(): Amount {
-  return { currency: undefined, gross: undefined, net: undefined, vats: [] };
-}
-
-export const Amount = {
-  encode(message: Amount, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.currency !== undefined) {
-      writer.uint32(10).string(message.currency);
-    }
-    if (message.gross !== undefined) {
-      writer.uint32(17).double(message.gross);
-    }
-    if (message.net !== undefined) {
-      writer.uint32(25).double(message.net);
-    }
-    for (const v of message.vats) {
-      VAT.encode(v!, writer.uint32(34).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): Amount {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseAmount();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          message.currency = reader.string();
-          break;
-        case 2:
-          message.gross = reader.double();
-          break;
-        case 3:
-          message.net = reader.double();
-          break;
-        case 4:
-          message.vats.push(VAT.decode(reader, reader.uint32()));
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
-      }
-    }
-    return message;
-  },
-
-  fromJSON(object: any): Amount {
-    return {
-      currency: isSet(object.currency) ? String(object.currency) : undefined,
-      gross: isSet(object.gross) ? Number(object.gross) : undefined,
-      net: isSet(object.net) ? Number(object.net) : undefined,
-      vats: Array.isArray(object?.vats) ? object.vats.map((e: any) => VAT.fromJSON(e)) : [],
-    };
-  },
-
-  toJSON(message: Amount): unknown {
-    const obj: any = {};
-    message.currency !== undefined && (obj.currency = message.currency);
-    message.gross !== undefined && (obj.gross = message.gross);
-    message.net !== undefined && (obj.net = message.net);
-    if (message.vats) {
-      obj.vats = message.vats.map((e) => e ? VAT.toJSON(e) : undefined);
-    } else {
-      obj.vats = [];
-    }
-    return obj;
-  },
-
-  create(base?: DeepPartial<Amount>): Amount {
-    return Amount.fromPartial(base ?? {});
-  },
-
-  fromPartial(object: DeepPartial<Amount>): Amount {
-    const message = createBaseAmount();
-    message.currency = object.currency ?? undefined;
-    message.gross = object.gross ?? undefined;
-    message.net = object.net ?? undefined;
-    message.vats = object.vats?.map((e) => VAT.fromPartial(e)) || [];
-    return message;
-  },
-};
-
 /** Microservice definition. */
 export type TaxServiceDefinition = typeof TaxServiceDefinition;
 export const TaxServiceDefinition = {
@@ -937,103 +778,6 @@ export const protoMetadata: ProtoMetadata = {
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
-    }, {
-      "name": "VAT",
-      "field": [{
-        "name": "tax_id",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "taxId",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
-        "name": "vat",
-        "number": 2,
-        "label": 1,
-        "type": 1,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 1,
-        "jsonName": "vat",
-        "options": undefined,
-        "proto3Optional": true,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [{ "name": "_tax_id", "options": undefined }, { "name": "_vat", "options": undefined }],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
-    }, {
-      "name": "Amount",
-      "field": [{
-        "name": "currency",
-        "number": 1,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "currency",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
-        "name": "gross",
-        "number": 2,
-        "label": 1,
-        "type": 1,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 1,
-        "jsonName": "gross",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
-        "name": "net",
-        "number": 3,
-        "label": 1,
-        "type": 1,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 2,
-        "jsonName": "net",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
-        "name": "vats",
-        "number": 4,
-        "label": 3,
-        "type": 11,
-        "typeName": ".io.restorecommerce.tax.VAT",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "vats",
-        "options": undefined,
-        "proto3Optional": false,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [{ "name": "_currency", "options": undefined }, { "name": "_gross", "options": undefined }, {
-        "name": "_net",
-        "options": undefined,
-      }],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
     }],
     "enumType": [],
     "service": [{
@@ -1091,12 +835,6 @@ export const protoMetadata: ProtoMetadata = {
         "leadingComments": "\n Microservice definition.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
-      }, {
-        "path": [4, 6, 2, 0],
-        "span": [79, 2, 31],
-        "leadingComments": "",
-        "trailingComments": " missing resource entity!\n",
-        "leadingDetachedComments": [],
       }],
     },
     "syntax": "proto3",
@@ -1107,8 +845,6 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.tax.TaxListResponse": TaxListResponse,
     ".io.restorecommerce.tax.TaxResponse": TaxResponse,
     ".io.restorecommerce.tax.Tax": Tax,
-    ".io.restorecommerce.tax.VAT": VAT,
-    ".io.restorecommerce.tax.Amount": Amount,
   },
   dependencies: [
     protoMetadata1,

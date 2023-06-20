@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package io.restorecommerce.amount;
+
+// Used by resolvers
+import "io/restorecommerce/options.proto";
+import "io/restorecommerce/tax.proto";
+import "io/restorecommerce/currency.proto";
+
+message VAT {
+  optional string tax_id = 1 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.tax.Tax",
+      target_service: "master_data",
+      target_sub_service: "tax",
+      target_method: "Read",
+      field_name: "tax",
+    }
+  ];
+  optional double vat = 2;
+}
+  
+message Amount {
+  optional string currency_id = 1 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.currency.Currency",
+      target_service: "master_data",
+      target_sub_service: "currency",
+      target_method: "Read",
+      field_name: "currency",
+    }
+  ];
+  optional double gross = 2;
+  optional double net = 3;
+  repeated VAT vats = 4;
+}

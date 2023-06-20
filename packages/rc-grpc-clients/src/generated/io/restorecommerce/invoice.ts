@@ -4,114 +4,68 @@ import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
 import { Any, protoMetadata as protoMetadata1 } from "../../google/protobuf/any";
 import { BillingAddress, protoMetadata as protoMetadata8 } from "./address";
+import { Amount, protoMetadata as protoMetadata9 } from "./amount";
 import { protoMetadata as protoMetadata5, Subject } from "./auth";
-import { protoMetadata as protoMetadata12 } from "./customer";
+import { protoMetadata as protoMetadata13 } from "./customer";
 import { File, protoMetadata as protoMetadata10 } from "./file";
 import { Meta, protoMetadata as protoMetadata3 } from "./meta";
 import { KafkaSubscription, protoMetadata as protoMetadata7, Resolver } from "./options";
 import { protoMetadata as protoMetadata4 } from "./organization";
+import { protoMetadata as protoMetadata11, Reference } from "./reference";
 import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata2, ReadRequest } from "./resource_base";
-import { protoMetadata as protoMetadata13 } from "./shop";
+import { protoMetadata as protoMetadata14 } from "./shop";
 import { OperationStatus, protoMetadata as protoMetadata6, Status, StatusListResponse } from "./status";
-import { Amount, protoMetadata as protoMetadata9 } from "./tax";
-import { protoMetadata as protoMetadata11 } from "./user";
+import { protoMetadata as protoMetadata12 } from "./user";
 
 export const protobufPackage = "io.restorecommerce.invoice";
 
-export enum State {
-  FAILED = "FAILED",
-  INVALID = "INVALID",
-  CREATED = "CREATED",
-  RENDERED = "RENDERED",
-  SENT = "SENT",
+export enum PaymentState {
+  UNPAYED = "UNPAYED",
   PAYED = "PAYED",
-  WITHDRAWN = "WITHDRAWN",
-  CANCELLED = "CANCELLED",
   UNRECOGNIZED = "UNRECOGNIZED",
 }
 
-export function stateFromJSON(object: any): State {
+export function paymentStateFromJSON(object: any): PaymentState {
   switch (object) {
     case 0:
-    case "FAILED":
-      return State.FAILED;
+    case "UNPAYED":
+      return PaymentState.UNPAYED;
     case 1:
-    case "INVALID":
-      return State.INVALID;
-    case 2:
-    case "CREATED":
-      return State.CREATED;
-    case 3:
-    case "RENDERED":
-      return State.RENDERED;
-    case 4:
-    case "SENT":
-      return State.SENT;
-    case 5:
     case "PAYED":
-      return State.PAYED;
-    case 6:
-    case "WITHDRAWN":
-      return State.WITHDRAWN;
-    case 7:
-    case "CANCELLED":
-      return State.CANCELLED;
+      return PaymentState.PAYED;
     case -1:
     case "UNRECOGNIZED":
     default:
-      return State.UNRECOGNIZED;
+      return PaymentState.UNRECOGNIZED;
   }
 }
 
-export function stateToJSON(object: State): string {
+export function paymentStateToJSON(object: PaymentState): string {
   switch (object) {
-    case State.FAILED:
-      return "FAILED";
-    case State.INVALID:
-      return "INVALID";
-    case State.CREATED:
-      return "CREATED";
-    case State.RENDERED:
-      return "RENDERED";
-    case State.SENT:
-      return "SENT";
-    case State.PAYED:
+    case PaymentState.UNPAYED:
+      return "UNPAYED";
+    case PaymentState.PAYED:
       return "PAYED";
-    case State.WITHDRAWN:
-      return "WITHDRAWN";
-    case State.CANCELLED:
-      return "CANCELLED";
-    case State.UNRECOGNIZED:
+    case PaymentState.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
   }
 }
 
-export function stateToNumber(object: State): number {
+export function paymentStateToNumber(object: PaymentState): number {
   switch (object) {
-    case State.FAILED:
+    case PaymentState.UNPAYED:
       return 0;
-    case State.INVALID:
+    case PaymentState.PAYED:
       return 1;
-    case State.CREATED:
-      return 2;
-    case State.RENDERED:
-      return 3;
-    case State.SENT:
-      return 4;
-    case State.PAYED:
-      return 5;
-    case State.WITHDRAWN:
-      return 6;
-    case State.CANCELLED:
-      return 7;
-    case State.UNRECOGNIZED:
+    case PaymentState.UNRECOGNIZED:
     default:
       return -1;
   }
 }
 
 export interface RequestInvoiceNumber {
+  shopId?: string | undefined;
   context?: Any;
   subject?: Subject;
 }
@@ -141,31 +95,25 @@ export interface InvoiceResponse {
   status?: Status;
 }
 
-export interface InvoiceNotification {
+export interface InvoiceId {
   id?: string | undefined;
   channelIds: string[];
   options?: Any | undefined;
   subject?: Subject | undefined;
 }
 
-export interface InvoiceNotificationList {
-  items: InvoiceNotification[];
+export interface InvoiceIdList {
+  items: InvoiceId[];
   totalCount?: number | undefined;
   subject?: Subject;
 }
 
 /** The Invoice recource, stored in DB. */
 export interface Invoice {
-  /** invoice_number */
   id?: string | undefined;
-  meta?:
-    | Meta
-    | undefined;
-  /**
-   * A forigner_key using the following pattern: `${collection}/${id}`.
-   * most likly an order_id or fulfillment_id.
-   */
-  referenceId?: string | undefined;
+  meta?: Meta | undefined;
+  invoiceNumber?: string | undefined;
+  reference?: Reference | undefined;
   userId?:
     | string
     | undefined;
@@ -176,15 +124,13 @@ export interface Invoice {
   /** shop_number --- ref. to sender orga */
   shopId?: string | undefined;
   timestamp?: number | undefined;
-  state?: State | undefined;
+  paymentState?: PaymentState | undefined;
   sender?: BillingAddress | undefined;
   recipient?: BillingAddress | undefined;
   positions: Position[];
   totalAmounts: Amount[];
   /** is there no better type for that? */
-  paymentMethodDetails?:
-    | Any
-    | undefined;
+  paymentHints: string[];
   /** url to rendered PDFs */
   documents: File[];
   customerRemark?:
@@ -196,19 +142,21 @@ export interface Invoice {
     | undefined;
   /** value performance to date */
   toDate?: number | undefined;
+  sent?: boolean | undefined;
+  withdrawn?: boolean | undefined;
 }
 
 export interface Position {
   id?: string | undefined;
-  invoiceRows: Row[];
+  rows: Row[];
   /** repeated in case of multiple currencies? */
   amounts: Amount[];
 }
 
 export interface Row {
   id?: string | undefined;
-  product?: ProductEntry | undefined;
-  manual?: ManualEntry | undefined;
+  productItem?: ProductItem | undefined;
+  manualItem?: ManualItem | undefined;
   unitPrice?: number | undefined;
   quantity?: number | undefined;
   amount?:
@@ -218,25 +166,28 @@ export interface Row {
   contractStartDate?: number | undefined;
 }
 
-export interface ProductEntry {
+export interface ProductItem {
   productId?: string | undefined;
   variantId?: string | undefined;
 }
 
-export interface ManualEntry {
-  articleNumber?: string | undefined;
+export interface ManualItem {
+  stockKeepingUnit?: string | undefined;
   name?: string | undefined;
   descritpion?: string | undefined;
 }
 
 function createBaseRequestInvoiceNumber(): RequestInvoiceNumber {
-  return { context: undefined, subject: undefined };
+  return { shopId: undefined, context: undefined, subject: undefined };
 }
 
 export const RequestInvoiceNumber = {
   encode(message: RequestInvoiceNumber, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.shopId !== undefined) {
+      writer.uint32(10).string(message.shopId);
+    }
     if (message.context !== undefined) {
-      Any.encode(message.context, writer.uint32(10).fork()).ldelim();
+      Any.encode(message.context, writer.uint32(18).fork()).ldelim();
     }
     if (message.subject !== undefined) {
       Subject.encode(message.subject, writer.uint32(26).fork()).ldelim();
@@ -252,6 +203,9 @@ export const RequestInvoiceNumber = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          message.shopId = reader.string();
+          break;
+        case 2:
           message.context = Any.decode(reader, reader.uint32());
           break;
         case 3:
@@ -267,6 +221,7 @@ export const RequestInvoiceNumber = {
 
   fromJSON(object: any): RequestInvoiceNumber {
     return {
+      shopId: isSet(object.shopId) ? String(object.shopId) : undefined,
       context: isSet(object.context) ? Any.fromJSON(object.context) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
@@ -274,6 +229,7 @@ export const RequestInvoiceNumber = {
 
   toJSON(message: RequestInvoiceNumber): unknown {
     const obj: any = {};
+    message.shopId !== undefined && (obj.shopId = message.shopId);
     message.context !== undefined && (obj.context = message.context ? Any.toJSON(message.context) : undefined);
     message.subject !== undefined && (obj.subject = message.subject ? Subject.toJSON(message.subject) : undefined);
     return obj;
@@ -285,6 +241,7 @@ export const RequestInvoiceNumber = {
 
   fromPartial(object: DeepPartial<RequestInvoiceNumber>): RequestInvoiceNumber {
     const message = createBaseRequestInvoiceNumber();
+    message.shopId = object.shopId ?? undefined;
     message.context = (object.context !== undefined && object.context !== null)
       ? Any.fromPartial(object.context)
       : undefined;
@@ -618,12 +575,12 @@ export const InvoiceResponse = {
   },
 };
 
-function createBaseInvoiceNotification(): InvoiceNotification {
+function createBaseInvoiceId(): InvoiceId {
   return { id: undefined, channelIds: [], options: undefined, subject: undefined };
 }
 
-export const InvoiceNotification = {
-  encode(message: InvoiceNotification, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const InvoiceId = {
+  encode(message: InvoiceId, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
@@ -639,10 +596,10 @@ export const InvoiceNotification = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): InvoiceNotification {
+  decode(input: _m0.Reader | Uint8Array, length?: number): InvoiceId {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseInvoiceNotification();
+    const message = createBaseInvoiceId();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -666,7 +623,7 @@ export const InvoiceNotification = {
     return message;
   },
 
-  fromJSON(object: any): InvoiceNotification {
+  fromJSON(object: any): InvoiceId {
     return {
       id: isSet(object.id) ? String(object.id) : undefined,
       channelIds: Array.isArray(object?.channelIds) ? object.channelIds.map((e: any) => String(e)) : [],
@@ -675,7 +632,7 @@ export const InvoiceNotification = {
     };
   },
 
-  toJSON(message: InvoiceNotification): unknown {
+  toJSON(message: InvoiceId): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     if (message.channelIds) {
@@ -688,12 +645,12 @@ export const InvoiceNotification = {
     return obj;
   },
 
-  create(base?: DeepPartial<InvoiceNotification>): InvoiceNotification {
-    return InvoiceNotification.fromPartial(base ?? {});
+  create(base?: DeepPartial<InvoiceId>): InvoiceId {
+    return InvoiceId.fromPartial(base ?? {});
   },
 
-  fromPartial(object: DeepPartial<InvoiceNotification>): InvoiceNotification {
-    const message = createBaseInvoiceNotification();
+  fromPartial(object: DeepPartial<InvoiceId>): InvoiceId {
+    const message = createBaseInvoiceId();
     message.id = object.id ?? undefined;
     message.channelIds = object.channelIds?.map((e) => e) || [];
     message.options = (object.options !== undefined && object.options !== null)
@@ -706,14 +663,14 @@ export const InvoiceNotification = {
   },
 };
 
-function createBaseInvoiceNotificationList(): InvoiceNotificationList {
+function createBaseInvoiceIdList(): InvoiceIdList {
   return { items: [], totalCount: undefined, subject: undefined };
 }
 
-export const InvoiceNotificationList = {
-  encode(message: InvoiceNotificationList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const InvoiceIdList = {
+  encode(message: InvoiceIdList, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     for (const v of message.items) {
-      InvoiceNotification.encode(v!, writer.uint32(10).fork()).ldelim();
+      InvoiceId.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.totalCount !== undefined) {
       writer.uint32(16).uint32(message.totalCount);
@@ -724,15 +681,15 @@ export const InvoiceNotificationList = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): InvoiceNotificationList {
+  decode(input: _m0.Reader | Uint8Array, length?: number): InvoiceIdList {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseInvoiceNotificationList();
+    const message = createBaseInvoiceIdList();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.items.push(InvoiceNotification.decode(reader, reader.uint32()));
+          message.items.push(InvoiceId.decode(reader, reader.uint32()));
           break;
         case 2:
           message.totalCount = reader.uint32();
@@ -748,18 +705,18 @@ export const InvoiceNotificationList = {
     return message;
   },
 
-  fromJSON(object: any): InvoiceNotificationList {
+  fromJSON(object: any): InvoiceIdList {
     return {
-      items: Array.isArray(object?.items) ? object.items.map((e: any) => InvoiceNotification.fromJSON(e)) : [],
+      items: Array.isArray(object?.items) ? object.items.map((e: any) => InvoiceId.fromJSON(e)) : [],
       totalCount: isSet(object.totalCount) ? Number(object.totalCount) : undefined,
       subject: isSet(object.subject) ? Subject.fromJSON(object.subject) : undefined,
     };
   },
 
-  toJSON(message: InvoiceNotificationList): unknown {
+  toJSON(message: InvoiceIdList): unknown {
     const obj: any = {};
     if (message.items) {
-      obj.items = message.items.map((e) => e ? InvoiceNotification.toJSON(e) : undefined);
+      obj.items = message.items.map((e) => e ? InvoiceId.toJSON(e) : undefined);
     } else {
       obj.items = [];
     }
@@ -768,13 +725,13 @@ export const InvoiceNotificationList = {
     return obj;
   },
 
-  create(base?: DeepPartial<InvoiceNotificationList>): InvoiceNotificationList {
-    return InvoiceNotificationList.fromPartial(base ?? {});
+  create(base?: DeepPartial<InvoiceIdList>): InvoiceIdList {
+    return InvoiceIdList.fromPartial(base ?? {});
   },
 
-  fromPartial(object: DeepPartial<InvoiceNotificationList>): InvoiceNotificationList {
-    const message = createBaseInvoiceNotificationList();
-    message.items = object.items?.map((e) => InvoiceNotification.fromPartial(e)) || [];
+  fromPartial(object: DeepPartial<InvoiceIdList>): InvoiceIdList {
+    const message = createBaseInvoiceIdList();
+    message.items = object.items?.map((e) => InvoiceId.fromPartial(e)) || [];
     message.totalCount = object.totalCount ?? undefined;
     message.subject = (object.subject !== undefined && object.subject !== null)
       ? Subject.fromPartial(object.subject)
@@ -787,21 +744,24 @@ function createBaseInvoice(): Invoice {
   return {
     id: undefined,
     meta: undefined,
-    referenceId: undefined,
+    invoiceNumber: undefined,
+    reference: undefined,
     userId: undefined,
     customerId: undefined,
     shopId: undefined,
     timestamp: undefined,
-    state: undefined,
+    paymentState: undefined,
     sender: undefined,
     recipient: undefined,
     positions: [],
     totalAmounts: [],
-    paymentMethodDetails: undefined,
+    paymentHints: [],
     documents: [],
     customerRemark: undefined,
     fromDate: undefined,
     toDate: undefined,
+    sent: undefined,
+    withdrawn: undefined,
   };
 }
 
@@ -813,50 +773,59 @@ export const Invoice = {
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
-    if (message.referenceId !== undefined) {
-      writer.uint32(26).string(message.referenceId);
+    if (message.invoiceNumber !== undefined) {
+      writer.uint32(26).string(message.invoiceNumber);
+    }
+    if (message.reference !== undefined) {
+      Reference.encode(message.reference, writer.uint32(34).fork()).ldelim();
     }
     if (message.userId !== undefined) {
-      writer.uint32(34).string(message.userId);
+      writer.uint32(42).string(message.userId);
     }
     if (message.customerId !== undefined) {
-      writer.uint32(42).string(message.customerId);
+      writer.uint32(50).string(message.customerId);
     }
     if (message.shopId !== undefined) {
-      writer.uint32(50).string(message.shopId);
+      writer.uint32(58).string(message.shopId);
     }
     if (message.timestamp !== undefined) {
-      writer.uint32(57).double(message.timestamp);
+      writer.uint32(65).double(message.timestamp);
     }
-    if (message.state !== undefined) {
-      writer.uint32(64).int32(stateToNumber(message.state));
+    if (message.paymentState !== undefined) {
+      writer.uint32(72).int32(paymentStateToNumber(message.paymentState));
     }
     if (message.sender !== undefined) {
-      BillingAddress.encode(message.sender, writer.uint32(74).fork()).ldelim();
+      BillingAddress.encode(message.sender, writer.uint32(82).fork()).ldelim();
     }
     if (message.recipient !== undefined) {
-      BillingAddress.encode(message.recipient, writer.uint32(82).fork()).ldelim();
+      BillingAddress.encode(message.recipient, writer.uint32(90).fork()).ldelim();
     }
     for (const v of message.positions) {
-      Position.encode(v!, writer.uint32(90).fork()).ldelim();
+      Position.encode(v!, writer.uint32(98).fork()).ldelim();
     }
     for (const v of message.totalAmounts) {
-      Amount.encode(v!, writer.uint32(98).fork()).ldelim();
+      Amount.encode(v!, writer.uint32(106).fork()).ldelim();
     }
-    if (message.paymentMethodDetails !== undefined) {
-      Any.encode(message.paymentMethodDetails, writer.uint32(106).fork()).ldelim();
+    for (const v of message.paymentHints) {
+      writer.uint32(114).string(v!);
     }
     for (const v of message.documents) {
-      File.encode(v!, writer.uint32(114).fork()).ldelim();
+      File.encode(v!, writer.uint32(122).fork()).ldelim();
     }
     if (message.customerRemark !== undefined) {
-      writer.uint32(122).string(message.customerRemark);
+      writer.uint32(130).string(message.customerRemark);
     }
     if (message.fromDate !== undefined) {
-      writer.uint32(129).double(message.fromDate);
+      writer.uint32(137).double(message.fromDate);
     }
     if (message.toDate !== undefined) {
-      writer.uint32(137).double(message.toDate);
+      writer.uint32(145).double(message.toDate);
+    }
+    if (message.sent !== undefined) {
+      writer.uint32(152).bool(message.sent);
+    }
+    if (message.withdrawn !== undefined) {
+      writer.uint32(160).bool(message.withdrawn);
     }
     return writer;
   },
@@ -875,49 +844,58 @@ export const Invoice = {
           message.meta = Meta.decode(reader, reader.uint32());
           break;
         case 3:
-          message.referenceId = reader.string();
+          message.invoiceNumber = reader.string();
           break;
         case 4:
-          message.userId = reader.string();
+          message.reference = Reference.decode(reader, reader.uint32());
           break;
         case 5:
-          message.customerId = reader.string();
+          message.userId = reader.string();
           break;
         case 6:
-          message.shopId = reader.string();
+          message.customerId = reader.string();
           break;
         case 7:
-          message.timestamp = reader.double();
+          message.shopId = reader.string();
           break;
         case 8:
-          message.state = stateFromJSON(reader.int32());
+          message.timestamp = reader.double();
           break;
         case 9:
-          message.sender = BillingAddress.decode(reader, reader.uint32());
+          message.paymentState = paymentStateFromJSON(reader.int32());
           break;
         case 10:
-          message.recipient = BillingAddress.decode(reader, reader.uint32());
+          message.sender = BillingAddress.decode(reader, reader.uint32());
           break;
         case 11:
-          message.positions.push(Position.decode(reader, reader.uint32()));
+          message.recipient = BillingAddress.decode(reader, reader.uint32());
           break;
         case 12:
-          message.totalAmounts.push(Amount.decode(reader, reader.uint32()));
+          message.positions.push(Position.decode(reader, reader.uint32()));
           break;
         case 13:
-          message.paymentMethodDetails = Any.decode(reader, reader.uint32());
+          message.totalAmounts.push(Amount.decode(reader, reader.uint32()));
           break;
         case 14:
-          message.documents.push(File.decode(reader, reader.uint32()));
+          message.paymentHints.push(reader.string());
           break;
         case 15:
-          message.customerRemark = reader.string();
+          message.documents.push(File.decode(reader, reader.uint32()));
           break;
         case 16:
-          message.fromDate = reader.double();
+          message.customerRemark = reader.string();
           break;
         case 17:
+          message.fromDate = reader.double();
+          break;
+        case 18:
           message.toDate = reader.double();
+          break;
+        case 19:
+          message.sent = reader.bool();
+          break;
+        case 20:
+          message.withdrawn = reader.bool();
           break;
         default:
           reader.skipType(tag & 7);
@@ -931,21 +909,24 @@ export const Invoice = {
     return {
       id: isSet(object.id) ? String(object.id) : undefined,
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
-      referenceId: isSet(object.referenceId) ? String(object.referenceId) : undefined,
+      invoiceNumber: isSet(object.invoiceNumber) ? String(object.invoiceNumber) : undefined,
+      reference: isSet(object.reference) ? Reference.fromJSON(object.reference) : undefined,
       userId: isSet(object.userId) ? String(object.userId) : undefined,
       customerId: isSet(object.customerId) ? String(object.customerId) : undefined,
       shopId: isSet(object.shopId) ? String(object.shopId) : undefined,
       timestamp: isSet(object.timestamp) ? Number(object.timestamp) : undefined,
-      state: isSet(object.state) ? stateFromJSON(object.state) : undefined,
+      paymentState: isSet(object.paymentState) ? paymentStateFromJSON(object.paymentState) : undefined,
       sender: isSet(object.sender) ? BillingAddress.fromJSON(object.sender) : undefined,
       recipient: isSet(object.recipient) ? BillingAddress.fromJSON(object.recipient) : undefined,
       positions: Array.isArray(object?.positions) ? object.positions.map((e: any) => Position.fromJSON(e)) : [],
       totalAmounts: Array.isArray(object?.totalAmounts) ? object.totalAmounts.map((e: any) => Amount.fromJSON(e)) : [],
-      paymentMethodDetails: isSet(object.paymentMethodDetails) ? Any.fromJSON(object.paymentMethodDetails) : undefined,
+      paymentHints: Array.isArray(object?.paymentHints) ? object.paymentHints.map((e: any) => String(e)) : [],
       documents: Array.isArray(object?.documents) ? object.documents.map((e: any) => File.fromJSON(e)) : [],
       customerRemark: isSet(object.customerRemark) ? String(object.customerRemark) : undefined,
       fromDate: isSet(object.fromDate) ? Number(object.fromDate) : undefined,
       toDate: isSet(object.toDate) ? Number(object.toDate) : undefined,
+      sent: isSet(object.sent) ? Boolean(object.sent) : undefined,
+      withdrawn: isSet(object.withdrawn) ? Boolean(object.withdrawn) : undefined,
     };
   },
 
@@ -953,12 +934,15 @@ export const Invoice = {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
-    message.referenceId !== undefined && (obj.referenceId = message.referenceId);
+    message.invoiceNumber !== undefined && (obj.invoiceNumber = message.invoiceNumber);
+    message.reference !== undefined &&
+      (obj.reference = message.reference ? Reference.toJSON(message.reference) : undefined);
     message.userId !== undefined && (obj.userId = message.userId);
     message.customerId !== undefined && (obj.customerId = message.customerId);
     message.shopId !== undefined && (obj.shopId = message.shopId);
     message.timestamp !== undefined && (obj.timestamp = message.timestamp);
-    message.state !== undefined && (obj.state = message.state !== undefined ? stateToJSON(message.state) : undefined);
+    message.paymentState !== undefined &&
+      (obj.paymentState = message.paymentState !== undefined ? paymentStateToJSON(message.paymentState) : undefined);
     message.sender !== undefined && (obj.sender = message.sender ? BillingAddress.toJSON(message.sender) : undefined);
     message.recipient !== undefined &&
       (obj.recipient = message.recipient ? BillingAddress.toJSON(message.recipient) : undefined);
@@ -972,8 +956,11 @@ export const Invoice = {
     } else {
       obj.totalAmounts = [];
     }
-    message.paymentMethodDetails !== undefined &&
-      (obj.paymentMethodDetails = message.paymentMethodDetails ? Any.toJSON(message.paymentMethodDetails) : undefined);
+    if (message.paymentHints) {
+      obj.paymentHints = message.paymentHints.map((e) => e);
+    } else {
+      obj.paymentHints = [];
+    }
     if (message.documents) {
       obj.documents = message.documents.map((e) => e ? File.toJSON(e) : undefined);
     } else {
@@ -982,6 +969,8 @@ export const Invoice = {
     message.customerRemark !== undefined && (obj.customerRemark = message.customerRemark);
     message.fromDate !== undefined && (obj.fromDate = message.fromDate);
     message.toDate !== undefined && (obj.toDate = message.toDate);
+    message.sent !== undefined && (obj.sent = message.sent);
+    message.withdrawn !== undefined && (obj.withdrawn = message.withdrawn);
     return obj;
   },
 
@@ -993,12 +982,15 @@ export const Invoice = {
     const message = createBaseInvoice();
     message.id = object.id ?? undefined;
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
-    message.referenceId = object.referenceId ?? undefined;
+    message.invoiceNumber = object.invoiceNumber ?? undefined;
+    message.reference = (object.reference !== undefined && object.reference !== null)
+      ? Reference.fromPartial(object.reference)
+      : undefined;
     message.userId = object.userId ?? undefined;
     message.customerId = object.customerId ?? undefined;
     message.shopId = object.shopId ?? undefined;
     message.timestamp = object.timestamp ?? undefined;
-    message.state = object.state ?? undefined;
+    message.paymentState = object.paymentState ?? undefined;
     message.sender = (object.sender !== undefined && object.sender !== null)
       ? BillingAddress.fromPartial(object.sender)
       : undefined;
@@ -1007,19 +999,19 @@ export const Invoice = {
       : undefined;
     message.positions = object.positions?.map((e) => Position.fromPartial(e)) || [];
     message.totalAmounts = object.totalAmounts?.map((e) => Amount.fromPartial(e)) || [];
-    message.paymentMethodDetails = (object.paymentMethodDetails !== undefined && object.paymentMethodDetails !== null)
-      ? Any.fromPartial(object.paymentMethodDetails)
-      : undefined;
+    message.paymentHints = object.paymentHints?.map((e) => e) || [];
     message.documents = object.documents?.map((e) => File.fromPartial(e)) || [];
     message.customerRemark = object.customerRemark ?? undefined;
     message.fromDate = object.fromDate ?? undefined;
     message.toDate = object.toDate ?? undefined;
+    message.sent = object.sent ?? undefined;
+    message.withdrawn = object.withdrawn ?? undefined;
     return message;
   },
 };
 
 function createBasePosition(): Position {
-  return { id: undefined, invoiceRows: [], amounts: [] };
+  return { id: undefined, rows: [], amounts: [] };
 }
 
 export const Position = {
@@ -1027,7 +1019,7 @@ export const Position = {
     if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
-    for (const v of message.invoiceRows) {
+    for (const v of message.rows) {
       Row.encode(v!, writer.uint32(26).fork()).ldelim();
     }
     for (const v of message.amounts) {
@@ -1047,7 +1039,7 @@ export const Position = {
           message.id = reader.string();
           break;
         case 3:
-          message.invoiceRows.push(Row.decode(reader, reader.uint32()));
+          message.rows.push(Row.decode(reader, reader.uint32()));
           break;
         case 5:
           message.amounts.push(Amount.decode(reader, reader.uint32()));
@@ -1063,7 +1055,7 @@ export const Position = {
   fromJSON(object: any): Position {
     return {
       id: isSet(object.id) ? String(object.id) : undefined,
-      invoiceRows: Array.isArray(object?.invoiceRows) ? object.invoiceRows.map((e: any) => Row.fromJSON(e)) : [],
+      rows: Array.isArray(object?.rows) ? object.rows.map((e: any) => Row.fromJSON(e)) : [],
       amounts: Array.isArray(object?.amounts) ? object.amounts.map((e: any) => Amount.fromJSON(e)) : [],
     };
   },
@@ -1071,10 +1063,10 @@ export const Position = {
   toJSON(message: Position): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    if (message.invoiceRows) {
-      obj.invoiceRows = message.invoiceRows.map((e) => e ? Row.toJSON(e) : undefined);
+    if (message.rows) {
+      obj.rows = message.rows.map((e) => e ? Row.toJSON(e) : undefined);
     } else {
-      obj.invoiceRows = [];
+      obj.rows = [];
     }
     if (message.amounts) {
       obj.amounts = message.amounts.map((e) => e ? Amount.toJSON(e) : undefined);
@@ -1091,7 +1083,7 @@ export const Position = {
   fromPartial(object: DeepPartial<Position>): Position {
     const message = createBasePosition();
     message.id = object.id ?? undefined;
-    message.invoiceRows = object.invoiceRows?.map((e) => Row.fromPartial(e)) || [];
+    message.rows = object.rows?.map((e) => Row.fromPartial(e)) || [];
     message.amounts = object.amounts?.map((e) => Amount.fromPartial(e)) || [];
     return message;
   },
@@ -1100,8 +1092,8 @@ export const Position = {
 function createBaseRow(): Row {
   return {
     id: undefined,
-    product: undefined,
-    manual: undefined,
+    productItem: undefined,
+    manualItem: undefined,
     unitPrice: undefined,
     quantity: undefined,
     amount: undefined,
@@ -1114,11 +1106,11 @@ export const Row = {
     if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
-    if (message.product !== undefined) {
-      ProductEntry.encode(message.product, writer.uint32(18).fork()).ldelim();
+    if (message.productItem !== undefined) {
+      ProductItem.encode(message.productItem, writer.uint32(18).fork()).ldelim();
     }
-    if (message.manual !== undefined) {
-      ManualEntry.encode(message.manual, writer.uint32(26).fork()).ldelim();
+    if (message.manualItem !== undefined) {
+      ManualItem.encode(message.manualItem, writer.uint32(26).fork()).ldelim();
     }
     if (message.unitPrice !== undefined) {
       writer.uint32(33).double(message.unitPrice);
@@ -1146,10 +1138,10 @@ export const Row = {
           message.id = reader.string();
           break;
         case 2:
-          message.product = ProductEntry.decode(reader, reader.uint32());
+          message.productItem = ProductItem.decode(reader, reader.uint32());
           break;
         case 3:
-          message.manual = ManualEntry.decode(reader, reader.uint32());
+          message.manualItem = ManualItem.decode(reader, reader.uint32());
           break;
         case 4:
           message.unitPrice = reader.double();
@@ -1174,8 +1166,8 @@ export const Row = {
   fromJSON(object: any): Row {
     return {
       id: isSet(object.id) ? String(object.id) : undefined,
-      product: isSet(object.product) ? ProductEntry.fromJSON(object.product) : undefined,
-      manual: isSet(object.manual) ? ManualEntry.fromJSON(object.manual) : undefined,
+      productItem: isSet(object.productItem) ? ProductItem.fromJSON(object.productItem) : undefined,
+      manualItem: isSet(object.manualItem) ? ManualItem.fromJSON(object.manualItem) : undefined,
       unitPrice: isSet(object.unitPrice) ? Number(object.unitPrice) : undefined,
       quantity: isSet(object.quantity) ? Number(object.quantity) : undefined,
       amount: isSet(object.amount) ? Amount.fromJSON(object.amount) : undefined,
@@ -1186,8 +1178,10 @@ export const Row = {
   toJSON(message: Row): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    message.product !== undefined && (obj.product = message.product ? ProductEntry.toJSON(message.product) : undefined);
-    message.manual !== undefined && (obj.manual = message.manual ? ManualEntry.toJSON(message.manual) : undefined);
+    message.productItem !== undefined &&
+      (obj.productItem = message.productItem ? ProductItem.toJSON(message.productItem) : undefined);
+    message.manualItem !== undefined &&
+      (obj.manualItem = message.manualItem ? ManualItem.toJSON(message.manualItem) : undefined);
     message.unitPrice !== undefined && (obj.unitPrice = message.unitPrice);
     message.quantity !== undefined && (obj.quantity = Math.round(message.quantity));
     message.amount !== undefined && (obj.amount = message.amount ? Amount.toJSON(message.amount) : undefined);
@@ -1202,11 +1196,11 @@ export const Row = {
   fromPartial(object: DeepPartial<Row>): Row {
     const message = createBaseRow();
     message.id = object.id ?? undefined;
-    message.product = (object.product !== undefined && object.product !== null)
-      ? ProductEntry.fromPartial(object.product)
+    message.productItem = (object.productItem !== undefined && object.productItem !== null)
+      ? ProductItem.fromPartial(object.productItem)
       : undefined;
-    message.manual = (object.manual !== undefined && object.manual !== null)
-      ? ManualEntry.fromPartial(object.manual)
+    message.manualItem = (object.manualItem !== undefined && object.manualItem !== null)
+      ? ManualItem.fromPartial(object.manualItem)
       : undefined;
     message.unitPrice = object.unitPrice ?? undefined;
     message.quantity = object.quantity ?? undefined;
@@ -1218,12 +1212,12 @@ export const Row = {
   },
 };
 
-function createBaseProductEntry(): ProductEntry {
+function createBaseProductItem(): ProductItem {
   return { productId: undefined, variantId: undefined };
 }
 
-export const ProductEntry = {
-  encode(message: ProductEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const ProductItem = {
+  encode(message: ProductItem, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.productId !== undefined) {
       writer.uint32(10).string(message.productId);
     }
@@ -1233,10 +1227,10 @@ export const ProductEntry = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): ProductEntry {
+  decode(input: _m0.Reader | Uint8Array, length?: number): ProductItem {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseProductEntry();
+    const message = createBaseProductItem();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1254,40 +1248,40 @@ export const ProductEntry = {
     return message;
   },
 
-  fromJSON(object: any): ProductEntry {
+  fromJSON(object: any): ProductItem {
     return {
       productId: isSet(object.productId) ? String(object.productId) : undefined,
       variantId: isSet(object.variantId) ? String(object.variantId) : undefined,
     };
   },
 
-  toJSON(message: ProductEntry): unknown {
+  toJSON(message: ProductItem): unknown {
     const obj: any = {};
     message.productId !== undefined && (obj.productId = message.productId);
     message.variantId !== undefined && (obj.variantId = message.variantId);
     return obj;
   },
 
-  create(base?: DeepPartial<ProductEntry>): ProductEntry {
-    return ProductEntry.fromPartial(base ?? {});
+  create(base?: DeepPartial<ProductItem>): ProductItem {
+    return ProductItem.fromPartial(base ?? {});
   },
 
-  fromPartial(object: DeepPartial<ProductEntry>): ProductEntry {
-    const message = createBaseProductEntry();
+  fromPartial(object: DeepPartial<ProductItem>): ProductItem {
+    const message = createBaseProductItem();
     message.productId = object.productId ?? undefined;
     message.variantId = object.variantId ?? undefined;
     return message;
   },
 };
 
-function createBaseManualEntry(): ManualEntry {
-  return { articleNumber: undefined, name: undefined, descritpion: undefined };
+function createBaseManualItem(): ManualItem {
+  return { stockKeepingUnit: undefined, name: undefined, descritpion: undefined };
 }
 
-export const ManualEntry = {
-  encode(message: ManualEntry, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.articleNumber !== undefined) {
-      writer.uint32(10).string(message.articleNumber);
+export const ManualItem = {
+  encode(message: ManualItem, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.stockKeepingUnit !== undefined) {
+      writer.uint32(10).string(message.stockKeepingUnit);
     }
     if (message.name !== undefined) {
       writer.uint32(18).string(message.name);
@@ -1298,15 +1292,15 @@ export const ManualEntry = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): ManualEntry {
+  decode(input: _m0.Reader | Uint8Array, length?: number): ManualItem {
     const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseManualEntry();
+    const message = createBaseManualItem();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.articleNumber = reader.string();
+          message.stockKeepingUnit = reader.string();
           break;
         case 2:
           message.name = reader.string();
@@ -1322,29 +1316,29 @@ export const ManualEntry = {
     return message;
   },
 
-  fromJSON(object: any): ManualEntry {
+  fromJSON(object: any): ManualItem {
     return {
-      articleNumber: isSet(object.articleNumber) ? String(object.articleNumber) : undefined,
+      stockKeepingUnit: isSet(object.stockKeepingUnit) ? String(object.stockKeepingUnit) : undefined,
       name: isSet(object.name) ? String(object.name) : undefined,
       descritpion: isSet(object.descritpion) ? String(object.descritpion) : undefined,
     };
   },
 
-  toJSON(message: ManualEntry): unknown {
+  toJSON(message: ManualItem): unknown {
     const obj: any = {};
-    message.articleNumber !== undefined && (obj.articleNumber = message.articleNumber);
+    message.stockKeepingUnit !== undefined && (obj.stockKeepingUnit = message.stockKeepingUnit);
     message.name !== undefined && (obj.name = message.name);
     message.descritpion !== undefined && (obj.descritpion = message.descritpion);
     return obj;
   },
 
-  create(base?: DeepPartial<ManualEntry>): ManualEntry {
-    return ManualEntry.fromPartial(base ?? {});
+  create(base?: DeepPartial<ManualItem>): ManualItem {
+    return ManualItem.fromPartial(base ?? {});
   },
 
-  fromPartial(object: DeepPartial<ManualEntry>): ManualEntry {
-    const message = createBaseManualEntry();
-    message.articleNumber = object.articleNumber ?? undefined;
+  fromPartial(object: DeepPartial<ManualItem>): ManualItem {
+    const message = createBaseManualItem();
+    message.stockKeepingUnit = object.stockKeepingUnit ?? undefined;
     message.name = object.name ?? undefined;
     message.descritpion = object.descritpion ?? undefined;
     return message;
@@ -1406,15 +1400,25 @@ export const InvoiceServiceDefinition = {
       responseStream: false,
       options: {},
     },
+    /** Mark invoices as withdrawn */
+    withdraw: {
+      name: "Withdraw",
+      requestType: InvoiceIdList,
+      requestStream: false,
+      responseType: InvoiceListResponse,
+      responseStream: false,
+      options: {},
+    },
     /** Triggers notification-srv (sends invoice per email for instance) */
     send: {
       name: "Send",
-      requestType: InvoiceNotificationList,
+      requestType: InvoiceIdList,
       requestStream: false,
       responseType: StatusListResponse,
       responseStream: false,
       options: {},
     },
+    /** Generate an incremented invoice number */
     generateInvoiceNumber: {
       name: "GenerateInvoiceNumber",
       requestType: RequestInvoiceNumber,
@@ -1434,11 +1438,11 @@ export interface InvoiceServiceImplementation<CallContextExt = {}> {
   delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;
   /** Render invoices as PDF to ostorage. (creates if not exist, updates if id is given) */
   render(request: InvoiceList, context: CallContext & CallContextExt): Promise<DeepPartial<InvoiceListResponse>>;
+  /** Mark invoices as withdrawn */
+  withdraw(request: InvoiceIdList, context: CallContext & CallContextExt): Promise<DeepPartial<InvoiceListResponse>>;
   /** Triggers notification-srv (sends invoice per email for instance) */
-  send(
-    request: InvoiceNotificationList,
-    context: CallContext & CallContextExt,
-  ): Promise<DeepPartial<StatusListResponse>>;
+  send(request: InvoiceIdList, context: CallContext & CallContextExt): Promise<DeepPartial<StatusListResponse>>;
+  /** Generate an incremented invoice number */
   generateInvoiceNumber(
     request: RequestInvoiceNumber,
     context: CallContext & CallContextExt,
@@ -1453,11 +1457,11 @@ export interface InvoiceServiceClient<CallOptionsExt = {}> {
   delete(request: DeepPartial<DeleteRequest>, options?: CallOptions & CallOptionsExt): Promise<DeleteResponse>;
   /** Render invoices as PDF to ostorage. (creates if not exist, updates if id is given) */
   render(request: DeepPartial<InvoiceList>, options?: CallOptions & CallOptionsExt): Promise<InvoiceListResponse>;
+  /** Mark invoices as withdrawn */
+  withdraw(request: DeepPartial<InvoiceIdList>, options?: CallOptions & CallOptionsExt): Promise<InvoiceListResponse>;
   /** Triggers notification-srv (sends invoice per email for instance) */
-  send(
-    request: DeepPartial<InvoiceNotificationList>,
-    options?: CallOptions & CallOptionsExt,
-  ): Promise<StatusListResponse>;
+  send(request: DeepPartial<InvoiceIdList>, options?: CallOptions & CallOptionsExt): Promise<StatusListResponse>;
+  /** Generate an incremented invoice number */
   generateInvoiceNumber(
     request: DeepPartial<RequestInvoiceNumber>,
     options?: CallOptions & CallOptionsExt,
@@ -1498,8 +1502,9 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/status.proto",
       "io/restorecommerce/options.proto",
       "io/restorecommerce/address.proto",
-      "io/restorecommerce/tax.proto",
+      "io/restorecommerce/amount.proto",
       "io/restorecommerce/file.proto",
+      "io/restorecommerce/reference.proto",
       "io/restorecommerce/user.proto",
       "io/restorecommerce/customer.proto",
       "io/restorecommerce/shop.proto",
@@ -1509,8 +1514,20 @@ export const protoMetadata: ProtoMetadata = {
     "messageType": [{
       "name": "RequestInvoiceNumber",
       "field": [{
-        "name": "context",
+        "name": "shop_id",
         "number": 1,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "shopId",
+        "options": undefined,
+        "proto3Optional": true,
+      }, {
+        "name": "context",
+        "number": 2,
         "label": 1,
         "type": 11,
         "typeName": ".google.protobuf.Any",
@@ -1537,7 +1554,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [],
+      "oneofDecl": [{ "name": "_shop_id", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1717,7 +1734,7 @@ export const protoMetadata: ProtoMetadata = {
       "reservedRange": [],
       "reservedName": [],
     }, {
-      "name": "InvoiceNotification",
+      "name": "InvoiceId",
       "field": [{
         "name": "id",
         "number": 1,
@@ -1779,13 +1796,13 @@ export const protoMetadata: ProtoMetadata = {
       "reservedRange": [],
       "reservedName": [],
     }, {
-      "name": "InvoiceNotificationList",
+      "name": "InvoiceIdList",
       "field": [{
         "name": "items",
         "number": 1,
         "label": 3,
         "type": 11,
-        "typeName": ".io.restorecommerce.invoice.InvoiceNotification",
+        "typeName": ".io.restorecommerce.invoice.InvoiceId",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
@@ -1852,7 +1869,7 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "reference_id",
+        "name": "invoice_number",
         "number": 3,
         "label": 1,
         "type": 9,
@@ -1860,18 +1877,30 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 2,
-        "jsonName": "referenceId",
+        "jsonName": "invoiceNumber",
+        "options": undefined,
+        "proto3Optional": true,
+      }, {
+        "name": "reference",
+        "number": 4,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.reference.Reference",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 3,
+        "jsonName": "reference",
         "options": undefined,
         "proto3Optional": true,
       }, {
         "name": "user_id",
-        "number": 4,
+        "number": 5,
         "label": 1,
         "type": 9,
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 3,
+        "oneofIndex": 4,
         "jsonName": "userId",
         "options": {
           "ctype": 0,
@@ -1885,13 +1914,13 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": true,
       }, {
         "name": "customer_id",
-        "number": 5,
+        "number": 6,
         "label": 1,
         "type": 9,
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 4,
+        "oneofIndex": 5,
         "jsonName": "customerId",
         "options": {
           "ctype": 0,
@@ -1905,13 +1934,13 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": true,
       }, {
         "name": "shop_id",
-        "number": 6,
+        "number": 7,
         "label": 1,
         "type": 9,
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 5,
+        "oneofIndex": 6,
         "jsonName": "shopId",
         "options": {
           "ctype": 0,
@@ -1925,42 +1954,30 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": true,
       }, {
         "name": "timestamp",
-        "number": 7,
+        "number": 8,
         "label": 1,
         "type": 1,
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 6,
+        "oneofIndex": 7,
         "jsonName": "timestamp",
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "state",
-        "number": 8,
+        "name": "payment_state",
+        "number": 9,
         "label": 1,
         "type": 14,
-        "typeName": ".io.restorecommerce.invoice.State",
+        "typeName": ".io.restorecommerce.invoice.PaymentState",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 7,
-        "jsonName": "state",
+        "oneofIndex": 8,
+        "jsonName": "paymentState",
         "options": undefined,
         "proto3Optional": true,
       }, {
         "name": "sender",
-        "number": 9,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.address.BillingAddress",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 8,
-        "jsonName": "sender",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
-        "name": "recipient",
         "number": 10,
         "label": 1,
         "type": 11,
@@ -1968,12 +1985,24 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 9,
+        "jsonName": "sender",
+        "options": undefined,
+        "proto3Optional": true,
+      }, {
+        "name": "recipient",
+        "number": 11,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.address.BillingAddress",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 10,
         "jsonName": "recipient",
         "options": undefined,
         "proto3Optional": true,
       }, {
         "name": "positions",
-        "number": 11,
+        "number": 12,
         "label": 3,
         "type": 11,
         "typeName": ".io.restorecommerce.invoice.Position",
@@ -1985,10 +2014,10 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": false,
       }, {
         "name": "total_amounts",
-        "number": 12,
+        "number": 13,
         "label": 3,
         "type": 11,
-        "typeName": ".io.restorecommerce.tax.Amount",
+        "typeName": ".io.restorecommerce.amount.Amount",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
@@ -1996,20 +2025,20 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "payment_method_details",
-        "number": 13,
-        "label": 1,
-        "type": 11,
-        "typeName": ".google.protobuf.Any",
+        "name": "payment_hints",
+        "number": 14,
+        "label": 3,
+        "type": 9,
+        "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 10,
-        "jsonName": "paymentMethodDetails",
+        "oneofIndex": 0,
+        "jsonName": "paymentHints",
         "options": undefined,
-        "proto3Optional": true,
+        "proto3Optional": false,
       }, {
         "name": "documents",
-        "number": 14,
+        "number": 15,
         "label": 3,
         "type": 11,
         "typeName": ".io.restorecommerce.file.File",
@@ -2021,7 +2050,7 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": false,
       }, {
         "name": "customer_remark",
-        "number": 15,
+        "number": 16,
         "label": 1,
         "type": 9,
         "typeName": "",
@@ -2033,7 +2062,7 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": true,
       }, {
         "name": "from_date",
-        "number": 16,
+        "number": 17,
         "label": 1,
         "type": 1,
         "typeName": "",
@@ -2045,7 +2074,7 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": true,
       }, {
         "name": "to_date",
-        "number": 17,
+        "number": 18,
         "label": 1,
         "type": 1,
         "typeName": "",
@@ -2053,6 +2082,30 @@ export const protoMetadata: ProtoMetadata = {
         "defaultValue": "",
         "oneofIndex": 13,
         "jsonName": "toDate",
+        "options": undefined,
+        "proto3Optional": true,
+      }, {
+        "name": "sent",
+        "number": 19,
+        "label": 1,
+        "type": 8,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 14,
+        "jsonName": "sent",
+        "options": undefined,
+        "proto3Optional": true,
+      }, {
+        "name": "withdrawn",
+        "number": 20,
+        "label": 1,
+        "type": 8,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 15,
+        "jsonName": "withdrawn",
         "options": undefined,
         "proto3Optional": true,
       }],
@@ -2063,18 +2116,20 @@ export const protoMetadata: ProtoMetadata = {
       "oneofDecl": [
         { "name": "_id", "options": undefined },
         { "name": "_meta", "options": undefined },
-        { "name": "_reference_id", "options": undefined },
+        { "name": "_invoice_number", "options": undefined },
+        { "name": "_reference", "options": undefined },
         { "name": "_user_id", "options": undefined },
         { "name": "_customer_id", "options": undefined },
         { "name": "_shop_id", "options": undefined },
         { "name": "_timestamp", "options": undefined },
-        { "name": "_state", "options": undefined },
+        { "name": "_payment_state", "options": undefined },
         { "name": "_sender", "options": undefined },
         { "name": "_recipient", "options": undefined },
-        { "name": "_payment_method_details", "options": undefined },
         { "name": "_customer_remark", "options": undefined },
         { "name": "_from_date", "options": undefined },
         { "name": "_to_date", "options": undefined },
+        { "name": "_sent", "options": undefined },
+        { "name": "_withdrawn", "options": undefined },
       ],
       "options": {
         "messageSetWireFormat": false,
@@ -2100,7 +2155,7 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "invoice_rows",
+        "name": "rows",
         "number": 3,
         "label": 3,
         "type": 11,
@@ -2108,7 +2163,7 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "invoiceRows",
+        "jsonName": "rows",
         "options": undefined,
         "proto3Optional": false,
       }, {
@@ -2116,7 +2171,7 @@ export const protoMetadata: ProtoMetadata = {
         "number": 5,
         "label": 3,
         "type": 11,
-        "typeName": ".io.restorecommerce.tax.Amount",
+        "typeName": ".io.restorecommerce.amount.Amount",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
@@ -2147,27 +2202,27 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "product",
+        "name": "product_item",
         "number": 2,
         "label": 1,
         "type": 11,
-        "typeName": ".io.restorecommerce.invoice.ProductEntry",
+        "typeName": ".io.restorecommerce.invoice.ProductItem",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "product",
+        "jsonName": "productItem",
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "manual",
+        "name": "manual_item",
         "number": 3,
         "label": 1,
         "type": 11,
-        "typeName": ".io.restorecommerce.invoice.ManualEntry",
+        "typeName": ".io.restorecommerce.invoice.ManualItem",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "manual",
+        "jsonName": "manualItem",
         "options": undefined,
         "proto3Optional": false,
       }, {
@@ -2199,7 +2254,7 @@ export const protoMetadata: ProtoMetadata = {
         "number": 6,
         "label": 1,
         "type": 11,
-        "typeName": ".io.restorecommerce.tax.Amount",
+        "typeName": ".io.restorecommerce.amount.Amount",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 4,
@@ -2224,7 +2279,7 @@ export const protoMetadata: ProtoMetadata = {
       "enumType": [],
       "extensionRange": [],
       "oneofDecl": [
-        { "name": "entry_type", "options": undefined },
+        { "name": "item_type", "options": undefined },
         { "name": "_id", "options": undefined },
         { "name": "_unit_price", "options": undefined },
         { "name": "_quantity", "options": undefined },
@@ -2235,7 +2290,7 @@ export const protoMetadata: ProtoMetadata = {
       "reservedRange": [],
       "reservedName": [],
     }, {
-      "name": "ProductEntry",
+      "name": "ProductItem",
       "field": [{
         "name": "product_id",
         "number": 1,
@@ -2278,9 +2333,9 @@ export const protoMetadata: ProtoMetadata = {
       "reservedRange": [],
       "reservedName": [],
     }, {
-      "name": "ManualEntry",
+      "name": "ManualItem",
       "field": [{
-        "name": "article_number",
+        "name": "stock_keeping_unit",
         "number": 1,
         "label": 1,
         "type": 9,
@@ -2288,7 +2343,7 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "articleNumber",
+        "jsonName": "stockKeepingUnit",
         "options": undefined,
         "proto3Optional": true,
       }, {
@@ -2320,26 +2375,22 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [{ "name": "_article_number", "options": undefined }, { "name": "_name", "options": undefined }, {
-        "name": "_descritpion",
-        "options": undefined,
-      }],
+      "oneofDecl": [
+        { "name": "_stock_keeping_unit", "options": undefined },
+        { "name": "_name", "options": undefined },
+        { "name": "_descritpion", "options": undefined },
+      ],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
     }],
     "enumType": [{
-      "name": "State",
-      "value": [
-        { "name": "FAILED", "number": 0, "options": undefined },
-        { "name": "INVALID", "number": 1, "options": undefined },
-        { "name": "CREATED", "number": 2, "options": undefined },
-        { "name": "RENDERED", "number": 3, "options": undefined },
-        { "name": "SENT", "number": 4, "options": undefined },
-        { "name": "PAYED", "number": 5, "options": undefined },
-        { "name": "WITHDRAWN", "number": 6, "options": undefined },
-        { "name": "CANCELLED", "number": 7, "options": undefined },
-      ],
+      "name": "PaymentState",
+      "value": [{ "name": "UNPAYED", "number": 0, "options": undefined }, {
+        "name": "PAYED",
+        "number": 1,
+        "options": undefined,
+      }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -2389,8 +2440,15 @@ export const protoMetadata: ProtoMetadata = {
         "clientStreaming": false,
         "serverStreaming": false,
       }, {
+        "name": "Withdraw",
+        "inputType": ".io.restorecommerce.invoice.InvoiceIdList",
+        "outputType": ".io.restorecommerce.invoice.InvoiceListResponse",
+        "options": undefined,
+        "clientStreaming": false,
+        "serverStreaming": false,
+      }, {
         "name": "Send",
-        "inputType": ".io.restorecommerce.invoice.InvoiceNotificationList",
+        "inputType": ".io.restorecommerce.invoice.InvoiceIdList",
         "outputType": ".io.restorecommerce.status.StatusListResponse",
         "options": undefined,
         "clientStreaming": false,
@@ -2409,93 +2467,92 @@ export const protoMetadata: ProtoMetadata = {
     "options": undefined,
     "sourceCodeInfo": {
       "location": [{
-        "path": [3, 10],
-        "span": [16, 0, 39],
+        "path": [3, 11],
+        "span": [17, 0, 39],
         "leadingComments": " Used by resolvers\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0],
-        "span": [23, 0, 42, 1],
+        "span": [24, 0, 52, 1],
         "leadingComments": "\n Microservice definition.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 5],
-        "span": [35, 2, 57],
+        "span": [36, 2, 57],
         "leadingComments": "\n Render invoices as PDF to ostorage. (creates if not exist, updates if id is given)\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 6],
-        "span": [40, 2, 92],
+        "span": [41, 2, 61],
+        "leadingComments": "\n Mark invoices as withdrawn\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [6, 0, 2, 7],
+        "span": [46, 2, 82],
         "leadingComments": "\n Triggers notification-srv (sends invoice per email for instance) \n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
+        "path": [6, 0, 2, 8],
+        "span": [51, 2, 82],
+        "leadingComments": "\n Generate an incremented invoice number\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
         "path": [4, 8],
-        "span": [101, 0, 155, 1],
+        "span": [106, 0, 159, 1],
         "leadingComments": "\n The Invoice recource, stored in DB.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 8, 2, 0],
-        "span": [110, 2, 25],
-        "leadingComments": "",
-        "trailingComments": " invoice_number\n",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 8, 2, 2],
-        "span": [116, 2, 35],
-        "leadingComments":
-          "\n A forigner_key using the following pattern: `${collection}/${id}`.\n most likly an order_id or fulfillment_id.\n",
-        "trailingComments": "",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 8, 2, 4],
-        "span": [126, 2, 134, 4],
+        "path": [4, 8, 2, 5],
+        "span": [128, 2, 136, 4],
         "leadingComments": "",
         "trailingComments": " customer_number ref. to recipent orga\n",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 8, 2, 5],
-        "span": [135, 2, 143, 4],
+        "path": [4, 8, 2, 6],
+        "span": [137, 2, 145, 4],
         "leadingComments": "",
         "trailingComments": " shop_number --- ref. to sender orga\n",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 8, 2, 12],
-        "span": [150, 2, 59],
+        "path": [4, 8, 2, 13],
+        "span": [152, 2, 37],
         "leadingComments": "",
         "trailingComments": " is there no better type for that?\n",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 8, 2, 13],
-        "span": [151, 2, 55],
+        "path": [4, 8, 2, 14],
+        "span": [153, 2, 55],
         "leadingComments": "",
         "trailingComments": " url to rendered PDFs\n",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 8, 2, 15],
-        "span": [153, 2, 33],
+        "path": [4, 8, 2, 16],
+        "span": [155, 2, 33],
         "leadingComments": "",
         "trailingComments": " value performance from date\n",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 8, 2, 16],
-        "span": [154, 2, 31],
+        "path": [4, 8, 2, 17],
+        "span": [156, 2, 31],
         "leadingComments": "",
         "trailingComments": " value performance to date\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 9, 2, 2],
-        "span": [160, 2, 53],
+        "span": [164, 2, 56],
         "leadingComments": "",
         "trailingComments": " repeated in case of multiple currencies?\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 10, 2, 6],
-        "span": [172, 2, 42],
+        "span": [176, 2, 42],
         "leadingComments": "",
         "trailingComments": " if there is any contract associated with product\n",
         "leadingDetachedComments": [],
@@ -2504,20 +2561,20 @@ export const protoMetadata: ProtoMetadata = {
     "syntax": "proto3",
   }),
   references: {
-    ".io.restorecommerce.invoice.State": State,
+    ".io.restorecommerce.invoice.PaymentState": PaymentState,
     ".io.restorecommerce.invoice.RequestInvoiceNumber": RequestInvoiceNumber,
     ".io.restorecommerce.invoice.InvoiceNumberResponse": InvoiceNumberResponse,
     ".io.restorecommerce.invoice.Deleted": Deleted,
     ".io.restorecommerce.invoice.InvoiceList": InvoiceList,
     ".io.restorecommerce.invoice.InvoiceListResponse": InvoiceListResponse,
     ".io.restorecommerce.invoice.InvoiceResponse": InvoiceResponse,
-    ".io.restorecommerce.invoice.InvoiceNotification": InvoiceNotification,
-    ".io.restorecommerce.invoice.InvoiceNotificationList": InvoiceNotificationList,
+    ".io.restorecommerce.invoice.InvoiceId": InvoiceId,
+    ".io.restorecommerce.invoice.InvoiceIdList": InvoiceIdList,
     ".io.restorecommerce.invoice.Invoice": Invoice,
     ".io.restorecommerce.invoice.Position": Position,
     ".io.restorecommerce.invoice.Row": Row,
-    ".io.restorecommerce.invoice.ProductEntry": ProductEntry,
-    ".io.restorecommerce.invoice.ManualEntry": ManualEntry,
+    ".io.restorecommerce.invoice.ProductItem": ProductItem,
+    ".io.restorecommerce.invoice.ManualItem": ManualItem,
   },
   dependencies: [
     protoMetadata1,
@@ -2533,6 +2590,7 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata11,
     protoMetadata12,
     protoMetadata13,
+    protoMetadata14,
   ],
   options: {
     messages: {
@@ -2566,7 +2624,7 @@ export const protoMetadata: ProtoMetadata = {
           },
         },
       },
-      "ProductEntry": {
+      "ProductItem": {
         fields: {
           "product_id": {
             "resolver": Resolver.decode(

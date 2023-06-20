@@ -8,6 +8,9 @@ import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
 import "io/restorecommerce/options.proto";
 
+// For resolver
+import "io/restorecommerce/product_category.proto";
+
 // ProductPrototype resource
 message ProductPrototype {
   optional string id = 1;
@@ -15,7 +18,15 @@ message ProductPrototype {
   optional string name = 3;
   optional string version = 4;
   optional string description = 5;
-  optional string category_id = 6;
+  optional string category_id = 6 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.product_category.ProductCategory",
+      target_service: "catalog",
+      target_sub_service: "product_category",
+      target_method: "Read",
+      field_name: "category",
+    }
+  ];
 }
 
 message ProductPrototypeList {

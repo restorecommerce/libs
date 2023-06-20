@@ -1,0 +1,88 @@
+syntax = "proto3";
+
+package io.restorecommerce.currency;
+
+import "io/restorecommerce/resource_base.proto";
+import "io/restorecommerce/meta.proto";
+import "io/restorecommerce/auth.proto";
+import "io/restorecommerce/status.proto";
+import "io/restorecommerce/options.proto";
+
+/*
+* Microservice definition.
+*/
+service CurrencyService {
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (CurrencyListResponse) {
+    option (io.restorecommerce.options.is_query) = true;
+  };
+  rpc Create (CurrencyList) returns (CurrencyListResponse);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
+  rpc Update (CurrencyList) returns (CurrencyListResponse);
+  rpc Upsert (CurrencyList) returns (CurrencyListResponse);
+  rpc QueryExchangeRate (ExchangeRateQueryList) returns (ExchangeRateListResponse);
+}
+
+message Deleted {
+  string id = 1;
+}
+
+message CurrencyList {
+  repeated Currency items = 1;
+  optional uint32 total_count = 2;
+  io.restorecommerce.auth.Subject subject = 3;
+}
+
+message CurrencyListResponse {
+  repeated CurrencyResponse items = 1;
+  uint32 total_count = 2;
+  io.restorecommerce.status.OperationStatus operation_status = 3;
+}
+
+message CurrencyResponse {
+  Currency payload = 1;
+  io.restorecommerce.status.Status status = 2;
+}
+
+message Currency {
+  optional string id = 1;
+  optional io.restorecommerce.meta.Meta meta = 2;
+  optional string name = 3;
+  optional string country_id = 4;
+  /*
+  * For custom exchange rates beyond market.
+  * Regular rates are retrived from API by calling QueryExchangeRate.
+  */
+  repeated ExchangeRate custom_exchange_rates = 5;
+}
+
+message ExchangeRate {
+  optional string to_currency_id = 1;
+  optional double rate = 3;
+  optional double expenses = 4; //fees
+  optional double amount = 5;
+}
+
+message ExchangeRateQuery {
+  optional string from_currency_id = 1;
+  optional string to_currency_id = 2;
+  optional double datetime = 3; // now in general case
+  optional double amount = 4; // leave empty == 1.0
+}
+
+message ExchangeRateQueryList {
+  repeated ExchangeRate items = 1;
+  optional uint32 total_count = 2;
+  io.restorecommerce.auth.Subject subject = 3;
+}
+
+message ExchangeRateResponse {
+  optional string from_currency_id = 1;
+  ExchangeRate payload = 3;
+  optional double timestamp = 2;
+  io.restorecommerce.status.Status status = 4;
+}
+
+message ExchangeRateListResponse {
+  repeated ExchangeRateResponse items = 1;
+  io.restorecommerce.status.OperationStatus operation_status = 3;
+}

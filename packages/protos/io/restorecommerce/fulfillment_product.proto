@@ -2,13 +2,14 @@ syntax = "proto3";
 
 package io.restorecommerce.fulfillment_product;
 
+import "io/restorecommerce/reference.proto";
 import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
 import "io/restorecommerce/attribute.proto";
 import "io/restorecommerce/address.proto";
-import "io/restorecommerce/tax.proto";
+import "io/restorecommerce/amount.proto";
 import "io/restorecommerce/geometry.proto";
 import "io/restorecommerce/fulfillment_courier.proto";
 import "io/restorecommerce/fulfillment.proto";
@@ -110,16 +111,15 @@ message FulfillmentProductListResponse {
 }
 
 message PackingSolution {
-  optional double price = 1;
+  optional io.restorecommerce.amount.Amount amount = 1;
   optional double compactness = 2;
   optional double homogeneity = 3;
   optional double score = 4;
   repeated io.restorecommerce.fulfillment.Parcel parcels = 5;
-  repeated io.restorecommerce.tax.VAT vats = 6;
 }
 
 message PackingSolutionResponse {
-  optional string reference_id = 1; // forigner_key: use the following pattern: `${collection}/${id}`
+  optional io.restorecommerce.reference.Reference reference = 1;
   repeated PackingSolution solutions = 2;
   optional io.restorecommerce.status.Status status = 3;
 }

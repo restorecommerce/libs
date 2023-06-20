@@ -10,8 +10,9 @@ import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
 import "io/restorecommerce/options.proto";
 import "io/restorecommerce/address.proto";
-import "io/restorecommerce/tax.proto";
+import "io/restorecommerce/amount.proto";
 import "io/restorecommerce/file.proto";
+import "io/restorecommerce/reference.proto";
 
 // Used by resolvers
 import "io/restorecommerce/user.proto";
@@ -34,28 +35,32 @@ service InvoiceService {
   * Render invoices as PDF to ostorage. (creates if not exist, updates if id is given)
   */
   rpc Render (InvoiceList) returns (InvoiceListResponse);
+  
+  /*
+  * Mark invoices as withdrawn
+  */
+  rpc Withdraw (InvoiceIdList) returns (InvoiceListResponse);
 
   /*
   * Triggers notification-srv (sends invoice per email for instance) 
   */
-  rpc Send (InvoiceNotificationList) returns (io.restorecommerce.status.StatusListResponse);
+  rpc Send (InvoiceIdList) returns (io.restorecommerce.status.StatusListResponse);
+
+  /*
+  * Generate an incremented invoice number
+  */
   rpc GenerateInvoiceNumber(RequestInvoiceNumber) returns (InvoiceNumberResponse);
 }
 
-enum State {
-  FAILED = 0;
-  INVALID = 1;
-  CREATED = 2;
-  RENDERED = 3;
-  SENT = 4;
-  PAYED = 5;
-  WITHDRAWN = 6;
-  CANCELLED = 7;
+enum PaymentState {
+  UNPAYED = 0;
+  PAYED = 1;
 }
 
 message RequestInvoiceNumber {
- google.protobuf.Any context = 1;
- io.restorecommerce.auth.Subject subject = 3;
+  optional string shop_id = 1;
+  google.protobuf.Any context = 2;
+  io.restorecommerce.auth.Subject subject = 3;
 }
 
 message InvoiceNumberResponse {
@@ -83,15 +88,15 @@ message InvoiceResponse {
   io.restorecommerce.status.Status status = 2;
 }
 
-message InvoiceNotification {
+message InvoiceId {
   optional string id = 1;
   repeated string channel_ids = 2;
   optional google.protobuf.Any options = 3;
   optional io.restorecommerce.auth.Subject subject = 4;
 }
 
-message InvoiceNotificationList {
-  repeated InvoiceNotification items = 1;
+message InvoiceIdList {
+  repeated InvoiceId items = 1;
   optional uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
 }
@@ -108,14 +113,11 @@ message Invoice {
     deleted: "invoiceDeleted"
   };
 
-  optional string id = 1; // invoice_number
+  optional string id = 1;
   optional io.restorecommerce.meta.Meta meta = 2;
-  /*
-  * A forigner_key using the following pattern: `${collection}/${id}`.
-  * most likly an order_id or fulfillment_id.
-  */
-  optional string reference_id = 3; 
-  optional string user_id = 4 [
+  optional string invoice_number = 3;
+  optional io.restorecommerce.reference.Reference reference = 4; 
+  optional string user_id = 5 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.user.User",
       target_service: "identity",
@@ -124,7 +126,7 @@ message Invoice {
       field_name: "user",
     }
   ];
-  optional string customer_id = 5 [
+  optional string customer_id = 6 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.customer.Customer",
       target_service: "resource",
@@ -133,7 +135,7 @@ message Invoice {
       field_name: "customer",
     }
   ]; // customer_number ref. to recipent orga
-  optional string shop_id = 6 [
+  optional string shop_id = 7 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.shop.Shop",
       target_service: "resource",
@@ -142,38 +144,40 @@ message Invoice {
       field_name: "shop",
     }
   ]; // shop_number --- ref. to sender orga
-  optional double timestamp = 7;
-  optional State state = 8;
-  optional io.restorecommerce.address.BillingAddress sender = 9;
-  optional io.restorecommerce.address.BillingAddress recipient = 10;
-  repeated Position positions = 11;
-  repeated io.restorecommerce.tax.Amount total_amounts = 12;
-  optional google.protobuf.Any payment_method_details = 13; // is there no better type for that?
-  repeated io.restorecommerce.file.File documents = 14; // url to rendered PDFs
-  optional string customer_remark = 15;
-  optional double from_date = 16; // value performance from date
-  optional double to_date = 17; // value performance to date
+  optional double timestamp = 8;
+  optional PaymentState payment_state = 9;
+  optional io.restorecommerce.address.BillingAddress sender = 10;
+  optional io.restorecommerce.address.BillingAddress recipient = 11;
+  repeated Position positions = 12;
+  repeated io.restorecommerce.amount.Amount total_amounts = 13;
+  repeated string payment_hints = 14; // is there no better type for that?
+  repeated io.restorecommerce.file.File documents = 15; // url to rendered PDFs
+  optional string customer_remark = 16;
+  optional double from_date = 17; // value performance from date
+  optional double to_date = 18; // value performance to date
+  optional bool sent = 19;
+  optional bool withdrawn = 20;
 }
 
 message Position {
   optional string id = 1;
-  repeated Row invoice_rows = 3;
-  repeated io.restorecommerce.tax.Amount amounts = 5; // repeated in case of multiple currencies?
+  repeated Row rows = 3;
+  repeated io.restorecommerce.amount.Amount amounts = 5; // repeated in case of multiple currencies?
 }
 
 message Row {
   optional string id = 1;
-  oneof entry_type {
-    ProductEntry product = 2;
-    ManualEntry manual = 3;
+  oneof item_type {
+    ProductItem product_item = 2;
+    ManualItem manual_item = 3;
   }
   optional double unit_price = 4;
   optional uint32 quantity = 5;
-  optional io.restorecommerce.tax.Amount amount = 6;
+  optional io.restorecommerce.amount.Amount amount = 6;
   optional double contract_start_date = 7; // if there is any contract associated with product
 }
 
-message ProductEntry {
+message ProductItem {
   optional string product_id = 1 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.product.Product",
@@ -186,8 +190,8 @@ message ProductEntry {
   optional string variant_id = 2;
 }
 
-message ManualEntry {
-  optional string article_number = 1;
+message ManualItem {
+  optional string stock_keeping_unit = 1;
   optional string name = 2;
   optional string descritpion = 3;
 }

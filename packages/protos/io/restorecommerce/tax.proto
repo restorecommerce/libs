@@ -70,15 +70,3 @@ message Tax {
     }
   ];
 }
-
-message VAT {
-  optional string tax_id = 1;
-  optional double vat = 2;
-}
-
-message Amount {
-  optional string currency = 1; // missing resource entity!
-  optional double gross = 2;
-  optional double net = 3;
-  repeated VAT vats = 4;
-}

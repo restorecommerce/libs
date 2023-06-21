@@ -35,6 +35,7 @@ export interface Currency {
   id?: string | undefined;
   meta?: Meta | undefined;
   name?: string | undefined;
+  symbol?: string | undefined;
   countryId?:
     | string
     | undefined;
@@ -51,7 +52,10 @@ export interface ExchangeRate {
     | number
     | undefined;
   /** fees */
-  expenses?: number | undefined;
+  expenses?:
+    | number
+    | undefined;
+  /** leave empty == 1.0 */
   amount?: number | undefined;
 }
 
@@ -359,7 +363,14 @@ export const CurrencyResponse = {
 };
 
 function createBaseCurrency(): Currency {
-  return { id: undefined, meta: undefined, name: undefined, countryId: undefined, customExchangeRates: [] };
+  return {
+    id: undefined,
+    meta: undefined,
+    name: undefined,
+    symbol: undefined,
+    countryId: undefined,
+    customExchangeRates: [],
+  };
 }
 
 export const Currency = {
@@ -373,11 +384,14 @@ export const Currency = {
     if (message.name !== undefined) {
       writer.uint32(26).string(message.name);
     }
+    if (message.symbol !== undefined) {
+      writer.uint32(34).string(message.symbol);
+    }
     if (message.countryId !== undefined) {
-      writer.uint32(34).string(message.countryId);
+      writer.uint32(42).string(message.countryId);
     }
     for (const v of message.customExchangeRates) {
-      ExchangeRate.encode(v!, writer.uint32(42).fork()).ldelim();
+      ExchangeRate.encode(v!, writer.uint32(50).fork()).ldelim();
     }
     return writer;
   },
@@ -399,9 +413,12 @@ export const Currency = {
           message.name = reader.string();
           break;
         case 4:
-          message.countryId = reader.string();
+          message.symbol = reader.string();
           break;
         case 5:
+          message.countryId = reader.string();
+          break;
+        case 6:
           message.customExchangeRates.push(ExchangeRate.decode(reader, reader.uint32()));
           break;
         default:
@@ -417,6 +434,7 @@ export const Currency = {
       id: isSet(object.id) ? String(object.id) : undefined,
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
       name: isSet(object.name) ? String(object.name) : undefined,
+      symbol: isSet(object.symbol) ? String(object.symbol) : undefined,
       countryId: isSet(object.countryId) ? String(object.countryId) : undefined,
       customExchangeRates: Array.isArray(object?.customExchangeRates)
         ? object.customExchangeRates.map((e: any) => ExchangeRate.fromJSON(e))
@@ -429,6 +447,7 @@ export const Currency = {
     message.id !== undefined && (obj.id = message.id);
     message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.name !== undefined && (obj.name = message.name);
+    message.symbol !== undefined && (obj.symbol = message.symbol);
     message.countryId !== undefined && (obj.countryId = message.countryId);
     if (message.customExchangeRates) {
       obj.customExchangeRates = message.customExchangeRates.map((e) => e ? ExchangeRate.toJSON(e) : undefined);
@@ -447,6 +466,7 @@ export const Currency = {
     message.id = object.id ?? undefined;
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
     message.name = object.name ?? undefined;
+    message.symbol = object.symbol ?? undefined;
     message.countryId = object.countryId ?? undefined;
     message.customExchangeRates = object.customExchangeRates?.map((e) => ExchangeRate.fromPartial(e)) || [];
     return message;
@@ -1149,7 +1169,7 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "country_id",
+        "name": "symbol",
         "number": 4,
         "label": 1,
         "type": 9,
@@ -1157,12 +1177,24 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 3,
+        "jsonName": "symbol",
+        "options": undefined,
+        "proto3Optional": true,
+      }, {
+        "name": "country_id",
+        "number": 5,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 4,
         "jsonName": "countryId",
         "options": undefined,
         "proto3Optional": true,
       }, {
         "name": "custom_exchange_rates",
-        "number": 5,
+        "number": 6,
         "label": 3,
         "type": 11,
         "typeName": ".io.restorecommerce.currency.ExchangeRate",
@@ -1177,10 +1209,13 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [{ "name": "_id", "options": undefined }, { "name": "_meta", "options": undefined }, {
-        "name": "_name",
-        "options": undefined,
-      }, { "name": "_country_id", "options": undefined }],
+      "oneofDecl": [
+        { "name": "_id", "options": undefined },
+        { "name": "_meta", "options": undefined },
+        { "name": "_name", "options": undefined },
+        { "name": "_symbol", "options": undefined },
+        { "name": "_country_id", "options": undefined },
+      ],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -1513,27 +1548,33 @@ export const protoMetadata: ProtoMetadata = {
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 4, 2, 4],
-        "span": [54, 2, 50],
+        "path": [4, 4, 2, 5],
+        "span": [55, 2, 50],
         "leadingComments":
           "\n For custom exchange rates beyond market.\n Regular rates are retrived from API by calling QueryExchangeRate.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 5, 2, 2],
-        "span": [60, 2, 31],
+        "span": [61, 2, 31],
         "leadingComments": "",
         "trailingComments": "fees\n",
         "leadingDetachedComments": [],
       }, {
+        "path": [4, 5, 2, 3],
+        "span": [62, 2, 29],
+        "leadingComments": "",
+        "trailingComments": " leave empty == 1.0\n",
+        "leadingDetachedComments": [],
+      }, {
         "path": [4, 6, 2, 2],
-        "span": [67, 2, 31],
+        "span": [68, 2, 31],
         "leadingComments": "",
         "trailingComments": " now in general case\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 6, 2, 3],
-        "span": [68, 2, 29],
+        "span": [69, 2, 29],
         "leadingComments": "",
         "trailingComments": " leave empty == 1.0\n",
         "leadingDetachedComments": [],

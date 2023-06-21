@@ -47,19 +47,20 @@ message Currency {
   optional string id = 1;
   optional io.restorecommerce.meta.Meta meta = 2;
   optional string name = 3;
-  optional string country_id = 4;
+  optional string symbol = 4;
+  optional string country_id = 5;
   /*
   * For custom exchange rates beyond market.
   * Regular rates are retrived from API by calling QueryExchangeRate.
   */
-  repeated ExchangeRate custom_exchange_rates = 5;
+  repeated ExchangeRate custom_exchange_rates = 6;
 }
 
 message ExchangeRate {
   optional string to_currency_id = 1;
   optional double rate = 3;
   optional double expenses = 4; //fees
-  optional double amount = 5;
+  optional double amount = 5; // leave empty == 1.0
 }
 
 message ExchangeRateQuery {

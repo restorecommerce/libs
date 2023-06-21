@@ -186,13 +186,7 @@ export interface Fulfillment {
   /** set by service */
   trackings: Tracking[];
   /** set by service */
-  totalPrice?:
-    | number
-    | undefined;
-  /** set by service */
-  totalVat?:
-    | number
-    | undefined;
+  totalAmount: Amount[];
   /** set by service */
   state?: State | undefined;
 }
@@ -874,8 +868,7 @@ function createBaseFulfillment(): Fulfillment {
     meta: undefined,
     labels: [],
     trackings: [],
-    totalPrice: undefined,
-    totalVat: undefined,
+    totalAmount: [],
     state: undefined,
   };
 }
@@ -897,11 +890,8 @@ export const Fulfillment = {
     for (const v of message.trackings) {
       Tracking.encode(v!, writer.uint32(42).fork()).ldelim();
     }
-    if (message.totalPrice !== undefined) {
-      writer.uint32(49).double(message.totalPrice);
-    }
-    if (message.totalVat !== undefined) {
-      writer.uint32(57).double(message.totalVat);
+    for (const v of message.totalAmount) {
+      Amount.encode(v!, writer.uint32(50).fork()).ldelim();
     }
     if (message.state !== undefined) {
       writer.uint32(64).int32(stateToNumber(message.state));
@@ -932,10 +922,7 @@ export const Fulfillment = {
           message.trackings.push(Tracking.decode(reader, reader.uint32()));
           break;
         case 6:
-          message.totalPrice = reader.double();
-          break;
-        case 7:
-          message.totalVat = reader.double();
+          message.totalAmount.push(Amount.decode(reader, reader.uint32()));
           break;
         case 8:
           message.state = stateFromJSON(reader.int32());
@@ -955,8 +942,7 @@ export const Fulfillment = {
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
       labels: Array.isArray(object?.labels) ? object.labels.map((e: any) => Label.fromJSON(e)) : [],
       trackings: Array.isArray(object?.trackings) ? object.trackings.map((e: any) => Tracking.fromJSON(e)) : [],
-      totalPrice: isSet(object.totalPrice) ? Number(object.totalPrice) : undefined,
-      totalVat: isSet(object.totalVat) ? Number(object.totalVat) : undefined,
+      totalAmount: Array.isArray(object?.totalAmount) ? object.totalAmount.map((e: any) => Amount.fromJSON(e)) : [],
       state: isSet(object.state) ? stateFromJSON(object.state) : undefined,
     };
   },
@@ -977,8 +963,11 @@ export const Fulfillment = {
     } else {
       obj.trackings = [];
     }
-    message.totalPrice !== undefined && (obj.totalPrice = message.totalPrice);
-    message.totalVat !== undefined && (obj.totalVat = message.totalVat);
+    if (message.totalAmount) {
+      obj.totalAmount = message.totalAmount.map((e) => e ? Amount.toJSON(e) : undefined);
+    } else {
+      obj.totalAmount = [];
+    }
     message.state !== undefined && (obj.state = message.state !== undefined ? stateToJSON(message.state) : undefined);
     return obj;
   },
@@ -996,8 +985,7 @@ export const Fulfillment = {
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
     message.labels = object.labels?.map((e) => Label.fromPartial(e)) || [];
     message.trackings = object.trackings?.map((e) => Tracking.fromPartial(e)) || [];
-    message.totalPrice = object.totalPrice ?? undefined;
-    message.totalVat = object.totalVat ?? undefined;
+    message.totalAmount = object.totalAmount?.map((e) => Amount.fromPartial(e)) || [];
     message.state = object.state ?? undefined;
     return message;
   },
@@ -2428,29 +2416,17 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "total_price",
+        "name": "total_amount",
         "number": 6,
-        "label": 1,
-        "type": 1,
-        "typeName": "",
+        "label": 3,
+        "type": 11,
+        "typeName": ".io.restorecommerce.amount.Amount",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 3,
-        "jsonName": "totalPrice",
+        "oneofIndex": 0,
+        "jsonName": "totalAmount",
         "options": undefined,
-        "proto3Optional": true,
-      }, {
-        "name": "total_vat",
-        "number": 7,
-        "label": 1,
-        "type": 1,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 4,
-        "jsonName": "totalVat",
-        "options": undefined,
-        "proto3Optional": true,
+        "proto3Optional": false,
       }, {
         "name": "state",
         "number": 8,
@@ -2459,7 +2435,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.fulfillment.State",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 5,
+        "oneofIndex": 3,
         "jsonName": "state",
         "options": undefined,
         "proto3Optional": true,
@@ -2468,14 +2444,10 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [
-        { "name": "_id", "options": undefined },
-        { "name": "_packaging", "options": undefined },
-        { "name": "_meta", "options": undefined },
-        { "name": "_total_price", "options": undefined },
-        { "name": "_total_vat", "options": undefined },
-        { "name": "_state", "options": undefined },
-      ],
+      "oneofDecl": [{ "name": "_id", "options": undefined }, { "name": "_packaging", "options": undefined }, {
+        "name": "_meta",
+        "options": undefined,
+      }, { "name": "_state", "options": undefined }],
       "options": {
         "messageSetWireFormat": false,
         "noStandardDescriptorAccessor": false,
@@ -3050,7 +3022,7 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 6],
-        "span": [159, 0, 176, 1],
+        "span": [159, 0, 175, 1],
         "leadingComments": "*\nThis is the message of how it get stored to the database\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
@@ -3074,37 +3046,31 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 6, 2, 5],
-        "span": [173, 2, 34],
+        "span": [173, 2, 61],
         "leadingComments": "",
         "trailingComments": "set by service\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 6, 2, 6],
-        "span": [174, 2, 32],
-        "leadingComments": "",
-        "trailingComments": "set by service\n",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 6, 2, 7],
-        "span": [175, 2, 27],
+        "span": [174, 2, 27],
         "leadingComments": "",
         "trailingComments": "set by service\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 10, 2, 1],
-        "span": [197, 2, 39],
+        "span": [196, 2, 39],
         "leadingComments": "",
         "trailingComments": "optional\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 13, 2, 0],
-        "span": [213, 2, 37],
+        "span": [212, 2, 37],
         "leadingComments": "",
         "trailingComments": " if given\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 13, 2, 2],
-        "span": [215, 2, 39],
+        "span": [214, 2, 39],
         "leadingComments": "",
         "trailingComments": " includes all on empty\n",
         "leadingDetachedComments": [],

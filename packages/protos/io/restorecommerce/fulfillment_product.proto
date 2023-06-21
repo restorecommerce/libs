@@ -10,6 +10,7 @@ import "io/restorecommerce/status.proto";
 import "io/restorecommerce/attribute.proto";
 import "io/restorecommerce/address.proto";
 import "io/restorecommerce/amount.proto";
+import "io/restorecommerce/price.proto";
 import "io/restorecommerce/geometry.proto";
 import "io/restorecommerce/fulfillment_courier.proto";
 import "io/restorecommerce/fulfillment.proto";
@@ -88,7 +89,7 @@ message Variant {
   optional string id = 1;
   optional string name = 2;
   optional string description = 3;
-  optional double price = 4;
+  optional io.restorecommerce.price.Price price = 4;
   optional io.restorecommerce.geometry.BoundingBox3D max_size = 6;
   optional double max_weight = 7;
 }

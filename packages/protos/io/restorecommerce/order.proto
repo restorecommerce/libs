@@ -11,6 +11,7 @@ import "io/restorecommerce/status.proto";
 import "io/restorecommerce/options.proto";
 import "io/restorecommerce/address.proto";
 import "io/restorecommerce/amount.proto";
+import "io/restorecommerce/price.proto";
 import "io/restorecommerce/country.proto";
 import "io/restorecommerce/fulfillment.proto";
 import "io/restorecommerce/fulfillment_product.proto";
@@ -67,7 +68,7 @@ message Item {
   ];
   optional string variant_id = 3;
   optional int32 quantity = 4;
-  optional double unit_price = 5; //Set by service
+  optional io.restorecommerce.price.Price unit_price = 5; //Set by service
   optional io.restorecommerce.amount.Amount amount = 6; //Set by service
 }
 

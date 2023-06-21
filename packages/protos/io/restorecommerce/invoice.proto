@@ -11,6 +11,7 @@ import "io/restorecommerce/status.proto";
 import "io/restorecommerce/options.proto";
 import "io/restorecommerce/address.proto";
 import "io/restorecommerce/amount.proto";
+import "io/restorecommerce/price.proto";
 import "io/restorecommerce/file.proto";
 import "io/restorecommerce/reference.proto";
 
@@ -171,7 +172,7 @@ message Row {
     ProductItem product_item = 2;
     ManualItem manual_item = 3;
   }
-  optional double unit_price = 4;
+  optional io.restorecommerce.price.Price unit_price = 4;
   optional uint32 quantity = 5;
   optional io.restorecommerce.amount.Amount amount = 6;
   optional double contract_start_date = 7; // if there is any contract associated with product

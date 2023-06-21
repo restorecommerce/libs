@@ -171,8 +171,7 @@ message Fulfillment {
   optional io.restorecommerce.meta.Meta meta = 3;
   repeated Label labels = 4; //set by service
   repeated Tracking trackings = 5; //set by service
-  optional double total_price = 6; //set by service
-  optional double total_vat = 7; //set by service
+  repeated io.restorecommerce.amount.Amount total_amount = 6; //set by service
   optional State state = 8; //set by service
 }
 

@@ -6,26 +6,27 @@ import { Any, protoMetadata as protoMetadata1 } from "../../google/protobuf/any"
 import { BillingAddress, protoMetadata as protoMetadata7, ShippingAddress } from "./address";
 import { Amount, protoMetadata as protoMetadata8 } from "./amount";
 import { protoMetadata as protoMetadata4, Subject } from "./auth";
-import { protoMetadata as protoMetadata9 } from "./country";
+import { protoMetadata as protoMetadata10 } from "./country";
 import {
   FulfillmentListResponse,
-  protoMetadata as protoMetadata10,
-  State as State13,
-  stateFromJSON as stateFromJSON15,
-  stateToJSON as stateToJSON16,
-  stateToNumber as stateToNumber14,
+  protoMetadata as protoMetadata11,
+  State as State14,
+  stateFromJSON as stateFromJSON16,
+  stateToJSON as stateToJSON17,
+  stateToNumber as stateToNumber15,
 } from "./fulfillment";
-import { PackingSolutionListResponse, Preferences, protoMetadata as protoMetadata11 } from "./fulfillment_product";
+import { PackingSolutionListResponse, Preferences, protoMetadata as protoMetadata12 } from "./fulfillment_product";
 import {
   InvoiceListResponse,
   PaymentState,
   paymentStateFromJSON,
   paymentStateToJSON,
   paymentStateToNumber,
-  protoMetadata as protoMetadata12,
+  protoMetadata as protoMetadata13,
 } from "./invoice";
 import { Meta, protoMetadata as protoMetadata3 } from "./meta";
 import { KafkaSubscription, protoMetadata as protoMetadata6, Resolver } from "./options";
+import { Price, protoMetadata as protoMetadata9 } from "./price";
 import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata2, ReadRequest } from "./resource_base";
 import { OperationStatus, protoMetadata as protoMetadata5, Status, StatusListResponse } from "./status";
 
@@ -133,7 +134,7 @@ export interface Item {
     | undefined;
   /** Set by service */
   unit_price?:
-    | number
+    | Price
     | undefined;
   /** Set by service */
   amount?: Amount | undefined;
@@ -153,7 +154,7 @@ export interface Order {
     | undefined;
   /** Set by kafka */
   fulfillment_state?:
-    | State13
+    | State14
     | undefined;
   /** Set by kafka */
   payment_state?:
@@ -268,7 +269,7 @@ export const Item = {
       writer.uint32(32).int32(message.quantity);
     }
     if (message.unit_price !== undefined) {
-      writer.uint32(41).double(message.unit_price);
+      Price.encode(message.unit_price, writer.uint32(42).fork()).ldelim();
     }
     if (message.amount !== undefined) {
       Amount.encode(message.amount, writer.uint32(50).fork()).ldelim();
@@ -296,7 +297,7 @@ export const Item = {
           message.quantity = reader.int32();
           break;
         case 5:
-          message.unit_price = reader.double();
+          message.unit_price = Price.decode(reader, reader.uint32());
           break;
         case 6:
           message.amount = Amount.decode(reader, reader.uint32());
@@ -315,7 +316,7 @@ export const Item = {
       product_id: isSet(object.product_id) ? String(object.product_id) : undefined,
       variant_id: isSet(object.variant_id) ? String(object.variant_id) : undefined,
       quantity: isSet(object.quantity) ? Number(object.quantity) : undefined,
-      unit_price: isSet(object.unit_price) ? Number(object.unit_price) : undefined,
+      unit_price: isSet(object.unit_price) ? Price.fromJSON(object.unit_price) : undefined,
       amount: isSet(object.amount) ? Amount.fromJSON(object.amount) : undefined,
     };
   },
@@ -326,7 +327,8 @@ export const Item = {
     message.product_id !== undefined && (obj.product_id = message.product_id);
     message.variant_id !== undefined && (obj.variant_id = message.variant_id);
     message.quantity !== undefined && (obj.quantity = Math.round(message.quantity));
-    message.unit_price !== undefined && (obj.unit_price = message.unit_price);
+    message.unit_price !== undefined &&
+      (obj.unit_price = message.unit_price ? Price.toJSON(message.unit_price) : undefined);
     message.amount !== undefined && (obj.amount = message.amount ? Amount.toJSON(message.amount) : undefined);
     return obj;
   },
@@ -341,7 +343,9 @@ export const Item = {
     message.product_id = object.product_id ?? undefined;
     message.variant_id = object.variant_id ?? undefined;
     message.quantity = object.quantity ?? undefined;
-    message.unit_price = object.unit_price ?? undefined;
+    message.unit_price = (object.unit_price !== undefined && object.unit_price !== null)
+      ? Price.fromPartial(object.unit_price)
+      : undefined;
     message.amount = (object.amount !== undefined && object.amount !== null)
       ? Amount.fromPartial(object.amount)
       : undefined;
@@ -395,7 +399,7 @@ export const Order = {
       writer.uint32(56).int32(stateToNumber(message.order_state));
     }
     if (message.fulfillment_state !== undefined) {
-      writer.uint32(64).int32(stateToNumber14(message.fulfillment_state));
+      writer.uint32(64).int32(stateToNumber15(message.fulfillment_state));
     }
     if (message.payment_state !== undefined) {
       writer.uint32(72).int32(paymentStateToNumber(message.payment_state));
@@ -456,7 +460,7 @@ export const Order = {
           message.order_state = stateFromJSON(reader.int32());
           break;
         case 8:
-          message.fulfillment_state = stateFromJSON15(reader.int32());
+          message.fulfillment_state = stateFromJSON16(reader.int32());
           break;
         case 9:
           message.payment_state = paymentStateFromJSON(reader.int32());
@@ -502,7 +506,7 @@ export const Order = {
       shop_id: isSet(object.shop_id) ? String(object.shop_id) : undefined,
       items: Array.isArray(object?.items) ? object.items.map((e: any) => Item.fromJSON(e)) : [],
       order_state: isSet(object.order_state) ? stateFromJSON(object.order_state) : undefined,
-      fulfillment_state: isSet(object.fulfillment_state) ? stateFromJSON15(object.fulfillment_state) : undefined,
+      fulfillment_state: isSet(object.fulfillment_state) ? stateFromJSON16(object.fulfillment_state) : undefined,
       payment_state: isSet(object.payment_state) ? paymentStateFromJSON(object.payment_state) : undefined,
       total_amounts: Array.isArray(object?.total_amounts)
         ? object.total_amounts.map((e: any) => Amount.fromJSON(e))
@@ -534,7 +538,7 @@ export const Order = {
     message.order_state !== undefined &&
       (obj.order_state = message.order_state !== undefined ? stateToJSON(message.order_state) : undefined);
     message.fulfillment_state !== undefined && (obj.fulfillment_state = message.fulfillment_state !== undefined
-      ? stateToJSON16(message.fulfillment_state)
+      ? stateToJSON17(message.fulfillment_state)
       : undefined);
     message.payment_state !== undefined &&
       (obj.payment_state = message.payment_state !== undefined ? paymentStateToJSON(message.payment_state) : undefined);
@@ -1524,6 +1528,7 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/options.proto",
       "io/restorecommerce/address.proto",
       "io/restorecommerce/amount.proto",
+      "io/restorecommerce/price.proto",
       "io/restorecommerce/country.proto",
       "io/restorecommerce/fulfillment.proto",
       "io/restorecommerce/fulfillment_product.proto",
@@ -1593,8 +1598,8 @@ export const protoMetadata: ProtoMetadata = {
         "name": "unit_price",
         "number": 5,
         "label": 1,
-        "type": 1,
-        "typeName": "",
+        "type": 11,
+        "typeName": ".io.restorecommerce.price.Price",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 4,
@@ -2460,115 +2465,115 @@ export const protoMetadata: ProtoMetadata = {
     "sourceCodeInfo": {
       "location": [{
         "path": [6, 0, 2, 9],
-        "span": [33, 2, 129],
+        "span": [34, 2, 129],
         "leadingComments": " Requires Fulfillment Service\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 10],
-        "span": [35, 2, 114],
+        "span": [36, 2, 114],
         "leadingComments": " Requires Fulfillment Service\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 11],
-        "span": [37, 2, 105],
+        "span": [38, 2, 105],
         "leadingComments": " Requires Fulfillment Service\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 12],
-        "span": [40, 2, 98],
+        "span": [41, 2, 98],
         "leadingComments": " Requires Invoice Service\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 13],
-        "span": [42, 2, 97],
+        "span": [43, 2, 97],
         "leadingComments": " Requires Invoice Service\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 0, 2, 4],
-        "span": [69, 2, 33],
+        "span": [70, 2, 57],
         "leadingComments": "",
         "trailingComments": "Set by service\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 0, 2, 5],
-        "span": [70, 2, 55],
+        "span": [71, 2, 55],
         "leadingComments": "",
         "trailingComments": "Set by service\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1],
-        "span": [76, 0, 126, 1],
+        "span": [77, 0, 127, 1],
         "leadingComments": "*\nDatabase Entity\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 6],
-        "span": [115, 2, 33],
+        "span": [116, 2, 33],
         "leadingComments": "",
         "trailingComments": " Set by service\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 7],
-        "span": [116, 2, 70],
+        "span": [117, 2, 70],
         "leadingComments": "",
         "trailingComments": " Set by kafka\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 8],
-        "span": [117, 2, 69],
+        "span": [118, 2, 69],
         "leadingComments": "",
         "trailingComments": " Set by kafka\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 9],
-        "span": [118, 2, 63],
+        "span": [119, 2, 63],
         "leadingComments": "",
         "trailingComments": " Set by service --- repeated in case of variant currency?\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 7, 2, 1],
-        "span": [156, 2, 34],
+        "span": [157, 2, 34],
         "leadingComments": "",
         "trailingComments": " @TODO: not used!\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 7, 2, 2],
-        "span": [157, 2, 41],
+        "span": [158, 2, 41],
         "leadingComments": "",
         "trailingComments": " @TODO: not used!\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 7, 2, 3],
-        "span": [158, 2, 37],
+        "span": [159, 2, 37],
         "leadingComments": "",
         "trailingComments": " @TODO: not used!\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 7, 2, 5],
-        "span": [160, 2, 36],
+        "span": [161, 2, 36],
         "leadingComments": "",
         "trailingComments": " includes all if empty\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 9, 2, 0],
-        "span": [171, 2, 37],
+        "span": [172, 2, 37],
         "leadingComments": "",
         "trailingComments": " if given\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 9, 2, 2],
-        "span": [173, 2, 37],
+        "span": [174, 2, 37],
         "leadingComments": "",
         "trailingComments": " includes all on empty\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 9, 2, 3],
-        "span": [174, 2, 44],
+        "span": [175, 2, 44],
         "leadingComments": "",
         "trailingComments": " includes all on empty\n",
         "leadingDetachedComments": [],
@@ -2603,6 +2608,7 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata10,
     protoMetadata11,
     protoMetadata12,
+    protoMetadata13,
   ],
   options: {
     messages: {

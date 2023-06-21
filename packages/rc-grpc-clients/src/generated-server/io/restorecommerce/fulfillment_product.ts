@@ -6,11 +6,12 @@ import { protoMetadata as protoMetadata7, ShippingAddress } from "./address";
 import { Amount, protoMetadata as protoMetadata8 } from "./amount";
 import { Attribute, protoMetadata as protoMetadata6 } from "./attribute";
 import { protoMetadata as protoMetadata4, Subject } from "./auth";
-import { Item, Parcel, protoMetadata as protoMetadata11 } from "./fulfillment";
-import { protoMetadata as protoMetadata10 } from "./fulfillment_courier";
-import { BoundingBox3D, protoMetadata as protoMetadata9 } from "./geometry";
+import { Item, Parcel, protoMetadata as protoMetadata12 } from "./fulfillment";
+import { protoMetadata as protoMetadata11 } from "./fulfillment_courier";
+import { BoundingBox3D, protoMetadata as protoMetadata10 } from "./geometry";
 import { Meta, protoMetadata as protoMetadata3 } from "./meta";
-import { KafkaSubscription, protoMetadata as protoMetadata12, Resolver } from "./options";
+import { KafkaSubscription, protoMetadata as protoMetadata13, Resolver } from "./options";
+import { Price, protoMetadata as protoMetadata9 } from "./price";
 import { protoMetadata as protoMetadata1, Reference } from "./reference";
 import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata2, ReadRequest } from "./resource_base";
 import { OperationStatus, protoMetadata as protoMetadata5, Status } from "./status";
@@ -60,7 +61,7 @@ export interface Variant {
   id?: string | undefined;
   name?: string | undefined;
   description?: string | undefined;
-  price?: number | undefined;
+  price?: Price | undefined;
   max_size?: BoundingBox3D | undefined;
   max_weight?: number | undefined;
 }
@@ -544,7 +545,7 @@ export const Variant = {
       writer.uint32(26).string(message.description);
     }
     if (message.price !== undefined) {
-      writer.uint32(33).double(message.price);
+      Price.encode(message.price, writer.uint32(34).fork()).ldelim();
     }
     if (message.max_size !== undefined) {
       BoundingBox3D.encode(message.max_size, writer.uint32(50).fork()).ldelim();
@@ -572,7 +573,7 @@ export const Variant = {
           message.description = reader.string();
           break;
         case 4:
-          message.price = reader.double();
+          message.price = Price.decode(reader, reader.uint32());
           break;
         case 6:
           message.max_size = BoundingBox3D.decode(reader, reader.uint32());
@@ -593,7 +594,7 @@ export const Variant = {
       id: isSet(object.id) ? String(object.id) : undefined,
       name: isSet(object.name) ? String(object.name) : undefined,
       description: isSet(object.description) ? String(object.description) : undefined,
-      price: isSet(object.price) ? Number(object.price) : undefined,
+      price: isSet(object.price) ? Price.fromJSON(object.price) : undefined,
       max_size: isSet(object.max_size) ? BoundingBox3D.fromJSON(object.max_size) : undefined,
       max_weight: isSet(object.max_weight) ? Number(object.max_weight) : undefined,
     };
@@ -604,7 +605,7 @@ export const Variant = {
     message.id !== undefined && (obj.id = message.id);
     message.name !== undefined && (obj.name = message.name);
     message.description !== undefined && (obj.description = message.description);
-    message.price !== undefined && (obj.price = message.price);
+    message.price !== undefined && (obj.price = message.price ? Price.toJSON(message.price) : undefined);
     message.max_size !== undefined &&
       (obj.max_size = message.max_size ? BoundingBox3D.toJSON(message.max_size) : undefined);
     message.max_weight !== undefined && (obj.max_weight = message.max_weight);
@@ -620,7 +621,7 @@ export const Variant = {
     message.id = object.id ?? undefined;
     message.name = object.name ?? undefined;
     message.description = object.description ?? undefined;
-    message.price = object.price ?? undefined;
+    message.price = (object.price !== undefined && object.price !== null) ? Price.fromPartial(object.price) : undefined;
     message.max_size = (object.max_size !== undefined && object.max_size !== null)
       ? BoundingBox3D.fromPartial(object.max_size)
       : undefined;
@@ -1293,6 +1294,7 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/attribute.proto",
       "io/restorecommerce/address.proto",
       "io/restorecommerce/amount.proto",
+      "io/restorecommerce/price.proto",
       "io/restorecommerce/geometry.proto",
       "io/restorecommerce/fulfillment_courier.proto",
       "io/restorecommerce/fulfillment.proto",
@@ -1649,8 +1651,8 @@ export const protoMetadata: ProtoMetadata = {
         "name": "price",
         "number": 4,
         "label": 1,
-        "type": 1,
-        "typeName": "",
+        "type": 11,
+        "typeName": ".io.restorecommerce.price.Price",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 3,
@@ -2071,13 +2073,13 @@ export const protoMetadata: ProtoMetadata = {
     "sourceCodeInfo": {
       "location": [{
         "path": [4, 0, 2, 0],
-        "span": [35, 2, 63],
+        "span": [36, 2, 63],
         "leadingComments": "",
         "trailingComments": "ID, name or type\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 4],
-        "span": [48, 2, 35],
+        "span": [49, 2, 35],
         "leadingComments":
           "\n A forigner_key using the following pattern: `${collection}/${id}`\n most likly an order_id or fulfillment_id.\n",
         "trailingComments": "",
@@ -2113,6 +2115,7 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata10,
     protoMetadata11,
     protoMetadata12,
+    protoMetadata13,
   ],
   options: {
     messages: {

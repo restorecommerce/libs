@@ -6,16 +6,17 @@ import { Any, protoMetadata as protoMetadata1 } from "../../google/protobuf/any"
 import { BillingAddress, protoMetadata as protoMetadata8 } from "./address";
 import { Amount, protoMetadata as protoMetadata9 } from "./amount";
 import { protoMetadata as protoMetadata5, Subject } from "./auth";
-import { protoMetadata as protoMetadata13 } from "./customer";
-import { File, protoMetadata as protoMetadata10 } from "./file";
+import { protoMetadata as protoMetadata14 } from "./customer";
+import { File, protoMetadata as protoMetadata11 } from "./file";
 import { Meta, protoMetadata as protoMetadata3 } from "./meta";
 import { KafkaSubscription, protoMetadata as protoMetadata7, Resolver } from "./options";
 import { protoMetadata as protoMetadata4 } from "./organization";
-import { protoMetadata as protoMetadata11, Reference } from "./reference";
+import { Price, protoMetadata as protoMetadata10 } from "./price";
+import { protoMetadata as protoMetadata12, Reference } from "./reference";
 import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata2, ReadRequest } from "./resource_base";
-import { protoMetadata as protoMetadata14 } from "./shop";
+import { protoMetadata as protoMetadata15 } from "./shop";
 import { OperationStatus, protoMetadata as protoMetadata6, Status, StatusListResponse } from "./status";
-import { protoMetadata as protoMetadata12 } from "./user";
+import { protoMetadata as protoMetadata13 } from "./user";
 
 export const protobufPackage = "io.restorecommerce.invoice";
 
@@ -157,7 +158,7 @@ export interface Row {
   id?: string | undefined;
   productItem?: ProductItem | undefined;
   manualItem?: ManualItem | undefined;
-  unitPrice?: number | undefined;
+  unitPrice?: Price | undefined;
   quantity?: number | undefined;
   amount?:
     | Amount
@@ -1113,7 +1114,7 @@ export const Row = {
       ManualItem.encode(message.manualItem, writer.uint32(26).fork()).ldelim();
     }
     if (message.unitPrice !== undefined) {
-      writer.uint32(33).double(message.unitPrice);
+      Price.encode(message.unitPrice, writer.uint32(34).fork()).ldelim();
     }
     if (message.quantity !== undefined) {
       writer.uint32(40).uint32(message.quantity);
@@ -1144,7 +1145,7 @@ export const Row = {
           message.manualItem = ManualItem.decode(reader, reader.uint32());
           break;
         case 4:
-          message.unitPrice = reader.double();
+          message.unitPrice = Price.decode(reader, reader.uint32());
           break;
         case 5:
           message.quantity = reader.uint32();
@@ -1168,7 +1169,7 @@ export const Row = {
       id: isSet(object.id) ? String(object.id) : undefined,
       productItem: isSet(object.productItem) ? ProductItem.fromJSON(object.productItem) : undefined,
       manualItem: isSet(object.manualItem) ? ManualItem.fromJSON(object.manualItem) : undefined,
-      unitPrice: isSet(object.unitPrice) ? Number(object.unitPrice) : undefined,
+      unitPrice: isSet(object.unitPrice) ? Price.fromJSON(object.unitPrice) : undefined,
       quantity: isSet(object.quantity) ? Number(object.quantity) : undefined,
       amount: isSet(object.amount) ? Amount.fromJSON(object.amount) : undefined,
       contractStartDate: isSet(object.contractStartDate) ? Number(object.contractStartDate) : undefined,
@@ -1182,7 +1183,8 @@ export const Row = {
       (obj.productItem = message.productItem ? ProductItem.toJSON(message.productItem) : undefined);
     message.manualItem !== undefined &&
       (obj.manualItem = message.manualItem ? ManualItem.toJSON(message.manualItem) : undefined);
-    message.unitPrice !== undefined && (obj.unitPrice = message.unitPrice);
+    message.unitPrice !== undefined &&
+      (obj.unitPrice = message.unitPrice ? Price.toJSON(message.unitPrice) : undefined);
     message.quantity !== undefined && (obj.quantity = Math.round(message.quantity));
     message.amount !== undefined && (obj.amount = message.amount ? Amount.toJSON(message.amount) : undefined);
     message.contractStartDate !== undefined && (obj.contractStartDate = message.contractStartDate);
@@ -1202,7 +1204,9 @@ export const Row = {
     message.manualItem = (object.manualItem !== undefined && object.manualItem !== null)
       ? ManualItem.fromPartial(object.manualItem)
       : undefined;
-    message.unitPrice = object.unitPrice ?? undefined;
+    message.unitPrice = (object.unitPrice !== undefined && object.unitPrice !== null)
+      ? Price.fromPartial(object.unitPrice)
+      : undefined;
     message.quantity = object.quantity ?? undefined;
     message.amount = (object.amount !== undefined && object.amount !== null)
       ? Amount.fromPartial(object.amount)
@@ -1503,6 +1507,7 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/options.proto",
       "io/restorecommerce/address.proto",
       "io/restorecommerce/amount.proto",
+      "io/restorecommerce/price.proto",
       "io/restorecommerce/file.proto",
       "io/restorecommerce/reference.proto",
       "io/restorecommerce/user.proto",
@@ -2229,8 +2234,8 @@ export const protoMetadata: ProtoMetadata = {
         "name": "unit_price",
         "number": 4,
         "label": 1,
-        "type": 1,
-        "typeName": "",
+        "type": 11,
+        "typeName": ".io.restorecommerce.price.Price",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 2,
@@ -2467,92 +2472,92 @@ export const protoMetadata: ProtoMetadata = {
     "options": undefined,
     "sourceCodeInfo": {
       "location": [{
-        "path": [3, 11],
-        "span": [17, 0, 39],
+        "path": [3, 12],
+        "span": [18, 0, 39],
         "leadingComments": " Used by resolvers\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0],
-        "span": [24, 0, 52, 1],
+        "span": [25, 0, 53, 1],
         "leadingComments": "\n Microservice definition.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 5],
-        "span": [36, 2, 57],
+        "span": [37, 2, 57],
         "leadingComments": "\n Render invoices as PDF to ostorage. (creates if not exist, updates if id is given)\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 6],
-        "span": [41, 2, 61],
+        "span": [42, 2, 61],
         "leadingComments": "\n Mark invoices as withdrawn\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 7],
-        "span": [46, 2, 82],
+        "span": [47, 2, 82],
         "leadingComments": "\n Triggers notification-srv (sends invoice per email for instance) \n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 8],
-        "span": [51, 2, 82],
+        "span": [52, 2, 82],
         "leadingComments": "\n Generate an incremented invoice number\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 8],
-        "span": [106, 0, 159, 1],
+        "span": [107, 0, 160, 1],
         "leadingComments": "\n The Invoice recource, stored in DB.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 8, 2, 5],
-        "span": [128, 2, 136, 4],
+        "span": [129, 2, 137, 4],
         "leadingComments": "",
         "trailingComments": " customer_number ref. to recipent orga\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 8, 2, 6],
-        "span": [137, 2, 145, 4],
+        "span": [138, 2, 146, 4],
         "leadingComments": "",
         "trailingComments": " shop_number --- ref. to sender orga\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 8, 2, 13],
-        "span": [152, 2, 37],
+        "span": [153, 2, 37],
         "leadingComments": "",
         "trailingComments": " is there no better type for that?\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 8, 2, 14],
-        "span": [153, 2, 55],
+        "span": [154, 2, 55],
         "leadingComments": "",
         "trailingComments": " url to rendered PDFs\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 8, 2, 16],
-        "span": [155, 2, 33],
+        "span": [156, 2, 33],
         "leadingComments": "",
         "trailingComments": " value performance from date\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 8, 2, 17],
-        "span": [156, 2, 31],
+        "span": [157, 2, 31],
         "leadingComments": "",
         "trailingComments": " value performance to date\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 9, 2, 2],
-        "span": [164, 2, 56],
+        "span": [165, 2, 56],
         "leadingComments": "",
         "trailingComments": " repeated in case of multiple currencies?\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 10, 2, 6],
-        "span": [176, 2, 42],
+        "span": [177, 2, 42],
         "leadingComments": "",
         "trailingComments": " if there is any contract associated with product\n",
         "leadingDetachedComments": [],
@@ -2591,6 +2596,7 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata12,
     protoMetadata13,
     protoMetadata14,
+    protoMetadata15,
   ],
   options: {
     messages: {

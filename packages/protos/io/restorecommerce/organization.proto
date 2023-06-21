@@ -53,7 +53,7 @@ message OrganizationResponse {
 message Organization {
   optional string id = 1; /// Organization ID, unique, key
   optional io.restorecommerce.meta.Meta meta = 2;
-  optional string parent_id = 4 [
+  optional string parent_id = 3 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.organization.Organization",
       target_service: "master_data",
@@ -62,7 +62,7 @@ message Organization {
       field_name: "parent",
     }
   ]; //  Hierarchically superior organization; may be null
-  repeated string contact_point_ids = 6 [
+  repeated string contact_point_ids = 4 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.contact_point.ContactPoint",
       target_service: "master_data",
@@ -71,14 +71,14 @@ message Organization {
       field_name: "contactPoints",
     }
   ]; // list of possible legal addresses of different types
-  optional string website = 7;
-  optional string email = 8;
-  optional string logo = 9; // base64; arangoDB does not support blob storage
-  optional string vat_id = 10;
-  optional string isic_v4 = 11;
-  optional string registration = 12;
-  optional string registration_court = 13;
-  optional string name = 14;
-  repeated string payment_method_ids = 15;
-  optional google.protobuf.Any data = 16; /// additional data
+  optional string website = 5;
+  optional string email = 6;
+  optional string logo = 7; // base64; arangoDB does not support blob storage
+  optional string vat_id = 8;
+  optional string isic_v4 = 9;
+  optional string registration = 10;
+  optional string registration_court = 11;
+  optional string name = 12;
+  repeated string payment_method_ids = 13;
+  optional google.protobuf.Any data = 14; /// additional data
 }

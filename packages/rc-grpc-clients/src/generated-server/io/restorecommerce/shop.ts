@@ -12,7 +12,7 @@ import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata1, ReadReq
 import { OperationStatus, protoMetadata as protoMetadata4, Status } from "./status";
 import { protoMetadata as protoMetadata6 } from "./user";
 
-export const protobufPackage = "io.restorecommerce.vendor";
+export const protobufPackage = "io.restorecommerce.shop";
 
 export interface ShopList {
   items: Shop[];
@@ -60,25 +60,38 @@ export const ShopList = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): ShopList {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseShopList();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.items.push(Shop.decode(reader, reader.uint32()));
-          break;
+          continue;
         case 2:
+          if (tag !== 16) {
+            break;
+          }
+
           message.total_count = reader.uint32();
-          break;
+          continue;
         case 3:
+          if (tag !== 26) {
+            break;
+          }
+
           message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -137,25 +150,38 @@ export const ShopListResponse = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): ShopListResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseShopListResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.items.push(ShopResponse.decode(reader, reader.uint32()));
-          break;
+          continue;
         case 2:
+          if (tag !== 16) {
+            break;
+          }
+
           message.total_count = reader.uint32();
-          break;
+          continue;
         case 3:
+          if (tag !== 26) {
+            break;
+          }
+
           message.operation_status = OperationStatus.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -212,22 +238,31 @@ export const ShopResponse = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): ShopResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseShopResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.payload = Shop.decode(reader, reader.uint32());
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.status = Status.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -301,37 +336,66 @@ export const Shop = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Shop {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseShop();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.id = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.meta = Meta.decode(reader, reader.uint32());
-          break;
+          continue;
         case 3:
+          if (tag !== 26) {
+            break;
+          }
+
           message.shop_number = reader.string();
-          break;
+          continue;
         case 4:
+          if (tag !== 34) {
+            break;
+          }
+
           message.name = reader.string();
-          break;
+          continue;
         case 5:
+          if (tag !== 42) {
+            break;
+          }
+
           message.description = reader.string();
-          break;
+          continue;
         case 6:
+          if (tag !== 50) {
+            break;
+          }
+
           message.domain = reader.string();
-          break;
+          continue;
         case 7:
+          if (tag !== 58) {
+            break;
+          }
+
           message.organization_id = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -381,7 +445,7 @@ export const Shop = {
 export type ShopServiceDefinition = typeof ShopServiceDefinition;
 export const ShopServiceDefinition = {
   name: "ShopService",
-  fullName: "io.restorecommerce.vendor.ShopService",
+  fullName: "io.restorecommerce.shop.ShopService",
   methods: {
     read: {
       name: "Read",
@@ -389,7 +453,7 @@ export const ShopServiceDefinition = {
       requestStream: false,
       responseType: ShopListResponse,
       responseStream: false,
-      options: {},
+      options: { _unknownFields: { 248008: [Buffer.from([1])] } },
     },
     create: {
       name: "Create",
@@ -466,7 +530,7 @@ export interface ProtoMetadata {
 export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto1.fromPartial({
     "name": "io/restorecommerce/shop.proto",
-    "package": "io.restorecommerce.vendor",
+    "package": "io.restorecommerce.shop",
     "dependency": [
       "io/restorecommerce/resource_base.proto",
       "io/restorecommerce/meta.proto",
@@ -487,7 +551,7 @@ export const protoMetadata: ProtoMetadata = {
         "number": 1,
         "label": 3,
         "type": 11,
-        "typeName": ".io.restorecommerce.vendor.Shop",
+        "typeName": ".io.restorecommerce.shop.Shop",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
@@ -534,7 +598,7 @@ export const protoMetadata: ProtoMetadata = {
         "number": 1,
         "label": 3,
         "type": 11,
-        "typeName": ".io.restorecommerce.vendor.ShopResponse",
+        "typeName": ".io.restorecommerce.shop.ShopResponse",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
@@ -581,7 +645,7 @@ export const protoMetadata: ProtoMetadata = {
         "number": 1,
         "label": 1,
         "type": 11,
-        "typeName": ".io.restorecommerce.vendor.Shop",
+        "typeName": ".io.restorecommerce.shop.Shop",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
@@ -727,14 +791,14 @@ export const protoMetadata: ProtoMetadata = {
       "method": [{
         "name": "Read",
         "inputType": ".io.restorecommerce.resourcebase.ReadRequest",
-        "outputType": ".io.restorecommerce.vendor.ShopListResponse",
+        "outputType": ".io.restorecommerce.shop.ShopListResponse",
         "options": { "deprecated": false, "idempotencyLevel": 0, "uninterpretedOption": [] },
         "clientStreaming": false,
         "serverStreaming": false,
       }, {
         "name": "Create",
-        "inputType": ".io.restorecommerce.vendor.ShopList",
-        "outputType": ".io.restorecommerce.vendor.ShopListResponse",
+        "inputType": ".io.restorecommerce.shop.ShopList",
+        "outputType": ".io.restorecommerce.shop.ShopListResponse",
         "options": undefined,
         "clientStreaming": false,
         "serverStreaming": false,
@@ -747,15 +811,15 @@ export const protoMetadata: ProtoMetadata = {
         "serverStreaming": false,
       }, {
         "name": "Update",
-        "inputType": ".io.restorecommerce.vendor.ShopList",
-        "outputType": ".io.restorecommerce.vendor.ShopListResponse",
+        "inputType": ".io.restorecommerce.shop.ShopList",
+        "outputType": ".io.restorecommerce.shop.ShopListResponse",
         "options": undefined,
         "clientStreaming": false,
         "serverStreaming": false,
       }, {
         "name": "Upsert",
-        "inputType": ".io.restorecommerce.vendor.ShopList",
-        "outputType": ".io.restorecommerce.vendor.ShopListResponse",
+        "inputType": ".io.restorecommerce.shop.ShopList",
+        "outputType": ".io.restorecommerce.shop.ShopListResponse",
         "options": undefined,
         "clientStreaming": false,
         "serverStreaming": false,
@@ -782,10 +846,10 @@ export const protoMetadata: ProtoMetadata = {
     "syntax": "proto3",
   }),
   references: {
-    ".io.restorecommerce.vendor.ShopList": ShopList,
-    ".io.restorecommerce.vendor.ShopListResponse": ShopListResponse,
-    ".io.restorecommerce.vendor.ShopResponse": ShopResponse,
-    ".io.restorecommerce.vendor.Shop": Shop,
+    ".io.restorecommerce.shop.ShopList": ShopList,
+    ".io.restorecommerce.shop.ShopListResponse": ShopListResponse,
+    ".io.restorecommerce.shop.ShopResponse": ShopResponse,
+    ".io.restorecommerce.shop.Shop": Shop,
   },
   dependencies: [
     protoMetadata1,

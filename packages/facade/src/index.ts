@@ -31,6 +31,7 @@ import bodyParser from 'koa-bodyparser';
 import cors from '@koa/cors';
 import graphqlUploadKoa from 'graphql-upload/graphqlUploadKoa.mjs';
 import helmet from 'koa-helmet';
+import Router from 'koa-router';
 
 export * from './modules/index.js';
 export * from './middlewares/index.js';
@@ -309,11 +310,15 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
     );
     this.koa.use(cors());
     this.koa.use(bodyParser());
-    this.koa.use(
+
+    const apolloGraphQLRouter = new Router();
+    apolloGraphQLRouter.all('/graphql',
       koaMiddleware(gqlServer, {
         context: async ({ ctx }) => ctx,
       })
     );
+
+    this.koa.use(apolloGraphQLRouter.routes());
   }
 }
 

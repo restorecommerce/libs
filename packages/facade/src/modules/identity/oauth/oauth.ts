@@ -105,7 +105,7 @@ export const createOAuth = (): KoaRouter<{}, IdentityContext> => {
 
   router.get('/oauth2-login', async (ctx, next) => {
     ctx.type = 'html';
-    ctx.body = await login((await ctx.identitySrvClient.oauth.GenerateLinks({})).links);
+    ctx.body = await login((await ctx.identitySrvClient.oauth.generateLinks({})).links);
     return next();
   });
 
@@ -118,7 +118,7 @@ export const createOAuth = (): KoaRouter<{}, IdentityContext> => {
   });
 
   router.get('/oauth2-urls', async (ctx, next) => {
-    ctx.body = (await ctx.identitySrvClient.oauth.GenerateLinks({})).links;
+    ctx.body = (await ctx.identitySrvClient.oauth.generateLinks({})).links;
     return next();
   });
 

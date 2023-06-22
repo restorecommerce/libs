@@ -410,17 +410,15 @@ export type IoRestorecommerceCustomerCustomer = {
   __typename?: 'IoRestorecommerceCustomerCustomer';
   id?: Maybe<Scalars['String']['output']>;
   meta?: Maybe<IoRestorecommerceMetaMeta>;
-  individualUser?: Maybe<IoRestorecommerceCustomerIndividualUser>;
-  orgUser?: Maybe<IoRestorecommerceCustomerOrgUser>;
-  guest?: Maybe<IoRestorecommerceCustomerGuest>;
+  private?: Maybe<IoRestorecommerceCustomerPrivate>;
+  commercial?: Maybe<IoRestorecommerceCustomerCommercial>;
+  publicSector?: Maybe<IoRestorecommerceCustomerPublicSector>;
 };
 
-export type IoRestorecommerceCustomerIndividualUser = {
-  __typename?: 'IoRestorecommerceCustomerIndividualUser';
+export type IoRestorecommerceCustomerPrivate = {
+  __typename?: 'IoRestorecommerceCustomerPrivate';
   userId?: Maybe<Scalars['String']['output']>;
   user?: Maybe<IoRestorecommerceUserUser>;
-  addressId?: Maybe<Scalars['String']['output']>;
-  address?: Maybe<IoRestorecommerceAddressAddress>;
   contactPointIds?: Maybe<Array<Scalars['String']['output']>>;
   contactPoints?: Maybe<Array<IoRestorecommerceContactPointContactPoint>>;
 };
@@ -519,19 +517,19 @@ export type IoRestorecommerceContactPointContactPoint = {
   physicalAddress?: Maybe<IoRestorecommerceAddressAddress>;
   website?: Maybe<Scalars['String']['output']>;
   email?: Maybe<Scalars['String']['output']>;
-  contactPointTypeId?: Maybe<Scalars['String']['output']>;
-  contactPointType?: Maybe<IoRestorecommerceContactPointTypeContactPointType>;
+  contactPointTypeIds?: Maybe<Array<Scalars['String']['output']>>;
+  contactPointType?: Maybe<Array<IoRestorecommerceContactPointTypeContactPointType>>;
   telephone?: Maybe<Scalars['String']['output']>;
   timezoneId?: Maybe<Scalars['String']['output']>;
   timezone?: Maybe<IoRestorecommerceTimezoneTimezone>;
   localeId?: Maybe<Scalars['String']['output']>;
   locale?: Maybe<IoRestorecommerceLocaleLocale>;
+  name?: Maybe<Scalars['String']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
 };
 
-export type IoRestorecommerceCustomerOrgUser = {
-  __typename?: 'IoRestorecommerceCustomerOrgUser';
-  userId?: Maybe<Scalars['String']['output']>;
-  user?: Maybe<IoRestorecommerceUserUser>;
+export type IoRestorecommerceCustomerCommercial = {
+  __typename?: 'IoRestorecommerceCustomerCommercial';
   organizationId?: Maybe<Scalars['String']['output']>;
   organization?: Maybe<IoRestorecommerceOrganizationOrganization>;
 };
@@ -540,8 +538,6 @@ export type IoRestorecommerceOrganizationOrganization = {
   __typename?: 'IoRestorecommerceOrganizationOrganization';
   id?: Maybe<Scalars['String']['output']>;
   meta?: Maybe<IoRestorecommerceMetaMeta>;
-  addressId?: Maybe<Scalars['String']['output']>;
-  address?: Maybe<IoRestorecommerceAddressAddress>;
   parentId?: Maybe<Scalars['String']['output']>;
   parent?: Maybe<IoRestorecommerceOrganizationOrganization>;
   contactPointIds?: Maybe<Array<Scalars['String']['output']>>;
@@ -558,13 +554,10 @@ export type IoRestorecommerceOrganizationOrganization = {
   data?: Maybe<GoogleProtobufAny>;
 };
 
-export type IoRestorecommerceCustomerGuest = {
-  __typename?: 'IoRestorecommerceCustomerGuest';
-  guest?: Maybe<Scalars['Boolean']['output']>;
-  addressId?: Maybe<Scalars['String']['output']>;
-  address?: Maybe<IoRestorecommerceAddressAddress>;
-  contactPointIds?: Maybe<Array<Scalars['String']['output']>>;
-  contactPoints?: Maybe<Array<IoRestorecommerceContactPointContactPoint>>;
+export type IoRestorecommerceCustomerPublicSector = {
+  __typename?: 'IoRestorecommerceCustomerPublicSector';
+  organizationId?: Maybe<Scalars['String']['output']>;
+  organization?: Maybe<IoRestorecommerceOrganizationOrganization>;
 };
 
 export type ResourceContactPointQuery = {
@@ -729,13 +722,7 @@ export type IoRestorecommerceTaxTypeTaxType = {
   meta?: Maybe<IoRestorecommerceMetaMeta>;
   type?: Maybe<Scalars['String']['output']>;
   description?: Maybe<Scalars['String']['output']>;
-  behavior?: Maybe<IoRestorecommerceTaxTypeBehavior>;
 };
-
-export enum IoRestorecommerceTaxTypeBehavior {
-  None = 0,
-  AdditiveOnGross = 1
-}
 
 export type ResourceTaxQuery = {
   __typename?: 'ResourceTaxQuery';
@@ -1155,26 +1142,22 @@ export type IIoRestorecommerceCustomerCustomerList = {
 export type IIoRestorecommerceCustomerCustomer = {
   id?: InputMaybe<Scalars['String']['input']>;
   meta?: InputMaybe<IIoRestorecommerceMetaMeta>;
-  individualUser?: InputMaybe<IIoRestorecommerceCustomerIndividualUser>;
-  orgUser?: InputMaybe<IIoRestorecommerceCustomerOrgUser>;
-  guest?: InputMaybe<IIoRestorecommerceCustomerGuest>;
+  private?: InputMaybe<IIoRestorecommerceCustomerPrivate>;
+  commercial?: InputMaybe<IIoRestorecommerceCustomerCommercial>;
+  publicSector?: InputMaybe<IIoRestorecommerceCustomerPublicSector>;
 };
 
-export type IIoRestorecommerceCustomerIndividualUser = {
+export type IIoRestorecommerceCustomerPrivate = {
   userId?: InputMaybe<Scalars['String']['input']>;
-  addressId?: InputMaybe<Scalars['String']['input']>;
   contactPointIds?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
-export type IIoRestorecommerceCustomerOrgUser = {
-  userId?: InputMaybe<Scalars['String']['input']>;
+export type IIoRestorecommerceCustomerCommercial = {
   organizationId?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type IIoRestorecommerceCustomerGuest = {
-  guest?: InputMaybe<Scalars['Boolean']['input']>;
-  addressId?: InputMaybe<Scalars['String']['input']>;
-  contactPointIds?: InputMaybe<Array<Scalars['String']['input']>>;
+export type IIoRestorecommerceCustomerPublicSector = {
+  organizationId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type ResourceContactPointMutation = {
@@ -1207,10 +1190,12 @@ export type IIoRestorecommerceContactPointContactPoint = {
   physicalAddressId?: InputMaybe<Scalars['String']['input']>;
   website?: InputMaybe<Scalars['String']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
-  contactPointTypeId?: InputMaybe<Scalars['String']['input']>;
+  contactPointTypeIds?: InputMaybe<Array<Scalars['String']['input']>>;
   telephone?: InputMaybe<Scalars['String']['input']>;
   timezoneId?: InputMaybe<Scalars['String']['input']>;
   localeId?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type ResourceLocaleMutation = {
@@ -1307,7 +1292,6 @@ export type IIoRestorecommerceOrganizationOrganizationList = {
 export type IIoRestorecommerceOrganizationOrganization = {
   id?: InputMaybe<Scalars['String']['input']>;
   meta?: InputMaybe<IIoRestorecommerceMetaMeta>;
-  addressId?: InputMaybe<Scalars['String']['input']>;
   parentId?: InputMaybe<Scalars['String']['input']>;
   contactPointIds?: InputMaybe<Array<Scalars['String']['input']>>;
   website?: InputMaybe<Scalars['String']['input']>;
@@ -1351,7 +1335,6 @@ export type IIoRestorecommerceTaxTypeTaxType = {
   meta?: InputMaybe<IIoRestorecommerceMetaMeta>;
   type?: InputMaybe<Scalars['String']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
-  behavior?: InputMaybe<IoRestorecommerceTaxTypeBehavior>;
 };
 
 export type ResourceTaxMutation = {
@@ -1617,7 +1600,7 @@ export type ResolversTypes = ResolversObject<{
   IoRestorecommerceCustomerCustomerListResponse: ResolverTypeWrapper<IoRestorecommerceCustomerCustomerListResponse>;
   IoRestorecommerceCustomerCustomerResponse: ResolverTypeWrapper<IoRestorecommerceCustomerCustomerResponse>;
   IoRestorecommerceCustomerCustomer: ResolverTypeWrapper<IoRestorecommerceCustomerCustomer>;
-  IoRestorecommerceCustomerIndividualUser: ResolverTypeWrapper<IoRestorecommerceCustomerIndividualUser>;
+  IoRestorecommerceCustomerPrivate: ResolverTypeWrapper<IoRestorecommerceCustomerPrivate>;
   IoRestorecommerceUserUser: ResolverTypeWrapper<IoRestorecommerceUserUser>;
   IoRestorecommerceAuthRoleAssociation: ResolverTypeWrapper<IoRestorecommerceAuthRoleAssociation>;
   IoRestorecommerceLocaleLocale: ResolverTypeWrapper<IoRestorecommerceLocaleLocale>;
@@ -1626,9 +1609,9 @@ export type ResolversTypes = ResolversObject<{
   IoRestorecommerceAuthTokens: ResolverTypeWrapper<IoRestorecommerceAuthTokens>;
   GoogleProtobufAny: ResolverTypeWrapper<GoogleProtobufAny>;
   IoRestorecommerceContactPointContactPoint: ResolverTypeWrapper<IoRestorecommerceContactPointContactPoint>;
-  IoRestorecommerceCustomerOrgUser: ResolverTypeWrapper<IoRestorecommerceCustomerOrgUser>;
+  IoRestorecommerceCustomerCommercial: ResolverTypeWrapper<IoRestorecommerceCustomerCommercial>;
   IoRestorecommerceOrganizationOrganization: ResolverTypeWrapper<IoRestorecommerceOrganizationOrganization>;
-  IoRestorecommerceCustomerGuest: ResolverTypeWrapper<IoRestorecommerceCustomerGuest>;
+  IoRestorecommerceCustomerPublicSector: ResolverTypeWrapper<IoRestorecommerceCustomerPublicSector>;
   ResourceContactPointQuery: ResolverTypeWrapper<ResourceContactPointQuery>;
   ProtoIoRestorecommerceContactPointContactPointListResponse: ResolverTypeWrapper<ProtoIoRestorecommerceContactPointContactPointListResponse>;
   IoRestorecommerceContactPointContactPointListResponse: ResolverTypeWrapper<IoRestorecommerceContactPointContactPointListResponse>;
@@ -1651,7 +1634,6 @@ export type ResolversTypes = ResolversObject<{
   IoRestorecommerceTaxTypeTaxTypeListResponse: ResolverTypeWrapper<IoRestorecommerceTaxTypeTaxTypeListResponse>;
   IoRestorecommerceTaxTypeTaxTypeResponse: ResolverTypeWrapper<IoRestorecommerceTaxTypeTaxTypeResponse>;
   IoRestorecommerceTaxTypeTaxType: ResolverTypeWrapper<IoRestorecommerceTaxTypeTaxType>;
-  IoRestorecommerceTaxTypeBehavior: IoRestorecommerceTaxTypeBehavior;
   ResourceTaxQuery: ResolverTypeWrapper<ResourceTaxQuery>;
   ProtoIoRestorecommerceTaxTaxListResponse: ResolverTypeWrapper<ProtoIoRestorecommerceTaxTaxListResponse>;
   IoRestorecommerceTaxTaxListResponse: ResolverTypeWrapper<IoRestorecommerceTaxTaxListResponse>;
@@ -1700,9 +1682,9 @@ export type ResolversTypes = ResolversObject<{
   ResourceCustomerMutation: ResolverTypeWrapper<ResourceCustomerMutation>;
   IIoRestorecommerceCustomerCustomerList: IIoRestorecommerceCustomerCustomerList;
   IIoRestorecommerceCustomerCustomer: IIoRestorecommerceCustomerCustomer;
-  IIoRestorecommerceCustomerIndividualUser: IIoRestorecommerceCustomerIndividualUser;
-  IIoRestorecommerceCustomerOrgUser: IIoRestorecommerceCustomerOrgUser;
-  IIoRestorecommerceCustomerGuest: IIoRestorecommerceCustomerGuest;
+  IIoRestorecommerceCustomerPrivate: IIoRestorecommerceCustomerPrivate;
+  IIoRestorecommerceCustomerCommercial: IIoRestorecommerceCustomerCommercial;
+  IIoRestorecommerceCustomerPublicSector: IIoRestorecommerceCustomerPublicSector;
   ResourceContactPointMutation: ResolverTypeWrapper<ResourceContactPointMutation>;
   IIoRestorecommerceContactPointContactPointList: IIoRestorecommerceContactPointContactPointList;
   IIoRestorecommerceContactPointContactPoint: IIoRestorecommerceContactPointContactPoint;
@@ -1786,7 +1768,7 @@ export type ResolversParentTypes = ResolversObject<{
   IoRestorecommerceCustomerCustomerListResponse: IoRestorecommerceCustomerCustomerListResponse;
   IoRestorecommerceCustomerCustomerResponse: IoRestorecommerceCustomerCustomerResponse;
   IoRestorecommerceCustomerCustomer: IoRestorecommerceCustomerCustomer;
-  IoRestorecommerceCustomerIndividualUser: IoRestorecommerceCustomerIndividualUser;
+  IoRestorecommerceCustomerPrivate: IoRestorecommerceCustomerPrivate;
   IoRestorecommerceUserUser: IoRestorecommerceUserUser;
   IoRestorecommerceAuthRoleAssociation: IoRestorecommerceAuthRoleAssociation;
   IoRestorecommerceLocaleLocale: IoRestorecommerceLocaleLocale;
@@ -1794,9 +1776,9 @@ export type ResolversParentTypes = ResolversObject<{
   IoRestorecommerceAuthTokens: IoRestorecommerceAuthTokens;
   GoogleProtobufAny: GoogleProtobufAny;
   IoRestorecommerceContactPointContactPoint: IoRestorecommerceContactPointContactPoint;
-  IoRestorecommerceCustomerOrgUser: IoRestorecommerceCustomerOrgUser;
+  IoRestorecommerceCustomerCommercial: IoRestorecommerceCustomerCommercial;
   IoRestorecommerceOrganizationOrganization: IoRestorecommerceOrganizationOrganization;
-  IoRestorecommerceCustomerGuest: IoRestorecommerceCustomerGuest;
+  IoRestorecommerceCustomerPublicSector: IoRestorecommerceCustomerPublicSector;
   ResourceContactPointQuery: ResourceContactPointQuery;
   ProtoIoRestorecommerceContactPointContactPointListResponse: ProtoIoRestorecommerceContactPointContactPointListResponse;
   IoRestorecommerceContactPointContactPointListResponse: IoRestorecommerceContactPointContactPointListResponse;
@@ -1863,9 +1845,9 @@ export type ResolversParentTypes = ResolversObject<{
   ResourceCustomerMutation: ResourceCustomerMutation;
   IIoRestorecommerceCustomerCustomerList: IIoRestorecommerceCustomerCustomerList;
   IIoRestorecommerceCustomerCustomer: IIoRestorecommerceCustomerCustomer;
-  IIoRestorecommerceCustomerIndividualUser: IIoRestorecommerceCustomerIndividualUser;
-  IIoRestorecommerceCustomerOrgUser: IIoRestorecommerceCustomerOrgUser;
-  IIoRestorecommerceCustomerGuest: IIoRestorecommerceCustomerGuest;
+  IIoRestorecommerceCustomerPrivate: IIoRestorecommerceCustomerPrivate;
+  IIoRestorecommerceCustomerCommercial: IIoRestorecommerceCustomerCommercial;
+  IIoRestorecommerceCustomerPublicSector: IIoRestorecommerceCustomerPublicSector;
   ResourceContactPointMutation: ResourceContactPointMutation;
   IIoRestorecommerceContactPointContactPointList: IIoRestorecommerceContactPointContactPointList;
   IIoRestorecommerceContactPointContactPoint: IIoRestorecommerceContactPointContactPoint;
@@ -2161,17 +2143,15 @@ export type IoRestorecommerceCustomerCustomerResponseResolvers<ContextType = Res
 export type IoRestorecommerceCustomerCustomerResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceCustomerCustomer'] = ResolversParentTypes['IoRestorecommerceCustomerCustomer']> = ResolversObject<{
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
-  individualUser?: Resolver<Maybe<ResolversTypes['IoRestorecommerceCustomerIndividualUser']>, ParentType, ContextType>;
-  orgUser?: Resolver<Maybe<ResolversTypes['IoRestorecommerceCustomerOrgUser']>, ParentType, ContextType>;
-  guest?: Resolver<Maybe<ResolversTypes['IoRestorecommerceCustomerGuest']>, ParentType, ContextType>;
+  private?: Resolver<Maybe<ResolversTypes['IoRestorecommerceCustomerPrivate']>, ParentType, ContextType>;
+  commercial?: Resolver<Maybe<ResolversTypes['IoRestorecommerceCustomerCommercial']>, ParentType, ContextType>;
+  publicSector?: Resolver<Maybe<ResolversTypes['IoRestorecommerceCustomerPublicSector']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceCustomerIndividualUserResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceCustomerIndividualUser'] = ResolversParentTypes['IoRestorecommerceCustomerIndividualUser']> = ResolversObject<{
+export type IoRestorecommerceCustomerPrivateResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceCustomerPrivate'] = ResolversParentTypes['IoRestorecommerceCustomerPrivate']> = ResolversObject<{
   userId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['IoRestorecommerceUserUser']>, ParentType, ContextType>;
-  addressId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  address?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAddressAddress']>, ParentType, ContextType>;
   contactPointIds?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   contactPoints?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceContactPointContactPoint']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -2265,19 +2245,19 @@ export type IoRestorecommerceContactPointContactPointResolvers<ContextType = Res
   physicalAddress?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAddressAddress']>, ParentType, ContextType>;
   website?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  contactPointTypeId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  contactPointType?: Resolver<Maybe<ResolversTypes['IoRestorecommerceContactPointTypeContactPointType']>, ParentType, ContextType>;
+  contactPointTypeIds?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  contactPointType?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceContactPointTypeContactPointType']>>, ParentType, ContextType>;
   telephone?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   timezoneId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   timezone?: Resolver<Maybe<ResolversTypes['IoRestorecommerceTimezoneTimezone']>, ParentType, ContextType>;
   localeId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   locale?: Resolver<Maybe<ResolversTypes['IoRestorecommerceLocaleLocale']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceCustomerOrgUserResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceCustomerOrgUser'] = ResolversParentTypes['IoRestorecommerceCustomerOrgUser']> = ResolversObject<{
-  userId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  user?: Resolver<Maybe<ResolversTypes['IoRestorecommerceUserUser']>, ParentType, ContextType>;
+export type IoRestorecommerceCustomerCommercialResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceCustomerCommercial'] = ResolversParentTypes['IoRestorecommerceCustomerCommercial']> = ResolversObject<{
   organizationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   organization?: Resolver<Maybe<ResolversTypes['IoRestorecommerceOrganizationOrganization']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -2286,8 +2266,6 @@ export type IoRestorecommerceCustomerOrgUserResolvers<ContextType = ResourceCont
 export type IoRestorecommerceOrganizationOrganizationResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceOrganizationOrganization'] = ResolversParentTypes['IoRestorecommerceOrganizationOrganization']> = ResolversObject<{
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
-  addressId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  address?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAddressAddress']>, ParentType, ContextType>;
   parentId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   parent?: Resolver<Maybe<ResolversTypes['IoRestorecommerceOrganizationOrganization']>, ParentType, ContextType>;
   contactPointIds?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
@@ -2305,12 +2283,9 @@ export type IoRestorecommerceOrganizationOrganizationResolvers<ContextType = Res
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceCustomerGuestResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceCustomerGuest'] = ResolversParentTypes['IoRestorecommerceCustomerGuest']> = ResolversObject<{
-  guest?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  addressId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  address?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAddressAddress']>, ParentType, ContextType>;
-  contactPointIds?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
-  contactPoints?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceContactPointContactPoint']>>, ParentType, ContextType>;
+export type IoRestorecommerceCustomerPublicSectorResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceCustomerPublicSector'] = ResolversParentTypes['IoRestorecommerceCustomerPublicSector']> = ResolversObject<{
+  organizationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  organization?: Resolver<Maybe<ResolversTypes['IoRestorecommerceOrganizationOrganization']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -2450,11 +2425,8 @@ export type IoRestorecommerceTaxTypeTaxTypeResolvers<ContextType = ResourceConte
   meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
   type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  behavior?: Resolver<Maybe<ResolversTypes['IoRestorecommerceTaxTypeBehavior']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
-
-export type IoRestorecommerceTaxTypeBehaviorResolvers = { NONE: 0, ADDITIVE_ON_GROSS: 1 };
 
 export type ResourceTaxQueryResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ResourceTaxQuery'] = ResolversParentTypes['ResourceTaxQuery']> = ResolversObject<{
   Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceTaxTaxListResponse']>, ParentType, ContextType, RequireFields<ResourceTaxQueryReadArgs, 'input'>>;
@@ -2742,7 +2714,7 @@ export type Resolvers<ContextType = ResourceContext> = ResolversObject<{
   IoRestorecommerceCustomerCustomerListResponse?: IoRestorecommerceCustomerCustomerListResponseResolvers<ContextType>;
   IoRestorecommerceCustomerCustomerResponse?: IoRestorecommerceCustomerCustomerResponseResolvers<ContextType>;
   IoRestorecommerceCustomerCustomer?: IoRestorecommerceCustomerCustomerResolvers<ContextType>;
-  IoRestorecommerceCustomerIndividualUser?: IoRestorecommerceCustomerIndividualUserResolvers<ContextType>;
+  IoRestorecommerceCustomerPrivate?: IoRestorecommerceCustomerPrivateResolvers<ContextType>;
   IoRestorecommerceUserUser?: IoRestorecommerceUserUserResolvers<ContextType>;
   IoRestorecommerceAuthRoleAssociation?: IoRestorecommerceAuthRoleAssociationResolvers<ContextType>;
   IoRestorecommerceLocaleLocale?: IoRestorecommerceLocaleLocaleResolvers<ContextType>;
@@ -2751,9 +2723,9 @@ export type Resolvers<ContextType = ResourceContext> = ResolversObject<{
   IoRestorecommerceAuthTokens?: IoRestorecommerceAuthTokensResolvers<ContextType>;
   GoogleProtobufAny?: GoogleProtobufAnyResolvers<ContextType>;
   IoRestorecommerceContactPointContactPoint?: IoRestorecommerceContactPointContactPointResolvers<ContextType>;
-  IoRestorecommerceCustomerOrgUser?: IoRestorecommerceCustomerOrgUserResolvers<ContextType>;
+  IoRestorecommerceCustomerCommercial?: IoRestorecommerceCustomerCommercialResolvers<ContextType>;
   IoRestorecommerceOrganizationOrganization?: IoRestorecommerceOrganizationOrganizationResolvers<ContextType>;
-  IoRestorecommerceCustomerGuest?: IoRestorecommerceCustomerGuestResolvers<ContextType>;
+  IoRestorecommerceCustomerPublicSector?: IoRestorecommerceCustomerPublicSectorResolvers<ContextType>;
   ResourceContactPointQuery?: ResourceContactPointQueryResolvers<ContextType>;
   ProtoIoRestorecommerceContactPointContactPointListResponse?: ProtoIoRestorecommerceContactPointContactPointListResponseResolvers<ContextType>;
   IoRestorecommerceContactPointContactPointListResponse?: IoRestorecommerceContactPointContactPointListResponseResolvers<ContextType>;
@@ -2776,7 +2748,6 @@ export type Resolvers<ContextType = ResourceContext> = ResolversObject<{
   IoRestorecommerceTaxTypeTaxTypeListResponse?: IoRestorecommerceTaxTypeTaxTypeListResponseResolvers<ContextType>;
   IoRestorecommerceTaxTypeTaxTypeResponse?: IoRestorecommerceTaxTypeTaxTypeResponseResolvers<ContextType>;
   IoRestorecommerceTaxTypeTaxType?: IoRestorecommerceTaxTypeTaxTypeResolvers<ContextType>;
-  IoRestorecommerceTaxTypeBehavior?: IoRestorecommerceTaxTypeBehaviorResolvers;
   ResourceTaxQuery?: ResourceTaxQueryResolvers<ContextType>;
   ProtoIoRestorecommerceTaxTaxListResponse?: ProtoIoRestorecommerceTaxTaxListResponseResolvers<ContextType>;
   IoRestorecommerceTaxTaxListResponse?: IoRestorecommerceTaxTaxListResponseResolvers<ContextType>;

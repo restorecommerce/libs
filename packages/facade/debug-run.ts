@@ -55,7 +55,7 @@ const createTestFacade = () => {
       oauth: true,
       apiKey: 'api_key'
     }))
-    .useModule(resourceModule({config: serviceConfig.get('resource')}))
+    .useModule(resourceModule({config: serviceConfig.get('master_data')}))
     .useModule(accessControlModule({config: serviceConfig.get('access_control')}))
     .useModule(fulfillmentModule({config: serviceConfig.get('fulfillment')}))
     .useModule(catalogModule({config: serviceConfig.get('catalog')}))

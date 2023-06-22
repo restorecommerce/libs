@@ -17,6 +17,9 @@ import "io/restorecommerce/fulfillment.proto";
 import "io/restorecommerce/fulfillment_product.proto";
 import "io/restorecommerce/invoice.proto";
 
+// Used by resolvers
+import "io/restorecommerce/shop.proto";
+
 
 service OrderService {
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (OrderListResponse) {
@@ -30,7 +33,7 @@ service OrderService {
   rpc Withdraw (OrderIdList) returns (OrderListResponse);
   rpc Cancel (OrderIdList) returns (OrderListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
-  
+
   // Requires Fulfillment Service
   rpc QueryPackingSolution (FulfillmentRequestList) returns (io.restorecommerce.fulfillment_product.PackingSolutionListResponse);
   // Requires Fulfillment Service

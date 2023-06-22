@@ -60,16 +60,27 @@ export type IoRestorecommerceInvoiceInvoice = {
   __typename?: 'IoRestorecommerceInvoiceInvoice';
   id?: Maybe<Scalars['String']['output']>;
   meta?: Maybe<IoRestorecommerceMetaMeta>;
-  timestamp?: Maybe<Scalars['String']['output']>;
+  invoiceNumber?: Maybe<Scalars['String']['output']>;
+  reference?: Maybe<IoRestorecommerceReferenceReference>;
+  userId?: Maybe<Scalars['String']['output']>;
+  user?: Maybe<IoRestorecommerceUserUser>;
   customerId?: Maybe<Scalars['String']['output']>;
   customer?: Maybe<IoRestorecommerceCustomerCustomer>;
-  paymentStatus?: Maybe<Scalars['String']['output']>;
-  totalAmount?: Maybe<Scalars['Float']['output']>;
-  netAmount?: Maybe<Scalars['Float']['output']>;
-  vatAmount?: Maybe<Scalars['Float']['output']>;
-  document?: Maybe<Scalars['String']['output']>;
-  invoiceNumber?: Maybe<Scalars['String']['output']>;
+  shopId?: Maybe<Scalars['String']['output']>;
+  shop?: Maybe<IoRestorecommerceShopShop>;
+  timestamp?: Maybe<Scalars['Float']['output']>;
+  paymentState?: Maybe<IoRestorecommerceInvoicePaymentState>;
+  sender?: Maybe<IoRestorecommerceAddressBillingAddress>;
+  recipient?: Maybe<IoRestorecommerceAddressBillingAddress>;
+  positions?: Maybe<Array<IoRestorecommerceInvoicePosition>>;
+  totalAmounts?: Maybe<Array<IoRestorecommerceAmountAmount>>;
+  paymentHints?: Maybe<Array<Scalars['String']['output']>>;
+  documents?: Maybe<Array<IoRestorecommerceFileFile>>;
   customerRemark?: Maybe<Scalars['String']['output']>;
+  fromDate?: Maybe<Scalars['Float']['output']>;
+  toDate?: Maybe<Scalars['Float']['output']>;
+  sent?: Maybe<Scalars['Boolean']['output']>;
+  withdrawn?: Maybe<Scalars['Boolean']['output']>;
 };
 
 export type IoRestorecommerceMetaMeta = {
@@ -93,23 +104,10 @@ export type IoRestorecommerceAttributeAttributeObj = {
   attributes?: Maybe<IoRestorecommerceAttributeAttribute>;
 };
 
-export type IoRestorecommerceCustomerCustomer = {
-  __typename?: 'IoRestorecommerceCustomerCustomer';
-  id?: Maybe<Scalars['String']['output']>;
-  meta?: Maybe<IoRestorecommerceMetaMeta>;
-  individualUser?: Maybe<IoRestorecommerceCustomerIndividualUser>;
-  orgUser?: Maybe<IoRestorecommerceCustomerOrgUser>;
-  guest?: Maybe<IoRestorecommerceCustomerGuest>;
-};
-
-export type IoRestorecommerceCustomerIndividualUser = {
-  __typename?: 'IoRestorecommerceCustomerIndividualUser';
-  userId?: Maybe<Scalars['String']['output']>;
-  user?: Maybe<IoRestorecommerceUserUser>;
-  addressId?: Maybe<Scalars['String']['output']>;
-  address?: Maybe<IoRestorecommerceAddressAddress>;
-  contactPointIds?: Maybe<Array<Scalars['String']['output']>>;
-  contactPoints?: Maybe<Array<IoRestorecommerceContactPointContactPoint>>;
+export type IoRestorecommerceReferenceReference = {
+  __typename?: 'IoRestorecommerceReferenceReference';
+  instanceType?: Maybe<Scalars['String']['output']>;
+  instanceId?: Maybe<Scalars['String']['output']>;
 };
 
 export type IoRestorecommerceUserUser = {
@@ -205,6 +203,42 @@ export type GoogleProtobufAny = {
   value?: Maybe<Scalars['GoogleProtobufAnyValue']['output']>;
 };
 
+export type IoRestorecommerceCustomerCustomer = {
+  __typename?: 'IoRestorecommerceCustomerCustomer';
+  id?: Maybe<Scalars['String']['output']>;
+  meta?: Maybe<IoRestorecommerceMetaMeta>;
+  private?: Maybe<IoRestorecommerceCustomerPrivate>;
+  commercial?: Maybe<IoRestorecommerceCustomerCommercial>;
+  publicSector?: Maybe<IoRestorecommerceCustomerPublicSector>;
+};
+
+export type IoRestorecommerceCustomerPrivate = {
+  __typename?: 'IoRestorecommerceCustomerPrivate';
+  userId?: Maybe<Scalars['String']['output']>;
+  user?: Maybe<IoRestorecommerceUserUser>;
+  contactPointIds?: Maybe<Array<Scalars['String']['output']>>;
+  contactPoints?: Maybe<Array<IoRestorecommerceContactPointContactPoint>>;
+};
+
+export type IoRestorecommerceContactPointContactPoint = {
+  __typename?: 'IoRestorecommerceContactPointContactPoint';
+  id?: Maybe<Scalars['String']['output']>;
+  meta?: Maybe<IoRestorecommerceMetaMeta>;
+  physicalAddressId?: Maybe<Scalars['String']['output']>;
+  physicalAddress?: Maybe<IoRestorecommerceAddressAddress>;
+  website?: Maybe<Scalars['String']['output']>;
+  email?: Maybe<Scalars['String']['output']>;
+  contactPointTypeIds?: Maybe<Array<Scalars['String']['output']>>;
+  contactPointType?: Maybe<Array<IoRestorecommerceContactPointTypeContactPointType>>;
+  telephone?: Maybe<Scalars['String']['output']>;
+  timezoneId?: Maybe<Scalars['String']['output']>;
+  timezone?: Maybe<IoRestorecommerceTimezoneTimezone>;
+  localeId?: Maybe<Scalars['String']['output']>;
+  locale?: Maybe<IoRestorecommerceLocaleLocale>;
+  name?: Maybe<Scalars['String']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+};
+
 export type IoRestorecommerceAddressAddress = {
   __typename?: 'IoRestorecommerceAddressAddress';
   id?: Maybe<Scalars['String']['output']>;
@@ -266,23 +300,6 @@ export type IoRestorecommerceAddressPackStation = {
   postNumber?: Maybe<Scalars['String']['output']>;
 };
 
-export type IoRestorecommerceContactPointContactPoint = {
-  __typename?: 'IoRestorecommerceContactPointContactPoint';
-  id?: Maybe<Scalars['String']['output']>;
-  meta?: Maybe<IoRestorecommerceMetaMeta>;
-  physicalAddressId?: Maybe<Scalars['String']['output']>;
-  physicalAddress?: Maybe<IoRestorecommerceAddressAddress>;
-  website?: Maybe<Scalars['String']['output']>;
-  email?: Maybe<Scalars['String']['output']>;
-  contactPointTypeId?: Maybe<Scalars['String']['output']>;
-  contactPointType?: Maybe<IoRestorecommerceContactPointTypeContactPointType>;
-  telephone?: Maybe<Scalars['String']['output']>;
-  timezoneId?: Maybe<Scalars['String']['output']>;
-  timezone?: Maybe<IoRestorecommerceTimezoneTimezone>;
-  localeId?: Maybe<Scalars['String']['output']>;
-  locale?: Maybe<IoRestorecommerceLocaleLocale>;
-};
-
 export type IoRestorecommerceContactPointTypeContactPointType = {
   __typename?: 'IoRestorecommerceContactPointTypeContactPointType';
   id?: Maybe<Scalars['String']['output']>;
@@ -290,10 +307,8 @@ export type IoRestorecommerceContactPointTypeContactPointType = {
   type?: Maybe<Scalars['String']['output']>;
 };
 
-export type IoRestorecommerceCustomerOrgUser = {
-  __typename?: 'IoRestorecommerceCustomerOrgUser';
-  userId?: Maybe<Scalars['String']['output']>;
-  user?: Maybe<IoRestorecommerceUserUser>;
+export type IoRestorecommerceCustomerCommercial = {
+  __typename?: 'IoRestorecommerceCustomerCommercial';
   organizationId?: Maybe<Scalars['String']['output']>;
   organization?: Maybe<IoRestorecommerceOrganizationOrganization>;
 };
@@ -302,8 +317,6 @@ export type IoRestorecommerceOrganizationOrganization = {
   __typename?: 'IoRestorecommerceOrganizationOrganization';
   id?: Maybe<Scalars['String']['output']>;
   meta?: Maybe<IoRestorecommerceMetaMeta>;
-  addressId?: Maybe<Scalars['String']['output']>;
-  address?: Maybe<IoRestorecommerceAddressAddress>;
   parentId?: Maybe<Scalars['String']['output']>;
   parent?: Maybe<IoRestorecommerceOrganizationOrganization>;
   contactPointIds?: Maybe<Array<Scalars['String']['output']>>;
@@ -320,13 +333,314 @@ export type IoRestorecommerceOrganizationOrganization = {
   data?: Maybe<GoogleProtobufAny>;
 };
 
-export type IoRestorecommerceCustomerGuest = {
-  __typename?: 'IoRestorecommerceCustomerGuest';
-  guest?: Maybe<Scalars['Boolean']['output']>;
-  addressId?: Maybe<Scalars['String']['output']>;
+export type IoRestorecommerceCustomerPublicSector = {
+  __typename?: 'IoRestorecommerceCustomerPublicSector';
+  organizationId?: Maybe<Scalars['String']['output']>;
+  organization?: Maybe<IoRestorecommerceOrganizationOrganization>;
+};
+
+export type IoRestorecommerceShopShop = {
+  __typename?: 'IoRestorecommerceShopShop';
+  id?: Maybe<Scalars['String']['output']>;
+  meta?: Maybe<IoRestorecommerceMetaMeta>;
+  shopNumber?: Maybe<Scalars['String']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  domain?: Maybe<Scalars['String']['output']>;
+  organizationId?: Maybe<Scalars['String']['output']>;
+  organization?: Maybe<IoRestorecommerceOrganizationOrganization>;
+};
+
+export enum IoRestorecommerceInvoicePaymentState {
+  Unpayed = 0,
+  Payed = 1
+}
+
+export type IoRestorecommerceAddressBillingAddress = {
+  __typename?: 'IoRestorecommerceAddressBillingAddress';
   address?: Maybe<IoRestorecommerceAddressAddress>;
-  contactPointIds?: Maybe<Array<Scalars['String']['output']>>;
-  contactPoints?: Maybe<Array<IoRestorecommerceContactPointContactPoint>>;
+  contact?: Maybe<IoRestorecommerceAddressContact>;
+  comments?: Maybe<Scalars['String']['output']>;
+};
+
+export type IoRestorecommerceAddressContact = {
+  __typename?: 'IoRestorecommerceAddressContact';
+  name?: Maybe<Scalars['String']['output']>;
+  email?: Maybe<Scalars['String']['output']>;
+  phone?: Maybe<Scalars['String']['output']>;
+};
+
+export type IoRestorecommerceInvoicePosition = {
+  __typename?: 'IoRestorecommerceInvoicePosition';
+  id?: Maybe<Scalars['String']['output']>;
+  rows?: Maybe<Array<IoRestorecommerceInvoiceRow>>;
+  amounts?: Maybe<Array<IoRestorecommerceAmountAmount>>;
+};
+
+export type IoRestorecommerceInvoiceRow = {
+  __typename?: 'IoRestorecommerceInvoiceRow';
+  id?: Maybe<Scalars['String']['output']>;
+  productItem?: Maybe<IoRestorecommerceInvoiceProductItem>;
+  manualItem?: Maybe<IoRestorecommerceInvoiceManualItem>;
+  unitPrice?: Maybe<IoRestorecommercePricePrice>;
+  quantity?: Maybe<Scalars['Int']['output']>;
+  amount?: Maybe<IoRestorecommerceAmountAmount>;
+  contractStartDate?: Maybe<Scalars['Float']['output']>;
+};
+
+export type IoRestorecommerceInvoiceProductItem = {
+  __typename?: 'IoRestorecommerceInvoiceProductItem';
+  productId?: Maybe<Scalars['String']['output']>;
+  product?: Maybe<IoRestorecommerceProductProduct>;
+  variantId?: Maybe<Scalars['String']['output']>;
+};
+
+export type IoRestorecommerceProductProduct = {
+  __typename?: 'IoRestorecommerceProductProduct';
+  id?: Maybe<Scalars['String']['output']>;
+  meta?: Maybe<IoRestorecommerceMetaMeta>;
+  product?: Maybe<IoRestorecommerceProductIndividualProduct>;
+  bundle?: Maybe<IoRestorecommerceProductBundle>;
+  shopId?: Maybe<Scalars['String']['output']>;
+  shop?: Maybe<IoRestorecommerceShopShop>;
+  active?: Maybe<Scalars['Boolean']['output']>;
+  tags?: Maybe<Array<Scalars['String']['output']>>;
+  associations?: Maybe<Array<IoRestorecommerceProductAssociation>>;
+  data?: Maybe<GoogleProtobufAny>;
+};
+
+export type IoRestorecommerceProductIndividualProduct = {
+  __typename?: 'IoRestorecommerceProductIndividualProduct';
+  name?: Maybe<Scalars['String']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  manufacturerId?: Maybe<Scalars['String']['output']>;
+  manufacturer?: Maybe<IoRestorecommerceManufacturerManufacturer>;
+  taricCode?: Maybe<Scalars['String']['output']>;
+  prototypeId?: Maybe<Scalars['String']['output']>;
+  prototype?: Maybe<IoRestorecommerceProductPrototypeProductPrototype>;
+  categoryId?: Maybe<Scalars['String']['output']>;
+  category?: Maybe<IoRestorecommerceProductCategoryProductCategory>;
+  taxIds?: Maybe<Array<Scalars['String']['output']>>;
+  currencyId?: Maybe<Scalars['String']['output']>;
+  gtin?: Maybe<Scalars['String']['output']>;
+  physical?: Maybe<IoRestorecommerceProductPhysicalProduct>;
+  virtual?: Maybe<IoRestorecommerceProductVirtualProduct>;
+};
+
+export type IoRestorecommerceManufacturerManufacturer = {
+  __typename?: 'IoRestorecommerceManufacturerManufacturer';
+  id?: Maybe<Scalars['String']['output']>;
+  meta?: Maybe<IoRestorecommerceMetaMeta>;
+  name?: Maybe<Scalars['String']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+};
+
+export type IoRestorecommerceProductPrototypeProductPrototype = {
+  __typename?: 'IoRestorecommerceProductPrototypeProductPrototype';
+  id?: Maybe<Scalars['String']['output']>;
+  meta?: Maybe<IoRestorecommerceMetaMeta>;
+  name?: Maybe<Scalars['String']['output']>;
+  version?: Maybe<Scalars['String']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  categoryId?: Maybe<Scalars['String']['output']>;
+  category?: Maybe<IoRestorecommerceProductCategoryProductCategory>;
+};
+
+export type IoRestorecommerceProductCategoryProductCategory = {
+  __typename?: 'IoRestorecommerceProductCategoryProductCategory';
+  id?: Maybe<Scalars['String']['output']>;
+  meta?: Maybe<IoRestorecommerceMetaMeta>;
+  name?: Maybe<Scalars['String']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  priceGroupId?: Maybe<Scalars['String']['output']>;
+  priceGroup?: Maybe<IoRestorecommercePriceGroupPriceGroup>;
+  image?: Maybe<IoRestorecommerceImageImage>;
+  parent?: Maybe<IoRestorecommerceProductCategoryParent>;
+};
+
+export type IoRestorecommercePriceGroupPriceGroup = {
+  __typename?: 'IoRestorecommercePriceGroupPriceGroup';
+  id?: Maybe<Scalars['String']['output']>;
+  meta?: Maybe<IoRestorecommerceMetaMeta>;
+  name?: Maybe<Scalars['String']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+};
+
+export type IoRestorecommerceProductCategoryParent = {
+  __typename?: 'IoRestorecommerceProductCategoryParent';
+  parentId?: Maybe<Scalars['String']['output']>;
+};
+
+export type IoRestorecommerceProductPhysicalProduct = {
+  __typename?: 'IoRestorecommerceProductPhysicalProduct';
+  variants?: Maybe<Array<IoRestorecommerceProductPhysicalVariant>>;
+};
+
+export type IoRestorecommerceProductPhysicalVariant = {
+  __typename?: 'IoRestorecommerceProductPhysicalVariant';
+  id?: Maybe<Scalars['String']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  stockLevel?: Maybe<Scalars['Int']['output']>;
+  price?: Maybe<IoRestorecommercePricePrice>;
+  images?: Maybe<Array<IoRestorecommerceImageImage>>;
+  files?: Maybe<Array<IoRestorecommerceFileFile>>;
+  stockKeepingUnit?: Maybe<Scalars['String']['output']>;
+  templateVariant?: Maybe<Scalars['String']['output']>;
+  package?: Maybe<IoRestorecommerceProductPackage>;
+  attributes?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
+};
+
+export type IoRestorecommercePricePrice = {
+  __typename?: 'IoRestorecommercePricePrice';
+  regularPrice?: Maybe<Scalars['Float']['output']>;
+  sale?: Maybe<Scalars['Boolean']['output']>;
+  salePrice?: Maybe<Scalars['Float']['output']>;
+  currencyId?: Maybe<Scalars['String']['output']>;
+  currency?: Maybe<IoRestorecommerceCurrencyCurrency>;
+  taxIds?: Maybe<Array<Scalars['String']['output']>>;
+  taxes?: Maybe<Array<IoRestorecommerceTaxTax>>;
+};
+
+export type IoRestorecommerceCurrencyCurrency = {
+  __typename?: 'IoRestorecommerceCurrencyCurrency';
+  id?: Maybe<Scalars['String']['output']>;
+  meta?: Maybe<IoRestorecommerceMetaMeta>;
+  name?: Maybe<Scalars['String']['output']>;
+  symbol?: Maybe<Scalars['String']['output']>;
+  countryId?: Maybe<Scalars['String']['output']>;
+  customExchangeRates?: Maybe<Array<IoRestorecommerceCurrencyExchangeRate>>;
+};
+
+export type IoRestorecommerceCurrencyExchangeRate = {
+  __typename?: 'IoRestorecommerceCurrencyExchangeRate';
+  toCurrencyId?: Maybe<Scalars['String']['output']>;
+  rate?: Maybe<Scalars['Float']['output']>;
+  expenses?: Maybe<Scalars['Float']['output']>;
+  amount?: Maybe<Scalars['Float']['output']>;
+};
+
+export type IoRestorecommerceTaxTax = {
+  __typename?: 'IoRestorecommerceTaxTax';
+  id?: Maybe<Scalars['String']['output']>;
+  meta?: Maybe<IoRestorecommerceMetaMeta>;
+  countryId?: Maybe<Scalars['String']['output']>;
+  country?: Maybe<IoRestorecommerceCountryCountry>;
+  rate?: Maybe<Scalars['Float']['output']>;
+  variant?: Maybe<Scalars['String']['output']>;
+  typeId?: Maybe<Scalars['String']['output']>;
+  type?: Maybe<IoRestorecommerceTaxTypeTaxType>;
+};
+
+export type IoRestorecommerceTaxTypeTaxType = {
+  __typename?: 'IoRestorecommerceTaxTypeTaxType';
+  id?: Maybe<Scalars['String']['output']>;
+  meta?: Maybe<IoRestorecommerceMetaMeta>;
+  type?: Maybe<Scalars['String']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+};
+
+export type IoRestorecommerceFileFile = {
+  __typename?: 'IoRestorecommerceFileFile';
+  id?: Maybe<Scalars['String']['output']>;
+  index?: Maybe<Scalars['Int']['output']>;
+  caption?: Maybe<Scalars['String']['output']>;
+  filename?: Maybe<Scalars['String']['output']>;
+  contentType?: Maybe<Scalars['String']['output']>;
+  url?: Maybe<Scalars['String']['output']>;
+  bytes?: Maybe<Scalars['Int']['output']>;
+  tags?: Maybe<Array<Scalars['String']['output']>>;
+  thumbnail?: Maybe<IoRestorecommerceImageImage>;
+};
+
+export type IoRestorecommerceProductPackage = {
+  __typename?: 'IoRestorecommerceProductPackage';
+  sizeInCm?: Maybe<IoRestorecommerceGeometryBoundingBox3D>;
+  weightInKg?: Maybe<Scalars['Float']['output']>;
+  rotatable?: Maybe<Scalars['Boolean']['output']>;
+};
+
+export type IoRestorecommerceGeometryBoundingBox3D = {
+  __typename?: 'IoRestorecommerceGeometryBoundingBox3D';
+  width?: Maybe<Scalars['Float']['output']>;
+  height?: Maybe<Scalars['Float']['output']>;
+  length?: Maybe<Scalars['Float']['output']>;
+};
+
+export type IoRestorecommerceProductVirtualProduct = {
+  __typename?: 'IoRestorecommerceProductVirtualProduct';
+  variants?: Maybe<Array<IoRestorecommerceProductVirtualVariant>>;
+};
+
+export type IoRestorecommerceProductVirtualVariant = {
+  __typename?: 'IoRestorecommerceProductVirtualVariant';
+  id?: Maybe<Scalars['String']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  stockLevel?: Maybe<Scalars['Int']['output']>;
+  price?: Maybe<IoRestorecommercePricePrice>;
+  images?: Maybe<Array<IoRestorecommerceImageImage>>;
+  files?: Maybe<Array<IoRestorecommerceFileFile>>;
+  stockKeepingUnit?: Maybe<Scalars['String']['output']>;
+  templateVariant?: Maybe<Scalars['String']['output']>;
+  attributes?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
+};
+
+export type IoRestorecommerceProductBundle = {
+  __typename?: 'IoRestorecommerceProductBundle';
+  name?: Maybe<Scalars['String']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  images?: Maybe<Array<IoRestorecommerceImageImage>>;
+  products?: Maybe<Array<IoRestorecommerceProductBundleProduct>>;
+  price?: Maybe<IoRestorecommercePricePrice>;
+  prePackaged?: Maybe<IoRestorecommerceProductPackage>;
+};
+
+export type IoRestorecommerceProductBundleProduct = {
+  __typename?: 'IoRestorecommerceProductBundleProduct';
+  productId?: Maybe<Scalars['String']['output']>;
+  product?: Maybe<IoRestorecommerceProductProduct>;
+  variantId?: Maybe<Scalars['String']['output']>;
+  quantity?: Maybe<Scalars['Int']['output']>;
+  priceRatio?: Maybe<Scalars['Float']['output']>;
+};
+
+export type IoRestorecommerceProductAssociation = {
+  __typename?: 'IoRestorecommerceProductAssociation';
+  productId?: Maybe<Scalars['String']['output']>;
+  product?: Maybe<IoRestorecommerceProductProduct>;
+  type?: Maybe<IoRestorecommerceProductAssociationType>;
+  tags?: Maybe<Array<Scalars['String']['output']>>;
+  data?: Maybe<GoogleProtobufAny>;
+};
+
+export enum IoRestorecommerceProductAssociationType {
+  Miscellaneous = 0,
+  Accessory = 1,
+  Recommendation = 2
+}
+
+export type IoRestorecommerceInvoiceManualItem = {
+  __typename?: 'IoRestorecommerceInvoiceManualItem';
+  stockKeepingUnit?: Maybe<Scalars['String']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  descritpion?: Maybe<Scalars['String']['output']>;
+};
+
+export type IoRestorecommerceAmountAmount = {
+  __typename?: 'IoRestorecommerceAmountAmount';
+  currencyId?: Maybe<Scalars['String']['output']>;
+  currency?: Maybe<IoRestorecommerceCurrencyCurrency>;
+  gross?: Maybe<Scalars['Float']['output']>;
+  net?: Maybe<Scalars['Float']['output']>;
+  vats?: Maybe<Array<IoRestorecommerceAmountVat>>;
+};
+
+export type IoRestorecommerceAmountVat = {
+  __typename?: 'IoRestorecommerceAmountVAT';
+  taxId?: Maybe<Scalars['String']['output']>;
+  tax?: Maybe<IoRestorecommerceTaxTax>;
+  vat?: Maybe<Scalars['Float']['output']>;
 };
 
 export type IoRestorecommerceStatusStatus = {
@@ -473,6 +787,9 @@ export type InvoicingInvoiceMutation = {
   __typename?: 'InvoicingInvoiceMutation';
   Mutate?: Maybe<ProtoIoRestorecommerceInvoiceInvoiceListResponse>;
   Delete?: Maybe<ProtoIoRestorecommerceResourcebaseDeleteResponse>;
+  Render?: Maybe<ProtoIoRestorecommerceInvoiceInvoiceListResponse>;
+  Withdraw?: Maybe<ProtoIoRestorecommerceInvoiceInvoiceListResponse>;
+  Send?: Maybe<ProtoIoRestorecommerceStatusStatusListResponse>;
   GenerateInvoiceNumber?: Maybe<ProtoIoRestorecommerceInvoiceInvoiceNumberResponse>;
 };
 
@@ -484,6 +801,21 @@ export type InvoicingInvoiceMutationMutateArgs = {
 
 export type InvoicingInvoiceMutationDeleteArgs = {
   input: IIoRestorecommerceResourcebaseDeleteRequest;
+};
+
+
+export type InvoicingInvoiceMutationRenderArgs = {
+  input: IIoRestorecommerceInvoiceInvoiceList;
+};
+
+
+export type InvoicingInvoiceMutationWithdrawArgs = {
+  input: IIoRestorecommerceInvoiceInvoiceIdList;
+};
+
+
+export type InvoicingInvoiceMutationSendArgs = {
+  input: IIoRestorecommerceInvoiceInvoiceIdList;
 };
 
 
@@ -502,15 +834,24 @@ export type IIoRestorecommerceInvoiceInvoiceList = {
 export type IIoRestorecommerceInvoiceInvoice = {
   id?: InputMaybe<Scalars['String']['input']>;
   meta?: InputMaybe<IIoRestorecommerceMetaMeta>;
-  timestamp?: InputMaybe<Scalars['String']['input']>;
-  customerId?: InputMaybe<Scalars['String']['input']>;
-  paymentStatus?: InputMaybe<Scalars['String']['input']>;
-  totalAmount?: InputMaybe<Scalars['Float']['input']>;
-  netAmount?: InputMaybe<Scalars['Float']['input']>;
-  vatAmount?: InputMaybe<Scalars['Float']['input']>;
-  document?: InputMaybe<Scalars['String']['input']>;
   invoiceNumber?: InputMaybe<Scalars['String']['input']>;
+  reference?: InputMaybe<IIoRestorecommerceReferenceReference>;
+  userId?: InputMaybe<Scalars['String']['input']>;
+  customerId?: InputMaybe<Scalars['String']['input']>;
+  shopId?: InputMaybe<Scalars['String']['input']>;
+  timestamp?: InputMaybe<Scalars['Float']['input']>;
+  paymentState?: InputMaybe<IoRestorecommerceInvoicePaymentState>;
+  sender?: InputMaybe<IIoRestorecommerceAddressBillingAddress>;
+  recipient?: InputMaybe<IIoRestorecommerceAddressBillingAddress>;
+  positions?: InputMaybe<Array<IIoRestorecommerceInvoicePosition>>;
+  totalAmounts?: InputMaybe<Array<IIoRestorecommerceAmountAmount>>;
+  paymentHints?: InputMaybe<Array<Scalars['String']['input']>>;
+  documents?: InputMaybe<Array<IIoRestorecommerceFileFile>>;
   customerRemark?: InputMaybe<Scalars['String']['input']>;
+  fromDate?: InputMaybe<Scalars['Float']['input']>;
+  toDate?: InputMaybe<Scalars['Float']['input']>;
+  sent?: InputMaybe<Scalars['Boolean']['input']>;
+  withdrawn?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type IIoRestorecommerceMetaMeta = {
@@ -529,6 +870,139 @@ export type IIoRestorecommerceAttributeAttribute = {
 
 export type IIoRestorecommerceAttributeAttributeObj = {
   attributes?: InputMaybe<IIoRestorecommerceAttributeAttribute>;
+};
+
+export type IIoRestorecommerceReferenceReference = {
+  instanceType?: InputMaybe<Scalars['String']['input']>;
+  instanceId?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IIoRestorecommerceAddressBillingAddress = {
+  address?: InputMaybe<IIoRestorecommerceAddressAddress>;
+  contact?: InputMaybe<IIoRestorecommerceAddressContact>;
+  comments?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IIoRestorecommerceAddressAddress = {
+  id?: InputMaybe<Scalars['String']['input']>;
+  meta?: InputMaybe<IIoRestorecommerceMetaMeta>;
+  postcode?: InputMaybe<Scalars['String']['input']>;
+  countryId?: InputMaybe<Scalars['String']['input']>;
+  locality?: InputMaybe<Scalars['String']['input']>;
+  street?: InputMaybe<Scalars['String']['input']>;
+  region?: InputMaybe<Scalars['String']['input']>;
+  geoCoordinates?: InputMaybe<IIoRestorecommerceAddressGeoPoint>;
+  altitude?: InputMaybe<Scalars['Float']['input']>;
+  buildingNumber?: InputMaybe<Scalars['String']['input']>;
+  addressAddition?: InputMaybe<IIoRestorecommerceAddressAddressAddition>;
+  businessAddress?: InputMaybe<IIoRestorecommerceAddressBusinessAddress>;
+  residentialAddress?: InputMaybe<IIoRestorecommerceAddressResidentialAddress>;
+  packStation?: InputMaybe<IIoRestorecommerceAddressPackStation>;
+};
+
+export type IIoRestorecommerceAddressGeoPoint = {
+  latitude?: InputMaybe<Scalars['Float']['input']>;
+  longitude?: InputMaybe<Scalars['Float']['input']>;
+};
+
+export type IIoRestorecommerceAddressAddressAddition = {
+  field1?: InputMaybe<Scalars['String']['input']>;
+  field2?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IIoRestorecommerceAddressBusinessAddress = {
+  name?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IIoRestorecommerceAddressResidentialAddress = {
+  title?: InputMaybe<Scalars['String']['input']>;
+  givenName?: InputMaybe<Scalars['String']['input']>;
+  midName?: InputMaybe<Scalars['String']['input']>;
+  familyName?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IIoRestorecommerceAddressPackStation = {
+  provider?: InputMaybe<Scalars['String']['input']>;
+  stationNumber?: InputMaybe<Scalars['String']['input']>;
+  postNumber?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IIoRestorecommerceAddressContact = {
+  name?: InputMaybe<Scalars['String']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  phone?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IIoRestorecommerceInvoicePosition = {
+  id?: InputMaybe<Scalars['String']['input']>;
+  rows?: InputMaybe<Array<IIoRestorecommerceInvoiceRow>>;
+  amounts?: InputMaybe<Array<IIoRestorecommerceAmountAmount>>;
+};
+
+export type IIoRestorecommerceInvoiceRow = {
+  id?: InputMaybe<Scalars['String']['input']>;
+  productItem?: InputMaybe<IIoRestorecommerceInvoiceProductItem>;
+  manualItem?: InputMaybe<IIoRestorecommerceInvoiceManualItem>;
+  unitPrice?: InputMaybe<IIoRestorecommercePricePrice>;
+  quantity?: InputMaybe<Scalars['Int']['input']>;
+  amount?: InputMaybe<IIoRestorecommerceAmountAmount>;
+  contractStartDate?: InputMaybe<Scalars['Float']['input']>;
+};
+
+export type IIoRestorecommerceInvoiceProductItem = {
+  productId?: InputMaybe<Scalars['String']['input']>;
+  variantId?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IIoRestorecommerceInvoiceManualItem = {
+  stockKeepingUnit?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  descritpion?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IIoRestorecommercePricePrice = {
+  regularPrice?: InputMaybe<Scalars['Float']['input']>;
+  sale?: InputMaybe<Scalars['Boolean']['input']>;
+  salePrice?: InputMaybe<Scalars['Float']['input']>;
+  currencyId?: InputMaybe<Scalars['String']['input']>;
+  taxIds?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+export type IIoRestorecommerceAmountAmount = {
+  currencyId?: InputMaybe<Scalars['String']['input']>;
+  gross?: InputMaybe<Scalars['Float']['input']>;
+  net?: InputMaybe<Scalars['Float']['input']>;
+  vats?: InputMaybe<Array<IIoRestorecommerceAmountVat>>;
+};
+
+export type IIoRestorecommerceAmountVat = {
+  taxId?: InputMaybe<Scalars['String']['input']>;
+  vat?: InputMaybe<Scalars['Float']['input']>;
+};
+
+export type IIoRestorecommerceFileFile = {
+  id?: InputMaybe<Scalars['String']['input']>;
+  index?: InputMaybe<Scalars['Int']['input']>;
+  caption?: InputMaybe<Scalars['String']['input']>;
+  filename?: InputMaybe<Scalars['String']['input']>;
+  contentType?: InputMaybe<Scalars['String']['input']>;
+  url?: InputMaybe<Scalars['String']['input']>;
+  bytes?: InputMaybe<Scalars['Int']['input']>;
+  tags?: InputMaybe<Array<Scalars['String']['input']>>;
+  thumbnail?: InputMaybe<IIoRestorecommerceImageImage>;
+};
+
+export type IIoRestorecommerceImageImage = {
+  id?: InputMaybe<Scalars['String']['input']>;
+  caption?: InputMaybe<Scalars['String']['input']>;
+  filename?: InputMaybe<Scalars['String']['input']>;
+  contentType?: InputMaybe<Scalars['String']['input']>;
+  url?: InputMaybe<Scalars['String']['input']>;
+  width?: InputMaybe<Scalars['Float']['input']>;
+  height?: InputMaybe<Scalars['Float']['input']>;
+  length?: InputMaybe<Scalars['Float']['input']>;
+  tags?: InputMaybe<Array<Scalars['String']['input']>>;
+  index?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export enum ModeType {
@@ -557,6 +1031,28 @@ export type IIoRestorecommerceResourcebaseDeleteRequest = {
   scope?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type IIoRestorecommerceInvoiceInvoiceIdList = {
+  items?: InputMaybe<Array<IIoRestorecommerceInvoiceInvoiceId>>;
+  totalCount?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type IIoRestorecommerceInvoiceInvoiceId = {
+  id?: InputMaybe<Scalars['String']['input']>;
+  channelIds?: InputMaybe<Array<Scalars['String']['input']>>;
+  options?: InputMaybe<IGoogleProtobufAny>;
+};
+
+export type ProtoIoRestorecommerceStatusStatusListResponse = {
+  __typename?: 'ProtoIoRestorecommerceStatusStatusListResponse';
+  details?: Maybe<IoRestorecommerceStatusStatusListResponse>;
+};
+
+export type IoRestorecommerceStatusStatusListResponse = {
+  __typename?: 'IoRestorecommerceStatusStatusListResponse';
+  status?: Maybe<Array<IoRestorecommerceStatusStatus>>;
+  operationStatus?: Maybe<IoRestorecommerceStatusOperationStatus>;
+};
+
 export type ProtoIoRestorecommerceInvoiceInvoiceNumberResponse = {
   __typename?: 'ProtoIoRestorecommerceInvoiceInvoiceNumberResponse';
   details?: Maybe<IoRestorecommerceInvoiceInvoiceNumberResponse>;
@@ -564,10 +1060,11 @@ export type ProtoIoRestorecommerceInvoiceInvoiceNumberResponse = {
 
 export type IoRestorecommerceInvoiceInvoiceNumberResponse = {
   __typename?: 'IoRestorecommerceInvoiceInvoiceNumberResponse';
-  invoiceNo?: Maybe<Scalars['String']['output']>;
+  invoiceNumber?: Maybe<Scalars['String']['output']>;
 };
 
 export type IIoRestorecommerceInvoiceRequestInvoiceNumber = {
+  shopId?: InputMaybe<Scalars['String']['input']>;
   context?: InputMaybe<IGoogleProtobufAny>;
 };
 
@@ -575,6 +1072,7 @@ export type Subscription = {
   __typename?: 'Subscription';
   orderingOrders?: Maybe<SubscriptionOutput>;
   catalogProducts?: Maybe<SubscriptionOutput>;
+  invoicingInvoices?: Maybe<SubscriptionOutput>;
 };
 
 
@@ -584,6 +1082,11 @@ export type SubscriptionOrderingOrdersArgs = {
 
 
 export type SubscriptionCatalogProductsArgs = {
+  action?: InputMaybe<SubscriptionAction>;
+};
+
+
+export type SubscriptionInvoicingInvoicesArgs = {
   action?: InputMaybe<SubscriptionAction>;
 };
 
@@ -682,8 +1185,7 @@ export type ResolversTypes = ResolversObject<{
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   IoRestorecommerceAttributeAttribute: ResolverTypeWrapper<IoRestorecommerceAttributeAttribute>;
   IoRestorecommerceAttributeAttributeObj: ResolverTypeWrapper<IoRestorecommerceAttributeAttributeObj>;
-  IoRestorecommerceCustomerCustomer: ResolverTypeWrapper<IoRestorecommerceCustomerCustomer>;
-  IoRestorecommerceCustomerIndividualUser: ResolverTypeWrapper<IoRestorecommerceCustomerIndividualUser>;
+  IoRestorecommerceReferenceReference: ResolverTypeWrapper<IoRestorecommerceReferenceReference>;
   IoRestorecommerceUserUser: ResolverTypeWrapper<IoRestorecommerceUserUser>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   IoRestorecommerceAuthRoleAssociation: ResolverTypeWrapper<IoRestorecommerceAuthRoleAssociation>;
@@ -695,6 +1197,9 @@ export type ResolversTypes = ResolversObject<{
   IoRestorecommerceAuthTokens: ResolverTypeWrapper<IoRestorecommerceAuthTokens>;
   GoogleProtobufAny: ResolverTypeWrapper<GoogleProtobufAny>;
   GoogleProtobufAnyValue: ResolverTypeWrapper<Scalars['GoogleProtobufAnyValue']['output']>;
+  IoRestorecommerceCustomerCustomer: ResolverTypeWrapper<IoRestorecommerceCustomerCustomer>;
+  IoRestorecommerceCustomerPrivate: ResolverTypeWrapper<IoRestorecommerceCustomerPrivate>;
+  IoRestorecommerceContactPointContactPoint: ResolverTypeWrapper<IoRestorecommerceContactPointContactPoint>;
   IoRestorecommerceAddressAddress: ResolverTypeWrapper<IoRestorecommerceAddressAddress>;
   IoRestorecommerceCountryCountry: ResolverTypeWrapper<IoRestorecommerceCountryCountry>;
   IoRestorecommerceAddressGeoPoint: ResolverTypeWrapper<IoRestorecommerceAddressGeoPoint>;
@@ -702,11 +1207,43 @@ export type ResolversTypes = ResolversObject<{
   IoRestorecommerceAddressBusinessAddress: ResolverTypeWrapper<IoRestorecommerceAddressBusinessAddress>;
   IoRestorecommerceAddressResidentialAddress: ResolverTypeWrapper<IoRestorecommerceAddressResidentialAddress>;
   IoRestorecommerceAddressPackStation: ResolverTypeWrapper<IoRestorecommerceAddressPackStation>;
-  IoRestorecommerceContactPointContactPoint: ResolverTypeWrapper<IoRestorecommerceContactPointContactPoint>;
   IoRestorecommerceContactPointTypeContactPointType: ResolverTypeWrapper<IoRestorecommerceContactPointTypeContactPointType>;
-  IoRestorecommerceCustomerOrgUser: ResolverTypeWrapper<IoRestorecommerceCustomerOrgUser>;
+  IoRestorecommerceCustomerCommercial: ResolverTypeWrapper<IoRestorecommerceCustomerCommercial>;
   IoRestorecommerceOrganizationOrganization: ResolverTypeWrapper<IoRestorecommerceOrganizationOrganization>;
-  IoRestorecommerceCustomerGuest: ResolverTypeWrapper<IoRestorecommerceCustomerGuest>;
+  IoRestorecommerceCustomerPublicSector: ResolverTypeWrapper<IoRestorecommerceCustomerPublicSector>;
+  IoRestorecommerceShopShop: ResolverTypeWrapper<IoRestorecommerceShopShop>;
+  IoRestorecommerceInvoicePaymentState: IoRestorecommerceInvoicePaymentState;
+  IoRestorecommerceAddressBillingAddress: ResolverTypeWrapper<IoRestorecommerceAddressBillingAddress>;
+  IoRestorecommerceAddressContact: ResolverTypeWrapper<IoRestorecommerceAddressContact>;
+  IoRestorecommerceInvoicePosition: ResolverTypeWrapper<IoRestorecommerceInvoicePosition>;
+  IoRestorecommerceInvoiceRow: ResolverTypeWrapper<IoRestorecommerceInvoiceRow>;
+  IoRestorecommerceInvoiceProductItem: ResolverTypeWrapper<IoRestorecommerceInvoiceProductItem>;
+  IoRestorecommerceProductProduct: ResolverTypeWrapper<IoRestorecommerceProductProduct>;
+  IoRestorecommerceProductIndividualProduct: ResolverTypeWrapper<IoRestorecommerceProductIndividualProduct>;
+  IoRestorecommerceManufacturerManufacturer: ResolverTypeWrapper<IoRestorecommerceManufacturerManufacturer>;
+  IoRestorecommerceProductPrototypeProductPrototype: ResolverTypeWrapper<IoRestorecommerceProductPrototypeProductPrototype>;
+  IoRestorecommerceProductCategoryProductCategory: ResolverTypeWrapper<IoRestorecommerceProductCategoryProductCategory>;
+  IoRestorecommercePriceGroupPriceGroup: ResolverTypeWrapper<IoRestorecommercePriceGroupPriceGroup>;
+  IoRestorecommerceProductCategoryParent: ResolverTypeWrapper<IoRestorecommerceProductCategoryParent>;
+  IoRestorecommerceProductPhysicalProduct: ResolverTypeWrapper<IoRestorecommerceProductPhysicalProduct>;
+  IoRestorecommerceProductPhysicalVariant: ResolverTypeWrapper<IoRestorecommerceProductPhysicalVariant>;
+  IoRestorecommercePricePrice: ResolverTypeWrapper<IoRestorecommercePricePrice>;
+  IoRestorecommerceCurrencyCurrency: ResolverTypeWrapper<IoRestorecommerceCurrencyCurrency>;
+  IoRestorecommerceCurrencyExchangeRate: ResolverTypeWrapper<IoRestorecommerceCurrencyExchangeRate>;
+  IoRestorecommerceTaxTax: ResolverTypeWrapper<IoRestorecommerceTaxTax>;
+  IoRestorecommerceTaxTypeTaxType: ResolverTypeWrapper<IoRestorecommerceTaxTypeTaxType>;
+  IoRestorecommerceFileFile: ResolverTypeWrapper<IoRestorecommerceFileFile>;
+  IoRestorecommerceProductPackage: ResolverTypeWrapper<IoRestorecommerceProductPackage>;
+  IoRestorecommerceGeometryBoundingBox3D: ResolverTypeWrapper<IoRestorecommerceGeometryBoundingBox3D>;
+  IoRestorecommerceProductVirtualProduct: ResolverTypeWrapper<IoRestorecommerceProductVirtualProduct>;
+  IoRestorecommerceProductVirtualVariant: ResolverTypeWrapper<IoRestorecommerceProductVirtualVariant>;
+  IoRestorecommerceProductBundle: ResolverTypeWrapper<IoRestorecommerceProductBundle>;
+  IoRestorecommerceProductBundleProduct: ResolverTypeWrapper<IoRestorecommerceProductBundleProduct>;
+  IoRestorecommerceProductAssociation: ResolverTypeWrapper<IoRestorecommerceProductAssociation>;
+  IoRestorecommerceProductAssociationType: IoRestorecommerceProductAssociationType;
+  IoRestorecommerceInvoiceManualItem: ResolverTypeWrapper<IoRestorecommerceInvoiceManualItem>;
+  IoRestorecommerceAmountAmount: ResolverTypeWrapper<IoRestorecommerceAmountAmount>;
+  IoRestorecommerceAmountVAT: ResolverTypeWrapper<IoRestorecommerceAmountVat>;
   IoRestorecommerceStatusStatus: ResolverTypeWrapper<IoRestorecommerceStatusStatus>;
   IoRestorecommerceStatusOperationStatus: ResolverTypeWrapper<IoRestorecommerceStatusOperationStatus>;
   IIoRestorecommerceResourcebaseReadRequest: IIoRestorecommerceResourcebaseReadRequest;
@@ -733,10 +1270,32 @@ export type ResolversTypes = ResolversObject<{
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
   IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
   IIoRestorecommerceAttributeAttributeObj: IIoRestorecommerceAttributeAttributeObj;
+  IIoRestorecommerceReferenceReference: IIoRestorecommerceReferenceReference;
+  IIoRestorecommerceAddressBillingAddress: IIoRestorecommerceAddressBillingAddress;
+  IIoRestorecommerceAddressAddress: IIoRestorecommerceAddressAddress;
+  IIoRestorecommerceAddressGeoPoint: IIoRestorecommerceAddressGeoPoint;
+  IIoRestorecommerceAddressAddressAddition: IIoRestorecommerceAddressAddressAddition;
+  IIoRestorecommerceAddressBusinessAddress: IIoRestorecommerceAddressBusinessAddress;
+  IIoRestorecommerceAddressResidentialAddress: IIoRestorecommerceAddressResidentialAddress;
+  IIoRestorecommerceAddressPackStation: IIoRestorecommerceAddressPackStation;
+  IIoRestorecommerceAddressContact: IIoRestorecommerceAddressContact;
+  IIoRestorecommerceInvoicePosition: IIoRestorecommerceInvoicePosition;
+  IIoRestorecommerceInvoiceRow: IIoRestorecommerceInvoiceRow;
+  IIoRestorecommerceInvoiceProductItem: IIoRestorecommerceInvoiceProductItem;
+  IIoRestorecommerceInvoiceManualItem: IIoRestorecommerceInvoiceManualItem;
+  IIoRestorecommercePricePrice: IIoRestorecommercePricePrice;
+  IIoRestorecommerceAmountAmount: IIoRestorecommerceAmountAmount;
+  IIoRestorecommerceAmountVAT: IIoRestorecommerceAmountVat;
+  IIoRestorecommerceFileFile: IIoRestorecommerceFileFile;
+  IIoRestorecommerceImageImage: IIoRestorecommerceImageImage;
   ModeType: ModeType;
   ProtoIoRestorecommerceResourcebaseDeleteResponse: ResolverTypeWrapper<ProtoIoRestorecommerceResourcebaseDeleteResponse>;
   IoRestorecommerceResourcebaseDeleteResponse: ResolverTypeWrapper<IoRestorecommerceResourcebaseDeleteResponse>;
   IIoRestorecommerceResourcebaseDeleteRequest: IIoRestorecommerceResourcebaseDeleteRequest;
+  IIoRestorecommerceInvoiceInvoiceIdList: IIoRestorecommerceInvoiceInvoiceIdList;
+  IIoRestorecommerceInvoiceInvoiceId: IIoRestorecommerceInvoiceInvoiceId;
+  ProtoIoRestorecommerceStatusStatusListResponse: ResolverTypeWrapper<ProtoIoRestorecommerceStatusStatusListResponse>;
+  IoRestorecommerceStatusStatusListResponse: ResolverTypeWrapper<IoRestorecommerceStatusStatusListResponse>;
   ProtoIoRestorecommerceInvoiceInvoiceNumberResponse: ResolverTypeWrapper<ProtoIoRestorecommerceInvoiceInvoiceNumberResponse>;
   IoRestorecommerceInvoiceInvoiceNumberResponse: ResolverTypeWrapper<IoRestorecommerceInvoiceInvoiceNumberResponse>;
   IIoRestorecommerceInvoiceRequestInvoiceNumber: IIoRestorecommerceInvoiceRequestInvoiceNumber;
@@ -759,8 +1318,7 @@ export type ResolversParentTypes = ResolversObject<{
   Float: Scalars['Float']['output'];
   IoRestorecommerceAttributeAttribute: IoRestorecommerceAttributeAttribute;
   IoRestorecommerceAttributeAttributeObj: IoRestorecommerceAttributeAttributeObj;
-  IoRestorecommerceCustomerCustomer: IoRestorecommerceCustomerCustomer;
-  IoRestorecommerceCustomerIndividualUser: IoRestorecommerceCustomerIndividualUser;
+  IoRestorecommerceReferenceReference: IoRestorecommerceReferenceReference;
   IoRestorecommerceUserUser: IoRestorecommerceUserUser;
   Boolean: Scalars['Boolean']['output'];
   IoRestorecommerceAuthRoleAssociation: IoRestorecommerceAuthRoleAssociation;
@@ -771,6 +1329,9 @@ export type ResolversParentTypes = ResolversObject<{
   IoRestorecommerceAuthTokens: IoRestorecommerceAuthTokens;
   GoogleProtobufAny: GoogleProtobufAny;
   GoogleProtobufAnyValue: Scalars['GoogleProtobufAnyValue']['output'];
+  IoRestorecommerceCustomerCustomer: IoRestorecommerceCustomerCustomer;
+  IoRestorecommerceCustomerPrivate: IoRestorecommerceCustomerPrivate;
+  IoRestorecommerceContactPointContactPoint: IoRestorecommerceContactPointContactPoint;
   IoRestorecommerceAddressAddress: IoRestorecommerceAddressAddress;
   IoRestorecommerceCountryCountry: IoRestorecommerceCountryCountry;
   IoRestorecommerceAddressGeoPoint: IoRestorecommerceAddressGeoPoint;
@@ -778,11 +1339,41 @@ export type ResolversParentTypes = ResolversObject<{
   IoRestorecommerceAddressBusinessAddress: IoRestorecommerceAddressBusinessAddress;
   IoRestorecommerceAddressResidentialAddress: IoRestorecommerceAddressResidentialAddress;
   IoRestorecommerceAddressPackStation: IoRestorecommerceAddressPackStation;
-  IoRestorecommerceContactPointContactPoint: IoRestorecommerceContactPointContactPoint;
   IoRestorecommerceContactPointTypeContactPointType: IoRestorecommerceContactPointTypeContactPointType;
-  IoRestorecommerceCustomerOrgUser: IoRestorecommerceCustomerOrgUser;
+  IoRestorecommerceCustomerCommercial: IoRestorecommerceCustomerCommercial;
   IoRestorecommerceOrganizationOrganization: IoRestorecommerceOrganizationOrganization;
-  IoRestorecommerceCustomerGuest: IoRestorecommerceCustomerGuest;
+  IoRestorecommerceCustomerPublicSector: IoRestorecommerceCustomerPublicSector;
+  IoRestorecommerceShopShop: IoRestorecommerceShopShop;
+  IoRestorecommerceAddressBillingAddress: IoRestorecommerceAddressBillingAddress;
+  IoRestorecommerceAddressContact: IoRestorecommerceAddressContact;
+  IoRestorecommerceInvoicePosition: IoRestorecommerceInvoicePosition;
+  IoRestorecommerceInvoiceRow: IoRestorecommerceInvoiceRow;
+  IoRestorecommerceInvoiceProductItem: IoRestorecommerceInvoiceProductItem;
+  IoRestorecommerceProductProduct: IoRestorecommerceProductProduct;
+  IoRestorecommerceProductIndividualProduct: IoRestorecommerceProductIndividualProduct;
+  IoRestorecommerceManufacturerManufacturer: IoRestorecommerceManufacturerManufacturer;
+  IoRestorecommerceProductPrototypeProductPrototype: IoRestorecommerceProductPrototypeProductPrototype;
+  IoRestorecommerceProductCategoryProductCategory: IoRestorecommerceProductCategoryProductCategory;
+  IoRestorecommercePriceGroupPriceGroup: IoRestorecommercePriceGroupPriceGroup;
+  IoRestorecommerceProductCategoryParent: IoRestorecommerceProductCategoryParent;
+  IoRestorecommerceProductPhysicalProduct: IoRestorecommerceProductPhysicalProduct;
+  IoRestorecommerceProductPhysicalVariant: IoRestorecommerceProductPhysicalVariant;
+  IoRestorecommercePricePrice: IoRestorecommercePricePrice;
+  IoRestorecommerceCurrencyCurrency: IoRestorecommerceCurrencyCurrency;
+  IoRestorecommerceCurrencyExchangeRate: IoRestorecommerceCurrencyExchangeRate;
+  IoRestorecommerceTaxTax: IoRestorecommerceTaxTax;
+  IoRestorecommerceTaxTypeTaxType: IoRestorecommerceTaxTypeTaxType;
+  IoRestorecommerceFileFile: IoRestorecommerceFileFile;
+  IoRestorecommerceProductPackage: IoRestorecommerceProductPackage;
+  IoRestorecommerceGeometryBoundingBox3D: IoRestorecommerceGeometryBoundingBox3D;
+  IoRestorecommerceProductVirtualProduct: IoRestorecommerceProductVirtualProduct;
+  IoRestorecommerceProductVirtualVariant: IoRestorecommerceProductVirtualVariant;
+  IoRestorecommerceProductBundle: IoRestorecommerceProductBundle;
+  IoRestorecommerceProductBundleProduct: IoRestorecommerceProductBundleProduct;
+  IoRestorecommerceProductAssociation: IoRestorecommerceProductAssociation;
+  IoRestorecommerceInvoiceManualItem: IoRestorecommerceInvoiceManualItem;
+  IoRestorecommerceAmountAmount: IoRestorecommerceAmountAmount;
+  IoRestorecommerceAmountVAT: IoRestorecommerceAmountVat;
   IoRestorecommerceStatusStatus: IoRestorecommerceStatusStatus;
   IoRestorecommerceStatusOperationStatus: IoRestorecommerceStatusOperationStatus;
   IIoRestorecommerceResourcebaseReadRequest: IIoRestorecommerceResourcebaseReadRequest;
@@ -802,9 +1393,31 @@ export type ResolversParentTypes = ResolversObject<{
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
   IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
   IIoRestorecommerceAttributeAttributeObj: IIoRestorecommerceAttributeAttributeObj;
+  IIoRestorecommerceReferenceReference: IIoRestorecommerceReferenceReference;
+  IIoRestorecommerceAddressBillingAddress: IIoRestorecommerceAddressBillingAddress;
+  IIoRestorecommerceAddressAddress: IIoRestorecommerceAddressAddress;
+  IIoRestorecommerceAddressGeoPoint: IIoRestorecommerceAddressGeoPoint;
+  IIoRestorecommerceAddressAddressAddition: IIoRestorecommerceAddressAddressAddition;
+  IIoRestorecommerceAddressBusinessAddress: IIoRestorecommerceAddressBusinessAddress;
+  IIoRestorecommerceAddressResidentialAddress: IIoRestorecommerceAddressResidentialAddress;
+  IIoRestorecommerceAddressPackStation: IIoRestorecommerceAddressPackStation;
+  IIoRestorecommerceAddressContact: IIoRestorecommerceAddressContact;
+  IIoRestorecommerceInvoicePosition: IIoRestorecommerceInvoicePosition;
+  IIoRestorecommerceInvoiceRow: IIoRestorecommerceInvoiceRow;
+  IIoRestorecommerceInvoiceProductItem: IIoRestorecommerceInvoiceProductItem;
+  IIoRestorecommerceInvoiceManualItem: IIoRestorecommerceInvoiceManualItem;
+  IIoRestorecommercePricePrice: IIoRestorecommercePricePrice;
+  IIoRestorecommerceAmountAmount: IIoRestorecommerceAmountAmount;
+  IIoRestorecommerceAmountVAT: IIoRestorecommerceAmountVat;
+  IIoRestorecommerceFileFile: IIoRestorecommerceFileFile;
+  IIoRestorecommerceImageImage: IIoRestorecommerceImageImage;
   ProtoIoRestorecommerceResourcebaseDeleteResponse: ProtoIoRestorecommerceResourcebaseDeleteResponse;
   IoRestorecommerceResourcebaseDeleteResponse: IoRestorecommerceResourcebaseDeleteResponse;
   IIoRestorecommerceResourcebaseDeleteRequest: IIoRestorecommerceResourcebaseDeleteRequest;
+  IIoRestorecommerceInvoiceInvoiceIdList: IIoRestorecommerceInvoiceInvoiceIdList;
+  IIoRestorecommerceInvoiceInvoiceId: IIoRestorecommerceInvoiceInvoiceId;
+  ProtoIoRestorecommerceStatusStatusListResponse: ProtoIoRestorecommerceStatusStatusListResponse;
+  IoRestorecommerceStatusStatusListResponse: IoRestorecommerceStatusStatusListResponse;
   ProtoIoRestorecommerceInvoiceInvoiceNumberResponse: ProtoIoRestorecommerceInvoiceInvoiceNumberResponse;
   IoRestorecommerceInvoiceInvoiceNumberResponse: IoRestorecommerceInvoiceInvoiceNumberResponse;
   IIoRestorecommerceInvoiceRequestInvoiceNumber: IIoRestorecommerceInvoiceRequestInvoiceNumber;
@@ -847,16 +1460,27 @@ export type IoRestorecommerceInvoiceInvoiceResponseResolvers<ContextType = Invoi
 export type IoRestorecommerceInvoiceInvoiceResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceInvoiceInvoice'] = ResolversParentTypes['IoRestorecommerceInvoiceInvoice']> = ResolversObject<{
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
-  timestamp?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  invoiceNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  reference?: Resolver<Maybe<ResolversTypes['IoRestorecommerceReferenceReference']>, ParentType, ContextType>;
+  userId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  user?: Resolver<Maybe<ResolversTypes['IoRestorecommerceUserUser']>, ParentType, ContextType>;
   customerId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   customer?: Resolver<Maybe<ResolversTypes['IoRestorecommerceCustomerCustomer']>, ParentType, ContextType>;
-  paymentStatus?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  totalAmount?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
-  netAmount?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
-  vatAmount?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
-  document?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  invoiceNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  shopId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  shop?: Resolver<Maybe<ResolversTypes['IoRestorecommerceShopShop']>, ParentType, ContextType>;
+  timestamp?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  paymentState?: Resolver<Maybe<ResolversTypes['IoRestorecommerceInvoicePaymentState']>, ParentType, ContextType>;
+  sender?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAddressBillingAddress']>, ParentType, ContextType>;
+  recipient?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAddressBillingAddress']>, ParentType, ContextType>;
+  positions?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceInvoicePosition']>>, ParentType, ContextType>;
+  totalAmounts?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAmountAmount']>>, ParentType, ContextType>;
+  paymentHints?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  documents?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceFileFile']>>, ParentType, ContextType>;
   customerRemark?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  fromDate?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  toDate?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  sent?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  withdrawn?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -881,22 +1505,9 @@ export type IoRestorecommerceAttributeAttributeObjResolvers<ContextType = Invoic
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceCustomerCustomerResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceCustomerCustomer'] = ResolversParentTypes['IoRestorecommerceCustomerCustomer']> = ResolversObject<{
-  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
-  individualUser?: Resolver<Maybe<ResolversTypes['IoRestorecommerceCustomerIndividualUser']>, ParentType, ContextType>;
-  orgUser?: Resolver<Maybe<ResolversTypes['IoRestorecommerceCustomerOrgUser']>, ParentType, ContextType>;
-  guest?: Resolver<Maybe<ResolversTypes['IoRestorecommerceCustomerGuest']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type IoRestorecommerceCustomerIndividualUserResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceCustomerIndividualUser'] = ResolversParentTypes['IoRestorecommerceCustomerIndividualUser']> = ResolversObject<{
-  userId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  user?: Resolver<Maybe<ResolversTypes['IoRestorecommerceUserUser']>, ParentType, ContextType>;
-  addressId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  address?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAddressAddress']>, ParentType, ContextType>;
-  contactPointIds?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
-  contactPoints?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceContactPointContactPoint']>>, ParentType, ContextType>;
+export type IoRestorecommerceReferenceReferenceResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceReferenceReference'] = ResolversParentTypes['IoRestorecommerceReferenceReference']> = ResolversObject<{
+  instanceType?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  instanceId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -992,6 +1603,42 @@ export interface GoogleProtobufAnyValueScalarConfig extends GraphQLScalarTypeCon
   name: 'GoogleProtobufAnyValue';
 }
 
+export type IoRestorecommerceCustomerCustomerResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceCustomerCustomer'] = ResolversParentTypes['IoRestorecommerceCustomerCustomer']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
+  private?: Resolver<Maybe<ResolversTypes['IoRestorecommerceCustomerPrivate']>, ParentType, ContextType>;
+  commercial?: Resolver<Maybe<ResolversTypes['IoRestorecommerceCustomerCommercial']>, ParentType, ContextType>;
+  publicSector?: Resolver<Maybe<ResolversTypes['IoRestorecommerceCustomerPublicSector']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceCustomerPrivateResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceCustomerPrivate'] = ResolversParentTypes['IoRestorecommerceCustomerPrivate']> = ResolversObject<{
+  userId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  user?: Resolver<Maybe<ResolversTypes['IoRestorecommerceUserUser']>, ParentType, ContextType>;
+  contactPointIds?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  contactPoints?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceContactPointContactPoint']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceContactPointContactPointResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceContactPointContactPoint'] = ResolversParentTypes['IoRestorecommerceContactPointContactPoint']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
+  physicalAddressId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  physicalAddress?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAddressAddress']>, ParentType, ContextType>;
+  website?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  contactPointTypeIds?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  contactPointType?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceContactPointTypeContactPointType']>>, ParentType, ContextType>;
+  telephone?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  timezoneId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  timezone?: Resolver<Maybe<ResolversTypes['IoRestorecommerceTimezoneTimezone']>, ParentType, ContextType>;
+  localeId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  locale?: Resolver<Maybe<ResolversTypes['IoRestorecommerceLocaleLocale']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type IoRestorecommerceAddressAddressResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceAddressAddress'] = ResolversParentTypes['IoRestorecommerceAddressAddress']> = ResolversObject<{
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
@@ -1053,23 +1700,6 @@ export type IoRestorecommerceAddressPackStationResolvers<ContextType = Invoicing
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceContactPointContactPointResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceContactPointContactPoint'] = ResolversParentTypes['IoRestorecommerceContactPointContactPoint']> = ResolversObject<{
-  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
-  physicalAddressId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  physicalAddress?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAddressAddress']>, ParentType, ContextType>;
-  website?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  contactPointTypeId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  contactPointType?: Resolver<Maybe<ResolversTypes['IoRestorecommerceContactPointTypeContactPointType']>, ParentType, ContextType>;
-  telephone?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  timezoneId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  timezone?: Resolver<Maybe<ResolversTypes['IoRestorecommerceTimezoneTimezone']>, ParentType, ContextType>;
-  localeId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  locale?: Resolver<Maybe<ResolversTypes['IoRestorecommerceLocaleLocale']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
 export type IoRestorecommerceContactPointTypeContactPointTypeResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceContactPointTypeContactPointType'] = ResolversParentTypes['IoRestorecommerceContactPointTypeContactPointType']> = ResolversObject<{
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
@@ -1077,9 +1707,7 @@ export type IoRestorecommerceContactPointTypeContactPointTypeResolvers<ContextTy
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceCustomerOrgUserResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceCustomerOrgUser'] = ResolversParentTypes['IoRestorecommerceCustomerOrgUser']> = ResolversObject<{
-  userId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  user?: Resolver<Maybe<ResolversTypes['IoRestorecommerceUserUser']>, ParentType, ContextType>;
+export type IoRestorecommerceCustomerCommercialResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceCustomerCommercial'] = ResolversParentTypes['IoRestorecommerceCustomerCommercial']> = ResolversObject<{
   organizationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   organization?: Resolver<Maybe<ResolversTypes['IoRestorecommerceOrganizationOrganization']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -1088,8 +1716,6 @@ export type IoRestorecommerceCustomerOrgUserResolvers<ContextType = InvoicingCon
 export type IoRestorecommerceOrganizationOrganizationResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceOrganizationOrganization'] = ResolversParentTypes['IoRestorecommerceOrganizationOrganization']> = ResolversObject<{
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
-  addressId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  address?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAddressAddress']>, ParentType, ContextType>;
   parentId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   parent?: Resolver<Maybe<ResolversTypes['IoRestorecommerceOrganizationOrganization']>, ParentType, ContextType>;
   contactPointIds?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
@@ -1107,12 +1733,306 @@ export type IoRestorecommerceOrganizationOrganizationResolvers<ContextType = Inv
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceCustomerGuestResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceCustomerGuest'] = ResolversParentTypes['IoRestorecommerceCustomerGuest']> = ResolversObject<{
-  guest?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  addressId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+export type IoRestorecommerceCustomerPublicSectorResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceCustomerPublicSector'] = ResolversParentTypes['IoRestorecommerceCustomerPublicSector']> = ResolversObject<{
+  organizationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  organization?: Resolver<Maybe<ResolversTypes['IoRestorecommerceOrganizationOrganization']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceShopShopResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceShopShop'] = ResolversParentTypes['IoRestorecommerceShopShop']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
+  shopNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  domain?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  organizationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  organization?: Resolver<Maybe<ResolversTypes['IoRestorecommerceOrganizationOrganization']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceInvoicePaymentStateResolvers = { UNPAYED: 0, PAYED: 1 };
+
+export type IoRestorecommerceAddressBillingAddressResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceAddressBillingAddress'] = ResolversParentTypes['IoRestorecommerceAddressBillingAddress']> = ResolversObject<{
   address?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAddressAddress']>, ParentType, ContextType>;
-  contactPointIds?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
-  contactPoints?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceContactPointContactPoint']>>, ParentType, ContextType>;
+  contact?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAddressContact']>, ParentType, ContextType>;
+  comments?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceAddressContactResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceAddressContact'] = ResolversParentTypes['IoRestorecommerceAddressContact']> = ResolversObject<{
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  phone?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceInvoicePositionResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceInvoicePosition'] = ResolversParentTypes['IoRestorecommerceInvoicePosition']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  rows?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceInvoiceRow']>>, ParentType, ContextType>;
+  amounts?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAmountAmount']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceInvoiceRowResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceInvoiceRow'] = ResolversParentTypes['IoRestorecommerceInvoiceRow']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  productItem?: Resolver<Maybe<ResolversTypes['IoRestorecommerceInvoiceProductItem']>, ParentType, ContextType>;
+  manualItem?: Resolver<Maybe<ResolversTypes['IoRestorecommerceInvoiceManualItem']>, ParentType, ContextType>;
+  unitPrice?: Resolver<Maybe<ResolversTypes['IoRestorecommercePricePrice']>, ParentType, ContextType>;
+  quantity?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  amount?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAmountAmount']>, ParentType, ContextType>;
+  contractStartDate?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceInvoiceProductItemResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceInvoiceProductItem'] = ResolversParentTypes['IoRestorecommerceInvoiceProductItem']> = ResolversObject<{
+  productId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  product?: Resolver<Maybe<ResolversTypes['IoRestorecommerceProductProduct']>, ParentType, ContextType>;
+  variantId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceProductProductResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceProductProduct'] = ResolversParentTypes['IoRestorecommerceProductProduct']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
+  product?: Resolver<Maybe<ResolversTypes['IoRestorecommerceProductIndividualProduct']>, ParentType, ContextType>;
+  bundle?: Resolver<Maybe<ResolversTypes['IoRestorecommerceProductBundle']>, ParentType, ContextType>;
+  shopId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  shop?: Resolver<Maybe<ResolversTypes['IoRestorecommerceShopShop']>, ParentType, ContextType>;
+  active?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  tags?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  associations?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceProductAssociation']>>, ParentType, ContextType>;
+  data?: Resolver<Maybe<ResolversTypes['GoogleProtobufAny']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceProductIndividualProductResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceProductIndividualProduct'] = ResolversParentTypes['IoRestorecommerceProductIndividualProduct']> = ResolversObject<{
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  manufacturerId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  manufacturer?: Resolver<Maybe<ResolversTypes['IoRestorecommerceManufacturerManufacturer']>, ParentType, ContextType>;
+  taricCode?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  prototypeId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  prototype?: Resolver<Maybe<ResolversTypes['IoRestorecommerceProductPrototypeProductPrototype']>, ParentType, ContextType>;
+  categoryId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  category?: Resolver<Maybe<ResolversTypes['IoRestorecommerceProductCategoryProductCategory']>, ParentType, ContextType>;
+  taxIds?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  currencyId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  gtin?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  physical?: Resolver<Maybe<ResolversTypes['IoRestorecommerceProductPhysicalProduct']>, ParentType, ContextType>;
+  virtual?: Resolver<Maybe<ResolversTypes['IoRestorecommerceProductVirtualProduct']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceManufacturerManufacturerResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceManufacturerManufacturer'] = ResolversParentTypes['IoRestorecommerceManufacturerManufacturer']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceProductPrototypeProductPrototypeResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceProductPrototypeProductPrototype'] = ResolversParentTypes['IoRestorecommerceProductPrototypeProductPrototype']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  version?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  categoryId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  category?: Resolver<Maybe<ResolversTypes['IoRestorecommerceProductCategoryProductCategory']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceProductCategoryProductCategoryResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceProductCategoryProductCategory'] = ResolversParentTypes['IoRestorecommerceProductCategoryProductCategory']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  priceGroupId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  priceGroup?: Resolver<Maybe<ResolversTypes['IoRestorecommercePriceGroupPriceGroup']>, ParentType, ContextType>;
+  image?: Resolver<Maybe<ResolversTypes['IoRestorecommerceImageImage']>, ParentType, ContextType>;
+  parent?: Resolver<Maybe<ResolversTypes['IoRestorecommerceProductCategoryParent']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommercePriceGroupPriceGroupResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommercePriceGroupPriceGroup'] = ResolversParentTypes['IoRestorecommercePriceGroupPriceGroup']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceProductCategoryParentResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceProductCategoryParent'] = ResolversParentTypes['IoRestorecommerceProductCategoryParent']> = ResolversObject<{
+  parentId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceProductPhysicalProductResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceProductPhysicalProduct'] = ResolversParentTypes['IoRestorecommerceProductPhysicalProduct']> = ResolversObject<{
+  variants?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceProductPhysicalVariant']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceProductPhysicalVariantResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceProductPhysicalVariant'] = ResolversParentTypes['IoRestorecommerceProductPhysicalVariant']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  stockLevel?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  price?: Resolver<Maybe<ResolversTypes['IoRestorecommercePricePrice']>, ParentType, ContextType>;
+  images?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceImageImage']>>, ParentType, ContextType>;
+  files?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceFileFile']>>, ParentType, ContextType>;
+  stockKeepingUnit?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  templateVariant?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  package?: Resolver<Maybe<ResolversTypes['IoRestorecommerceProductPackage']>, ParentType, ContextType>;
+  attributes?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommercePricePriceResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommercePricePrice'] = ResolversParentTypes['IoRestorecommercePricePrice']> = ResolversObject<{
+  regularPrice?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  sale?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  salePrice?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  currencyId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  currency?: Resolver<Maybe<ResolversTypes['IoRestorecommerceCurrencyCurrency']>, ParentType, ContextType>;
+  taxIds?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  taxes?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceTaxTax']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceCurrencyCurrencyResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceCurrencyCurrency'] = ResolversParentTypes['IoRestorecommerceCurrencyCurrency']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  symbol?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  countryId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  customExchangeRates?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceCurrencyExchangeRate']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceCurrencyExchangeRateResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceCurrencyExchangeRate'] = ResolversParentTypes['IoRestorecommerceCurrencyExchangeRate']> = ResolversObject<{
+  toCurrencyId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  rate?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  expenses?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  amount?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceTaxTaxResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceTaxTax'] = ResolversParentTypes['IoRestorecommerceTaxTax']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
+  countryId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  country?: Resolver<Maybe<ResolversTypes['IoRestorecommerceCountryCountry']>, ParentType, ContextType>;
+  rate?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  variant?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  typeId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['IoRestorecommerceTaxTypeTaxType']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceTaxTypeTaxTypeResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceTaxTypeTaxType'] = ResolversParentTypes['IoRestorecommerceTaxTypeTaxType']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceFileFileResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceFileFile'] = ResolversParentTypes['IoRestorecommerceFileFile']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  index?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  caption?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  filename?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  contentType?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  url?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  bytes?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  tags?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  thumbnail?: Resolver<Maybe<ResolversTypes['IoRestorecommerceImageImage']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceProductPackageResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceProductPackage'] = ResolversParentTypes['IoRestorecommerceProductPackage']> = ResolversObject<{
+  sizeInCm?: Resolver<Maybe<ResolversTypes['IoRestorecommerceGeometryBoundingBox3D']>, ParentType, ContextType>;
+  weightInKg?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  rotatable?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceGeometryBoundingBox3DResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceGeometryBoundingBox3D'] = ResolversParentTypes['IoRestorecommerceGeometryBoundingBox3D']> = ResolversObject<{
+  width?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  height?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  length?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceProductVirtualProductResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceProductVirtualProduct'] = ResolversParentTypes['IoRestorecommerceProductVirtualProduct']> = ResolversObject<{
+  variants?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceProductVirtualVariant']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceProductVirtualVariantResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceProductVirtualVariant'] = ResolversParentTypes['IoRestorecommerceProductVirtualVariant']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  stockLevel?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  price?: Resolver<Maybe<ResolversTypes['IoRestorecommercePricePrice']>, ParentType, ContextType>;
+  images?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceImageImage']>>, ParentType, ContextType>;
+  files?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceFileFile']>>, ParentType, ContextType>;
+  stockKeepingUnit?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  templateVariant?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  attributes?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceProductBundleResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceProductBundle'] = ResolversParentTypes['IoRestorecommerceProductBundle']> = ResolversObject<{
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  images?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceImageImage']>>, ParentType, ContextType>;
+  products?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceProductBundleProduct']>>, ParentType, ContextType>;
+  price?: Resolver<Maybe<ResolversTypes['IoRestorecommercePricePrice']>, ParentType, ContextType>;
+  prePackaged?: Resolver<Maybe<ResolversTypes['IoRestorecommerceProductPackage']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceProductBundleProductResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceProductBundleProduct'] = ResolversParentTypes['IoRestorecommerceProductBundleProduct']> = ResolversObject<{
+  productId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  product?: Resolver<Maybe<ResolversTypes['IoRestorecommerceProductProduct']>, ParentType, ContextType>;
+  variantId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  quantity?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  priceRatio?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceProductAssociationResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceProductAssociation'] = ResolversParentTypes['IoRestorecommerceProductAssociation']> = ResolversObject<{
+  productId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  product?: Resolver<Maybe<ResolversTypes['IoRestorecommerceProductProduct']>, ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['IoRestorecommerceProductAssociationType']>, ParentType, ContextType>;
+  tags?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  data?: Resolver<Maybe<ResolversTypes['GoogleProtobufAny']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceProductAssociationTypeResolvers = { Miscellaneous: 0, Accessory: 1, Recommendation: 2 };
+
+export type IoRestorecommerceInvoiceManualItemResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceInvoiceManualItem'] = ResolversParentTypes['IoRestorecommerceInvoiceManualItem']> = ResolversObject<{
+  stockKeepingUnit?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  descritpion?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceAmountAmountResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceAmountAmount'] = ResolversParentTypes['IoRestorecommerceAmountAmount']> = ResolversObject<{
+  currencyId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  currency?: Resolver<Maybe<ResolversTypes['IoRestorecommerceCurrencyCurrency']>, ParentType, ContextType>;
+  gross?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  net?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  vats?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAmountVAT']>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceAmountVatResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceAmountVAT'] = ResolversParentTypes['IoRestorecommerceAmountVAT']> = ResolversObject<{
+  taxId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  tax?: Resolver<Maybe<ResolversTypes['IoRestorecommerceTaxTax']>, ParentType, ContextType>;
+  vat?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1155,6 +2075,9 @@ export type InvoicingMutationResolvers<ContextType = InvoicingContext, ParentTyp
 export type InvoicingInvoiceMutationResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['InvoicingInvoiceMutation'] = ResolversParentTypes['InvoicingInvoiceMutation']> = ResolversObject<{
   Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceInvoiceInvoiceListResponse']>, ParentType, ContextType, RequireFields<InvoicingInvoiceMutationMutateArgs, 'input'>>;
   Delete?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceResourcebaseDeleteResponse']>, ParentType, ContextType, RequireFields<InvoicingInvoiceMutationDeleteArgs, 'input'>>;
+  Render?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceInvoiceInvoiceListResponse']>, ParentType, ContextType, RequireFields<InvoicingInvoiceMutationRenderArgs, 'input'>>;
+  Withdraw?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceInvoiceInvoiceListResponse']>, ParentType, ContextType, RequireFields<InvoicingInvoiceMutationWithdrawArgs, 'input'>>;
+  Send?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceStatusStatusListResponse']>, ParentType, ContextType, RequireFields<InvoicingInvoiceMutationSendArgs, 'input'>>;
   GenerateInvoiceNumber?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceInvoiceInvoiceNumberResponse']>, ParentType, ContextType, RequireFields<InvoicingInvoiceMutationGenerateInvoiceNumberArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -1170,19 +2093,31 @@ export type IoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType = I
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type ProtoIoRestorecommerceStatusStatusListResponseResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceStatusStatusListResponse'] = ResolversParentTypes['ProtoIoRestorecommerceStatusStatusListResponse']> = ResolversObject<{
+  details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusStatusListResponse']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceStatusStatusListResponseResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceStatusStatusListResponse'] = ResolversParentTypes['IoRestorecommerceStatusStatusListResponse']> = ResolversObject<{
+  status?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceStatusStatus']>>, ParentType, ContextType>;
+  operationStatus?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusOperationStatus']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type ProtoIoRestorecommerceInvoiceInvoiceNumberResponseResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceInvoiceInvoiceNumberResponse'] = ResolversParentTypes['ProtoIoRestorecommerceInvoiceInvoiceNumberResponse']> = ResolversObject<{
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceInvoiceInvoiceNumberResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type IoRestorecommerceInvoiceInvoiceNumberResponseResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceInvoiceInvoiceNumberResponse'] = ResolversParentTypes['IoRestorecommerceInvoiceInvoiceNumberResponse']> = ResolversObject<{
-  invoiceNo?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  invoiceNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type SubscriptionResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
   orderingOrders?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "orderingOrders", ParentType, ContextType, Partial<SubscriptionOrderingOrdersArgs>>;
   catalogProducts?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "catalogProducts", ParentType, ContextType, Partial<SubscriptionCatalogProductsArgs>>;
+  invoicingInvoices?: SubscriptionResolver<Maybe<ResolversTypes['SubscriptionOutput']>, "invoicingInvoices", ParentType, ContextType, Partial<SubscriptionInvoicingInvoicesArgs>>;
 }>;
 
 export type SubscriptionOutputResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['SubscriptionOutput'] = ResolversParentTypes['SubscriptionOutput']> = ResolversObject<{
@@ -1201,8 +2136,7 @@ export type Resolvers<ContextType = InvoicingContext> = ResolversObject<{
   IoRestorecommerceMetaMeta?: IoRestorecommerceMetaMetaResolvers<ContextType>;
   IoRestorecommerceAttributeAttribute?: IoRestorecommerceAttributeAttributeResolvers<ContextType>;
   IoRestorecommerceAttributeAttributeObj?: IoRestorecommerceAttributeAttributeObjResolvers<ContextType>;
-  IoRestorecommerceCustomerCustomer?: IoRestorecommerceCustomerCustomerResolvers<ContextType>;
-  IoRestorecommerceCustomerIndividualUser?: IoRestorecommerceCustomerIndividualUserResolvers<ContextType>;
+  IoRestorecommerceReferenceReference?: IoRestorecommerceReferenceReferenceResolvers<ContextType>;
   IoRestorecommerceUserUser?: IoRestorecommerceUserUserResolvers<ContextType>;
   IoRestorecommerceAuthRoleAssociation?: IoRestorecommerceAuthRoleAssociationResolvers<ContextType>;
   IoRestorecommerceTimezoneTimezone?: IoRestorecommerceTimezoneTimezoneResolvers<ContextType>;
@@ -1212,6 +2146,9 @@ export type Resolvers<ContextType = InvoicingContext> = ResolversObject<{
   IoRestorecommerceAuthTokens?: IoRestorecommerceAuthTokensResolvers<ContextType>;
   GoogleProtobufAny?: GoogleProtobufAnyResolvers<ContextType>;
   GoogleProtobufAnyValue?: GraphQLScalarType;
+  IoRestorecommerceCustomerCustomer?: IoRestorecommerceCustomerCustomerResolvers<ContextType>;
+  IoRestorecommerceCustomerPrivate?: IoRestorecommerceCustomerPrivateResolvers<ContextType>;
+  IoRestorecommerceContactPointContactPoint?: IoRestorecommerceContactPointContactPointResolvers<ContextType>;
   IoRestorecommerceAddressAddress?: IoRestorecommerceAddressAddressResolvers<ContextType>;
   IoRestorecommerceCountryCountry?: IoRestorecommerceCountryCountryResolvers<ContextType>;
   IoRestorecommerceAddressGeoPoint?: IoRestorecommerceAddressGeoPointResolvers<ContextType>;
@@ -1219,11 +2156,43 @@ export type Resolvers<ContextType = InvoicingContext> = ResolversObject<{
   IoRestorecommerceAddressBusinessAddress?: IoRestorecommerceAddressBusinessAddressResolvers<ContextType>;
   IoRestorecommerceAddressResidentialAddress?: IoRestorecommerceAddressResidentialAddressResolvers<ContextType>;
   IoRestorecommerceAddressPackStation?: IoRestorecommerceAddressPackStationResolvers<ContextType>;
-  IoRestorecommerceContactPointContactPoint?: IoRestorecommerceContactPointContactPointResolvers<ContextType>;
   IoRestorecommerceContactPointTypeContactPointType?: IoRestorecommerceContactPointTypeContactPointTypeResolvers<ContextType>;
-  IoRestorecommerceCustomerOrgUser?: IoRestorecommerceCustomerOrgUserResolvers<ContextType>;
+  IoRestorecommerceCustomerCommercial?: IoRestorecommerceCustomerCommercialResolvers<ContextType>;
   IoRestorecommerceOrganizationOrganization?: IoRestorecommerceOrganizationOrganizationResolvers<ContextType>;
-  IoRestorecommerceCustomerGuest?: IoRestorecommerceCustomerGuestResolvers<ContextType>;
+  IoRestorecommerceCustomerPublicSector?: IoRestorecommerceCustomerPublicSectorResolvers<ContextType>;
+  IoRestorecommerceShopShop?: IoRestorecommerceShopShopResolvers<ContextType>;
+  IoRestorecommerceInvoicePaymentState?: IoRestorecommerceInvoicePaymentStateResolvers;
+  IoRestorecommerceAddressBillingAddress?: IoRestorecommerceAddressBillingAddressResolvers<ContextType>;
+  IoRestorecommerceAddressContact?: IoRestorecommerceAddressContactResolvers<ContextType>;
+  IoRestorecommerceInvoicePosition?: IoRestorecommerceInvoicePositionResolvers<ContextType>;
+  IoRestorecommerceInvoiceRow?: IoRestorecommerceInvoiceRowResolvers<ContextType>;
+  IoRestorecommerceInvoiceProductItem?: IoRestorecommerceInvoiceProductItemResolvers<ContextType>;
+  IoRestorecommerceProductProduct?: IoRestorecommerceProductProductResolvers<ContextType>;
+  IoRestorecommerceProductIndividualProduct?: IoRestorecommerceProductIndividualProductResolvers<ContextType>;
+  IoRestorecommerceManufacturerManufacturer?: IoRestorecommerceManufacturerManufacturerResolvers<ContextType>;
+  IoRestorecommerceProductPrototypeProductPrototype?: IoRestorecommerceProductPrototypeProductPrototypeResolvers<ContextType>;
+  IoRestorecommerceProductCategoryProductCategory?: IoRestorecommerceProductCategoryProductCategoryResolvers<ContextType>;
+  IoRestorecommercePriceGroupPriceGroup?: IoRestorecommercePriceGroupPriceGroupResolvers<ContextType>;
+  IoRestorecommerceProductCategoryParent?: IoRestorecommerceProductCategoryParentResolvers<ContextType>;
+  IoRestorecommerceProductPhysicalProduct?: IoRestorecommerceProductPhysicalProductResolvers<ContextType>;
+  IoRestorecommerceProductPhysicalVariant?: IoRestorecommerceProductPhysicalVariantResolvers<ContextType>;
+  IoRestorecommercePricePrice?: IoRestorecommercePricePriceResolvers<ContextType>;
+  IoRestorecommerceCurrencyCurrency?: IoRestorecommerceCurrencyCurrencyResolvers<ContextType>;
+  IoRestorecommerceCurrencyExchangeRate?: IoRestorecommerceCurrencyExchangeRateResolvers<ContextType>;
+  IoRestorecommerceTaxTax?: IoRestorecommerceTaxTaxResolvers<ContextType>;
+  IoRestorecommerceTaxTypeTaxType?: IoRestorecommerceTaxTypeTaxTypeResolvers<ContextType>;
+  IoRestorecommerceFileFile?: IoRestorecommerceFileFileResolvers<ContextType>;
+  IoRestorecommerceProductPackage?: IoRestorecommerceProductPackageResolvers<ContextType>;
+  IoRestorecommerceGeometryBoundingBox3D?: IoRestorecommerceGeometryBoundingBox3DResolvers<ContextType>;
+  IoRestorecommerceProductVirtualProduct?: IoRestorecommerceProductVirtualProductResolvers<ContextType>;
+  IoRestorecommerceProductVirtualVariant?: IoRestorecommerceProductVirtualVariantResolvers<ContextType>;
+  IoRestorecommerceProductBundle?: IoRestorecommerceProductBundleResolvers<ContextType>;
+  IoRestorecommerceProductBundleProduct?: IoRestorecommerceProductBundleProductResolvers<ContextType>;
+  IoRestorecommerceProductAssociation?: IoRestorecommerceProductAssociationResolvers<ContextType>;
+  IoRestorecommerceProductAssociationType?: IoRestorecommerceProductAssociationTypeResolvers;
+  IoRestorecommerceInvoiceManualItem?: IoRestorecommerceInvoiceManualItemResolvers<ContextType>;
+  IoRestorecommerceAmountAmount?: IoRestorecommerceAmountAmountResolvers<ContextType>;
+  IoRestorecommerceAmountVAT?: IoRestorecommerceAmountVatResolvers<ContextType>;
   IoRestorecommerceStatusStatus?: IoRestorecommerceStatusStatusResolvers<ContextType>;
   IoRestorecommerceStatusOperationStatus?: IoRestorecommerceStatusOperationStatusResolvers<ContextType>;
   IoRestorecommerceResourcebaseSortSortOrder?: IoRestorecommerceResourcebaseSortSortOrderResolvers;
@@ -1238,6 +2207,8 @@ export type Resolvers<ContextType = InvoicingContext> = ResolversObject<{
   InvoicingInvoiceMutation?: InvoicingInvoiceMutationResolvers<ContextType>;
   ProtoIoRestorecommerceResourcebaseDeleteResponse?: ProtoIoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType>;
   IoRestorecommerceResourcebaseDeleteResponse?: IoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType>;
+  ProtoIoRestorecommerceStatusStatusListResponse?: ProtoIoRestorecommerceStatusStatusListResponseResolvers<ContextType>;
+  IoRestorecommerceStatusStatusListResponse?: IoRestorecommerceStatusStatusListResponseResolvers<ContextType>;
   ProtoIoRestorecommerceInvoiceInvoiceNumberResponse?: ProtoIoRestorecommerceInvoiceInvoiceNumberResponseResolvers<ContextType>;
   IoRestorecommerceInvoiceInvoiceNumberResponse?: IoRestorecommerceInvoiceInvoiceNumberResponseResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;

@@ -10,10 +10,10 @@ import { protoMetadata as protoMetadata10 } from "./country";
 import {
   FulfillmentListResponse,
   protoMetadata as protoMetadata11,
-  State as State14,
-  stateFromJSON as stateFromJSON16,
-  stateToJSON as stateToJSON17,
-  stateToNumber as stateToNumber15,
+  State as State15,
+  stateFromJSON as stateFromJSON17,
+  stateToJSON as stateToJSON18,
+  stateToNumber as stateToNumber16,
 } from "./fulfillment";
 import { PackingSolutionListResponse, Preferences, protoMetadata as protoMetadata12 } from "./fulfillment_product";
 import {
@@ -28,6 +28,7 @@ import { Meta, protoMetadata as protoMetadata3 } from "./meta";
 import { KafkaSubscription, protoMetadata as protoMetadata6, Resolver } from "./options";
 import { Price, protoMetadata as protoMetadata9 } from "./price";
 import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata2, ReadRequest } from "./resource_base";
+import { protoMetadata as protoMetadata14 } from "./shop";
 import { OperationStatus, protoMetadata as protoMetadata5, Status, StatusListResponse } from "./status";
 
 export const protobufPackage = "io.restorecommerce.order";
@@ -154,7 +155,7 @@ export interface Order {
     | undefined;
   /** Set by kafka */
   fulfillmentState?:
-    | State14
+    | State15
     | undefined;
   /** Set by kafka */
   paymentState?:
@@ -278,34 +279,59 @@ export const Item = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Item {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseItem();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.id = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.productId = reader.string();
-          break;
+          continue;
         case 3:
+          if (tag !== 26) {
+            break;
+          }
+
           message.variantId = reader.string();
-          break;
+          continue;
         case 4:
+          if (tag !== 32) {
+            break;
+          }
+
           message.quantity = reader.int32();
-          break;
+          continue;
         case 5:
+          if (tag !== 42) {
+            break;
+          }
+
           message.unitPrice = Price.decode(reader, reader.uint32());
-          break;
+          continue;
         case 6:
+          if (tag !== 50) {
+            break;
+          }
+
           message.amount = Amount.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -399,7 +425,7 @@ export const Order = {
       writer.uint32(56).int32(stateToNumber(message.orderState));
     }
     if (message.fulfillmentState !== undefined) {
-      writer.uint32(64).int32(stateToNumber15(message.fulfillmentState));
+      writer.uint32(64).int32(stateToNumber16(message.fulfillmentState));
     }
     if (message.paymentState !== undefined) {
       writer.uint32(72).int32(paymentStateToNumber(message.paymentState));
@@ -432,67 +458,136 @@ export const Order = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Order {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseOrder();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.id = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.meta = Meta.decode(reader, reader.uint32());
-          break;
+          continue;
         case 3:
+          if (tag !== 26) {
+            break;
+          }
+
           message.userId = reader.string();
-          break;
+          continue;
         case 4:
+          if (tag !== 34) {
+            break;
+          }
+
           message.customerId = reader.string();
-          break;
+          continue;
         case 5:
+          if (tag !== 42) {
+            break;
+          }
+
           message.shopId = reader.string();
-          break;
+          continue;
         case 6:
+          if (tag !== 50) {
+            break;
+          }
+
           message.items.push(Item.decode(reader, reader.uint32()));
-          break;
+          continue;
         case 7:
+          if (tag !== 56) {
+            break;
+          }
+
           message.orderState = stateFromJSON(reader.int32());
-          break;
+          continue;
         case 8:
-          message.fulfillmentState = stateFromJSON16(reader.int32());
-          break;
+          if (tag !== 64) {
+            break;
+          }
+
+          message.fulfillmentState = stateFromJSON17(reader.int32());
+          continue;
         case 9:
+          if (tag !== 72) {
+            break;
+          }
+
           message.paymentState = paymentStateFromJSON(reader.int32());
-          break;
+          continue;
         case 10:
+          if (tag !== 82) {
+            break;
+          }
+
           message.totalAmounts.push(Amount.decode(reader, reader.uint32()));
-          break;
+          continue;
         case 11:
+          if (tag !== 90) {
+            break;
+          }
+
           message.shippingAddress = ShippingAddress.decode(reader, reader.uint32());
-          break;
+          continue;
         case 12:
+          if (tag !== 98) {
+            break;
+          }
+
           message.billingAddress = BillingAddress.decode(reader, reader.uint32());
-          break;
+          continue;
         case 13:
+          if (tag !== 106) {
+            break;
+          }
+
           message.billingEmail = reader.string();
-          break;
+          continue;
         case 14:
+          if (tag !== 114) {
+            break;
+          }
+
           message.notificationEmail = reader.string();
-          break;
+          continue;
         case 15:
+          if (tag !== 122) {
+            break;
+          }
+
           message.customerOrderNr = reader.string();
-          break;
+          continue;
         case 16:
+          if (tag !== 130) {
+            break;
+          }
+
           message.customerRemark = reader.string();
-          break;
+          continue;
         case 17:
+          if (tag !== 138) {
+            break;
+          }
+
           message.packagingPreferences = Preferences.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -506,7 +601,7 @@ export const Order = {
       shopId: isSet(object.shopId) ? String(object.shopId) : undefined,
       items: Array.isArray(object?.items) ? object.items.map((e: any) => Item.fromJSON(e)) : [],
       orderState: isSet(object.orderState) ? stateFromJSON(object.orderState) : undefined,
-      fulfillmentState: isSet(object.fulfillmentState) ? stateFromJSON16(object.fulfillmentState) : undefined,
+      fulfillmentState: isSet(object.fulfillmentState) ? stateFromJSON17(object.fulfillmentState) : undefined,
       paymentState: isSet(object.paymentState) ? paymentStateFromJSON(object.paymentState) : undefined,
       totalAmounts: Array.isArray(object?.totalAmounts) ? object.totalAmounts.map((e: any) => Amount.fromJSON(e)) : [],
       shippingAddress: isSet(object.shippingAddress) ? ShippingAddress.fromJSON(object.shippingAddress) : undefined,
@@ -536,7 +631,7 @@ export const Order = {
     message.orderState !== undefined &&
       (obj.orderState = message.orderState !== undefined ? stateToJSON(message.orderState) : undefined);
     message.fulfillmentState !== undefined && (obj.fulfillmentState = message.fulfillmentState !== undefined
-      ? stateToJSON17(message.fulfillmentState)
+      ? stateToJSON18(message.fulfillmentState)
       : undefined);
     message.paymentState !== undefined &&
       (obj.paymentState = message.paymentState !== undefined ? paymentStateToJSON(message.paymentState) : undefined);
@@ -608,22 +703,31 @@ export const OrderIdList = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): OrderIdList {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseOrderIdList();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.ids.push(reader.string());
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -679,25 +783,38 @@ export const OrderList = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): OrderList {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseOrderList();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.items.push(Order.decode(reader, reader.uint32()));
-          break;
+          continue;
         case 2:
+          if (tag !== 16) {
+            break;
+          }
+
           message.totalCount = reader.uint32();
-          break;
+          continue;
         case 3:
+          if (tag !== 26) {
+            break;
+          }
+
           message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -756,25 +873,38 @@ export const OrderListResponse = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): OrderListResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseOrderListResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.items.push(OrderResponse.decode(reader, reader.uint32()));
-          break;
+          continue;
         case 2:
+          if (tag !== 16) {
+            break;
+          }
+
           message.totalCount = reader.uint32();
-          break;
+          continue;
         case 3:
+          if (tag !== 26) {
+            break;
+          }
+
           message.operationStatus = OperationStatus.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -831,22 +961,31 @@ export const OrderResponse = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): OrderResponse {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseOrderResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.payload = Order.decode(reader, reader.uint32());
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.status = Status.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -894,19 +1033,24 @@ export const Deleted = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): Deleted {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseDeleted();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.id = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -971,37 +1115,66 @@ export const FulfillmentRequest = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): FulfillmentRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseFulfillmentRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.orderId = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.exportType = reader.string();
-          break;
+          continue;
         case 3:
+          if (tag !== 26) {
+            break;
+          }
+
           message.exportDescription = reader.string();
-          break;
+          continue;
         case 4:
+          if (tag !== 34) {
+            break;
+          }
+
           message.invoiceNumber = reader.string();
-          break;
+          continue;
         case 5:
+          if (tag !== 42) {
+            break;
+          }
+
           message.senderAddress = ShippingAddress.decode(reader, reader.uint32());
-          break;
+          continue;
         case 6:
+          if (tag !== 50) {
+            break;
+          }
+
           message.includeItems.push(reader.string());
-          break;
+          continue;
         case 7:
+          if (tag !== 58) {
+            break;
+          }
+
           message.data = Any.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -1073,25 +1246,38 @@ export const FulfillmentRequestList = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): FulfillmentRequestList {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseFulfillmentRequestList();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.items.push(FulfillmentRequest.decode(reader, reader.uint32()));
-          break;
+          continue;
         case 2:
+          if (tag !== 16) {
+            break;
+          }
+
           message.totalCount = reader.uint32();
-          break;
+          continue;
         case 3:
+          if (tag !== 26) {
+            break;
+          }
+
           message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -1153,28 +1339,45 @@ export const InvoiceRequest = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): InvoiceRequest {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseInvoiceRequest();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.invoiceNumber = reader.string();
-          break;
+          continue;
         case 2:
+          if (tag !== 18) {
+            break;
+          }
+
           message.orderId = reader.string();
-          break;
+          continue;
         case 3:
+          if (tag !== 26) {
+            break;
+          }
+
           message.includedItems.push(reader.string());
-          break;
+          continue;
         case 4:
+          if (tag !== 34) {
+            break;
+          }
+
           message.includedFulfillments = reader.string();
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -1234,25 +1437,38 @@ export const InvoiceRequestList = {
   },
 
   decode(input: _m0.Reader | Uint8Array, length?: number): InvoiceRequestList {
-    const reader = input instanceof _m0.Reader ? input : new _m0.Reader(input);
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
     const message = createBaseInvoiceRequestList();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.items.push(InvoiceRequest.decode(reader, reader.uint32()));
-          break;
+          continue;
         case 2:
+          if (tag !== 16) {
+            break;
+          }
+
           message.totalCount = reader.uint32();
-          break;
+          continue;
         case 3:
+          if (tag !== 26) {
+            break;
+          }
+
           message.subject = Subject.decode(reader, reader.uint32());
-          break;
-        default:
-          reader.skipType(tag & 7);
-          break;
+          continue;
       }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
     }
     return message;
   },
@@ -1303,7 +1519,7 @@ export const OrderServiceDefinition = {
       requestStream: false,
       responseType: OrderListResponse,
       responseStream: false,
-      options: {},
+      options: { _unknownFields: { 248008: [Buffer.from([1])] } },
     },
     create: {
       name: "Create",
@@ -1530,6 +1746,7 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/fulfillment.proto",
       "io/restorecommerce/fulfillment_product.proto",
       "io/restorecommerce/invoice.proto",
+      "io/restorecommerce/shop.proto",
     ],
     "publicDependency": [],
     "weakDependency": [],
@@ -2461,116 +2678,122 @@ export const protoMetadata: ProtoMetadata = {
     "options": undefined,
     "sourceCodeInfo": {
       "location": [{
+        "path": [3, 13],
+        "span": [20, 0, 39],
+        "leadingComments": " Used by resolvers\n",
+        "trailingComments": "",
+        "leadingDetachedComments": [],
+      }, {
         "path": [6, 0, 2, 9],
-        "span": [34, 2, 129],
+        "span": [37, 2, 129],
         "leadingComments": " Requires Fulfillment Service\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 10],
-        "span": [36, 2, 114],
+        "span": [39, 2, 114],
         "leadingComments": " Requires Fulfillment Service\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 11],
-        "span": [38, 2, 105],
+        "span": [41, 2, 105],
         "leadingComments": " Requires Fulfillment Service\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 12],
-        "span": [41, 2, 98],
+        "span": [44, 2, 98],
         "leadingComments": " Requires Invoice Service\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 13],
-        "span": [43, 2, 97],
+        "span": [46, 2, 97],
         "leadingComments": " Requires Invoice Service\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 0, 2, 4],
-        "span": [70, 2, 57],
+        "span": [73, 2, 57],
         "leadingComments": "",
         "trailingComments": "Set by service\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 0, 2, 5],
-        "span": [71, 2, 55],
+        "span": [74, 2, 55],
         "leadingComments": "",
         "trailingComments": "Set by service\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1],
-        "span": [77, 0, 127, 1],
+        "span": [80, 0, 130, 1],
         "leadingComments": "*\nDatabase Entity\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 6],
-        "span": [116, 2, 33],
+        "span": [119, 2, 33],
         "leadingComments": "",
         "trailingComments": " Set by service\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 7],
-        "span": [117, 2, 70],
+        "span": [120, 2, 70],
         "leadingComments": "",
         "trailingComments": " Set by kafka\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 8],
-        "span": [118, 2, 69],
+        "span": [121, 2, 69],
         "leadingComments": "",
         "trailingComments": " Set by kafka\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 9],
-        "span": [119, 2, 63],
+        "span": [122, 2, 63],
         "leadingComments": "",
         "trailingComments": " Set by service --- repeated in case of variant currency?\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 7, 2, 1],
-        "span": [157, 2, 34],
+        "span": [160, 2, 34],
         "leadingComments": "",
         "trailingComments": " @TODO: not used!\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 7, 2, 2],
-        "span": [158, 2, 41],
+        "span": [161, 2, 41],
         "leadingComments": "",
         "trailingComments": " @TODO: not used!\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 7, 2, 3],
-        "span": [159, 2, 37],
+        "span": [162, 2, 37],
         "leadingComments": "",
         "trailingComments": " @TODO: not used!\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 7, 2, 5],
-        "span": [161, 2, 36],
+        "span": [164, 2, 36],
         "leadingComments": "",
         "trailingComments": " includes all if empty\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 9, 2, 0],
-        "span": [172, 2, 37],
+        "span": [175, 2, 37],
         "leadingComments": "",
         "trailingComments": " if given\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 9, 2, 2],
-        "span": [174, 2, 37],
+        "span": [177, 2, 37],
         "leadingComments": "",
         "trailingComments": " includes all on empty\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 9, 2, 3],
-        "span": [175, 2, 44],
+        "span": [178, 2, 44],
         "leadingComments": "",
         "trailingComments": " includes all on empty\n",
         "leadingDetachedComments": [],
@@ -2606,6 +2829,7 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata11,
     protoMetadata12,
     protoMetadata13,
+    protoMetadata14,
   ],
   options: {
     messages: {

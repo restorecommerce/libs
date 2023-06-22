@@ -1,0 +1,35 @@
+{
+  "name": "@restorecommerce/dev",
+  "version": "0.0.1",
+  "description": "Collection of development tools",
+  "author": "n-fuse GmbH",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/restorecommerce/libs.git"
+  },
+  "license": "MIT",
+  "keywords": [
+    "restore",
+    "commerce",
+    "dev"
+  ],
+  "type": "module",
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.59.9",
+    "@typescript-eslint/parser": "^5.59.9",
+    "eslint-plugin-file-extension-in-import-ts": "^1.0.2",
+    "eslint-plugin-prefer-arrow-functions": "^3.1.4",
+    "eslint-plugin-unicorn": "^47.0.0"
+  },
+  "peerDependencies": {
+    "@types/node": "^18.15.3",
+    "eslint": "^8.42.0",
+    "typescript": ">=5.0.0 <5.1.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=16"
+  }
+}

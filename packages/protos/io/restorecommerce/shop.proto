@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package io.restorecommerce.vendor;
+package io.restorecommerce.shop;
 
 import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/meta.proto";

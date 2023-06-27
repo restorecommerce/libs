@@ -78,11 +78,11 @@ message FulfillmentProduct {
     }
   ];
   repeated string start_zones = 6;
-  repeated string destination_zones = 8;
-  repeated string tax_ids = 9;
-  repeated io.restorecommerce.attribute.Attribute attributes = 10;
-  repeated Variant variants = 11;
-  optional io.restorecommerce.meta.Meta meta = 12;
+  repeated string destination_zones = 7;
+  repeated string tax_ids = 8;
+  repeated io.restorecommerce.attribute.Attribute attributes = 9;
+  repeated Variant variants = 10;
+  optional io.restorecommerce.meta.Meta meta = 11;
 }
 
 message Variant {

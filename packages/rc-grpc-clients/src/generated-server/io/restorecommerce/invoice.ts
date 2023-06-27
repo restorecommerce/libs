@@ -114,7 +114,7 @@ export interface Invoice {
   id?: string | undefined;
   meta?: Meta | undefined;
   invoice_number?: string | undefined;
-  reference?: Reference | undefined;
+  references: Reference[];
   user_id?:
     | string
     | undefined;
@@ -834,7 +834,7 @@ function createBaseInvoice(): Invoice {
     id: undefined,
     meta: undefined,
     invoice_number: undefined,
-    reference: undefined,
+    references: [],
     user_id: undefined,
     customer_id: undefined,
     shop_id: undefined,
@@ -865,8 +865,8 @@ export const Invoice = {
     if (message.invoice_number !== undefined) {
       writer.uint32(26).string(message.invoice_number);
     }
-    if (message.reference !== undefined) {
-      Reference.encode(message.reference, writer.uint32(34).fork()).ldelim();
+    for (const v of message.references) {
+      Reference.encode(v!, writer.uint32(34).fork()).ldelim();
     }
     if (message.user_id !== undefined) {
       writer.uint32(42).string(message.user_id);
@@ -952,7 +952,7 @@ export const Invoice = {
             break;
           }
 
-          message.reference = Reference.decode(reader, reader.uint32());
+          message.references.push(Reference.decode(reader, reader.uint32()));
           continue;
         case 5:
           if (tag !== 42) {
@@ -1080,7 +1080,7 @@ export const Invoice = {
       id: isSet(object.id) ? String(object.id) : undefined,
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
       invoice_number: isSet(object.invoice_number) ? String(object.invoice_number) : undefined,
-      reference: isSet(object.reference) ? Reference.fromJSON(object.reference) : undefined,
+      references: Array.isArray(object?.references) ? object.references.map((e: any) => Reference.fromJSON(e)) : [],
       user_id: isSet(object.user_id) ? String(object.user_id) : undefined,
       customer_id: isSet(object.customer_id) ? String(object.customer_id) : undefined,
       shop_id: isSet(object.shop_id) ? String(object.shop_id) : undefined,
@@ -1107,8 +1107,11 @@ export const Invoice = {
     message.id !== undefined && (obj.id = message.id);
     message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.invoice_number !== undefined && (obj.invoice_number = message.invoice_number);
-    message.reference !== undefined &&
-      (obj.reference = message.reference ? Reference.toJSON(message.reference) : undefined);
+    if (message.references) {
+      obj.references = message.references.map((e) => e ? Reference.toJSON(e) : undefined);
+    } else {
+      obj.references = [];
+    }
     message.user_id !== undefined && (obj.user_id = message.user_id);
     message.customer_id !== undefined && (obj.customer_id = message.customer_id);
     message.shop_id !== undefined && (obj.shop_id = message.shop_id);
@@ -1155,9 +1158,7 @@ export const Invoice = {
     message.id = object.id ?? undefined;
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
     message.invoice_number = object.invoice_number ?? undefined;
-    message.reference = (object.reference !== undefined && object.reference !== null)
-      ? Reference.fromPartial(object.reference)
-      : undefined;
+    message.references = object.references?.map((e) => Reference.fromPartial(e)) || [];
     message.user_id = object.user_id ?? undefined;
     message.customer_id = object.customer_id ?? undefined;
     message.shop_id = object.shop_id ?? undefined;
@@ -2121,17 +2122,17 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "reference",
+        "name": "references",
         "number": 4,
-        "label": 1,
+        "label": 3,
         "type": 11,
         "typeName": ".io.restorecommerce.reference.Reference",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 3,
-        "jsonName": "reference",
+        "oneofIndex": 0,
+        "jsonName": "references",
         "options": undefined,
-        "proto3Optional": true,
+        "proto3Optional": false,
       }, {
         "name": "user_id",
         "number": 5,
@@ -2140,7 +2141,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 4,
+        "oneofIndex": 3,
         "jsonName": "userId",
         "options": {
           "ctype": 0,
@@ -2160,7 +2161,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 5,
+        "oneofIndex": 4,
         "jsonName": "customerId",
         "options": {
           "ctype": 0,
@@ -2180,7 +2181,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 6,
+        "oneofIndex": 5,
         "jsonName": "shopId",
         "options": {
           "ctype": 0,
@@ -2200,7 +2201,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 7,
+        "oneofIndex": 6,
         "jsonName": "timestamp",
         "options": undefined,
         "proto3Optional": true,
@@ -2212,7 +2213,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.invoice.PaymentState",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 8,
+        "oneofIndex": 7,
         "jsonName": "paymentState",
         "options": undefined,
         "proto3Optional": true,
@@ -2224,7 +2225,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.address.BillingAddress",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 9,
+        "oneofIndex": 8,
         "jsonName": "sender",
         "options": undefined,
         "proto3Optional": true,
@@ -2236,7 +2237,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.address.BillingAddress",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 10,
+        "oneofIndex": 9,
         "jsonName": "recipient",
         "options": undefined,
         "proto3Optional": true,
@@ -2296,7 +2297,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 11,
+        "oneofIndex": 10,
         "jsonName": "customerRemark",
         "options": undefined,
         "proto3Optional": true,
@@ -2308,7 +2309,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 12,
+        "oneofIndex": 11,
         "jsonName": "fromDate",
         "options": undefined,
         "proto3Optional": true,
@@ -2320,7 +2321,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 13,
+        "oneofIndex": 12,
         "jsonName": "toDate",
         "options": undefined,
         "proto3Optional": true,
@@ -2332,7 +2333,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 14,
+        "oneofIndex": 13,
         "jsonName": "sent",
         "options": undefined,
         "proto3Optional": true,
@@ -2344,7 +2345,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 15,
+        "oneofIndex": 14,
         "jsonName": "withdrawn",
         "options": undefined,
         "proto3Optional": true,
@@ -2357,7 +2358,6 @@ export const protoMetadata: ProtoMetadata = {
         { "name": "_id", "options": undefined },
         { "name": "_meta", "options": undefined },
         { "name": "_invoice_number", "options": undefined },
-        { "name": "_reference", "options": undefined },
         { "name": "_user_id", "options": undefined },
         { "name": "_customer_id", "options": undefined },
         { "name": "_shop_id", "options": undefined },

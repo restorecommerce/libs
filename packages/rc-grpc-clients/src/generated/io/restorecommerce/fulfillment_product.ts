@@ -431,19 +431,19 @@ export const FulfillmentProduct = {
       writer.uint32(50).string(v!);
     }
     for (const v of message.destinationZones) {
-      writer.uint32(66).string(v!);
+      writer.uint32(58).string(v!);
     }
     for (const v of message.taxIds) {
-      writer.uint32(74).string(v!);
+      writer.uint32(66).string(v!);
     }
     for (const v of message.attributes) {
-      Attribute.encode(v!, writer.uint32(82).fork()).ldelim();
+      Attribute.encode(v!, writer.uint32(74).fork()).ldelim();
     }
     for (const v of message.variants) {
-      Variant.encode(v!, writer.uint32(90).fork()).ldelim();
+      Variant.encode(v!, writer.uint32(82).fork()).ldelim();
     }
     if (message.meta !== undefined) {
-      Meta.encode(message.meta, writer.uint32(98).fork()).ldelim();
+      Meta.encode(message.meta, writer.uint32(90).fork()).ldelim();
     }
     return writer;
   },
@@ -490,36 +490,36 @@ export const FulfillmentProduct = {
 
           message.startZones.push(reader.string());
           continue;
+        case 7:
+          if (tag !== 58) {
+            break;
+          }
+
+          message.destinationZones.push(reader.string());
+          continue;
         case 8:
           if (tag !== 66) {
             break;
           }
 
-          message.destinationZones.push(reader.string());
+          message.taxIds.push(reader.string());
           continue;
         case 9:
           if (tag !== 74) {
             break;
           }
 
-          message.taxIds.push(reader.string());
+          message.attributes.push(Attribute.decode(reader, reader.uint32()));
           continue;
         case 10:
           if (tag !== 82) {
             break;
           }
 
-          message.attributes.push(Attribute.decode(reader, reader.uint32()));
+          message.variants.push(Variant.decode(reader, reader.uint32()));
           continue;
         case 11:
           if (tag !== 90) {
-            break;
-          }
-
-          message.variants.push(Variant.decode(reader, reader.uint32()));
-          continue;
-        case 12:
-          if (tag !== 98) {
             break;
           }
 
@@ -1728,7 +1728,7 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": false,
       }, {
         "name": "destination_zones",
-        "number": 8,
+        "number": 7,
         "label": 3,
         "type": 9,
         "typeName": "",
@@ -1740,7 +1740,7 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": false,
       }, {
         "name": "tax_ids",
-        "number": 9,
+        "number": 8,
         "label": 3,
         "type": 9,
         "typeName": "",
@@ -1752,7 +1752,7 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": false,
       }, {
         "name": "attributes",
-        "number": 10,
+        "number": 9,
         "label": 3,
         "type": 11,
         "typeName": ".io.restorecommerce.attribute.Attribute",
@@ -1764,7 +1764,7 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": false,
       }, {
         "name": "variants",
-        "number": 11,
+        "number": 10,
         "label": 3,
         "type": 11,
         "typeName": ".io.restorecommerce.fulfillment_product.Variant",
@@ -1776,7 +1776,7 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": false,
       }, {
         "name": "meta",
-        "number": 12,
+        "number": 11,
         "label": 1,
         "type": 11,
         "typeName": ".io.restorecommerce.meta.Meta",

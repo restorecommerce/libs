@@ -123,11 +123,10 @@ message Order {
   repeated io.restorecommerce.amount.Amount total_amounts = 10;                // Set by service --- repeated in case of variant currency?
   optional io.restorecommerce.address.ShippingAddress shipping_address = 11;
   optional io.restorecommerce.address.BillingAddress billing_address = 12;
-  optional string billing_email = 13;
-  optional string notification_email = 14;
-  optional string customer_order_nr = 15;
-  optional string customer_remark = 16;
-  optional io.restorecommerce.fulfillment_product.Preferences packaging_preferences = 17;
+  optional string notification_email = 13;
+  optional string customer_order_nr = 14;
+  optional string customer_remark = 15;
+  optional io.restorecommerce.fulfillment_product.Preferences packaging_preferences = 16;
 }
 
 message OrderIdList {
@@ -172,11 +171,15 @@ message FulfillmentRequestList {
   io.restorecommerce.auth.Subject subject = 3;
 }
 
-message InvoiceRequest {
-  optional string invoice_number = 1; // if given
+message InvoicePosition {
   optional string order_id = 2;
   repeated string included_items = 3; // includes all on empty
-  optional string included_fulfillments = 4; // includes all on empty
+  repeated string included_fulfillments = 4; // includes all on empty
+}
+
+message InvoiceRequest {
+  optional string invoice_number = 1; // if given
+  repeated InvoicePosition positions = 2;
 }
 
 message InvoiceRequestList {

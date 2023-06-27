@@ -114,7 +114,7 @@ message Parcel {
   optional string variant_id = 3;
   optional Item item = 4;
   optional io.restorecommerce.amount.Amount amount = 5;
-  optional io.restorecommerce.product.Package package = 7;
+  optional io.restorecommerce.product.Package package = 6;
 }
 
 message Label {

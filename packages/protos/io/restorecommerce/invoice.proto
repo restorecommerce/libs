@@ -117,7 +117,7 @@ message Invoice {
   optional string id = 1;
   optional io.restorecommerce.meta.Meta meta = 2;
   optional string invoice_number = 3;
-  optional io.restorecommerce.reference.Reference reference = 4; 
+  repeated io.restorecommerce.reference.Reference references = 4; 
   optional string user_id = 5 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.user.User",

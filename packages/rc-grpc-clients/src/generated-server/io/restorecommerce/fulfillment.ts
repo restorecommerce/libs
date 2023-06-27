@@ -372,7 +372,7 @@ export const Parcel = {
       Amount.encode(message.amount, writer.uint32(42).fork()).ldelim();
     }
     if (message.package !== undefined) {
-      Package.encode(message.package, writer.uint32(58).fork()).ldelim();
+      Package.encode(message.package, writer.uint32(50).fork()).ldelim();
     }
     return writer;
   },
@@ -419,8 +419,8 @@ export const Parcel = {
 
           message.amount = Amount.decode(reader, reader.uint32());
           continue;
-        case 7:
-          if (tag !== 58) {
+        case 6:
+          if (tag !== 50) {
             break;
           }
 
@@ -2255,7 +2255,7 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": true,
       }, {
         "name": "package",
-        "number": 7,
+        "number": 6,
         "label": 1,
         "type": 11,
         "typeName": ".io.restorecommerce.product.Package",

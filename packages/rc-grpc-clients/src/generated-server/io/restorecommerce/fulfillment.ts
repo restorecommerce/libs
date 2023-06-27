@@ -186,7 +186,7 @@ export interface Fulfillment {
   /** set by service */
   trackings: Tracking[];
   /** set by service */
-  total_amount: Amount[];
+  total_amounts: Amount[];
   /** set by service */
   state?: State | undefined;
 }
@@ -1006,7 +1006,7 @@ function createBaseFulfillment(): Fulfillment {
     meta: undefined,
     labels: [],
     trackings: [],
-    total_amount: [],
+    total_amounts: [],
     state: undefined,
   };
 }
@@ -1028,7 +1028,7 @@ export const Fulfillment = {
     for (const v of message.trackings) {
       Tracking.encode(v!, writer.uint32(42).fork()).ldelim();
     }
-    for (const v of message.total_amount) {
+    for (const v of message.total_amounts) {
       Amount.encode(v!, writer.uint32(50).fork()).ldelim();
     }
     if (message.state !== undefined) {
@@ -1084,7 +1084,7 @@ export const Fulfillment = {
             break;
           }
 
-          message.total_amount.push(Amount.decode(reader, reader.uint32()));
+          message.total_amounts.push(Amount.decode(reader, reader.uint32()));
           continue;
         case 8:
           if (tag !== 64) {
@@ -1109,7 +1109,9 @@ export const Fulfillment = {
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
       labels: Array.isArray(object?.labels) ? object.labels.map((e: any) => Label.fromJSON(e)) : [],
       trackings: Array.isArray(object?.trackings) ? object.trackings.map((e: any) => Tracking.fromJSON(e)) : [],
-      total_amount: Array.isArray(object?.total_amount) ? object.total_amount.map((e: any) => Amount.fromJSON(e)) : [],
+      total_amounts: Array.isArray(object?.total_amounts)
+        ? object.total_amounts.map((e: any) => Amount.fromJSON(e))
+        : [],
       state: isSet(object.state) ? stateFromJSON(object.state) : undefined,
     };
   },
@@ -1130,10 +1132,10 @@ export const Fulfillment = {
     } else {
       obj.trackings = [];
     }
-    if (message.total_amount) {
-      obj.total_amount = message.total_amount.map((e) => e ? Amount.toJSON(e) : undefined);
+    if (message.total_amounts) {
+      obj.total_amounts = message.total_amounts.map((e) => e ? Amount.toJSON(e) : undefined);
     } else {
-      obj.total_amount = [];
+      obj.total_amounts = [];
     }
     message.state !== undefined && (obj.state = message.state !== undefined ? stateToJSON(message.state) : undefined);
     return obj;
@@ -1152,7 +1154,7 @@ export const Fulfillment = {
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
     message.labels = object.labels?.map((e) => Label.fromPartial(e)) || [];
     message.trackings = object.trackings?.map((e) => Tracking.fromPartial(e)) || [];
-    message.total_amount = object.total_amount?.map((e) => Amount.fromPartial(e)) || [];
+    message.total_amounts = object.total_amounts?.map((e) => Amount.fromPartial(e)) || [];
     message.state = object.state ?? undefined;
     return message;
   },
@@ -2683,7 +2685,7 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "total_amount",
+        "name": "total_amounts",
         "number": 6,
         "label": 3,
         "type": 11,
@@ -2691,7 +2693,7 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "totalAmount",
+        "jsonName": "totalAmounts",
         "options": undefined,
         "proto3Optional": false,
       }, {
@@ -3313,7 +3315,7 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 6, 2, 5],
-        "span": [173, 2, 61],
+        "span": [173, 2, 62],
         "leadingComments": "",
         "trailingComments": "set by service\n",
         "leadingDetachedComments": [],

@@ -112,7 +112,7 @@ message FulfillmentProductListResponse {
 }
 
 message PackingSolution {
-  optional io.restorecommerce.amount.Amount amount = 1;
+  repeated io.restorecommerce.amount.Amount amounts = 1;
   optional double compactness = 2;
   optional double homogeneity = 3;
   optional double score = 4;

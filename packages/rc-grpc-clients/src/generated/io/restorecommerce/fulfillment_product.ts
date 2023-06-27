@@ -84,7 +84,7 @@ export interface FulfillmentProductListResponse {
 }
 
 export interface PackingSolution {
-  amount?: Amount | undefined;
+  amounts: Amount[];
   compactness?: number | undefined;
   homogeneity?: number | undefined;
   score?: number | undefined;
@@ -997,13 +997,13 @@ export const FulfillmentProductListResponse = {
 };
 
 function createBasePackingSolution(): PackingSolution {
-  return { amount: undefined, compactness: undefined, homogeneity: undefined, score: undefined, parcels: [] };
+  return { amounts: [], compactness: undefined, homogeneity: undefined, score: undefined, parcels: [] };
 }
 
 export const PackingSolution = {
   encode(message: PackingSolution, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.amount !== undefined) {
-      Amount.encode(message.amount, writer.uint32(10).fork()).ldelim();
+    for (const v of message.amounts) {
+      Amount.encode(v!, writer.uint32(10).fork()).ldelim();
     }
     if (message.compactness !== undefined) {
       writer.uint32(17).double(message.compactness);
@@ -1032,7 +1032,7 @@ export const PackingSolution = {
             break;
           }
 
-          message.amount = Amount.decode(reader, reader.uint32());
+          message.amounts.push(Amount.decode(reader, reader.uint32()));
           continue;
         case 2:
           if (tag !== 17) {
@@ -1073,7 +1073,7 @@ export const PackingSolution = {
 
   fromJSON(object: any): PackingSolution {
     return {
-      amount: isSet(object.amount) ? Amount.fromJSON(object.amount) : undefined,
+      amounts: Array.isArray(object?.amounts) ? object.amounts.map((e: any) => Amount.fromJSON(e)) : [],
       compactness: isSet(object.compactness) ? Number(object.compactness) : undefined,
       homogeneity: isSet(object.homogeneity) ? Number(object.homogeneity) : undefined,
       score: isSet(object.score) ? Number(object.score) : undefined,
@@ -1083,7 +1083,11 @@ export const PackingSolution = {
 
   toJSON(message: PackingSolution): unknown {
     const obj: any = {};
-    message.amount !== undefined && (obj.amount = message.amount ? Amount.toJSON(message.amount) : undefined);
+    if (message.amounts) {
+      obj.amounts = message.amounts.map((e) => e ? Amount.toJSON(e) : undefined);
+    } else {
+      obj.amounts = [];
+    }
     message.compactness !== undefined && (obj.compactness = message.compactness);
     message.homogeneity !== undefined && (obj.homogeneity = message.homogeneity);
     message.score !== undefined && (obj.score = message.score);
@@ -1101,9 +1105,7 @@ export const PackingSolution = {
 
   fromPartial(object: DeepPartial<PackingSolution>): PackingSolution {
     const message = createBasePackingSolution();
-    message.amount = (object.amount !== undefined && object.amount !== null)
-      ? Amount.fromPartial(object.amount)
-      : undefined;
+    message.amounts = object.amounts?.map((e) => Amount.fromPartial(e)) || [];
     message.compactness = object.compactness ?? undefined;
     message.homogeneity = object.homogeneity ?? undefined;
     message.score = object.score ?? undefined;
@@ -2027,17 +2029,17 @@ export const protoMetadata: ProtoMetadata = {
     }, {
       "name": "PackingSolution",
       "field": [{
-        "name": "amount",
+        "name": "amounts",
         "number": 1,
-        "label": 1,
+        "label": 3,
         "type": 11,
         "typeName": ".io.restorecommerce.amount.Amount",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "amount",
+        "jsonName": "amounts",
         "options": undefined,
-        "proto3Optional": true,
+        "proto3Optional": false,
       }, {
         "name": "compactness",
         "number": 2,
@@ -2046,7 +2048,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 1,
+        "oneofIndex": 0,
         "jsonName": "compactness",
         "options": undefined,
         "proto3Optional": true,
@@ -2058,7 +2060,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 2,
+        "oneofIndex": 1,
         "jsonName": "homogeneity",
         "options": undefined,
         "proto3Optional": true,
@@ -2070,7 +2072,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 3,
+        "oneofIndex": 2,
         "jsonName": "score",
         "options": undefined,
         "proto3Optional": true,
@@ -2091,10 +2093,11 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [{ "name": "_amount", "options": undefined }, { "name": "_compactness", "options": undefined }, {
-        "name": "_homogeneity",
-        "options": undefined,
-      }, { "name": "_score", "options": undefined }],
+      "oneofDecl": [
+        { "name": "_compactness", "options": undefined },
+        { "name": "_homogeneity", "options": undefined },
+        { "name": "_score", "options": undefined },
+      ],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],

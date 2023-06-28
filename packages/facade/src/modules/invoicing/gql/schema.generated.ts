@@ -61,7 +61,7 @@ export type IoRestorecommerceInvoiceInvoice = {
   id?: Maybe<Scalars['String']['output']>;
   meta?: Maybe<IoRestorecommerceMetaMeta>;
   invoiceNumber?: Maybe<Scalars['String']['output']>;
-  reference?: Maybe<IoRestorecommerceReferenceReference>;
+  references?: Maybe<Array<IoRestorecommerceReferenceReference>>;
   userId?: Maybe<Scalars['String']['output']>;
   user?: Maybe<IoRestorecommerceUserUser>;
   customerId?: Maybe<Scalars['String']['output']>;
@@ -835,7 +835,7 @@ export type IIoRestorecommerceInvoiceInvoice = {
   id?: InputMaybe<Scalars['String']['input']>;
   meta?: InputMaybe<IIoRestorecommerceMetaMeta>;
   invoiceNumber?: InputMaybe<Scalars['String']['input']>;
-  reference?: InputMaybe<IIoRestorecommerceReferenceReference>;
+  references?: InputMaybe<Array<IIoRestorecommerceReferenceReference>>;
   userId?: InputMaybe<Scalars['String']['input']>;
   customerId?: InputMaybe<Scalars['String']['input']>;
   shopId?: InputMaybe<Scalars['String']['input']>;
@@ -1461,7 +1461,7 @@ export type IoRestorecommerceInvoiceInvoiceResolvers<ContextType = InvoicingCont
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
   invoiceNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  reference?: Resolver<Maybe<ResolversTypes['IoRestorecommerceReferenceReference']>, ParentType, ContextType>;
+  references?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceReferenceReference']>>, ParentType, ContextType>;
   userId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   user?: Resolver<Maybe<ResolversTypes['IoRestorecommerceUserUser']>, ParentType, ContextType>;
   customerId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;

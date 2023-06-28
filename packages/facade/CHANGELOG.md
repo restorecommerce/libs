@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.7](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.3.6...@restorecommerce/facade@1.3.7) (2023-06-28)
+
+
+### Bug Fixes
+
+* correct protos, facade calls, apollo route ([ff52c38](https://github.com/restorecommerce/libs/commit/ff52c38ee4e6c6236747d6921361b5e4131384a2))
+* **facade:** unit test due to change in proto files ([0c050d5](https://github.com/restorecommerce/libs/commit/0c050d5bd732c44c7592c7ea45269ba996783a89))
+
+
+
+
+
 ## [1.3.6](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.3.5...@restorecommerce/facade@1.3.6) (2023-06-16)
 
 **Note:** Version bump only for package @restorecommerce/facade

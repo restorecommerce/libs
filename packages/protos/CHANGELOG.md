@@ -3,6 +3,38 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.0.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@3.1.2...@restorecommerce/protos@4.0.0) (2023-06-28)
+
+
+### Bug Fixes
+
+* correct protos, facade calls, apollo route ([ff52c38](https://github.com/restorecommerce/libs/commit/ff52c38ee4e6c6236747d6921361b5e4131384a2))
+* **fix orga:** fix numbers in orga ([72c3885](https://github.com/restorecommerce/libs/commit/72c3885938fb5311222e3d75c64d45d25925e289))
+* **fulfillment.proto:** use Price everywhere ([c2a2cb5](https://github.com/restorecommerce/libs/commit/c2a2cb57cb84eac9e046413fc5f41dec7efc1132))
+* **fulfillment:** fix type errors ([615ab2c](https://github.com/restorecommerce/libs/commit/615ab2cf738708d8dffd20343ebf0953a0da7a78))
+
+
+### Features
+
+* **currency.proto:** add currency proto, update invoice.proto ([988d161](https://github.com/restorecommerce/libs/commit/988d161913d01fc88d383810a2bd963e9c75a2f8))
+* **invoice.proto:** adjust invoice.proto to ordering-srv and fulfillment-srv ([71ee108](https://github.com/restorecommerce/libs/commit/71ee1088eec9fc54b61ab189e988504180687902))
+* **invoice:** support multiple orders and fulfillments per invoice ([e2092a0](https://github.com/restorecommerce/libs/commit/e2092a081d886722fc7112a760b9a3a3fa434519))
+* **shop.proto:** add shop.proto, remove double addresses and more ([a872677](https://github.com/restorecommerce/libs/commit/a8726777447cf443809f3d7eba7d808e7339bbba))
+
+
+### BREAKING CHANGES
+
+* **invoice:** invoice has repeated references
+* **fulfillment.proto:** ordering, fulfillment, invoice
+* **currency.proto:** Significant changes in Invoice
+* **invoice.proto:** The invoicing-srv must be refactored!
+* **shop.proto:** significant changes in product.proto, order, organization, invoice, tax_type,
+fulfillment, customer, contact_point
+
+
+
+
+
 ## [3.1.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@3.1.1...@restorecommerce/protos@3.1.2) (2023-06-16)
 
 **Note:** Version bump only for package @restorecommerce/protos

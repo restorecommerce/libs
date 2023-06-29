@@ -39,15 +39,16 @@ export const reduceRoleAssociations = async (roleAssociations: RoleAssociation[]
         const attribute = association.attributes[i];
         if (attribute.id == urns.roleScopingEntity &&
           attribute.value == urns.organization) {
-          const next = association.attributes[i + 1];
+          // const next = association.attributes[i + 1];
+          const next = attribute?.attributes;
           let inScope = false;
-          if (next.id == urns.roleScopingInstance) {
-            inScope = next.value == scopeID;
-          }
-
-          if (inScope) {
-            foundAttributes.push(attribute);
-            foundAttributes.push(next);
+          for (let roleScopeInstObj of next) {
+            if (roleScopeInstObj.id == urns.roleScopingInstance) {
+              inScope = roleScopeInstObj.value == scopeID;
+            }
+            if (inScope) {
+              foundAttributes.push(attribute);
+            }
           }
         }
       }
@@ -106,7 +107,6 @@ const checkSubjectMatch = (user: ResolvedSubject, ruleSubjectAttributes: Attribu
   // role URN exists
   // 2) Now check if the subject rule role value matches with one of the users ctx role_associations
   // then get the corresponding scope instance and check if the targetScope is present in user HR scope Object
-
   let roleScopeEntExists = false;
   let roleValueExists = false;
   // by default HR scoping check is considered
@@ -124,7 +124,7 @@ const checkSubjectMatch = (user: ResolvedSubject, ruleSubjectAttributes: Attribu
     if (attribute.id === urns.roleScopingEntity) {
       roleScopeEntExists = true;
       ruleRoleScopeEntityName = attribute.value;
-    } else if (attribute.id === urns.role) {
+    } else if (attribute.id === urns.role) { // urns.role -> urn:restorecommerce:acs:names:role
       roleValueExists = true;
       ruleRoleValue = attribute.value;
     } else if (attribute.id === urns.hierarchicalRoleScoping) {
@@ -146,9 +146,14 @@ const checkSubjectMatch = (user: ResolvedSubject, ruleSubjectAttributes: Attribu
             if (roleAttrs.id === urns.roleScopingEntity &&
               roleAttrs.value === ruleRoleScopeEntityName) {
               roleScopeEntityNameMatched = true;
-            } else if (roleScopeEntityNameMatched && roleAttrs.id === urns.roleScopingInstance) {
-              userAssocScope = roleAttrs.value;
-              break;
+            }
+            if (roleScopeEntityNameMatched && roleAttrs?.attributes?.length > 0) {
+              for (let roleScopeInstObj of roleAttrs.attributes) {
+                if (roleScopeInstObj.id === urns.roleScopingInstance) {
+                  userAssocScope = roleScopeInstObj.value;
+                  break;
+                }
+              }
             }
           }
           // check if this userAssocScope's HR object contains the targetScope

@@ -51,14 +51,14 @@ const updateMetaData = (resourceList: Array<any>): Array<CtxResource> => {
     if (!resource.meta) {
       resource.meta = {};
     }
-    resource.meta.owner = [
+    resource.meta.owners = [
       {
         id: 'urn:restorecommerce:acs:names:ownerIndicatoryEntity',
-        value: 'urn:test:acs:model:organization.Organization'
-      },
-      {
-        id: 'urn:restorecommerce:acs:names:ownerInstance',
-        value: 'targetScope'
+        value: 'urn:test:acs:model:organization.Organization',
+        attributes: [{
+          id: 'urn:restorecommerce:acs:names:ownerInstance',
+          value: 'targetScope'
+        }]
       }
     ];
     return resource;
@@ -104,11 +104,11 @@ let subject = {
       attributes: [
         {
           id: 'urn:restorecommerce:acs:names:roleScopingEntity',
-          value: 'urn:test:acs:model:organization.Organization'
-        },
-        {
-          id: 'urn:restorecommerce:acs:names:roleScopingInstance',
-          value: 'targetScope'
+          value: 'urn:test:acs:model:organization.Organization',
+          attributes: [{
+            id: 'urn:restorecommerce:acs:names:roleScopingInstance',
+            value: 'targetScope'
+          }]
         }
       ]
     }

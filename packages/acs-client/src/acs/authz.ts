@@ -82,12 +82,11 @@ export const createSubjectTarget = (subject: DeepPartial<Subject>): Attribute[] 
       {
         id: urns.roleScopingEntity,
         value: urns.orgScope,
-        attributes: []
-      },
-      {
-        id: urns.roleScopingInstance,
-        value: subject.scope,
-        attributes: []
+        attributes: [{
+          id: urns.roleScopingInstance,
+          value: subject.scope,
+          attributes: []
+        }]
       }
     ]);
   }

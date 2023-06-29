@@ -115,11 +115,11 @@ export interface RegisterRequest {
   id?: string | undefined;
   guest?: boolean | undefined;
   meta?: Meta | undefined;
-  name?: string | undefined;
+  name: string;
   first_name?: string | undefined;
   last_name?: string | undefined;
-  email?: string | undefined;
-  password?: string | undefined;
+  email: string;
+  password: string;
   timezone_id?: string | undefined;
   locale_id?:
     | string
@@ -813,11 +813,11 @@ function createBaseRegisterRequest(): RegisterRequest {
     id: undefined,
     guest: undefined,
     meta: undefined,
-    name: undefined,
+    name: "",
     first_name: undefined,
     last_name: undefined,
-    email: undefined,
-    password: undefined,
+    email: "",
+    password: "",
     timezone_id: undefined,
     locale_id: undefined,
     default_scope: undefined,
@@ -837,7 +837,7 @@ export const RegisterRequest = {
     if (message.meta !== undefined) {
       Meta.encode(message.meta, writer.uint32(26).fork()).ldelim();
     }
-    if (message.name !== undefined) {
+    if (message.name !== "") {
       writer.uint32(34).string(message.name);
     }
     if (message.first_name !== undefined) {
@@ -846,10 +846,10 @@ export const RegisterRequest = {
     if (message.last_name !== undefined) {
       writer.uint32(50).string(message.last_name);
     }
-    if (message.email !== undefined) {
+    if (message.email !== "") {
       writer.uint32(58).string(message.email);
     }
-    if (message.password !== undefined) {
+    if (message.password !== "") {
       writer.uint32(66).string(message.password);
     }
     if (message.timezone_id !== undefined) {
@@ -982,11 +982,11 @@ export const RegisterRequest = {
       id: isSet(object.id) ? String(object.id) : undefined,
       guest: isSet(object.guest) ? Boolean(object.guest) : undefined,
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
-      name: isSet(object.name) ? String(object.name) : undefined,
+      name: isSet(object.name) ? String(object.name) : "",
       first_name: isSet(object.first_name) ? String(object.first_name) : undefined,
       last_name: isSet(object.last_name) ? String(object.last_name) : undefined,
-      email: isSet(object.email) ? String(object.email) : undefined,
-      password: isSet(object.password) ? String(object.password) : undefined,
+      email: isSet(object.email) ? String(object.email) : "",
+      password: isSet(object.password) ? String(object.password) : "",
       timezone_id: isSet(object.timezone_id) ? String(object.timezone_id) : undefined,
       locale_id: isSet(object.locale_id) ? String(object.locale_id) : undefined,
       default_scope: isSet(object.default_scope) ? String(object.default_scope) : undefined,
@@ -1023,11 +1023,11 @@ export const RegisterRequest = {
     message.id = object.id ?? undefined;
     message.guest = object.guest ?? undefined;
     message.meta = (object.meta !== undefined && object.meta !== null) ? Meta.fromPartial(object.meta) : undefined;
-    message.name = object.name ?? undefined;
+    message.name = object.name ?? "";
     message.first_name = object.first_name ?? undefined;
     message.last_name = object.last_name ?? undefined;
-    message.email = object.email ?? undefined;
-    message.password = object.password ?? undefined;
+    message.email = object.email ?? "";
+    message.password = object.password ?? "";
     message.timezone_id = object.timezone_id ?? undefined;
     message.locale_id = object.locale_id ?? undefined;
     message.default_scope = object.default_scope ?? undefined;
@@ -4237,10 +4237,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 3,
+        "oneofIndex": 0,
         "jsonName": "name",
         "options": undefined,
-        "proto3Optional": true,
+        "proto3Optional": false,
       }, {
         "name": "first_name",
         "number": 5,
@@ -4249,7 +4249,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 4,
+        "oneofIndex": 3,
         "jsonName": "firstName",
         "options": undefined,
         "proto3Optional": true,
@@ -4261,7 +4261,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 5,
+        "oneofIndex": 4,
         "jsonName": "lastName",
         "options": undefined,
         "proto3Optional": true,
@@ -4273,10 +4273,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 6,
+        "oneofIndex": 0,
         "jsonName": "email",
         "options": undefined,
-        "proto3Optional": true,
+        "proto3Optional": false,
       }, {
         "name": "password",
         "number": 8,
@@ -4285,10 +4285,10 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 7,
+        "oneofIndex": 0,
         "jsonName": "password",
         "options": undefined,
-        "proto3Optional": true,
+        "proto3Optional": false,
       }, {
         "name": "timezone_id",
         "number": 9,
@@ -4297,7 +4297,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 8,
+        "oneofIndex": 5,
         "jsonName": "timezoneId",
         "options": undefined,
         "proto3Optional": true,
@@ -4309,7 +4309,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 9,
+        "oneofIndex": 6,
         "jsonName": "localeId",
         "options": undefined,
         "proto3Optional": true,
@@ -4321,7 +4321,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 10,
+        "oneofIndex": 7,
         "jsonName": "defaultScope",
         "options": undefined,
         "proto3Optional": true,
@@ -4333,7 +4333,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": ".io.restorecommerce.user.UserType",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 11,
+        "oneofIndex": 8,
         "jsonName": "userType",
         "options": undefined,
         "proto3Optional": true,
@@ -4345,7 +4345,7 @@ export const protoMetadata: ProtoMetadata = {
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
-        "oneofIndex": 12,
+        "oneofIndex": 9,
         "jsonName": "captchaCode",
         "options": undefined,
         "proto3Optional": true,
@@ -4358,11 +4358,8 @@ export const protoMetadata: ProtoMetadata = {
         { "name": "_id", "options": undefined },
         { "name": "_guest", "options": undefined },
         { "name": "_meta", "options": undefined },
-        { "name": "_name", "options": undefined },
         { "name": "_first_name", "options": undefined },
         { "name": "_last_name", "options": undefined },
-        { "name": "_email", "options": undefined },
-        { "name": "_password", "options": undefined },
         { "name": "_timezone_id", "options": undefined },
         { "name": "_locale_id", "options": undefined },
         { "name": "_default_scope", "options": undefined },

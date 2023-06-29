@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@4.0.0...@restorecommerce/protos@4.0.1) (2023-06-29)
+
+
+### Bug Fixes
+
+* **protos:** Make name, email and password mandatory for register request ([64165c1](https://github.com/restorecommerce/libs/commit/64165c1875fe1c9ccd319513671334b625dce20c))
+
+
+
+
+
 # [4.0.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@3.1.2...@restorecommerce/protos@4.0.0) (2023-06-28)
 
 

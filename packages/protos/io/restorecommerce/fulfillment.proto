@@ -14,6 +14,7 @@ import "io/restorecommerce/product.proto";
 import "io/restorecommerce/options.proto";
 import "io/restorecommerce/amount.proto";
 import "io/restorecommerce/invoice.proto";
+import "google/protobuf/timestamp.proto";
 
 /**
 Microservice definition.
@@ -141,7 +142,7 @@ message Packaging {
 }
 
 message Event {
-  optional int64 timestamp = 1;
+  optional google.protobuf.Timestamp timestamp = 1;
   optional string location = 2;
   optional google.protobuf.Any details = 3;
   optional io.restorecommerce.status.Status status = 4;

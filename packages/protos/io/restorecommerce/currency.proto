@@ -7,6 +7,7 @@ import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
 import "io/restorecommerce/options.proto";
+import "google/protobuf/timestamp.proto";
 
 /*
 * Microservice definition.
@@ -66,7 +67,7 @@ message ExchangeRate {
 message ExchangeRateQuery {
   optional string from_currency_id = 1;
   optional string to_currency_id = 2;
-  optional double datetime = 3; // now in general case
+  optional google.protobuf.Timestamp datetime = 3; // now in general case
   optional double amount = 4; // leave empty == 1.0
 }
 
@@ -79,7 +80,7 @@ message ExchangeRateQueryList {
 message ExchangeRateResponse {
   optional string from_currency_id = 1;
   ExchangeRate payload = 3;
-  optional double timestamp = 2;
+  optional google.protobuf.Timestamp timestamp = 2;
   io.restorecommerce.status.Status status = 4;
 }
 

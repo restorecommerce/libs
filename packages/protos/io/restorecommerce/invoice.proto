@@ -19,6 +19,7 @@ import "io/restorecommerce/reference.proto";
 import "io/restorecommerce/user.proto";
 import "io/restorecommerce/customer.proto";
 import "io/restorecommerce/shop.proto";
+import "google/protobuf/timestamp.proto";
 
 /*
 * Microservice definition.
@@ -145,7 +146,7 @@ message Invoice {
       field_name: "shop",
     }
   ]; // shop_number --- ref. to sender orga
-  optional double timestamp = 8;
+  optional google.protobuf.Timestamp timestamp = 8;
   optional PaymentState payment_state = 9;
   optional io.restorecommerce.address.BillingAddress sender = 10;
   optional io.restorecommerce.address.BillingAddress recipient = 11;

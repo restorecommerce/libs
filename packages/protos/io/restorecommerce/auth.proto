@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package io.restorecommerce.auth;
 import "io/restorecommerce/attribute.proto";
+import "google/protobuf/timestamp.proto";
 
 /**
  * Subject of creating User
@@ -33,7 +34,7 @@ message RoleAssociation {
   optional string role = 1;  // role ID
   repeated io.restorecommerce.attribute.Attribute attributes = 2;  // useful attributes for RBAC/ABAC like organizational scope
   optional string id = 3; // identifier for role_association
-  optional double created = 4; // timestamp when the role was created
+  optional google.protobuf.Timestamp created = 4; // timestamp when the role was created
 }
 
 message HierarchicalScopesRequest {

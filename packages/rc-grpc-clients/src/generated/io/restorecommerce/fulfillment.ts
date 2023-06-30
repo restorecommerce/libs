@@ -239,6 +239,7 @@ export interface InvoiceSection {
 export interface InvoiceRequest {
   /** if given */
   invoiceNumber?: string | undefined;
+  paymentHints: string[];
   sections: InvoiceSection[];
 }
 
@@ -1745,7 +1746,7 @@ export const InvoiceSection = {
 };
 
 function createBaseInvoiceRequest(): InvoiceRequest {
-  return { invoiceNumber: undefined, sections: [] };
+  return { invoiceNumber: undefined, paymentHints: [], sections: [] };
 }
 
 export const InvoiceRequest = {
@@ -1753,8 +1754,11 @@ export const InvoiceRequest = {
     if (message.invoiceNumber !== undefined) {
       writer.uint32(10).string(message.invoiceNumber);
     }
+    for (const v of message.paymentHints) {
+      writer.uint32(18).string(v!);
+    }
     for (const v of message.sections) {
-      InvoiceSection.encode(v!, writer.uint32(18).fork()).ldelim();
+      InvoiceSection.encode(v!, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -1778,6 +1782,13 @@ export const InvoiceRequest = {
             break;
           }
 
+          message.paymentHints.push(reader.string());
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
           message.sections.push(InvoiceSection.decode(reader, reader.uint32()));
           continue;
       }
@@ -1792,6 +1803,7 @@ export const InvoiceRequest = {
   fromJSON(object: any): InvoiceRequest {
     return {
       invoiceNumber: isSet(object.invoiceNumber) ? String(object.invoiceNumber) : undefined,
+      paymentHints: Array.isArray(object?.paymentHints) ? object.paymentHints.map((e: any) => String(e)) : [],
       sections: Array.isArray(object?.sections) ? object.sections.map((e: any) => InvoiceSection.fromJSON(e)) : [],
     };
   },
@@ -1799,6 +1811,11 @@ export const InvoiceRequest = {
   toJSON(message: InvoiceRequest): unknown {
     const obj: any = {};
     message.invoiceNumber !== undefined && (obj.invoiceNumber = message.invoiceNumber);
+    if (message.paymentHints) {
+      obj.paymentHints = message.paymentHints.map((e) => e);
+    } else {
+      obj.paymentHints = [];
+    }
     if (message.sections) {
       obj.sections = message.sections.map((e) => e ? InvoiceSection.toJSON(e) : undefined);
     } else {
@@ -1814,6 +1831,7 @@ export const InvoiceRequest = {
   fromPartial(object: DeepPartial<InvoiceRequest>): InvoiceRequest {
     const message = createBaseInvoiceRequest();
     message.invoiceNumber = object.invoiceNumber ?? undefined;
+    message.paymentHints = object.paymentHints?.map((e) => e) || [];
     message.sections = object.sections?.map((e) => InvoiceSection.fromPartial(e)) || [];
     return message;
   },
@@ -3098,8 +3116,20 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "sections",
+        "name": "payment_hints",
         "number": 2,
+        "label": 3,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "paymentHints",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "sections",
+        "number": 3,
         "label": 3,
         "type": 11,
         "typeName": ".io.restorecommerce.fulfillment.InvoiceSection",

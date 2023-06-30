@@ -134,9 +134,6 @@ export interface Invoice {
   sections: Section[];
   total_amounts: Amount[];
   payment_hints: string[];
-  customer_remark?:
-    | string
-    | undefined;
   /** url to rendered PDFs */
   documents: File[];
   /** value performance from date */
@@ -151,6 +148,7 @@ export interface Invoice {
 
 export interface Section {
   id?: string | undefined;
+  customer_remark?: string | undefined;
   positions: Position[];
   /** repeated in case of multiple currencies? */
   amounts: Amount[];
@@ -854,7 +852,6 @@ function createBaseInvoice(): Invoice {
     sections: [],
     total_amounts: [],
     payment_hints: [],
-    customer_remark: undefined,
     documents: [],
     from_date: undefined,
     to_date: undefined,
@@ -907,23 +904,20 @@ export const Invoice = {
     for (const v of message.payment_hints) {
       writer.uint32(114).string(v!);
     }
-    if (message.customer_remark !== undefined) {
-      writer.uint32(122).string(message.customer_remark);
-    }
     for (const v of message.documents) {
-      File.encode(v!, writer.uint32(130).fork()).ldelim();
+      File.encode(v!, writer.uint32(122).fork()).ldelim();
     }
     if (message.from_date !== undefined) {
-      Timestamp.encode(toTimestamp(message.from_date), writer.uint32(138).fork()).ldelim();
+      Timestamp.encode(toTimestamp(message.from_date), writer.uint32(130).fork()).ldelim();
     }
     if (message.to_date !== undefined) {
-      Timestamp.encode(toTimestamp(message.to_date), writer.uint32(146).fork()).ldelim();
+      Timestamp.encode(toTimestamp(message.to_date), writer.uint32(138).fork()).ldelim();
     }
     if (message.sent !== undefined) {
-      writer.uint32(152).bool(message.sent);
+      writer.uint32(144).bool(message.sent);
     }
     if (message.withdrawn !== undefined) {
-      writer.uint32(160).bool(message.withdrawn);
+      writer.uint32(152).bool(message.withdrawn);
     }
     return writer;
   },
@@ -1038,38 +1032,31 @@ export const Invoice = {
             break;
           }
 
-          message.customer_remark = reader.string();
+          message.documents.push(File.decode(reader, reader.uint32()));
           continue;
         case 16:
           if (tag !== 130) {
             break;
           }
 
-          message.documents.push(File.decode(reader, reader.uint32()));
+          message.from_date = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           continue;
         case 17:
           if (tag !== 138) {
             break;
           }
 
-          message.from_date = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
-          continue;
-        case 18:
-          if (tag !== 146) {
-            break;
-          }
-
           message.to_date = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           continue;
-        case 19:
-          if (tag !== 152) {
+        case 18:
+          if (tag !== 144) {
             break;
           }
 
           message.sent = reader.bool();
           continue;
-        case 20:
-          if (tag !== 160) {
+        case 19:
+          if (tag !== 152) {
             break;
           }
 
@@ -1102,7 +1089,6 @@ export const Invoice = {
         ? object.total_amounts.map((e: any) => Amount.fromJSON(e))
         : [],
       payment_hints: Array.isArray(object?.payment_hints) ? object.payment_hints.map((e: any) => String(e)) : [],
-      customer_remark: isSet(object.customer_remark) ? String(object.customer_remark) : undefined,
       documents: Array.isArray(object?.documents) ? object.documents.map((e: any) => File.fromJSON(e)) : [],
       from_date: isSet(object.from_date) ? fromJsonTimestamp(object.from_date) : undefined,
       to_date: isSet(object.to_date) ? fromJsonTimestamp(object.to_date) : undefined,
@@ -1145,7 +1131,6 @@ export const Invoice = {
     } else {
       obj.payment_hints = [];
     }
-    message.customer_remark !== undefined && (obj.customer_remark = message.customer_remark);
     if (message.documents) {
       obj.documents = message.documents.map((e) => e ? File.toJSON(e) : undefined);
     } else {
@@ -1182,7 +1167,6 @@ export const Invoice = {
     message.sections = object.sections?.map((e) => Section.fromPartial(e)) || [];
     message.total_amounts = object.total_amounts?.map((e) => Amount.fromPartial(e)) || [];
     message.payment_hints = object.payment_hints?.map((e) => e) || [];
-    message.customer_remark = object.customer_remark ?? undefined;
     message.documents = object.documents?.map((e) => File.fromPartial(e)) || [];
     message.from_date = object.from_date ?? undefined;
     message.to_date = object.to_date ?? undefined;
@@ -1193,13 +1177,16 @@ export const Invoice = {
 };
 
 function createBaseSection(): Section {
-  return { id: undefined, positions: [], amounts: [] };
+  return { id: undefined, customer_remark: undefined, positions: [], amounts: [] };
 }
 
 export const Section = {
   encode(message: Section, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
+    }
+    if (message.customer_remark !== undefined) {
+      writer.uint32(18).string(message.customer_remark);
     }
     for (const v of message.positions) {
       Position.encode(v!, writer.uint32(26).fork()).ldelim();
@@ -1223,6 +1210,13 @@ export const Section = {
           }
 
           message.id = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.customer_remark = reader.string();
           continue;
         case 3:
           if (tag !== 26) {
@@ -1250,6 +1244,7 @@ export const Section = {
   fromJSON(object: any): Section {
     return {
       id: isSet(object.id) ? String(object.id) : undefined,
+      customer_remark: isSet(object.customer_remark) ? String(object.customer_remark) : undefined,
       positions: Array.isArray(object?.positions) ? object.positions.map((e: any) => Position.fromJSON(e)) : [],
       amounts: Array.isArray(object?.amounts) ? object.amounts.map((e: any) => Amount.fromJSON(e)) : [],
     };
@@ -1258,6 +1253,7 @@ export const Section = {
   toJSON(message: Section): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
+    message.customer_remark !== undefined && (obj.customer_remark = message.customer_remark);
     if (message.positions) {
       obj.positions = message.positions.map((e) => e ? Position.toJSON(e) : undefined);
     } else {
@@ -1278,6 +1274,7 @@ export const Section = {
   fromPartial(object: DeepPartial<Section>): Section {
     const message = createBaseSection();
     message.id = object.id ?? undefined;
+    message.customer_remark = object.customer_remark ?? undefined;
     message.positions = object.positions?.map((e) => Position.fromPartial(e)) || [];
     message.amounts = object.amounts?.map((e) => Amount.fromPartial(e)) || [];
     return message;
@@ -2396,20 +2393,8 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "customer_remark",
-        "number": 15,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 10,
-        "jsonName": "customerRemark",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
         "name": "documents",
-        "number": 16,
+        "number": 15,
         "label": 3,
         "type": 11,
         "typeName": ".io.restorecommerce.file.File",
@@ -2421,6 +2406,18 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": false,
       }, {
         "name": "from_date",
+        "number": 16,
+        "label": 1,
+        "type": 11,
+        "typeName": ".google.protobuf.Timestamp",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 10,
+        "jsonName": "fromDate",
+        "options": undefined,
+        "proto3Optional": true,
+      }, {
+        "name": "to_date",
         "number": 17,
         "label": 1,
         "type": 11,
@@ -2428,23 +2425,23 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 11,
-        "jsonName": "fromDate",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
-        "name": "to_date",
-        "number": 18,
-        "label": 1,
-        "type": 11,
-        "typeName": ".google.protobuf.Timestamp",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 12,
         "jsonName": "toDate",
         "options": undefined,
         "proto3Optional": true,
       }, {
         "name": "sent",
+        "number": 18,
+        "label": 1,
+        "type": 8,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 12,
+        "jsonName": "sent",
+        "options": undefined,
+        "proto3Optional": true,
+      }, {
+        "name": "withdrawn",
         "number": 19,
         "label": 1,
         "type": 8,
@@ -2452,18 +2449,6 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 13,
-        "jsonName": "sent",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
-        "name": "withdrawn",
-        "number": 20,
-        "label": 1,
-        "type": 8,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 14,
         "jsonName": "withdrawn",
         "options": undefined,
         "proto3Optional": true,
@@ -2483,7 +2468,6 @@ export const protoMetadata: ProtoMetadata = {
         { "name": "_payment_state", "options": undefined },
         { "name": "_sender", "options": undefined },
         { "name": "_recipient", "options": undefined },
-        { "name": "_customer_remark", "options": undefined },
         { "name": "_from_date", "options": undefined },
         { "name": "_to_date", "options": undefined },
         { "name": "_sent", "options": undefined },
@@ -2510,6 +2494,18 @@ export const protoMetadata: ProtoMetadata = {
         "defaultValue": "",
         "oneofIndex": 0,
         "jsonName": "id",
+        "options": undefined,
+        "proto3Optional": true,
+      }, {
+        "name": "customer_remark",
+        "number": 2,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 1,
+        "jsonName": "customerRemark",
         "options": undefined,
         "proto3Optional": true,
       }, {
@@ -2541,7 +2537,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [{ "name": "_id", "options": undefined }],
+      "oneofDecl": [{ "name": "_id", "options": undefined }, { "name": "_customer_remark", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -2930,7 +2926,7 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 8],
-        "span": [110, 0, 163, 1],
+        "span": [110, 0, 162, 1],
         "leadingComments": "\n The Invoice recource, stored in DB.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
@@ -2947,25 +2943,25 @@ export const protoMetadata: ProtoMetadata = {
         "trailingComments": " shop_number --- ref. to sender orga\n",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 8, 2, 15],
-        "span": [158, 2, 55],
+        "path": [4, 8, 2, 14],
+        "span": [157, 2, 55],
         "leadingComments": "",
         "trailingComments": " url to rendered PDFs\n",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 8, 2, 16],
-        "span": [159, 2, 52],
+        "path": [4, 8, 2, 15],
+        "span": [158, 2, 52],
         "leadingComments": "",
         "trailingComments": " value performance from date\n",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 8, 2, 17],
-        "span": [160, 2, 50],
+        "path": [4, 8, 2, 16],
+        "span": [159, 2, 50],
         "leadingComments": "",
         "trailingComments": " value performance to date\n",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 9, 2, 2],
+        "path": [4, 9, 2, 3],
         "span": [168, 2, 56],
         "leadingComments": "",
         "trailingComments": " repeated in case of multiple currencies?\n",

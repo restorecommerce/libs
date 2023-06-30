@@ -155,16 +155,16 @@ message Invoice {
   repeated Section sections = 12;
   repeated io.restorecommerce.amount.Amount total_amounts = 13;
   repeated string payment_hints = 14;
-  optional string customer_remark = 15;
-  repeated io.restorecommerce.file.File documents = 16; // url to rendered PDFs
-  optional google.protobuf.Timestamp from_date = 17; // value performance from date
-  optional google.protobuf.Timestamp to_date = 18; // value performance to date
-  optional bool sent = 19;
-  optional bool withdrawn = 20;
+  repeated io.restorecommerce.file.File documents = 15; // url to rendered PDFs
+  optional google.protobuf.Timestamp from_date = 16; // value performance from date
+  optional google.protobuf.Timestamp to_date = 17; // value performance to date
+  optional bool sent = 18;
+  optional bool withdrawn = 19;
 }
 
 message Section {
   optional string id = 1;
+  optional string customer_remark = 2;
   repeated Position positions = 3;
   repeated io.restorecommerce.amount.Amount amounts = 5; // repeated in case of multiple currencies?
 }

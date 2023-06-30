@@ -217,7 +217,8 @@ message InvoiceSection {
 
 message InvoiceRequest {
   optional string invoice_number = 1; // if given
-  repeated InvoiceSection sections = 2;
+  repeated string payment_hints = 2;
+  repeated InvoiceSection sections = 3;
 }
 
 message InvoiceRequestList {

@@ -1,6 +1,7 @@
 /* eslint-disable */
 import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto } from "ts-proto-descriptors";
+import { protoMetadata as protoMetadata2, Timestamp } from "../../google/protobuf/timestamp";
 import { Attribute, AttributeObj, protoMetadata as protoMetadata1 } from "./attribute";
 
 export const protobufPackage = "io.restorecommerce.meta";
@@ -8,11 +9,11 @@ export const protobufPackage = "io.restorecommerce.meta";
 export interface Meta {
   /** timestamp */
   created?:
-    | number
+    | Date
     | undefined;
   /** timestamp */
   modified?:
-    | number
+    | Date
     | undefined;
   /** ID from last User who modified it */
   modifiedBy?: string | undefined;
@@ -27,10 +28,10 @@ function createBaseMeta(): Meta {
 export const Meta = {
   encode(message: Meta, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.created !== undefined) {
-      writer.uint32(9).double(message.created);
+      Timestamp.encode(toTimestamp(message.created), writer.uint32(10).fork()).ldelim();
     }
     if (message.modified !== undefined) {
-      writer.uint32(17).double(message.modified);
+      Timestamp.encode(toTimestamp(message.modified), writer.uint32(18).fork()).ldelim();
     }
     if (message.modifiedBy !== undefined) {
       writer.uint32(26).string(message.modifiedBy);
@@ -52,18 +53,18 @@ export const Meta = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 9) {
+          if (tag !== 10) {
             break;
           }
 
-          message.created = reader.double();
+          message.created = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           continue;
         case 2:
-          if (tag !== 17) {
+          if (tag !== 18) {
             break;
           }
 
-          message.modified = reader.double();
+          message.modified = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           continue;
         case 3:
           if (tag !== 26) {
@@ -97,8 +98,8 @@ export const Meta = {
 
   fromJSON(object: any): Meta {
     return {
-      created: isSet(object.created) ? Number(object.created) : undefined,
-      modified: isSet(object.modified) ? Number(object.modified) : undefined,
+      created: isSet(object.created) ? fromJsonTimestamp(object.created) : undefined,
+      modified: isSet(object.modified) ? fromJsonTimestamp(object.modified) : undefined,
       modifiedBy: isSet(object.modifiedBy) ? String(object.modifiedBy) : undefined,
       owners: Array.isArray(object?.owners) ? object.owners.map((e: any) => Attribute.fromJSON(e)) : [],
       acls: Array.isArray(object?.acls) ? object.acls.map((e: any) => AttributeObj.fromJSON(e)) : [],
@@ -107,8 +108,8 @@ export const Meta = {
 
   toJSON(message: Meta): unknown {
     const obj: any = {};
-    message.created !== undefined && (obj.created = message.created);
-    message.modified !== undefined && (obj.modified = message.modified);
+    message.created !== undefined && (obj.created = message.created.toISOString());
+    message.modified !== undefined && (obj.modified = message.modified.toISOString());
     message.modifiedBy !== undefined && (obj.modifiedBy = message.modifiedBy);
     if (message.owners) {
       obj.owners = message.owners.map((e) => e ? Attribute.toJSON(e) : undefined);
@@ -163,7 +164,7 @@ export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto.fromPartial({
     "name": "io/restorecommerce/meta.proto",
     "package": "io.restorecommerce.meta",
-    "dependency": ["io/restorecommerce/attribute.proto"],
+    "dependency": ["io/restorecommerce/attribute.proto", "google/protobuf/timestamp.proto"],
     "publicDependency": [],
     "weakDependency": [],
     "messageType": [{
@@ -172,8 +173,8 @@ export const protoMetadata: ProtoMetadata = {
         "name": "created",
         "number": 1,
         "label": 1,
-        "type": 1,
-        "typeName": "",
+        "type": 11,
+        "typeName": ".google.protobuf.Timestamp",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
@@ -184,8 +185,8 @@ export const protoMetadata: ProtoMetadata = {
         "name": "modified",
         "number": 2,
         "label": 1,
-        "type": 1,
-        "typeName": "",
+        "type": 11,
+        "typeName": ".google.protobuf.Timestamp",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 1,
@@ -248,19 +249,19 @@ export const protoMetadata: ProtoMetadata = {
     "sourceCodeInfo": {
       "location": [{
         "path": [4, 0, 2, 0],
-        "span": [9, 4, 32],
+        "span": [10, 4, 51],
         "leadingComments": "",
         "trailingComments": " timestamp\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 0, 2, 1],
-        "span": [10, 4, 33],
+        "span": [11, 4, 52],
         "leadingComments": "",
         "trailingComments": " timestamp\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 0, 2, 2],
-        "span": [11, 4, 36],
+        "span": [12, 4, 36],
         "leadingComments": "",
         "trailingComments": " ID from last User who modified it\n",
         "leadingDetachedComments": [],
@@ -269,7 +270,7 @@ export const protoMetadata: ProtoMetadata = {
     "syntax": "proto3",
   }),
   references: { ".io.restorecommerce.meta.Meta": Meta },
-  dependencies: [protoMetadata1],
+  dependencies: [protoMetadata1, protoMetadata2],
 };
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
@@ -278,6 +279,28 @@ export type DeepPartial<T> = T extends Builtin ? T
   : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
   : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+function toTimestamp(date: Date): Timestamp {
+  const seconds = date.getTime() / 1_000;
+  const nanos = (date.getTime() % 1_000) * 1_000_000;
+  return { seconds, nanos };
+}
+
+function fromTimestamp(t: Timestamp): Date {
+  let millis = (t.seconds || 0) * 1_000;
+  millis += (t.nanos || 0) / 1_000_000;
+  return new Date(millis);
+}
+
+function fromJsonTimestamp(o: any): Date {
+  if (o instanceof Date) {
+    return o;
+  } else if (typeof o === "string") {
+    return new Date(o);
+  } else {
+    return fromTimestamp(Timestamp.fromJSON(o));
+  }
+}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

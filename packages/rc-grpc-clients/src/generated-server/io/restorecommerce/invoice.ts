@@ -3,20 +3,23 @@ import type { CallContext, CallOptions } from "nice-grpc-common";
 import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
 import { Any, protoMetadata as protoMetadata1 } from "../../google/protobuf/any";
+import { protoMetadata as protoMetadata17, Timestamp } from "../../google/protobuf/timestamp";
 import { BillingAddress, protoMetadata as protoMetadata8 } from "./address";
 import { Amount, protoMetadata as protoMetadata9 } from "./amount";
+import { Attribute, protoMetadata as protoMetadata13 } from "./attribute";
 import { protoMetadata as protoMetadata5, Subject } from "./auth";
-import { protoMetadata as protoMetadata14 } from "./customer";
+import { protoMetadata as protoMetadata15 } from "./customer";
 import { File, protoMetadata as protoMetadata11 } from "./file";
 import { Meta, protoMetadata as protoMetadata3 } from "./meta";
 import { KafkaSubscription, protoMetadata as protoMetadata7, Resolver } from "./options";
 import { protoMetadata as protoMetadata4 } from "./organization";
 import { Price, protoMetadata as protoMetadata10 } from "./price";
+import { protoMetadata as protoMetadata18 } from "./product";
 import { protoMetadata as protoMetadata12, Reference } from "./reference";
 import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata2, ReadRequest } from "./resource_base";
-import { protoMetadata as protoMetadata15 } from "./shop";
+import { protoMetadata as protoMetadata16 } from "./shop";
 import { OperationStatus, protoMetadata as protoMetadata6, Status, StatusListResponse } from "./status";
-import { protoMetadata as protoMetadata13 } from "./user";
+import { protoMetadata as protoMetadata14 } from "./user";
 
 export const protobufPackage = "io.restorecommerce.invoice";
 
@@ -124,39 +127,39 @@ export interface Invoice {
     | undefined;
   /** shop_number --- ref. to sender orga */
   shop_id?: string | undefined;
-  timestamp?: number | undefined;
+  timestamp?: Date | undefined;
   payment_state?: PaymentState | undefined;
   sender?: BillingAddress | undefined;
   recipient?: BillingAddress | undefined;
-  positions: Position[];
+  sections: Section[];
   total_amounts: Amount[];
-  /** is there no better type for that? */
   payment_hints: string[];
-  /** url to rendered PDFs */
-  documents: File[];
   customer_remark?:
     | string
     | undefined;
+  /** url to rendered PDFs */
+  documents: File[];
   /** value performance from date */
   from_date?:
-    | number
+    | Date
     | undefined;
   /** value performance to date */
-  to_date?: number | undefined;
+  to_date?: Date | undefined;
   sent?: boolean | undefined;
   withdrawn?: boolean | undefined;
 }
 
-export interface Position {
+export interface Section {
   id?: string | undefined;
-  rows: Row[];
+  positions: Position[];
   /** repeated in case of multiple currencies? */
   amounts: Amount[];
 }
 
-export interface Row {
+export interface Position {
   id?: string | undefined;
   product_item?: ProductItem | undefined;
+  fultillment_item?: FulfillmentItem | undefined;
   manual_item?: ManualItem | undefined;
   unit_price?: Price | undefined;
   quantity?: number | undefined;
@@ -165,9 +168,15 @@ export interface Row {
     | undefined;
   /** if there is any contract associated with product */
   contract_start_date?: number | undefined;
+  attributes: Attribute[];
 }
 
 export interface ProductItem {
+  product_id?: string | undefined;
+  variant_id?: string | undefined;
+}
+
+export interface FulfillmentItem {
   product_id?: string | undefined;
   variant_id?: string | undefined;
 }
@@ -842,11 +851,11 @@ function createBaseInvoice(): Invoice {
     payment_state: undefined,
     sender: undefined,
     recipient: undefined,
-    positions: [],
+    sections: [],
     total_amounts: [],
     payment_hints: [],
-    documents: [],
     customer_remark: undefined,
+    documents: [],
     from_date: undefined,
     to_date: undefined,
     sent: undefined,
@@ -878,7 +887,7 @@ export const Invoice = {
       writer.uint32(58).string(message.shop_id);
     }
     if (message.timestamp !== undefined) {
-      writer.uint32(65).double(message.timestamp);
+      Timestamp.encode(toTimestamp(message.timestamp), writer.uint32(66).fork()).ldelim();
     }
     if (message.payment_state !== undefined) {
       writer.uint32(72).int32(paymentStateToNumber(message.payment_state));
@@ -889,8 +898,8 @@ export const Invoice = {
     if (message.recipient !== undefined) {
       BillingAddress.encode(message.recipient, writer.uint32(90).fork()).ldelim();
     }
-    for (const v of message.positions) {
-      Position.encode(v!, writer.uint32(98).fork()).ldelim();
+    for (const v of message.sections) {
+      Section.encode(v!, writer.uint32(98).fork()).ldelim();
     }
     for (const v of message.total_amounts) {
       Amount.encode(v!, writer.uint32(106).fork()).ldelim();
@@ -898,17 +907,17 @@ export const Invoice = {
     for (const v of message.payment_hints) {
       writer.uint32(114).string(v!);
     }
-    for (const v of message.documents) {
-      File.encode(v!, writer.uint32(122).fork()).ldelim();
-    }
     if (message.customer_remark !== undefined) {
-      writer.uint32(130).string(message.customer_remark);
+      writer.uint32(122).string(message.customer_remark);
+    }
+    for (const v of message.documents) {
+      File.encode(v!, writer.uint32(130).fork()).ldelim();
     }
     if (message.from_date !== undefined) {
-      writer.uint32(137).double(message.from_date);
+      Timestamp.encode(toTimestamp(message.from_date), writer.uint32(138).fork()).ldelim();
     }
     if (message.to_date !== undefined) {
-      writer.uint32(145).double(message.to_date);
+      Timestamp.encode(toTimestamp(message.to_date), writer.uint32(146).fork()).ldelim();
     }
     if (message.sent !== undefined) {
       writer.uint32(152).bool(message.sent);
@@ -976,11 +985,11 @@ export const Invoice = {
           message.shop_id = reader.string();
           continue;
         case 8:
-          if (tag !== 65) {
+          if (tag !== 66) {
             break;
           }
 
-          message.timestamp = reader.double();
+          message.timestamp = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           continue;
         case 9:
           if (tag !== 72) {
@@ -1008,7 +1017,7 @@ export const Invoice = {
             break;
           }
 
-          message.positions.push(Position.decode(reader, reader.uint32()));
+          message.sections.push(Section.decode(reader, reader.uint32()));
           continue;
         case 13:
           if (tag !== 106) {
@@ -1029,28 +1038,28 @@ export const Invoice = {
             break;
           }
 
-          message.documents.push(File.decode(reader, reader.uint32()));
+          message.customer_remark = reader.string();
           continue;
         case 16:
           if (tag !== 130) {
             break;
           }
 
-          message.customer_remark = reader.string();
+          message.documents.push(File.decode(reader, reader.uint32()));
           continue;
         case 17:
-          if (tag !== 137) {
+          if (tag !== 138) {
             break;
           }
 
-          message.from_date = reader.double();
+          message.from_date = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           continue;
         case 18:
-          if (tag !== 145) {
+          if (tag !== 146) {
             break;
           }
 
-          message.to_date = reader.double();
+          message.to_date = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           continue;
         case 19:
           if (tag !== 152) {
@@ -1084,19 +1093,19 @@ export const Invoice = {
       user_id: isSet(object.user_id) ? String(object.user_id) : undefined,
       customer_id: isSet(object.customer_id) ? String(object.customer_id) : undefined,
       shop_id: isSet(object.shop_id) ? String(object.shop_id) : undefined,
-      timestamp: isSet(object.timestamp) ? Number(object.timestamp) : undefined,
+      timestamp: isSet(object.timestamp) ? fromJsonTimestamp(object.timestamp) : undefined,
       payment_state: isSet(object.payment_state) ? paymentStateFromJSON(object.payment_state) : undefined,
       sender: isSet(object.sender) ? BillingAddress.fromJSON(object.sender) : undefined,
       recipient: isSet(object.recipient) ? BillingAddress.fromJSON(object.recipient) : undefined,
-      positions: Array.isArray(object?.positions) ? object.positions.map((e: any) => Position.fromJSON(e)) : [],
+      sections: Array.isArray(object?.sections) ? object.sections.map((e: any) => Section.fromJSON(e)) : [],
       total_amounts: Array.isArray(object?.total_amounts)
         ? object.total_amounts.map((e: any) => Amount.fromJSON(e))
         : [],
       payment_hints: Array.isArray(object?.payment_hints) ? object.payment_hints.map((e: any) => String(e)) : [],
-      documents: Array.isArray(object?.documents) ? object.documents.map((e: any) => File.fromJSON(e)) : [],
       customer_remark: isSet(object.customer_remark) ? String(object.customer_remark) : undefined,
-      from_date: isSet(object.from_date) ? Number(object.from_date) : undefined,
-      to_date: isSet(object.to_date) ? Number(object.to_date) : undefined,
+      documents: Array.isArray(object?.documents) ? object.documents.map((e: any) => File.fromJSON(e)) : [],
+      from_date: isSet(object.from_date) ? fromJsonTimestamp(object.from_date) : undefined,
+      to_date: isSet(object.to_date) ? fromJsonTimestamp(object.to_date) : undefined,
       sent: isSet(object.sent) ? Boolean(object.sent) : undefined,
       withdrawn: isSet(object.withdrawn) ? Boolean(object.withdrawn) : undefined,
     };
@@ -1115,16 +1124,16 @@ export const Invoice = {
     message.user_id !== undefined && (obj.user_id = message.user_id);
     message.customer_id !== undefined && (obj.customer_id = message.customer_id);
     message.shop_id !== undefined && (obj.shop_id = message.shop_id);
-    message.timestamp !== undefined && (obj.timestamp = message.timestamp);
+    message.timestamp !== undefined && (obj.timestamp = message.timestamp.toISOString());
     message.payment_state !== undefined &&
       (obj.payment_state = message.payment_state !== undefined ? paymentStateToJSON(message.payment_state) : undefined);
     message.sender !== undefined && (obj.sender = message.sender ? BillingAddress.toJSON(message.sender) : undefined);
     message.recipient !== undefined &&
       (obj.recipient = message.recipient ? BillingAddress.toJSON(message.recipient) : undefined);
-    if (message.positions) {
-      obj.positions = message.positions.map((e) => e ? Position.toJSON(e) : undefined);
+    if (message.sections) {
+      obj.sections = message.sections.map((e) => e ? Section.toJSON(e) : undefined);
     } else {
-      obj.positions = [];
+      obj.sections = [];
     }
     if (message.total_amounts) {
       obj.total_amounts = message.total_amounts.map((e) => e ? Amount.toJSON(e) : undefined);
@@ -1136,14 +1145,14 @@ export const Invoice = {
     } else {
       obj.payment_hints = [];
     }
+    message.customer_remark !== undefined && (obj.customer_remark = message.customer_remark);
     if (message.documents) {
       obj.documents = message.documents.map((e) => e ? File.toJSON(e) : undefined);
     } else {
       obj.documents = [];
     }
-    message.customer_remark !== undefined && (obj.customer_remark = message.customer_remark);
-    message.from_date !== undefined && (obj.from_date = message.from_date);
-    message.to_date !== undefined && (obj.to_date = message.to_date);
+    message.from_date !== undefined && (obj.from_date = message.from_date.toISOString());
+    message.to_date !== undefined && (obj.to_date = message.to_date.toISOString());
     message.sent !== undefined && (obj.sent = message.sent);
     message.withdrawn !== undefined && (obj.withdrawn = message.withdrawn);
     return obj;
@@ -1170,11 +1179,11 @@ export const Invoice = {
     message.recipient = (object.recipient !== undefined && object.recipient !== null)
       ? BillingAddress.fromPartial(object.recipient)
       : undefined;
-    message.positions = object.positions?.map((e) => Position.fromPartial(e)) || [];
+    message.sections = object.sections?.map((e) => Section.fromPartial(e)) || [];
     message.total_amounts = object.total_amounts?.map((e) => Amount.fromPartial(e)) || [];
     message.payment_hints = object.payment_hints?.map((e) => e) || [];
-    message.documents = object.documents?.map((e) => File.fromPartial(e)) || [];
     message.customer_remark = object.customer_remark ?? undefined;
+    message.documents = object.documents?.map((e) => File.fromPartial(e)) || [];
     message.from_date = object.from_date ?? undefined;
     message.to_date = object.to_date ?? undefined;
     message.sent = object.sent ?? undefined;
@@ -1183,17 +1192,17 @@ export const Invoice = {
   },
 };
 
-function createBasePosition(): Position {
-  return { id: undefined, rows: [], amounts: [] };
+function createBaseSection(): Section {
+  return { id: undefined, positions: [], amounts: [] };
 }
 
-export const Position = {
-  encode(message: Position, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const Section = {
+  encode(message: Section, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
-    for (const v of message.rows) {
-      Row.encode(v!, writer.uint32(26).fork()).ldelim();
+    for (const v of message.positions) {
+      Position.encode(v!, writer.uint32(26).fork()).ldelim();
     }
     for (const v of message.amounts) {
       Amount.encode(v!, writer.uint32(42).fork()).ldelim();
@@ -1201,10 +1210,10 @@ export const Position = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): Position {
+  decode(input: _m0.Reader | Uint8Array, length?: number): Section {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBasePosition();
+    const message = createBaseSection();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1220,7 +1229,7 @@ export const Position = {
             break;
           }
 
-          message.rows.push(Row.decode(reader, reader.uint32()));
+          message.positions.push(Position.decode(reader, reader.uint32()));
           continue;
         case 5:
           if (tag !== 42) {
@@ -1238,21 +1247,21 @@ export const Position = {
     return message;
   },
 
-  fromJSON(object: any): Position {
+  fromJSON(object: any): Section {
     return {
       id: isSet(object.id) ? String(object.id) : undefined,
-      rows: Array.isArray(object?.rows) ? object.rows.map((e: any) => Row.fromJSON(e)) : [],
+      positions: Array.isArray(object?.positions) ? object.positions.map((e: any) => Position.fromJSON(e)) : [],
       amounts: Array.isArray(object?.amounts) ? object.amounts.map((e: any) => Amount.fromJSON(e)) : [],
     };
   },
 
-  toJSON(message: Position): unknown {
+  toJSON(message: Section): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
-    if (message.rows) {
-      obj.rows = message.rows.map((e) => e ? Row.toJSON(e) : undefined);
+    if (message.positions) {
+      obj.positions = message.positions.map((e) => e ? Position.toJSON(e) : undefined);
     } else {
-      obj.rows = [];
+      obj.positions = [];
     }
     if (message.amounts) {
       obj.amounts = message.amounts.map((e) => e ? Amount.toJSON(e) : undefined);
@@ -1262,61 +1271,69 @@ export const Position = {
     return obj;
   },
 
-  create(base?: DeepPartial<Position>): Position {
-    return Position.fromPartial(base ?? {});
+  create(base?: DeepPartial<Section>): Section {
+    return Section.fromPartial(base ?? {});
   },
 
-  fromPartial(object: DeepPartial<Position>): Position {
-    const message = createBasePosition();
+  fromPartial(object: DeepPartial<Section>): Section {
+    const message = createBaseSection();
     message.id = object.id ?? undefined;
-    message.rows = object.rows?.map((e) => Row.fromPartial(e)) || [];
+    message.positions = object.positions?.map((e) => Position.fromPartial(e)) || [];
     message.amounts = object.amounts?.map((e) => Amount.fromPartial(e)) || [];
     return message;
   },
 };
 
-function createBaseRow(): Row {
+function createBasePosition(): Position {
   return {
     id: undefined,
     product_item: undefined,
+    fultillment_item: undefined,
     manual_item: undefined,
     unit_price: undefined,
     quantity: undefined,
     amount: undefined,
     contract_start_date: undefined,
+    attributes: [],
   };
 }
 
-export const Row = {
-  encode(message: Row, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const Position = {
+  encode(message: Position, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.id !== undefined) {
       writer.uint32(10).string(message.id);
     }
     if (message.product_item !== undefined) {
       ProductItem.encode(message.product_item, writer.uint32(18).fork()).ldelim();
     }
+    if (message.fultillment_item !== undefined) {
+      FulfillmentItem.encode(message.fultillment_item, writer.uint32(26).fork()).ldelim();
+    }
     if (message.manual_item !== undefined) {
-      ManualItem.encode(message.manual_item, writer.uint32(26).fork()).ldelim();
+      ManualItem.encode(message.manual_item, writer.uint32(34).fork()).ldelim();
     }
     if (message.unit_price !== undefined) {
-      Price.encode(message.unit_price, writer.uint32(34).fork()).ldelim();
+      Price.encode(message.unit_price, writer.uint32(42).fork()).ldelim();
     }
     if (message.quantity !== undefined) {
-      writer.uint32(40).uint32(message.quantity);
+      writer.uint32(48).uint32(message.quantity);
     }
     if (message.amount !== undefined) {
-      Amount.encode(message.amount, writer.uint32(50).fork()).ldelim();
+      Amount.encode(message.amount, writer.uint32(58).fork()).ldelim();
     }
     if (message.contract_start_date !== undefined) {
-      writer.uint32(57).double(message.contract_start_date);
+      writer.uint32(65).double(message.contract_start_date);
+    }
+    for (const v of message.attributes) {
+      Attribute.encode(v!, writer.uint32(74).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): Row {
+  decode(input: _m0.Reader | Uint8Array, length?: number): Position {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseRow();
+    const message = createBasePosition();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1339,35 +1356,49 @@ export const Row = {
             break;
           }
 
-          message.manual_item = ManualItem.decode(reader, reader.uint32());
+          message.fultillment_item = FulfillmentItem.decode(reader, reader.uint32());
           continue;
         case 4:
           if (tag !== 34) {
             break;
           }
 
-          message.unit_price = Price.decode(reader, reader.uint32());
+          message.manual_item = ManualItem.decode(reader, reader.uint32());
           continue;
         case 5:
-          if (tag !== 40) {
+          if (tag !== 42) {
+            break;
+          }
+
+          message.unit_price = Price.decode(reader, reader.uint32());
+          continue;
+        case 6:
+          if (tag !== 48) {
             break;
           }
 
           message.quantity = reader.uint32();
           continue;
-        case 6:
-          if (tag !== 50) {
+        case 7:
+          if (tag !== 58) {
             break;
           }
 
           message.amount = Amount.decode(reader, reader.uint32());
           continue;
-        case 7:
-          if (tag !== 57) {
+        case 8:
+          if (tag !== 65) {
             break;
           }
 
           message.contract_start_date = reader.double();
+          continue;
+        case 9:
+          if (tag !== 74) {
+            break;
+          }
+
+          message.attributes.push(Attribute.decode(reader, reader.uint32()));
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -1378,23 +1409,27 @@ export const Row = {
     return message;
   },
 
-  fromJSON(object: any): Row {
+  fromJSON(object: any): Position {
     return {
       id: isSet(object.id) ? String(object.id) : undefined,
       product_item: isSet(object.product_item) ? ProductItem.fromJSON(object.product_item) : undefined,
+      fultillment_item: isSet(object.fultillment_item) ? FulfillmentItem.fromJSON(object.fultillment_item) : undefined,
       manual_item: isSet(object.manual_item) ? ManualItem.fromJSON(object.manual_item) : undefined,
       unit_price: isSet(object.unit_price) ? Price.fromJSON(object.unit_price) : undefined,
       quantity: isSet(object.quantity) ? Number(object.quantity) : undefined,
       amount: isSet(object.amount) ? Amount.fromJSON(object.amount) : undefined,
       contract_start_date: isSet(object.contract_start_date) ? Number(object.contract_start_date) : undefined,
+      attributes: Array.isArray(object?.attributes) ? object.attributes.map((e: any) => Attribute.fromJSON(e)) : [],
     };
   },
 
-  toJSON(message: Row): unknown {
+  toJSON(message: Position): unknown {
     const obj: any = {};
     message.id !== undefined && (obj.id = message.id);
     message.product_item !== undefined &&
       (obj.product_item = message.product_item ? ProductItem.toJSON(message.product_item) : undefined);
+    message.fultillment_item !== undefined &&
+      (obj.fultillment_item = message.fultillment_item ? FulfillmentItem.toJSON(message.fultillment_item) : undefined);
     message.manual_item !== undefined &&
       (obj.manual_item = message.manual_item ? ManualItem.toJSON(message.manual_item) : undefined);
     message.unit_price !== undefined &&
@@ -1402,18 +1437,26 @@ export const Row = {
     message.quantity !== undefined && (obj.quantity = Math.round(message.quantity));
     message.amount !== undefined && (obj.amount = message.amount ? Amount.toJSON(message.amount) : undefined);
     message.contract_start_date !== undefined && (obj.contract_start_date = message.contract_start_date);
+    if (message.attributes) {
+      obj.attributes = message.attributes.map((e) => e ? Attribute.toJSON(e) : undefined);
+    } else {
+      obj.attributes = [];
+    }
     return obj;
   },
 
-  create(base?: DeepPartial<Row>): Row {
-    return Row.fromPartial(base ?? {});
+  create(base?: DeepPartial<Position>): Position {
+    return Position.fromPartial(base ?? {});
   },
 
-  fromPartial(object: DeepPartial<Row>): Row {
-    const message = createBaseRow();
+  fromPartial(object: DeepPartial<Position>): Position {
+    const message = createBasePosition();
     message.id = object.id ?? undefined;
     message.product_item = (object.product_item !== undefined && object.product_item !== null)
       ? ProductItem.fromPartial(object.product_item)
+      : undefined;
+    message.fultillment_item = (object.fultillment_item !== undefined && object.fultillment_item !== null)
+      ? FulfillmentItem.fromPartial(object.fultillment_item)
       : undefined;
     message.manual_item = (object.manual_item !== undefined && object.manual_item !== null)
       ? ManualItem.fromPartial(object.manual_item)
@@ -1426,6 +1469,7 @@ export const Row = {
       ? Amount.fromPartial(object.amount)
       : undefined;
     message.contract_start_date = object.contract_start_date ?? undefined;
+    message.attributes = object.attributes?.map((e) => Attribute.fromPartial(e)) || [];
     return message;
   },
 };
@@ -1495,6 +1539,77 @@ export const ProductItem = {
 
   fromPartial(object: DeepPartial<ProductItem>): ProductItem {
     const message = createBaseProductItem();
+    message.product_id = object.product_id ?? undefined;
+    message.variant_id = object.variant_id ?? undefined;
+    return message;
+  },
+};
+
+function createBaseFulfillmentItem(): FulfillmentItem {
+  return { product_id: undefined, variant_id: undefined };
+}
+
+export const FulfillmentItem = {
+  encode(message: FulfillmentItem, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.product_id !== undefined) {
+      writer.uint32(10).string(message.product_id);
+    }
+    if (message.variant_id !== undefined) {
+      writer.uint32(18).string(message.variant_id);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): FulfillmentItem {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseFulfillmentItem();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.product_id = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.variant_id = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): FulfillmentItem {
+    return {
+      product_id: isSet(object.product_id) ? String(object.product_id) : undefined,
+      variant_id: isSet(object.variant_id) ? String(object.variant_id) : undefined,
+    };
+  },
+
+  toJSON(message: FulfillmentItem): unknown {
+    const obj: any = {};
+    message.product_id !== undefined && (obj.product_id = message.product_id);
+    message.variant_id !== undefined && (obj.variant_id = message.variant_id);
+    return obj;
+  },
+
+  create(base?: DeepPartial<FulfillmentItem>): FulfillmentItem {
+    return FulfillmentItem.fromPartial(base ?? {});
+  },
+
+  fromPartial(object: DeepPartial<FulfillmentItem>): FulfillmentItem {
+    const message = createBaseFulfillmentItem();
     message.product_id = object.product_id ?? undefined;
     message.variant_id = object.variant_id ?? undefined;
     return message;
@@ -1631,7 +1746,7 @@ export const InvoiceServiceDefinition = {
       responseStream: false,
       options: {},
     },
-    /** Render invoices as PDF to ostorage. (creates if not exist, updates if id is given) */
+    /** Evaluates and (re-)Renders invoices as PDF to ostorage. (creates if not exist, updates if id is given) */
     render: {
       name: "Render",
       requestType: InvoiceList,
@@ -1676,7 +1791,7 @@ export interface InvoiceServiceImplementation<CallContextExt = {}> {
   update(request: InvoiceList, context: CallContext & CallContextExt): Promise<DeepPartial<InvoiceListResponse>>;
   upsert(request: InvoiceList, context: CallContext & CallContextExt): Promise<DeepPartial<InvoiceListResponse>>;
   delete(request: DeleteRequest, context: CallContext & CallContextExt): Promise<DeepPartial<DeleteResponse>>;
-  /** Render invoices as PDF to ostorage. (creates if not exist, updates if id is given) */
+  /** Evaluates and (re-)Renders invoices as PDF to ostorage. (creates if not exist, updates if id is given) */
   render(request: InvoiceList, context: CallContext & CallContextExt): Promise<DeepPartial<InvoiceListResponse>>;
   /** Mark invoices as withdrawn */
   withdraw(request: InvoiceIdList, context: CallContext & CallContextExt): Promise<DeepPartial<InvoiceListResponse>>;
@@ -1695,7 +1810,7 @@ export interface InvoiceServiceClient<CallOptionsExt = {}> {
   update(request: DeepPartial<InvoiceList>, options?: CallOptions & CallOptionsExt): Promise<InvoiceListResponse>;
   upsert(request: DeepPartial<InvoiceList>, options?: CallOptions & CallOptionsExt): Promise<InvoiceListResponse>;
   delete(request: DeepPartial<DeleteRequest>, options?: CallOptions & CallOptionsExt): Promise<DeleteResponse>;
-  /** Render invoices as PDF to ostorage. (creates if not exist, updates if id is given) */
+  /** Evaluates and (re-)Renders invoices as PDF to ostorage. (creates if not exist, updates if id is given) */
   render(request: DeepPartial<InvoiceList>, options?: CallOptions & CallOptionsExt): Promise<InvoiceListResponse>;
   /** Mark invoices as withdrawn */
   withdraw(request: DeepPartial<InvoiceIdList>, options?: CallOptions & CallOptionsExt): Promise<InvoiceListResponse>;
@@ -1746,9 +1861,12 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/price.proto",
       "io/restorecommerce/file.proto",
       "io/restorecommerce/reference.proto",
+      "io/restorecommerce/attribute.proto",
       "io/restorecommerce/user.proto",
       "io/restorecommerce/customer.proto",
       "io/restorecommerce/shop.proto",
+      "google/protobuf/timestamp.proto",
+      "io/restorecommerce/product.proto",
     ],
     "publicDependency": [],
     "weakDependency": [],
@@ -2197,8 +2315,8 @@ export const protoMetadata: ProtoMetadata = {
         "name": "timestamp",
         "number": 8,
         "label": 1,
-        "type": 1,
-        "typeName": "",
+        "type": 11,
+        "typeName": ".google.protobuf.Timestamp",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 6,
@@ -2242,15 +2360,15 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "positions",
+        "name": "sections",
         "number": 12,
         "label": 3,
         "type": 11,
-        "typeName": ".io.restorecommerce.invoice.Position",
+        "typeName": ".io.restorecommerce.invoice.Section",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "positions",
+        "jsonName": "sections",
         "options": undefined,
         "proto3Optional": false,
       }, {
@@ -2278,20 +2396,8 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "documents",
-        "number": 15,
-        "label": 3,
-        "type": 11,
-        "typeName": ".io.restorecommerce.file.File",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "documents",
-        "options": undefined,
-        "proto3Optional": false,
-      }, {
         "name": "customer_remark",
-        "number": 16,
+        "number": 15,
         "label": 1,
         "type": 9,
         "typeName": "",
@@ -2302,11 +2408,23 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
+        "name": "documents",
+        "number": 16,
+        "label": 3,
+        "type": 11,
+        "typeName": ".io.restorecommerce.file.File",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "documents",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
         "name": "from_date",
         "number": 17,
         "label": 1,
-        "type": 1,
-        "typeName": "",
+        "type": 11,
+        "typeName": ".google.protobuf.Timestamp",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 11,
@@ -2317,8 +2435,8 @@ export const protoMetadata: ProtoMetadata = {
         "name": "to_date",
         "number": 18,
         "label": 1,
-        "type": 1,
-        "typeName": "",
+        "type": 11,
+        "typeName": ".google.protobuf.Timestamp",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 12,
@@ -2381,7 +2499,7 @@ export const protoMetadata: ProtoMetadata = {
       "reservedRange": [],
       "reservedName": [],
     }, {
-      "name": "Position",
+      "name": "Section",
       "field": [{
         "name": "id",
         "number": 1,
@@ -2395,15 +2513,15 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "rows",
+        "name": "positions",
         "number": 3,
         "label": 3,
         "type": 11,
-        "typeName": ".io.restorecommerce.invoice.Row",
+        "typeName": ".io.restorecommerce.invoice.Position",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "rows",
+        "jsonName": "positions",
         "options": undefined,
         "proto3Optional": false,
       }, {
@@ -2428,7 +2546,7 @@ export const protoMetadata: ProtoMetadata = {
       "reservedRange": [],
       "reservedName": [],
     }, {
-      "name": "Row",
+      "name": "Position",
       "field": [{
         "name": "id",
         "number": 1,
@@ -2454,8 +2572,20 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "manual_item",
+        "name": "fultillment_item",
         "number": 3,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.invoice.FulfillmentItem",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "fultillmentItem",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "manual_item",
+        "number": 4,
         "label": 1,
         "type": 11,
         "typeName": ".io.restorecommerce.invoice.ManualItem",
@@ -2467,7 +2597,7 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": false,
       }, {
         "name": "unit_price",
-        "number": 4,
+        "number": 5,
         "label": 1,
         "type": 11,
         "typeName": ".io.restorecommerce.price.Price",
@@ -2479,7 +2609,7 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": true,
       }, {
         "name": "quantity",
-        "number": 5,
+        "number": 6,
         "label": 1,
         "type": 13,
         "typeName": "",
@@ -2491,7 +2621,7 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": true,
       }, {
         "name": "amount",
-        "number": 6,
+        "number": 7,
         "label": 1,
         "type": 11,
         "typeName": ".io.restorecommerce.amount.Amount",
@@ -2503,7 +2633,7 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": true,
       }, {
         "name": "contract_start_date",
-        "number": 7,
+        "number": 8,
         "label": 1,
         "type": 1,
         "typeName": "",
@@ -2513,6 +2643,18 @@ export const protoMetadata: ProtoMetadata = {
         "jsonName": "contractStartDate",
         "options": undefined,
         "proto3Optional": true,
+      }, {
+        "name": "attributes",
+        "number": 9,
+        "label": 3,
+        "type": 11,
+        "typeName": ".io.restorecommerce.attribute.Attribute",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "attributes",
+        "options": undefined,
+        "proto3Optional": false,
       }],
       "extension": [],
       "nestedType": [],
@@ -2531,6 +2673,49 @@ export const protoMetadata: ProtoMetadata = {
       "reservedName": [],
     }, {
       "name": "ProductItem",
+      "field": [{
+        "name": "product_id",
+        "number": 1,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "productId",
+        "options": {
+          "ctype": 0,
+          "packed": false,
+          "jstype": 0,
+          "lazy": false,
+          "deprecated": false,
+          "weak": false,
+          "uninterpretedOption": [],
+        },
+        "proto3Optional": true,
+      }, {
+        "name": "variant_id",
+        "number": 2,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 1,
+        "jsonName": "variantId",
+        "options": undefined,
+        "proto3Optional": true,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [{ "name": "_product_id", "options": undefined }, { "name": "_variant_id", "options": undefined }],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "FulfillmentItem",
       "field": [{
         "name": "product_id",
         "number": 1,
@@ -2707,92 +2892,87 @@ export const protoMetadata: ProtoMetadata = {
     "options": undefined,
     "sourceCodeInfo": {
       "location": [{
-        "path": [3, 12],
-        "span": [18, 0, 39],
+        "path": [3, 13],
+        "span": [19, 0, 39],
         "leadingComments": " Used by resolvers\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0],
-        "span": [25, 0, 53, 1],
+        "span": [28, 0, 56, 1],
         "leadingComments": "\n Microservice definition.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 5],
-        "span": [37, 2, 57],
-        "leadingComments": "\n Render invoices as PDF to ostorage. (creates if not exist, updates if id is given)\n",
+        "span": [40, 2, 57],
+        "leadingComments":
+          "\n Evaluates and (re-)Renders invoices as PDF to ostorage. (creates if not exist, updates if id is given)\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 6],
-        "span": [42, 2, 61],
+        "span": [45, 2, 61],
         "leadingComments": "\n Mark invoices as withdrawn\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 7],
-        "span": [47, 2, 82],
+        "span": [50, 2, 82],
         "leadingComments": "\n Triggers notification-srv (sends invoice per email for instance) \n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 8],
-        "span": [52, 2, 82],
+        "span": [55, 2, 82],
         "leadingComments": "\n Generate an incremented invoice number\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 8],
-        "span": [107, 0, 160, 1],
+        "span": [110, 0, 163, 1],
         "leadingComments": "\n The Invoice recource, stored in DB.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 8, 2, 5],
-        "span": [129, 2, 137, 4],
+        "span": [132, 2, 140, 4],
         "leadingComments": "",
         "trailingComments": " customer_number ref. to recipent orga\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 8, 2, 6],
-        "span": [138, 2, 146, 4],
+        "span": [141, 2, 149, 4],
         "leadingComments": "",
         "trailingComments": " shop_number --- ref. to sender orga\n",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 8, 2, 13],
-        "span": [153, 2, 37],
-        "leadingComments": "",
-        "trailingComments": " is there no better type for that?\n",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 8, 2, 14],
-        "span": [154, 2, 55],
+        "path": [4, 8, 2, 15],
+        "span": [158, 2, 55],
         "leadingComments": "",
         "trailingComments": " url to rendered PDFs\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 8, 2, 16],
-        "span": [156, 2, 33],
+        "span": [159, 2, 52],
         "leadingComments": "",
         "trailingComments": " value performance from date\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 8, 2, 17],
-        "span": [157, 2, 31],
+        "span": [160, 2, 50],
         "leadingComments": "",
         "trailingComments": " value performance to date\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 9, 2, 2],
-        "span": [165, 2, 56],
+        "span": [168, 2, 56],
         "leadingComments": "",
         "trailingComments": " repeated in case of multiple currencies?\n",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 10, 2, 6],
-        "span": [177, 2, 42],
+        "path": [4, 10, 2, 7],
+        "span": [181, 2, 42],
         "leadingComments": "",
         "trailingComments": " if there is any contract associated with product\n",
         "leadingDetachedComments": [],
@@ -2811,9 +2991,10 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.invoice.InvoiceId": InvoiceId,
     ".io.restorecommerce.invoice.InvoiceIdList": InvoiceIdList,
     ".io.restorecommerce.invoice.Invoice": Invoice,
+    ".io.restorecommerce.invoice.Section": Section,
     ".io.restorecommerce.invoice.Position": Position,
-    ".io.restorecommerce.invoice.Row": Row,
     ".io.restorecommerce.invoice.ProductItem": ProductItem,
+    ".io.restorecommerce.invoice.FulfillmentItem": FulfillmentItem,
     ".io.restorecommerce.invoice.ManualItem": ManualItem,
   },
   dependencies: [
@@ -2832,6 +3013,9 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata13,
     protoMetadata14,
     protoMetadata15,
+    protoMetadata16,
+    protoMetadata17,
+    protoMetadata18,
   ],
   options: {
     messages: {
@@ -2877,6 +3061,18 @@ export const protoMetadata: ProtoMetadata = {
           },
         },
       },
+      "FulfillmentItem": {
+        fields: {
+          "product_id": {
+            "resolver": Resolver.decode(
+              Buffer.from(
+                "CjouaW8ucmVzdG9yZWNvbW1lcmNlLmZ1bGZpbGxtZW50X3Byb2R1Y3QuRnVsZmlsbG1lbnRQcm9kdWN0EgtmdWxmaWxsbWVudBoTZnVsZmlsbG1lbnRfcHJvZHVjdCIEUmVhZCoHcHJvZHVjdA==",
+                "base64",
+              ),
+            ),
+          },
+        },
+      },
     },
     services: { "InvoiceService": { options: undefined, methods: { "Read": { "is_query": true } } } },
   },
@@ -2888,6 +3084,28 @@ export type DeepPartial<T> = T extends Builtin ? T
   : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
   : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+function toTimestamp(date: Date): Timestamp {
+  const seconds = date.getTime() / 1_000;
+  const nanos = (date.getTime() % 1_000) * 1_000_000;
+  return { seconds, nanos };
+}
+
+function fromTimestamp(t: Timestamp): Date {
+  let millis = (t.seconds || 0) * 1_000;
+  millis += (t.nanos || 0) / 1_000_000;
+  return new Date(millis);
+}
+
+function fromJsonTimestamp(o: any): Date {
+  if (o instanceof Date) {
+    return o;
+  } else if (typeof o === "string") {
+    return new Date(o);
+  } else {
+    return fromTimestamp(Timestamp.fromJSON(o));
+  }
+}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

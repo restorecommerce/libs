@@ -1,7 +1,7 @@
 /* eslint-disable */
 import * as Long from "long";
 import * as _m0 from "protobufjs/minimal";
-import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
+import { FileDescriptorProto } from "ts-proto-descriptors";
 
 export const protobufPackage = "google.protobuf";
 
@@ -191,7 +191,7 @@ type ProtoMetaMessageOptions = {
 };
 
 export interface ProtoMetadata {
-  fileDescriptor: FileDescriptorProto1;
+  fileDescriptor: FileDescriptorProto;
   references: { [key: string]: any };
   dependencies?: ProtoMetadata[];
   options?: {
@@ -205,7 +205,7 @@ export interface ProtoMetadata {
 }
 
 export const protoMetadata: ProtoMetadata = {
-  fileDescriptor: FileDescriptorProto1.fromPartial({
+  fileDescriptor: FileDescriptorProto.fromPartial({
     "name": "google/protobuf/timestamp.proto",
     "package": "google.protobuf",
     "dependency": [],

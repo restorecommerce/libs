@@ -2,6 +2,7 @@
 import type { CallContext, CallOptions } from "nice-grpc-common";
 import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
+import { protoMetadata as protoMetadata6, Timestamp } from "../../google/protobuf/timestamp";
 import { protoMetadata as protoMetadata3, Subject } from "./auth";
 import { Meta, protoMetadata as protoMetadata2 } from "./meta";
 import { protoMetadata as protoMetadata5 } from "./options";
@@ -66,7 +67,7 @@ export interface ExchangeRateQuery {
     | undefined;
   /** now in general case */
   datetime?:
-    | number
+    | Date
     | undefined;
   /** leave empty == 1.0 */
   amount?: number | undefined;
@@ -81,7 +82,7 @@ export interface ExchangeRateQueryList {
 export interface ExchangeRateResponse {
   from_currency_id?: string | undefined;
   payload?: ExchangeRate;
-  timestamp?: number | undefined;
+  timestamp?: Date | undefined;
   status?: Status;
 }
 
@@ -648,7 +649,7 @@ export const ExchangeRateQuery = {
       writer.uint32(18).string(message.to_currency_id);
     }
     if (message.datetime !== undefined) {
-      writer.uint32(25).double(message.datetime);
+      Timestamp.encode(toTimestamp(message.datetime), writer.uint32(26).fork()).ldelim();
     }
     if (message.amount !== undefined) {
       writer.uint32(33).double(message.amount);
@@ -678,11 +679,11 @@ export const ExchangeRateQuery = {
           message.to_currency_id = reader.string();
           continue;
         case 3:
-          if (tag !== 25) {
+          if (tag !== 26) {
             break;
           }
 
-          message.datetime = reader.double();
+          message.datetime = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           continue;
         case 4:
           if (tag !== 33) {
@@ -704,7 +705,7 @@ export const ExchangeRateQuery = {
     return {
       from_currency_id: isSet(object.from_currency_id) ? String(object.from_currency_id) : undefined,
       to_currency_id: isSet(object.to_currency_id) ? String(object.to_currency_id) : undefined,
-      datetime: isSet(object.datetime) ? Number(object.datetime) : undefined,
+      datetime: isSet(object.datetime) ? fromJsonTimestamp(object.datetime) : undefined,
       amount: isSet(object.amount) ? Number(object.amount) : undefined,
     };
   },
@@ -713,7 +714,7 @@ export const ExchangeRateQuery = {
     const obj: any = {};
     message.from_currency_id !== undefined && (obj.from_currency_id = message.from_currency_id);
     message.to_currency_id !== undefined && (obj.to_currency_id = message.to_currency_id);
-    message.datetime !== undefined && (obj.datetime = message.datetime);
+    message.datetime !== undefined && (obj.datetime = message.datetime.toISOString());
     message.amount !== undefined && (obj.amount = message.amount);
     return obj;
   },
@@ -835,7 +836,7 @@ export const ExchangeRateResponse = {
       ExchangeRate.encode(message.payload, writer.uint32(26).fork()).ldelim();
     }
     if (message.timestamp !== undefined) {
-      writer.uint32(17).double(message.timestamp);
+      Timestamp.encode(toTimestamp(message.timestamp), writer.uint32(18).fork()).ldelim();
     }
     if (message.status !== undefined) {
       Status.encode(message.status, writer.uint32(34).fork()).ldelim();
@@ -865,11 +866,11 @@ export const ExchangeRateResponse = {
           message.payload = ExchangeRate.decode(reader, reader.uint32());
           continue;
         case 2:
-          if (tag !== 17) {
+          if (tag !== 18) {
             break;
           }
 
-          message.timestamp = reader.double();
+          message.timestamp = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           continue;
         case 4:
           if (tag !== 34) {
@@ -891,7 +892,7 @@ export const ExchangeRateResponse = {
     return {
       from_currency_id: isSet(object.from_currency_id) ? String(object.from_currency_id) : undefined,
       payload: isSet(object.payload) ? ExchangeRate.fromJSON(object.payload) : undefined,
-      timestamp: isSet(object.timestamp) ? Number(object.timestamp) : undefined,
+      timestamp: isSet(object.timestamp) ? fromJsonTimestamp(object.timestamp) : undefined,
       status: isSet(object.status) ? Status.fromJSON(object.status) : undefined,
     };
   },
@@ -900,7 +901,7 @@ export const ExchangeRateResponse = {
     const obj: any = {};
     message.from_currency_id !== undefined && (obj.from_currency_id = message.from_currency_id);
     message.payload !== undefined && (obj.payload = message.payload ? ExchangeRate.toJSON(message.payload) : undefined);
-    message.timestamp !== undefined && (obj.timestamp = message.timestamp);
+    message.timestamp !== undefined && (obj.timestamp = message.timestamp.toISOString());
     message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
   },
@@ -1113,6 +1114,7 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/auth.proto",
       "io/restorecommerce/status.proto",
       "io/restorecommerce/options.proto",
+      "google/protobuf/timestamp.proto",
     ],
     "publicDependency": [],
     "weakDependency": [],
@@ -1449,8 +1451,8 @@ export const protoMetadata: ProtoMetadata = {
         "name": "datetime",
         "number": 3,
         "label": 1,
-        "type": 1,
-        "typeName": "",
+        "type": 11,
+        "typeName": ".google.protobuf.Timestamp",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 2,
@@ -1560,8 +1562,8 @@ export const protoMetadata: ProtoMetadata = {
         "name": "timestamp",
         "number": 2,
         "label": 1,
-        "type": 1,
-        "typeName": "",
+        "type": 11,
+        "typeName": ".google.protobuf.Timestamp",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 1,
@@ -1681,38 +1683,38 @@ export const protoMetadata: ProtoMetadata = {
     "sourceCodeInfo": {
       "location": [{
         "path": [6, 0],
-        "span": [13, 0, 22, 1],
+        "span": [14, 0, 23, 1],
         "leadingComments": "\n Microservice definition.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 4, 2, 5],
-        "span": [55, 2, 50],
+        "span": [56, 2, 50],
         "leadingComments":
           "\n For custom exchange rates beyond market.\n Regular rates are retrived from API by calling QueryExchangeRate.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 5, 2, 2],
-        "span": [61, 2, 31],
+        "span": [62, 2, 31],
         "leadingComments": "",
         "trailingComments": "fees\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 5, 2, 3],
-        "span": [62, 2, 29],
+        "span": [63, 2, 29],
         "leadingComments": "",
         "trailingComments": " leave empty == 1.0\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 6, 2, 2],
-        "span": [68, 2, 31],
+        "span": [69, 2, 50],
         "leadingComments": "",
         "trailingComments": " now in general case\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 6, 2, 3],
-        "span": [69, 2, 29],
+        "span": [70, 2, 29],
         "leadingComments": "",
         "trailingComments": " leave empty == 1.0\n",
         "leadingDetachedComments": [],
@@ -1732,7 +1734,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.currency.ExchangeRateResponse": ExchangeRateResponse,
     ".io.restorecommerce.currency.ExchangeRateListResponse": ExchangeRateListResponse,
   },
-  dependencies: [protoMetadata1, protoMetadata2, protoMetadata3, protoMetadata4, protoMetadata5],
+  dependencies: [protoMetadata1, protoMetadata2, protoMetadata3, protoMetadata4, protoMetadata5, protoMetadata6],
   options: { services: { "CurrencyService": { options: undefined, methods: { "Read": { "is_query": true } } } } },
 };
 
@@ -1742,6 +1744,28 @@ export type DeepPartial<T> = T extends Builtin ? T
   : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
   : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+function toTimestamp(date: Date): Timestamp {
+  const seconds = date.getTime() / 1_000;
+  const nanos = (date.getTime() % 1_000) * 1_000_000;
+  return { seconds, nanos };
+}
+
+function fromTimestamp(t: Timestamp): Date {
+  let millis = (t.seconds || 0) * 1_000;
+  millis += (t.nanos || 0) / 1_000_000;
+  return new Date(millis);
+}
+
+function fromJsonTimestamp(o: any): Date {
+  if (o instanceof Date) {
+    return o;
+  } else if (typeof o === "string") {
+    return new Date(o);
+  } else {
+    return fromTimestamp(Timestamp.fromJSON(o));
+  }
+}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

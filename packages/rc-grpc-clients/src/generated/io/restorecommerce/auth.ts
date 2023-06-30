@@ -1,6 +1,7 @@
 /* eslint-disable */
 import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto } from "ts-proto-descriptors";
+import { protoMetadata as protoMetadata2, Timestamp } from "../../google/protobuf/timestamp";
 import { Attribute, protoMetadata as protoMetadata1 } from "./attribute";
 
 export const protobufPackage = "io.restorecommerce.auth";
@@ -64,7 +65,7 @@ export interface RoleAssociation {
     | string
     | undefined;
   /** timestamp when the role was created */
-  created?: number | undefined;
+  created?: Date | undefined;
 }
 
 export interface HierarchicalScopesRequest {
@@ -426,7 +427,7 @@ export const RoleAssociation = {
       writer.uint32(26).string(message.id);
     }
     if (message.created !== undefined) {
-      writer.uint32(33).double(message.created);
+      Timestamp.encode(toTimestamp(message.created), writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -460,11 +461,11 @@ export const RoleAssociation = {
           message.id = reader.string();
           continue;
         case 4:
-          if (tag !== 33) {
+          if (tag !== 34) {
             break;
           }
 
-          message.created = reader.double();
+          message.created = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -480,7 +481,7 @@ export const RoleAssociation = {
       role: isSet(object.role) ? String(object.role) : undefined,
       attributes: Array.isArray(object?.attributes) ? object.attributes.map((e: any) => Attribute.fromJSON(e)) : [],
       id: isSet(object.id) ? String(object.id) : undefined,
-      created: isSet(object.created) ? Number(object.created) : undefined,
+      created: isSet(object.created) ? fromJsonTimestamp(object.created) : undefined,
     };
   },
 
@@ -493,7 +494,7 @@ export const RoleAssociation = {
       obj.attributes = [];
     }
     message.id !== undefined && (obj.id = message.id);
-    message.created !== undefined && (obj.created = message.created);
+    message.created !== undefined && (obj.created = message.created.toISOString());
     return obj;
   },
 
@@ -682,7 +683,7 @@ export const protoMetadata: ProtoMetadata = {
   fileDescriptor: FileDescriptorProto.fromPartial({
     "name": "io/restorecommerce/auth.proto",
     "package": "io.restorecommerce.auth",
-    "dependency": ["io/restorecommerce/attribute.proto"],
+    "dependency": ["io/restorecommerce/attribute.proto", "google/protobuf/timestamp.proto"],
     "publicDependency": [],
     "weakDependency": [],
     "messageType": [{
@@ -938,8 +939,8 @@ export const protoMetadata: ProtoMetadata = {
         "name": "created",
         "number": 4,
         "label": 1,
-        "type": 1,
-        "typeName": "",
+        "type": 11,
+        "typeName": ".google.protobuf.Timestamp",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 2,
@@ -1036,97 +1037,97 @@ export const protoMetadata: ProtoMetadata = {
     "sourceCodeInfo": {
       "location": [{
         "path": [4, 0],
-        "span": [8, 0, 13, 1],
+        "span": [9, 0, 14, 1],
         "leadingComments": "*\n Subject of creating User\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 0, 2, 0],
-        "span": [9, 2, 25],
+        "span": [10, 2, 25],
         "leadingComments": "",
         "trailingComments": " user id\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 0, 2, 1],
-        "span": [10, 2, 28],
+        "span": [11, 2, 28],
         "leadingComments": "",
         "trailingComments": " target scope (ID of the target scoping entity)\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 0, 2, 2],
-        "span": [11, 2, 36],
+        "span": [12, 2, 36],
         "leadingComments": "",
         "trailingComments": " for unauthenticated context\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 0],
-        "span": [16, 2, 27],
+        "span": [17, 2, 27],
         "leadingComments": "",
         "trailingComments": " token name\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 1],
-        "span": [17, 2, 33],
+        "span": [18, 2, 33],
         "leadingComments": "",
         "trailingComments": " expiration date for token\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 2],
-        "span": [18, 2, 28],
+        "span": [19, 2, 28],
         "leadingComments": "",
         "trailingComments": " token\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 3],
-        "span": [19, 2, 29],
+        "span": [20, 2, 29],
         "leadingComments": "",
         "trailingComments": " identifier for role_association\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 4],
-        "span": [20, 2, 27],
+        "span": [21, 2, 27],
         "leadingComments": "",
         "trailingComments": " type of token eg: access_token, refresh_token\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 2, 2, 0],
-        "span": [26, 2, 25],
+        "span": [27, 2, 25],
         "leadingComments": "",
         "trailingComments": " root node\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 2, 2, 1],
-        "span": [27, 2, 42],
+        "span": [28, 2, 42],
         "leadingComments": "",
         "trailingComments": " children nodes\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 2, 2, 2],
-        "span": [28, 2, 27],
+        "span": [29, 2, 27],
         "leadingComments": "",
         "trailingComments": " role identifier associated with root node scope\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 3, 2, 0],
-        "span": [32, 2, 27],
+        "span": [33, 2, 27],
         "leadingComments": "",
         "trailingComments": " role ID\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 3, 2, 1],
-        "span": [33, 2, 65],
+        "span": [34, 2, 65],
         "leadingComments": "",
         "trailingComments": " useful attributes for RBAC/ABAC like organizational scope\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 3, 2, 2],
-        "span": [34, 2, 25],
+        "span": [35, 2, 25],
         "leadingComments": "",
         "trailingComments": " identifier for role_association\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 3, 2, 3],
-        "span": [35, 2, 30],
+        "span": [36, 2, 49],
         "leadingComments": "",
         "trailingComments": " timestamp when the role was created\n",
         "leadingDetachedComments": [],
@@ -1142,7 +1143,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.auth.HierarchicalScopesRequest": HierarchicalScopesRequest,
     ".io.restorecommerce.auth.HierarchicalScopesResponse": HierarchicalScopesResponse,
   },
-  dependencies: [protoMetadata1],
+  dependencies: [protoMetadata1, protoMetadata2],
 };
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
@@ -1151,6 +1152,28 @@ export type DeepPartial<T> = T extends Builtin ? T
   : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
   : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+function toTimestamp(date: Date): Timestamp {
+  const seconds = date.getTime() / 1_000;
+  const nanos = (date.getTime() % 1_000) * 1_000_000;
+  return { seconds, nanos };
+}
+
+function fromTimestamp(t: Timestamp): Date {
+  let millis = (t.seconds || 0) * 1_000;
+  millis += (t.nanos || 0) / 1_000_000;
+  return new Date(millis);
+}
+
+function fromJsonTimestamp(o: any): Date {
+  if (o instanceof Date) {
+    return o;
+  } else if (typeof o === "string") {
+    return new Date(o);
+  } else {
+    return fromTimestamp(Timestamp.fromJSON(o));
+  }
+}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

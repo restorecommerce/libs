@@ -14,12 +14,14 @@ import "io/restorecommerce/amount.proto";
 import "io/restorecommerce/price.proto";
 import "io/restorecommerce/file.proto";
 import "io/restorecommerce/reference.proto";
+import "io/restorecommerce/attribute.proto";
 
 // Used by resolvers
 import "io/restorecommerce/user.proto";
 import "io/restorecommerce/customer.proto";
 import "io/restorecommerce/shop.proto";
 import "google/protobuf/timestamp.proto";
+import "io/restorecommerce/product.proto";
 
 /*
 * Microservice definition.
@@ -34,7 +36,7 @@ service InvoiceService {
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
 
   /*
-  * Render invoices as PDF to ostorage. (creates if not exist, updates if id is given)
+  * Evaluates and (re-)Renders invoices as PDF to ostorage. (creates if not exist, updates if id is given)
   */
   rpc Render (InvoiceList) returns (InvoiceListResponse);
   
@@ -150,33 +152,35 @@ message Invoice {
   optional PaymentState payment_state = 9;
   optional io.restorecommerce.address.BillingAddress sender = 10;
   optional io.restorecommerce.address.BillingAddress recipient = 11;
-  repeated Position positions = 12;
+  repeated Section sections = 12;
   repeated io.restorecommerce.amount.Amount total_amounts = 13;
-  repeated string payment_hints = 14; // is there no better type for that?
-  repeated io.restorecommerce.file.File documents = 15; // url to rendered PDFs
-  optional string customer_remark = 16;
-  optional double from_date = 17; // value performance from date
-  optional double to_date = 18; // value performance to date
+  repeated string payment_hints = 14;
+  optional string customer_remark = 15;
+  repeated io.restorecommerce.file.File documents = 16; // url to rendered PDFs
+  optional google.protobuf.Timestamp from_date = 17; // value performance from date
+  optional google.protobuf.Timestamp to_date = 18; // value performance to date
   optional bool sent = 19;
   optional bool withdrawn = 20;
 }
 
-message Position {
+message Section {
   optional string id = 1;
-  repeated Row rows = 3;
+  repeated Position positions = 3;
   repeated io.restorecommerce.amount.Amount amounts = 5; // repeated in case of multiple currencies?
 }
 
-message Row {
+message Position {
   optional string id = 1;
   oneof item_type {
     ProductItem product_item = 2;
-    ManualItem manual_item = 3;
+    FulfillmentItem fultillment_item = 3;
+    ManualItem manual_item = 4;
   }
-  optional io.restorecommerce.price.Price unit_price = 4;
-  optional uint32 quantity = 5;
-  optional io.restorecommerce.amount.Amount amount = 6;
-  optional double contract_start_date = 7; // if there is any contract associated with product
+  optional io.restorecommerce.price.Price unit_price = 5;
+  optional uint32 quantity = 6;
+  optional io.restorecommerce.amount.Amount amount = 7;
+  optional double contract_start_date = 8; // if there is any contract associated with product
+  repeated io.restorecommerce.attribute.Attribute attributes = 9;
 }
 
 message ProductItem {
@@ -185,6 +189,19 @@ message ProductItem {
       target_type: ".io.restorecommerce.product.Product",
       target_service: "catalog",
       target_sub_service: "product",
+      target_method: "Read",
+      field_name: "product",
+    }
+  ];
+  optional string variant_id = 2;
+}
+
+message FulfillmentItem {
+  optional string product_id = 1 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.fulfillment_product.FulfillmentProduct",
+      target_service: "fulfillment",
+      target_sub_service: "fulfillment_product",
       target_method: "Read",
       field_name: "product",
     }

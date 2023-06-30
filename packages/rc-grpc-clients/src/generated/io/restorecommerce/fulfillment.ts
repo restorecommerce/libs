@@ -1,9 +1,9 @@
 /* eslint-disable */
-import * as Long from "long";
 import type { CallContext, CallOptions } from "nice-grpc-common";
 import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
 import { Any, protoMetadata as protoMetadata1 } from "../../google/protobuf/any";
+import { protoMetadata as protoMetadata13, Timestamp } from "../../google/protobuf/timestamp";
 import { protoMetadata as protoMetadata7, ShippingAddress } from "./address";
 import { Amount, protoMetadata as protoMetadata11 } from "./amount";
 import { protoMetadata as protoMetadata4, Subject } from "./auth";
@@ -158,7 +158,7 @@ export interface Packaging {
 }
 
 export interface Event {
-  timestamp?: number | undefined;
+  timestamp?: Date | undefined;
   location?: string | undefined;
   details?: Any | undefined;
   status?: Status | undefined;
@@ -228,14 +228,18 @@ export interface Deleted {
   id: string;
 }
 
-export interface InvoiceRequest {
-  /** if given */
-  invoiceNumber?: string | undefined;
+export interface InvoiceSection {
   fulfillmentId?:
     | string
     | undefined;
-  /** includes all on empty */
-  includedParcels: string[];
+  /** selects all on empty */
+  selectedParcels: string[];
+}
+
+export interface InvoiceRequest {
+  /** if given */
+  invoiceNumber?: string | undefined;
+  sections: InvoiceSection[];
 }
 
 export interface InvoiceRequestList {
@@ -800,7 +804,7 @@ function createBaseEvent(): Event {
 export const Event = {
   encode(message: Event, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.timestamp !== undefined) {
-      writer.uint32(8).int64(message.timestamp);
+      Timestamp.encode(toTimestamp(message.timestamp), writer.uint32(10).fork()).ldelim();
     }
     if (message.location !== undefined) {
       writer.uint32(18).string(message.location);
@@ -822,11 +826,11 @@ export const Event = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 8) {
+          if (tag !== 10) {
             break;
           }
 
-          message.timestamp = longToNumber(reader.int64() as Long);
+          message.timestamp = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           continue;
         case 2:
           if (tag !== 18) {
@@ -860,7 +864,7 @@ export const Event = {
 
   fromJSON(object: any): Event {
     return {
-      timestamp: isSet(object.timestamp) ? Number(object.timestamp) : undefined,
+      timestamp: isSet(object.timestamp) ? fromJsonTimestamp(object.timestamp) : undefined,
       location: isSet(object.location) ? String(object.location) : undefined,
       details: isSet(object.details) ? Any.fromJSON(object.details) : undefined,
       status: isSet(object.status) ? Status.fromJSON(object.status) : undefined,
@@ -869,7 +873,7 @@ export const Event = {
 
   toJSON(message: Event): unknown {
     const obj: any = {};
-    message.timestamp !== undefined && (obj.timestamp = Math.round(message.timestamp));
+    message.timestamp !== undefined && (obj.timestamp = message.timestamp.toISOString());
     message.location !== undefined && (obj.location = message.location);
     message.details !== undefined && (obj.details = message.details ? Any.toJSON(message.details) : undefined);
     message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
@@ -1665,8 +1669,83 @@ export const Deleted = {
   },
 };
 
+function createBaseInvoiceSection(): InvoiceSection {
+  return { fulfillmentId: undefined, selectedParcels: [] };
+}
+
+export const InvoiceSection = {
+  encode(message: InvoiceSection, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.fulfillmentId !== undefined) {
+      writer.uint32(10).string(message.fulfillmentId);
+    }
+    for (const v of message.selectedParcels) {
+      writer.uint32(18).string(v!);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): InvoiceSection {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseInvoiceSection();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.fulfillmentId = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.selectedParcels.push(reader.string());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): InvoiceSection {
+    return {
+      fulfillmentId: isSet(object.fulfillmentId) ? String(object.fulfillmentId) : undefined,
+      selectedParcels: Array.isArray(object?.selectedParcels) ? object.selectedParcels.map((e: any) => String(e)) : [],
+    };
+  },
+
+  toJSON(message: InvoiceSection): unknown {
+    const obj: any = {};
+    message.fulfillmentId !== undefined && (obj.fulfillmentId = message.fulfillmentId);
+    if (message.selectedParcels) {
+      obj.selectedParcels = message.selectedParcels.map((e) => e);
+    } else {
+      obj.selectedParcels = [];
+    }
+    return obj;
+  },
+
+  create(base?: DeepPartial<InvoiceSection>): InvoiceSection {
+    return InvoiceSection.fromPartial(base ?? {});
+  },
+
+  fromPartial(object: DeepPartial<InvoiceSection>): InvoiceSection {
+    const message = createBaseInvoiceSection();
+    message.fulfillmentId = object.fulfillmentId ?? undefined;
+    message.selectedParcels = object.selectedParcels?.map((e) => e) || [];
+    return message;
+  },
+};
+
 function createBaseInvoiceRequest(): InvoiceRequest {
-  return { invoiceNumber: undefined, fulfillmentId: undefined, includedParcels: [] };
+  return { invoiceNumber: undefined, sections: [] };
 }
 
 export const InvoiceRequest = {
@@ -1674,11 +1753,8 @@ export const InvoiceRequest = {
     if (message.invoiceNumber !== undefined) {
       writer.uint32(10).string(message.invoiceNumber);
     }
-    if (message.fulfillmentId !== undefined) {
-      writer.uint32(18).string(message.fulfillmentId);
-    }
-    for (const v of message.includedParcels) {
-      writer.uint32(26).string(v!);
+    for (const v of message.sections) {
+      InvoiceSection.encode(v!, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -1702,14 +1778,7 @@ export const InvoiceRequest = {
             break;
           }
 
-          message.fulfillmentId = reader.string();
-          continue;
-        case 3:
-          if (tag !== 26) {
-            break;
-          }
-
-          message.includedParcels.push(reader.string());
+          message.sections.push(InvoiceSection.decode(reader, reader.uint32()));
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -1723,19 +1792,17 @@ export const InvoiceRequest = {
   fromJSON(object: any): InvoiceRequest {
     return {
       invoiceNumber: isSet(object.invoiceNumber) ? String(object.invoiceNumber) : undefined,
-      fulfillmentId: isSet(object.fulfillmentId) ? String(object.fulfillmentId) : undefined,
-      includedParcels: Array.isArray(object?.includedParcels) ? object.includedParcels.map((e: any) => String(e)) : [],
+      sections: Array.isArray(object?.sections) ? object.sections.map((e: any) => InvoiceSection.fromJSON(e)) : [],
     };
   },
 
   toJSON(message: InvoiceRequest): unknown {
     const obj: any = {};
     message.invoiceNumber !== undefined && (obj.invoiceNumber = message.invoiceNumber);
-    message.fulfillmentId !== undefined && (obj.fulfillmentId = message.fulfillmentId);
-    if (message.includedParcels) {
-      obj.includedParcels = message.includedParcels.map((e) => e);
+    if (message.sections) {
+      obj.sections = message.sections.map((e) => e ? InvoiceSection.toJSON(e) : undefined);
     } else {
-      obj.includedParcels = [];
+      obj.sections = [];
     }
     return obj;
   },
@@ -1747,8 +1814,7 @@ export const InvoiceRequest = {
   fromPartial(object: DeepPartial<InvoiceRequest>): InvoiceRequest {
     const message = createBaseInvoiceRequest();
     message.invoiceNumber = object.invoiceNumber ?? undefined;
-    message.fulfillmentId = object.fulfillmentId ?? undefined;
-    message.includedParcels = object.includedParcels?.map((e) => e) || [];
+    message.sections = object.sections?.map((e) => InvoiceSection.fromPartial(e)) || [];
     return message;
   },
 };
@@ -2112,6 +2178,7 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/options.proto",
       "io/restorecommerce/amount.proto",
       "io/restorecommerce/invoice.proto",
+      "google/protobuf/timestamp.proto",
     ],
     "publicDependency": [],
     "weakDependency": [],
@@ -2497,8 +2564,8 @@ export const protoMetadata: ProtoMetadata = {
         "name": "timestamp",
         "number": 1,
         "label": 1,
-        "type": 3,
-        "typeName": "",
+        "type": 11,
+        "typeName": ".google.protobuf.Timestamp",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
@@ -2982,6 +3049,41 @@ export const protoMetadata: ProtoMetadata = {
       "reservedRange": [],
       "reservedName": [],
     }, {
+      "name": "InvoiceSection",
+      "field": [{
+        "name": "fulfillment_id",
+        "number": 1,
+        "label": 1,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "fulfillmentId",
+        "options": undefined,
+        "proto3Optional": true,
+      }, {
+        "name": "selected_parcels",
+        "number": 2,
+        "label": 3,
+        "type": 9,
+        "typeName": "",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "selectedParcels",
+        "options": undefined,
+        "proto3Optional": false,
+      }],
+      "extension": [],
+      "nestedType": [],
+      "enumType": [],
+      "extensionRange": [],
+      "oneofDecl": [{ "name": "_fulfillment_id", "options": undefined }],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
       "name": "InvoiceRequest",
       "field": [{
         "name": "invoice_number",
@@ -2996,27 +3098,15 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "fulfillment_id",
+        "name": "sections",
         "number": 2,
-        "label": 1,
-        "type": 9,
-        "typeName": "",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 1,
-        "jsonName": "fulfillmentId",
-        "options": undefined,
-        "proto3Optional": true,
-      }, {
-        "name": "included_parcels",
-        "number": 3,
         "label": 3,
-        "type": 9,
-        "typeName": "",
+        "type": 11,
+        "typeName": ".io.restorecommerce.fulfillment.InvoiceSection",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "includedParcels",
+        "jsonName": "sections",
         "options": undefined,
         "proto3Optional": false,
       }],
@@ -3024,10 +3114,7 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [{ "name": "_invoice_number", "options": undefined }, {
-        "name": "_fulfillment_id",
-        "options": undefined,
-      }],
+      "oneofDecl": [{ "name": "_invoice_number", "options": undefined }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -3189,153 +3276,153 @@ export const protoMetadata: ProtoMetadata = {
     "sourceCodeInfo": {
       "location": [{
         "path": [6, 0],
-        "span": [20, 0, 82, 1],
+        "span": [21, 0, 83, 1],
         "leadingComments": "*\nMicroservice definition.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 0],
-        "span": [24, 2, 26, 3],
+        "span": [25, 2, 27, 3],
         "leadingComments": "*\nReturns a list of shipment IDs.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 1],
-        "span": [31, 2, 65],
+        "span": [32, 2, 65],
         "leadingComments": "*\nCreates fulfillment orders\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 2],
-        "span": [36, 2, 65],
+        "span": [37, 2, 65],
         "leadingComments": "*\nUpdates fulfillment orders unless Status is beyond Submit\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 3],
-        "span": [41, 2, 65],
+        "span": [42, 2, 65],
         "leadingComments": "*\nCreates or Updates fulfillment orders unless Status is beyond Submit\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 4],
-        "span": [46, 2, 67],
+        "span": [47, 2, 67],
         "leadingComments": "*\nEvaluate fulfillment for correctness\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 5],
-        "span": [51, 2, 65],
+        "span": [52, 2, 65],
         "leadingComments": "*\nCreates, Submits and Updates fulfillment orders against API\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 6],
-        "span": [56, 2, 66],
+        "span": [57, 2, 66],
         "leadingComments": "*\nTrack a batch of fulfillments\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 7],
-        "span": [61, 2, 69],
+        "span": [62, 2, 69],
         "leadingComments": "*\nWithdraw a batch of fulfillments and request for cancelation\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 8],
-        "span": [66, 2, 67],
+        "span": [67, 2, 67],
         "leadingComments": "*\nCancel a batch of fulfillments\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 9],
-        "span": [71, 2, 118],
+        "span": [72, 2, 118],
         "leadingComments": "*\nDelete a batch of fulfillments from the database\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 10],
-        "span": [76, 2, 98],
+        "span": [77, 2, 98],
         "leadingComments": "*\nRequires Invoice Service\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 11],
-        "span": [81, 2, 97],
+        "span": [82, 2, 97],
         "leadingComments": "*\nRequires Invoice Service\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 2, 2, 4],
-        "span": [126, 2, 38],
+        "span": [127, 2, 38],
         "leadingComments": "",
         "trailingComments": "filled on Order\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 2, 2, 5],
-        "span": [127, 2, 27],
+        "span": [128, 2, 27],
         "leadingComments": "",
         "trailingComments": "update by Track\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 2, 2, 6],
-        "span": [128, 2, 55],
+        "span": [129, 2, 55],
         "leadingComments": "",
         "trailingComments": "API status\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 6],
-        "span": [159, 0, 175, 1],
+        "span": [160, 0, 176, 1],
         "leadingComments": "*\nThis is the message of how it get stored to the database\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 6, 2, 1],
-        "span": [169, 2, 35],
+        "span": [170, 2, 35],
         "leadingComments": "",
         "trailingComments": "set by user\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 6, 2, 3],
-        "span": [171, 2, 28],
+        "span": [172, 2, 28],
         "leadingComments": "",
         "trailingComments": "set by service\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 6, 2, 4],
-        "span": [172, 2, 34],
+        "span": [173, 2, 34],
         "leadingComments": "",
         "trailingComments": "set by service\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 6, 2, 5],
-        "span": [173, 2, 62],
+        "span": [174, 2, 62],
         "leadingComments": "",
         "trailingComments": "set by service\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 6, 2, 6],
-        "span": [174, 2, 27],
+        "span": [175, 2, 27],
         "leadingComments": "",
         "trailingComments": "set by service\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 10, 2, 1],
-        "span": [196, 2, 39],
+        "span": [197, 2, 39],
         "leadingComments": "",
         "trailingComments": "optional\n",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 13, 2, 0],
-        "span": [212, 2, 37],
-        "leadingComments": "",
-        "trailingComments": " if given\n",
-        "leadingDetachedComments": [],
-      }, {
-        "path": [4, 13, 2, 2],
+        "path": [4, 13, 2, 1],
         "span": [214, 2, 39],
         "leadingComments": "",
-        "trailingComments": " includes all on empty\n",
+        "trailingComments": " selects all on empty\n",
+        "leadingDetachedComments": [],
+      }, {
+        "path": [4, 14, 2, 0],
+        "span": [218, 2, 37],
+        "leadingComments": "",
+        "trailingComments": " if given\n",
         "leadingDetachedComments": [],
       }],
     },
@@ -3356,6 +3443,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.fulfillment.FulfillmentId": FulfillmentId,
     ".io.restorecommerce.fulfillment.FulfillmentIdList": FulfillmentIdList,
     ".io.restorecommerce.fulfillment.Deleted": Deleted,
+    ".io.restorecommerce.fulfillment.InvoiceSection": InvoiceSection,
     ".io.restorecommerce.fulfillment.InvoiceRequest": InvoiceRequest,
     ".io.restorecommerce.fulfillment.InvoiceRequestList": InvoiceRequestList,
   },
@@ -3372,6 +3460,7 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata10,
     protoMetadata11,
     protoMetadata12,
+    protoMetadata13,
   ],
   options: {
     messages: {
@@ -3402,25 +3491,6 @@ export const protoMetadata: ProtoMetadata = {
   },
 };
 
-declare var self: any | undefined;
-declare var window: any | undefined;
-declare var global: any | undefined;
-var tsProtoGlobalThis: any = (() => {
-  if (typeof globalThis !== "undefined") {
-    return globalThis;
-  }
-  if (typeof self !== "undefined") {
-    return self;
-  }
-  if (typeof window !== "undefined") {
-    return window;
-  }
-  if (typeof global !== "undefined") {
-    return global;
-  }
-  throw "Unable to locate global object";
-})();
-
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
 export type DeepPartial<T> = T extends Builtin ? T
@@ -3428,18 +3498,26 @@ export type DeepPartial<T> = T extends Builtin ? T
   : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
 
-function longToNumber(long: Long): number {
-  if (long.gt(Number.MAX_SAFE_INTEGER)) {
-    throw new tsProtoGlobalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
-  }
-  return long.toNumber();
+function toTimestamp(date: Date): Timestamp {
+  const seconds = date.getTime() / 1_000;
+  const nanos = (date.getTime() % 1_000) * 1_000_000;
+  return { seconds, nanos };
 }
 
-// If you get a compile-error about 'Constructor<Long> and ... have no overlap',
-// add '--ts_proto_opt=esModuleInterop=true' as a flag when calling 'protoc'.
-if (_m0.util.Long !== Long) {
-  _m0.util.Long = Long as any;
-  _m0.configure();
+function fromTimestamp(t: Timestamp): Date {
+  let millis = (t.seconds || 0) * 1_000;
+  millis += (t.nanos || 0) / 1_000_000;
+  return new Date(millis);
+}
+
+function fromJsonTimestamp(o: any): Date {
+  if (o instanceof Date) {
+    return o;
+  } else if (typeof o === "string") {
+    return new Date(o);
+  } else {
+    return fromTimestamp(Timestamp.fromJSON(o));
+  }
 }
 
 function isSet(value: any): boolean {

@@ -91,9 +91,18 @@ message IndividualProduct {
       field_name: "manufacturer",
     }
   ];
-  optional string taric_code = 4;
+  optional string origin_country_id = 4 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.country.Country",
+      target_service: "master_data",
+      target_sub_service: "country",
+      target_method: "Read",
+      field_name: "origin_country",
+    }
+  ];
+  optional string taric_code = 5;
   oneof classification {
-    string prototype_id = 5 [
+    string prototype_id = 6 [
       (io.restorecommerce.options.resolver) = {
         target_type: ".io.restorecommerce.product_prototype.ProductPrototype",
         target_service: "catalog",
@@ -102,7 +111,7 @@ message IndividualProduct {
         field_name: "prototype",
       }
     ];
-    string category_id = 6 [
+    string category_id = 7 [
       (io.restorecommerce.options.resolver) = {
         target_type: ".io.restorecommerce.product_category.ProductCategory",
         target_service: "catalog",
@@ -112,17 +121,21 @@ message IndividualProduct {
       }
     ];
   }
-  repeated string tax_ids = 7;
-  optional string currency_id = 8;
-  optional string gtin = 9;
+  repeated string tax_ids = 8;
+  optional string gtin = 10;
   oneof nature {
-    PhysicalProduct physical = 10;
-    VirtualProduct virtual = 11;
+    PhysicalProduct physical = 11;
+    ServiceProduct service = 12;
+    VirtualProduct virtual = 13;
   };
 }
 
 message PhysicalProduct {
   repeated PhysicalVariant variants = 1;
+}
+
+message ServiceProduct {
+  repeated ServiceVariant variants = 1;
 }
 
 message VirtualProduct {
@@ -164,6 +177,19 @@ message PhysicalVariant {
   optional string template_variant = 9;
   optional Package package = 10;
   repeated io.restorecommerce.attribute.Attribute attributes = 11;
+}
+
+message ServiceVariant {
+  optional string id = 1;
+  optional string name = 2;
+  optional string description = 3;
+  optional int32 stock_level = 4;
+  optional io.restorecommerce.price.Price price = 5;
+  repeated io.restorecommerce.image.Image images = 6;
+  repeated io.restorecommerce.file.File files = 7;
+  optional string stock_keeping_unit = 8;
+  optional string template_variant = 9;
+  repeated io.restorecommerce.attribute.Attribute attributes = 10;
 }
 
 message VirtualVariant {

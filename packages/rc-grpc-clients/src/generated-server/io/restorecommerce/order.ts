@@ -9,11 +9,12 @@ import { protoMetadata as protoMetadata4, Subject } from "./auth";
 import { protoMetadata as protoMetadata10 } from "./country";
 import {
   FulfillmentListResponse,
+  InvoiceSection as InvoiceSection16,
   protoMetadata as protoMetadata11,
   State as State15,
-  stateFromJSON as stateFromJSON17,
-  stateToJSON as stateToJSON18,
-  stateToNumber as stateToNumber16,
+  stateFromJSON as stateFromJSON18,
+  stateToJSON as stateToJSON19,
+  stateToNumber as stateToNumber17,
 } from "./fulfillment";
 import { PackingSolutionListResponse, Preferences, protoMetadata as protoMetadata12 } from "./fulfillment_product";
 import {
@@ -126,6 +127,51 @@ export function stateToNumber(object: State): number {
   }
 }
 
+export enum FulfillmentInvoiceMode {
+  INCLUDE = "INCLUDE",
+  EXCLUDE = "EXCLUDE",
+  UNRECOGNIZED = "UNRECOGNIZED",
+}
+
+export function fulfillmentInvoiceModeFromJSON(object: any): FulfillmentInvoiceMode {
+  switch (object) {
+    case 0:
+    case "INCLUDE":
+      return FulfillmentInvoiceMode.INCLUDE;
+    case 1:
+    case "EXCLUDE":
+      return FulfillmentInvoiceMode.EXCLUDE;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return FulfillmentInvoiceMode.UNRECOGNIZED;
+  }
+}
+
+export function fulfillmentInvoiceModeToJSON(object: FulfillmentInvoiceMode): string {
+  switch (object) {
+    case FulfillmentInvoiceMode.INCLUDE:
+      return "INCLUDE";
+    case FulfillmentInvoiceMode.EXCLUDE:
+      return "EXCLUDE";
+    case FulfillmentInvoiceMode.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
+
+export function fulfillmentInvoiceModeToNumber(object: FulfillmentInvoiceMode): number {
+  switch (object) {
+    case FulfillmentInvoiceMode.INCLUDE:
+      return 0;
+    case FulfillmentInvoiceMode.EXCLUDE:
+      return 1;
+    case FulfillmentInvoiceMode.UNRECOGNIZED:
+    default:
+      return -1;
+  }
+}
+
 export interface Item {
   id?: string | undefined;
   product_id?: string | undefined;
@@ -214,8 +260,8 @@ export interface FulfillmentRequest {
   sender_address?:
     | ShippingAddress
     | undefined;
-  /** includes all if empty */
-  include_items: string[];
+  /** select all on empty */
+  selected_items: string[];
   data?: Any;
 }
 
@@ -225,20 +271,23 @@ export interface FulfillmentRequestList {
   subject?: Subject;
 }
 
-export interface InvoicePosition {
+export interface InvoiceSection {
   order_id?:
     | string
     | undefined;
+  /** select all on empty */
+  selected_items: string[];
+  fulfillment_mode?:
+    | FulfillmentInvoiceMode
+    | undefined;
   /** includes all on empty */
-  included_items: string[];
-  /** includes all on empty */
-  included_fulfillments: string[];
+  selected_fulfillments: InvoiceSection16[];
 }
 
 export interface InvoiceRequest {
   /** if given */
   invoice_number?: string | undefined;
-  positions: InvoicePosition[];
+  sections: InvoiceSection[];
 }
 
 export interface InvoiceRequestList {
@@ -427,7 +476,7 @@ export const Order = {
       writer.uint32(56).int32(stateToNumber(message.order_state));
     }
     if (message.fulfillment_state !== undefined) {
-      writer.uint32(64).int32(stateToNumber16(message.fulfillment_state));
+      writer.uint32(64).int32(stateToNumber17(message.fulfillment_state));
     }
     if (message.payment_state !== undefined) {
       writer.uint32(72).int32(paymentStateToNumber(message.payment_state));
@@ -517,7 +566,7 @@ export const Order = {
             break;
           }
 
-          message.fulfillment_state = stateFromJSON17(reader.int32());
+          message.fulfillment_state = stateFromJSON18(reader.int32());
           continue;
         case 9:
           if (tag !== 72) {
@@ -593,7 +642,7 @@ export const Order = {
       shop_id: isSet(object.shop_id) ? String(object.shop_id) : undefined,
       items: Array.isArray(object?.items) ? object.items.map((e: any) => Item.fromJSON(e)) : [],
       order_state: isSet(object.order_state) ? stateFromJSON(object.order_state) : undefined,
-      fulfillment_state: isSet(object.fulfillment_state) ? stateFromJSON17(object.fulfillment_state) : undefined,
+      fulfillment_state: isSet(object.fulfillment_state) ? stateFromJSON18(object.fulfillment_state) : undefined,
       payment_state: isSet(object.payment_state) ? paymentStateFromJSON(object.payment_state) : undefined,
       total_amounts: Array.isArray(object?.total_amounts)
         ? object.total_amounts.map((e: any) => Amount.fromJSON(e))
@@ -624,7 +673,7 @@ export const Order = {
     message.order_state !== undefined &&
       (obj.order_state = message.order_state !== undefined ? stateToJSON(message.order_state) : undefined);
     message.fulfillment_state !== undefined && (obj.fulfillment_state = message.fulfillment_state !== undefined
-      ? stateToJSON18(message.fulfillment_state)
+      ? stateToJSON19(message.fulfillment_state)
       : undefined);
     message.payment_state !== undefined &&
       (obj.payment_state = message.payment_state !== undefined ? paymentStateToJSON(message.payment_state) : undefined);
@@ -1075,7 +1124,7 @@ function createBaseFulfillmentRequest(): FulfillmentRequest {
     export_description: undefined,
     invoice_number: undefined,
     sender_address: undefined,
-    include_items: [],
+    selected_items: [],
     data: undefined,
   };
 }
@@ -1097,7 +1146,7 @@ export const FulfillmentRequest = {
     if (message.sender_address !== undefined) {
       ShippingAddress.encode(message.sender_address, writer.uint32(42).fork()).ldelim();
     }
-    for (const v of message.include_items) {
+    for (const v of message.selected_items) {
       writer.uint32(50).string(v!);
     }
     if (message.data !== undefined) {
@@ -1153,7 +1202,7 @@ export const FulfillmentRequest = {
             break;
           }
 
-          message.include_items.push(reader.string());
+          message.selected_items.push(reader.string());
           continue;
         case 7:
           if (tag !== 58) {
@@ -1178,7 +1227,7 @@ export const FulfillmentRequest = {
       export_description: isSet(object.export_description) ? String(object.export_description) : undefined,
       invoice_number: isSet(object.invoice_number) ? String(object.invoice_number) : undefined,
       sender_address: isSet(object.sender_address) ? ShippingAddress.fromJSON(object.sender_address) : undefined,
-      include_items: Array.isArray(object?.include_items) ? object.include_items.map((e: any) => String(e)) : [],
+      selected_items: Array.isArray(object?.selected_items) ? object.selected_items.map((e: any) => String(e)) : [],
       data: isSet(object.data) ? Any.fromJSON(object.data) : undefined,
     };
   },
@@ -1191,10 +1240,10 @@ export const FulfillmentRequest = {
     message.invoice_number !== undefined && (obj.invoice_number = message.invoice_number);
     message.sender_address !== undefined &&
       (obj.sender_address = message.sender_address ? ShippingAddress.toJSON(message.sender_address) : undefined);
-    if (message.include_items) {
-      obj.include_items = message.include_items.map((e) => e);
+    if (message.selected_items) {
+      obj.selected_items = message.selected_items.map((e) => e);
     } else {
-      obj.include_items = [];
+      obj.selected_items = [];
     }
     message.data !== undefined && (obj.data = message.data ? Any.toJSON(message.data) : undefined);
     return obj;
@@ -1213,7 +1262,7 @@ export const FulfillmentRequest = {
     message.sender_address = (object.sender_address !== undefined && object.sender_address !== null)
       ? ShippingAddress.fromPartial(object.sender_address)
       : undefined;
-    message.include_items = object.include_items?.map((e) => e) || [];
+    message.selected_items = object.selected_items?.map((e) => e) || [];
     message.data = (object.data !== undefined && object.data !== null) ? Any.fromPartial(object.data) : undefined;
     return message;
   },
@@ -1309,51 +1358,61 @@ export const FulfillmentRequestList = {
   },
 };
 
-function createBaseInvoicePosition(): InvoicePosition {
-  return { order_id: undefined, included_items: [], included_fulfillments: [] };
+function createBaseInvoiceSection(): InvoiceSection {
+  return { order_id: undefined, selected_items: [], fulfillment_mode: undefined, selected_fulfillments: [] };
 }
 
-export const InvoicePosition = {
-  encode(message: InvoicePosition, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const InvoiceSection = {
+  encode(message: InvoiceSection, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.order_id !== undefined) {
-      writer.uint32(18).string(message.order_id);
+      writer.uint32(10).string(message.order_id);
     }
-    for (const v of message.included_items) {
-      writer.uint32(26).string(v!);
+    for (const v of message.selected_items) {
+      writer.uint32(18).string(v!);
     }
-    for (const v of message.included_fulfillments) {
-      writer.uint32(34).string(v!);
+    if (message.fulfillment_mode !== undefined) {
+      writer.uint32(24).int32(fulfillmentInvoiceModeToNumber(message.fulfillment_mode));
+    }
+    for (const v of message.selected_fulfillments) {
+      InvoiceSection16.encode(v!, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): InvoicePosition {
+  decode(input: _m0.Reader | Uint8Array, length?: number): InvoiceSection {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseInvoicePosition();
+    const message = createBaseInvoiceSection();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
-        case 2:
-          if (tag !== 18) {
+        case 1:
+          if (tag !== 10) {
             break;
           }
 
           message.order_id = reader.string();
           continue;
-        case 3:
-          if (tag !== 26) {
+        case 2:
+          if (tag !== 18) {
             break;
           }
 
-          message.included_items.push(reader.string());
+          message.selected_items.push(reader.string());
+          continue;
+        case 3:
+          if (tag !== 24) {
+            break;
+          }
+
+          message.fulfillment_mode = fulfillmentInvoiceModeFromJSON(reader.int32());
           continue;
         case 4:
           if (tag !== 34) {
             break;
           }
 
-          message.included_fulfillments.push(reader.string());
+          message.selected_fulfillments.push(InvoiceSection16.decode(reader, reader.uint32()));
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -1364,47 +1423,54 @@ export const InvoicePosition = {
     return message;
   },
 
-  fromJSON(object: any): InvoicePosition {
+  fromJSON(object: any): InvoiceSection {
     return {
       order_id: isSet(object.order_id) ? String(object.order_id) : undefined,
-      included_items: Array.isArray(object?.included_items) ? object.included_items.map((e: any) => String(e)) : [],
-      included_fulfillments: Array.isArray(object?.included_fulfillments)
-        ? object.included_fulfillments.map((e: any) => String(e))
+      selected_items: Array.isArray(object?.selected_items) ? object.selected_items.map((e: any) => String(e)) : [],
+      fulfillment_mode: isSet(object.fulfillment_mode)
+        ? fulfillmentInvoiceModeFromJSON(object.fulfillment_mode)
+        : undefined,
+      selected_fulfillments: Array.isArray(object?.selected_fulfillments)
+        ? object.selected_fulfillments.map((e: any) => InvoiceSection.fromJSON(e))
         : [],
     };
   },
 
-  toJSON(message: InvoicePosition): unknown {
+  toJSON(message: InvoiceSection): unknown {
     const obj: any = {};
     message.order_id !== undefined && (obj.order_id = message.order_id);
-    if (message.included_items) {
-      obj.included_items = message.included_items.map((e) => e);
+    if (message.selected_items) {
+      obj.selected_items = message.selected_items.map((e) => e);
     } else {
-      obj.included_items = [];
+      obj.selected_items = [];
     }
-    if (message.included_fulfillments) {
-      obj.included_fulfillments = message.included_fulfillments.map((e) => e);
+    message.fulfillment_mode !== undefined && (obj.fulfillment_mode = message.fulfillment_mode !== undefined
+      ? fulfillmentInvoiceModeToJSON(message.fulfillment_mode)
+      : undefined);
+    if (message.selected_fulfillments) {
+      obj.selected_fulfillments = message.selected_fulfillments.map((e) => e ? InvoiceSection16.toJSON(e) : undefined);
     } else {
-      obj.included_fulfillments = [];
+      obj.selected_fulfillments = [];
     }
     return obj;
   },
 
-  create(base?: DeepPartial<InvoicePosition>): InvoicePosition {
-    return InvoicePosition.fromPartial(base ?? {});
+  create(base?: DeepPartial<InvoiceSection>): InvoiceSection {
+    return InvoiceSection.fromPartial(base ?? {});
   },
 
-  fromPartial(object: DeepPartial<InvoicePosition>): InvoicePosition {
-    const message = createBaseInvoicePosition();
+  fromPartial(object: DeepPartial<InvoiceSection>): InvoiceSection {
+    const message = createBaseInvoiceSection();
     message.order_id = object.order_id ?? undefined;
-    message.included_items = object.included_items?.map((e) => e) || [];
-    message.included_fulfillments = object.included_fulfillments?.map((e) => e) || [];
+    message.selected_items = object.selected_items?.map((e) => e) || [];
+    message.fulfillment_mode = object.fulfillment_mode ?? undefined;
+    message.selected_fulfillments = object.selected_fulfillments?.map((e) => InvoiceSection16.fromPartial(e)) || [];
     return message;
   },
 };
 
 function createBaseInvoiceRequest(): InvoiceRequest {
-  return { invoice_number: undefined, positions: [] };
+  return { invoice_number: undefined, sections: [] };
 }
 
 export const InvoiceRequest = {
@@ -1412,8 +1478,8 @@ export const InvoiceRequest = {
     if (message.invoice_number !== undefined) {
       writer.uint32(10).string(message.invoice_number);
     }
-    for (const v of message.positions) {
-      InvoicePosition.encode(v!, writer.uint32(18).fork()).ldelim();
+    for (const v of message.sections) {
+      InvoiceSection.encode(v!, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -1437,7 +1503,7 @@ export const InvoiceRequest = {
             break;
           }
 
-          message.positions.push(InvoicePosition.decode(reader, reader.uint32()));
+          message.sections.push(InvoiceSection.decode(reader, reader.uint32()));
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -1451,17 +1517,17 @@ export const InvoiceRequest = {
   fromJSON(object: any): InvoiceRequest {
     return {
       invoice_number: isSet(object.invoice_number) ? String(object.invoice_number) : undefined,
-      positions: Array.isArray(object?.positions) ? object.positions.map((e: any) => InvoicePosition.fromJSON(e)) : [],
+      sections: Array.isArray(object?.sections) ? object.sections.map((e: any) => InvoiceSection.fromJSON(e)) : [],
     };
   },
 
   toJSON(message: InvoiceRequest): unknown {
     const obj: any = {};
     message.invoice_number !== undefined && (obj.invoice_number = message.invoice_number);
-    if (message.positions) {
-      obj.positions = message.positions.map((e) => e ? InvoicePosition.toJSON(e) : undefined);
+    if (message.sections) {
+      obj.sections = message.sections.map((e) => e ? InvoiceSection.toJSON(e) : undefined);
     } else {
-      obj.positions = [];
+      obj.sections = [];
     }
     return obj;
   },
@@ -1473,7 +1539,7 @@ export const InvoiceRequest = {
   fromPartial(object: DeepPartial<InvoiceRequest>): InvoiceRequest {
     const message = createBaseInvoiceRequest();
     message.invoice_number = object.invoice_number ?? undefined;
-    message.positions = object.positions?.map((e) => InvoicePosition.fromPartial(e)) || [];
+    message.sections = object.sections?.map((e) => InvoiceSection.fromPartial(e)) || [];
     return message;
   },
 };
@@ -2406,7 +2472,7 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "include_items",
+        "name": "selected_items",
         "number": 6,
         "label": 3,
         "type": 9,
@@ -2414,7 +2480,7 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "includeItems",
+        "jsonName": "selectedItems",
         "options": undefined,
         "proto3Optional": false,
       }, {
@@ -2492,10 +2558,10 @@ export const protoMetadata: ProtoMetadata = {
       "reservedRange": [],
       "reservedName": [],
     }, {
-      "name": "InvoicePosition",
+      "name": "InvoiceSection",
       "field": [{
         "name": "order_id",
-        "number": 2,
+        "number": 1,
         "label": 1,
         "type": 9,
         "typeName": "",
@@ -2506,27 +2572,39 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "included_items",
-        "number": 3,
+        "name": "selected_items",
+        "number": 2,
         "label": 3,
         "type": 9,
         "typeName": "",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "includedItems",
+        "jsonName": "selectedItems",
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "included_fulfillments",
+        "name": "fulfillment_mode",
+        "number": 3,
+        "label": 1,
+        "type": 14,
+        "typeName": ".io.restorecommerce.order.FulfillmentInvoiceMode",
+        "extendee": "",
+        "defaultValue": "",
+        "oneofIndex": 1,
+        "jsonName": "fulfillmentMode",
+        "options": undefined,
+        "proto3Optional": true,
+      }, {
+        "name": "selected_fulfillments",
         "number": 4,
         "label": 3,
-        "type": 9,
-        "typeName": "",
+        "type": 11,
+        "typeName": ".io.restorecommerce.fulfillment.InvoiceSection",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "includedFulfillments",
+        "jsonName": "selectedFulfillments",
         "options": undefined,
         "proto3Optional": false,
       }],
@@ -2534,7 +2612,10 @@ export const protoMetadata: ProtoMetadata = {
       "nestedType": [],
       "enumType": [],
       "extensionRange": [],
-      "oneofDecl": [{ "name": "_order_id", "options": undefined }],
+      "oneofDecl": [{ "name": "_order_id", "options": undefined }, {
+        "name": "_fulfillment_mode",
+        "options": undefined,
+      }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -2553,15 +2634,15 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "positions",
+        "name": "sections",
         "number": 2,
         "label": 3,
         "type": 11,
-        "typeName": ".io.restorecommerce.order.InvoicePosition",
+        "typeName": ".io.restorecommerce.order.InvoiceSection",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "positions",
+        "jsonName": "sections",
         "options": undefined,
         "proto3Optional": false,
       }],
@@ -2633,6 +2714,16 @@ export const protoMetadata: ProtoMetadata = {
         { "name": "WITHDRAWN", "number": 6, "options": undefined },
         { "name": "CANCELLED", "number": 7, "options": undefined },
       ],
+      "options": undefined,
+      "reservedRange": [],
+      "reservedName": [],
+    }, {
+      "name": "FulfillmentInvoiceMode",
+      "value": [{ "name": "INCLUDE", "number": 0, "options": undefined }, {
+        "name": "EXCLUDE",
+        "number": 1,
+        "options": undefined,
+      }],
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
@@ -2781,85 +2872,85 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 0, 2, 4],
-        "span": [73, 2, 57],
+        "span": [78, 2, 57],
         "leadingComments": "",
         "trailingComments": "Set by service\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 0, 2, 5],
-        "span": [74, 2, 55],
+        "span": [79, 2, 55],
         "leadingComments": "",
         "trailingComments": "Set by service\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1],
-        "span": [80, 0, 129, 1],
+        "span": [85, 0, 134, 1],
         "leadingComments": "*\nDatabase Entity\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 6],
-        "span": [119, 2, 33],
+        "span": [124, 2, 33],
         "leadingComments": "",
         "trailingComments": " Set by service\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 7],
-        "span": [120, 2, 70],
+        "span": [125, 2, 70],
         "leadingComments": "",
         "trailingComments": " Set by kafka\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 8],
-        "span": [121, 2, 69],
+        "span": [126, 2, 69],
         "leadingComments": "",
         "trailingComments": " Set by kafka\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 9],
-        "span": [122, 2, 63],
+        "span": [127, 2, 63],
         "leadingComments": "",
         "trailingComments": " Set by service --- repeated in case of variant currency?\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 7, 2, 1],
-        "span": [159, 2, 34],
+        "span": [164, 2, 34],
         "leadingComments": "",
         "trailingComments": " @TODO: not used!\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 7, 2, 2],
-        "span": [160, 2, 41],
+        "span": [165, 2, 41],
         "leadingComments": "",
         "trailingComments": " @TODO: not used!\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 7, 2, 3],
-        "span": [161, 2, 37],
+        "span": [166, 2, 37],
         "leadingComments": "",
         "trailingComments": " @TODO: not used!\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 7, 2, 5],
-        "span": [163, 2, 36],
+        "span": [168, 2, 37],
         "leadingComments": "",
-        "trailingComments": " includes all if empty\n",
+        "trailingComments": " select all on empty\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 9, 2, 1],
-        "span": [175, 2, 37],
+        "span": [180, 2, 37],
         "leadingComments": "",
-        "trailingComments": " includes all on empty\n",
+        "trailingComments": " select all on empty\n",
         "leadingDetachedComments": [],
       }, {
-        "path": [4, 9, 2, 2],
-        "span": [176, 2, 44],
+        "path": [4, 9, 2, 3],
+        "span": [182, 2, 83],
         "leadingComments": "",
         "trailingComments": " includes all on empty\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 10, 2, 0],
-        "span": [180, 2, 37],
+        "span": [186, 2, 37],
         "leadingComments": "",
         "trailingComments": " if given\n",
         "leadingDetachedComments": [],
@@ -2869,6 +2960,7 @@ export const protoMetadata: ProtoMetadata = {
   }),
   references: {
     ".io.restorecommerce.order.State": State,
+    ".io.restorecommerce.order.FulfillmentInvoiceMode": FulfillmentInvoiceMode,
     ".io.restorecommerce.order.Item": Item,
     ".io.restorecommerce.order.Order": Order,
     ".io.restorecommerce.order.OrderIdList": OrderIdList,
@@ -2878,7 +2970,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.order.Deleted": Deleted,
     ".io.restorecommerce.order.FulfillmentRequest": FulfillmentRequest,
     ".io.restorecommerce.order.FulfillmentRequestList": FulfillmentRequestList,
-    ".io.restorecommerce.order.InvoicePosition": InvoicePosition,
+    ".io.restorecommerce.order.InvoiceSection": InvoiceSection,
     ".io.restorecommerce.order.InvoiceRequest": InvoiceRequest,
     ".io.restorecommerce.order.InvoiceRequestList": InvoiceRequestList,
   },

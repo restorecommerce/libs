@@ -210,10 +210,14 @@ message Deleted {
   string id = 1;
 }
 
+message InvoiceSection {
+  optional string fulfillment_id = 1;
+  repeated string selected_parcels = 2; // selects all on empty
+}
+
 message InvoiceRequest {
   optional string invoice_number = 1; // if given
-  optional string fulfillment_id = 2;
-  repeated string included_parcels = 3; // includes all on empty
+  repeated InvoiceSection sections = 2;
 }
 
 message InvoiceRequestList {

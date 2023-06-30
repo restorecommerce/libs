@@ -58,6 +58,11 @@ enum State {
   CANCELLED = 7;
 }
 
+enum FulfillmentInvoiceMode {
+  INCLUDE = 0;
+  EXCLUDE = 1;
+}
+
 message Item {
   optional string id = 1;
   optional string product_id = 2 [
@@ -161,7 +166,7 @@ message FulfillmentRequest {
   optional string export_description = 3; // @TODO: not used!
   optional string invoice_number = 4; // @TODO: not used!
   optional io.restorecommerce.address.ShippingAddress sender_address = 5;
-  repeated string include_items = 6; // includes all if empty
+  repeated string selected_items = 6; // select all on empty
   google.protobuf.Any data = 7;
 }
 
@@ -171,15 +176,16 @@ message FulfillmentRequestList {
   io.restorecommerce.auth.Subject subject = 3;
 }
 
-message InvoicePosition {
-  optional string order_id = 2;
-  repeated string included_items = 3; // includes all on empty
-  repeated string included_fulfillments = 4; // includes all on empty
+message InvoiceSection {
+  optional string order_id = 1;
+  repeated string selected_items = 2; // select all on empty
+  optional FulfillmentInvoiceMode fulfillment_mode = 3;
+  repeated io.restorecommerce.fulfillment.InvoiceSection selected_fulfillments = 4; // includes all on empty
 }
 
 message InvoiceRequest {
   optional string invoice_number = 1; // if given
-  repeated InvoicePosition positions = 2;
+  repeated InvoiceSection sections = 2;
 }
 
 message InvoiceRequestList {

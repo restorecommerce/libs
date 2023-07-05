@@ -106,7 +106,7 @@ export const getGQLResolverFunctions =
 
       (obj as any)[methodName] = async (args: any, context: ServiceClient<CTX, keyof CTX, T>) => {
         const client = context[key].client;
-        const service = client[key as any];
+        const service = client[serviceKey];
         try {
           const converted = await preprocessGQLInput(args.input, typing.input);
           const scope = args?.input?.scope;

@@ -498,7 +498,7 @@ export const generateSubServiceResolvers = <T, M extends Record<string, any>, CT
                     // TODO Support custom input messages
                     const req = ReadRequest.fromPartial({
                       filters: [{
-                        filter: idList.map(id => ({
+                        filters: idList.map(id => ({
                           field: 'id',
                           operation: Filter_Operation.eq,
                           value: id,

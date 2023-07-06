@@ -56,7 +56,7 @@ const streamToAsyncIterable = async function* (request: any, readableStreamKey: 
 
 export const getGQLResolverFunctions =
   <T extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, T>, SRV = any, R = ResolverFn<any, any, ServiceClient<CTX, keyof CTX, T>, any>, B extends keyof T = any, NS extends keyof CTX = any>
-    (service: ServiceDescriptorProto, key: any, serviceKey: B, cfg: ServiceConfig): { [key in keyof SRV]: R } => {
+    (service: ServiceDescriptorProto, key: NS, serviceKey: B, cfg: ServiceConfig): { [key in keyof SRV]: R } => {
     if (!service.method) {
       return {} as { [key in keyof SRV]: R };
     }
@@ -107,7 +107,7 @@ export const getGQLResolverFunctions =
       (obj as any)[methodName] = async (args: any, context: ServiceClient<CTX, keyof CTX, T>) => {
         let client;
         if (key == 'master_data') {
-          key = 'resource';
+          key = 'resource' as NS;
         }
         client = context[key].client;
         const service = client[serviceKey];
@@ -118,7 +118,7 @@ export const getGQLResolverFunctions =
           let req = typing.processor.fromPartial(converted);
 
           // convert enum strings to integers
-          req = convertEnumToInt(typing, req);
+          // req = convertEnumToInt(typing, req);
           if (subjectField !== null) {
             req.subject = getTyping(authSubjectType)!.processor.fromPartial({});
 

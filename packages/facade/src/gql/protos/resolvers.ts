@@ -50,13 +50,13 @@ export type SubscribeResolverFn<TResult, TParent, TContext, TArgs> = (
 const streamToAsyncIterable = async function* (request: any, readableStreamKey: string): AsyncIterable<any> {
   const readStream = _.clone(request[readableStreamKey]);
   for await (const chunk of new S2A(readStream)) {
-    yield Object.assign({}, request, { [readableStreamKey] : chunk });
+    yield Object.assign({}, request, { [readableStreamKey]: chunk });
   }
 }
 
 export const getGQLResolverFunctions =
   <T extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, T>, SRV = any, R = ResolverFn<any, any, ServiceClient<CTX, keyof CTX, T>, any>, B extends keyof T = any, NS extends keyof CTX = any>
-  (service: ServiceDescriptorProto, key: NS, serviceKey: B, cfg: ServiceConfig): { [key in keyof SRV]: R } => {
+    (service: ServiceDescriptorProto, key: any, serviceKey: B, cfg: ServiceConfig): { [key in keyof SRV]: R } => {
     if (!service.method) {
       return {} as { [key in keyof SRV]: R };
     }
@@ -105,7 +105,11 @@ export const getGQLResolverFunctions =
       }
 
       (obj as any)[methodName] = async (args: any, context: ServiceClient<CTX, keyof CTX, T>) => {
-        const client = context[key].client;
+        let client;
+        if (key == 'master_data') {
+          key = 'resource';
+        }
+        client = context[key].client;
         const service = client[serviceKey];
         try {
           const converted = await preprocessGQLInput(args.input, typing.input);
@@ -149,7 +153,7 @@ export const getGQLResolverFunctions =
                 return key;
               }
             });
-            if(readableStreamKey.length > 0) {
+            if (readableStreamKey.length > 0) {
               req = streamToAsyncIterable(req, readableStreamKey[0]);
             }
           }
@@ -159,7 +163,7 @@ export const getGQLResolverFunctions =
           const grpcClientConfig = cfg.client;
           const bufferFields = getKeys((grpcClientConfig as any)?.bufferFields);
           if (result instanceof stream.Readable) {
-            let operationStatus = {code: 0, message: ''};
+            let operationStatus = { code: 0, message: '' };
             let aggregatedResponse: any = await new Promise((resolve, reject) => {
               let response: any = {};
               let combinedChunks: any = {};
@@ -174,7 +178,7 @@ export const getGQLResolverFunctions =
                 for (let bufferField of existingBufferFields) {
                   if (chunkObj[bufferField] && chunkObj[bufferField].value) {
                     if (!response[bufferField]) {
-                      response[bufferField] = {value: []};
+                      response[bufferField] = { value: [] };
                     }
                     if (response[bufferField] && response[bufferField].value && !_.isArray(response[bufferField].value)) {
                       response[bufferField].value = [];
@@ -207,7 +211,7 @@ export const getGQLResolverFunctions =
                 }
               });
             });
-            return {details: aggregatedResponse, operationStatus};
+            return { details: aggregatedResponse, operationStatus };
           }
 
           if ('items' in result) {
@@ -251,8 +255,8 @@ const subscriptionResolvers: Record<string, {
 }> = {};
 
 export const registerResolverFunction = <T extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, T>>
-(namespace: string, name: string, func: ResolverFn<any, any, ServiceClient<CTX, keyof CTX, T>, any>,
-  mutation = false, subspace: string | undefined = undefined, service?: ServiceDescriptorProto) => {
+  (namespace: string, name: string, func: ResolverFn<any, any, ServiceClient<CTX, keyof CTX, T>, any>,
+    mutation = false, subspace: string | undefined = undefined, service?: ServiceDescriptorProto) => {
   if (!namespaceResolverRegistry.has(namespace)) {
     namespaceResolverRegistry.set(namespace, new Map());
   }
@@ -347,7 +351,7 @@ export const generateSubServiceResolvers = <T, M extends Record<string, any>, CT
       if (service.name) {
         // strip Service from end of String for sub service name
         const subName = getServiceName(service.name);
-        const {mutations, queries} = getWhitelistBlacklistConfig(service, config, meta, subName);
+        const { mutations, queries } = getWhitelistBlacklistConfig(service, config, meta, subName);
 
         const func = getGQLResolverFunctions<M, CTX>(service, namespace, subName || namespace, config);
 
@@ -417,7 +421,7 @@ export const generateSubServiceResolvers = <T, M extends Record<string, any>, CT
                 const pending: { id: string }[] = [];
 
                 commandTopic.on(event, (message: { id: string }) => {
-                  pending.push({id: message.id});
+                  pending.push({ id: message.id });
                   deferred?.resolve(false);
                 });
 
@@ -427,21 +431,21 @@ export const generateSubServiceResolvers = <T, M extends Record<string, any>, CT
                   },
                   next: async () => {
                     if (pending.length) {
-                      return {value: {[fieldName]: pending.shift()!}};
+                      return { value: { [fieldName]: pending.shift()! } };
                     }
 
                     return (await new Promise<boolean>(
-                      (resolve, reject) => (deferred = {resolve, reject}),
+                      (resolve, reject) => (deferred = { resolve, reject }),
                     ))
-                      ? {done: true, value: undefined}
-                      : {value: {[fieldName]: pending.shift()!}};
+                      ? { done: true, value: undefined }
+                      : { value: { [fieldName]: pending.shift()! } };
                   },
                   throw: async (err: Error) => {
                     throw err;
                   },
                   return: async () => {
                     await events.stop();
-                    return {done: true, value: undefined};
+                    return { done: true, value: undefined };
                   },
                 };
               }

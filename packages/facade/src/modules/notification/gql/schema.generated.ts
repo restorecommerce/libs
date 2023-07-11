@@ -15,7 +15,9 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  DateTime: { input: any; output: any; }
   GoogleProtobufAnyValue: { input: any; output: any; }
+  IDateTime: { input: any; output: any; }
 };
 
 export type Query = {
@@ -71,8 +73,8 @@ export type IoRestorecommerceNotificationNotification = {
 
 export type IoRestorecommerceMetaMeta = {
   __typename?: 'IoRestorecommerceMetaMeta';
-  created?: Maybe<Scalars['Float']['output']>;
-  modified?: Maybe<Scalars['Float']['output']>;
+  created?: Maybe<Scalars['DateTime']['output']>;
+  modified?: Maybe<Scalars['DateTime']['output']>;
   modifiedBy?: Maybe<Scalars['String']['output']>;
   owners?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
   acls?: Maybe<Array<IoRestorecommerceAttributeAttributeObj>>;
@@ -267,8 +269,8 @@ export type IIoRestorecommerceNotificationNotification = {
 };
 
 export type IIoRestorecommerceMetaMeta = {
-  created?: InputMaybe<Scalars['Float']['input']>;
-  modified?: InputMaybe<Scalars['Float']['input']>;
+  created?: InputMaybe<Scalars['IDateTime']['input']>;
+  modified?: InputMaybe<Scalars['IDateTime']['input']>;
   modifiedBy?: InputMaybe<Scalars['String']['input']>;
   owners?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
   acls?: InputMaybe<Array<IIoRestorecommerceAttributeAttributeObj>>;
@@ -442,7 +444,7 @@ export type ResolversTypes = ResolversObject<{
   IoRestorecommerceNotificationNotification: ResolverTypeWrapper<IoRestorecommerceNotificationNotification>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   IoRestorecommerceMetaMeta: ResolverTypeWrapper<IoRestorecommerceMetaMeta>;
-  Float: ResolverTypeWrapper<Scalars['Float']['output']>;
+  DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   IoRestorecommerceAttributeAttribute: ResolverTypeWrapper<IoRestorecommerceAttributeAttribute>;
   IoRestorecommerceAttributeAttributeObj: ResolverTypeWrapper<IoRestorecommerceAttributeAttributeObj>;
   IoRestorecommerceStatusStatus: ResolverTypeWrapper<IoRestorecommerceStatusStatus>;
@@ -472,6 +474,7 @@ export type ResolversTypes = ResolversObject<{
   IIoRestorecommerceNotificationNotificationList: IIoRestorecommerceNotificationNotificationList;
   IIoRestorecommerceNotificationNotification: IIoRestorecommerceNotificationNotification;
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
+  IDateTime: ResolverTypeWrapper<Scalars['IDateTime']['output']>;
   IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
   IIoRestorecommerceAttributeAttributeObj: IIoRestorecommerceAttributeAttributeObj;
   ModeType: ModeType;
@@ -494,7 +497,7 @@ export type ResolversParentTypes = ResolversObject<{
   IoRestorecommerceNotificationNotification: IoRestorecommerceNotificationNotification;
   String: Scalars['String']['output'];
   IoRestorecommerceMetaMeta: IoRestorecommerceMetaMeta;
-  Float: Scalars['Float']['output'];
+  DateTime: Scalars['DateTime']['output'];
   IoRestorecommerceAttributeAttribute: IoRestorecommerceAttributeAttribute;
   IoRestorecommerceAttributeAttributeObj: IoRestorecommerceAttributeAttributeObj;
   IoRestorecommerceStatusStatus: IoRestorecommerceStatusStatus;
@@ -517,6 +520,7 @@ export type ResolversParentTypes = ResolversObject<{
   IIoRestorecommerceNotificationNotificationList: IIoRestorecommerceNotificationNotificationList;
   IIoRestorecommerceNotificationNotification: IIoRestorecommerceNotificationNotification;
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
+  IDateTime: Scalars['IDateTime']['output'];
   IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
   IIoRestorecommerceAttributeAttributeObj: IIoRestorecommerceAttributeAttributeObj;
   ProtoIoRestorecommerceResourcebaseDeleteResponse: ProtoIoRestorecommerceResourcebaseDeleteResponse;
@@ -572,13 +576,17 @@ export type IoRestorecommerceNotificationNotificationResolvers<ContextType = Not
 }>;
 
 export type IoRestorecommerceMetaMetaResolvers<ContextType = NotificationContext, ParentType extends ResolversParentTypes['IoRestorecommerceMetaMeta'] = ResolversParentTypes['IoRestorecommerceMetaMeta']> = ResolversObject<{
-  created?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
-  modified?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  created?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  modified?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   modifiedBy?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   owners?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
   acls?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttributeObj']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
+
+export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
+  name: 'DateTime';
+}
 
 export type IoRestorecommerceAttributeAttributeResolvers<ContextType = NotificationContext, ParentType extends ResolversParentTypes['IoRestorecommerceAttributeAttribute'] = ResolversParentTypes['IoRestorecommerceAttributeAttribute']> = ResolversObject<{
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -638,6 +646,10 @@ export type NotificationNotificationMutationResolvers<ContextType = Notification
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export interface IDateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['IDateTime'], any> {
+  name: 'IDateTime';
+}
+
 export type ProtoIoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType = NotificationContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceResourcebaseDeleteResponse'] = ResolversParentTypes['ProtoIoRestorecommerceResourcebaseDeleteResponse']> = ResolversObject<{
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceResourcebaseDeleteResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -672,6 +684,7 @@ export type Resolvers<ContextType = NotificationContext> = ResolversObject<{
   IoRestorecommerceNotificationNotificationResponse?: IoRestorecommerceNotificationNotificationResponseResolvers<ContextType>;
   IoRestorecommerceNotificationNotification?: IoRestorecommerceNotificationNotificationResolvers<ContextType>;
   IoRestorecommerceMetaMeta?: IoRestorecommerceMetaMetaResolvers<ContextType>;
+  DateTime?: GraphQLScalarType;
   IoRestorecommerceAttributeAttribute?: IoRestorecommerceAttributeAttributeResolvers<ContextType>;
   IoRestorecommerceAttributeAttributeObj?: IoRestorecommerceAttributeAttributeObjResolvers<ContextType>;
   IoRestorecommerceStatusStatus?: IoRestorecommerceStatusStatusResolvers<ContextType>;
@@ -687,6 +700,7 @@ export type Resolvers<ContextType = NotificationContext> = ResolversObject<{
   Mutation?: MutationResolvers<ContextType>;
   NotificationMutation?: NotificationMutationResolvers<ContextType>;
   NotificationNotificationMutation?: NotificationNotificationMutationResolvers<ContextType>;
+  IDateTime?: GraphQLScalarType;
   ProtoIoRestorecommerceResourcebaseDeleteResponse?: ProtoIoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType>;
   IoRestorecommerceResourcebaseDeleteResponse?: IoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;

@@ -16,6 +16,8 @@ export type Scalars = {
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
   GoogleProtobufAnyValue: { input: any; output: any; }
+  DateTime: { input: any; output: any; }
+  IDateTime: { input: any; output: any; }
 };
 
 export type Query = {
@@ -251,8 +253,8 @@ export type IoRestorecommercePolicyPolicy = {
 
 export type IoRestorecommerceMetaMeta = {
   __typename?: 'IoRestorecommerceMetaMeta';
-  created?: Maybe<Scalars['Float']['output']>;
-  modified?: Maybe<Scalars['Float']['output']>;
+  created?: Maybe<Scalars['DateTime']['output']>;
+  modified?: Maybe<Scalars['DateTime']['output']>;
   modifiedBy?: Maybe<Scalars['String']['output']>;
   owners?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
   acls?: Maybe<Array<IoRestorecommerceAttributeAttributeObj>>;
@@ -486,8 +488,8 @@ export type IIoRestorecommercePolicyPolicy = {
 };
 
 export type IIoRestorecommerceMetaMeta = {
-  created?: InputMaybe<Scalars['Float']['input']>;
-  modified?: InputMaybe<Scalars['Float']['input']>;
+  created?: InputMaybe<Scalars['IDateTime']['input']>;
+  modified?: InputMaybe<Scalars['IDateTime']['input']>;
   modifiedBy?: InputMaybe<Scalars['String']['input']>;
   owners?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
   acls?: InputMaybe<Array<IIoRestorecommerceAttributeAttributeObj>>;
@@ -757,7 +759,7 @@ export type ResolversTypes = ResolversObject<{
   IoRestorecommercePolicyPolicyResponse: ResolverTypeWrapper<IoRestorecommercePolicyPolicyResponse>;
   IoRestorecommercePolicyPolicy: ResolverTypeWrapper<IoRestorecommercePolicyPolicy>;
   IoRestorecommerceMetaMeta: ResolverTypeWrapper<IoRestorecommerceMetaMeta>;
-  Float: ResolverTypeWrapper<Scalars['Float']['output']>;
+  DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   IoRestorecommerceAttributeAttributeObj: ResolverTypeWrapper<IoRestorecommerceAttributeAttributeObj>;
   IoRestorecommerceStatusStatus: ResolverTypeWrapper<IoRestorecommerceStatusStatus>;
   IIoRestorecommerceResourcebaseReadRequest: IIoRestorecommerceResourcebaseReadRequest;
@@ -788,6 +790,7 @@ export type ResolversTypes = ResolversObject<{
   IIoRestorecommercePolicyPolicyList: IIoRestorecommercePolicyPolicyList;
   IIoRestorecommercePolicyPolicy: IIoRestorecommercePolicyPolicy;
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
+  IDateTime: ResolverTypeWrapper<Scalars['IDateTime']['output']>;
   IIoRestorecommerceAttributeAttributeObj: IIoRestorecommerceAttributeAttributeObj;
   ModeType: ModeType;
   ProtoIoRestorecommerceResourcebaseDeleteResponse: ResolverTypeWrapper<ProtoIoRestorecommerceResourcebaseDeleteResponse>;
@@ -838,7 +841,7 @@ export type ResolversParentTypes = ResolversObject<{
   IoRestorecommercePolicyPolicyResponse: IoRestorecommercePolicyPolicyResponse;
   IoRestorecommercePolicyPolicy: IoRestorecommercePolicyPolicy;
   IoRestorecommerceMetaMeta: IoRestorecommerceMetaMeta;
-  Float: Scalars['Float']['output'];
+  DateTime: Scalars['DateTime']['output'];
   IoRestorecommerceAttributeAttributeObj: IoRestorecommerceAttributeAttributeObj;
   IoRestorecommerceStatusStatus: IoRestorecommerceStatusStatus;
   IIoRestorecommerceResourcebaseReadRequest: IIoRestorecommerceResourcebaseReadRequest;
@@ -865,6 +868,7 @@ export type ResolversParentTypes = ResolversObject<{
   IIoRestorecommercePolicyPolicyList: IIoRestorecommercePolicyPolicyList;
   IIoRestorecommercePolicyPolicy: IIoRestorecommercePolicyPolicy;
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
+  IDateTime: Scalars['IDateTime']['output'];
   IIoRestorecommerceAttributeAttributeObj: IIoRestorecommerceAttributeAttributeObj;
   ProtoIoRestorecommerceResourcebaseDeleteResponse: ProtoIoRestorecommerceResourcebaseDeleteResponse;
   IoRestorecommerceResourcebaseDeleteResponse: IoRestorecommerceResourcebaseDeleteResponse;
@@ -1045,13 +1049,17 @@ export type IoRestorecommercePolicyPolicyResolvers<ContextType = AccessControlCo
 }>;
 
 export type IoRestorecommerceMetaMetaResolvers<ContextType = AccessControlContext, ParentType extends ResolversParentTypes['IoRestorecommerceMetaMeta'] = ResolversParentTypes['IoRestorecommerceMetaMeta']> = ResolversObject<{
-  created?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
-  modified?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  created?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  modified?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   modifiedBy?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   owners?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
   acls?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttributeObj']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
+
+export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
+  name: 'DateTime';
+}
 
 export type IoRestorecommerceAttributeAttributeObjResolvers<ContextType = AccessControlContext, ParentType extends ResolversParentTypes['IoRestorecommerceAttributeAttributeObj'] = ResolversParentTypes['IoRestorecommerceAttributeAttributeObj']> = ResolversObject<{
   attributes?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAttributeAttribute']>, ParentType, ContextType>;
@@ -1160,6 +1168,10 @@ export type AccessControlPolicyMutationResolvers<ContextType = AccessControlCont
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export interface IDateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['IDateTime'], any> {
+  name: 'IDateTime';
+}
+
 export type ProtoIoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType = AccessControlContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceResourcebaseDeleteResponse'] = ResolversParentTypes['ProtoIoRestorecommerceResourcebaseDeleteResponse']> = ResolversObject<{
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceResourcebaseDeleteResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -1226,6 +1238,7 @@ export type Resolvers<ContextType = AccessControlContext> = ResolversObject<{
   IoRestorecommercePolicyPolicyResponse?: IoRestorecommercePolicyPolicyResponseResolvers<ContextType>;
   IoRestorecommercePolicyPolicy?: IoRestorecommercePolicyPolicyResolvers<ContextType>;
   IoRestorecommerceMetaMeta?: IoRestorecommerceMetaMetaResolvers<ContextType>;
+  DateTime?: GraphQLScalarType;
   IoRestorecommerceAttributeAttributeObj?: IoRestorecommerceAttributeAttributeObjResolvers<ContextType>;
   IoRestorecommerceStatusStatus?: IoRestorecommerceStatusStatusResolvers<ContextType>;
   IoRestorecommerceResourcebaseSortSortOrder?: IoRestorecommerceResourcebaseSortSortOrderResolvers;
@@ -1245,6 +1258,7 @@ export type Resolvers<ContextType = AccessControlContext> = ResolversObject<{
   Mutation?: MutationResolvers<ContextType>;
   AccessControlMutation?: AccessControlMutationResolvers<ContextType>;
   AccessControlPolicyMutation?: AccessControlPolicyMutationResolvers<ContextType>;
+  IDateTime?: GraphQLScalarType;
   ProtoIoRestorecommerceResourcebaseDeleteResponse?: ProtoIoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType>;
   IoRestorecommerceResourcebaseDeleteResponse?: IoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType>;
   AccessControlRuleMutation?: AccessControlRuleMutationResolvers<ContextType>;

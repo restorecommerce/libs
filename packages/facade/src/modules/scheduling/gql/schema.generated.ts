@@ -16,6 +16,8 @@ export type Scalars = {
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
   GoogleProtobufAnyValue: { input: any; output: any; }
+  DateTime: { input: any; output: any; }
+  IDateTime: { input: any; output: any; }
 };
 
 export type Query = {
@@ -80,8 +82,8 @@ export type GoogleProtobufAny = {
 
 export type IoRestorecommerceMetaMeta = {
   __typename?: 'IoRestorecommerceMetaMeta';
-  created?: Maybe<Scalars['Float']['output']>;
-  modified?: Maybe<Scalars['Float']['output']>;
+  created?: Maybe<Scalars['DateTime']['output']>;
+  modified?: Maybe<Scalars['DateTime']['output']>;
   modifiedBy?: Maybe<Scalars['String']['output']>;
   owners?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
   acls?: Maybe<Array<IoRestorecommerceAttributeAttributeObj>>;
@@ -232,8 +234,8 @@ export type IGoogleProtobufAny = {
 };
 
 export type IIoRestorecommerceMetaMeta = {
-  created?: InputMaybe<Scalars['Float']['input']>;
-  modified?: InputMaybe<Scalars['Float']['input']>;
+  created?: InputMaybe<Scalars['IDateTime']['input']>;
+  modified?: InputMaybe<Scalars['IDateTime']['input']>;
   modifiedBy?: InputMaybe<Scalars['String']['input']>;
   owners?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
   acls?: InputMaybe<Array<IIoRestorecommerceAttributeAttributeObj>>;
@@ -435,13 +437,14 @@ export type ResolversTypes = ResolversObject<{
   GoogleProtobufAny: ResolverTypeWrapper<GoogleProtobufAny>;
   GoogleProtobufAnyValue: ResolverTypeWrapper<Scalars['GoogleProtobufAnyValue']['output']>;
   IoRestorecommerceMetaMeta: ResolverTypeWrapper<IoRestorecommerceMetaMeta>;
-  Float: ResolverTypeWrapper<Scalars['Float']['output']>;
+  DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   IoRestorecommerceAttributeAttribute: ResolverTypeWrapper<IoRestorecommerceAttributeAttribute>;
   IoRestorecommerceAttributeAttributeObj: ResolverTypeWrapper<IoRestorecommerceAttributeAttributeObj>;
   IoRestorecommerceJobJobOptions: ResolverTypeWrapper<IoRestorecommerceJobJobOptions>;
   IoRestorecommerceJobJobOptionsPriority: IoRestorecommerceJobJobOptionsPriority;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   IoRestorecommerceJobBackoff: ResolverTypeWrapper<IoRestorecommerceJobBackoff>;
+  Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   IoRestorecommerceJobBackoffType: IoRestorecommerceJobBackoffType;
   IoRestorecommerceJobRepeat: ResolverTypeWrapper<IoRestorecommerceJobRepeat>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
@@ -459,6 +462,7 @@ export type ResolversTypes = ResolversObject<{
   IIoRestorecommerceJobData: IIoRestorecommerceJobData;
   IGoogleProtobufAny: IGoogleProtobufAny;
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
+  IDateTime: ResolverTypeWrapper<Scalars['IDateTime']['output']>;
   IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
   IIoRestorecommerceAttributeAttributeObj: IIoRestorecommerceAttributeAttributeObj;
   IIoRestorecommerceJobJobOptions: IIoRestorecommerceJobJobOptions;
@@ -487,12 +491,13 @@ export type ResolversParentTypes = ResolversObject<{
   GoogleProtobufAny: GoogleProtobufAny;
   GoogleProtobufAnyValue: Scalars['GoogleProtobufAnyValue']['output'];
   IoRestorecommerceMetaMeta: IoRestorecommerceMetaMeta;
-  Float: Scalars['Float']['output'];
+  DateTime: Scalars['DateTime']['output'];
   IoRestorecommerceAttributeAttribute: IoRestorecommerceAttributeAttribute;
   IoRestorecommerceAttributeAttributeObj: IoRestorecommerceAttributeAttributeObj;
   IoRestorecommerceJobJobOptions: IoRestorecommerceJobJobOptions;
   Int: Scalars['Int']['output'];
   IoRestorecommerceJobBackoff: IoRestorecommerceJobBackoff;
+  Float: Scalars['Float']['output'];
   IoRestorecommerceJobRepeat: IoRestorecommerceJobRepeat;
   Boolean: Scalars['Boolean']['output'];
   IoRestorecommerceStatusStatus: IoRestorecommerceStatusStatus;
@@ -508,6 +513,7 @@ export type ResolversParentTypes = ResolversObject<{
   IIoRestorecommerceJobData: IIoRestorecommerceJobData;
   IGoogleProtobufAny: IGoogleProtobufAny;
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
+  IDateTime: Scalars['IDateTime']['output'];
   IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
   IIoRestorecommerceAttributeAttributeObj: IIoRestorecommerceAttributeAttributeObj;
   IIoRestorecommerceJobJobOptions: IIoRestorecommerceJobJobOptions;
@@ -579,13 +585,17 @@ export interface GoogleProtobufAnyValueScalarConfig extends GraphQLScalarTypeCon
 }
 
 export type IoRestorecommerceMetaMetaResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['IoRestorecommerceMetaMeta'] = ResolversParentTypes['IoRestorecommerceMetaMeta']> = ResolversObject<{
-  created?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
-  modified?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  created?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  modified?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   modifiedBy?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   owners?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
   acls?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttributeObj']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
+
+export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
+  name: 'DateTime';
+}
 
 export type IoRestorecommerceAttributeAttributeResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['IoRestorecommerceAttributeAttribute'] = ResolversParentTypes['IoRestorecommerceAttributeAttribute']> = ResolversObject<{
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -661,6 +671,10 @@ export type SchedulingJobMutationResolvers<ContextType = SchedulingContext, Pare
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export interface IDateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['IDateTime'], any> {
+  name: 'IDateTime';
+}
+
 export type ProtoIoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType = SchedulingContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceResourcebaseDeleteResponse'] = ResolversParentTypes['ProtoIoRestorecommerceResourcebaseDeleteResponse']> = ResolversObject<{
   details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceResourcebaseDeleteResponse']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -698,6 +712,7 @@ export type Resolvers<ContextType = SchedulingContext> = ResolversObject<{
   GoogleProtobufAny?: GoogleProtobufAnyResolvers<ContextType>;
   GoogleProtobufAnyValue?: GraphQLScalarType;
   IoRestorecommerceMetaMeta?: IoRestorecommerceMetaMetaResolvers<ContextType>;
+  DateTime?: GraphQLScalarType;
   IoRestorecommerceAttributeAttribute?: IoRestorecommerceAttributeAttributeResolvers<ContextType>;
   IoRestorecommerceAttributeAttributeObj?: IoRestorecommerceAttributeAttributeObjResolvers<ContextType>;
   IoRestorecommerceJobJobOptions?: IoRestorecommerceJobJobOptionsResolvers<ContextType>;
@@ -711,6 +726,7 @@ export type Resolvers<ContextType = SchedulingContext> = ResolversObject<{
   Mutation?: MutationResolvers<ContextType>;
   SchedulingMutation?: SchedulingMutationResolvers<ContextType>;
   SchedulingJobMutation?: SchedulingJobMutationResolvers<ContextType>;
+  IDateTime?: GraphQLScalarType;
   ProtoIoRestorecommerceResourcebaseDeleteResponse?: ProtoIoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType>;
   IoRestorecommerceResourcebaseDeleteResponse?: IoRestorecommerceResourcebaseDeleteResponseResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;

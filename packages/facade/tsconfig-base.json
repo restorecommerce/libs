@@ -1,12 +1,23 @@
 {
-  "extends": "./node_modules/@restorecommerce/dev/tsconfig.json",
+  "extends": "../../tsconfig-base.json",
   "compilerOptions": {
-    "paths": {
-      "@modules": ["src/modules/index"],
-      "@modules/*": ["src/modules/*"],
-      "@gql": ["src/gql/index"],
-      "@gql/*": ["src/gql/*"]
-    },
-    "rootDirs": ["src"]
+    "typeRoots": [
+      "./node_modules/@types"
+    ],
+    "allowJs": true,
+    "maxNodeModuleJsDepth": 10,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "strict": true,
+    "target": "ES6",
+    "module": "ESNext",
+    "moduleResolution": "Node16",
+    "skipLibCheck": true // temp work around for kafka-client typings
+  },
+  "ts-node": {
+    "transpileOnly": true,
+    "files": true,
+    "experimentalResolver": true
   }
 }

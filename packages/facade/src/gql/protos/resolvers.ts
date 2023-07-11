@@ -106,8 +106,11 @@ export const getGQLResolverFunctions =
 
       (obj as any)[methodName] = async (args: any, context: ServiceClient<CTX, keyof CTX, T>) => {
         let client;
+        // rename master_data and ostorage name space to actual service names in proto files
         if (key == 'master_data') {
           key = 'resource' as NS;
+        } else if (key == 'ostorage') {
+          serviceKey = 'ostorage' as B;
         }
         client = context[key].client;
         const service = client[serviceKey];

@@ -1,6 +1,10 @@
 import { createServiceConfig } from '@restorecommerce/service-config';
 import { createLogger } from '@restorecommerce/logger';
 import { isNumber } from 'util';
+import intoStream from 'into-stream';
+import { Transform } from 'stream';
+import pkg from 'lodash';
+const { isEmpty } = pkg;
 
 const cfg = createServiceConfig(process.cwd());
 const loggerCfg = cfg.get('logger');
@@ -32,80 +36,95 @@ export const handleGetFile = async (bucket: string, key: string, ctx: any, clien
     const ostorageSrv = client['ostorage'];
     req = { bucket, key, download, subject: ctx.subject };
     let grpcGetStream = await ostorageSrv.get(req);
-
-    let statusCode: any, statusMessage: any, objectOptions: any, objectLastModified: any, objectBuffer = [], objectKey: any;
-    for await (const data of grpcGetStream) {
-      if(!statusCode) {
-        statusCode =  data?.response?.status?.code;
-      }
-      if (!statusMessage) {
-        statusMessage =  data?.response?.status?.message;
-      }
-      if(!objectOptions) {
-        objectOptions =  data?.response?.payload?.options;
-      }
-      if(!objectLastModified) {
-        objectLastModified = data?.payload?.meta?.modified;
-      }
-      if (data?.response?.payload?.object) {
-        objectBuffer.push(data?.response?.payload?.object);
-      }
-      if (!objectKey) {
-        objectKey = data?.response?.payload?.key;
-      }
-    }
-
-    const setResponseHeaders = () => {
-      if (objectLastModified) {
-        ctx.response.set('Last-Modified', new Date(objectLastModified));
-      }
-      if (!objectOptions) {
-        logger.debug(`Object ${key} from bucket ${bucket} does not have options`);
+    const readStream = intoStream.object(grpcGetStream);
+    let streamData: any = {
+      key: '', object: {}, url: '', options: {}
+    };
+    readStream.on('error', (err: any) => {
+      if (err.message.includes('NotFound')) {
+        err.code = 404;
+      } else if (err.message.includes('PermissionDenied')) {
+        err.code = 403;
       } else {
-        // set response headers on ctx response received from ostorage-srv
-        let {
-          encoding,
-          content_type,
-          content_language,
-          content_disposition,
-          length,
-          version,
-          md5
-        } = objectOptions;
-        if (encoding) {
-          ctx.response.set('Content-Encoding', encoding);
-        }
-        if (content_type) {
-          ctx.response.set('Content-Type', content_type);
-        }
-        if (content_language) {
-          ctx.response.set('Content-Language', content_language);
-        }
-        if (content_disposition) {
-          ctx.response.set('Content-Disposition', `${content_disposition};filename=${objectKey}`);
-        }
-        if (length) {
-          ctx.response.set('Content-Length', length);
-        }
-        if (version) {
-          ctx.response.set('ETag', version);
-        }
-        if (md5) {
-          ctx.response.set('Content-MD5', md5);
-        }
+        err.code = 500;
       }
+      ctx.response.status = err.code;
+      logger.error('Error streaming request', { message: err.message });
+      ctx.res.end(err.message);
+    });
+
+    readStream.on('end', (data: any) => {
+      ctx.response.status = 200;
+      logger.info(`File ${key} download completed successfully from bucket ${bucket}`);
+    });
+
+
+    const transformGrpcObjToBuffer = () => {
+      return new Transform({
+        objectMode: true,
+        transform: (chunk, _, done) => {
+          // set options if its not set already
+          if (isEmpty(streamData.options)) {
+            streamData.options = chunk.response?.payload?.options;
+            // set Last-Modified
+            if (chunk?.response?.payload?.meta?.modified) {
+              ctx.response.set('Last-Modified', new Date(chunk?.response?.payload?.meta?.modified));
+            }
+            if (!streamData.options) {
+              logger.silly(`File ${key} from bucket ${bucket} does have empty options`, streamData.options);
+            } else {
+              // set response headers on ctx response received from ostorage-srv
+              let {
+                encoding,
+                content_type,
+                content_language,
+                content_disposition,
+                length,
+                version,
+                md5
+              } = streamData.options;
+              if (encoding) {
+                ctx.response.set('Content-Encoding', encoding);
+              }
+              if (content_type) {
+                ctx.response.set('Content-Type', content_type);
+              }
+              if (content_language) {
+                ctx.response.set('Content-Language', content_language);
+              }
+              const name = streamData.key;
+              if (content_disposition) {
+                ctx.response.set('Content-Disposition', `${content_disposition};filename=${name}`);
+              }
+              if (length) {
+                ctx.response.set('Content-Length', length);
+              }
+              if (version) {
+                ctx.response.set('ETag', version);
+              }
+              if (md5) {
+                ctx.response.set('Content-MD5', md5);
+              }
+            }
+          }
+          // object buffer
+          if (chunk.response?.status?.code && chunk.response?.status.code != 200) {
+            ctx.response.status = chunk.response.status.code;
+            logger.error('Error streaming request', { message: chunk.response });
+            ctx.res.end(chunk.response.status.message);
+          }
+          done(null, chunk?.response?.payload?.object);
+        }
+      });
     };
 
-    // add status
-    if (statusCode != 200) {
-      logger.error('Error downloading file', { code: statusCode, message: statusMessage });
-    } else if (statusCode === 200) {
-      // assigning the grpcStream object through transform to Koa ctx response
-      setResponseHeaders();
-      logger.info(`Successfully downloaded file ${key}`);
+    // assigning the grpcStream object through transform to Koa ctx response
+    ctx.response.body = readStream.pipe(transformGrpcObjToBuffer());
+    if (streamData.error && streamData.error.message) {
+      ctx.response.status = 404;
+      ctx.response.body = 'Object does not exist';
+      return;
     }
-    ctx.response.body = Buffer.concat(objectBuffer);
-    ctx.response.status = statusCode ? statusCode : 500;
     return ctx.response;
   } catch (error) {
     logger.error(`Error downloading file ${key}`, { code: (error as any).code, message: (error as any).message, stack: (error as any).stack });

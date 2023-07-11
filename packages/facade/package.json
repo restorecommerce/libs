@@ -38,6 +38,7 @@
     "graphql-upload": "^16.0.2",
     "graphql-ws": "^5.13.1",
     "handlebars": "^4.7.7",
+    "into-stream": "^8.0.0",
     "jose": "^4.14.4",
     "koa": "^2.14.2",
     "koa-body": "^6.0.1",

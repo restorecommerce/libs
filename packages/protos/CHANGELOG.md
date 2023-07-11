@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.1.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@4.0.1...@restorecommerce/protos@4.1.0) (2023-07-11)
+
+
+### Bug Fixes
+
+* **timestamps:** fix invoice date type by timestamp, add payment_details to invoice trigger request ([139ab69](https://github.com/restorecommerce/libs/commit/139ab69ba1d4739386ac2844d1e1f98c2046b98e))
+
+
+### Features
+
+* **invoicing:** invoicing supports FulfillmentProducts ([d0684cf](https://github.com/restorecommerce/libs/commit/d0684cf4773ecc2aa0f807bb8c4be1a21a62caab))
+
+
+
+
+
 ## [4.0.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@4.0.0...@restorecommerce/protos@4.0.1) (2023-06-29)
 
 

@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.10](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.3.8...@restorecommerce/facade@1.3.10) (2023-07-11)
+
+
+### Bug Fixes
+
+* enum conversion to int no longer necessary ([27dcac0](https://github.com/restorecommerce/libs/commit/27dcac03f71c3db92ecae838814dd961aa107ec3))
+* facade grpc client resolution ([4ced730](https://github.com/restorecommerce/libs/commit/4ced730977714cf30bfe45728a7e1ead78f43eca))
+* **facade:** client for renamed resource to master_data ([6929a9e](https://github.com/restorecommerce/libs/commit/6929a9e8cabbc3045047005da2c05ff44b88f2d1))
+* **facade:** convert async iterable to readable stream for file download ([a3f5118](https://github.com/restorecommerce/libs/commit/a3f511865df262495f493547a3d1cbc37b260b42))
+* nested filters for recursive field resolution ([1b6d180](https://github.com/restorecommerce/libs/commit/1b6d180b83e4efbedf54b42b20fb4b4c17996c6a))
+
+
+
+
+
 ## [1.3.8](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.3.7...@restorecommerce/facade@1.3.8) (2023-06-29)
 
 **Note:** Version bump only for package @restorecommerce/facade

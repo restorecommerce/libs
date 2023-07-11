@@ -26,18 +26,18 @@ export interface ProductCategory {
 export interface ProductCategoryList {
   items: ProductCategory[];
   totalCount?: number | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface ProductCategoryListResponse {
   items: ProductCategoryResponse[];
   totalCount: number;
-  operationStatus?: OperationStatus;
+  operationStatus?: OperationStatus | undefined;
 }
 
 export interface ProductCategoryResponse {
-  payload?: ProductCategory;
-  status?: Status;
+  payload?: ProductCategory | undefined;
+  status?: Status | undefined;
 }
 
 export interface Deleted {

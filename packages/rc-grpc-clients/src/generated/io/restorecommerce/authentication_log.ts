@@ -13,18 +13,18 @@ export const protobufPackage = "io.restorecommerce.authentication_log";
 export interface AuthenticationLogList {
   items: AuthenticationLog[];
   totalCount?: number | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface AuthenticationLogListResponse {
   items: AuthenticationLogResponse[];
   totalCount: number;
-  operationStatus?: OperationStatus;
+  operationStatus?: OperationStatus | undefined;
 }
 
 export interface AuthenticationLogResponse {
-  payload?: AuthenticationLog;
-  status?: Status;
+  payload?: AuthenticationLog | undefined;
+  status?: Status | undefined;
 }
 
 /** Authentication Log */

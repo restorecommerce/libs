@@ -60,7 +60,9 @@ export interface ExtensionRequest {
 /** / The message sent by the server to answer ServerReflectionInfo method. */
 export interface ServerReflectionResponse {
   valid_host: string;
-  original_request?: ServerReflectionRequest;
+  original_request?:
+    | ServerReflectionRequest
+    | undefined;
   /**
    * / This message is used to answer file_by_filename, file_containing_symbol,
    * / file_containing_extension requests with transitive dependencies. As
@@ -1510,10 +1512,10 @@ export const protoMetadata: ProtoMetadata = {
   dependencies: [],
 };
 
-declare var self: any | undefined;
-declare var window: any | undefined;
-declare var global: any | undefined;
-var tsProtoGlobalThis: any = (() => {
+declare const self: any | undefined;
+declare const window: any | undefined;
+declare const global: any | undefined;
+const tsProtoGlobalThis: any = (() => {
   if (typeof globalThis !== "undefined") {
     return globalThis;
   }

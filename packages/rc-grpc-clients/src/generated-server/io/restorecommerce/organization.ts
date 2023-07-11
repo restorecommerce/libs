@@ -20,24 +20,24 @@ export interface Deleted {
 export interface DeleteOrgData {
   org_ids: string[];
   user_ids: string[];
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface OrganizationList {
   items: Organization[];
   total_count?: number | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface OrganizationListResponse {
   items: OrganizationResponse[];
   total_count: number;
-  operation_status?: OperationStatus;
+  operation_status?: OperationStatus | undefined;
 }
 
 export interface OrganizationResponse {
-  payload?: Organization;
-  status?: Status;
+  payload?: Organization | undefined;
+  status?: Status | undefined;
 }
 
 export interface Organization {

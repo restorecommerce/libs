@@ -18,18 +18,18 @@ export interface Deleted {
 export interface CurrencyList {
   items: Currency[];
   total_count?: number | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface CurrencyListResponse {
   items: CurrencyResponse[];
   total_count: number;
-  operation_status?: OperationStatus;
+  operation_status?: OperationStatus | undefined;
 }
 
 export interface CurrencyResponse {
-  payload?: Currency;
-  status?: Status;
+  payload?: Currency | undefined;
+  status?: Status | undefined;
 }
 
 export interface Currency {
@@ -76,19 +76,19 @@ export interface ExchangeRateQuery {
 export interface ExchangeRateQueryList {
   items: ExchangeRate[];
   total_count?: number | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface ExchangeRateResponse {
   from_currency_id?: string | undefined;
-  payload?: ExchangeRate;
+  payload?: ExchangeRate | undefined;
   timestamp?: Date | undefined;
-  status?: Status;
+  status?: Status | undefined;
 }
 
 export interface ExchangeRateListResponse {
   items: ExchangeRateResponse[];
-  operation_status?: OperationStatus;
+  operation_status?: OperationStatus | undefined;
 }
 
 function createBaseDeleted(): Deleted {

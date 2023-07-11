@@ -21,18 +21,18 @@ export interface Deleted {
 export interface ContactPointList {
   items: ContactPoint[];
   totalCount?: number | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface ContactPointListResponse {
   items: ContactPointResponse[];
   totalCount: number;
-  operationStatus?: OperationStatus;
+  operationStatus?: OperationStatus | undefined;
 }
 
 export interface ContactPointResponse {
-  payload?: ContactPoint;
-  status?: Status;
+  payload?: ContactPoint | undefined;
+  status?: Status | undefined;
 }
 
 export interface ContactPoint {

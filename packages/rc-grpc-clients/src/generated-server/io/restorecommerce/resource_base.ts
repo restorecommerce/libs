@@ -335,7 +335,7 @@ export interface ReadRequest {
   locales_limiter: string[];
   custom_queries: string[];
   custom_arguments?: Any | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
   search?: Search | undefined;
 }
 
@@ -346,7 +346,9 @@ export interface DeleteRequest {
     | undefined;
   /** / Delete specified documents */
   ids: string[];
-  subject?: Subject;
+  subject?:
+    | Subject
+    | undefined;
   /** list of views to be dropped */
   views: string[];
   /** list of analyzers to be deleted */
@@ -355,27 +357,27 @@ export interface DeleteRequest {
 
 export interface DeleteResponse {
   status: Status[];
-  operation_status?: OperationStatus;
+  operation_status?: OperationStatus | undefined;
 }
 
 /** / List of resources */
 export interface ResourceList {
   items: Resource[];
   total_count?: number | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 /** ResourceList response */
 export interface ResourceListResponse {
   items: ResourceResponse[];
   total_count: number;
-  operation_status?: OperationStatus;
+  operation_status?: OperationStatus | undefined;
 }
 
 /** resource read response */
 export interface ResourceResponse {
-  payload?: Resource;
-  status?: Status;
+  payload?: Resource | undefined;
+  status?: Status | undefined;
 }
 
 /** Example resource */

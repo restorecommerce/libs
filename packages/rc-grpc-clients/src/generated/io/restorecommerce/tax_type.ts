@@ -17,18 +17,18 @@ export interface Deleted {
 export interface TaxTypeList {
   items: TaxType[];
   totalCount?: number | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface TaxTypeListResponse {
   items: TaxTypeResponse[];
   totalCount: number;
-  operationStatus?: OperationStatus;
+  operationStatus?: OperationStatus | undefined;
 }
 
 export interface TaxTypeResponse {
-  payload?: TaxType;
-  status?: Status;
+  payload?: TaxType | undefined;
+  status?: Status | undefined;
 }
 
 export interface TaxType {

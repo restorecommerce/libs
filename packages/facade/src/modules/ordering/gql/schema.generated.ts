@@ -68,7 +68,7 @@ export type IoRestorecommerceOrderOrder = {
   shopId?: Maybe<Scalars['String']['output']>;
   shop?: Maybe<IoRestorecommerceShopShop>;
   items?: Maybe<Array<IoRestorecommerceOrderItem>>;
-  orderState?: Maybe<IoRestorecommerceOrderState>;
+  orderState?: Maybe<IoRestorecommerceOrderOrderState>;
   fulfillmentState?: Maybe<IoRestorecommerceFulfillmentState>;
   paymentState?: Maybe<IoRestorecommerceInvoicePaymentState>;
   totalAmounts?: Maybe<Array<IoRestorecommerceAmountAmount>>;
@@ -615,7 +615,7 @@ export type IoRestorecommerceAmountVat = {
   vat?: Maybe<Scalars['Float']['output']>;
 };
 
-export enum IoRestorecommerceOrderState {
+export enum IoRestorecommerceOrderOrderState {
   Failed = 0,
   Invalid = 1,
   Created = 2,
@@ -894,7 +894,7 @@ export type IIoRestorecommerceOrderOrder = {
   customerId?: InputMaybe<Scalars['String']['input']>;
   shopId?: InputMaybe<Scalars['String']['input']>;
   items?: InputMaybe<Array<IIoRestorecommerceOrderItem>>;
-  orderState?: InputMaybe<IoRestorecommerceOrderState>;
+  orderState?: InputMaybe<IoRestorecommerceOrderOrderState>;
   fulfillmentState?: InputMaybe<IoRestorecommerceFulfillmentState>;
   paymentState?: InputMaybe<IoRestorecommerceInvoicePaymentState>;
   totalAmounts?: InputMaybe<Array<IIoRestorecommerceAmountAmount>>;
@@ -1508,7 +1508,7 @@ export type ResolversTypes = ResolversObject<{
   IoRestorecommerceProductAssociationType: IoRestorecommerceProductAssociationType;
   IoRestorecommerceAmountAmount: ResolverTypeWrapper<IoRestorecommerceAmountAmount>;
   IoRestorecommerceAmountVAT: ResolverTypeWrapper<IoRestorecommerceAmountVat>;
-  IoRestorecommerceOrderState: IoRestorecommerceOrderState;
+  IoRestorecommerceOrderOrderState: IoRestorecommerceOrderOrderState;
   IoRestorecommerceFulfillmentState: IoRestorecommerceFulfillmentState;
   IoRestorecommerceInvoicePaymentState: IoRestorecommerceInvoicePaymentState;
   IoRestorecommerceAddressShippingAddress: ResolverTypeWrapper<IoRestorecommerceAddressShippingAddress>;
@@ -1791,7 +1791,7 @@ export type IoRestorecommerceOrderOrderResolvers<ContextType = OrderingContext, 
   shopId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   shop?: Resolver<Maybe<ResolversTypes['IoRestorecommerceShopShop']>, ParentType, ContextType>;
   items?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceOrderItem']>>, ParentType, ContextType>;
-  orderState?: Resolver<Maybe<ResolversTypes['IoRestorecommerceOrderState']>, ParentType, ContextType>;
+  orderState?: Resolver<Maybe<ResolversTypes['IoRestorecommerceOrderOrderState']>, ParentType, ContextType>;
   fulfillmentState?: Resolver<Maybe<ResolversTypes['IoRestorecommerceFulfillmentState']>, ParentType, ContextType>;
   paymentState?: Resolver<Maybe<ResolversTypes['IoRestorecommerceInvoicePaymentState']>, ParentType, ContextType>;
   totalAmounts?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAmountAmount']>>, ParentType, ContextType>;
@@ -2338,7 +2338,7 @@ export type IoRestorecommerceAmountVatResolvers<ContextType = OrderingContext, P
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceOrderStateResolvers = { FAILED: 0, INVALID: 1, CREATED: 2, SUBMITTED: 3, IN_PROCESS: 4, DONE: 5, WITHDRAWN: 6, CANCELLED: 7 };
+export type IoRestorecommerceOrderOrderStateResolvers = { FAILED: 0, INVALID: 1, CREATED: 2, SUBMITTED: 3, IN_PROCESS: 4, DONE: 5, WITHDRAWN: 6, CANCELLED: 7 };
 
 export type IoRestorecommerceFulfillmentStateResolvers = { FAILED: 0, INVALID: 1, CREATED: 2, SUBMITTED: 3, IN_TRANSIT: 4, FULFILLED: 5, WITHDRAWN: 6, CANCELLED: 7 };
 
@@ -2767,7 +2767,7 @@ export type Resolvers<ContextType = OrderingContext> = ResolversObject<{
   IoRestorecommerceProductAssociationType?: IoRestorecommerceProductAssociationTypeResolvers;
   IoRestorecommerceAmountAmount?: IoRestorecommerceAmountAmountResolvers<ContextType>;
   IoRestorecommerceAmountVAT?: IoRestorecommerceAmountVatResolvers<ContextType>;
-  IoRestorecommerceOrderState?: IoRestorecommerceOrderStateResolvers;
+  IoRestorecommerceOrderOrderState?: IoRestorecommerceOrderOrderStateResolvers;
   IoRestorecommerceFulfillmentState?: IoRestorecommerceFulfillmentStateResolvers;
   IoRestorecommerceInvoicePaymentState?: IoRestorecommerceInvoicePaymentStateResolvers;
   IoRestorecommerceAddressShippingAddress?: IoRestorecommerceAddressShippingAddressResolvers<ContextType>;

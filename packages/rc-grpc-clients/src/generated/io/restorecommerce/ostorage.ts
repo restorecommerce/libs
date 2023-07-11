@@ -15,17 +15,17 @@ export const protobufPackage = "io.restorecommerce.ostorage";
 
 export interface CopyRequestList {
   items: CopyRequestItem[];
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface CopyResponseList {
   responses: copyResponsePayloadWithStatus[];
-  operationStatus?: OperationStatus;
+  operationStatus?: OperationStatus | undefined;
 }
 
 export interface copyResponsePayloadWithStatus {
-  payload?: CopyResponseItem;
-  status?: Status;
+  payload?: CopyResponseItem | undefined;
+  status?: Status | undefined;
 }
 
 export interface CopyRequestItem {
@@ -40,8 +40,8 @@ export interface CopyResponseItem {
   bucket: string;
   copySource: string;
   key: string;
-  meta?: Meta;
-  options?: Options;
+  meta?: Meta | undefined;
+  options?: Options | undefined;
 }
 
 export interface Options {
@@ -64,72 +64,72 @@ export interface Object {
   meta?: Meta | undefined;
   url?: string | undefined;
   options?: Options | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface ObjectResponse {
-  response?: ObjectResponsePayloadWithStatus;
-  operationStatus?: OperationStatus;
+  response?: ObjectResponsePayloadWithStatus | undefined;
+  operationStatus?: OperationStatus | undefined;
 }
 
 export interface ObjectResponsePayloadWithStatus {
-  payload?: ObjectResponsePayload;
-  status?: Status;
+  payload?: ObjectResponsePayload | undefined;
+  status?: Status | undefined;
 }
 
 export interface ObjectResponsePayload {
   key: string;
   bucket: string;
   object: Buffer;
-  meta?: Meta;
+  meta?: Meta | undefined;
   url: string;
-  options?: Options;
+  options?: Options | undefined;
 }
 
 export interface GetRequest {
   key: string;
   bucket: string;
   download?: boolean | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface ListResponse {
   responses: ObjectsDataWithPayloadStatus[];
-  operationStatus?: OperationStatus;
+  operationStatus?: OperationStatus | undefined;
 }
 
 export interface ObjectsDataWithPayloadStatus {
-  payload?: ObjectData;
-  status?: Status;
+  payload?: ObjectData | undefined;
+  status?: Status | undefined;
 }
 
 export interface ObjectData {
   objectName: string;
   url: string;
-  meta?: Meta;
+  meta?: Meta | undefined;
 }
 
 export interface DeleteRequest {
   key: string;
   bucket: string;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface PutResponse {
-  response?: PutResponseWithPayloadStatus;
-  operationStatus?: OperationStatus;
+  response?: PutResponseWithPayloadStatus | undefined;
+  operationStatus?: OperationStatus | undefined;
 }
 
 export interface PutResponseWithPayloadStatus {
-  payload?: Response;
-  status?: Status;
+  payload?: Response | undefined;
+  status?: Status | undefined;
 }
 
 export interface Response {
   url: string;
   bucket: string;
   key: string;
-  meta?: Meta;
+  meta?: Meta | undefined;
   tags: Attribute[];
   /** file size of uploaded object */
   length: number;
@@ -139,7 +139,7 @@ export interface ListRequest {
   bucket: string;
   /** / Filter based on fieldName|operation, value|list */
   filters?: FilterOp | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
   maxKeys?: number | undefined;
   prefix?: string | undefined;
 }
@@ -157,7 +157,7 @@ export interface OstorageMessage {
 
 export interface MoveRequestList {
   items: MoveRequestItem[];
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface MoveRequestItem {
@@ -177,20 +177,20 @@ export interface MoveRequestItem {
 
 export interface MoveResponseList {
   responses: MoveResponsePayloadWithStatus[];
-  operationStatus?: OperationStatus;
+  operationStatus?: OperationStatus | undefined;
 }
 
 export interface MoveResponsePayloadWithStatus {
-  payload?: MoveResponseItem;
-  status?: Status;
+  payload?: MoveResponseItem | undefined;
+  status?: Status | undefined;
 }
 
 export interface MoveResponseItem {
   bucket: string;
   sourceObject: string;
   key: string;
-  meta?: Meta;
-  options?: Options;
+  meta?: Meta | undefined;
+  options?: Options | undefined;
 }
 
 function createBaseCopyRequestList(): CopyRequestList {
@@ -4276,10 +4276,10 @@ export const protoMetadata: ProtoMetadata = {
   },
 };
 
-declare var self: any | undefined;
-declare var window: any | undefined;
-declare var global: any | undefined;
-var tsProtoGlobalThis: any = (() => {
+declare const self: any | undefined;
+declare const window: any | undefined;
+declare const global: any | undefined;
+const tsProtoGlobalThis: any = (() => {
   if (typeof globalThis !== "undefined") {
     return globalThis;
   }

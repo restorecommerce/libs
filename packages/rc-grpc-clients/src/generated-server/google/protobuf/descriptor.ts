@@ -33,14 +33,18 @@ export interface FileDescriptorProto {
   enum_type: EnumDescriptorProto[];
   service: ServiceDescriptorProto[];
   extension: FieldDescriptorProto[];
-  options?: FileOptions;
+  options?:
+    | FileOptions
+    | undefined;
   /**
    * / This field contains optional information about the original source code.
    * / You may safely remove this entire field without harming runtime
    * / functionality of the descriptors -- the information is needed only by
    * / development tools.
    */
-  source_code_info?: SourceCodeInfo;
+  source_code_info?:
+    | SourceCodeInfo
+    | undefined;
   /**
    * / The syntax of the proto file.
    * / The supported values are "proto2" and "proto3".
@@ -57,7 +61,7 @@ export interface DescriptorProto {
   enum_type: EnumDescriptorProto[];
   extension_range: DescriptorProto_ExtensionRange[];
   oneof_decl: OneofDescriptorProto[];
-  options?: MessageOptions;
+  options?: MessageOptions | undefined;
   reserved_range: DescriptorProto_ReservedRange[];
   /**
    * / Reserved field names, which may not be used by fields in the same message.
@@ -126,7 +130,7 @@ export interface FieldDescriptorProto {
    * / it to camelCase.
    */
   json_name: string;
-  options?: FieldOptions;
+  options?: FieldOptions | undefined;
 }
 
 export enum FieldDescriptorProto_Type {
@@ -383,21 +387,21 @@ export interface OneofDescriptorProto {
 export interface EnumDescriptorProto {
   name: string;
   value: EnumValueDescriptorProto[];
-  options?: EnumOptions;
+  options?: EnumOptions | undefined;
 }
 
 /** / Describes a value within an enum. */
 export interface EnumValueDescriptorProto {
   name: string;
   number: number;
-  options?: EnumValueOptions;
+  options?: EnumValueOptions | undefined;
 }
 
 /** / Describes a service. */
 export interface ServiceDescriptorProto {
   name: string;
   method: MethodDescriptorProto[];
-  options?: ServiceOptions;
+  options?: ServiceOptions | undefined;
 }
 
 /** / Describes a method of a service. */
@@ -409,7 +413,9 @@ export interface MethodDescriptorProto {
    */
   input_type: string;
   output_type: string;
-  options?: MethodOptions;
+  options?:
+    | MethodOptions
+    | undefined;
   /** / Identifies if client streams multiple client messages */
   client_streaming: boolean;
   /** / Identifies if server streams multiple server messages */
@@ -6337,10 +6343,10 @@ export const protoMetadata: ProtoMetadata = {
   dependencies: [],
 };
 
-declare var self: any | undefined;
-declare var window: any | undefined;
-declare var global: any | undefined;
-var tsProtoGlobalThis: any = (() => {
+declare const self: any | undefined;
+declare const window: any | undefined;
+declare const global: any | undefined;
+const tsProtoGlobalThis: any = (() => {
   if (typeof globalThis !== "undefined") {
     return globalThis;
   }

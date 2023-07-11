@@ -93,18 +93,18 @@ export interface RuleRQ {
 export interface RuleList {
   items: Rule[];
   total_count?: number | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface RuleListResponse {
   items: RuleResponse[];
   total_count: number;
-  operation_status?: OperationStatus;
+  operation_status?: OperationStatus | undefined;
 }
 
 export interface RuleResponse {
-  payload?: Rule;
-  status?: Status;
+  payload?: Rule | undefined;
+  status?: Status | undefined;
 }
 
 /**

@@ -49,18 +49,18 @@ export interface PolicyRQ {
 export interface PolicyList {
   items: Policy[];
   totalCount?: number | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface PolicyListResponse {
   items: PolicyResponse[];
   totalCount: number;
-  operationStatus?: OperationStatus;
+  operationStatus?: OperationStatus | undefined;
 }
 
 export interface PolicyResponse {
-  payload?: Policy;
-  status?: Status;
+  payload?: Policy | undefined;
+  status?: Status | undefined;
 }
 
 function createBasePolicy(): Policy {

@@ -23,18 +23,18 @@ export interface Deleted {
 export interface JobList {
   items: Job[];
   total_count?: number | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface JobListResponse {
   items: JobResponse[];
   total_count: number;
-  operation_status?: OperationStatus;
+  operation_status?: OperationStatus | undefined;
 }
 
 export interface JobResponse {
-  payload?: Job;
-  status?: Status;
+  payload?: Job | undefined;
+  status?: Status | undefined;
 }
 
 /** A Job resource */
@@ -315,7 +315,7 @@ export interface JobReadRequest {
     | undefined;
   /** Fields selector */
   fields: FieldFilter[];
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 /** only possible to sort jobs by creation date */

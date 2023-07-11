@@ -12,7 +12,7 @@ export interface SearchRequest {
   collection?: string | undefined;
   text?: string | undefined;
   acls: string[];
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface SearchResponse {

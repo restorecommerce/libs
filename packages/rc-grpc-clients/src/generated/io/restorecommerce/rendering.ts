@@ -10,15 +10,21 @@ export interface Payload {
    * json with <key, template> pairs
    * e.g. { 'subject': ..., 'message':....}
    */
-  templates?: Any;
+  templates?:
+    | Any
+    | undefined;
   /** data to fill template with */
-  data?: Any;
+  data?:
+    | Any
+    | undefined;
   /** stylesheet URL */
   styleUrl: string;
   /** inlining, copying CSS into <style>, etc... */
   strategy: Payload_Strategy;
   /** rendering options JSON object */
-  options?: Any;
+  options?:
+    | Any
+    | undefined;
   /** content type for rendering such as 'application/html' or 'application/text' */
   contentType: string;
 }

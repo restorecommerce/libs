@@ -194,18 +194,18 @@ export interface Fulfillment {
 export interface FulfillmentList {
   items: Fulfillment[];
   totalCount?: number | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface FulfillmentResponse {
-  payload?: Fulfillment;
-  status?: Status;
+  payload?: Fulfillment | undefined;
+  status?: Status | undefined;
 }
 
 export interface FulfillmentListResponse {
   items: FulfillmentResponse[];
   totalCount: number;
-  operationStatus?: OperationStatus;
+  operationStatus?: OperationStatus | undefined;
 }
 
 export interface FulfillmentId {
@@ -221,7 +221,7 @@ export interface FulfillmentId {
 export interface FulfillmentIdList {
   items: FulfillmentId[];
   totalCount?: number | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface Deleted {
@@ -246,7 +246,7 @@ export interface InvoiceRequest {
 export interface InvoiceRequestList {
   items: InvoiceRequest[];
   totalCount?: number | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 function createBaseItem(): Item {

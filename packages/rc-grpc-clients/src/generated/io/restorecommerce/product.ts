@@ -74,20 +74,20 @@ export interface Association {
   productId?: string | undefined;
   type: AssociationType;
   tags: string[];
-  data?: Any;
+  data?: Any | undefined;
 }
 
 /** Product resource entity */
 export interface Product {
   id?: string | undefined;
-  meta?: Meta;
+  meta?: Meta | undefined;
   product?: IndividualProduct | undefined;
   bundle?: Bundle | undefined;
   shopId?: string | undefined;
   active?: boolean | undefined;
   tags: string[];
   associations: Association[];
-  data?: Any;
+  data?: Any | undefined;
 }
 
 export interface IndividualProduct {
@@ -126,12 +126,12 @@ export interface ProductList {
 export interface ProductListResponse {
   items: ProductResponse[];
   totalCount: number;
-  operationStatus?: OperationStatus;
+  operationStatus?: OperationStatus | undefined;
 }
 
 export interface ProductResponse {
-  payload?: Product;
-  status?: Status;
+  payload?: Product | undefined;
+  status?: Status | undefined;
 }
 
 export interface Package {

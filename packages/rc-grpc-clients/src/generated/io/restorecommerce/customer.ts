@@ -16,18 +16,18 @@ export const protobufPackage = "io.restorecommerce.customer";
 export interface CustomerList {
   items: Customer[];
   totalCount?: number | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface CustomerListResponse {
   items: CustomerResponse[];
   totalCount: number;
-  operationStatus?: OperationStatus;
+  operationStatus?: OperationStatus | undefined;
 }
 
 export interface CustomerResponse {
-  payload?: Customer;
-  status?: Status;
+  payload?: Customer | undefined;
+  status?: Status | undefined;
 }
 
 export interface Customer {

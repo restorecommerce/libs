@@ -17,18 +17,18 @@ export interface Deleted {
 export interface CredentialList {
   items: Credential[];
   total_count?: number | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface CredentialListResponse {
   items: CredentialResponse[];
   total_count: number;
-  operation_status?: OperationStatus;
+  operation_status?: OperationStatus | undefined;
 }
 
 export interface CredentialResponse {
-  payload?: Credential;
-  status?: Status;
+  payload?: Credential | undefined;
+  status?: Status | undefined;
 }
 
 export interface Credential {

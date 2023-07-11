@@ -47,7 +47,7 @@ service OrderService {
   rpc TriggerInvoice (InvoiceRequestList) returns (io.restorecommerce.status.StatusListResponse);
 }
 
-enum State {
+enum OrderState {
   FAILED = 0;
   INVALID = 1;
   CREATED = 2;
@@ -122,7 +122,7 @@ message Order {
     }
   ];
   repeated Item items = 6;
-  optional State order_state = 7;                                         // Set by service
+  optional OrderState order_state = 7;                                         // Set by service
   optional io.restorecommerce.fulfillment.State fulfillment_state = 8;    // Set by kafka
   optional io.restorecommerce.invoice.PaymentState payment_state = 9;            // Set by kafka
   repeated io.restorecommerce.amount.Amount total_amounts = 10;                // Set by service --- repeated in case of variant currency?

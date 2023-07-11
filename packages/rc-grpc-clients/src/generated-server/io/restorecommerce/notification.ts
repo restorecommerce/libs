@@ -17,18 +17,18 @@ export interface Deleted {
 export interface NotificationList {
   items: Notification[];
   total_count?: number | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface NotificationListResponse {
   items: NotificationResponse[];
   total_count: number;
-  operation_status?: OperationStatus;
+  operation_status?: OperationStatus | undefined;
 }
 
 export interface NotificationResponse {
-  items?: Notification;
-  status?: Status;
+  items?: Notification | undefined;
+  status?: Status | undefined;
 }
 
 export interface Notification {

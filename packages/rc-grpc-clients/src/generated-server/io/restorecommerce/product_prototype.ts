@@ -24,18 +24,18 @@ export interface ProductPrototype {
 export interface ProductPrototypeList {
   items: ProductPrototype[];
   total_count?: number | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface ProductPrototypeListResponse {
   items: ProductPrototypeResponse[];
   total_count: number;
-  operation_status?: OperationStatus;
+  operation_status?: OperationStatus | undefined;
 }
 
 export interface ProductPrototypeResponse {
-  payload?: ProductPrototype;
-  status?: Status;
+  payload?: ProductPrototype | undefined;
+  status?: Status | undefined;
 }
 
 export interface Deleted {

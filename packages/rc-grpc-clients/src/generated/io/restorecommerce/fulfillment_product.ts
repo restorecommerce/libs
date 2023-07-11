@@ -41,7 +41,7 @@ export interface ProductQuery {
 export interface ProductQueryList {
   items: ProductQuery[];
   totalCount?: number | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface FulfillmentProduct {
@@ -69,18 +69,18 @@ export interface Variant {
 export interface FulfillmentProductList {
   items: FulfillmentProduct[];
   totalCount?: number | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface FulfillmentProductResponse {
-  payload?: FulfillmentProduct;
-  status?: Status;
+  payload?: FulfillmentProduct | undefined;
+  status?: Status | undefined;
 }
 
 export interface FulfillmentProductListResponse {
   items: FulfillmentProductResponse[];
   totalCount: number;
-  operationStatus?: OperationStatus;
+  operationStatus?: OperationStatus | undefined;
 }
 
 export interface PackingSolution {
@@ -100,7 +100,7 @@ export interface PackingSolutionResponse {
 export interface PackingSolutionListResponse {
   items: PackingSolutionResponse[];
   totalCount?: number | undefined;
-  operationStatus?: OperationStatus;
+  operationStatus?: OperationStatus | undefined;
 }
 
 export interface Deleted {

@@ -17,18 +17,18 @@ export interface Deleted {
 export interface TimezoneList {
   items: Timezone[];
   total_count?: number | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface TimezoneListResponse {
   items: TimezoneResponse[];
   total_count: number;
-  operation_status?: OperationStatus;
+  operation_status?: OperationStatus | undefined;
 }
 
 export interface TimezoneResponse {
-  payload?: Timezone;
-  status?: Status;
+  payload?: Timezone | undefined;
+  status?: Status | undefined;
 }
 
 export interface Timezone {

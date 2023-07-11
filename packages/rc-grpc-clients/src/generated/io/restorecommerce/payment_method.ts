@@ -123,18 +123,18 @@ export interface Deleted {
 export interface PaymentMethodList {
   items: PaymentMethod[];
   totalCount?: number | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface PaymentMethodListResponse {
   items: PaymentMethodResponse[];
   totalCount: number;
-  operationStatus?: OperationStatus;
+  operationStatus?: OperationStatus | undefined;
 }
 
 export interface PaymentMethodResponse {
-  payload?: PaymentMethod;
-  status?: Status;
+  payload?: PaymentMethod | undefined;
+  status?: Status | undefined;
 }
 
 export interface PaymentMethod {

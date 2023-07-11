@@ -70,8 +70,8 @@ export function paymentStateToNumber(object: PaymentState): number {
 
 export interface RequestInvoiceNumber {
   shop_id?: string | undefined;
-  context?: Any;
-  subject?: Subject;
+  context?: Any | undefined;
+  subject?: Subject | undefined;
 }
 
 export interface InvoiceNumberResponse {
@@ -85,18 +85,18 @@ export interface Deleted {
 export interface InvoiceList {
   items: Invoice[];
   total_count?: number | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface InvoiceListResponse {
   items: InvoiceResponse[];
   total_count: number;
-  operation_status?: OperationStatus;
+  operation_status?: OperationStatus | undefined;
 }
 
 export interface InvoiceResponse {
-  payload?: Invoice;
-  status?: Status;
+  payload?: Invoice | undefined;
+  status?: Status | undefined;
 }
 
 export interface InvoiceId {
@@ -109,7 +109,7 @@ export interface InvoiceId {
 export interface InvoiceIdList {
   items: InvoiceId[];
   total_count?: number | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 /** The Invoice recource, stored in DB. */

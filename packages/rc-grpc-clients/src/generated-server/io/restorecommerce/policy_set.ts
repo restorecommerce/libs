@@ -28,18 +28,18 @@ export interface PolicySet {
 export interface PolicySetList {
   items: PolicySet[];
   total_count?: number | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface PolicySetListResponse {
   items: PolicySetResponse[];
   total_count: number;
-  operation_status?: OperationStatus;
+  operation_status?: OperationStatus | undefined;
 }
 
 export interface PolicySetResponse {
-  payload?: PolicySet;
-  status?: Status;
+  payload?: PolicySet | undefined;
+  status?: Status | undefined;
 }
 
 export interface PolicySetRQ {

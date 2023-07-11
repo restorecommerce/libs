@@ -29,18 +29,18 @@ export interface ExchangeCodeRequest {
 }
 
 export interface ExchangeCodeResponse {
-  user?: UserResponse;
+  user?: UserResponse | undefined;
   email: string;
-  token?: Tokens;
+  token?: Tokens | undefined;
 }
 
 export interface GetTokenRequest {
-  subject?: Subject;
+  subject?: Subject | undefined;
   service: string;
 }
 
 export interface GetTokenResponse {
-  status?: Status;
+  status?: Status | undefined;
   token?: string | undefined;
 }
 

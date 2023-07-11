@@ -17,18 +17,18 @@ export const protobufPackage = "io.restorecommerce.shop";
 export interface ShopList {
   items: Shop[];
   totalCount?: number | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface ShopListResponse {
   items: ShopResponse[];
   totalCount: number;
-  operationStatus?: OperationStatus;
+  operationStatus?: OperationStatus | undefined;
 }
 
 export interface ShopResponse {
-  payload?: Shop;
-  status?: Status;
+  payload?: Shop | undefined;
+  status?: Status | undefined;
 }
 
 export interface Shop {

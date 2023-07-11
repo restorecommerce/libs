@@ -12,25 +12,27 @@ import { OperationStatus, protoMetadata as protoMetadata4 } from "./status";
 export const protobufPackage = "io.restorecommerce.access_control";
 
 export interface Request {
-  target?: Target;
+  target?:
+    | Target
+    | undefined;
   /**
    * generic data structure which can be provided
    * to a contextQuery (see io/restorecommerce/rule.proto)
    */
-  context?: Context;
+  context?: Context | undefined;
 }
 
 export interface Context {
-  subject?: Any;
+  subject?: Any | undefined;
   resources: Any[];
-  security?: Any;
+  security?: Any | undefined;
 }
 
 export interface Response {
   decision: Response_Decision;
   obligations: Attribute[];
   evaluation_cacheable: boolean;
-  operation_status?: OperationStatus;
+  operation_status?: OperationStatus | undefined;
 }
 
 export enum Response_Decision {
@@ -97,7 +99,7 @@ export function response_DecisionToNumber(object: Response_Decision): number {
 export interface ReverseQuery {
   policy_sets: PolicySetRQ[];
   obligations: Attribute[];
-  operation_status?: OperationStatus;
+  operation_status?: OperationStatus | undefined;
 }
 
 function createBaseRequest(): Request {

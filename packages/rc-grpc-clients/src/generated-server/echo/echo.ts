@@ -8,12 +8,12 @@ export const protobufPackage = "echo";
 
 export interface EchoRequest {
   message: string;
-  test?: Any;
+  test?: Any | undefined;
 }
 
 export interface EchoResponse {
   message: string;
-  test?: Any;
+  test?: Any | undefined;
 }
 
 function createBaseEchoRequest(): EchoRequest {

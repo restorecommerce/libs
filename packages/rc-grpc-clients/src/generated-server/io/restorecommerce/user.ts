@@ -91,12 +91,12 @@ export interface LoginRequest {
 
 export interface OrgIDRequest {
   org_ids: string[];
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface DeleteUsersByOrgResponse {
   user_ids: string[];
-  operation_status?: OperationStatus;
+  operation_status?: OperationStatus | undefined;
 }
 
 export interface FindRequest {
@@ -104,7 +104,7 @@ export interface FindRequest {
   id?: string | undefined;
   name?: string | undefined;
   email?: string | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface FindByTokenRequest {
@@ -134,7 +134,7 @@ export interface ActivateRequest {
   /** / user name or email */
   identifier: string;
   activation_code: string;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface ConfirmUserInvitationRequest {
@@ -142,26 +142,26 @@ export interface ConfirmUserInvitationRequest {
   identifier: string;
   password: string;
   activation_code: string;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface SendInvitationEmailRequest {
   /** user name or email */
   identifier: string;
   invited_by_user_identifier: string;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface ChangePasswordRequest {
   password: string;
   new_password: string;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface RequestPasswordChangeRequest {
   /** user name or email */
   identifier: string;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface ConfirmPasswordChangeRequest {
@@ -169,33 +169,33 @@ export interface ConfirmPasswordChangeRequest {
   identifier: string;
   activation_code: string;
   password: string;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface ChangeEmailRequest {
   /** user name or email */
   identifier: string;
   new_email: string;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface ConfirmEmailChangeRequest {
   /** user name or email */
   identifier: string;
   activation_code: string;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface UnregisterRequest {
   /** / User ID */
   identifier: string;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface SendActivationEmailRequest {
   /** / User name or email */
   identifier: string;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 /**
@@ -244,29 +244,29 @@ export interface EmailChangeConfirmed {
 export interface UserList {
   items: User[];
   total_count?: number | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface UserListWithRoleResponse {
   items: UserRoleResponse[];
   total_count: number;
-  operation_status?: OperationStatus;
+  operation_status?: OperationStatus | undefined;
 }
 
 export interface UserRoleResponse {
-  payload?: UserRole;
-  status?: Status;
+  payload?: UserRole | undefined;
+  status?: Status | undefined;
 }
 
 export interface UserListResponse {
   items: UserResponse[];
   total_count: number;
-  operation_status?: OperationStatus;
+  operation_status?: OperationStatus | undefined;
 }
 
 export interface UserResponse {
-  payload?: User;
-  status?: Status;
+  payload?: User | undefined;
+  status?: Status | undefined;
 }
 
 /** User activation request. */
@@ -278,7 +278,7 @@ export interface Activate {
 export interface FindByRoleRequest {
   role: string;
   attributes: Attribute[];
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 /** A User resource. */
@@ -368,7 +368,9 @@ export interface User {
 export interface UserRole {
   /** / User ID, unique, key */
   id: string;
-  meta?: Meta;
+  meta?:
+    | Meta
+    | undefined;
   /** The name of the user, can be used for login */
   name: string;
   first_name: string;
@@ -397,7 +399,7 @@ export interface UserRole {
   unauthenticated: boolean;
   /** / Is the user a guest. A guest is a automatically generated user which can later be turned in a non-guest user. */
   guest: boolean;
-  image?: Image;
+  image?: Image | undefined;
   user_type: UserType;
   /** For user invitation */
   invite: boolean;
@@ -410,7 +412,7 @@ export interface UserRole {
   tokens: Tokens[];
   last_access: number;
   /** / additional data */
-  data?: Any;
+  data?: Any | undefined;
   roles: Role[];
 }
 

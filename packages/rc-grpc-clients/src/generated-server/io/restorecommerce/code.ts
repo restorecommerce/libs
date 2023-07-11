@@ -2,15 +2,15 @@
 import type { CallContext, CallOptions } from "nice-grpc-common";
 import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import { protoMetadata as protoMetadata4, Subject } from "./auth";
-import { Meta, protoMetadata as protoMetadata3 } from "./meta";
-import { protoMetadata as protoMetadata6 } from "./options";
-import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata2, ReadRequest } from "./resource_base";
-import { OperationStatus, protoMetadata as protoMetadata5, Status as Status1 } from "./status";
+import { protoMetadata as protoMetadata3, Subject } from "./auth";
+import { Meta, protoMetadata as protoMetadata2 } from "./meta";
+import { protoMetadata as protoMetadata5 } from "./options";
+import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata1, ReadRequest } from "./resource_base";
+import { OperationStatus, protoMetadata as protoMetadata4, Status } from "./status";
 
 export const protobufPackage = "io.restorecommerce.code";
 
-export enum Status {
+export enum StatusCode {
   ADDED = "ADDED",
   CHANGED_NAME = "CHANGED_NAME",
   CHANGED_CHARACTERISTIC = "CHANGED_CHARACTERISTIC",
@@ -20,68 +20,68 @@ export enum Status {
   UNRECOGNIZED = "UNRECOGNIZED",
 }
 
-export function statusFromJSON(object: any): Status {
+export function statusCodeFromJSON(object: any): StatusCode {
   switch (object) {
     case 0:
     case "ADDED":
-      return Status.ADDED;
+      return StatusCode.ADDED;
     case 1:
     case "CHANGED_NAME":
-      return Status.CHANGED_NAME;
+      return StatusCode.CHANGED_NAME;
     case 2:
     case "CHANGED_CHARACTERISTIC":
-      return Status.CHANGED_CHARACTERISTIC;
+      return StatusCode.CHANGED_CHARACTERISTIC;
     case 3:
     case "DEPRECATED":
-      return Status.DEPRECATED;
+      return StatusCode.DEPRECATED;
     case 4:
     case "MARKED_AS_DELETED":
-      return Status.MARKED_AS_DELETED;
+      return StatusCode.MARKED_AS_DELETED;
     case 5:
     case "REINSTATED":
-      return Status.REINSTATED;
+      return StatusCode.REINSTATED;
     case -1:
     case "UNRECOGNIZED":
     default:
-      return Status.UNRECOGNIZED;
+      return StatusCode.UNRECOGNIZED;
   }
 }
 
-export function statusToJSON(object: Status): string {
+export function statusCodeToJSON(object: StatusCode): string {
   switch (object) {
-    case Status.ADDED:
+    case StatusCode.ADDED:
       return "ADDED";
-    case Status.CHANGED_NAME:
+    case StatusCode.CHANGED_NAME:
       return "CHANGED_NAME";
-    case Status.CHANGED_CHARACTERISTIC:
+    case StatusCode.CHANGED_CHARACTERISTIC:
       return "CHANGED_CHARACTERISTIC";
-    case Status.DEPRECATED:
+    case StatusCode.DEPRECATED:
       return "DEPRECATED";
-    case Status.MARKED_AS_DELETED:
+    case StatusCode.MARKED_AS_DELETED:
       return "MARKED_AS_DELETED";
-    case Status.REINSTATED:
+    case StatusCode.REINSTATED:
       return "REINSTATED";
-    case Status.UNRECOGNIZED:
+    case StatusCode.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
   }
 }
 
-export function statusToNumber(object: Status): number {
+export function statusCodeToNumber(object: StatusCode): number {
   switch (object) {
-    case Status.ADDED:
+    case StatusCode.ADDED:
       return 0;
-    case Status.CHANGED_NAME:
+    case StatusCode.CHANGED_NAME:
       return 1;
-    case Status.CHANGED_CHARACTERISTIC:
+    case StatusCode.CHANGED_CHARACTERISTIC:
       return 2;
-    case Status.DEPRECATED:
+    case StatusCode.DEPRECATED:
       return 3;
-    case Status.MARKED_AS_DELETED:
+    case StatusCode.MARKED_AS_DELETED:
       return 4;
-    case Status.REINSTATED:
+    case StatusCode.REINSTATED:
       return 5;
-    case Status.UNRECOGNIZED:
+    case StatusCode.UNRECOGNIZED:
     default:
       return -1;
   }
@@ -231,24 +231,24 @@ export function sectorToNumber(object: Sector): number {
 export interface CodeList {
   items: Code[];
   total_count?: number | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface CodeListResponse {
   items: CodeResponse[];
   total_count: number;
-  operation_status?: OperationStatus;
+  operation_status?: OperationStatus | undefined;
 }
 
 export interface CodeResponse {
-  payload?: Code;
-  status?: Status1;
+  payload?: Code | undefined;
+  status?: Status | undefined;
 }
 
 export interface Code {
   id?: string | undefined;
   meta?: Meta | undefined;
-  status?: Status | undefined;
+  status?: StatusCode | undefined;
   common_code?: string | undefined;
   name?: string | undefined;
   description?: string | undefined;
@@ -452,7 +452,7 @@ export const CodeResponse = {
       Code.encode(message.payload, writer.uint32(10).fork()).ldelim();
     }
     if (message.status !== undefined) {
-      Status1.encode(message.status, writer.uint32(18).fork()).ldelim();
+      Status.encode(message.status, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
@@ -476,7 +476,7 @@ export const CodeResponse = {
             break;
           }
 
-          message.status = Status1.decode(reader, reader.uint32());
+          message.status = Status.decode(reader, reader.uint32());
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -490,14 +490,14 @@ export const CodeResponse = {
   fromJSON(object: any): CodeResponse {
     return {
       payload: isSet(object.payload) ? Code.fromJSON(object.payload) : undefined,
-      status: isSet(object.status) ? Status1.fromJSON(object.status) : undefined,
+      status: isSet(object.status) ? Status.fromJSON(object.status) : undefined,
     };
   },
 
   toJSON(message: CodeResponse): unknown {
     const obj: any = {};
     message.payload !== undefined && (obj.payload = message.payload ? Code.toJSON(message.payload) : undefined);
-    message.status !== undefined && (obj.status = message.status ? Status1.toJSON(message.status) : undefined);
+    message.status !== undefined && (obj.status = message.status ? Status.toJSON(message.status) : undefined);
     return obj;
   },
 
@@ -511,7 +511,7 @@ export const CodeResponse = {
       ? Code.fromPartial(object.payload)
       : undefined;
     message.status = (object.status !== undefined && object.status !== null)
-      ? Status1.fromPartial(object.status)
+      ? Status.fromPartial(object.status)
       : undefined;
     return message;
   },
@@ -544,7 +544,7 @@ export const Code = {
       Meta.encode(message.meta, writer.uint32(18).fork()).ldelim();
     }
     if (message.status !== undefined) {
-      writer.uint32(24).int32(statusToNumber(message.status));
+      writer.uint32(24).int32(statusCodeToNumber(message.status));
     }
     if (message.common_code !== undefined) {
       writer.uint32(34).string(message.common_code);
@@ -605,7 +605,7 @@ export const Code = {
             break;
           }
 
-          message.status = statusFromJSON(reader.int32());
+          message.status = statusCodeFromJSON(reader.int32());
           continue;
         case 4:
           if (tag !== 34) {
@@ -690,7 +690,7 @@ export const Code = {
     return {
       id: isSet(object.id) ? String(object.id) : undefined,
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
-      status: isSet(object.status) ? statusFromJSON(object.status) : undefined,
+      status: isSet(object.status) ? statusCodeFromJSON(object.status) : undefined,
       common_code: isSet(object.common_code) ? String(object.common_code) : undefined,
       name: isSet(object.name) ? String(object.name) : undefined,
       description: isSet(object.description) ? String(object.description) : undefined,
@@ -709,7 +709,7 @@ export const Code = {
     message.id !== undefined && (obj.id = message.id);
     message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.status !== undefined &&
-      (obj.status = message.status !== undefined ? statusToJSON(message.status) : undefined);
+      (obj.status = message.status !== undefined ? statusCodeToJSON(message.status) : undefined);
     message.common_code !== undefined && (obj.common_code = message.common_code);
     message.name !== undefined && (obj.name = message.name);
     message.description !== undefined && (obj.description = message.description);
@@ -1005,7 +1005,7 @@ export const protoMetadata: ProtoMetadata = {
         "number": 3,
         "label": 1,
         "type": 14,
-        "typeName": ".io.restorecommerce.code.Status",
+        "typeName": ".io.restorecommerce.code.StatusCode",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 2,
@@ -1157,7 +1157,7 @@ export const protoMetadata: ProtoMetadata = {
       "reservedName": [],
     }],
     "enumType": [{
-      "name": "Status",
+      "name": "StatusCode",
       "value": [
         { "name": "ADDED", "number": 0, "options": undefined },
         { "name": "CHANGED_NAME", "number": 1, "options": undefined },
@@ -1237,14 +1237,14 @@ export const protoMetadata: ProtoMetadata = {
     "syntax": "proto3",
   }),
   references: {
-    ".io.restorecommerce.code.Status": Status,
+    ".io.restorecommerce.code.StatusCode": StatusCode,
     ".io.restorecommerce.code.Sector": Sector,
     ".io.restorecommerce.code.CodeList": CodeList,
     ".io.restorecommerce.code.CodeListResponse": CodeListResponse,
     ".io.restorecommerce.code.CodeResponse": CodeResponse,
     ".io.restorecommerce.code.Code": Code,
   },
-  dependencies: [protoMetadata2, protoMetadata3, protoMetadata4, protoMetadata5, protoMetadata6],
+  dependencies: [protoMetadata1, protoMetadata2, protoMetadata3, protoMetadata4, protoMetadata5],
   options: { services: { "CodeService": { options: undefined, methods: { "Read": { "is_query": true } } } } },
 };
 

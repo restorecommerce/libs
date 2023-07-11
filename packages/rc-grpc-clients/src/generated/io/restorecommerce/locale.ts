@@ -17,18 +17,18 @@ export interface Deleted {
 export interface LocaleList {
   items: Locale[];
   totalCount?: number | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface LocaleListResponse {
   items: LocaleResponse[];
   totalCount: number;
-  operationStatus?: OperationStatus;
+  operationStatus?: OperationStatus | undefined;
 }
 
 export interface LocaleResponse {
-  payload?: Locale;
-  status?: Status;
+  payload?: Locale | undefined;
+  status?: Status | undefined;
 }
 
 export interface Locale {

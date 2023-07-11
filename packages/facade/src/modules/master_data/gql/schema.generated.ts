@@ -851,7 +851,7 @@ export type IoRestorecommerceCodeCode = {
   __typename?: 'IoRestorecommerceCodeCode';
   id?: Maybe<Scalars['String']['output']>;
   meta?: Maybe<IoRestorecommerceMetaMeta>;
-  status?: Maybe<IoRestorecommerceCodeStatus>;
+  status?: Maybe<IoRestorecommerceCodeCodeStatus>;
   commonCode?: Maybe<Scalars['String']['output']>;
   name?: Maybe<Scalars['String']['output']>;
   description?: Maybe<Scalars['String']['output']>;
@@ -864,7 +864,7 @@ export type IoRestorecommerceCodeCode = {
   quantity?: Maybe<Scalars['String']['output']>;
 };
 
-export enum IoRestorecommerceCodeStatus {
+export enum IoRestorecommerceCodeCodeStatus {
   Added = 0,
   ChangedName = 1,
   ChangedCharacteristic = 2,
@@ -1438,7 +1438,7 @@ export type IIoRestorecommerceCodeCodeList = {
 export type IIoRestorecommerceCodeCode = {
   id?: InputMaybe<Scalars['String']['input']>;
   meta?: InputMaybe<IIoRestorecommerceMetaMeta>;
-  status?: InputMaybe<IoRestorecommerceCodeStatus>;
+  status?: InputMaybe<IoRestorecommerceCodeCodeStatus>;
   commonCode?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
@@ -1654,7 +1654,7 @@ export type ResolversTypes = ResolversObject<{
   IoRestorecommerceCodeCodeListResponse: ResolverTypeWrapper<IoRestorecommerceCodeCodeListResponse>;
   IoRestorecommerceCodeCodeResponse: ResolverTypeWrapper<IoRestorecommerceCodeCodeResponse>;
   IoRestorecommerceCodeCode: ResolverTypeWrapper<IoRestorecommerceCodeCode>;
-  IoRestorecommerceCodeStatus: IoRestorecommerceCodeStatus;
+  IoRestorecommerceCodeCodeStatus: IoRestorecommerceCodeCodeStatus;
   IoRestorecommerceCodeSector: IoRestorecommerceCodeSector;
   Mutation: ResolverTypeWrapper<{}>;
   ResourceMutation: ResolverTypeWrapper<ResourceMutation>;
@@ -2541,7 +2541,7 @@ export type IoRestorecommerceCodeCodeResponseResolvers<ContextType = ResourceCon
 export type IoRestorecommerceCodeCodeResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceCodeCode'] = ResolversParentTypes['IoRestorecommerceCodeCode']> = ResolversObject<{
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
-  status?: Resolver<Maybe<ResolversTypes['IoRestorecommerceCodeStatus']>, ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['IoRestorecommerceCodeCodeStatus']>, ParentType, ContextType>;
   commonCode?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -2555,7 +2555,7 @@ export type IoRestorecommerceCodeCodeResolvers<ContextType = ResourceContext, Pa
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceCodeStatusResolvers = { ADDED: 0, CHANGED_NAME: 1, CHANGED_CHARACTERISTIC: 2, DEPRECATED: 3, MARKED_AS_DELETED: 4, REINSTATED: 5 };
+export type IoRestorecommerceCodeCodeStatusResolvers = { ADDED: 0, CHANGED_NAME: 1, CHANGED_CHARACTERISTIC: 2, DEPRECATED: 3, MARKED_AS_DELETED: 4, REINSTATED: 5 };
 
 export type IoRestorecommerceCodeSectorResolvers = { UNKNOWN: 0, ACOUSTICS: 1, ATOMIC_AND_NUCLEAR_PHYSICS: 2, CHARACTERISTIC_NUMBERS: 3, ELECTRICITY_AND_MAGNETISM: 4, HEAT: 5, LIGHT_AND_RELATED_ELECTROMAGNETIC_RADIATIONS: 6, MECHANICS: 7, MISCELLANEOUS: 8, NUCLEAR_REACTIONS_AND_IONIZING_RADIATIONS: 9, PERIODIC_AND_RELATED_PHASES: 10, PHYSICAL_CHEMISTRY_AND_MOLECULAR_PHYSICS: 11, SOLID_STATE_PHYSICS: 12, SPACE_AND_TIME: 13 };
 
@@ -2780,7 +2780,7 @@ export type Resolvers<ContextType = ResourceContext> = ResolversObject<{
   IoRestorecommerceCodeCodeListResponse?: IoRestorecommerceCodeCodeListResponseResolvers<ContextType>;
   IoRestorecommerceCodeCodeResponse?: IoRestorecommerceCodeCodeResponseResolvers<ContextType>;
   IoRestorecommerceCodeCode?: IoRestorecommerceCodeCodeResolvers<ContextType>;
-  IoRestorecommerceCodeStatus?: IoRestorecommerceCodeStatusResolvers;
+  IoRestorecommerceCodeCodeStatus?: IoRestorecommerceCodeCodeStatusResolvers;
   IoRestorecommerceCodeSector?: IoRestorecommerceCodeSectorResolvers;
   Mutation?: MutationResolvers<ContextType>;
   ResourceMutation?: ResourceMutationResolvers<ContextType>;

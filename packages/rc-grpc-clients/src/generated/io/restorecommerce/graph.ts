@@ -14,7 +14,7 @@ export interface TraversalRequest {
   collection?: Collection | undefined;
   opts?: Options | undefined;
   path?: boolean | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
   filters: Filters[];
 }
 
@@ -325,10 +325,12 @@ export function filter_ValueTypeToNumber(object: Filter_ValueType): number {
 
 export interface TraversalResponse {
   /** vertices */
-  data?: Any;
+  data?:
+    | Any
+    | undefined;
   /** traversed vertices paths */
-  paths?: Any;
-  operationStatus?: OperationStatus;
+  paths?: Any | undefined;
+  operationStatus?: OperationStatus | undefined;
 }
 
 function createBaseTraversalRequest(): TraversalRequest {

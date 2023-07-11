@@ -21,18 +21,18 @@ export interface PriceGroup {
 export interface PriceGroupList {
   items: PriceGroup[];
   total_count?: number | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface PriceGroupListResponse {
   items: PriceGroupResponse[];
   total_count: number;
-  operation_status?: OperationStatus;
+  operation_status?: OperationStatus | undefined;
 }
 
 export interface PriceGroupResponse {
-  payload?: PriceGroup;
-  status?: Status;
+  payload?: PriceGroup | undefined;
+  status?: Status | undefined;
 }
 
 export interface Deleted {

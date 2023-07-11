@@ -16,7 +16,7 @@ export interface CommandRequest {
     | undefined;
   /** variable payload */
   payload?: Any | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 /** used to push responses to Kafka */
@@ -28,7 +28,7 @@ export interface CommandResponse {
    */
   services: string[];
   /** variable payload */
-  payload?: Any;
+  payload?: Any | undefined;
 }
 
 function createBaseCommandRequest(): CommandRequest {

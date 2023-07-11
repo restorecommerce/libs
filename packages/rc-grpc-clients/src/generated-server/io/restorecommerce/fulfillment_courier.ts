@@ -25,18 +25,18 @@ export interface FulfillmentCourier {
 export interface FulfillmentCourierList {
   items: FulfillmentCourier[];
   total_count?: number | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface FulfillmentCourierResponse {
-  payload?: FulfillmentCourier;
-  status?: Status;
+  payload?: FulfillmentCourier | undefined;
+  status?: Status | undefined;
 }
 
 export interface FulfillmentCourierListResponse {
   items: FulfillmentCourierResponse[];
   total_count: number;
-  operation_status?: OperationStatus;
+  operation_status?: OperationStatus | undefined;
 }
 
 export interface Deleted {

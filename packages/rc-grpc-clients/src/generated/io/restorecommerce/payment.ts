@@ -1291,14 +1291,14 @@ export interface SetupPayload {
 }
 
 export interface SetupPayloadStatus {
-  payload?: SetupPayload;
-  status?: Status;
+  payload?: SetupPayload | undefined;
+  status?: Status | undefined;
 }
 
 /** Response object for setup calls. */
 export interface SetupResponse {
-  item?: SetupPayloadStatus;
-  operationStatus?: OperationStatus;
+  item?: SetupPayloadStatus | undefined;
+  operationStatus?: OperationStatus | undefined;
 }
 
 /** Request object for authorization or purchase call for cardless payment. */
@@ -1309,7 +1309,7 @@ export interface PaymentRequest {
   paymentId?: string | undefined;
   payerId?: string | undefined;
   token?: string | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 /** Request object for capture call for both standard and cardless payments. */
@@ -1318,7 +1318,7 @@ export interface CaptureRequest {
   paymentSum?: number | undefined;
   currency?: string | undefined;
   paymentId?: string | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface PaymentPayload {
@@ -1327,8 +1327,8 @@ export interface PaymentPayload {
 }
 
 export interface PaymentPayloadStatus {
-  payload?: PaymentPayload;
-  status?: Status;
+  payload?: PaymentPayload | undefined;
+  status?: Status | undefined;
 }
 
 /**
@@ -1336,8 +1336,8 @@ export interface PaymentPayloadStatus {
  * for both standard and cardless payments.
  */
 export interface PaymentResponse {
-  item?: PaymentPayloadStatus;
-  operationStatus?: OperationStatus;
+  item?: PaymentPayloadStatus | undefined;
+  operationStatus?: OperationStatus | undefined;
 }
 
 /** Used for building ActiveMerchant::Billing::CreditCard instance. */

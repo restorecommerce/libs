@@ -20,18 +20,18 @@ export interface Deleted {
 export interface LocationList {
   items: Location[];
   totalCount?: number | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface LocationListResponse {
   items: LocationResponse[];
   totalCount: number;
-  operationStatus?: OperationStatus;
+  operationStatus?: OperationStatus | undefined;
 }
 
 export interface LocationResponse {
-  payload?: Location;
-  status?: Status;
+  payload?: Location | undefined;
+  status?: Status | undefined;
 }
 
 export interface Location {

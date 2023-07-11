@@ -115,18 +115,18 @@ export function commandParameter_ParameterTypeToNumber(object: CommandParameter_
 export interface CommandList {
   items: Command[];
   total_count?: number | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface CommandListResponse {
   items: CommandResponse[];
   total_count: number;
-  operation_status?: OperationStatus;
+  operation_status?: OperationStatus | undefined;
 }
 
 export interface CommandResponse {
-  payload?: Command;
-  status?: Status;
+  payload?: Command | undefined;
+  status?: Status | undefined;
 }
 
 function createBaseCommand(): Command {

@@ -38,7 +38,7 @@ message CodeResponse {
 message Code {
   optional string id = 1;
   optional io.restorecommerce.meta.Meta meta = 2;
-  optional Status status = 3;
+  optional StatusCode status = 3;
   optional string common_code = 4;
   optional string name = 5;
   optional string description = 6;
@@ -51,7 +51,7 @@ message Code {
   optional string quantity = 13;
 }
 
-enum Status {
+enum StatusCode {
   ADDED = 0;
   CHANGED_NAME = 1;
   CHANGED_CHARACTERISTIC = 2;

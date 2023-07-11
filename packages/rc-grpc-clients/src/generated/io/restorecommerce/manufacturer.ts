@@ -21,18 +21,18 @@ export interface Manufacturer {
 export interface ManufacturerList {
   items: Manufacturer[];
   totalCount?: number | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface ManufacturerListResponse {
   items: ManufacturerResponse[];
   totalCount: number;
-  operationStatus?: OperationStatus;
+  operationStatus?: OperationStatus | undefined;
 }
 
 export interface ManufacturerResponse {
-  payload?: Manufacturer;
-  status?: Status;
+  payload?: Manufacturer | undefined;
+  status?: Status | undefined;
 }
 
 export interface Deleted {

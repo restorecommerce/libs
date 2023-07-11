@@ -3,9 +3,9 @@ syntax = "proto3";
 package io.restorecommerce.status;
 
 message Status {
-  optional string id = 1;
-  optional uint32 code = 2;
-  optional string message = 3;
+  string id = 1;
+  uint32 code = 2;
+  string message = 3;
 }
 
 message StatusArray {
@@ -13,19 +13,19 @@ message StatusArray {
 }
 
 message StatusObj {
-  optional Status status = 1;
+  Status status = 1;
 }
 
 message OperationStatusObj {
-  optional OperationStatus operation_status = 1;
+  OperationStatus operation_status = 1;
 }
 
 message OperationStatus {
-  optional uint32 code = 1;
-  optional string message = 2;
+  uint32 code = 1;
+  string message = 2;
 }
 
 message StatusListResponse {
   repeated Status status = 1;
-  optional OperationStatus operation_status = 2;
+  OperationStatus operation_status = 2;
 }

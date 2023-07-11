@@ -16,18 +16,18 @@ export interface Deleted {
 export interface NotificationChannelList {
   items: NotificationChannel[];
   total_count?: number | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface NotificationChannelListResponse {
   items: NotificationChannelResponse[];
   total_count: number;
-  operation_status?: OperationStatus;
+  operation_status?: OperationStatus | undefined;
 }
 
 export interface NotificationChannelResponse {
-  items?: NotificationChannel;
-  status?: Status;
+  items?: NotificationChannel | undefined;
+  status?: Status | undefined;
 }
 
 export interface NotificationChannel {

@@ -17,7 +17,7 @@ export interface Deleted {
 export interface ContactPointTypeList {
   items: ContactPointType[];
   total_count?: number | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface ContactPointType {
@@ -29,12 +29,12 @@ export interface ContactPointType {
 export interface ContactPointTypeListResponse {
   items: ContactPointTypeResponse[];
   total_count: number;
-  operation_status?: OperationStatus;
+  operation_status?: OperationStatus | undefined;
 }
 
 export interface ContactPointTypeResponse {
-  payload?: ContactPointType;
-  status?: Status;
+  payload?: ContactPointType | undefined;
+  status?: Status | undefined;
 }
 
 function createBaseDeleted(): Deleted {

@@ -25,7 +25,7 @@ export interface StreamTestResponse {
 
 export interface TestResponse {
   result: string;
-  status?: Status;
+  status?: Status | undefined;
 }
 
 export interface TestEvent {
@@ -35,10 +35,10 @@ export interface TestEvent {
 
 export interface TestBufferedData {
   id: string;
-  meta?: Meta;
+  meta?: Meta | undefined;
   value: string;
   count: number;
-  data?: Any;
+  data?: Any | undefined;
 }
 
 export interface TestBufferedDataList {
@@ -47,14 +47,14 @@ export interface TestBufferedDataList {
 }
 
 export interface TestBufferedDataResponse {
-  payload?: TestBufferedData;
-  status?: Status;
+  payload?: TestBufferedData | undefined;
+  status?: Status | undefined;
 }
 
 export interface TestBufferedDataListResponse {
   items: TestBufferedDataResponse[];
   total_count: number;
-  operation_status?: OperationStatus;
+  operation_status?: OperationStatus | undefined;
 }
 
 export interface ExtendMe {
@@ -64,24 +64,24 @@ export interface ExtendMe {
 export interface ResourceList {
   items: Resource[];
   total_count: number;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface ResourceListResponse {
   items: ResourceResponse[];
   total_count: number;
-  operation_status?: OperationStatus;
+  operation_status?: OperationStatus | undefined;
 }
 
 export interface ResourceResponse {
-  payload?: Resource;
-  status?: Status;
+  payload?: Resource | undefined;
+  status?: Status | undefined;
 }
 
 /** / Example resource */
 export interface Resource {
   id: string;
-  meta?: Meta;
+  meta?: Meta | undefined;
   value: number;
   text: string;
   active: boolean;

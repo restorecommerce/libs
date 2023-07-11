@@ -9,12 +9,12 @@ import { protoMetadata as protoMetadata4, Subject } from "./auth";
 import { protoMetadata as protoMetadata10 } from "./country";
 import {
   FulfillmentListResponse,
-  InvoiceSection as InvoiceSection16,
+  InvoiceSection as InvoiceSection15,
   protoMetadata as protoMetadata11,
-  State as State15,
-  stateFromJSON as stateFromJSON18,
-  stateToJSON as stateToJSON19,
-  stateToNumber as stateToNumber17,
+  State,
+  stateFromJSON,
+  stateToJSON,
+  stateToNumber,
 } from "./fulfillment";
 import { PackingSolutionListResponse, Preferences, protoMetadata as protoMetadata12 } from "./fulfillment_product";
 import {
@@ -34,7 +34,7 @@ import { OperationStatus, protoMetadata as protoMetadata5, Status, StatusListRes
 
 export const protobufPackage = "io.restorecommerce.order";
 
-export enum State {
+export enum OrderState {
   FAILED = "FAILED",
   INVALID = "INVALID",
   CREATED = "CREATED",
@@ -46,82 +46,82 @@ export enum State {
   UNRECOGNIZED = "UNRECOGNIZED",
 }
 
-export function stateFromJSON(object: any): State {
+export function orderStateFromJSON(object: any): OrderState {
   switch (object) {
     case 0:
     case "FAILED":
-      return State.FAILED;
+      return OrderState.FAILED;
     case 1:
     case "INVALID":
-      return State.INVALID;
+      return OrderState.INVALID;
     case 2:
     case "CREATED":
-      return State.CREATED;
+      return OrderState.CREATED;
     case 3:
     case "SUBMITTED":
-      return State.SUBMITTED;
+      return OrderState.SUBMITTED;
     case 4:
     case "IN_PROCESS":
-      return State.IN_PROCESS;
+      return OrderState.IN_PROCESS;
     case 5:
     case "DONE":
-      return State.DONE;
+      return OrderState.DONE;
     case 6:
     case "WITHDRAWN":
-      return State.WITHDRAWN;
+      return OrderState.WITHDRAWN;
     case 7:
     case "CANCELLED":
-      return State.CANCELLED;
+      return OrderState.CANCELLED;
     case -1:
     case "UNRECOGNIZED":
     default:
-      return State.UNRECOGNIZED;
+      return OrderState.UNRECOGNIZED;
   }
 }
 
-export function stateToJSON(object: State): string {
+export function orderStateToJSON(object: OrderState): string {
   switch (object) {
-    case State.FAILED:
+    case OrderState.FAILED:
       return "FAILED";
-    case State.INVALID:
+    case OrderState.INVALID:
       return "INVALID";
-    case State.CREATED:
+    case OrderState.CREATED:
       return "CREATED";
-    case State.SUBMITTED:
+    case OrderState.SUBMITTED:
       return "SUBMITTED";
-    case State.IN_PROCESS:
+    case OrderState.IN_PROCESS:
       return "IN_PROCESS";
-    case State.DONE:
+    case OrderState.DONE:
       return "DONE";
-    case State.WITHDRAWN:
+    case OrderState.WITHDRAWN:
       return "WITHDRAWN";
-    case State.CANCELLED:
+    case OrderState.CANCELLED:
       return "CANCELLED";
-    case State.UNRECOGNIZED:
+    case OrderState.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
   }
 }
 
-export function stateToNumber(object: State): number {
+export function orderStateToNumber(object: OrderState): number {
   switch (object) {
-    case State.FAILED:
+    case OrderState.FAILED:
       return 0;
-    case State.INVALID:
+    case OrderState.INVALID:
       return 1;
-    case State.CREATED:
+    case OrderState.CREATED:
       return 2;
-    case State.SUBMITTED:
+    case OrderState.SUBMITTED:
       return 3;
-    case State.IN_PROCESS:
+    case OrderState.IN_PROCESS:
       return 4;
-    case State.DONE:
+    case OrderState.DONE:
       return 5;
-    case State.WITHDRAWN:
+    case OrderState.WITHDRAWN:
       return 6;
-    case State.CANCELLED:
+    case OrderState.CANCELLED:
       return 7;
-    case State.UNRECOGNIZED:
+    case OrderState.UNRECOGNIZED:
     default:
       return -1;
   }
@@ -197,11 +197,11 @@ export interface Order {
   items: Item[];
   /** Set by service */
   orderState?:
-    | State
+    | OrderState
     | undefined;
   /** Set by kafka */
   fulfillmentState?:
-    | State15
+    | State
     | undefined;
   /** Set by kafka */
   paymentState?:
@@ -219,24 +219,24 @@ export interface Order {
 
 export interface OrderIdList {
   ids: string[];
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface OrderList {
   items: Order[];
   totalCount?: number | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface OrderListResponse {
   items: OrderResponse[];
   totalCount: number;
-  operationStatus?: OperationStatus;
+  operationStatus?: OperationStatus | undefined;
 }
 
 export interface OrderResponse {
-  payload?: Order;
-  status?: Status;
+  payload?: Order | undefined;
+  status?: Status | undefined;
 }
 
 export interface Deleted {
@@ -262,13 +262,13 @@ export interface FulfillmentRequest {
     | undefined;
   /** select all on empty */
   selectedItems: string[];
-  data?: Any;
+  data?: Any | undefined;
 }
 
 export interface FulfillmentRequestList {
   items: FulfillmentRequest[];
   totalCount?: number | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface InvoiceSection {
@@ -281,7 +281,7 @@ export interface InvoiceSection {
     | FulfillmentInvoiceMode
     | undefined;
   /** includes all on empty */
-  selectedFulfillments: InvoiceSection16[];
+  selectedFulfillments: InvoiceSection15[];
 }
 
 export interface InvoiceRequest {
@@ -294,7 +294,7 @@ export interface InvoiceRequest {
 export interface InvoiceRequestList {
   items: InvoiceRequest[];
   totalCount?: number | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 function createBaseItem(): Item {
@@ -474,10 +474,10 @@ export const Order = {
       Item.encode(v!, writer.uint32(50).fork()).ldelim();
     }
     if (message.orderState !== undefined) {
-      writer.uint32(56).int32(stateToNumber(message.orderState));
+      writer.uint32(56).int32(orderStateToNumber(message.orderState));
     }
     if (message.fulfillmentState !== undefined) {
-      writer.uint32(64).int32(stateToNumber17(message.fulfillmentState));
+      writer.uint32(64).int32(stateToNumber(message.fulfillmentState));
     }
     if (message.paymentState !== undefined) {
       writer.uint32(72).int32(paymentStateToNumber(message.paymentState));
@@ -560,14 +560,14 @@ export const Order = {
             break;
           }
 
-          message.orderState = stateFromJSON(reader.int32());
+          message.orderState = orderStateFromJSON(reader.int32());
           continue;
         case 8:
           if (tag !== 64) {
             break;
           }
 
-          message.fulfillmentState = stateFromJSON18(reader.int32());
+          message.fulfillmentState = stateFromJSON(reader.int32());
           continue;
         case 9:
           if (tag !== 72) {
@@ -642,8 +642,8 @@ export const Order = {
       customerId: isSet(object.customerId) ? String(object.customerId) : undefined,
       shopId: isSet(object.shopId) ? String(object.shopId) : undefined,
       items: Array.isArray(object?.items) ? object.items.map((e: any) => Item.fromJSON(e)) : [],
-      orderState: isSet(object.orderState) ? stateFromJSON(object.orderState) : undefined,
-      fulfillmentState: isSet(object.fulfillmentState) ? stateFromJSON18(object.fulfillmentState) : undefined,
+      orderState: isSet(object.orderState) ? orderStateFromJSON(object.orderState) : undefined,
+      fulfillmentState: isSet(object.fulfillmentState) ? stateFromJSON(object.fulfillmentState) : undefined,
       paymentState: isSet(object.paymentState) ? paymentStateFromJSON(object.paymentState) : undefined,
       totalAmounts: Array.isArray(object?.totalAmounts) ? object.totalAmounts.map((e: any) => Amount.fromJSON(e)) : [],
       shippingAddress: isSet(object.shippingAddress) ? ShippingAddress.fromJSON(object.shippingAddress) : undefined,
@@ -670,10 +670,11 @@ export const Order = {
       obj.items = [];
     }
     message.orderState !== undefined &&
-      (obj.orderState = message.orderState !== undefined ? stateToJSON(message.orderState) : undefined);
-    message.fulfillmentState !== undefined && (obj.fulfillmentState = message.fulfillmentState !== undefined
-      ? stateToJSON19(message.fulfillmentState)
-      : undefined);
+      (obj.orderState = message.orderState !== undefined ? orderStateToJSON(message.orderState) : undefined);
+    message.fulfillmentState !== undefined &&
+      (obj.fulfillmentState = message.fulfillmentState !== undefined
+        ? stateToJSON(message.fulfillmentState)
+        : undefined);
     message.paymentState !== undefined &&
       (obj.paymentState = message.paymentState !== undefined ? paymentStateToJSON(message.paymentState) : undefined);
     if (message.totalAmounts) {
@@ -1372,7 +1373,7 @@ export const InvoiceSection = {
       writer.uint32(24).int32(fulfillmentInvoiceModeToNumber(message.fulfillmentMode));
     }
     for (const v of message.selectedFulfillments) {
-      InvoiceSection16.encode(v!, writer.uint32(34).fork()).ldelim();
+      InvoiceSection15.encode(v!, writer.uint32(34).fork()).ldelim();
     }
     return writer;
   },
@@ -1410,7 +1411,7 @@ export const InvoiceSection = {
             break;
           }
 
-          message.selectedFulfillments.push(InvoiceSection16.decode(reader, reader.uint32()));
+          message.selectedFulfillments.push(InvoiceSection15.decode(reader, reader.uint32()));
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -1446,7 +1447,7 @@ export const InvoiceSection = {
       ? fulfillmentInvoiceModeToJSON(message.fulfillmentMode)
       : undefined);
     if (message.selectedFulfillments) {
-      obj.selectedFulfillments = message.selectedFulfillments.map((e) => e ? InvoiceSection16.toJSON(e) : undefined);
+      obj.selectedFulfillments = message.selectedFulfillments.map((e) => e ? InvoiceSection15.toJSON(e) : undefined);
     } else {
       obj.selectedFulfillments = [];
     }
@@ -1462,7 +1463,7 @@ export const InvoiceSection = {
     message.orderId = object.orderId ?? undefined;
     message.selectedItems = object.selectedItems?.map((e) => e) || [];
     message.fulfillmentMode = object.fulfillmentMode ?? undefined;
-    message.selectedFulfillments = object.selectedFulfillments?.map((e) => InvoiceSection16.fromPartial(e)) || [];
+    message.selectedFulfillments = object.selectedFulfillments?.map((e) => InvoiceSection15.fromPartial(e)) || [];
     return message;
   },
 };
@@ -2092,7 +2093,7 @@ export const protoMetadata: ProtoMetadata = {
         "number": 7,
         "label": 1,
         "type": 14,
-        "typeName": ".io.restorecommerce.order.State",
+        "typeName": ".io.restorecommerce.order.OrderState",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 5,
@@ -2730,7 +2731,7 @@ export const protoMetadata: ProtoMetadata = {
       "reservedName": [],
     }],
     "enumType": [{
-      "name": "State",
+      "name": "OrderState",
       "value": [
         { "name": "FAILED", "number": 0, "options": undefined },
         { "name": "INVALID", "number": 1, "options": undefined },
@@ -2917,7 +2918,7 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 6],
-        "span": [124, 2, 33],
+        "span": [124, 2, 38],
         "leadingComments": "",
         "trailingComments": " Set by service\n",
         "leadingDetachedComments": [],
@@ -2986,7 +2987,7 @@ export const protoMetadata: ProtoMetadata = {
     "syntax": "proto3",
   }),
   references: {
-    ".io.restorecommerce.order.State": State,
+    ".io.restorecommerce.order.OrderState": OrderState,
     ".io.restorecommerce.order.FulfillmentInvoiceMode": FulfillmentInvoiceMode,
     ".io.restorecommerce.order.Item": Item,
     ".io.restorecommerce.order.Order": Order,

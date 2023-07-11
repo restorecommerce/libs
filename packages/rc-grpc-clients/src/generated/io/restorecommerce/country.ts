@@ -17,18 +17,18 @@ export interface Deleted {
 export interface CountryList {
   items: Country[];
   totalCount?: number | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface CountryListResponse {
   items: CountryResponse[];
   totalCount: number;
-  operationStatus?: OperationStatus;
+  operationStatus?: OperationStatus | undefined;
 }
 
 export interface CountryResponse {
-  payload?: Country;
-  status?: Status;
+  payload?: Country | undefined;
+  status?: Status | undefined;
 }
 
 export interface Country {

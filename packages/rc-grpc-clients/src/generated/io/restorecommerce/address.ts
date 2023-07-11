@@ -18,18 +18,18 @@ export interface Deleted {
 export interface AddressList {
   items: Address[];
   totalCount?: number | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface AddressListResponse {
   items: AddressResponse[];
   totalCount: number;
-  operationStatus?: OperationStatus;
+  operationStatus?: OperationStatus | undefined;
 }
 
 export interface AddressResponse {
-  payload?: Address;
-  status?: Status;
+  payload?: Address | undefined;
+  status?: Status | undefined;
 }
 
 export interface GeoPoint {

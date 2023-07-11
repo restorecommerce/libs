@@ -27,18 +27,18 @@ export interface Role {
 export interface RoleList {
   items: Role[];
   total_count?: number | undefined;
-  subject?: Subject;
+  subject?: Subject | undefined;
 }
 
 export interface RoleListResponse {
   items: RoleResponse[];
   total_count: number;
-  operation_status?: OperationStatus;
+  operation_status?: OperationStatus | undefined;
 }
 
 export interface RoleResponse {
-  payload?: Role;
-  status?: Status;
+  payload?: Role | undefined;
+  status?: Status | undefined;
 }
 
 export interface Deleted {

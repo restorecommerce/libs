@@ -17,10 +17,10 @@
     "interface"
   ],
   "dependencies": {
-    "@restorecommerce/chassis-srv": "^1.2.3",
+    "@restorecommerce/chassis-srv": "^1.2.4",
     "@restorecommerce/grpc-client": "^2.0.2",
-    "@restorecommerce/kafka-client": "^1.0.13",
-    "@restorecommerce/rc-grpc-clients": "^4.1.0",
+    "@restorecommerce/kafka-client": "^1.0.14",
+    "@restorecommerce/rc-grpc-clients": "^4.1.1",
     "@restorecommerce/service-config": "^1.0.6",
     "lodash": "^4.17.21",
     "redis": "^4.6.7"

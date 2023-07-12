@@ -257,8 +257,8 @@
   "fieldHandlers": {
     "fieldGenerators": {},
     "bufferFields": {
-      "testBufferedData": "data",
-      "resource": "data"
+      "testBufferedData": ["data"],
+      "resource": ["data"]
     },
     "timeStampFields": [
       {

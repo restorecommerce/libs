@@ -80,7 +80,7 @@ const updateMetadata = (docMeta: DocumentMetadata, newDoc: BaseDocument): BaseDo
   }
 
   docMeta.modified_by = newDoc.meta.modified_by;
-  docMeta.modified = Date.now();
+  docMeta.modified = new Date();
 
   newDoc.meta = docMeta;
   return newDoc;
@@ -395,7 +395,7 @@ export class ResourcesAPIBase {
       let dispatch = [];
       dispatch = await Promise.all(documents.map(async (doc) => {
         if (this.bufferFields && doc) {
-          doc = this.encodeOrDecode([doc], this.bufferFields, 'decode');
+          doc = this.encodeOrDecode([doc], this.bufferFields, 'decode')[0];
         }
         let foundDocs;
         if (doc && doc.id) {
@@ -412,6 +412,10 @@ export class ResourcesAPIBase {
           createDocuments.push(doc);
           eventName = 'Created';
         } else {
+          // convert dateTimeStamp fields
+          if(this.timeStampFields) {
+            foundDocs = this.encodeOrDecode(foundDocs, this.timeStampFields, 'convertMilisecToDateObj');
+          }
           // update
           const dbDoc = foundDocs[0];
           updateMetadata(dbDoc.meta, doc);
@@ -467,9 +471,9 @@ export class ResourcesAPIBase {
       const collectionName = this.collectionName;
       let docsWithUpMetadata = await Promise.all(documents.map(async (doc) => {
         if (this.bufferFields && doc) {
-          doc = this.encodeOrDecode([_.cloneDeep(doc)], this.bufferFields, 'decode');
+          doc = this.encodeOrDecode([_.cloneDeep(doc)], this.bufferFields, 'decode')[0];
         }
-        const foundDocs = await this.db.find(collectionName, { id: doc.id });
+        let foundDocs = await this.db.find(collectionName, { id: doc.id });
         let dbDoc;
         if (foundDocs && foundDocs.length === 1) {
           dbDoc = foundDocs[0];
@@ -527,8 +531,6 @@ export class ResourcesAPIBase {
         }
         return doc;
       }));
-
-      // config fix to be removed after ts-proto is used
 
       if (this.timeStampFields && docsWithUpMetadata?.length > 0) {
         docsWithUpMetadata = this.encodeOrDecode(docsWithUpMetadata, this.timeStampFields, 'convertDateObjToMilisec');

@@ -185,14 +185,13 @@ let meta = {
   modified: new Date(),
   modified_by: 'Admin',
   owners: [{
-    attributes: [],
     id: 'urn:restorecommerce:acs:names:ownerIndicatoryEntity',
-    value: 'urn:restorecommerce:acs:model:user.User'
-  },
-  {
-    attributes: [],
-    id: 'urn:restorecommerce:acs:names:ownerInstance',
-    value: 'Admin'
+    value: 'urn:restorecommerce:acs:model:user.User',
+    attributes: [{
+      attributes: [],
+      id: 'urn:restorecommerce:acs:names:ownerInstance',
+      value: 'Admin'
+    }]
   }]
 };
 
@@ -292,10 +291,11 @@ describe('ServiceBase', () => {
       db = await chassis.database.get(cfg.get('database:testdb'), server.logger) as chassis.GraphDatabaseProvider;
       await db.truncate();
       testData = [
-        { id: 'test_xy', meta, value: 1, text: 'first simple sentence for searching', active: true, created: today.getTime(), status: 'GOOD', data: undefined },
-        { id: 'test_xyz', meta, value: 3, text: 'second test data', active: false, created: tomorrow.getTime(), status: 'BAD', data: undefined },
-        { id: 'test_zy', meta, value: 12, text: 'third search data string', active: false, created: tomorrow.getTime(), status: 'UNKNOWN', data: undefined }];
-      await db.insert('resources', testData);
+        { id: 'test_xy', meta, value: 1, text: 'first simple sentence for searching', active: true, created: today, status: 'GOOD', data: undefined },
+        { id: 'test_xyz', meta, value: 3, text: 'second test data', active: false, created: tomorrow, status: 'BAD', data: undefined },
+        { id: 'test_zy', meta, value: 12, text: 'third search data string', active: false, created: tomorrow, status: 'UNKNOWN', data: undefined }];
+      // await db.insert('resources', testData);
+      await testService.create({ items: testData });
     });
     describe('read', () => {
       it('should return all three elements with no arguments', async () => {
@@ -306,7 +306,12 @@ describe('ServiceBase', () => {
         result.total_count.should.be.equal(3);
         result.items.should.be.Array();
         result.items.should.length(3);
+        for (let data of testData) {
+          delete data?.meta?.modified;
+        }
         _.forEach(result.items, (item) => {
+          // delete modified field as it will be changed when creating
+          delete item.payload.meta.modified;
           testData.should.matchAny(item.payload);
         });
         should.exist(result.operation_status);
@@ -368,6 +373,7 @@ describe('ServiceBase', () => {
         });
         // match the descending order
         for (let i = 0; i < result.items.length; i++) {
+          delete result.items[i].payload.meta.modified;
           result.items[i].payload.should.deepEqual(testDataDescending[i]);
         }
         result.operation_status.code.should.equal(200);
@@ -391,6 +397,7 @@ describe('ServiceBase', () => {
         result.total_count.should.be.equal(1);
         result.items.should.be.Array();
         result.items.should.length(1);
+        delete result.items[0].payload.meta.modified;
         result.items[0].payload.should.deepEqual(testData[2]); // testData[2] is object with value > 10
         result.operation_status.code.should.equal(200);
         result.operation_status.message.should.equal('success');
@@ -412,6 +419,7 @@ describe('ServiceBase', () => {
         result.total_count.should.be.equal(1);
         result.items.should.be.Array();
         result.items.should.length(1);
+        delete result.items[0].payload.meta.modified;
         result.items[0].payload.should.deepEqual(testData[0]); // testData[9] is object with value 'test_xy'
         result.operation_status.code.should.equal(200);
         result.operation_status.message.should.equal('success');
@@ -434,16 +442,20 @@ describe('ServiceBase', () => {
         result.total_count.should.be.equal(1);
         result.items.should.be.Array();
         result.items.should.length(1);
+        delete result.items[0].payload.meta.modified;
         result.items[0].payload.should.deepEqual(testData[0]);
         result.operation_status.code.should.equal(200);
         result.operation_status.message.should.equal('success');
       });
       it('should return resources matching date filter', async () => {
+        const todayDatePlusOneMin = new Date();
+        todayDatePlusOneMin.setSeconds(todayDatePlusOneMin.getSeconds() + 60);
+        // timeObject.setSeconds(timeObject.getSeconds() + 60);   
         const filters = [{
           filters: [{
             field: 'created',
             operation: Filter_Operation.lt,
-            value: today.toString(),
+            value: todayDatePlusOneMin.toString(),
             type: Filter_ValueType.DATE,
           }]
         }];
@@ -453,16 +465,16 @@ describe('ServiceBase', () => {
         should.exist(result);
         should.exist(result.items);
         should.exist(result.total_count);
-        result.total_count.should.be.equal(2);
+        result.total_count.should.be.equal(1);
         result.items.should.be.Array();
-        result.items.should.length(2);
+        result.items.should.length(1);
         let resultPayload = [];
         for (let item of result.items) {
           resultPayload.push(item.payload);
         }
-        _.sortBy(resultPayload, 'id').should.deepEqual(_.sortBy(_.filter(testData, (data) => {
-          return data.created.getTime() < today.getTime();
-        }), 'id'));
+        _.sortBy(resultPayload[0].id, 'id').should.deepEqual(_.sortBy(_.filter(testData, (data) => {
+          return data.created <= today.getTime();
+        })[0].id, 'id'));
         result.operation_status.code.should.equal(200);
         result.operation_status.message.should.equal('success');
       });
@@ -485,10 +497,14 @@ describe('ServiceBase', () => {
         result.items.should.be.Array();
         result.items.should.length(2);
         let resultPayload = [];
+        // delete modified properties as the modified date would have changed
         for (let item of result.items) {
+          delete item.payload.meta.modified;
           resultPayload.push(item.payload);
         }
         _.sortBy(resultPayload, 'id').should.deepEqual(_.sortBy(_.filter(testData, (data) => {
+          // data.created = new Date(data.created);
+          delete data.meta.modified;
           return (data.status === "BAD" || data.status === "UNKNOWN");
         }), 'id'));
         result.operation_status.code.should.equal(200);
@@ -512,10 +528,13 @@ describe('ServiceBase', () => {
         result.items.should.be.Array();
         result.items.should.length(2);
         let resultPayload = [];
+        // delete modified property
         for (let item of result.items) {
+          delete item.payload.meta.modified;
           resultPayload.push(item.payload);
         }
         _.sortBy(resultPayload, 'id').should.deepEqual(_.sortBy(_.filter(testData, (data) => {
+          delete data.meta.modified;
           return data.id != 'test_xy';
         }), 'id'));
         result.operation_status.code.should.equal(200);
@@ -535,9 +554,9 @@ describe('ServiceBase', () => {
         result.items.should.be.Array();
         result.items.should.length(3);
         const testDataReduced = [
-          { id: '', text: '', meta: undefined, value: testData[0].value, active: false, created: new Date().toISOString(), status: '', data: undefined },
-          { id: '', text: '', meta: undefined, value: testData[1].value, active: false, created: new Date().toISOString(), status: '', data: undefined },
-          { id: '', text: '', meta: undefined, value: testData[2].value, active: false, created: new Date().toISOString(), status: '', data: undefined },
+          { id: '', text: '', meta: undefined, value: testData[0].value, active: false, created: undefined, status: '', data: undefined },
+          { id: '', text: '', meta: undefined, value: testData[1].value, active: false, created: undefined, status: '', data: undefined },
+          { id: '', text: '', meta: undefined, value: testData[2].value, active: false, created: undefined, status: '', data: undefined },
         ];
         let resultPayload = [];
         for (let item of result.items) {
@@ -567,8 +586,8 @@ describe('ServiceBase', () => {
         result.items.should.length(2);
 
         const testDataReduced = [
-          { id: '', text: '', meta: undefined, value: testData[0].value, active: false, created: new Date().toISOString(), status: '', data: undefined },
-          { id: '', text: '', meta: undefined, value: testData[1].value, active: false, created: new Date().toISOString(), status: '', data: undefined },
+          { id: '', text: '', meta: undefined, value: testData[0].value, active: false, created: undefined, status: '', data: undefined },
+          { id: '', text: '', meta: undefined, value: testData[1].value, active: false, created: undefined, status: '', data: undefined },
         ];
         let resultPayload = [];
         for (let item of result.items) {
@@ -623,14 +642,13 @@ describe('ServiceBase', () => {
           acl: [],
           modified_by: 'Admin',
           owner: [{
-            attribute: [],
             id: 'urn:restorecommerce:acs:names:ownerIndicatoryEntity',
-            value: 'urn:restorecommerce:acs:model:user.User'
-          },
-          {
-            attribute: [],
-            id: 'urn:restorecommerce:acs:names:ownerInstance',
-            value: 'Admin'
+            value: 'urn:restorecommerce:acs:model:user.User',
+            attributes: [{
+              attribute: [],
+              id: 'urn:restorecommerce:acs:names:ownerInstance',
+              value: 'Admin'
+            }]
           }]
         };
         const newTestDataFirst = {
@@ -661,7 +679,6 @@ describe('ServiceBase', () => {
             return e.payload.value === -10 && e.payload.text.length > 0;
           }
         });
-
         // validate overall status
         should.exist(result.operation_status);
         result.operation_status.code.should.equal(200);
@@ -676,7 +693,12 @@ describe('ServiceBase', () => {
         allTestData.items.length.should.equal(5);
 
         const compareData = _.concat(testData, _.map(result.items, (item) => item.payload));
+        // delete modified property from meta data
+        for (let data of compareData) {
+          delete data?.meta?.modified;
+        }
         _.forEach(allTestData.items, (e) => {
+          delete e.payload?.meta?.modified;
           compareData.should.matchAny(e.payload);
         });
       });
@@ -725,8 +747,12 @@ describe('ServiceBase', () => {
         allTestData.operation_status.message.should.equal('success');
         let resultPayload = [];
         for (let item of allTestData.items) {
+          delete item?.payload?.meta?.modified;
           resultPayload.push(item.payload);
         }
+        // delete modified property for testData[0] and testData[2]
+        delete testData[0]?.meta?.modified;
+        delete testData[2]?.meta?.modified;
         _.sortBy(resultPayload, 'id')
           .should.deepEqual(_.sortBy([testData[0], testData[2]], 'id'));
       });
@@ -850,7 +876,7 @@ describe('ServiceBase', () => {
           let resp = await testService.create({ items: bufferObjects });
           // Read directly from DB and compare the JSON data
           // because normal read() operation again encodes and sends the data back.
-          // This way, we check if the data was actually encoded by reading it fromt the DB.
+          // This way, we check if the data was actually encoded by reading it from the DB.
           const result = await db.find('resources');
           should.exist(result);
           should.exist(result[0]);

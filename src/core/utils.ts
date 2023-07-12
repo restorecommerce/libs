@@ -20,9 +20,9 @@ const updateObject = (obj: any, path: string, value: any, fieldHandlerType: stri
     } else if (value?.value && fieldHandlerType === 'decode') {
       let unmarshalled = JSON.parse(value.value.toString());
       _.set(obj, path, unmarshalled);
-    } else if(value && fieldHandlerType == 'convertDateObjToMilisec') {
+    } else if(value && fieldHandlerType == 'convertDateObjToMilisec' && value instanceof Date) {
       _.set(obj, path, value.getTime());
-    } else if(value && fieldHandlerType == 'convertMilisecToDateObj') {
+    } else if(value && fieldHandlerType == 'convertMilisecToDateObj' && typeof(value) == 'number') {
       _.set(obj, path, new Date(value));
     }
   } catch(error) {

@@ -260,6 +260,12 @@
       "testBufferedData": "data",
       "resource": "data"
     },
+    "timeStampFields": [
+      {
+        "fields": ["created", "meta.created", "meta.modified"],
+        "entities": ["resources"]
+      }
+    ],
     "requiredFields": {
       "resource": [
         "text"

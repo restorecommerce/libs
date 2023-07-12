@@ -6,7 +6,7 @@ import { BaseDocument, DocumentMetadata } from './interfaces';
 import { DatabaseProvider, GraphDatabaseProvider } from '@restorecommerce/chassis-srv';
 import { DeepPartial } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/attribute';
 import { Search } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base';
-import { encodeOrDecodeIfExists } from './utils';
+import { fieldHandler } from './utils';
 
 let redisClient: any;
 
@@ -32,7 +32,6 @@ const setDefaults = async (obj: { meta?: DocumentMetadata;[key: string]: any }, 
     throw new errors.InvalidArgument('Object does not contain ownership information');
   }
 
-  const now = Date.now();
   if (redisClient) {
     const values = await redisClient.hGetAll(collectionName);
 
@@ -60,9 +59,9 @@ const setDefaults = async (obj: { meta?: DocumentMetadata;[key: string]: any }, 
   }
 
   if (_.isNil(o.meta.created) || o.meta.created === 0) {
-    o.meta.created = now;
+    o.meta.created = new Date();
   }
-  o.meta.modified = now;
+  o.meta.modified = new Date();
   if (_.isNil(o.id) || o.id === 0 || isEmptyObject(o.id)) {
     o.id = uuidGen();
   }
@@ -91,9 +90,9 @@ const updateMetadata = (docMeta: DocumentMetadata, newDoc: BaseDocument): BaseDo
  * Resource API base provides functions for CRUD operations.
  */
 export class ResourcesAPIBase {
-  bufferField: string;
+  bufferFields: string[];
   requiredFields: any;
-  dateTimeField: string[];
+  timeStampFields: string[];
   resourceName: string;
   logger: any;
   /**
@@ -115,13 +114,13 @@ export class ResourcesAPIBase {
       redisClient = fieldHandlerConf.redisClient;
     }
 
-    if (fieldHandlerConf.bufferField) {
-      this.bufferField = fieldHandlerConf.bufferField;
+    if (fieldHandlerConf.bufferFields) {
+      this.bufferFields = fieldHandlerConf.bufferFields;
     }
 
     // config fix to be removed after ts-proto is used
-    if (fieldHandlerConf.dateTimeField) {
-      this.dateTimeField = fieldHandlerConf.dateTimeField;
+    if (fieldHandlerConf.timeStampFields) {
+      this.timeStampFields = fieldHandlerConf.timeStampFields;
     }
 
     if (fieldHandlerConf.requiredFields) {
@@ -176,12 +175,14 @@ export class ResourcesAPIBase {
       search
     };
     let entities: BaseDocument[] = await this.db.find(this.collectionName, filter, options);
-    if (this.bufferField && entities?.length > 0) {
+    if (this.bufferFields && entities?.length > 0) {
       // encode the msg obj back to buffer obj and send it back
-      entities = entities?.map((obj) => encodeOrDecodeIfExists(obj, this.bufferField, 'encode'));
+      entities = this.encodeOrDecode(entities, this.bufferFields, 'endcode');
     }
-    // config fix to be removed after ts-proto is used
-    entities = this.convertmsToSecondsNanos(entities);
+    if (this.timeStampFields && entities?.length > 0) {
+      // convert number to Date Object
+      entities = this.encodeOrDecode(entities, this.timeStampFields, 'convertMilisecToDateObj');
+    }
     return entities;
   }
 
@@ -192,7 +193,6 @@ export class ResourcesAPIBase {
   */
   async create(documents: BaseDocument[]): Promise<any> {
     const collection = this.collectionName;
-    let toInsert = [];
     let result = [];
     try {
       let result = [];
@@ -208,15 +208,17 @@ export class ResourcesAPIBase {
         return await setDefaults(doc, collection);
       }));
 
-      if (this.bufferField && documents?.length > 0) {
-        toInsert = documents.map((obj) => encodeOrDecodeIfExists(obj, this.bufferField, 'decode'));
+      if (this.bufferFields && documents?.length > 0) {
+        documents = this.encodeOrDecode(documents, this.bufferFields, 'decode');
       }
-      // config fix to be removed after ts-proto is used
-      documents = this.convertSecondsNanosToms(documents);
+      if (this.timeStampFields && documents?.length > 0) {
+        // convert Date Object to Number
+        documents = this.encodeOrDecode(documents, this.timeStampFields, 'convertDateObjToMilisec');
+      }
       if (this.isGraphDB(this.db)) {
         await this.db.createGraphDB(this.graphName);
         await this.db.addVertexCollection(collection);
-        let createVertexResp = await this.db.createVertex(collection, this.bufferField ? toInsert : documents);
+        let createVertexResp = await this.db.createVertex(collection, documents);
         for (let document of documents) {
           if (this.edgeCfg && _.isArray(this.edgeCfg) && this.edgeCfg.length > 0) {
             for (let eachEdgeCfg of this.edgeCfg) {
@@ -251,8 +253,11 @@ export class ResourcesAPIBase {
         } else {
           result.push(createVertexResp);
         }
-        // config fix to be removed after ts-proto is used
-        result = this.convertmsToSecondsNanos(result);
+        if (this.timeStampFields && result?.length > 0) {
+          // convert number to Date Object
+          result = this.encodeOrDecode(result, this.timeStampFields, 'convertMilisecToDateObj');
+        }
+
         return result;
       }
       else {
@@ -260,12 +265,14 @@ export class ResourcesAPIBase {
         if (!_.isEmpty(result)) {
           checkReqFieldResult = result;
         }
-        result = await this.db.insert(collection, this.bufferField ? toInsert : documents);
+        result = await this.db.insert(collection, documents);
         if (!_.isEmpty(checkReqFieldResult)) {
           checkReqFieldResult.forEach((reqFieldResult) => result.push(reqFieldResult));
         }
-        // config fix to be removed after ts-proto is used
-        result = this.convertmsToSecondsNanos(result);
+        if (this.timeStampFields && result?.length > 0) {
+          // convert number to Date Object
+          result = this.encodeOrDecode(result, this.timeStampFields, 'convertMilisecToDateObj');
+        }
         return result;
       }
     } catch (e) {
@@ -387,8 +394,8 @@ export class ResourcesAPIBase {
       let updateDocuments = [];
       let dispatch = [];
       dispatch = await Promise.all(documents.map(async (doc) => {
-        if (this.bufferField && doc) {
-          doc = encodeOrDecodeIfExists(doc, this.bufferField, 'decode');
+        if (this.bufferFields && doc) {
+          doc = this.encodeOrDecode([doc], this.bufferFields, 'decode');
         }
         let foundDocs;
         if (doc && doc.id) {
@@ -416,23 +423,24 @@ export class ResourcesAPIBase {
         }
       }));
 
-      if (createDocuments.length > 0) {
-        createDocuments = this.convertSecondsNanosToms(createDocuments);
+      if (createDocuments?.length > 0) {
         createDocsResult = await this.create(createDocuments);
       }
 
-      if (updateDocuments.length > 0) {
-        updateDocuments = this.convertSecondsNanosToms(updateDocuments);
+      if (updateDocuments?.length > 0) {
         updateDocsResult = await this.update(updateDocuments);
       }
 
       result = _.union(createDocuments, updateDocuments);
-      // config fix to be removed after ts-proto is used
-      result = this.convertmsToSecondsNanos(result);
+
+      if (this.timeStampFields && result?.length > 0) {
+        // convert number to Date Object
+        result = this.encodeOrDecode(result, this.timeStampFields, 'convertMilisecToDateObj');
+      }
       await Promise.all(dispatch);
 
-      if (this.bufferField && result?.length > 0) {
-        result = result?.map((obj) => encodeOrDecodeIfExists(obj, this.bufferField, 'encode'));
+      if (this.bufferFields && result?.length > 0) {
+        result = this.encodeOrDecode(result, this.bufferFields, 'encode');
       }
 
       return result;
@@ -458,8 +466,8 @@ export class ResourcesAPIBase {
     try {
       const collectionName = this.collectionName;
       let docsWithUpMetadata = await Promise.all(documents.map(async (doc) => {
-        if (this.bufferField && doc) {
-          doc = encodeOrDecodeIfExists(_.cloneDeep(doc), this.bufferField, 'decode');
+        if (this.bufferFields && doc) {
+          doc = this.encodeOrDecode([_.cloneDeep(doc)], this.bufferFields, 'decode');
         }
         const foundDocs = await this.db.find(collectionName, { id: doc.id });
         let dbDoc;
@@ -521,11 +529,16 @@ export class ResourcesAPIBase {
       }));
 
       // config fix to be removed after ts-proto is used
-      docsWithUpMetadata = this.convertSecondsNanosToms(docsWithUpMetadata);
+
+      if (this.timeStampFields && docsWithUpMetadata?.length > 0) {
+        docsWithUpMetadata = this.encodeOrDecode(docsWithUpMetadata, this.timeStampFields, 'convertDateObjToMilisec');
+      }
       updateResponse = await this.db.update(collectionName, docsWithUpMetadata);
-      updateResponse = this.convertmsToSecondsNanos(updateResponse);
-      if (this.bufferField && updateResponse?.length > 0) {
-        updateResponse = updateResponse.map((obj) => encodeOrDecodeIfExists(obj, this.bufferField, 'encode'));
+      if (this.timeStampFields && updateResponse?.length > 0) {
+        updateResponse = this.encodeOrDecode(updateResponse, this.timeStampFields, 'convertMilisecToDateObj');
+      }
+      if (this.bufferFields && updateResponse?.length > 0) {
+        updateResponse = this.encodeOrDecode(updateResponse, this.bufferFields, 'encode');
       }
       return updateResponse;
     } catch (e) {
@@ -539,76 +552,12 @@ export class ResourcesAPIBase {
     }
   }
 
-  private convertSecondsNanosToms(documents: any): any {
-    documents?.forEach(doc => {
-      this.dateTimeField?.forEach((field) => {
-        if (field.indexOf('.')) {
-          this.updateJSON(field, doc, true);
-        } else if (field && doc[field]?.seconds) {
-          // convert seconds and nano seconds to unix epoch date time in mili seconds
-          let millis = doc[field].seconds * 1_000;
-          millis += doc[field]?.nanos / 1_000_000;
-          doc[field] = millis;
-        }
-      });
-    });
-    return documents;
-  }
-
-  private convertmsToSecondsNanos(documents: any): any {
-    documents?.forEach(doc => {
-      this.dateTimeField?.forEach(field => {
-        if (field.indexOf('.')) {
-          this.updateJSON(field, doc, false);
-        } else if (doc && doc[field]) {
-          const seconds = doc[field] / 1_000;
-          const nanos = (doc[field] % 1_000) * 1_000_000;
-          doc[field] = { seconds, nanos };
-        }
-      });
-    });
-    return documents;
-  }
-
-  private updateJSON = (path, obj, secondsNanoToms = true) => {
-    let fields = path.split('.');
-    let result = obj;
-    let j = 0;
-    for (let i = 0, n = fields.length; i < n && result !== undefined; i++) {
-      let field = fields[i];
-      if (i === n - 1) {
-        // reset value finally after iterating to the position (only if value already exists)
-        if (result[field]) {
-          if (secondsNanoToms && result[field]?.seconds) {
-            let millis = result[field].seconds * 1_000;
-            millis += result[field]?.nanos / 1_000_000;
-            result[field] = millis;
-          } else {
-            const seconds = result[field] / 1_000;
-            const nanos = (result[field] % 1_000) * 1_000_000;
-            result[field] = { seconds, nanos };
-          }
-        }
-      } else {
-        if (_.isArray(result[field])) {
-          // till i < n concat new fields
-          let newField;
-          for (let k = i + 1; k < n; k++) {
-            if (newField) {
-              newField = newField + '.' + fields[k];
-            } else {
-              newField = fields[k];
-            }
-          }
-          for (; j < result[field].length; j++) {
-            // recurisve call to update each element if its an array
-            this.updateJSON(newField, result[field][j], secondsNanoToms);
-          }
-        } else {
-          // update object till final path is reached
-          result = result[field];
-        }
+  private encodeOrDecode(documents: any, fieldPaths: string[], fieldHanlder: string): any {
+    for (let doc of documents) {
+      for(let fieldPath of fieldPaths) {
+        doc = fieldHandler(doc, fieldPath, fieldHanlder);
       }
     }
-  };
+    return documents;
+  }
 }

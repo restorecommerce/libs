@@ -12,17 +12,26 @@ const marshallObj = (val) => {
   }
 };
 
-const updateObject = (obj: any, path: string, value: any, encodeOrDecode: string) => {
-  if (value && encodeOrDecode === 'encode') {
-    const marshalled = marshallObj(value);
-    _.set(obj, path, marshalled);
-  } else if (value?.value && encodeOrDecode === 'decode') {
-    let unmarshalled = JSON.parse(value.value.toString());
-    _.set(obj, path, unmarshalled);
+const updateObject = (obj: any, path: string, value: any, fieldHandlerType: string) => {
+  try {
+    if (value && fieldHandlerType === 'encode') {
+      const marshalled = marshallObj(value);
+      _.set(obj, path, marshalled);
+    } else if (value?.value && fieldHandlerType === 'decode') {
+      let unmarshalled = JSON.parse(value.value.toString());
+      _.set(obj, path, unmarshalled);
+    } else if(value && fieldHandlerType == 'convertDateObjToMilisec') {
+      _.set(obj, path, value.getTime());
+    } else if(value && fieldHandlerType == 'convertMilisecToDateObj') {
+      _.set(obj, path, new Date(value));
+    }
+  } catch(error) {
+    // rethrow the error, this is caught and logged in ResourceAPI
+    throw error;
   }
 };
 
-const setNestedPath = (object: any, fieldPath: string, encodeOrDecode: string) => {
+const setNestedPath = (object: any, fieldPath: string, fieldHandlerType: string) => {
   const prefix = fieldPath?.substring(0, fieldPath.indexOf('.['));
   const suffix = fieldPath?.substring(fieldPath.indexOf('].') + 2);
   let setRecursive = false;
@@ -35,11 +44,11 @@ const setNestedPath = (object: any, fieldPath: string, encodeOrDecode: string) =
     array.forEach((obj: any) => {
       let fieldExists = _.get(obj, suffix);
       if (fieldExists) {
-        updateObject(obj, suffix, fieldExists, encodeOrDecode);
+        updateObject(obj, suffix, fieldExists, fieldHandlerType);
       }
       // recursive call
       if (fieldExists && setRecursive) {
-        setNestedPath(obj, suffix, encodeOrDecode);
+        setNestedPath(obj, suffix, fieldHandlerType);
       }
     });
   }
@@ -54,7 +63,7 @@ const baseGet = (object: any, path: string[]): any => {
   return (index && index == length) ? object : undefined;
 };
 
-export const encodeOrDecodeIfExists = (obj: any, fieldPath: string, encodeOrDecode: string): any => {
+export const fieldHandler = (obj: any, fieldPath: string, fieldHandlerType: string): any => {
   // fieldList contains the split Path to individual fields for fieldPath
   // and the baseGet breaks when the first field do not exist
   // ex: if fieldPath is `a.[0].b.c` then dotFieldPath is `a.0.b.c`
@@ -67,10 +76,10 @@ export const encodeOrDecodeIfExists = (obj: any, fieldPath: string, encodeOrDeco
   // only if the configured field exist check recursively for all entries in object
   if (fieldExists && array) {
     // use setNestedPath
-    setNestedPath(obj, fieldPath, encodeOrDecode);
+    setNestedPath(obj, fieldPath, fieldHandlerType);
   } else if (fieldExists) {
     // use normal set and return
-    updateObject(obj, fieldPath, fieldExists, encodeOrDecode);
+    updateObject(obj, fieldPath, fieldExists, fieldHandlerType);
   }
   return obj;
 };

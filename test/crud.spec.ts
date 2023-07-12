@@ -77,11 +77,11 @@ describe('converting to filter to object', () => {
       }]
     };
     /* eslint-disable */
-  const expectedDBObject = { "$or": [{ "device_id": "12345" }, { "overall_status": { "$in": ["BAD", "GOOD"] } }, { "device_active": true }, { "$and": [{ "firstname": "test_first" }, { "lastname": "test_last" }, { "middleName": "test_middle" }] }] };
-  const dbFilter = toObject(protoFilter);
-  should.exist(dbFilter);
-  dbFilter.should.deepEqual(expectedDBObject);
-});
+    const expectedDBObject = { "$or": [{ "device_id": "12345" }, { "overall_status": { "$in": ["BAD", "GOOD"] } }, { "device_active": true }, { "$and": [{ "firstname": "test_first" }, { "lastname": "test_last" }, { "middleName": "test_middle" }] }] };
+    const dbFilter = toObject(protoFilter);
+    should.exist(dbFilter);
+    dbFilter.should.deepEqual(expectedDBObject);
+  });
 
   it('should convert nested proto filter to valid DB filter object', () => {
     const protoFilter =
@@ -138,7 +138,7 @@ describe('converting to filter to object', () => {
       ]
     };
     /* eslint-disable */
-    const expectedDBObject = { "$or": [{ "$and": [{ "user_type": { "$not": { "$eq": "TECHNICAL_USER" } } }, { "first_name": { "$iLike": "%test%" } }, { "last_name": { "$iLike": "%test%" } } ] }, { "$and": [{ "state": "BW" }, { "city": "Stuttgart" }] }] }
+    const expectedDBObject = { "$or": [{ "$and": [{ "user_type": { "$not": { "$eq": "TECHNICAL_USER" } } }, { "first_name": { "$iLike": "%test%" } }, { "last_name": { "$iLike": "%test%" } }] }, { "$and": [{ "state": "BW" }, { "city": "Stuttgart" }] }] }
     const dbFilter = toObject(protoFilter);
     should.exist(dbFilter);
     dbFilter.should.deepEqual(expectedDBObject);
@@ -179,11 +179,10 @@ describe('converting to filter to object', () => {
 
 });
 
-const now = Date.now();
 let meta = {
   acls: [],
-  created: now,
-  modified: now,
+  created: new Date(),
+  modified: new Date(),
   modified_by: 'Admin',
   owners: [{
     attributes: [],
@@ -208,7 +207,8 @@ describe('ServiceBase', () => {
   let testData: any;
   let cfg;
   const today = new Date();
-  const tomorrow = new Date(((new Date()).getDate() + 1));
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
   before(async () => {
     // Load test config from chassis service config
     cfg = createServiceConfig(process.cwd() + '/test');
@@ -226,18 +226,19 @@ describe('ServiceBase', () => {
     const bufferHandlerConfig: any = cfg.get('fieldHandlers:bufferFields');
     const entitiesNames = Object.keys(bufferHandlerConfig);
     const requiredFieldsConfig: any = cfg.get('fieldHandlers:requiredFields');
-    let resourceFieldConfig: any;
+    const timeStampFieldsConfigs: any = cfg.get('fieldHandlers:timeStampFields');
+    let resourceFieldConfig: any = {};
     if (bufferHandlerConfig && entitiesNames.includes(resourceName)) {
-      if (!resourceFieldConfig) {
-        resourceFieldConfig = {};
-      }
-      resourceFieldConfig['bufferField'] = bufferHandlerConfig[resourceName];
+      resourceFieldConfig['bufferFields'] = bufferHandlerConfig[resourceName];
     }
     if (requiredFieldsConfig && (resourceName in requiredFieldsConfig)) {
-      if (!resourceFieldConfig) {
-        resourceFieldConfig = {};
-      }
       resourceFieldConfig['requiredFields'] = requiredFieldsConfig;
+    }
+    resourceFieldConfig['timeStampFields'] = [];
+    for (let timeStampFiledConfig of timeStampFieldsConfigs) {
+      if (timeStampFiledConfig.entities.includes(`${resourceName}s`)) {
+        resourceFieldConfig['timeStampFields'].push(...timeStampFiledConfig.fields);
+      }
     }
 
     const resourceAPI: ResourcesAPIBase = new ResourcesAPIBase(db, `${resourceName}s`, resourceFieldConfig);
@@ -259,7 +260,7 @@ describe('ServiceBase', () => {
       if (!resourceFieldConfig) {
         resourceFieldConfig = {};
       }
-      resourceFieldConfig['bufferField'] = bufferHandlerConfig[bufferResourceName];
+      resourceFieldConfig['bufferFields'] = bufferHandlerConfig[bufferResourceName];
     }
 
     // Create buffered service and bind it to gRPC server
@@ -460,7 +461,7 @@ describe('ServiceBase', () => {
           resultPayload.push(item.payload);
         }
         _.sortBy(resultPayload, 'id').should.deepEqual(_.sortBy(_.filter(testData, (data) => {
-          return data.created < today.getTime();
+          return data.created.getTime() < today.getTime();
         }), 'id'));
         result.operation_status.code.should.equal(200);
         result.operation_status.message.should.equal('success');
@@ -534,9 +535,9 @@ describe('ServiceBase', () => {
         result.items.should.be.Array();
         result.items.should.length(3);
         const testDataReduced = [
-          { id: '', text: '', meta: undefined, value: testData[0].value, active: false, created: 0, status: '', data: undefined },
-          { id: '', text: '', meta: undefined, value: testData[1].value, active: false, created: 0, status: '', data: undefined },
-          { id: '', text: '', meta: undefined, value: testData[2].value, active: false, created: 0, status: '', data: undefined },
+          { id: '', text: '', meta: undefined, value: testData[0].value, active: false, created: new Date().toISOString(), status: '', data: undefined },
+          { id: '', text: '', meta: undefined, value: testData[1].value, active: false, created: new Date().toISOString(), status: '', data: undefined },
+          { id: '', text: '', meta: undefined, value: testData[2].value, active: false, created: new Date().toISOString(), status: '', data: undefined },
         ];
         let resultPayload = [];
         for (let item of result.items) {
@@ -566,8 +567,8 @@ describe('ServiceBase', () => {
         result.items.should.length(2);
 
         const testDataReduced = [
-          { id: '', text: '', meta: undefined, value: testData[0].value, active: false, created: 0, status: '', data: undefined },
-          { id: '', text: '', meta: undefined, value: testData[1].value, active: false, created: 0, status: '', data: undefined },
+          { id: '', text: '', meta: undefined, value: testData[0].value, active: false, created: new Date().toISOString(), status: '', data: undefined },
+          { id: '', text: '', meta: undefined, value: testData[1].value, active: false, created: new Date().toISOString(), status: '', data: undefined },
         ];
         let resultPayload = [];
         for (let item of result.items) {

@@ -28,7 +28,7 @@ export interface Filter {
   operation: FilterOperation;
   value: string;
   type?: FilterValueType; // defaults to string data type if not provided
-  filters?: FilterOp [];
+  filters?: FilterOp[];
 }
 
 export interface FilterOp {
@@ -43,10 +43,15 @@ export interface BaseDocument {
 }
 
 export interface DocumentMetadata {
-  created?: number;
-  modified?: number;
+  created?: any;
+  modified?: any;
   modified_by?: string;
   owners: { id?: string; value?: string }[];
+}
+
+export interface DateTimeConfig {
+  fields: string[];
+  entities: string[];
 }
 
 export enum Direction {
@@ -67,7 +72,7 @@ export interface GraphFilter {
   operation: FilterOperation;
   value: string;
   type?: FilterValueType; // defaults to string data type if not provided
-  filters?: GraphFilters [];
+  filters?: GraphFilters[];
 }
 
 export interface GraphFilters {

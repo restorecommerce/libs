@@ -28,7 +28,7 @@ export interface Tokens {
     | undefined;
   /** expiration date for token */
   expiresIn?:
-    | number
+    | Date
     | undefined;
   /** token */
   token?:
@@ -39,7 +39,7 @@ export interface Tokens {
   /** type of token eg: access_token, refresh_token */
   type?: string | undefined;
   interactive?: boolean | undefined;
-  lastLogin?: number | undefined;
+  lastLogin?: Date | undefined;
 }
 
 export interface HierarchicalScope {
@@ -193,7 +193,7 @@ export const Tokens = {
       writer.uint32(10).string(message.name);
     }
     if (message.expiresIn !== undefined) {
-      writer.uint32(17).double(message.expiresIn);
+      Timestamp.encode(toTimestamp(message.expiresIn), writer.uint32(18).fork()).ldelim();
     }
     if (message.token !== undefined) {
       writer.uint32(26).string(message.token);
@@ -208,7 +208,7 @@ export const Tokens = {
       writer.uint32(48).bool(message.interactive);
     }
     if (message.lastLogin !== undefined) {
-      writer.uint32(57).double(message.lastLogin);
+      Timestamp.encode(toTimestamp(message.lastLogin), writer.uint32(58).fork()).ldelim();
     }
     return writer;
   },
@@ -228,11 +228,11 @@ export const Tokens = {
           message.name = reader.string();
           continue;
         case 2:
-          if (tag !== 17) {
+          if (tag !== 18) {
             break;
           }
 
-          message.expiresIn = reader.double();
+          message.expiresIn = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           continue;
         case 3:
           if (tag !== 26) {
@@ -263,11 +263,11 @@ export const Tokens = {
           message.interactive = reader.bool();
           continue;
         case 7:
-          if (tag !== 57) {
+          if (tag !== 58) {
             break;
           }
 
-          message.lastLogin = reader.double();
+          message.lastLogin = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -281,19 +281,19 @@ export const Tokens = {
   fromJSON(object: any): Tokens {
     return {
       name: isSet(object.name) ? String(object.name) : undefined,
-      expiresIn: isSet(object.expiresIn) ? Number(object.expiresIn) : undefined,
+      expiresIn: isSet(object.expiresIn) ? fromJsonTimestamp(object.expiresIn) : undefined,
       token: isSet(object.token) ? String(object.token) : undefined,
       scopes: Array.isArray(object?.scopes) ? object.scopes.map((e: any) => String(e)) : [],
       type: isSet(object.type) ? String(object.type) : undefined,
       interactive: isSet(object.interactive) ? Boolean(object.interactive) : undefined,
-      lastLogin: isSet(object.lastLogin) ? Number(object.lastLogin) : undefined,
+      lastLogin: isSet(object.lastLogin) ? fromJsonTimestamp(object.lastLogin) : undefined,
     };
   },
 
   toJSON(message: Tokens): unknown {
     const obj: any = {};
     message.name !== undefined && (obj.name = message.name);
-    message.expiresIn !== undefined && (obj.expiresIn = message.expiresIn);
+    message.expiresIn !== undefined && (obj.expiresIn = message.expiresIn.toISOString());
     message.token !== undefined && (obj.token = message.token);
     if (message.scopes) {
       obj.scopes = message.scopes.map((e) => e);
@@ -302,7 +302,7 @@ export const Tokens = {
     }
     message.type !== undefined && (obj.type = message.type);
     message.interactive !== undefined && (obj.interactive = message.interactive);
-    message.lastLogin !== undefined && (obj.lastLogin = message.lastLogin);
+    message.lastLogin !== undefined && (obj.lastLogin = message.lastLogin.toISOString());
     return obj;
   },
 
@@ -766,8 +766,8 @@ export const protoMetadata: ProtoMetadata = {
         "name": "expires_in",
         "number": 2,
         "label": 1,
-        "type": 1,
-        "typeName": "",
+        "type": 11,
+        "typeName": ".google.protobuf.Timestamp",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 1,
@@ -826,8 +826,8 @@ export const protoMetadata: ProtoMetadata = {
         "name": "last_login",
         "number": 7,
         "label": 1,
-        "type": 1,
-        "typeName": "",
+        "type": 11,
+        "typeName": ".google.protobuf.Timestamp",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 5,
@@ -1067,7 +1067,7 @@ export const protoMetadata: ProtoMetadata = {
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1, 2, 1],
-        "span": [18, 2, 33],
+        "span": [18, 2, 52],
         "leadingComments": "",
         "trailingComments": " expiration date for token\n",
         "leadingDetachedComments": [],

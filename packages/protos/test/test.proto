@@ -6,6 +6,7 @@ import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/status.proto";
 import "io/restorecommerce/auth.proto";
+import "google/protobuf/timestamp.proto";
 
 service Test {
   rpc Test (TestRequest) returns (TestResponse);
@@ -103,7 +104,7 @@ message Resource {
   int32 value = 3;
   string text = 4;
   bool active = 5;
-  double created = 6;
+  google.protobuf.Timestamp created = 6;
   string status = 7;
   optional google.protobuf.Any data = 8;
 }

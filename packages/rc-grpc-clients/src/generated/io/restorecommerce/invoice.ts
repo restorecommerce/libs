@@ -3031,14 +3031,17 @@ export const protoMetadata: ProtoMetadata = {
           "customer_id": {
             "resolver": Resolver.decode(
               Buffer.from(
-                "CiUuaW8ucmVzdG9yZWNvbW1lcmNlLmN1c3RvbWVyLkN1c3RvbWVyEghyZXNvdXJjZRoIY3VzdG9tZXIiBFJlYWQqCGN1c3RvbWVy",
+                "CiUuaW8ucmVzdG9yZWNvbW1lcmNlLmN1c3RvbWVyLkN1c3RvbWVyEgttYXN0ZXJfZGF0YRoIY3VzdG9tZXIiBFJlYWQqCGN1c3RvbWVy",
                 "base64",
               ),
             ),
           },
           "shop_id": {
             "resolver": Resolver.decode(
-              Buffer.from("Ch0uaW8ucmVzdG9yZWNvbW1lcmNlLnNob3AuU2hvcBIIcmVzb3VyY2UaBHNob3AiBFJlYWQqBHNob3A=", "base64"),
+              Buffer.from(
+                "Ch0uaW8ucmVzdG9yZWNvbW1lcmNlLnNob3AuU2hvcBILbWFzdGVyX2RhdGEaBHNob3AiBFJlYWQqBHNob3A=",
+                "base64",
+              ),
             ),
           },
         },

@@ -181,12 +181,12 @@ export enum IoRestorecommerceUserUserType {
 export type IoRestorecommerceAuthTokens = {
   __typename?: 'IoRestorecommerceAuthTokens';
   name?: Maybe<Scalars['String']['output']>;
-  expiresIn?: Maybe<Scalars['Float']['output']>;
+  expiresIn?: Maybe<Scalars['DateTime']['output']>;
   token?: Maybe<Scalars['String']['output']>;
   scopes?: Maybe<Array<Scalars['String']['output']>>;
   type?: Maybe<Scalars['String']['output']>;
   interactive?: Maybe<Scalars['Boolean']['output']>;
-  lastLogin?: Maybe<Scalars['Float']['output']>;
+  lastLogin?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type GoogleProtobufAny = {
@@ -473,7 +473,7 @@ export type IoRestorecommerceAuthenticationLogAuthenticationLog = {
   ipv6Address?: Maybe<Scalars['String']['output']>;
   operatingSystem?: Maybe<Scalars['String']['output']>;
   userAgent?: Maybe<Scalars['String']['output']>;
-  date?: Maybe<Scalars['Float']['output']>;
+  date?: Maybe<Scalars['DateTime']['output']>;
   activity?: Maybe<Scalars['String']['output']>;
   meta?: Maybe<IoRestorecommerceMetaMeta>;
   subjectId?: Maybe<Scalars['String']['output']>;
@@ -679,12 +679,12 @@ export type IIoRestorecommerceImageImage = {
 
 export type IIoRestorecommerceAuthTokens = {
   name?: InputMaybe<Scalars['String']['input']>;
-  expiresIn?: InputMaybe<Scalars['Float']['input']>;
+  expiresIn?: InputMaybe<Scalars['IDateTime']['input']>;
   token?: InputMaybe<Scalars['String']['input']>;
   scopes?: InputMaybe<Array<Scalars['String']['input']>>;
   type?: InputMaybe<Scalars['String']['input']>;
   interactive?: InputMaybe<Scalars['Boolean']['input']>;
-  lastLogin?: InputMaybe<Scalars['Float']['input']>;
+  lastLogin?: InputMaybe<Scalars['IDateTime']['input']>;
 };
 
 export enum ModeType {
@@ -871,7 +871,7 @@ export type IIoRestorecommerceAuthenticationLogAuthenticationLog = {
   ipv6Address?: InputMaybe<Scalars['String']['input']>;
   operatingSystem?: InputMaybe<Scalars['String']['input']>;
   userAgent?: InputMaybe<Scalars['String']['input']>;
-  date?: InputMaybe<Scalars['Float']['input']>;
+  date?: InputMaybe<Scalars['IDateTime']['input']>;
   activity?: InputMaybe<Scalars['String']['input']>;
   meta?: InputMaybe<IIoRestorecommerceMetaMeta>;
   subjectId?: InputMaybe<Scalars['String']['input']>;
@@ -1488,12 +1488,12 @@ export type IoRestorecommerceUserUserTypeResolvers = { ORG_USER: 0, INDIVIDUAL_U
 
 export type IoRestorecommerceAuthTokensResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['IoRestorecommerceAuthTokens'] = ResolversParentTypes['IoRestorecommerceAuthTokens']> = ResolversObject<{
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  expiresIn?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  expiresIn?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   token?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   scopes?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   interactive?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  lastLogin?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  lastLogin?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1650,7 +1650,7 @@ export type IoRestorecommerceAuthenticationLogAuthenticationLogResolvers<Context
   ipv6Address?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   operatingSystem?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   userAgent?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  date?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  date?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   activity?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
   subjectId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;

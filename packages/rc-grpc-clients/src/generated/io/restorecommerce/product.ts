@@ -3649,7 +3649,10 @@ export const protoMetadata: ProtoMetadata = {
         fields: {
           "shop_id": {
             "resolver": Resolver.decode(
-              Buffer.from("Ch0uaW8ucmVzdG9yZWNvbW1lcmNlLnNob3AuU2hvcBIIcmVzb3VyY2UaBHNob3AiBFJlYWQqBHNob3A=", "base64"),
+              Buffer.from(
+                "Ch0uaW8ucmVzdG9yZWNvbW1lcmNlLnNob3AuU2hvcBILbWFzdGVyX2RhdGEaBHNob3AiBFJlYWQqBHNob3A=",
+                "base64",
+              ),
             ),
           },
         },

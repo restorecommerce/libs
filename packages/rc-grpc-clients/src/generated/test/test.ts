@@ -3,6 +3,7 @@ import type { CallContext, CallOptions } from "nice-grpc-common";
 import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
 import { Any, protoMetadata as protoMetadata1 } from "../google/protobuf/any";
+import { protoMetadata as protoMetadata6, Timestamp } from "../google/protobuf/timestamp";
 import { protoMetadata as protoMetadata5, Subject } from "../io/restorecommerce/auth";
 import { Meta, protoMetadata as protoMetadata3 } from "../io/restorecommerce/meta";
 import {
@@ -85,7 +86,7 @@ export interface Resource {
   value: number;
   text: string;
   active: boolean;
-  created: number;
+  created?: Date | undefined;
   status: string;
   data?: Any | undefined;
 }
@@ -1011,7 +1012,16 @@ export const ResourceResponse = {
 };
 
 function createBaseResource(): Resource {
-  return { id: "", meta: undefined, value: 0, text: "", active: false, created: 0, status: "", data: undefined };
+  return {
+    id: "",
+    meta: undefined,
+    value: 0,
+    text: "",
+    active: false,
+    created: undefined,
+    status: "",
+    data: undefined,
+  };
 }
 
 export const Resource = {
@@ -1031,8 +1041,8 @@ export const Resource = {
     if (message.active === true) {
       writer.uint32(40).bool(message.active);
     }
-    if (message.created !== 0) {
-      writer.uint32(49).double(message.created);
+    if (message.created !== undefined) {
+      Timestamp.encode(toTimestamp(message.created), writer.uint32(50).fork()).ldelim();
     }
     if (message.status !== "") {
       writer.uint32(58).string(message.status);
@@ -1086,11 +1096,11 @@ export const Resource = {
           message.active = reader.bool();
           continue;
         case 6:
-          if (tag !== 49) {
+          if (tag !== 50) {
             break;
           }
 
-          message.created = reader.double();
+          message.created = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           continue;
         case 7:
           if (tag !== 58) {
@@ -1122,7 +1132,7 @@ export const Resource = {
       value: isSet(object.value) ? Number(object.value) : 0,
       text: isSet(object.text) ? String(object.text) : "",
       active: isSet(object.active) ? Boolean(object.active) : false,
-      created: isSet(object.created) ? Number(object.created) : 0,
+      created: isSet(object.created) ? fromJsonTimestamp(object.created) : undefined,
       status: isSet(object.status) ? String(object.status) : "",
       data: isSet(object.data) ? Any.fromJSON(object.data) : undefined,
     };
@@ -1135,7 +1145,7 @@ export const Resource = {
     message.value !== undefined && (obj.value = Math.round(message.value));
     message.text !== undefined && (obj.text = message.text);
     message.active !== undefined && (obj.active = message.active);
-    message.created !== undefined && (obj.created = message.created);
+    message.created !== undefined && (obj.created = message.created.toISOString());
     message.status !== undefined && (obj.status = message.status);
     message.data !== undefined && (obj.data = message.data ? Any.toJSON(message.data) : undefined);
     return obj;
@@ -1152,7 +1162,7 @@ export const Resource = {
     message.value = object.value ?? 0;
     message.text = object.text ?? "";
     message.active = object.active ?? false;
-    message.created = object.created ?? 0;
+    message.created = object.created ?? undefined;
     message.status = object.status ?? "";
     message.data = (object.data !== undefined && object.data !== null) ? Any.fromPartial(object.data) : undefined;
     return message;
@@ -1400,6 +1410,7 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/meta.proto",
       "io/restorecommerce/status.proto",
       "io/restorecommerce/auth.proto",
+      "google/protobuf/timestamp.proto",
     ],
     "publicDependency": [],
     "weakDependency": [],
@@ -1925,8 +1936,8 @@ export const protoMetadata: ProtoMetadata = {
         "name": "created",
         "number": 6,
         "label": 1,
-        "type": 1,
-        "typeName": "",
+        "type": 11,
+        "typeName": ".google.protobuf.Timestamp",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
@@ -2084,13 +2095,13 @@ export const protoMetadata: ProtoMetadata = {
     "sourceCodeInfo": {
       "location": [{
         "path": [6, 1],
-        "span": [21, 0, 25, 1],
+        "span": [22, 0, 26, 1],
         "leadingComments": "*\n Stream test service\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 12],
-        "span": [99, 0, 108, 1],
+        "span": [100, 0, 109, 1],
         "leadingComments": "/ Example resource\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
@@ -2113,7 +2124,7 @@ export const protoMetadata: ProtoMetadata = {
     ".test.ResourceResponse": ResourceResponse,
     ".test.Resource": Resource,
   },
-  dependencies: [protoMetadata1, protoMetadata2, protoMetadata3, protoMetadata4, protoMetadata5],
+  dependencies: [protoMetadata1, protoMetadata2, protoMetadata3, protoMetadata4, protoMetadata5, protoMetadata6],
 };
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
@@ -2122,6 +2133,28 @@ export type DeepPartial<T> = T extends Builtin ? T
   : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
   : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+function toTimestamp(date: Date): Timestamp {
+  const seconds = date.getTime() / 1_000;
+  const nanos = (date.getTime() % 1_000) * 1_000_000;
+  return { seconds, nanos };
+}
+
+function fromTimestamp(t: Timestamp): Date {
+  let millis = (t.seconds || 0) * 1_000;
+  millis += (t.nanos || 0) / 1_000_000;
+  return new Date(millis);
+}
+
+function fromJsonTimestamp(o: any): Date {
+  if (o instanceof Date) {
+    return o;
+  } else if (typeof o === "string") {
+    return new Date(o);
+  } else {
+    return fromTimestamp(Timestamp.fromJSON(o));
+  }
+}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

@@ -360,13 +360,14 @@ export type IoRestorecommerceOrganizationOrganization = {
   contactPoints?: Maybe<Array<IoRestorecommerceContactPointContactPoint>>;
   website?: Maybe<Scalars['String']['output']>;
   email?: Maybe<Scalars['String']['output']>;
-  logo?: Maybe<Scalars['String']['output']>;
+  logo?: Maybe<IoRestorecommerceImageImage>;
   vatId?: Maybe<Scalars['String']['output']>;
   isicV4?: Maybe<Scalars['String']['output']>;
   registration?: Maybe<Scalars['String']['output']>;
   registrationCourt?: Maybe<Scalars['String']['output']>;
   name?: Maybe<Scalars['String']['output']>;
   paymentMethodIds?: Maybe<Array<Scalars['String']['output']>>;
+  paymentMethods?: Maybe<Array<IoRestorecommercePaymentMethodPaymentMethod>>;
   data?: Maybe<GoogleProtobufAny>;
 };
 
@@ -461,6 +462,27 @@ export type IoRestorecommerceLocaleLocale = {
   value?: Maybe<Scalars['String']['output']>;
   description?: Maybe<Scalars['String']['output']>;
 };
+
+export type IoRestorecommercePaymentMethodPaymentMethod = {
+  __typename?: 'IoRestorecommercePaymentMethodPaymentMethod';
+  id?: Maybe<Scalars['String']['output']>;
+  meta?: Maybe<IoRestorecommerceMetaMeta>;
+  paymentMethod?: Maybe<IoRestorecommercePaymentMethodPaymentMethodEnum>;
+  transferType?: Maybe<IoRestorecommercePaymentMethodTransferTypeEnum>;
+  data?: Maybe<GoogleProtobufAny>;
+};
+
+export enum IoRestorecommercePaymentMethodPaymentMethodEnum {
+  WireTransfer = 0,
+  DirectDebit = 1,
+  Paypal = 2
+}
+
+export enum IoRestorecommercePaymentMethodTransferTypeEnum {
+  Receive = 0,
+  Send = 1,
+  Both = 2
+}
 
 export type GoogleProtobufAny = {
   __typename?: 'GoogleProtobufAny';
@@ -1237,6 +1259,9 @@ export type ResolversTypes = ResolversObject<{
   IoRestorecommerceContactPointTypeContactPointType: ResolverTypeWrapper<IoRestorecommerceContactPointTypeContactPointType>;
   IoRestorecommerceTimezoneTimezone: ResolverTypeWrapper<IoRestorecommerceTimezoneTimezone>;
   IoRestorecommerceLocaleLocale: ResolverTypeWrapper<IoRestorecommerceLocaleLocale>;
+  IoRestorecommercePaymentMethodPaymentMethod: ResolverTypeWrapper<IoRestorecommercePaymentMethodPaymentMethod>;
+  IoRestorecommercePaymentMethodPaymentMethodEnum: IoRestorecommercePaymentMethodPaymentMethodEnum;
+  IoRestorecommercePaymentMethodTransferTypeEnum: IoRestorecommercePaymentMethodTransferTypeEnum;
   GoogleProtobufAny: ResolverTypeWrapper<GoogleProtobufAny>;
   GoogleProtobufAnyValue: ResolverTypeWrapper<Scalars['GoogleProtobufAnyValue']['output']>;
   IoRestorecommerceProductAssociation: ResolverTypeWrapper<IoRestorecommerceProductAssociation>;
@@ -1374,6 +1399,7 @@ export type ResolversParentTypes = ResolversObject<{
   IoRestorecommerceContactPointTypeContactPointType: IoRestorecommerceContactPointTypeContactPointType;
   IoRestorecommerceTimezoneTimezone: IoRestorecommerceTimezoneTimezone;
   IoRestorecommerceLocaleLocale: IoRestorecommerceLocaleLocale;
+  IoRestorecommercePaymentMethodPaymentMethod: IoRestorecommercePaymentMethodPaymentMethod;
   GoogleProtobufAny: GoogleProtobufAny;
   GoogleProtobufAnyValue: Scalars['GoogleProtobufAnyValue']['output'];
   IoRestorecommerceProductAssociation: IoRestorecommerceProductAssociation;
@@ -1785,13 +1811,14 @@ export type IoRestorecommerceOrganizationOrganizationResolvers<ContextType = Cat
   contactPoints?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceContactPointContactPoint']>>, ParentType, ContextType>;
   website?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  logo?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  logo?: Resolver<Maybe<ResolversTypes['IoRestorecommerceImageImage']>, ParentType, ContextType>;
   vatId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   isicV4?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   registration?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   registrationCourt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   paymentMethodIds?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  paymentMethods?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommercePaymentMethodPaymentMethod']>>, ParentType, ContextType>;
   data?: Resolver<Maybe<ResolversTypes['GoogleProtobufAny']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -1887,6 +1914,19 @@ export type IoRestorecommerceLocaleLocaleResolvers<ContextType = CatalogContext,
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
+
+export type IoRestorecommercePaymentMethodPaymentMethodResolvers<ContextType = CatalogContext, ParentType extends ResolversParentTypes['IoRestorecommercePaymentMethodPaymentMethod'] = ResolversParentTypes['IoRestorecommercePaymentMethodPaymentMethod']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
+  paymentMethod?: Resolver<Maybe<ResolversTypes['IoRestorecommercePaymentMethodPaymentMethodEnum']>, ParentType, ContextType>;
+  transferType?: Resolver<Maybe<ResolversTypes['IoRestorecommercePaymentMethodTransferTypeEnum']>, ParentType, ContextType>;
+  data?: Resolver<Maybe<ResolversTypes['GoogleProtobufAny']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommercePaymentMethodPaymentMethodEnumResolvers = { WIRE_TRANSFER: 0, DIRECT_DEBIT: 1, PAYPAL: 2 };
+
+export type IoRestorecommercePaymentMethodTransferTypeEnumResolvers = { RECEIVE: 0, SEND: 1, BOTH: 2 };
 
 export type GoogleProtobufAnyResolvers<ContextType = CatalogContext, ParentType extends ResolversParentTypes['GoogleProtobufAny'] = ResolversParentTypes['GoogleProtobufAny']> = ResolversObject<{
   typeUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -2144,6 +2184,9 @@ export type Resolvers<ContextType = CatalogContext> = ResolversObject<{
   IoRestorecommerceContactPointTypeContactPointType?: IoRestorecommerceContactPointTypeContactPointTypeResolvers<ContextType>;
   IoRestorecommerceTimezoneTimezone?: IoRestorecommerceTimezoneTimezoneResolvers<ContextType>;
   IoRestorecommerceLocaleLocale?: IoRestorecommerceLocaleLocaleResolvers<ContextType>;
+  IoRestorecommercePaymentMethodPaymentMethod?: IoRestorecommercePaymentMethodPaymentMethodResolvers<ContextType>;
+  IoRestorecommercePaymentMethodPaymentMethodEnum?: IoRestorecommercePaymentMethodPaymentMethodEnumResolvers;
+  IoRestorecommercePaymentMethodTransferTypeEnum?: IoRestorecommercePaymentMethodTransferTypeEnumResolvers;
   GoogleProtobufAny?: GoogleProtobufAnyResolvers<ContextType>;
   GoogleProtobufAnyValue?: GraphQLScalarType;
   IoRestorecommerceProductAssociation?: IoRestorecommerceProductAssociationResolvers<ContextType>;

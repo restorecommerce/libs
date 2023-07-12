@@ -2,11 +2,12 @@
 import type { CallContext, CallOptions } from "nice-grpc-common";
 import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import { protoMetadata as protoMetadata3, Subject } from "./auth";
-import { Meta, protoMetadata as protoMetadata2 } from "./meta";
-import { protoMetadata as protoMetadata5 } from "./options";
-import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata1, ReadRequest } from "./resource_base";
-import { OperationStatus, protoMetadata as protoMetadata4, Status } from "./status";
+import { protoMetadata as protoMetadata1, Timestamp } from "../../google/protobuf/timestamp";
+import { protoMetadata as protoMetadata4, Subject } from "./auth";
+import { Meta, protoMetadata as protoMetadata3 } from "./meta";
+import { protoMetadata as protoMetadata6 } from "./options";
+import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata2, ReadRequest } from "./resource_base";
+import { OperationStatus, protoMetadata as protoMetadata5, Status } from "./status";
 
 export const protobufPackage = "io.restorecommerce.authentication_log";
 
@@ -39,7 +40,7 @@ export interface AuthenticationLog {
     | undefined;
   /** time stamp of login, logout or token update */
   date?:
-    | number
+    | Date
     | undefined;
   /** login, logout */
   activity?:
@@ -351,7 +352,7 @@ export const AuthenticationLog = {
       writer.uint32(42).string(message.user_agent);
     }
     if (message.date !== undefined) {
-      writer.uint32(49).double(message.date);
+      Timestamp.encode(toTimestamp(message.date), writer.uint32(50).fork()).ldelim();
     }
     if (message.activity !== undefined) {
       writer.uint32(58).string(message.activity);
@@ -411,11 +412,11 @@ export const AuthenticationLog = {
           message.user_agent = reader.string();
           continue;
         case 6:
-          if (tag !== 49) {
+          if (tag !== 50) {
             break;
           }
 
-          message.date = reader.double();
+          message.date = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           continue;
         case 7:
           if (tag !== 58) {
@@ -461,7 +462,7 @@ export const AuthenticationLog = {
       ipv6_address: isSet(object.ipv6_address) ? String(object.ipv6_address) : undefined,
       operating_system: isSet(object.operating_system) ? String(object.operating_system) : undefined,
       user_agent: isSet(object.user_agent) ? String(object.user_agent) : undefined,
-      date: isSet(object.date) ? Number(object.date) : undefined,
+      date: isSet(object.date) ? fromJsonTimestamp(object.date) : undefined,
       activity: isSet(object.activity) ? String(object.activity) : undefined,
       meta: isSet(object.meta) ? Meta.fromJSON(object.meta) : undefined,
       subject_id: isSet(object.subject_id) ? String(object.subject_id) : undefined,
@@ -476,7 +477,7 @@ export const AuthenticationLog = {
     message.ipv6_address !== undefined && (obj.ipv6_address = message.ipv6_address);
     message.operating_system !== undefined && (obj.operating_system = message.operating_system);
     message.user_agent !== undefined && (obj.user_agent = message.user_agent);
-    message.date !== undefined && (obj.date = message.date);
+    message.date !== undefined && (obj.date = message.date.toISOString());
     message.activity !== undefined && (obj.activity = message.activity);
     message.meta !== undefined && (obj.meta = message.meta ? Meta.toJSON(message.meta) : undefined);
     message.subject_id !== undefined && (obj.subject_id = message.subject_id);
@@ -675,6 +676,7 @@ export const protoMetadata: ProtoMetadata = {
     "name": "io/restorecommerce/authentication_log.proto",
     "package": "io.restorecommerce.authentication_log",
     "dependency": [
+      "google/protobuf/timestamp.proto",
       "io/restorecommerce/resource_base.proto",
       "io/restorecommerce/meta.proto",
       "io/restorecommerce/auth.proto",
@@ -878,8 +880,8 @@ export const protoMetadata: ProtoMetadata = {
         "name": "date",
         "number": 6,
         "label": 1,
-        "type": 1,
-        "typeName": "",
+        "type": 11,
+        "typeName": ".google.protobuf.Timestamp",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 5,
@@ -1024,49 +1026,49 @@ export const protoMetadata: ProtoMetadata = {
     "sourceCodeInfo": {
       "location": [{
         "path": [6, 0],
-        "span": [13, 0, 21, 1],
+        "span": [14, 0, 22, 1],
         "leadingComments": "\n Microservice definition.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 3],
-        "span": [43, 0, 54, 1],
+        "span": [44, 0, 55, 1],
         "leadingComments": "*\n Authentication Log\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 3, 2, 0],
-        "span": [44, 2, 25],
+        "span": [45, 2, 25],
         "leadingComments": "",
         "trailingComments": " log id\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 3, 2, 5],
-        "span": [49, 2, 27],
+        "span": [50, 2, 46],
         "leadingComments": "",
         "trailingComments": " time stamp of login, logout or token update\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 3, 2, 6],
-        "span": [50, 2, 31],
+        "span": [51, 2, 31],
         "leadingComments": "",
         "trailingComments": " login, logout\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 3, 2, 7],
-        "span": [51, 2, 49],
+        "span": [52, 2, 49],
         "leadingComments": "",
         "trailingComments": " meta info\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 3, 2, 8],
-        "span": [52, 2, 33],
+        "span": [53, 2, 33],
         "leadingComments": "",
         "trailingComments": " subject id\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 3, 2, 9],
-        "span": [53, 2, 34],
+        "span": [54, 2, 34],
         "leadingComments": "",
         "trailingComments": " token name associated with io.restorecommerce.auth.Token.token_name\n",
         "leadingDetachedComments": [],
@@ -1081,7 +1083,7 @@ export const protoMetadata: ProtoMetadata = {
     ".io.restorecommerce.authentication_log.AuthenticationLog": AuthenticationLog,
     ".io.restorecommerce.authentication_log.Deleted": Deleted,
   },
-  dependencies: [protoMetadata1, protoMetadata2, protoMetadata3, protoMetadata4, protoMetadata5],
+  dependencies: [protoMetadata1, protoMetadata2, protoMetadata3, protoMetadata4, protoMetadata5, protoMetadata6],
   options: {
     services: { "AuthenticationLogService": { options: undefined, methods: { "Read": { "is_query": true } } } },
   },
@@ -1093,6 +1095,28 @@ export type DeepPartial<T> = T extends Builtin ? T
   : T extends Array<infer U> ? Array<DeepPartial<U>> : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
   : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
+
+function toTimestamp(date: Date): Timestamp {
+  const seconds = date.getTime() / 1_000;
+  const nanos = (date.getTime() % 1_000) * 1_000_000;
+  return { seconds, nanos };
+}
+
+function fromTimestamp(t: Timestamp): Date {
+  let millis = (t.seconds || 0) * 1_000;
+  millis += (t.nanos || 0) / 1_000_000;
+  return new Date(millis);
+}
+
+function fromJsonTimestamp(o: any): Date {
+  if (o instanceof Date) {
+    return o;
+  } else if (typeof o === "string") {
+    return new Date(o);
+  } else {
+    return fromTimestamp(Timestamp.fromJSON(o));
+  }
+}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

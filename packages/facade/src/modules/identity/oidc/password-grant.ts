@@ -103,8 +103,8 @@ export const registerPasswordGrantType = (config: OIDCPasswordGrantTypeConfig) =
     return {
       access_token: accessToken,
       id_token: idToken,
-      expires_in: epochTime() + at.expiration,
-      last_login: epochTime(),
+      expires_in: new Date(epochTime() + at.expiration),
+      last_login: new Date(epochTime()),
       token_type: at.tokenType,
       scope: 'openid',
       token_name: tokenName,
@@ -153,7 +153,7 @@ export const registerPasswordGrantType = (config: OIDCPasswordGrantTypeConfig) =
           ipv6Address: ipv6_address,
           operatingSystem: os,
           userAgent: agentName,
-          date: new Date().getTime(),
+          date: new Date(),
           activity: 'login',
           tokenName: token_name
         });

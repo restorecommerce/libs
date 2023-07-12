@@ -67,7 +67,7 @@ message Product {
   optional string shop_id = 5 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.shop.Shop",
-      target_service: "resource",
+      target_service: "master_data",
       target_sub_service: "shop",
       target_method: "Read",
       field_name: "shop",

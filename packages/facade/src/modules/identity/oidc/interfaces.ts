@@ -78,8 +78,8 @@ export interface OIDCPasswordGrantTypeConfig {
 export interface TokenResponseBody {
   access_token?: string;
   id_token?: string;
-  expires_in?: number;
-  last_login?: number;
+  expires_in?: Date;
+  last_login?: Date;
   token_type?: string;
   scope?: string;
   subject_id?: string;

@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package io.restorecommerce.authentication_log;
 
+import "google/protobuf/timestamp.proto";
 import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
@@ -47,7 +48,7 @@ message AuthenticationLog {
   optional string ipv6_address = 3;
   optional string operating_system = 4;
   optional string user_agent = 5;
-  optional double date = 6; // time stamp of login, logout or token update
+  optional google.protobuf.Timestamp date = 6; // time stamp of login, logout or token update
   optional string activity = 7; // login, logout
   optional io.restorecommerce.meta.Meta meta = 8; // meta info
   optional string subject_id = 9; // subject id

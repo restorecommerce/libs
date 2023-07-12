@@ -95,7 +95,8 @@ export type IoRestorecommerceFulfillmentParcel = {
   productId?: Maybe<Scalars['String']['output']>;
   product?: Maybe<IoRestorecommerceFulfillmentProductFulfillmentProduct>;
   variantId?: Maybe<Scalars['String']['output']>;
-  item?: Maybe<IoRestorecommerceFulfillmentItem>;
+  items?: Maybe<Array<IoRestorecommerceFulfillmentItem>>;
+  price?: Maybe<IoRestorecommercePricePrice>;
   amount?: Maybe<IoRestorecommerceAmountAmount>;
   package?: Maybe<IoRestorecommerceProductPackage>;
 };
@@ -803,9 +804,18 @@ export type IIoRestorecommerceFulfillmentParcel = {
   id?: InputMaybe<Scalars['String']['input']>;
   productId?: InputMaybe<Scalars['String']['input']>;
   variantId?: InputMaybe<Scalars['String']['input']>;
-  item?: InputMaybe<IIoRestorecommerceFulfillmentItem>;
+  items?: InputMaybe<Array<IIoRestorecommerceFulfillmentItem>>;
+  price?: InputMaybe<IIoRestorecommercePricePrice>;
   amount?: InputMaybe<IIoRestorecommerceAmountAmount>;
   package?: InputMaybe<IIoRestorecommerceProductPackage>;
+};
+
+export type IIoRestorecommercePricePrice = {
+  regularPrice?: InputMaybe<Scalars['Float']['input']>;
+  sale?: InputMaybe<Scalars['Boolean']['input']>;
+  salePrice?: InputMaybe<Scalars['Float']['input']>;
+  currencyId?: InputMaybe<Scalars['String']['input']>;
+  taxIds?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type IIoRestorecommerceAmountAmount = {
@@ -1010,12 +1020,12 @@ export enum IoRestorecommerceUserUserType {
 export type IoRestorecommerceAuthTokens = {
   __typename?: 'IoRestorecommerceAuthTokens';
   name?: Maybe<Scalars['String']['output']>;
-  expiresIn?: Maybe<Scalars['Float']['output']>;
+  expiresIn?: Maybe<Scalars['DateTime']['output']>;
   token?: Maybe<Scalars['String']['output']>;
   scopes?: Maybe<Array<Scalars['String']['output']>>;
   type?: Maybe<Scalars['String']['output']>;
   interactive?: Maybe<Scalars['Boolean']['output']>;
-  lastLogin?: Maybe<Scalars['Float']['output']>;
+  lastLogin?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type IoRestorecommerceCustomerCustomer = {
@@ -1077,15 +1087,37 @@ export type IoRestorecommerceOrganizationOrganization = {
   contactPoints?: Maybe<Array<IoRestorecommerceContactPointContactPoint>>;
   website?: Maybe<Scalars['String']['output']>;
   email?: Maybe<Scalars['String']['output']>;
-  logo?: Maybe<Scalars['String']['output']>;
+  logo?: Maybe<IoRestorecommerceImageImage>;
   vatId?: Maybe<Scalars['String']['output']>;
   isicV4?: Maybe<Scalars['String']['output']>;
   registration?: Maybe<Scalars['String']['output']>;
   registrationCourt?: Maybe<Scalars['String']['output']>;
   name?: Maybe<Scalars['String']['output']>;
   paymentMethodIds?: Maybe<Array<Scalars['String']['output']>>;
+  paymentMethods?: Maybe<Array<IoRestorecommercePaymentMethodPaymentMethod>>;
   data?: Maybe<GoogleProtobufAny>;
 };
+
+export type IoRestorecommercePaymentMethodPaymentMethod = {
+  __typename?: 'IoRestorecommercePaymentMethodPaymentMethod';
+  id?: Maybe<Scalars['String']['output']>;
+  meta?: Maybe<IoRestorecommerceMetaMeta>;
+  paymentMethod?: Maybe<IoRestorecommercePaymentMethodPaymentMethodEnum>;
+  transferType?: Maybe<IoRestorecommercePaymentMethodTransferTypeEnum>;
+  data?: Maybe<GoogleProtobufAny>;
+};
+
+export enum IoRestorecommercePaymentMethodPaymentMethodEnum {
+  WireTransfer = 0,
+  DirectDebit = 1,
+  Paypal = 2
+}
+
+export enum IoRestorecommercePaymentMethodTransferTypeEnum {
+  Receive = 0,
+  Send = 1,
+  Both = 2
+}
 
 export type IoRestorecommerceCustomerPublicSector = {
   __typename?: 'IoRestorecommerceCustomerPublicSector';
@@ -1129,7 +1161,7 @@ export type IoRestorecommerceInvoicePosition = {
   __typename?: 'IoRestorecommerceInvoicePosition';
   id?: Maybe<Scalars['String']['output']>;
   productItem?: Maybe<IoRestorecommerceInvoiceProductItem>;
-  fultillmentItem?: Maybe<IoRestorecommerceInvoiceFulfillmentItem>;
+  fulfillmentItem?: Maybe<IoRestorecommerceInvoiceFulfillmentItem>;
   manualItem?: Maybe<IoRestorecommerceInvoiceManualItem>;
   unitPrice?: Maybe<IoRestorecommercePricePrice>;
   quantity?: Maybe<Scalars['Int']['output']>;
@@ -1450,14 +1482,6 @@ export type IIoRestorecommerceFulfillmentProductVariant = {
   maxWeight?: InputMaybe<Scalars['Float']['input']>;
 };
 
-export type IIoRestorecommercePricePrice = {
-  regularPrice?: InputMaybe<Scalars['Float']['input']>;
-  sale?: InputMaybe<Scalars['Boolean']['input']>;
-  salePrice?: InputMaybe<Scalars['Float']['input']>;
-  currencyId?: InputMaybe<Scalars['String']['input']>;
-  taxIds?: InputMaybe<Array<Scalars['String']['input']>>;
-};
-
 export type Subscription = {
   __typename?: 'Subscription';
   orderingOrders?: Maybe<SubscriptionOutput>;
@@ -1683,6 +1707,7 @@ export type ResolversTypes = ResolversObject<{
   IIoRestorecommerceFulfillmentPackaging: IIoRestorecommerceFulfillmentPackaging;
   IIoRestorecommerceReferenceReference: IIoRestorecommerceReferenceReference;
   IIoRestorecommerceFulfillmentParcel: IIoRestorecommerceFulfillmentParcel;
+  IIoRestorecommercePricePrice: IIoRestorecommercePricePrice;
   IIoRestorecommerceAmountAmount: IIoRestorecommerceAmountAmount;
   IIoRestorecommerceAmountVAT: IIoRestorecommerceAmountVat;
   IIoRestorecommerceFulfillmentLabel: IIoRestorecommerceFulfillmentLabel;
@@ -1712,6 +1737,9 @@ export type ResolversTypes = ResolversObject<{
   IoRestorecommerceContactPointTypeContactPointType: ResolverTypeWrapper<IoRestorecommerceContactPointTypeContactPointType>;
   IoRestorecommerceCustomerCommercial: ResolverTypeWrapper<IoRestorecommerceCustomerCommercial>;
   IoRestorecommerceOrganizationOrganization: ResolverTypeWrapper<IoRestorecommerceOrganizationOrganization>;
+  IoRestorecommercePaymentMethodPaymentMethod: ResolverTypeWrapper<IoRestorecommercePaymentMethodPaymentMethod>;
+  IoRestorecommercePaymentMethodPaymentMethodEnum: IoRestorecommercePaymentMethodPaymentMethodEnum;
+  IoRestorecommercePaymentMethodTransferTypeEnum: IoRestorecommercePaymentMethodTransferTypeEnum;
   IoRestorecommerceCustomerPublicSector: ResolverTypeWrapper<IoRestorecommerceCustomerPublicSector>;
   IoRestorecommerceShopShop: ResolverTypeWrapper<IoRestorecommerceShopShop>;
   IoRestorecommerceInvoicePaymentState: IoRestorecommerceInvoicePaymentState;
@@ -1751,7 +1779,6 @@ export type ResolversTypes = ResolversObject<{
   IIoRestorecommerceFulfillmentProductFulfillmentProductList: IIoRestorecommerceFulfillmentProductFulfillmentProductList;
   IIoRestorecommerceFulfillmentProductFulfillmentProduct: IIoRestorecommerceFulfillmentProductFulfillmentProduct;
   IIoRestorecommerceFulfillmentProductVariant: IIoRestorecommerceFulfillmentProductVariant;
-  IIoRestorecommercePricePrice: IIoRestorecommercePricePrice;
   Subscription: ResolverTypeWrapper<{}>;
   SubscriptionOutput: ResolverTypeWrapper<SubscriptionOutput>;
   SubscriptionAction: SubscriptionAction;
@@ -1853,6 +1880,7 @@ export type ResolversParentTypes = ResolversObject<{
   IIoRestorecommerceFulfillmentPackaging: IIoRestorecommerceFulfillmentPackaging;
   IIoRestorecommerceReferenceReference: IIoRestorecommerceReferenceReference;
   IIoRestorecommerceFulfillmentParcel: IIoRestorecommerceFulfillmentParcel;
+  IIoRestorecommercePricePrice: IIoRestorecommercePricePrice;
   IIoRestorecommerceAmountAmount: IIoRestorecommerceAmountAmount;
   IIoRestorecommerceAmountVAT: IIoRestorecommerceAmountVat;
   IIoRestorecommerceFulfillmentLabel: IIoRestorecommerceFulfillmentLabel;
@@ -1880,6 +1908,7 @@ export type ResolversParentTypes = ResolversObject<{
   IoRestorecommerceContactPointTypeContactPointType: IoRestorecommerceContactPointTypeContactPointType;
   IoRestorecommerceCustomerCommercial: IoRestorecommerceCustomerCommercial;
   IoRestorecommerceOrganizationOrganization: IoRestorecommerceOrganizationOrganization;
+  IoRestorecommercePaymentMethodPaymentMethod: IoRestorecommercePaymentMethodPaymentMethod;
   IoRestorecommerceCustomerPublicSector: IoRestorecommerceCustomerPublicSector;
   IoRestorecommerceShopShop: IoRestorecommerceShopShop;
   IoRestorecommerceAddressBillingAddress: IoRestorecommerceAddressBillingAddress;
@@ -1917,7 +1946,6 @@ export type ResolversParentTypes = ResolversObject<{
   IIoRestorecommerceFulfillmentProductFulfillmentProductList: IIoRestorecommerceFulfillmentProductFulfillmentProductList;
   IIoRestorecommerceFulfillmentProductFulfillmentProduct: IIoRestorecommerceFulfillmentProductFulfillmentProduct;
   IIoRestorecommerceFulfillmentProductVariant: IIoRestorecommerceFulfillmentProductVariant;
-  IIoRestorecommercePricePrice: IIoRestorecommercePricePrice;
   Subscription: {};
   SubscriptionOutput: SubscriptionOutput;
 }>;
@@ -1990,7 +2018,8 @@ export type IoRestorecommerceFulfillmentParcelResolvers<ContextType = Fulfillmen
   productId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   product?: Resolver<Maybe<ResolversTypes['IoRestorecommerceFulfillmentProductFulfillmentProduct']>, ParentType, ContextType>;
   variantId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  item?: Resolver<Maybe<ResolversTypes['IoRestorecommerceFulfillmentItem']>, ParentType, ContextType>;
+  items?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceFulfillmentItem']>>, ParentType, ContextType>;
+  price?: Resolver<Maybe<ResolversTypes['IoRestorecommercePricePrice']>, ParentType, ContextType>;
   amount?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAmountAmount']>, ParentType, ContextType>;
   package?: Resolver<Maybe<ResolversTypes['IoRestorecommerceProductPackage']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -2517,12 +2546,12 @@ export type IoRestorecommerceUserUserTypeResolvers = { ORG_USER: 0, INDIVIDUAL_U
 
 export type IoRestorecommerceAuthTokensResolvers<ContextType = FulfillmentContext, ParentType extends ResolversParentTypes['IoRestorecommerceAuthTokens'] = ResolversParentTypes['IoRestorecommerceAuthTokens']> = ResolversObject<{
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  expiresIn?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  expiresIn?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   token?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   scopes?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   interactive?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  lastLogin?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  lastLogin?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -2584,16 +2613,30 @@ export type IoRestorecommerceOrganizationOrganizationResolvers<ContextType = Ful
   contactPoints?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceContactPointContactPoint']>>, ParentType, ContextType>;
   website?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  logo?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  logo?: Resolver<Maybe<ResolversTypes['IoRestorecommerceImageImage']>, ParentType, ContextType>;
   vatId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   isicV4?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   registration?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   registrationCourt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   paymentMethodIds?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  paymentMethods?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommercePaymentMethodPaymentMethod']>>, ParentType, ContextType>;
   data?: Resolver<Maybe<ResolversTypes['GoogleProtobufAny']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
+
+export type IoRestorecommercePaymentMethodPaymentMethodResolvers<ContextType = FulfillmentContext, ParentType extends ResolversParentTypes['IoRestorecommercePaymentMethodPaymentMethod'] = ResolversParentTypes['IoRestorecommercePaymentMethodPaymentMethod']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
+  paymentMethod?: Resolver<Maybe<ResolversTypes['IoRestorecommercePaymentMethodPaymentMethodEnum']>, ParentType, ContextType>;
+  transferType?: Resolver<Maybe<ResolversTypes['IoRestorecommercePaymentMethodTransferTypeEnum']>, ParentType, ContextType>;
+  data?: Resolver<Maybe<ResolversTypes['GoogleProtobufAny']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommercePaymentMethodPaymentMethodEnumResolvers = { WIRE_TRANSFER: 0, DIRECT_DEBIT: 1, PAYPAL: 2 };
+
+export type IoRestorecommercePaymentMethodTransferTypeEnumResolvers = { RECEIVE: 0, SEND: 1, BOTH: 2 };
 
 export type IoRestorecommerceCustomerPublicSectorResolvers<ContextType = FulfillmentContext, ParentType extends ResolversParentTypes['IoRestorecommerceCustomerPublicSector'] = ResolversParentTypes['IoRestorecommerceCustomerPublicSector']> = ResolversObject<{
   organizationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -2633,7 +2676,7 @@ export type IoRestorecommerceInvoiceSectionResolvers<ContextType = FulfillmentCo
 export type IoRestorecommerceInvoicePositionResolvers<ContextType = FulfillmentContext, ParentType extends ResolversParentTypes['IoRestorecommerceInvoicePosition'] = ResolversParentTypes['IoRestorecommerceInvoicePosition']> = ResolversObject<{
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   productItem?: Resolver<Maybe<ResolversTypes['IoRestorecommerceInvoiceProductItem']>, ParentType, ContextType>;
-  fultillmentItem?: Resolver<Maybe<ResolversTypes['IoRestorecommerceInvoiceFulfillmentItem']>, ParentType, ContextType>;
+  fulfillmentItem?: Resolver<Maybe<ResolversTypes['IoRestorecommerceInvoiceFulfillmentItem']>, ParentType, ContextType>;
   manualItem?: Resolver<Maybe<ResolversTypes['IoRestorecommerceInvoiceManualItem']>, ParentType, ContextType>;
   unitPrice?: Resolver<Maybe<ResolversTypes['IoRestorecommercePricePrice']>, ParentType, ContextType>;
   quantity?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
@@ -2967,6 +3010,9 @@ export type Resolvers<ContextType = FulfillmentContext> = ResolversObject<{
   IoRestorecommerceContactPointTypeContactPointType?: IoRestorecommerceContactPointTypeContactPointTypeResolvers<ContextType>;
   IoRestorecommerceCustomerCommercial?: IoRestorecommerceCustomerCommercialResolvers<ContextType>;
   IoRestorecommerceOrganizationOrganization?: IoRestorecommerceOrganizationOrganizationResolvers<ContextType>;
+  IoRestorecommercePaymentMethodPaymentMethod?: IoRestorecommercePaymentMethodPaymentMethodResolvers<ContextType>;
+  IoRestorecommercePaymentMethodPaymentMethodEnum?: IoRestorecommercePaymentMethodPaymentMethodEnumResolvers;
+  IoRestorecommercePaymentMethodTransferTypeEnum?: IoRestorecommercePaymentMethodTransferTypeEnumResolvers;
   IoRestorecommerceCustomerPublicSector?: IoRestorecommerceCustomerPublicSectorResolvers<ContextType>;
   IoRestorecommerceShopShop?: IoRestorecommerceShopShopResolvers<ContextType>;
   IoRestorecommerceInvoicePaymentState?: IoRestorecommerceInvoicePaymentStateResolvers;

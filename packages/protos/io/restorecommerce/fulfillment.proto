@@ -12,6 +12,7 @@ import "io/restorecommerce/address.proto";
 import "io/restorecommerce/country.proto";
 import "io/restorecommerce/product.proto";
 import "io/restorecommerce/options.proto";
+import "io/restorecommerce/price.proto";
 import "io/restorecommerce/amount.proto";
 import "io/restorecommerce/invoice.proto";
 import "google/protobuf/timestamp.proto";
@@ -113,9 +114,10 @@ message Parcel {
     }
   ];
   optional string variant_id = 3;
-  optional Item item = 4;
-  optional io.restorecommerce.amount.Amount amount = 5;
-  optional io.restorecommerce.product.Package package = 6;
+  repeated Item items = 4;
+  optional io.restorecommerce.price.Price price = 5;
+  optional io.restorecommerce.amount.Amount amount = 6;
+  optional io.restorecommerce.product.Package package = 8;
 }
 
 message Label {

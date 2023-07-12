@@ -173,7 +173,7 @@ message Position {
   optional string id = 1;
   oneof item_type {
     ProductItem product_item = 2;
-    FulfillmentItem fultillment_item = 3;
+    FulfillmentItem fulfillment_item = 3;
     ManualItem manual_item = 4;
   }
   optional io.restorecommerce.price.Price unit_price = 5;

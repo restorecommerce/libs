@@ -3,14 +3,15 @@ import type { CallContext, CallOptions } from "nice-grpc-common";
 import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
 import { Any, protoMetadata as protoMetadata1 } from "../../google/protobuf/any";
-import { protoMetadata as protoMetadata13, Timestamp } from "../../google/protobuf/timestamp";
+import { protoMetadata as protoMetadata14, Timestamp } from "../../google/protobuf/timestamp";
 import { protoMetadata as protoMetadata7, ShippingAddress } from "./address";
-import { Amount, protoMetadata as protoMetadata11 } from "./amount";
+import { Amount, protoMetadata as protoMetadata12 } from "./amount";
 import { protoMetadata as protoMetadata4, Subject } from "./auth";
 import { protoMetadata as protoMetadata8 } from "./country";
-import { InvoiceListResponse, protoMetadata as protoMetadata12 } from "./invoice";
+import { InvoiceListResponse, protoMetadata as protoMetadata13 } from "./invoice";
 import { Meta, protoMetadata as protoMetadata6 } from "./meta";
 import { KafkaSubscription, protoMetadata as protoMetadata10, Resolver } from "./options";
+import { Price, protoMetadata as protoMetadata11 } from "./price";
 import { Package, protoMetadata as protoMetadata9 } from "./product";
 import { protoMetadata as protoMetadata2, Reference } from "./reference";
 import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata3, ReadRequest } from "./resource_base";
@@ -122,7 +123,8 @@ export interface Parcel {
   id?: string | undefined;
   product_id?: string | undefined;
   variant_id?: string | undefined;
-  item?: Item | undefined;
+  items: Item[];
+  price?: Price | undefined;
   amount?: Amount | undefined;
   package?: Package | undefined;
 }
@@ -353,7 +355,8 @@ function createBaseParcel(): Parcel {
     id: undefined,
     product_id: undefined,
     variant_id: undefined,
-    item: undefined,
+    items: [],
+    price: undefined,
     amount: undefined,
     package: undefined,
   };
@@ -370,14 +373,17 @@ export const Parcel = {
     if (message.variant_id !== undefined) {
       writer.uint32(26).string(message.variant_id);
     }
-    if (message.item !== undefined) {
-      Item.encode(message.item, writer.uint32(34).fork()).ldelim();
+    for (const v of message.items) {
+      Item.encode(v!, writer.uint32(34).fork()).ldelim();
+    }
+    if (message.price !== undefined) {
+      Price.encode(message.price, writer.uint32(42).fork()).ldelim();
     }
     if (message.amount !== undefined) {
-      Amount.encode(message.amount, writer.uint32(42).fork()).ldelim();
+      Amount.encode(message.amount, writer.uint32(50).fork()).ldelim();
     }
     if (message.package !== undefined) {
-      Package.encode(message.package, writer.uint32(50).fork()).ldelim();
+      Package.encode(message.package, writer.uint32(66).fork()).ldelim();
     }
     return writer;
   },
@@ -415,17 +421,24 @@ export const Parcel = {
             break;
           }
 
-          message.item = Item.decode(reader, reader.uint32());
+          message.items.push(Item.decode(reader, reader.uint32()));
           continue;
         case 5:
           if (tag !== 42) {
             break;
           }
 
-          message.amount = Amount.decode(reader, reader.uint32());
+          message.price = Price.decode(reader, reader.uint32());
           continue;
         case 6:
           if (tag !== 50) {
+            break;
+          }
+
+          message.amount = Amount.decode(reader, reader.uint32());
+          continue;
+        case 8:
+          if (tag !== 66) {
             break;
           }
 
@@ -445,7 +458,8 @@ export const Parcel = {
       id: isSet(object.id) ? String(object.id) : undefined,
       product_id: isSet(object.product_id) ? String(object.product_id) : undefined,
       variant_id: isSet(object.variant_id) ? String(object.variant_id) : undefined,
-      item: isSet(object.item) ? Item.fromJSON(object.item) : undefined,
+      items: Array.isArray(object?.items) ? object.items.map((e: any) => Item.fromJSON(e)) : [],
+      price: isSet(object.price) ? Price.fromJSON(object.price) : undefined,
       amount: isSet(object.amount) ? Amount.fromJSON(object.amount) : undefined,
       package: isSet(object.package) ? Package.fromJSON(object.package) : undefined,
     };
@@ -456,7 +470,12 @@ export const Parcel = {
     message.id !== undefined && (obj.id = message.id);
     message.product_id !== undefined && (obj.product_id = message.product_id);
     message.variant_id !== undefined && (obj.variant_id = message.variant_id);
-    message.item !== undefined && (obj.item = message.item ? Item.toJSON(message.item) : undefined);
+    if (message.items) {
+      obj.items = message.items.map((e) => e ? Item.toJSON(e) : undefined);
+    } else {
+      obj.items = [];
+    }
+    message.price !== undefined && (obj.price = message.price ? Price.toJSON(message.price) : undefined);
     message.amount !== undefined && (obj.amount = message.amount ? Amount.toJSON(message.amount) : undefined);
     message.package !== undefined && (obj.package = message.package ? Package.toJSON(message.package) : undefined);
     return obj;
@@ -471,7 +490,8 @@ export const Parcel = {
     message.id = object.id ?? undefined;
     message.product_id = object.product_id ?? undefined;
     message.variant_id = object.variant_id ?? undefined;
-    message.item = (object.item !== undefined && object.item !== null) ? Item.fromPartial(object.item) : undefined;
+    message.items = object.items?.map((e) => Item.fromPartial(e)) || [];
+    message.price = (object.price !== undefined && object.price !== null) ? Price.fromPartial(object.price) : undefined;
     message.amount = (object.amount !== undefined && object.amount !== null)
       ? Amount.fromPartial(object.amount)
       : undefined;
@@ -2200,6 +2220,7 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/country.proto",
       "io/restorecommerce/product.proto",
       "io/restorecommerce/options.proto",
+      "io/restorecommerce/price.proto",
       "io/restorecommerce/amount.proto",
       "io/restorecommerce/invoice.proto",
       "google/protobuf/timestamp.proto",
@@ -2315,20 +2336,32 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "item",
+        "name": "items",
         "number": 4,
-        "label": 1,
+        "label": 3,
         "type": 11,
         "typeName": ".io.restorecommerce.fulfillment.Item",
         "extendee": "",
         "defaultValue": "",
+        "oneofIndex": 0,
+        "jsonName": "items",
+        "options": undefined,
+        "proto3Optional": false,
+      }, {
+        "name": "price",
+        "number": 5,
+        "label": 1,
+        "type": 11,
+        "typeName": ".io.restorecommerce.price.Price",
+        "extendee": "",
+        "defaultValue": "",
         "oneofIndex": 3,
-        "jsonName": "item",
+        "jsonName": "price",
         "options": undefined,
         "proto3Optional": true,
       }, {
         "name": "amount",
-        "number": 5,
+        "number": 6,
         "label": 1,
         "type": 11,
         "typeName": ".io.restorecommerce.amount.Amount",
@@ -2340,7 +2373,7 @@ export const protoMetadata: ProtoMetadata = {
         "proto3Optional": true,
       }, {
         "name": "package",
-        "number": 6,
+        "number": 8,
         "label": 1,
         "type": 11,
         "typeName": ".io.restorecommerce.product.Package",
@@ -2359,7 +2392,7 @@ export const protoMetadata: ProtoMetadata = {
         { "name": "_id", "options": undefined },
         { "name": "_product_id", "options": undefined },
         { "name": "_variant_id", "options": undefined },
-        { "name": "_item", "options": undefined },
+        { "name": "_price", "options": undefined },
         { "name": "_amount", "options": undefined },
         { "name": "_package", "options": undefined },
       ],
@@ -3312,151 +3345,151 @@ export const protoMetadata: ProtoMetadata = {
     "sourceCodeInfo": {
       "location": [{
         "path": [6, 0],
-        "span": [21, 0, 83, 1],
+        "span": [22, 0, 84, 1],
         "leadingComments": "*\nMicroservice definition.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 0],
-        "span": [25, 2, 27, 3],
+        "span": [26, 2, 28, 3],
         "leadingComments": "*\nReturns a list of shipment IDs.\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 1],
-        "span": [32, 2, 65],
+        "span": [33, 2, 65],
         "leadingComments": "*\nCreates fulfillment orders\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 2],
-        "span": [37, 2, 65],
+        "span": [38, 2, 65],
         "leadingComments": "*\nUpdates fulfillment orders unless Status is beyond Submit\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 3],
-        "span": [42, 2, 65],
+        "span": [43, 2, 65],
         "leadingComments": "*\nCreates or Updates fulfillment orders unless Status is beyond Submit\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 4],
-        "span": [47, 2, 67],
+        "span": [48, 2, 67],
         "leadingComments": "*\nEvaluate fulfillment for correctness\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 5],
-        "span": [52, 2, 65],
+        "span": [53, 2, 65],
         "leadingComments": "*\nCreates, Submits and Updates fulfillment orders against API\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 6],
-        "span": [57, 2, 66],
+        "span": [58, 2, 66],
         "leadingComments": "*\nTrack a batch of fulfillments\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 7],
-        "span": [62, 2, 69],
+        "span": [63, 2, 69],
         "leadingComments": "*\nWithdraw a batch of fulfillments and request for cancelation\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 8],
-        "span": [67, 2, 67],
+        "span": [68, 2, 67],
         "leadingComments": "*\nCancel a batch of fulfillments\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 9],
-        "span": [72, 2, 118],
+        "span": [73, 2, 118],
         "leadingComments": "*\nDelete a batch of fulfillments from the database\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 10],
-        "span": [77, 2, 98],
+        "span": [78, 2, 98],
         "leadingComments": "*\nRequires Invoice Service\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [6, 0, 2, 11],
-        "span": [82, 2, 97],
+        "span": [83, 2, 97],
         "leadingComments": "*\nRequires Invoice Service\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 2, 2, 4],
-        "span": [127, 2, 38],
+        "span": [129, 2, 38],
         "leadingComments": "",
         "trailingComments": "filled on Order\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 2, 2, 5],
-        "span": [128, 2, 27],
+        "span": [130, 2, 27],
         "leadingComments": "",
         "trailingComments": "update by Track\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 2, 2, 6],
-        "span": [129, 2, 55],
+        "span": [131, 2, 55],
         "leadingComments": "",
         "trailingComments": "API status\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 6],
-        "span": [160, 0, 176, 1],
+        "span": [162, 0, 178, 1],
         "leadingComments": "*\nThis is the message of how it get stored to the database\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 6, 2, 1],
-        "span": [170, 2, 35],
+        "span": [172, 2, 35],
         "leadingComments": "",
         "trailingComments": "set by user\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 6, 2, 3],
-        "span": [172, 2, 28],
+        "span": [174, 2, 28],
         "leadingComments": "",
         "trailingComments": "set by service\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 6, 2, 4],
-        "span": [173, 2, 34],
+        "span": [175, 2, 34],
         "leadingComments": "",
         "trailingComments": "set by service\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 6, 2, 5],
-        "span": [174, 2, 62],
+        "span": [176, 2, 62],
         "leadingComments": "",
         "trailingComments": "set by service\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 6, 2, 6],
-        "span": [175, 2, 27],
+        "span": [177, 2, 27],
         "leadingComments": "",
         "trailingComments": "set by service\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 10, 2, 1],
-        "span": [197, 2, 39],
+        "span": [199, 2, 39],
         "leadingComments": "",
         "trailingComments": "optional\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 13, 2, 1],
-        "span": [214, 2, 39],
+        "span": [216, 2, 39],
         "leadingComments": "",
         "trailingComments": " selects all on empty\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 14, 2, 0],
-        "span": [218, 2, 37],
+        "span": [220, 2, 37],
         "leadingComments": "",
         "trailingComments": " if given\n",
         "leadingDetachedComments": [],
@@ -3497,6 +3530,7 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata11,
     protoMetadata12,
     protoMetadata13,
+    protoMetadata14,
   ],
   options: {
     messages: {

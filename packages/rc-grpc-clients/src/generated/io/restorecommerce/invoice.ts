@@ -157,7 +157,7 @@ export interface Section {
 export interface Position {
   id?: string | undefined;
   productItem?: ProductItem | undefined;
-  fultillmentItem?: FulfillmentItem | undefined;
+  fulfillmentItem?: FulfillmentItem | undefined;
   manualItem?: ManualItem | undefined;
   unitPrice?: Price | undefined;
   quantity?: number | undefined;
@@ -1283,7 +1283,7 @@ function createBasePosition(): Position {
   return {
     id: undefined,
     productItem: undefined,
-    fultillmentItem: undefined,
+    fulfillmentItem: undefined,
     manualItem: undefined,
     unitPrice: undefined,
     quantity: undefined,
@@ -1301,8 +1301,8 @@ export const Position = {
     if (message.productItem !== undefined) {
       ProductItem.encode(message.productItem, writer.uint32(18).fork()).ldelim();
     }
-    if (message.fultillmentItem !== undefined) {
-      FulfillmentItem.encode(message.fultillmentItem, writer.uint32(26).fork()).ldelim();
+    if (message.fulfillmentItem !== undefined) {
+      FulfillmentItem.encode(message.fulfillmentItem, writer.uint32(26).fork()).ldelim();
     }
     if (message.manualItem !== undefined) {
       ManualItem.encode(message.manualItem, writer.uint32(34).fork()).ldelim();
@@ -1351,7 +1351,7 @@ export const Position = {
             break;
           }
 
-          message.fultillmentItem = FulfillmentItem.decode(reader, reader.uint32());
+          message.fulfillmentItem = FulfillmentItem.decode(reader, reader.uint32());
           continue;
         case 4:
           if (tag !== 34) {
@@ -1408,7 +1408,7 @@ export const Position = {
     return {
       id: isSet(object.id) ? String(object.id) : undefined,
       productItem: isSet(object.productItem) ? ProductItem.fromJSON(object.productItem) : undefined,
-      fultillmentItem: isSet(object.fultillmentItem) ? FulfillmentItem.fromJSON(object.fultillmentItem) : undefined,
+      fulfillmentItem: isSet(object.fulfillmentItem) ? FulfillmentItem.fromJSON(object.fulfillmentItem) : undefined,
       manualItem: isSet(object.manualItem) ? ManualItem.fromJSON(object.manualItem) : undefined,
       unitPrice: isSet(object.unitPrice) ? Price.fromJSON(object.unitPrice) : undefined,
       quantity: isSet(object.quantity) ? Number(object.quantity) : undefined,
@@ -1423,8 +1423,8 @@ export const Position = {
     message.id !== undefined && (obj.id = message.id);
     message.productItem !== undefined &&
       (obj.productItem = message.productItem ? ProductItem.toJSON(message.productItem) : undefined);
-    message.fultillmentItem !== undefined &&
-      (obj.fultillmentItem = message.fultillmentItem ? FulfillmentItem.toJSON(message.fultillmentItem) : undefined);
+    message.fulfillmentItem !== undefined &&
+      (obj.fulfillmentItem = message.fulfillmentItem ? FulfillmentItem.toJSON(message.fulfillmentItem) : undefined);
     message.manualItem !== undefined &&
       (obj.manualItem = message.manualItem ? ManualItem.toJSON(message.manualItem) : undefined);
     message.unitPrice !== undefined &&
@@ -1450,8 +1450,8 @@ export const Position = {
     message.productItem = (object.productItem !== undefined && object.productItem !== null)
       ? ProductItem.fromPartial(object.productItem)
       : undefined;
-    message.fultillmentItem = (object.fultillmentItem !== undefined && object.fultillmentItem !== null)
-      ? FulfillmentItem.fromPartial(object.fultillmentItem)
+    message.fulfillmentItem = (object.fulfillmentItem !== undefined && object.fulfillmentItem !== null)
+      ? FulfillmentItem.fromPartial(object.fulfillmentItem)
       : undefined;
     message.manualItem = (object.manualItem !== undefined && object.manualItem !== null)
       ? ManualItem.fromPartial(object.manualItem)
@@ -2566,7 +2566,7 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": false,
       }, {
-        "name": "fultillment_item",
+        "name": "fulfillment_item",
         "number": 3,
         "label": 1,
         "type": 11,
@@ -2574,7 +2574,7 @@ export const protoMetadata: ProtoMetadata = {
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "fultillmentItem",
+        "jsonName": "fulfillmentItem",
         "options": undefined,
         "proto3Optional": false,
       }, {

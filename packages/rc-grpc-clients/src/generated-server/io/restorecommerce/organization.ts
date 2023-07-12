@@ -2,13 +2,15 @@
 import type { CallContext, CallOptions } from "nice-grpc-common";
 import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
-import { Any, protoMetadata as protoMetadata2 } from "../../google/protobuf/any";
-import { protoMetadata as protoMetadata7 } from "./address";
+import { Any, protoMetadata as protoMetadata1 } from "../../google/protobuf/any";
+import { protoMetadata as protoMetadata8 } from "./address";
 import { protoMetadata as protoMetadata4, Subject } from "./auth";
-import { protoMetadata as protoMetadata8 } from "./contact_point";
+import { protoMetadata as protoMetadata9 } from "./contact_point";
+import { Image, protoMetadata as protoMetadata6 } from "./image";
 import { Meta, protoMetadata as protoMetadata3 } from "./meta";
-import { protoMetadata as protoMetadata6, Resolver } from "./options";
-import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata1, ReadRequest } from "./resource_base";
+import { protoMetadata as protoMetadata7, Resolver } from "./options";
+import { protoMetadata as protoMetadata10 } from "./payment_method";
+import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata2, ReadRequest } from "./resource_base";
 import { OperationStatus, protoMetadata as protoMetadata5, Status } from "./status";
 
 export const protobufPackage = "io.restorecommerce.organization";
@@ -57,7 +59,7 @@ export interface Organization {
     | string
     | undefined;
   /** base64; arangoDB does not support blob storage */
-  logo?: string | undefined;
+  logo?: Image | undefined;
   vat_id?: string | undefined;
   isic_v4?: string | undefined;
   registration?: string | undefined;
@@ -514,7 +516,7 @@ export const Organization = {
       writer.uint32(50).string(message.email);
     }
     if (message.logo !== undefined) {
-      writer.uint32(58).string(message.logo);
+      Image.encode(message.logo, writer.uint32(58).fork()).ldelim();
     }
     if (message.vat_id !== undefined) {
       writer.uint32(66).string(message.vat_id);
@@ -594,7 +596,7 @@ export const Organization = {
             break;
           }
 
-          message.logo = reader.string();
+          message.logo = Image.decode(reader, reader.uint32());
           continue;
         case 8:
           if (tag !== 66) {
@@ -664,7 +666,7 @@ export const Organization = {
         : [],
       website: isSet(object.website) ? String(object.website) : undefined,
       email: isSet(object.email) ? String(object.email) : undefined,
-      logo: isSet(object.logo) ? String(object.logo) : undefined,
+      logo: isSet(object.logo) ? Image.fromJSON(object.logo) : undefined,
       vat_id: isSet(object.vat_id) ? String(object.vat_id) : undefined,
       isic_v4: isSet(object.isic_v4) ? String(object.isic_v4) : undefined,
       registration: isSet(object.registration) ? String(object.registration) : undefined,
@@ -689,7 +691,7 @@ export const Organization = {
     }
     message.website !== undefined && (obj.website = message.website);
     message.email !== undefined && (obj.email = message.email);
-    message.logo !== undefined && (obj.logo = message.logo);
+    message.logo !== undefined && (obj.logo = message.logo ? Image.toJSON(message.logo) : undefined);
     message.vat_id !== undefined && (obj.vat_id = message.vat_id);
     message.isic_v4 !== undefined && (obj.isic_v4 = message.isic_v4);
     message.registration !== undefined && (obj.registration = message.registration);
@@ -716,7 +718,7 @@ export const Organization = {
     message.contact_point_ids = object.contact_point_ids?.map((e) => e) || [];
     message.website = object.website ?? undefined;
     message.email = object.email ?? undefined;
-    message.logo = object.logo ?? undefined;
+    message.logo = (object.logo !== undefined && object.logo !== null) ? Image.fromPartial(object.logo) : undefined;
     message.vat_id = object.vat_id ?? undefined;
     message.isic_v4 = object.isic_v4 ?? undefined;
     message.registration = object.registration ?? undefined;
@@ -836,14 +838,16 @@ export const protoMetadata: ProtoMetadata = {
     "name": "io/restorecommerce/organization.proto",
     "package": "io.restorecommerce.organization",
     "dependency": [
-      "io/restorecommerce/resource_base.proto",
       "google/protobuf/any.proto",
+      "io/restorecommerce/resource_base.proto",
       "io/restorecommerce/meta.proto",
       "io/restorecommerce/auth.proto",
       "io/restorecommerce/status.proto",
+      "io/restorecommerce/image.proto",
       "io/restorecommerce/options.proto",
       "io/restorecommerce/address.proto",
       "io/restorecommerce/contact_point.proto",
+      "io/restorecommerce/payment_method.proto",
     ],
     "publicDependency": [],
     "weakDependency": [],
@@ -1140,8 +1144,8 @@ export const protoMetadata: ProtoMetadata = {
         "name": "logo",
         "number": 7,
         "label": 1,
-        "type": 9,
-        "typeName": "",
+        "type": 11,
+        "typeName": ".io.restorecommerce.image.Image",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 5,
@@ -1218,7 +1222,15 @@ export const protoMetadata: ProtoMetadata = {
         "defaultValue": "",
         "oneofIndex": 0,
         "jsonName": "paymentMethodIds",
-        "options": undefined,
+        "options": {
+          "ctype": 0,
+          "packed": false,
+          "jstype": 0,
+          "lazy": false,
+          "deprecated": false,
+          "weak": false,
+          "uninterpretedOption": [],
+        },
         "proto3Optional": false,
       }, {
         "name": "data",
@@ -1300,38 +1312,38 @@ export const protoMetadata: ProtoMetadata = {
     "options": undefined,
     "sourceCodeInfo": {
       "location": [{
-        "path": [3, 6],
-        "span": [12, 0, 42],
+        "path": [3, 7],
+        "span": [14, 0, 42],
         "leadingComments": " Used by resolvers\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 5, 2, 0],
-        "span": [53, 2, 25],
+        "span": [56, 2, 25],
         "leadingComments": "",
         "trailingComments": "/ Organization ID, unique, key\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 5, 2, 2],
-        "span": [55, 2, 63, 4],
+        "span": [58, 2, 66, 4],
         "leadingComments": "",
         "trailingComments": "  Hierarchically superior organization; may be null\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 5, 2, 3],
-        "span": [64, 2, 72, 4],
+        "span": [67, 2, 75, 4],
         "leadingComments": "",
         "trailingComments": " list of possible legal addresses of different types\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 5, 2, 6],
-        "span": [75, 2, 27],
+        "span": [78, 2, 51],
         "leadingComments": "",
         "trailingComments": " base64; arangoDB does not support blob storage\n",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 5, 2, 13],
-        "span": [82, 2, 41],
+        "span": [93, 2, 41],
         "leadingComments": "",
         "trailingComments": "/ additional data\n",
         "leadingDetachedComments": [],
@@ -1356,6 +1368,8 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata6,
     protoMetadata7,
     protoMetadata8,
+    protoMetadata9,
+    protoMetadata10,
   ],
   options: {
     messages: {
@@ -1373,6 +1387,14 @@ export const protoMetadata: ProtoMetadata = {
             "resolver": Resolver.decode(
               Buffer.from(
                 "Ci4uaW8ucmVzdG9yZWNvbW1lcmNlLmNvbnRhY3RfcG9pbnQuQ29udGFjdFBvaW50EgttYXN0ZXJfZGF0YRoNY29udGFjdF9wb2ludCIEUmVhZCoNY29udGFjdFBvaW50cw==",
+                "base64",
+              ),
+            ),
+          },
+          "payment_method_ids": {
+            "resolver": Resolver.decode(
+              Buffer.from(
+                "CjAuaW8ucmVzdG9yZWNvbW1lcmNlLnBheW1lbnRfbWV0aG9kLlBheW1lbnRNZXRob2QSB3BheW1lbnQaDnBheW1lbnRfbWV0aG9kIgRSZWFkKg5wYXltZW50TWV0aG9kcw==",
                 "base64",
               ),
             ),

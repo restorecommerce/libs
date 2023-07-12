@@ -2,16 +2,19 @@ syntax = "proto3";
 
 package io.restorecommerce.organization;
 
-import "io/restorecommerce/resource_base.proto";
 import "google/protobuf/any.proto";
+
+import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
+import "io/restorecommerce/image.proto";
 import "io/restorecommerce/options.proto";
 
 // Used by resolvers
 import "io/restorecommerce/address.proto";
 import "io/restorecommerce/contact_point.proto";
+import "io/restorecommerce/payment_method.proto";
 
 service OrganizationService {
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (OrganizationListResponse) {
@@ -73,12 +76,20 @@ message Organization {
   ]; // list of possible legal addresses of different types
   optional string website = 5;
   optional string email = 6;
-  optional string logo = 7; // base64; arangoDB does not support blob storage
+  optional io.restorecommerce.image.Image logo = 7; // base64; arangoDB does not support blob storage
   optional string vat_id = 8;
   optional string isic_v4 = 9;
   optional string registration = 10;
   optional string registration_court = 11;
   optional string name = 12;
-  repeated string payment_method_ids = 13;
+  repeated string payment_method_ids = 13 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.payment_method.PaymentMethod",
+      target_service: "payment",
+      target_sub_service: "payment_method",
+      target_method: "Read",
+      field_name: "paymentMethods",
+    }
+  ];
   optional google.protobuf.Any data = 14; /// additional data
 }

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/rc-grpc-clients@4.1.0...@restorecommerce/rc-grpc-clients@4.1.1) (2023-07-12)
+
+
+### Bug Fixes
+
+* **fulfillment, invoice, organization.proto:** fix typos in invoice, fulfillment and organization ([8d64222](https://github.com/restorecommerce/libs/commit/8d64222d3cbca44a0c9d4e265431d26aaac20223))
+
+
+
+
+
 # [4.1.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/rc-grpc-clients@4.0.1...@restorecommerce/rc-grpc-clients@4.1.0) (2023-07-11)
 
 

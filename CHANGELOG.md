@@ -1,3 +1,7 @@
+### 1.2.3 (July 13th, 2023)
+
+- fix typo for encoding buffer field handler type
+
 ### 1.2.2 (July 13th, 2023)
 
 - support nested buffer fields and also multiple bufferfields per entity, dateTime stamp field handlers

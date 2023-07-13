@@ -177,7 +177,7 @@ export class ResourcesAPIBase {
     let entities: BaseDocument[] = await this.db.find(this.collectionName, filter, options);
     if (this.bufferFields && entities?.length > 0) {
       // encode the msg obj back to buffer obj and send it back
-      entities = this.encodeOrDecode(entities, this.bufferFields, 'endcode');
+      entities = this.encodeOrDecode(entities, this.bufferFields, 'encode');
     }
     if (this.timeStampFields && entities?.length > 0) {
       // convert number to Date Object

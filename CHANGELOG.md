@@ -1,3 +1,8 @@
+### 1.2.2 (July 13th, 2023)
+
+- support nested buffer fields and also multiple bufferfields per entity, dateTime stamp field handlers
+- updated depeendencies
+
 ### 1.2.1 (June 19th, 2023)
 
 - extended resource base to support for nested buffer fields

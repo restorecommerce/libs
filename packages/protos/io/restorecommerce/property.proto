@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package io.restorecommerce.property;
+
+message property {
+  optional string id = 1;
+  optional string value = 2;
+  optional string unit_code = 3;
+}
+
+message propertyObj {
+  optional property properties = 1;
+}

@@ -8,14 +8,6 @@ message Status {
   string message = 3;
 }
 
-message StatusArray {
-  repeated Status status = 1;
-}
-
-message StatusObj {
-  Status status = 1;
-}
-
 message OperationStatusObj {
   OperationStatus operation_status = 1;
 }

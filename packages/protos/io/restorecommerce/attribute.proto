@@ -7,7 +7,3 @@ message Attribute {
   optional string value = 2;
   repeated Attribute attributes = 3;
 }
-
-message AttributeObj {
-  optional Attribute attributes = 1;
-}

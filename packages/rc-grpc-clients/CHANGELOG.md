@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.2.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/rc-grpc-clients@4.1.1...@restorecommerce/rc-grpc-clients@4.2.0) (2023-07-21)
+
+
+### Features
+
+* **rc-grpc-clients, facade:** regnerated typings due to changes in proto files ([df3f100](https://github.com/restorecommerce/libs/commit/df3f10038e10842b77e8fa6cd523d4870dfa2683))
+
+
+
+
+
 ## [4.1.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/rc-grpc-clients@4.1.0...@restorecommerce/rc-grpc-clients@4.1.1) (2023-07-12)
 
 

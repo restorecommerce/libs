@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.2.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@4.1.1...@restorecommerce/protos@4.2.0) (2023-07-21)
+
+
+### Features
+
+* **protos:** add property type ([397aaaa](https://github.com/restorecommerce/libs/commit/397aaaae8b02459b816d71d6c4e161da8da0b3f1))
+* **protos:** updated property proto for capital case and removed unused proto messages ([c185814](https://github.com/restorecommerce/libs/commit/c18581474ea98e45bf91e9029a701117aeb72a11))
+* **rc-grpc-clients, facade:** regnerated typings due to changes in proto files ([df3f100](https://github.com/restorecommerce/libs/commit/df3f10038e10842b77e8fa6cd523d4870dfa2683))
+
+
+
+
+
 ## [4.1.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@4.1.0...@restorecommerce/protos@4.1.1) (2023-07-12)
 
 

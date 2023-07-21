@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.4.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.3.11...@restorecommerce/facade@1.4.0) (2023-07-21)
+
+
+### Bug Fixes
+
+* correctly compile ts to dist ([d3ba3c1](https://github.com/restorecommerce/libs/commit/d3ba3c157c8a8bbe597dee067bfe212fe4d87c54))
+
+
+### Features
+
+* **rc-grpc-clients, facade:** regnerated typings due to changes in proto files ([df3f100](https://github.com/restorecommerce/libs/commit/df3f10038e10842b77e8fa6cd523d4870dfa2683))
+
+
+
+
+
 ## [1.3.11](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.3.10...@restorecommerce/facade@1.3.11) (2023-07-12)
 
 **Note:** Version bump only for package @restorecommerce/facade

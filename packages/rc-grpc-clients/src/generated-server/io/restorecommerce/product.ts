@@ -3,15 +3,16 @@ import type { CallContext, CallOptions } from "nice-grpc-common";
 import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto as FileDescriptorProto1 } from "ts-proto-descriptors";
 import { Any, protoMetadata as protoMetadata1 } from "../../google/protobuf/any";
-import { Attribute, protoMetadata as protoMetadata8 } from "./attribute";
+import { protoMetadata as protoMetadata8 } from "./attribute";
 import { protoMetadata as protoMetadata6, Subject } from "./auth";
 import { File, protoMetadata as protoMetadata5 } from "./file";
 import { BoundingBox3D, protoMetadata as protoMetadata9 } from "./geometry";
 import { Image, protoMetadata as protoMetadata4 } from "./image";
-import { protoMetadata as protoMetadata12 } from "./manufacturer";
+import { protoMetadata as protoMetadata13 } from "./manufacturer";
 import { Meta, protoMetadata as protoMetadata3 } from "./meta";
-import { KafkaSubscription, protoMetadata as protoMetadata11, Resolver } from "./options";
+import { KafkaSubscription, protoMetadata as protoMetadata12, Resolver } from "./options";
 import { Price, protoMetadata as protoMetadata10 } from "./price";
+import { Property, protoMetadata as protoMetadata11 } from "./property";
 import { DeleteRequest, DeleteResponse, protoMetadata as protoMetadata2, ReadRequest } from "./resource_base";
 import { OperationStatus, protoMetadata as protoMetadata7, Status } from "./status";
 
@@ -151,7 +152,7 @@ export interface PhysicalVariant {
   stock_keeping_unit?: string | undefined;
   template_variant?: string | undefined;
   package?: Package | undefined;
-  attributes: Attribute[];
+  properties: Property[];
 }
 
 export interface ServiceVariant {
@@ -164,7 +165,7 @@ export interface ServiceVariant {
   files: File[];
   stock_keeping_unit?: string | undefined;
   template_variant?: string | undefined;
-  attributes: Attribute[];
+  properties: Property[];
 }
 
 export interface VirtualVariant {
@@ -177,7 +178,7 @@ export interface VirtualVariant {
   files: File[];
   stock_keeping_unit?: string | undefined;
   template_variant?: string | undefined;
-  attributes: Attribute[];
+  properties: Property[];
 }
 
 export interface Bundle {
@@ -1259,7 +1260,7 @@ function createBasePhysicalVariant(): PhysicalVariant {
     stock_keeping_unit: undefined,
     template_variant: undefined,
     package: undefined,
-    attributes: [],
+    properties: [],
   };
 }
 
@@ -1295,8 +1296,8 @@ export const PhysicalVariant = {
     if (message.package !== undefined) {
       Package.encode(message.package, writer.uint32(82).fork()).ldelim();
     }
-    for (const v of message.attributes) {
-      Attribute.encode(v!, writer.uint32(90).fork()).ldelim();
+    for (const v of message.properties) {
+      Property.encode(v!, writer.uint32(90).fork()).ldelim();
     }
     return writer;
   },
@@ -1383,7 +1384,7 @@ export const PhysicalVariant = {
             break;
           }
 
-          message.attributes.push(Attribute.decode(reader, reader.uint32()));
+          message.properties.push(Property.decode(reader, reader.uint32()));
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -1406,7 +1407,7 @@ export const PhysicalVariant = {
       stock_keeping_unit: isSet(object.stock_keeping_unit) ? String(object.stock_keeping_unit) : undefined,
       template_variant: isSet(object.template_variant) ? String(object.template_variant) : undefined,
       package: isSet(object.package) ? Package.fromJSON(object.package) : undefined,
-      attributes: Array.isArray(object?.attributes) ? object.attributes.map((e: any) => Attribute.fromJSON(e)) : [],
+      properties: Array.isArray(object?.properties) ? object.properties.map((e: any) => Property.fromJSON(e)) : [],
     };
   },
 
@@ -1430,10 +1431,10 @@ export const PhysicalVariant = {
     message.stock_keeping_unit !== undefined && (obj.stock_keeping_unit = message.stock_keeping_unit);
     message.template_variant !== undefined && (obj.template_variant = message.template_variant);
     message.package !== undefined && (obj.package = message.package ? Package.toJSON(message.package) : undefined);
-    if (message.attributes) {
-      obj.attributes = message.attributes.map((e) => e ? Attribute.toJSON(e) : undefined);
+    if (message.properties) {
+      obj.properties = message.properties.map((e) => e ? Property.toJSON(e) : undefined);
     } else {
-      obj.attributes = [];
+      obj.properties = [];
     }
     return obj;
   },
@@ -1456,7 +1457,7 @@ export const PhysicalVariant = {
     message.package = (object.package !== undefined && object.package !== null)
       ? Package.fromPartial(object.package)
       : undefined;
-    message.attributes = object.attributes?.map((e) => Attribute.fromPartial(e)) || [];
+    message.properties = object.properties?.map((e) => Property.fromPartial(e)) || [];
     return message;
   },
 };
@@ -1472,7 +1473,7 @@ function createBaseServiceVariant(): ServiceVariant {
     files: [],
     stock_keeping_unit: undefined,
     template_variant: undefined,
-    attributes: [],
+    properties: [],
   };
 }
 
@@ -1505,8 +1506,8 @@ export const ServiceVariant = {
     if (message.template_variant !== undefined) {
       writer.uint32(74).string(message.template_variant);
     }
-    for (const v of message.attributes) {
-      Attribute.encode(v!, writer.uint32(82).fork()).ldelim();
+    for (const v of message.properties) {
+      Property.encode(v!, writer.uint32(82).fork()).ldelim();
     }
     return writer;
   },
@@ -1586,7 +1587,7 @@ export const ServiceVariant = {
             break;
           }
 
-          message.attributes.push(Attribute.decode(reader, reader.uint32()));
+          message.properties.push(Property.decode(reader, reader.uint32()));
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -1608,7 +1609,7 @@ export const ServiceVariant = {
       files: Array.isArray(object?.files) ? object.files.map((e: any) => File.fromJSON(e)) : [],
       stock_keeping_unit: isSet(object.stock_keeping_unit) ? String(object.stock_keeping_unit) : undefined,
       template_variant: isSet(object.template_variant) ? String(object.template_variant) : undefined,
-      attributes: Array.isArray(object?.attributes) ? object.attributes.map((e: any) => Attribute.fromJSON(e)) : [],
+      properties: Array.isArray(object?.properties) ? object.properties.map((e: any) => Property.fromJSON(e)) : [],
     };
   },
 
@@ -1631,10 +1632,10 @@ export const ServiceVariant = {
     }
     message.stock_keeping_unit !== undefined && (obj.stock_keeping_unit = message.stock_keeping_unit);
     message.template_variant !== undefined && (obj.template_variant = message.template_variant);
-    if (message.attributes) {
-      obj.attributes = message.attributes.map((e) => e ? Attribute.toJSON(e) : undefined);
+    if (message.properties) {
+      obj.properties = message.properties.map((e) => e ? Property.toJSON(e) : undefined);
     } else {
-      obj.attributes = [];
+      obj.properties = [];
     }
     return obj;
   },
@@ -1654,7 +1655,7 @@ export const ServiceVariant = {
     message.files = object.files?.map((e) => File.fromPartial(e)) || [];
     message.stock_keeping_unit = object.stock_keeping_unit ?? undefined;
     message.template_variant = object.template_variant ?? undefined;
-    message.attributes = object.attributes?.map((e) => Attribute.fromPartial(e)) || [];
+    message.properties = object.properties?.map((e) => Property.fromPartial(e)) || [];
     return message;
   },
 };
@@ -1670,7 +1671,7 @@ function createBaseVirtualVariant(): VirtualVariant {
     files: [],
     stock_keeping_unit: undefined,
     template_variant: undefined,
-    attributes: [],
+    properties: [],
   };
 }
 
@@ -1703,8 +1704,8 @@ export const VirtualVariant = {
     if (message.template_variant !== undefined) {
       writer.uint32(74).string(message.template_variant);
     }
-    for (const v of message.attributes) {
-      Attribute.encode(v!, writer.uint32(82).fork()).ldelim();
+    for (const v of message.properties) {
+      Property.encode(v!, writer.uint32(82).fork()).ldelim();
     }
     return writer;
   },
@@ -1784,7 +1785,7 @@ export const VirtualVariant = {
             break;
           }
 
-          message.attributes.push(Attribute.decode(reader, reader.uint32()));
+          message.properties.push(Property.decode(reader, reader.uint32()));
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -1806,7 +1807,7 @@ export const VirtualVariant = {
       files: Array.isArray(object?.files) ? object.files.map((e: any) => File.fromJSON(e)) : [],
       stock_keeping_unit: isSet(object.stock_keeping_unit) ? String(object.stock_keeping_unit) : undefined,
       template_variant: isSet(object.template_variant) ? String(object.template_variant) : undefined,
-      attributes: Array.isArray(object?.attributes) ? object.attributes.map((e: any) => Attribute.fromJSON(e)) : [],
+      properties: Array.isArray(object?.properties) ? object.properties.map((e: any) => Property.fromJSON(e)) : [],
     };
   },
 
@@ -1829,10 +1830,10 @@ export const VirtualVariant = {
     }
     message.stock_keeping_unit !== undefined && (obj.stock_keeping_unit = message.stock_keeping_unit);
     message.template_variant !== undefined && (obj.template_variant = message.template_variant);
-    if (message.attributes) {
-      obj.attributes = message.attributes.map((e) => e ? Attribute.toJSON(e) : undefined);
+    if (message.properties) {
+      obj.properties = message.properties.map((e) => e ? Property.toJSON(e) : undefined);
     } else {
-      obj.attributes = [];
+      obj.properties = [];
     }
     return obj;
   },
@@ -1852,7 +1853,7 @@ export const VirtualVariant = {
     message.files = object.files?.map((e) => File.fromPartial(e)) || [];
     message.stock_keeping_unit = object.stock_keeping_unit ?? undefined;
     message.template_variant = object.template_variant ?? undefined;
-    message.attributes = object.attributes?.map((e) => Attribute.fromPartial(e)) || [];
+    message.properties = object.properties?.map((e) => Property.fromPartial(e)) || [];
     return message;
   },
 };
@@ -2251,6 +2252,7 @@ export const protoMetadata: ProtoMetadata = {
       "io/restorecommerce/attribute.proto",
       "io/restorecommerce/geometry.proto",
       "io/restorecommerce/price.proto",
+      "io/restorecommerce/property.proto",
       "io/restorecommerce/options.proto",
       "io/restorecommerce/manufacturer.proto",
     ],
@@ -3027,15 +3029,15 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "attributes",
+        "name": "properties",
         "number": 11,
         "label": 3,
         "type": 11,
-        "typeName": ".io.restorecommerce.attribute.Attribute",
+        "typeName": ".io.restorecommerce.property.Property",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "attributes",
+        "jsonName": "properties",
         "options": undefined,
         "proto3Optional": false,
       }],
@@ -3167,15 +3169,15 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "attributes",
+        "name": "properties",
         "number": 10,
         "label": 3,
         "type": 11,
-        "typeName": ".io.restorecommerce.attribute.Attribute",
+        "typeName": ".io.restorecommerce.property.Property",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "attributes",
+        "jsonName": "properties",
         "options": undefined,
         "proto3Optional": false,
       }],
@@ -3306,15 +3308,15 @@ export const protoMetadata: ProtoMetadata = {
         "options": undefined,
         "proto3Optional": true,
       }, {
-        "name": "attributes",
+        "name": "properties",
         "number": 10,
         "label": 3,
         "type": 11,
-        "typeName": ".io.restorecommerce.attribute.Attribute",
+        "typeName": ".io.restorecommerce.property.Property",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,
-        "jsonName": "attributes",
+        "jsonName": "properties",
         "options": undefined,
         "proto3Optional": false,
       }],
@@ -3569,20 +3571,20 @@ export const protoMetadata: ProtoMetadata = {
     "options": undefined,
     "sourceCodeInfo": {
       "location": [{
-        "path": [3, 11],
-        "span": [17, 0, 47],
+        "path": [3, 12],
+        "span": [18, 0, 47],
         "leadingComments": " Used by resolvers\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 1],
-        "span": [51, 0, 79, 1],
+        "span": [52, 0, 80, 1],
         "leadingComments": " Product resource entity\n",
         "trailingComments": "",
         "leadingDetachedComments": [],
       }, {
         "path": [4, 14, 2, 3],
-        "span": [228, 2, 34],
+        "span": [229, 2, 34],
         "leadingComments": "",
         "trailingComments": "Price ratio in relation to the bundle price\n",
         "leadingDetachedComments": [],
@@ -3622,6 +3624,7 @@ export const protoMetadata: ProtoMetadata = {
     protoMetadata10,
     protoMetadata11,
     protoMetadata12,
+    protoMetadata13,
   ],
   options: {
     messages: {

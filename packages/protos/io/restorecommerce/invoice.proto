@@ -15,7 +15,7 @@ import "io/restorecommerce/price.proto";
 import "io/restorecommerce/file.proto";
 import "io/restorecommerce/reference.proto";
 import "io/restorecommerce/attribute.proto";
-import "io/restorecommerce/properties.proto";
+import "io/restorecommerce/property.proto";
 
 // Used by resolvers
 import "io/restorecommerce/user.proto";

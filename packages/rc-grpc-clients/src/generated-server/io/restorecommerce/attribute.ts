@@ -10,10 +10,6 @@ export interface Attribute {
   attributes: Attribute[];
 }
 
-export interface AttributeObj {
-  attributes?: Attribute | undefined;
-}
-
 function createBaseAttribute(): Attribute {
   return { id: undefined, value: undefined, attributes: [] };
 }
@@ -102,65 +98,6 @@ export const Attribute = {
   },
 };
 
-function createBaseAttributeObj(): AttributeObj {
-  return { attributes: undefined };
-}
-
-export const AttributeObj = {
-  encode(message: AttributeObj, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.attributes !== undefined) {
-      Attribute.encode(message.attributes, writer.uint32(10).fork()).ldelim();
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): AttributeObj {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseAttributeObj();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 10) {
-            break;
-          }
-
-          message.attributes = Attribute.decode(reader, reader.uint32());
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): AttributeObj {
-    return { attributes: isSet(object.attributes) ? Attribute.fromJSON(object.attributes) : undefined };
-  },
-
-  toJSON(message: AttributeObj): unknown {
-    const obj: any = {};
-    message.attributes !== undefined &&
-      (obj.attributes = message.attributes ? Attribute.toJSON(message.attributes) : undefined);
-    return obj;
-  },
-
-  create(base?: DeepPartial<AttributeObj>): AttributeObj {
-    return AttributeObj.fromPartial(base ?? {});
-  },
-
-  fromPartial(object: DeepPartial<AttributeObj>): AttributeObj {
-    const message = createBaseAttributeObj();
-    message.attributes = (object.attributes !== undefined && object.attributes !== null)
-      ? Attribute.fromPartial(object.attributes)
-      : undefined;
-    return message;
-  },
-};
-
 type ProtoMetaMessageOptions = {
   options?: { [key: string]: any };
   fields?: { [key: string]: { [key: string]: any } };
@@ -236,29 +173,6 @@ export const protoMetadata: ProtoMetadata = {
       "options": undefined,
       "reservedRange": [],
       "reservedName": [],
-    }, {
-      "name": "AttributeObj",
-      "field": [{
-        "name": "attributes",
-        "number": 1,
-        "label": 1,
-        "type": 11,
-        "typeName": ".io.restorecommerce.attribute.Attribute",
-        "extendee": "",
-        "defaultValue": "",
-        "oneofIndex": 0,
-        "jsonName": "attributes",
-        "options": undefined,
-        "proto3Optional": true,
-      }],
-      "extension": [],
-      "nestedType": [],
-      "enumType": [],
-      "extensionRange": [],
-      "oneofDecl": [{ "name": "_attributes", "options": undefined }],
-      "options": undefined,
-      "reservedRange": [],
-      "reservedName": [],
     }],
     "enumType": [],
     "service": [],
@@ -267,10 +181,7 @@ export const protoMetadata: ProtoMetadata = {
     "sourceCodeInfo": { "location": [] },
     "syntax": "proto3",
   }),
-  references: {
-    ".io.restorecommerce.attribute.Attribute": Attribute,
-    ".io.restorecommerce.attribute.AttributeObj": AttributeObj,
-  },
+  references: { ".io.restorecommerce.attribute.Attribute": Attribute },
   dependencies: [],
 };
 

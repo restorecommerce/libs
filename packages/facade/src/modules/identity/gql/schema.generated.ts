@@ -119,7 +119,7 @@ export type IoRestorecommerceMetaMeta = {
   modified?: Maybe<Scalars['DateTime']['output']>;
   modifiedBy?: Maybe<Scalars['String']['output']>;
   owners?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
-  acls?: Maybe<Array<IoRestorecommerceAttributeAttributeObj>>;
+  acls?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
 };
 
 export type IoRestorecommerceAttributeAttribute = {
@@ -127,11 +127,6 @@ export type IoRestorecommerceAttributeAttribute = {
   id?: Maybe<Scalars['String']['output']>;
   value?: Maybe<Scalars['String']['output']>;
   attributes?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
-};
-
-export type IoRestorecommerceAttributeAttributeObj = {
-  __typename?: 'IoRestorecommerceAttributeAttributeObj';
-  attributes?: Maybe<IoRestorecommerceAttributeAttribute>;
 };
 
 export type IoRestorecommerceAuthRoleAssociation = {
@@ -181,12 +176,12 @@ export enum IoRestorecommerceUserUserType {
 export type IoRestorecommerceAuthTokens = {
   __typename?: 'IoRestorecommerceAuthTokens';
   name?: Maybe<Scalars['String']['output']>;
-  expiresIn?: Maybe<Scalars['DateTime']['output']>;
+  expiresIn?: Maybe<Scalars['Float']['output']>;
   token?: Maybe<Scalars['String']['output']>;
   scopes?: Maybe<Array<Scalars['String']['output']>>;
   type?: Maybe<Scalars['String']['output']>;
   interactive?: Maybe<Scalars['Boolean']['output']>;
-  lastLogin?: Maybe<Scalars['DateTime']['output']>;
+  lastLogin?: Maybe<Scalars['Float']['output']>;
 };
 
 export type GoogleProtobufAny = {
@@ -650,11 +645,7 @@ export type IIoRestorecommerceMetaMeta = {
   modified?: InputMaybe<Scalars['IDateTime']['input']>;
   modifiedBy?: InputMaybe<Scalars['String']['input']>;
   owners?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
-  acls?: InputMaybe<Array<IIoRestorecommerceAttributeAttributeObj>>;
-};
-
-export type IIoRestorecommerceAttributeAttributeObj = {
-  attributes?: InputMaybe<IIoRestorecommerceAttributeAttribute>;
+  acls?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
 };
 
 export type IIoRestorecommerceAuthRoleAssociation = {
@@ -679,12 +670,12 @@ export type IIoRestorecommerceImageImage = {
 
 export type IIoRestorecommerceAuthTokens = {
   name?: InputMaybe<Scalars['String']['input']>;
-  expiresIn?: InputMaybe<Scalars['IDateTime']['input']>;
+  expiresIn?: InputMaybe<Scalars['Float']['input']>;
   token?: InputMaybe<Scalars['String']['input']>;
   scopes?: InputMaybe<Array<Scalars['String']['input']>>;
   type?: InputMaybe<Scalars['String']['input']>;
   interactive?: InputMaybe<Scalars['Boolean']['input']>;
-  lastLogin?: InputMaybe<Scalars['IDateTime']['input']>;
+  lastLogin?: InputMaybe<Scalars['Float']['input']>;
 };
 
 export enum ModeType {
@@ -1128,7 +1119,6 @@ export type ResolversTypes = ResolversObject<{
   IoRestorecommerceMetaMeta: ResolverTypeWrapper<IoRestorecommerceMetaMeta>;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   IoRestorecommerceAttributeAttribute: ResolverTypeWrapper<IoRestorecommerceAttributeAttribute>;
-  IoRestorecommerceAttributeAttributeObj: ResolverTypeWrapper<IoRestorecommerceAttributeAttributeObj>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   IoRestorecommerceAuthRoleAssociation: ResolverTypeWrapper<IoRestorecommerceAuthRoleAssociation>;
   IoRestorecommerceTimezoneTimezone: ResolverTypeWrapper<IoRestorecommerceTimezoneTimezone>;
@@ -1187,7 +1177,6 @@ export type ResolversTypes = ResolversObject<{
   IIoRestorecommerceUserUser: IIoRestorecommerceUserUser;
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
   IDateTime: ResolverTypeWrapper<Scalars['IDateTime']['output']>;
-  IIoRestorecommerceAttributeAttributeObj: IIoRestorecommerceAttributeAttributeObj;
   IIoRestorecommerceAuthRoleAssociation: IIoRestorecommerceAuthRoleAssociation;
   IIoRestorecommerceImageImage: IIoRestorecommerceImageImage;
   IIoRestorecommerceAuthTokens: IIoRestorecommerceAuthTokens;
@@ -1251,7 +1240,6 @@ export type ResolversParentTypes = ResolversObject<{
   IoRestorecommerceMetaMeta: IoRestorecommerceMetaMeta;
   DateTime: Scalars['DateTime']['output'];
   IoRestorecommerceAttributeAttribute: IoRestorecommerceAttributeAttribute;
-  IoRestorecommerceAttributeAttributeObj: IoRestorecommerceAttributeAttributeObj;
   Boolean: Scalars['Boolean']['output'];
   IoRestorecommerceAuthRoleAssociation: IoRestorecommerceAuthRoleAssociation;
   IoRestorecommerceTimezoneTimezone: IoRestorecommerceTimezoneTimezone;
@@ -1302,7 +1290,6 @@ export type ResolversParentTypes = ResolversObject<{
   IIoRestorecommerceUserUser: IIoRestorecommerceUserUser;
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
   IDateTime: Scalars['IDateTime']['output'];
-  IIoRestorecommerceAttributeAttributeObj: IIoRestorecommerceAttributeAttributeObj;
   IIoRestorecommerceAuthRoleAssociation: IIoRestorecommerceAuthRoleAssociation;
   IIoRestorecommerceImageImage: IIoRestorecommerceImageImage;
   IIoRestorecommerceAuthTokens: IIoRestorecommerceAuthTokens;
@@ -1427,7 +1414,7 @@ export type IoRestorecommerceMetaMetaResolvers<ContextType = IdentityContext, Pa
   modified?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   modifiedBy?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   owners?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
-  acls?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttributeObj']>>, ParentType, ContextType>;
+  acls?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1439,11 +1426,6 @@ export type IoRestorecommerceAttributeAttributeResolvers<ContextType = IdentityC
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   value?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   attributes?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type IoRestorecommerceAttributeAttributeObjResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['IoRestorecommerceAttributeAttributeObj'] = ResolversParentTypes['IoRestorecommerceAttributeAttributeObj']> = ResolversObject<{
-  attributes?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAttributeAttribute']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1488,12 +1470,12 @@ export type IoRestorecommerceUserUserTypeResolvers = { ORG_USER: 0, INDIVIDUAL_U
 
 export type IoRestorecommerceAuthTokensResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['IoRestorecommerceAuthTokens'] = ResolversParentTypes['IoRestorecommerceAuthTokens']> = ResolversObject<{
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  expiresIn?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  expiresIn?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   token?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   scopes?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   interactive?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  lastLogin?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  lastLogin?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1837,7 +1819,6 @@ export type Resolvers<ContextType = IdentityContext> = ResolversObject<{
   IoRestorecommerceMetaMeta?: IoRestorecommerceMetaMetaResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
   IoRestorecommerceAttributeAttribute?: IoRestorecommerceAttributeAttributeResolvers<ContextType>;
-  IoRestorecommerceAttributeAttributeObj?: IoRestorecommerceAttributeAttributeObjResolvers<ContextType>;
   IoRestorecommerceAuthRoleAssociation?: IoRestorecommerceAuthRoleAssociationResolvers<ContextType>;
   IoRestorecommerceTimezoneTimezone?: IoRestorecommerceTimezoneTimezoneResolvers<ContextType>;
   IoRestorecommerceLocaleLocale?: IoRestorecommerceLocaleLocaleResolvers<ContextType>;

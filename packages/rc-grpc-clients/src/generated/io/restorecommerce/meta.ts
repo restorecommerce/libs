@@ -2,7 +2,7 @@
 import * as _m0 from "protobufjs/minimal";
 import { FileDescriptorProto } from "ts-proto-descriptors";
 import { protoMetadata as protoMetadata2, Timestamp } from "../../google/protobuf/timestamp";
-import { Attribute, AttributeObj, protoMetadata as protoMetadata1 } from "./attribute";
+import { Attribute, protoMetadata as protoMetadata1 } from "./attribute";
 
 export const protobufPackage = "io.restorecommerce.meta";
 
@@ -18,7 +18,7 @@ export interface Meta {
   /** ID from last User who modified it */
   modifiedBy?: string | undefined;
   owners: Attribute[];
-  acls: AttributeObj[];
+  acls: Attribute[];
 }
 
 function createBaseMeta(): Meta {
@@ -40,7 +40,7 @@ export const Meta = {
       Attribute.encode(v!, writer.uint32(34).fork()).ldelim();
     }
     for (const v of message.acls) {
-      AttributeObj.encode(v!, writer.uint32(42).fork()).ldelim();
+      Attribute.encode(v!, writer.uint32(42).fork()).ldelim();
     }
     return writer;
   },
@@ -85,7 +85,7 @@ export const Meta = {
             break;
           }
 
-          message.acls.push(AttributeObj.decode(reader, reader.uint32()));
+          message.acls.push(Attribute.decode(reader, reader.uint32()));
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -102,7 +102,7 @@ export const Meta = {
       modified: isSet(object.modified) ? fromJsonTimestamp(object.modified) : undefined,
       modifiedBy: isSet(object.modifiedBy) ? String(object.modifiedBy) : undefined,
       owners: Array.isArray(object?.owners) ? object.owners.map((e: any) => Attribute.fromJSON(e)) : [],
-      acls: Array.isArray(object?.acls) ? object.acls.map((e: any) => AttributeObj.fromJSON(e)) : [],
+      acls: Array.isArray(object?.acls) ? object.acls.map((e: any) => Attribute.fromJSON(e)) : [],
     };
   },
 
@@ -117,7 +117,7 @@ export const Meta = {
       obj.owners = [];
     }
     if (message.acls) {
-      obj.acls = message.acls.map((e) => e ? AttributeObj.toJSON(e) : undefined);
+      obj.acls = message.acls.map((e) => e ? Attribute.toJSON(e) : undefined);
     } else {
       obj.acls = [];
     }
@@ -134,7 +134,7 @@ export const Meta = {
     message.modified = object.modified ?? undefined;
     message.modifiedBy = object.modifiedBy ?? undefined;
     message.owners = object.owners?.map((e) => Attribute.fromPartial(e)) || [];
-    message.acls = object.acls?.map((e) => AttributeObj.fromPartial(e)) || [];
+    message.acls = object.acls?.map((e) => Attribute.fromPartial(e)) || [];
     return message;
   },
 };
@@ -222,7 +222,7 @@ export const protoMetadata: ProtoMetadata = {
         "number": 5,
         "label": 3,
         "type": 11,
-        "typeName": ".io.restorecommerce.attribute.AttributeObj",
+        "typeName": ".io.restorecommerce.attribute.Attribute",
         "extendee": "",
         "defaultValue": "",
         "oneofIndex": 0,

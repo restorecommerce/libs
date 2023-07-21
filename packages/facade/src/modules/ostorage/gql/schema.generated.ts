@@ -81,7 +81,7 @@ export type IoRestorecommerceMetaMeta = {
   modified?: Maybe<Scalars['DateTime']['output']>;
   modifiedBy?: Maybe<Scalars['String']['output']>;
   owners?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
-  acls?: Maybe<Array<IoRestorecommerceAttributeAttributeObj>>;
+  acls?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
 };
 
 export type IoRestorecommerceAttributeAttribute = {
@@ -89,11 +89,6 @@ export type IoRestorecommerceAttributeAttribute = {
   id?: Maybe<Scalars['String']['output']>;
   value?: Maybe<Scalars['String']['output']>;
   attributes?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
-};
-
-export type IoRestorecommerceAttributeAttributeObj = {
-  __typename?: 'IoRestorecommerceAttributeAttributeObj';
-  attributes?: Maybe<IoRestorecommerceAttributeAttribute>;
 };
 
 export type IoRestorecommerceOstorageOptions = {
@@ -282,17 +277,13 @@ export type IIoRestorecommerceMetaMeta = {
   modified?: InputMaybe<Scalars['IDateTime']['input']>;
   modifiedBy?: InputMaybe<Scalars['String']['input']>;
   owners?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
-  acls?: InputMaybe<Array<IIoRestorecommerceAttributeAttributeObj>>;
+  acls?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
 };
 
 export type IIoRestorecommerceAttributeAttribute = {
   id?: InputMaybe<Scalars['String']['input']>;
   value?: InputMaybe<Scalars['String']['input']>;
   attributes?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
-};
-
-export type IIoRestorecommerceAttributeAttributeObj = {
-  attributes?: InputMaybe<IIoRestorecommerceAttributeAttribute>;
 };
 
 export type IIoRestorecommerceOstorageOptions = {
@@ -541,7 +532,6 @@ export type ResolversTypes = ResolversObject<{
   IoRestorecommerceMetaMeta: ResolverTypeWrapper<IoRestorecommerceMetaMeta>;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   IoRestorecommerceAttributeAttribute: ResolverTypeWrapper<IoRestorecommerceAttributeAttribute>;
-  IoRestorecommerceAttributeAttributeObj: ResolverTypeWrapper<IoRestorecommerceAttributeAttributeObj>;
   IoRestorecommerceOstorageOptions: ResolverTypeWrapper<IoRestorecommerceOstorageOptions>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   GoogleProtobufAny: ResolverTypeWrapper<GoogleProtobufAny>;
@@ -572,7 +562,6 @@ export type ResolversTypes = ResolversObject<{
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
   IDateTime: ResolverTypeWrapper<Scalars['IDateTime']['output']>;
   IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
-  IIoRestorecommerceAttributeAttributeObj: IIoRestorecommerceAttributeAttributeObj;
   IIoRestorecommerceOstorageOptions: IIoRestorecommerceOstorageOptions;
   IGoogleProtobufAny: IGoogleProtobufAny;
   ProtoIoRestorecommerceResourcebaseDeleteResponse: ResolverTypeWrapper<ProtoIoRestorecommerceResourcebaseDeleteResponse>;
@@ -609,7 +598,6 @@ export type ResolversParentTypes = ResolversObject<{
   IoRestorecommerceMetaMeta: IoRestorecommerceMetaMeta;
   DateTime: Scalars['DateTime']['output'];
   IoRestorecommerceAttributeAttribute: IoRestorecommerceAttributeAttribute;
-  IoRestorecommerceAttributeAttributeObj: IoRestorecommerceAttributeAttributeObj;
   IoRestorecommerceOstorageOptions: IoRestorecommerceOstorageOptions;
   Int: Scalars['Int']['output'];
   GoogleProtobufAny: GoogleProtobufAny;
@@ -637,7 +625,6 @@ export type ResolversParentTypes = ResolversObject<{
   IIoRestorecommerceMetaMeta: IIoRestorecommerceMetaMeta;
   IDateTime: Scalars['IDateTime']['output'];
   IIoRestorecommerceAttributeAttribute: IIoRestorecommerceAttributeAttribute;
-  IIoRestorecommerceAttributeAttributeObj: IIoRestorecommerceAttributeAttributeObj;
   IIoRestorecommerceOstorageOptions: IIoRestorecommerceOstorageOptions;
   IGoogleProtobufAny: IGoogleProtobufAny;
   ProtoIoRestorecommerceResourcebaseDeleteResponse: ProtoIoRestorecommerceResourcebaseDeleteResponse;
@@ -710,7 +697,7 @@ export type IoRestorecommerceMetaMetaResolvers<ContextType = OstorageContext, Pa
   modified?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   modifiedBy?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   owners?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
-  acls?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttributeObj']>>, ParentType, ContextType>;
+  acls?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -722,11 +709,6 @@ export type IoRestorecommerceAttributeAttributeResolvers<ContextType = OstorageC
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   value?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   attributes?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type IoRestorecommerceAttributeAttributeObjResolvers<ContextType = OstorageContext, ParentType extends ResolversParentTypes['IoRestorecommerceAttributeAttributeObj'] = ResolversParentTypes['IoRestorecommerceAttributeAttributeObj']> = ResolversObject<{
-  attributes?: Resolver<Maybe<ResolversTypes['IoRestorecommerceAttributeAttribute']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -937,7 +919,6 @@ export type Resolvers<ContextType = OstorageContext> = ResolversObject<{
   IoRestorecommerceMetaMeta?: IoRestorecommerceMetaMetaResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
   IoRestorecommerceAttributeAttribute?: IoRestorecommerceAttributeAttributeResolvers<ContextType>;
-  IoRestorecommerceAttributeAttributeObj?: IoRestorecommerceAttributeAttributeObjResolvers<ContextType>;
   IoRestorecommerceOstorageOptions?: IoRestorecommerceOstorageOptionsResolvers<ContextType>;
   GoogleProtobufAny?: GoogleProtobufAnyResolvers<ContextType>;
   GoogleProtobufAnyValue?: GraphQLScalarType;

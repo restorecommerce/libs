@@ -1,3 +1,7 @@
+### 1.2.4 (July 21st, 2023)
+
+- up deps
+
 ### 1.2.3 (July 13th, 2023)
 
 - fix typo for encoding buffer field handler type

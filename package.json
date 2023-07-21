@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/resource-base-interface",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "Restorecommerce Resource Base Interface",
   "main": "lib/index.js",
   "author": "n-fuse GmbH",
@@ -17,10 +17,10 @@
     "interface"
   ],
   "dependencies": {
-    "@restorecommerce/chassis-srv": "^1.2.4",
+    "@restorecommerce/chassis-srv": "^1.2.5",
     "@restorecommerce/grpc-client": "^2.0.2",
-    "@restorecommerce/kafka-client": "^1.0.14",
-    "@restorecommerce/rc-grpc-clients": "^4.1.1",
+    "@restorecommerce/kafka-client": "^1.0.15",
+    "@restorecommerce/rc-grpc-clients": "^4.2.0",
     "@restorecommerce/service-config": "^1.0.6",
     "lodash": "^4.17.21",
     "redis": "^4.6.7"
@@ -29,12 +29,12 @@
     "@types/lodash": "^4.14.195",
     "@types/mocha": "^10.0.1",
     "@types/redis": "^4.0.11",
-    "@typescript-eslint/eslint-plugin": "^6.0.0",
-    "@typescript-eslint/eslint-plugin-tslint": "^6.0.0",
-    "@typescript-eslint/parser": "^6.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.1.0",
+    "@typescript-eslint/eslint-plugin-tslint": "^6.1.0",
+    "@typescript-eslint/parser": "^6.1.0",
     "arangojs": "^8.4.0",
     "cross-env": "^7.0.3",
-    "eslint": "^8.44.0",
+    "eslint": "^8.45.0",
     "eslint-plugin-prefer-arrow-functions": "^3.1.4",
     "mocha": "^10.2.0",
     "npm-run-all": "^4.1.5",

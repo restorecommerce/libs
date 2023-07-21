@@ -15,6 +15,7 @@ import "io/restorecommerce/price.proto";
 import "io/restorecommerce/file.proto";
 import "io/restorecommerce/reference.proto";
 import "io/restorecommerce/attribute.proto";
+import "io/restorecommerce/properties.proto";
 
 // Used by resolvers
 import "io/restorecommerce/user.proto";
@@ -213,4 +214,5 @@ message ManualItem {
   optional string stock_keeping_unit = 1;
   optional string name = 2;
   optional string descritpion = 3;
+  repeated io.restorecommerce.property.Property properties = 4;
 }

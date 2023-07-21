@@ -12,6 +12,7 @@ import "io/restorecommerce/status.proto";
 import "io/restorecommerce/attribute.proto";
 import "io/restorecommerce/geometry.proto";
 import "io/restorecommerce/price.proto";
+import "io/restorecommerce/property.proto";
 import "io/restorecommerce/options.proto";
 
 // Used by resolvers
@@ -176,7 +177,7 @@ message PhysicalVariant {
   optional string stock_keeping_unit = 8;
   optional string template_variant = 9;
   optional Package package = 10;
-  repeated io.restorecommerce.attribute.Attribute attributes = 11;
+  repeated io.restorecommerce.property.Property properties = 11;
 }
 
 message ServiceVariant {
@@ -189,7 +190,7 @@ message ServiceVariant {
   repeated io.restorecommerce.file.File files = 7;
   optional string stock_keeping_unit = 8;
   optional string template_variant = 9;
-  repeated io.restorecommerce.attribute.Attribute attributes = 10;
+  repeated io.restorecommerce.property.Property properties = 10;
 }
 
 message VirtualVariant {
@@ -202,7 +203,7 @@ message VirtualVariant {
   repeated io.restorecommerce.file.File files = 7;
   optional string stock_keeping_unit = 8;
   optional string template_variant = 9;
-  repeated io.restorecommerce.attribute.Attribute attributes = 10;
+  repeated io.restorecommerce.property.Property properties = 10;
 }
 
 message Bundle {

@@ -1,2 +1,4 @@
 dist
 coverage
+src/generated/*
+src/generated-server/*

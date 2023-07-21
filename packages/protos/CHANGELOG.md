@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@4.2.0...@restorecommerce/protos@5.0.0) (2023-07-21)
+
+
+### Bug Fixes
+
+* **invoice:** fix misstyped import, regenerate types ([88fe1fd](https://github.com/restorecommerce/libs/commit/88fe1fd55cec8f488d17bb8c60f9a34fa07455fe))
+* **product, invoice:** add and use Properties in Product and Invoice ([ecd5a01](https://github.com/restorecommerce/libs/commit/ecd5a013f742761c2aa5944318c6f9e2450dce81))
+
+
+### BREAKING CHANGES
+
+* **product, invoice:** Code and data regarding to Attibutes in Product and Invoice must be fixed
+
+
+
+
+
 # [4.2.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@4.1.1...@restorecommerce/protos@4.2.0) (2023-07-21)
 
 

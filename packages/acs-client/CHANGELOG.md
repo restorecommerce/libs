@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.12](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@1.1.11...@restorecommerce/acs-client@1.1.12) (2023-07-21)
+
+**Note:** Version bump only for package @restorecommerce/acs-client
+
+
+
+
+
 ## [1.1.11](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@1.1.10...@restorecommerce/acs-client@1.1.11) (2023-07-21)
 
 **Note:** Version bump only for package @restorecommerce/acs-client

@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.0.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/rc-grpc-clients@4.2.0...@restorecommerce/rc-grpc-clients@5.0.0) (2023-07-21)
+
+
+### Bug Fixes
+
+* **ignore generated:** ignore rc-grpc-cliens generated code ([f9f5f5a](https://github.com/restorecommerce/libs/commit/f9f5f5a6bcba58b187cabefcfbd38fdbf56afe35))
+* **invoice:** fix misstyped import, regenerate types ([88fe1fd](https://github.com/restorecommerce/libs/commit/88fe1fd55cec8f488d17bb8c60f9a34fa07455fe))
+* **product, invoice:** add and use Properties in Product and Invoice ([ecd5a01](https://github.com/restorecommerce/libs/commit/ecd5a013f742761c2aa5944318c6f9e2450dce81))
+* **rm generated code:** rm generated code ([4cffd2b](https://github.com/restorecommerce/libs/commit/4cffd2b64e3b16ffc103e9b1aad30b357a6410eb))
+
+
+### BREAKING CHANGES
+
+* **product, invoice:** Code and data regarding to Attibutes in Product and Invoice must be fixed
+
+
+
+
+
 # [4.2.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/rc-grpc-clients@4.1.1...@restorecommerce/rc-grpc-clients@4.2.0) (2023-07-21)
 
 

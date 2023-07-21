@@ -1,4 +1,4 @@
 dist
 coverage
-src/generated/*
-src/generated-server/*
+**/generated/**/*.ts
+**/generated-server/**/*.ts

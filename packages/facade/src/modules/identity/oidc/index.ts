@@ -44,7 +44,7 @@ export function createOIDC({
       post_logout_redirect_uris,
       client_id,
       client_secret,
-      id_token_signed_response_alg: 'HS256',
+      id_token_signed_response_alg: 'RS256',
       grant_types: ['refresh_token', 'authorization_code', 'password'],
       redirect_uris,
       scopes: ['openid', 'offline_access'],

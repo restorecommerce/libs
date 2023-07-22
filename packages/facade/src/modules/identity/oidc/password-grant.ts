@@ -96,15 +96,15 @@ export const registerPasswordGrantType = (config: OIDCPasswordGrantTypeConfig) =
 
       token.set('jti', jti);
       token.scope = 'openid profile';
-      return await token.issue({expiresAt: exp});
+      return await token.issue({use: 'idtoken', expiresAt: exp});
     };
 
     const idToken = await generateIdToken(ctx, clientId, expiresIn, claims);
     return {
       access_token: accessToken,
       id_token: idToken,
-      expires_in: new Date(epochTime() + at.expiration),
-      last_login: new Date(epochTime()),
+      expires_in: new Date((epochTime() + at.expiration) * 1000),
+      last_login: new Date(),
       token_type: at.tokenType,
       scope: 'openid',
       token_name: tokenName,

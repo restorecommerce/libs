@@ -309,9 +309,9 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
       })
     );
     this.koa.use(cors());
-    this.koa.use(bodyParser());
 
     const apolloGraphQLRouter = new Router();
+    apolloGraphQLRouter.use(bodyParser());
     apolloGraphQLRouter.all('/graphql',
       koaMiddleware(gqlServer, {
         context: async ({ ctx }) => ctx,

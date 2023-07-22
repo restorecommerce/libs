@@ -40,7 +40,7 @@ export const loginUser: OIDCLoginFn = async (ctx, identifier, password, remember
   }
 
   try {
-    const result = await ctx.identitySrvClient.user.Login(LoginRequest.fromPartial({
+    const result = await ctx.identitySrvClient.user.login(LoginRequest.fromPartial({
       identifier,
       password,
     }));

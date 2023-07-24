@@ -43,17 +43,14 @@ message ProductQuery {
   optional io.restorecommerce.address.ShippingAddress receiver = 2;
   repeated io.restorecommerce.fulfillment.Item items = 3;
   optional Preferences preferences = 4;
-  /*
-  * A forigner_key using the following pattern: `${collection}/${id}`
-  * most likly an order_id or fulfillment_id.
-  */
-  optional string reference_id = 5;
+  optional string reference = 5;
 }
 
 message ProductQueryList {
   repeated ProductQuery items = 1;
   optional uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
+  optional io.restorecommerce.reference.Reference reference = 4;
 }
 
 message FulfillmentProduct {

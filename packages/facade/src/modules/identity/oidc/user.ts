@@ -45,7 +45,7 @@ export const loginUser: OIDCLoginFn = async (ctx, identifier, password, remember
       password,
     }));
 
-    if (!result) {
+    if (!result || !result.payload || result.status.code !== 200) {
       return {
         error: {
           key: 'INVALID_IDENTIFIER_OR_PASSWORD',
@@ -54,7 +54,7 @@ export const loginUser: OIDCLoginFn = async (ctx, identifier, password, remember
       };
     }
     return {
-      user: pick(result, KEY_WHITELIST),
+      user: pick(result.payload, KEY_WHITELIST),
       identifier,
       remember
     };

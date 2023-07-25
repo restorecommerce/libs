@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.4.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.4.2...@restorecommerce/facade@1.4.3) (2023-07-25)
+
+
+### Bug Fixes
+
+* **facade:** correctly unpack user login response ([78da09c](https://github.com/restorecommerce/libs/commit/78da09c78506be40b11993f0304b505e85dec83e))
+
+
+
+
+
 ## [1.4.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.4.1...@restorecommerce/facade@1.4.2) (2023-07-22)
 
 

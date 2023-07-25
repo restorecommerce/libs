@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@5.0.0...@restorecommerce/protos@5.0.1) (2023-07-25)
+
+
+### Bug Fixes
+
+* **fulfillment_product:** productQueryList uses reference_id:string instead of reference:Reference ([278afa8](https://github.com/restorecommerce/libs/commit/278afa89b5359765420744e1debca2387e366e15))
+
+
+
+
+
 # [5.0.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@4.2.0...@restorecommerce/protos@5.0.0) (2023-07-21)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/grpc-client@2.0.2...@restorecommerce/grpc-client@2.0.3) (2023-07-25)
+
+
+### Bug Fixes
+
+* **grpc-client:** log error when logging middleware initialized with no logger ([3e5a3a6](https://github.com/restorecommerce/libs/commit/3e5a3a6b95eba09831654384772a522bfd8a9e8f))
+
+
+
+
+
 ## [2.0.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/grpc-client@2.0.1...@restorecommerce/grpc-client@2.0.2) (2023-07-11)
 
 **Note:** Version bump only for package @restorecommerce/grpc-client

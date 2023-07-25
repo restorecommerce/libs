@@ -29,31 +29,35 @@ export async function* tracingMiddleware<Request, Response>(
 }
 
 export const loggingMiddleware = (logger: ReturnType<typeof createLogger>, omittedFields: any): ClientMiddleware => {
+  if (!logger) {
+    console.error(new Error('WARNING: grpc-client loggingMiddleware initialized with an undefined logger!'));
+  }
+
   return async function* <Request, Response>(
     call: ClientMiddlewareCall<Request, Response>,
     options: CallOptions & WithRequestID,
   ) {
     const {path} = call.method;
 
-    logger.debug(`[rid: ${options.rid}] invoking ${path} endpoint with data`, { request: call.request });
+    logger?.debug(`[rid: ${options.rid}] invoking ${path} endpoint with data`, { request: call.request });
 
     try {
       return yield* call.next(call.request, options);
     } catch (err) {
       if (err instanceof ClientError) {
-        logger.error(`[rid: ${options.rid}] Error serving request: Client Error`, {
+        logger?.error(`[rid: ${options.rid}] Error serving request: Client Error`, {
           code: err.code,
           message: err.message,
           stack: err.stack,
           details: err.details
         });
       } else if (isAbortError(err)) {
-        logger.error(`[rid: ${options.rid}] Error serving request: cancel`, {
+        logger?.error(`[rid: ${options.rid}] Error serving request: cancel`, {
           message: (err as Error).message,
           stack: (err as Error).stack,
         });
       } else {
-        logger.error(`[rid: ${options.rid}] Error serving request`, {
+        logger?.error(`[rid: ${options.rid}] Error serving request`, {
           message: (err as Error).message,
           stack: (err as Error).stack,
         });

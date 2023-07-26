@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.4.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.4.3...@restorecommerce/facade@1.4.4) (2023-07-26)
+
+
+### Bug Fixes
+
+* **facade:** Add bodyparser json limit ([a173c39](https://github.com/restorecommerce/libs/commit/a173c39e6d59f5ac2c8a23ee49a98f04a77d5f51))
+
+
+
+
+
 ## [1.4.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.4.2...@restorecommerce/facade@1.4.3) (2023-07-25)
 
 

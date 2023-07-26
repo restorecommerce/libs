@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.14](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@1.1.13...@restorecommerce/acs-client@1.1.14) (2023-07-26)
+
+
+### Bug Fixes
+
+* **acs-client:** as due to update of new grpc subject token property is set on object with undefined value ([98ff985](https://github.com/restorecommerce/libs/commit/98ff9851b720b6ef32c1f26f4d5fa06d1d692457))
+
+
+
+
+
 ## [1.1.13](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@1.1.12...@restorecommerce/acs-client@1.1.13) (2023-07-25)
 
 **Note:** Version bump only for package @restorecommerce/acs-client

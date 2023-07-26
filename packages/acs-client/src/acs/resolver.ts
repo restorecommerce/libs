@@ -106,7 +106,7 @@ export const isAllowedRequest = async (subject: Subject,
 export const accessRequest = async (subject: DeepPartial<Subject>, resource: Resource[],
   action: AuthZAction, ctx: ACSClientContext, operation?: Operation,
   database?: 'arangoDB' | 'postgres', useCache = true): Promise<DecisionResponse | PolicySetRQResponse> => {
-  if (_.isEmpty(subject)) {
+  if (_.isEmpty(subject) || !subject.token ) {
     // check if unauthenticated user is configured in config.json
     if (cfg.get('authorization:unauthenticated_user')) {
       subject = {

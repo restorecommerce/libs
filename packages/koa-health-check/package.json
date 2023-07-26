@@ -7,8 +7,9 @@
   "author": "n-fuse Gmbh",
   "repository": {
     "type": "git",
-    "url": "https://github.com/restorecommerce/koa-cloud-health.git"
+    "url": "https://github.com/restorecommerce/libs.git"
   },
+  "homepage": "https://github.com/restorecommerce/libs/tree/master/packages/koa-health-check#koa-health-check"
   "license": "MIT",
   "keywords": [
     "koa",

@@ -583,6 +583,7 @@ export type IoRestorecommerceFulfillmentProductPackingSolution = {
 export type IIoRestorecommerceFulfillmentProductProductQueryList = {
   items?: InputMaybe<Array<IIoRestorecommerceFulfillmentProductProductQuery>>;
   totalCount?: InputMaybe<Scalars['Int']['input']>;
+  reference?: InputMaybe<IIoRestorecommerceReferenceReference>;
 };
 
 export type IIoRestorecommerceFulfillmentProductProductQuery = {
@@ -590,7 +591,7 @@ export type IIoRestorecommerceFulfillmentProductProductQuery = {
   receiver?: InputMaybe<IIoRestorecommerceAddressShippingAddress>;
   items?: InputMaybe<Array<IIoRestorecommerceFulfillmentItem>>;
   preferences?: InputMaybe<IIoRestorecommerceFulfillmentProductPreferences>;
-  referenceId?: InputMaybe<Scalars['String']['input']>;
+  reference?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type IIoRestorecommerceAddressShippingAddress = {
@@ -685,6 +686,11 @@ export type IIoRestorecommerceGeometryBoundingBox3D = {
 export type IIoRestorecommerceFulfillmentProductPreferences = {
   couriers?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
   options?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
+};
+
+export type IIoRestorecommerceReferenceReference = {
+  instanceType?: InputMaybe<Scalars['String']['input']>;
+  instanceId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type Mutation = {
@@ -784,11 +790,6 @@ export type IIoRestorecommerceFulfillmentPackaging = {
   exportType?: InputMaybe<Scalars['String']['input']>;
   exportDescription?: InputMaybe<Scalars['String']['input']>;
   invoiceNumber?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type IIoRestorecommerceReferenceReference = {
-  instanceType?: InputMaybe<Scalars['String']['input']>;
-  instanceId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type IIoRestorecommerceFulfillmentParcel = {
@@ -1696,13 +1697,13 @@ export type ResolversTypes = ResolversObject<{
   IIoRestorecommerceProductPackage: IIoRestorecommerceProductPackage;
   IIoRestorecommerceGeometryBoundingBox3D: IIoRestorecommerceGeometryBoundingBox3D;
   IIoRestorecommerceFulfillmentProductPreferences: IIoRestorecommerceFulfillmentProductPreferences;
+  IIoRestorecommerceReferenceReference: IIoRestorecommerceReferenceReference;
   Mutation: ResolverTypeWrapper<{}>;
   FulfillmentMutation: ResolverTypeWrapper<FulfillmentMutation>;
   FulfillmentFulfillmentMutation: ResolverTypeWrapper<FulfillmentFulfillmentMutation>;
   IIoRestorecommerceFulfillmentFulfillmentList: IIoRestorecommerceFulfillmentFulfillmentList;
   IIoRestorecommerceFulfillmentFulfillment: IIoRestorecommerceFulfillmentFulfillment;
   IIoRestorecommerceFulfillmentPackaging: IIoRestorecommerceFulfillmentPackaging;
-  IIoRestorecommerceReferenceReference: IIoRestorecommerceReferenceReference;
   IIoRestorecommerceFulfillmentParcel: IIoRestorecommerceFulfillmentParcel;
   IIoRestorecommercePricePrice: IIoRestorecommercePricePrice;
   IIoRestorecommerceAmountAmount: IIoRestorecommerceAmountAmount;
@@ -1868,13 +1869,13 @@ export type ResolversParentTypes = ResolversObject<{
   IIoRestorecommerceProductPackage: IIoRestorecommerceProductPackage;
   IIoRestorecommerceGeometryBoundingBox3D: IIoRestorecommerceGeometryBoundingBox3D;
   IIoRestorecommerceFulfillmentProductPreferences: IIoRestorecommerceFulfillmentProductPreferences;
+  IIoRestorecommerceReferenceReference: IIoRestorecommerceReferenceReference;
   Mutation: {};
   FulfillmentMutation: FulfillmentMutation;
   FulfillmentFulfillmentMutation: FulfillmentFulfillmentMutation;
   IIoRestorecommerceFulfillmentFulfillmentList: IIoRestorecommerceFulfillmentFulfillmentList;
   IIoRestorecommerceFulfillmentFulfillment: IIoRestorecommerceFulfillmentFulfillment;
   IIoRestorecommerceFulfillmentPackaging: IIoRestorecommerceFulfillmentPackaging;
-  IIoRestorecommerceReferenceReference: IIoRestorecommerceReferenceReference;
   IIoRestorecommerceFulfillmentParcel: IIoRestorecommerceFulfillmentParcel;
   IIoRestorecommercePricePrice: IIoRestorecommercePricePrice;
   IIoRestorecommerceAmountAmount: IIoRestorecommerceAmountAmount;

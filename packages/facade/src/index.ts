@@ -47,6 +47,7 @@ interface RestoreCommerceFacadeImplConfig {
   env?: string;
   kafka?: KafkaProviderConfig['kafka'];
   fileUploadOptions?: FileUploadOptionsConfig['fileUploadOptions'];
+  jsonLimit?: string;
 }
 
 interface FacadeApolloServiceMap {
@@ -70,12 +71,13 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
   readonly env: string;
   readonly modules: FacadeModule[] = [];
   readonly kafkaConfig?: KafkaProviderConfig['kafka'];
-  readonly fileUploadOptionsConfig?:  FileUploadOptionsConfig['fileUploadOptions'];
+  readonly fileUploadOptionsConfig?: FileUploadOptionsConfig['fileUploadOptions'];
+  readonly jsonLimit?: string;
 
   private startFns: Array<(() => Promise<void>)> = [];
   private stopFns: Array<(() => Promise<void>)> = [];
 
-  constructor({ koa, logger, port, hostname, env, kafka, fileUploadOptions }: RestoreCommerceFacadeImplConfig) {
+  constructor({ koa, logger, port, hostname, env, kafka, fileUploadOptions, jsonLimit }: RestoreCommerceFacadeImplConfig) {
     this.logger = logger;
     this.port = port ?? 5000;
     this.hostname = hostname ?? '127.0.0.1';
@@ -83,6 +85,7 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
     this.env = env ?? 'development';
     this.kafkaConfig = kafka;
     this.fileUploadOptionsConfig = fileUploadOptions;
+    this.jsonLimit = jsonLimit ? jsonLimit : '50mb';
 
     setUseSubscriptions(!!kafka);
   }
@@ -311,7 +314,7 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
     this.koa.use(cors());
 
     const apolloGraphQLRouter = new Router();
-    apolloGraphQLRouter.use(bodyParser());
+    apolloGraphQLRouter.use(bodyParser({ jsonLimit: this.jsonLimit }));
     apolloGraphQLRouter.all('/graphql',
       koaMiddleware(gqlServer, {
         context: async ({ ctx }) => ctx,
@@ -330,6 +333,7 @@ export interface FacadeConfig {
   keys?: string[];
   kafka?: KafkaProviderConfig['kafka'];
   fileUploadOptions?: FileUploadOptionsConfig['fileUploadOptions'];
+  jsonLimit?: string;
 }
 
 export const createFacade = (config: FacadeConfig): Facade => {
@@ -362,5 +366,6 @@ export const createFacade = (config: FacadeConfig): Facade => {
     env: config.env,
     kafka: config.kafka,
     fileUploadOptions: config.fileUploadOptions,
+    jsonLimit: config.jsonLimit
   }).useModule(facadeStatusModule);
 };

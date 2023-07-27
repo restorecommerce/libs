@@ -12,11 +12,13 @@ import "io/restorecommerce/status.proto";
 import "io/restorecommerce/attribute.proto";
 import "io/restorecommerce/geometry.proto";
 import "io/restorecommerce/price.proto";
-import "io/restorecommerce/property.proto";
 import "io/restorecommerce/options.proto";
 
 // Used by resolvers
 import "io/restorecommerce/manufacturer.proto";
+import "io/restorecommerce/property.proto";
+import "io/restorecommerce/shop.proto";
+import "io/restorecommerce/tax.proto";
 
 service ProductService {
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (ProductListResponse) {
@@ -29,9 +31,9 @@ service ProductService {
 }
 
 enum AssociationType {
-  Miscellaneous = 0;
-  Accessory = 1;
-  Recommendation = 2;
+  MISCELLANEOUS = 0;
+  ACCESSORY = 1;
+  RECOMMENDATION = 2;
 }
 
 message Association {
@@ -122,7 +124,15 @@ message IndividualProduct {
       }
     ];
   }
-  repeated string tax_ids = 8;
+  repeated string tax_ids = 8 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.tax.Tax",
+      target_service: "master_data",
+      target_sub_service: "tax",
+      target_method: "Read",
+      field_name: "tax",
+    }
+  ];
   optional string gtin = 10;
   oneof nature {
     PhysicalProduct physical = 11;
@@ -175,7 +185,7 @@ message PhysicalVariant {
   repeated io.restorecommerce.image.Image images = 6;
   repeated io.restorecommerce.file.File files = 7;
   optional string stock_keeping_unit = 8;
-  optional string template_variant = 9;
+  optional string parent_variant_id = 9;
   optional Package package = 10;
   repeated io.restorecommerce.property.Property properties = 11;
 }
@@ -189,7 +199,7 @@ message ServiceVariant {
   repeated io.restorecommerce.image.Image images = 6;
   repeated io.restorecommerce.file.File files = 7;
   optional string stock_keeping_unit = 8;
-  optional string template_variant = 9;
+  optional string parent_variant_id = 9;
   repeated io.restorecommerce.property.Property properties = 10;
 }
 
@@ -202,7 +212,7 @@ message VirtualVariant {
   repeated io.restorecommerce.image.Image images = 6;
   repeated io.restorecommerce.file.File files = 7;
   optional string stock_keeping_unit = 8;
-  optional string template_variant = 9;
+  optional string parent_variant_id = 9;
   repeated io.restorecommerce.property.Property properties = 10;
 }
 

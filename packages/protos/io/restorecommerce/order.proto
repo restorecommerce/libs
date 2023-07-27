@@ -18,6 +18,8 @@ import "io/restorecommerce/fulfillment_product.proto";
 import "io/restorecommerce/invoice.proto";
 
 // Used by resolvers
+import "io/restorecommerce/user.proto";
+import "io/restorecommerce/customer.proto";
 import "io/restorecommerce/shop.proto";
 
 
@@ -96,11 +98,11 @@ message Order {
   optional io.restorecommerce.meta.Meta meta = 2;
   optional string user_id = 3 [
     (io.restorecommerce.options.resolver) = {
-      target_type: ".io.restorecommerce.customer.Customer",
-      target_service: "master_data",
-      target_sub_service: "customer",
+      target_type: ".io.restorecommerce.user.User",
+      target_service: "identity",
+      target_sub_service: "user",
       target_method: "Read",
-      field_name: "customer",
+      field_name: "user",
     }
   ];
   optional string customer_id = 4 [

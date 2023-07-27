@@ -17,6 +17,11 @@ import "io/restorecommerce/amount.proto";
 import "io/restorecommerce/invoice.proto";
 import "google/protobuf/timestamp.proto";
 
+// Used by resolvers
+import "io/restorecommerce/user.proto";
+import "io/restorecommerce/customer.proto";
+import "io/restorecommerce/shop.proto";
+
 /**
 Microservice definition.
 */
@@ -133,14 +138,13 @@ message Label {
 }
 
 message Packaging {
-  optional io.restorecommerce.reference.Reference reference = 1;
-  repeated Parcel parcels = 2;
-  optional io.restorecommerce.address.ShippingAddress sender = 3;
-  optional io.restorecommerce.address.ShippingAddress recipient = 4;
-  optional string notify = 5;
-  optional string export_type = 6;
-  optional string export_description = 7;
-  optional string invoice_number = 8;
+  repeated Parcel parcels = 1;
+  optional io.restorecommerce.address.ShippingAddress sender = 2;
+  optional io.restorecommerce.address.ShippingAddress recipient = 3;
+  optional string notify = 4;
+  optional string export_type = 5;
+  optional string export_description = 6;
+  optional string invoice_number = 7;
 }
 
 message Event {
@@ -170,12 +174,40 @@ message Fulfillment {
   };
 
   optional string id = 1;
-  optional Packaging packaging = 2; //set by user
-  optional io.restorecommerce.meta.Meta meta = 3;
-  repeated Label labels = 4; //set by service
-  repeated Tracking trackings = 5; //set by service
-  repeated io.restorecommerce.amount.Amount total_amounts = 6; //set by service
-  optional State state = 8; //set by service
+  optional io.restorecommerce.meta.Meta meta = 2;
+  optional string user_id = 3 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.user.User",
+      target_service: "identity",
+      target_sub_service: "user",
+      target_method: "Read",
+      field_name: "user",
+    }
+  ];
+  optional string customer_id = 4 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.customer.Customer",
+      target_service: "master_data",
+      target_sub_service: "customer",
+      target_method: "Read",
+      field_name: "customer",
+    }
+  ];
+  optional string shop_id = 5 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.shop.Shop",
+      target_service: "master_data",
+      target_sub_service: "shop",
+      target_method: "Read",
+      field_name: "shop",
+    }
+  ];
+  optional io.restorecommerce.reference.Reference reference = 6;
+  optional Packaging packaging = 7;
+  repeated Label labels = 8; //set by service
+  repeated Tracking trackings = 9; //set by service
+  repeated io.restorecommerce.amount.Amount total_amounts = 10; //set by service
+  optional State state = 11; //set by service
 }
 
 message FulfillmentList {

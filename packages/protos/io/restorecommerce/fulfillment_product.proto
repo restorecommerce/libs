@@ -39,18 +39,35 @@ message Preferences {
 }
 
 message ProductQuery {
-  optional io.restorecommerce.address.ShippingAddress sender = 1;
-  optional io.restorecommerce.address.ShippingAddress receiver = 2;
-  repeated io.restorecommerce.fulfillment.Item items = 3;
-  optional Preferences preferences = 4;
-  optional string reference = 5;
+  optional string customer_id = 1 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.customer.Customer",
+      target_service: "master_data",
+      target_sub_service: "customer",
+      target_method: "Read",
+      field_name: "customer",
+    }
+  ];
+  optional string shop_id = 2 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.shop.Shop",
+      target_service: "master_data",
+      target_sub_service: "shop",
+      target_method: "Read",
+      field_name: "shop",
+    }
+  ];
+  optional io.restorecommerce.address.ShippingAddress sender = 3;
+  optional io.restorecommerce.address.ShippingAddress recipient = 4;
+  repeated io.restorecommerce.fulfillment.Item items = 5;
+  optional Preferences preferences = 6;
+  optional io.restorecommerce.reference.Reference reference = 7;
 }
 
 message ProductQueryList {
   repeated ProductQuery items = 1;
   optional uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
-  optional io.restorecommerce.reference.Reference reference = 4;
 }
 
 message FulfillmentProduct {

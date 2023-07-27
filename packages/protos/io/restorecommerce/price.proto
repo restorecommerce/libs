@@ -4,7 +4,6 @@ package io.restorecommerce.price;
 
 // Used by resolvers
 import "io/restorecommerce/options.proto";
-import "io/restorecommerce/tax.proto";
 import "io/restorecommerce/currency.proto";
 
 message Price {
@@ -18,15 +17,6 @@ message Price {
       target_sub_service: "currency",
       target_method: "Read",
       field_name: "currency",
-    }
-  ];
-  repeated string tax_ids = 5 [
-    (io.restorecommerce.options.resolver) = {
-      target_type: ".io.restorecommerce.tax.Tax",
-      target_service: "master_data",
-      target_sub_service: "tax",
-      target_method: "Read",
-      field_name: "taxes",
     }
   ];
 }

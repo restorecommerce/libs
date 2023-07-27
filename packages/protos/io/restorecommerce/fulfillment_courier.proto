@@ -9,6 +9,9 @@ import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
 import "io/restorecommerce/options.proto";
 
+// Used by resolvers
+import "io/restorecommerce/shop.proto";
+
 /**
 Microservice defination
 */
@@ -33,13 +36,22 @@ message FulfillmentCourier {
   };
 
   optional string id = 1;
+  optional io.restorecommerce.meta.Meta meta = 2;
+  optional string shop_ids = 3 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.shop.Shop",
+      target_service: "master_data",
+      target_sub_service: "shop",
+      target_method: "Read",
+      field_name: "shops",
+    }
+  ];
   optional string name = 4;
   optional string description = 5;
   optional string logo = 6;
   optional string website = 7;
   optional string stub_type = 8;
-  optional google.protobuf.Any configuration = 10;
-  optional io.restorecommerce.meta.Meta meta = 11;
+  optional google.protobuf.Any configuration = 9;
 }
 
 message FulfillmentCourierList {

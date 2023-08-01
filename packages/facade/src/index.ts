@@ -311,7 +311,11 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
         maxFiles
       })
     );
-    this.koa.use(cors());
+    this.koa.use(cors({
+      credentials: true,
+      origin: '*',
+      exposeHeaders: ["x-jwt"]
+    }));
 
     const apolloGraphQLRouter = new Router();
     apolloGraphQLRouter.use(bodyParser({ jsonLimit: this.jsonLimit }));

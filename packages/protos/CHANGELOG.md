@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.0.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@5.0.1...@restorecommerce/protos@6.0.0) (2023-08-01)
+
+
+### Bug Fixes
+
+* **fulfillment, order, price, product, shop:** fix missing resolvers, enum style guide, naming ([103172c](https://github.com/restorecommerce/libs/commit/103172c9b2e1544a88257cededc1b39a2731fd8c))
+
+
+### BREAKING CHANGES
+
+* **fulfillment, order, price, product, shop:** changes in product require adjustments in example data
+
+
+
+
+
 ## [5.0.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@5.0.0...@restorecommerce/protos@5.0.1) (2023-07-25)
 
 

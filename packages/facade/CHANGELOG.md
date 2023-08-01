@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.4.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.4.4...@restorecommerce/facade@1.4.5) (2023-08-01)
+
+
+### Bug Fixes
+
+* **facade:** allow all origins on cors ([9a7c7d3](https://github.com/restorecommerce/libs/commit/9a7c7d3244204dc9e08f614887a4c6185fe4098b))
+
+
+
+
+
 ## [1.4.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.4.3...@restorecommerce/facade@1.4.4) (2023-07-26)
 
 

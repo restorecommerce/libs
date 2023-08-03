@@ -131,6 +131,7 @@ export function createOIDC({
         enabled: false
       },
     },
+    clientBasedCORS: () => true
   });
 
   // Disabled due to playground being disabled

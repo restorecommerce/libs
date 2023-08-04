@@ -37,7 +37,7 @@ message FulfillmentCourier {
 
   optional string id = 1;
   optional io.restorecommerce.meta.Meta meta = 2;
-  optional string shop_ids = 3 [
+  repeated string shop_ids = 3 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.shop.Shop",
       target_service: "master_data",

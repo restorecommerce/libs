@@ -24,7 +24,7 @@ service FulfillmentProductService {
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (FulfillmentProductListResponse) {
     option (io.restorecommerce.options.is_query) = true;
   };
-  rpc Find (ProductQueryList) returns (PackingSolutionListResponse) {
+  rpc Find (PackingSolutionQueryList) returns (PackingSolutionListResponse) {
     option (io.restorecommerce.options.is_query) = true;
   };
   rpc Create (FulfillmentProductList) returns (FulfillmentProductListResponse);
@@ -64,7 +64,7 @@ message ProductQuery {
   optional io.restorecommerce.reference.Reference reference = 7;
 }
 
-message ProductQueryList {
+message PackingSolutionQueryList {
   repeated ProductQuery items = 1;
   optional uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;

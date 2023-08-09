@@ -46,9 +46,9 @@ message Association {
       field_name: "product",
     }
   ];
-  AssociationType type = 2;
+  optional AssociationType type = 2;
   repeated string tags = 3;
-  google.protobuf.Any data = 4;
+  optional google.protobuf.Any data = 4;
 }
 
 // Product resource entity
@@ -62,7 +62,7 @@ message Product {
   };
 
   optional string id = 1;
-  io.restorecommerce.meta.Meta meta = 2;
+  optional io.restorecommerce.meta.Meta meta = 2;
   oneof product_type {
     IndividualProduct product = 3;
     Bundle bundle = 4;
@@ -79,7 +79,7 @@ message Product {
   optional bool active = 6;
   repeated string tags = 7;
   repeated Association associations = 8;
-  google.protobuf.Any data = 9;
+  optional google.protobuf.Any data = 9;
 }
 
 message IndividualProduct {

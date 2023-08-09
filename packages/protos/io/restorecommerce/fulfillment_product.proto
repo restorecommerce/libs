@@ -38,7 +38,7 @@ message Preferences {
   repeated io.restorecommerce.attribute.Attribute options = 2;
 }
 
-message ProductQuery {
+message PackingSolutionQuery {
   optional string customer_id = 1 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.customer.Customer",
@@ -65,7 +65,7 @@ message ProductQuery {
 }
 
 message PackingSolutionQueryList {
-  repeated ProductQuery items = 1;
+  repeated PackingSolutionQuery items = 1;
   optional uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
 }

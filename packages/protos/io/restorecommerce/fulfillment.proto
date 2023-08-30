@@ -231,7 +231,6 @@ message FulfillmentId {
   optional string id = 1;
   repeated string shipment_numbers = 2; //optional
   optional google.protobuf.Any options = 3;
-  optional io.restorecommerce.auth.Subject subject = 4;
 }
 
 message FulfillmentIdList {

@@ -106,6 +106,7 @@ message Variant {
   optional io.restorecommerce.price.Price price = 4;
   optional io.restorecommerce.geometry.BoundingBox3D max_size = 6;
   optional double max_weight = 7;
+  repeated io.restorecommerce.attribute.Attribute attributes = 8;
 }
 
 message FulfillmentProductList {

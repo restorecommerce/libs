@@ -17,7 +17,7 @@ jobs:
       - name: Setup NodeJS
         uses: actions/setup-node@v1
         with:
-          node-version: '18.14'
+          node-version: '18.17'
 
       - name: Upgrade npm
         run: npm i -g npm

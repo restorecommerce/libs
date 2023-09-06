@@ -233,6 +233,7 @@ describe('testing acs-client', () => {
       let subject = {
         id: 'test_user_id',
         scope: 'targetScope',
+        token: 'unauthenticated_token',
         unauthenticated: true,
         meta: {
           owners: []
@@ -301,6 +302,7 @@ describe('testing acs-client', () => {
       let subject = {
         id: 'test_user_id',
         scope: 'targetScope',
+        token: 'invalid',
         role_associations: [
           {
             role: 'test-role'
@@ -334,6 +336,7 @@ describe('testing acs-client', () => {
       let subject = {
         id: 'test_user_id',
         scope: 'targetScope',
+        token: 'valid_token',
         role_associations: [
           {
             role: 'test-role',
@@ -392,6 +395,7 @@ describe('testing acs-client', () => {
       let subject = {
         id: 'test_user_id',
         scope: 'targetSubScope',
+        token: 'valid_token',
         role_associations: [
           {
             role: 'test-role',
@@ -456,6 +460,7 @@ describe('testing acs-client', () => {
       let subject = {
         id: 'test_user_id',
         scope: 'targetSubScope',
+        token: 'invalid_token',
         role_associations: [
           {
             role: 'test-role',

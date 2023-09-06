@@ -98,6 +98,7 @@ let subject = {
   id: 'test_user_id',
   name: 'test_user',
   scope: 'targetScope',
+  token: 'valid_token',
   role_associations: [
     {
       role: 'test-role',

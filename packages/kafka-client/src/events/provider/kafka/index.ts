@@ -530,7 +530,7 @@ export class Kafka {
   async start(): Promise<void> {
     const operation = retry.operation({
       forever: true,
-      maxTimeout: 5000,
+      maxTimeout: this.config?.timeout ?? 60000,
     });
     return new Promise<void>((resolveRetry) => {
       operation.attempt(async () => {
@@ -552,33 +552,23 @@ export class Kafka {
 
           this.producer = this.client.producer();
           this.admin = this.client.admin();
-          const timeout = this.config.timeout ?? 5000;
 
           // waiting for producer to be ready
           await new Promise((resolveProducer, rejectProducer) => {
-            const timer = setTimeout(() => {
-              const err = 'Connection timeout: Kafka host is unreachable';
-              this.logger.error(err, this.config.kafka.brokers);
-              rejectProducer(err);
-            }, timeout);
-
             this.producer.on('producer.connect', () => {
               this.producerConnected = true;
               this.logger.info('The Producer is ready.');
-              clearTimeout(timer);
               resolveProducer(true);
             });
 
             this.producer.on('producer.disconnect', (err) => {
               this.producerConnected = false;
               this.logger.warn('The Producer has disconnected:', err);
-              clearTimeout(timer);
               rejectProducer(err);
             });
 
             this.producer.on('producer.network.request_timeout', (err) => {
               this.logger.warn('The Producer timed out:', err);
-              clearTimeout(timer);
               rejectProducer(err);
             });
 
@@ -601,10 +591,10 @@ export class Kafka {
           });
         }
         catch (err) {
+          operation.retry(err);
           const attemptNo = (operation.attempts as () => number)();
           this.producer?.disconnect();
           this.logger.info(`Retry initialize the Producer, attempt no: ${attemptNo}`);
-          operation.retry(err);
         }
       });
     });

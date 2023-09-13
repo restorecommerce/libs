@@ -7,5 +7,6 @@ module.exports = {
     'ts-jest': {
       tsconfig: 'tsconfig.test.json'
     }
-  }
+  },
+  testRegex: '(/__tests__/.*|(\\.|/)(spec))\\.[jt]sx?$'
 };

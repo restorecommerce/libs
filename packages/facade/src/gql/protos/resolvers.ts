@@ -370,7 +370,7 @@ export const generateSubServiceResolvers = <T, M extends Record<string, any>, CT
       Object.entries(meta.options?.messages || {}).forEach(([messageName, option]) => {
         if (option.options && 'kafka_subscriber' in option.options) {
           const kafkaSubscriber: KafkaSubscription = option.options.kafka_subscriber;
-          const fieldName = namespace + capitalize(kafkaSubscriber.plural);
+          const fieldName = namespace + capitalize(kafkaSubscriber.plural as string);
           const baseMessageName = meta.fileDescriptor.package + '.' + messageName;
           const typing = getTyping('.' + baseMessageName);
 
@@ -394,13 +394,13 @@ export const generateSubServiceResolvers = <T, M extends Record<string, any>, CT
               subscribe: async (parent, args, context, info) => {
                 const action = args.action || 'CREATED';
 
-                let event = kafkaSubscriber.created;
+                let event = kafkaSubscriber.created as string;
                 switch (action) {
                   case 'UPDATED':
-                    event = kafkaSubscriber.updated;
+                    event = kafkaSubscriber.updated as string;
                     break;
                   case 'DELETED':
-                    event = kafkaSubscriber.deleted;
+                    event = kafkaSubscriber.deleted as string;
                     break;
                 }
 
@@ -415,7 +415,7 @@ export const generateSubServiceResolvers = <T, M extends Record<string, any>, CT
                 }, context.logger);
                 await events.start();
 
-                const commandTopic = await events.topic(kafkaSubscriber.topic);
+                const commandTopic = await events.topic(kafkaSubscriber.topic as string);
 
                 let deferred: {
                   resolve: (done: boolean) => void;
@@ -423,7 +423,7 @@ export const generateSubServiceResolvers = <T, M extends Record<string, any>, CT
                 } | null = null;
                 const pending: { id: string }[] = [];
 
-                commandTopic.on(event, (message: { id: string }) => {
+                commandTopic.on(event as string, (message: { id: string }) => {
                   pending.push({ id: message.id });
                   deferred?.resolve(false);
                 });
@@ -488,13 +488,13 @@ export const generateSubServiceResolvers = <T, M extends Record<string, any>, CT
                   const resolver = field['resolver'] as Resolver;
 
                   // TODO This creates an N+1 problem!
-                  result[resolver.fieldName] = async (parent: any, _: any, ctx: any) => {
+                  result[resolver.fieldName as string] = async (parent: any, _: any, ctx: any) => {
                     if (!parent || !(fieldJsonName in parent) || parent[fieldJsonName] === undefined) {
                       return undefined;
                     }
 
-                    const client = ctx[resolver.targetService].client;
-                    const service = client[resolver.targetSubService];
+                    const client = ctx[resolver.targetService as string].client;
+                    const service = client[resolver.targetSubService as string];
 
                     const idList: string[] = Array.isArray(parent[fieldJsonName]) ? parent[fieldJsonName] : [parent[fieldJsonName]];
 
@@ -518,7 +518,7 @@ export const generateSubServiceResolvers = <T, M extends Record<string, any>, CT
                       req.subject!.token = authToken.split(' ')[1];
                     }
 
-                    const methodFunc = service[camelCase(resolver.targetMethod)] || service[resolver.targetMethod];
+                    const methodFunc = service[camelCase(resolver.targetMethod as string)] || service[resolver.targetMethod as string];
                     const result = await methodFunc(req);
 
                     if (result && result.items && result.items.length) {

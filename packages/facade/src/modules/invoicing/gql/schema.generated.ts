@@ -694,8 +694,8 @@ export type IoRestorecommerceFulfillmentCourierFulfillmentCourier = {
   __typename?: 'IoRestorecommerceFulfillmentCourierFulfillmentCourier';
   id?: Maybe<Scalars['String']['output']>;
   meta?: Maybe<IoRestorecommerceMetaMeta>;
-  shopIds?: Maybe<Scalars['String']['output']>;
-  shops?: Maybe<IoRestorecommerceShopShop>;
+  shopIds?: Maybe<Array<Scalars['String']['output']>>;
+  shops?: Maybe<Array<IoRestorecommerceShopShop>>;
   name?: Maybe<Scalars['String']['output']>;
   description?: Maybe<Scalars['String']['output']>;
   logo?: Maybe<Scalars['String']['output']>;
@@ -712,6 +712,7 @@ export type IoRestorecommerceFulfillmentProductVariant = {
   price?: Maybe<IoRestorecommercePricePrice>;
   maxSize?: Maybe<IoRestorecommerceGeometryBoundingBox3D>;
   maxWeight?: Maybe<Scalars['Float']['output']>;
+  attributes?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
 };
 
 export type IoRestorecommerceInvoiceManualItem = {
@@ -2206,8 +2207,8 @@ export type IoRestorecommerceFulfillmentProductFulfillmentProductResolvers<Conte
 export type IoRestorecommerceFulfillmentCourierFulfillmentCourierResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceFulfillmentCourierFulfillmentCourier'] = ResolversParentTypes['IoRestorecommerceFulfillmentCourierFulfillmentCourier']> = ResolversObject<{
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
-  shopIds?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  shops?: Resolver<Maybe<ResolversTypes['IoRestorecommerceShopShop']>, ParentType, ContextType>;
+  shopIds?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  shops?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceShopShop']>>, ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   logo?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -2224,6 +2225,7 @@ export type IoRestorecommerceFulfillmentProductVariantResolvers<ContextType = In
   price?: Resolver<Maybe<ResolversTypes['IoRestorecommercePricePrice']>, ParentType, ContextType>;
   maxSize?: Resolver<Maybe<ResolversTypes['IoRestorecommerceGeometryBoundingBox3D']>, ParentType, ContextType>;
   maxWeight?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  attributes?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

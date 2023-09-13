@@ -44,9 +44,9 @@ service OrderService {
   rpc TriggerFulfillment (FulfillmentRequestList) returns (io.restorecommerce.status.StatusListResponse);
 
   // Requires Invoice Service
-  rpc CreateInvoice (InvoiceRequestList) returns (io.restorecommerce.invoice.InvoiceListResponse);
+  rpc CreateInvoice (OrderingInvoiceRequestList) returns (io.restorecommerce.invoice.InvoiceListResponse);
   // Requires Invoice Service
-  rpc TriggerInvoice (InvoiceRequestList) returns (io.restorecommerce.status.StatusListResponse);
+  rpc TriggerInvoice (OrderingInvoiceRequestList) returns (io.restorecommerce.status.StatusListResponse);
 }
 
 enum OrderState {
@@ -178,21 +178,21 @@ message FulfillmentRequestList {
   io.restorecommerce.auth.Subject subject = 3;
 }
 
-message InvoiceSection {
+message OrderingInvoiceSection {
   optional string order_id = 1;
   repeated string selected_items = 2; // select all on empty
   optional FulfillmentInvoiceMode fulfillment_mode = 3;
-  repeated io.restorecommerce.fulfillment.InvoiceSection selected_fulfillments = 4; // includes all on empty
+  repeated io.restorecommerce.fulfillment.FulfillmentInvoiceSection selected_fulfillments = 4; // includes all on empty
 }
 
-message InvoiceRequest {
+message OrderingInvoiceRequest {
   optional string invoice_number = 1; // if given
   repeated string payment_hints = 2;
-  repeated InvoiceSection sections = 3;
+  repeated OrderingInvoiceSection sections = 3;
 }
 
-message InvoiceRequestList {
-  repeated InvoiceRequest items = 1;
+message OrderingInvoiceRequestList {
+  repeated OrderingInvoiceRequest items = 1;
   optional uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
 }

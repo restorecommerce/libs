@@ -155,10 +155,10 @@ export const recursiveEnumCheck = (typeName: string, enumMap: Map<string, string
 };
 
 const resolveMeta = <T extends GraphQLOutputType | GraphQLInputType>(
-  key: string,
+  key: string | undefined,
   field: Pick<FieldDescriptorProto, 'type' | 'typeName' | 'label'>,
   rootObjType: string,
-  objName: string,
+  objName: string | undefined,
   input: boolean
 ): T | null => {
   let result: GraphQLNullableType;
@@ -344,7 +344,7 @@ export const registerTyping = (
           const resolved = resolveMeta(data.fieldName, {
             type: FieldDescriptorProto_Type.TYPE_MESSAGE,
             label: field.label,
-            typeName: data.targetType
+            typeName: data.targetType as string
           }, type, name, false);
           if (resolvedMeta !== null) {
             result[data.fieldName!] = {

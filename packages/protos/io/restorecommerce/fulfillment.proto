@@ -81,12 +81,12 @@ service FulfillmentService {
   /**
   Requires Invoice Service
   */
-  rpc CreateInvoice (InvoiceRequestList) returns (io.restorecommerce.invoice.InvoiceListResponse);
+  rpc CreateInvoice (FulfillmentInvoiceRequestList) returns (io.restorecommerce.invoice.InvoiceListResponse);
 
   /**
   Requires Invoice Service
   */
-  rpc TriggerInvoice (InvoiceRequestList) returns (io.restorecommerce.status.StatusListResponse);
+  rpc TriggerInvoice (FulfillmentInvoiceRequestList) returns (io.restorecommerce.status.StatusListResponse);
 }
 
 enum State {
@@ -243,19 +243,19 @@ message Deleted {
   string id = 1;
 }
 
-message InvoiceSection {
+message FulfillmentInvoiceSection {
   optional string fulfillment_id = 1;
   repeated string selected_parcels = 2; // selects all on empty
 }
 
-message InvoiceRequest {
+message FulfillmentInvoiceRequest {
   optional string invoice_number = 1; // if given
   repeated string payment_hints = 2;
-  repeated InvoiceSection sections = 3;
+  repeated FulfillmentInvoiceSection sections = 3;
 }
 
-message InvoiceRequestList {
-  repeated InvoiceRequest items = 1;
+message FulfillmentInvoiceRequestList {
+  repeated FulfillmentInvoiceRequest items = 1;
   optional uint32 total_count = 2;
   io.restorecommerce.auth.Subject subject = 3;
 }

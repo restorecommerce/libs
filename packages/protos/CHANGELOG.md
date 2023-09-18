@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.1.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.0.0...@restorecommerce/protos@6.1.0) (2023-09-18)
+
+
+### Bug Fixes
+
+* **fulfillment_courier:** shop_ids should be repeated ([b9bfa2e](https://github.com/restorecommerce/libs/commit/b9bfa2ec37385fa29bfc4e061eb8faaa3ae97635))
+* **fulfillment:** fix fulfillment protos ([8c2ed99](https://github.com/restorecommerce/libs/commit/8c2ed99168ff7bb14b61657cd1264a8a1d6760a4))
+* **product.proto:** add missing optional modifiers in product.proto ([9b85ee5](https://github.com/restorecommerce/libs/commit/9b85ee5eb7efd98a5c1a7f9d540702f11908f8c1))
+
+
+### Features
+
+* **protos:** made all fields optional ([09e6f94](https://github.com/restorecommerce/libs/commit/09e6f9440a44160b6f5b3fd548d6a289b1ab7004))
+* regenrate rc-grpc-clients with initializeFieldsAsUndefined as false and fixed facade typings ([685d9b5](https://github.com/restorecommerce/libs/commit/685d9b5be92833ba475f46c6b0d4234ac7125211))
+
+
+
+
+
 # [6.0.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@5.0.1...@restorecommerce/protos@6.0.0) (2023-08-01)
 
 

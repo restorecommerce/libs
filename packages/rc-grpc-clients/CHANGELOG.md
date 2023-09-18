@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.1.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/rc-grpc-clients@5.0.2...@restorecommerce/rc-grpc-clients@5.1.0) (2023-09-18)
+
+
+### Features
+
+* regenrate rc-grpc-clients with initializeFieldsAsUndefined as false and fixed facade typings ([685d9b5](https://github.com/restorecommerce/libs/commit/685d9b5be92833ba475f46c6b0d4234ac7125211))
+
+
+
+
+
 ## [5.0.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/rc-grpc-clients@5.0.1...@restorecommerce/rc-grpc-clients@5.0.2) (2023-08-01)
 
 **Note:** Version bump only for package @restorecommerce/rc-grpc-clients

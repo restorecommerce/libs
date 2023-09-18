@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.5.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.4.6...@restorecommerce/facade@1.5.0) (2023-09-18)
+
+
+### Bug Fixes
+
+* **facade:** cross service resolvers for renaming of resource -> master_data ([28c83b5](https://github.com/restorecommerce/libs/commit/28c83b52b3874e417621ec47da1b6cb261cfc2b1))
+
+
+### Features
+
+* regenrate rc-grpc-clients with initializeFieldsAsUndefined as false and fixed facade typings ([685d9b5](https://github.com/restorecommerce/libs/commit/685d9b5be92833ba475f46c6b0d4234ac7125211))
+
+
+
+
+
 ## [1.4.6](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.4.5...@restorecommerce/facade@1.4.6) (2023-08-03)
 
 

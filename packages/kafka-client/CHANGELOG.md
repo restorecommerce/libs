@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.0.18...@restorecommerce/kafka-client@1.1.0) (2023-09-18)
+
+
+### Bug Fixes
+
+* **kafka_client:** catch KafkaJSNumberOfRetriesExceeded from new KafkaJS() ([7939cb2](https://github.com/restorecommerce/kafka-client/commit/7939cb294c4563e5d62c2b23bdc63e43afd2064f))
+
+
+### Features
+
+* **kafka-client:** relativate timeouts and make them configuratable ([139fea7](https://github.com/restorecommerce/kafka-client/commit/139fea78d79b205b41f1a49c3745282908facd2c))
+
+
+
+
+
 ## [1.0.18](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.0.17...@restorecommerce/kafka-client@1.0.18) (2023-08-01)
 
 **Note:** Version bump only for package @restorecommerce/kafka-client

@@ -35,76 +35,76 @@ service CRUD {
 }
 
 message TestRequest {
-  string value = 1;
+  optional string value = 1;
 }
 
 message StreamTestResponse {
-  string result = 1;
+  optional string result = 1;
 }
 
 message TestResponse {
-  string result = 1;
-  io.restorecommerce.status.Status status = 4;
+  optional string result = 1;
+  optional io.restorecommerce.status.Status status = 4;
 }
 
 message TestEvent {
-  string value = 1;
-  int32 count = 2;
+  optional string value = 1;
+  optional int32 count = 2;
 };
 
 message TestBufferedData {
-  string id = 1;
-  io.restorecommerce.meta.Meta meta = 2;
-  string value = 3;
-  int32 count = 4;
-  google.protobuf.Any data = 5;
+  optional string id = 1;
+  optional io.restorecommerce.meta.Meta meta = 2;
+  optional string value = 3;
+  optional int32 count = 4;
+  optional google.protobuf.Any data = 5;
 }
 
 message TestBufferedDataList {
   repeated TestBufferedData items = 1;
-  uint32 total_count = 2;
+  optional uint32 total_count = 2;
 }
 
 message TestBufferedDataResponse {
-  TestBufferedData payload = 1;
-  io.restorecommerce.status.Status status = 2;
+  optional TestBufferedData payload = 1;
+  optional io.restorecommerce.status.Status status = 2;
 }
 
 message TestBufferedDataListResponse {
   repeated TestBufferedDataResponse items = 1;
-  uint32 total_count = 2;
-  io.restorecommerce.status.OperationStatus operation_status = 3;
+  optional uint32 total_count = 2;
+  optional io.restorecommerce.status.OperationStatus operation_status = 3;
 }
 
 message ExtendMe {
-  int32 bar = 126;
+  optional int32 bar = 126;
 }
 
 message ResourceList {
   repeated Resource items = 1;
-  uint32 total_count = 2;
-  io.restorecommerce.auth.Subject subject = 3;
+  optional uint32 total_count = 2;
+  optional io.restorecommerce.auth.Subject subject = 3;
 }
 
 message ResourceListResponse {
   repeated ResourceResponse items = 1;
-  uint32 total_count = 2;
-  io.restorecommerce.status.OperationStatus operation_status = 3;
+  optional uint32 total_count = 2;
+  optional io.restorecommerce.status.OperationStatus operation_status = 3;
 }
 
 message ResourceResponse {
-  Resource payload = 1;
-  io.restorecommerce.status.Status status = 2;
+  optional Resource payload = 1;
+  optional io.restorecommerce.status.Status status = 2;
 }
 
 /// Example resource
 message Resource {
-  string id = 1;
-  io.restorecommerce.meta.Meta meta = 2;
-  int32 value = 3;
-  string text = 4;
-  bool active = 5;
-  google.protobuf.Timestamp created = 6;
-  string status = 7;
+  optional string id = 1;
+  optional io.restorecommerce.meta.Meta meta = 2;
+  optional int32 value = 3;
+  optional string text = 4;
+  optional bool active = 5;
+  optional google.protobuf.Timestamp created = 6;
+  optional string status = 7;
   optional google.protobuf.Any data = 8;
 }

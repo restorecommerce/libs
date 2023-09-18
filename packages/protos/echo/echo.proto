@@ -14,11 +14,11 @@ service EchoService {
 }
 
 message EchoRequest {
-  string message = 1;
-  google.protobuf.Any test = 2;
+  optional string message = 1;
+  optional google.protobuf.Any test = 2;
 }
 
 message EchoResponse {
-  string message = 1;
-  google.protobuf.Any test = 2;
+  optional string message = 1;
+  optional google.protobuf.Any test = 2;
 }

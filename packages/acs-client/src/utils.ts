@@ -1,7 +1,7 @@
 import {
-  UserScope, PolicySetRQ, PolicySetRQResponse,
-  AttributeTarget, HierarchicalScope,
-  ResourceFilterMap, CustomQueryArgs, DecisionResponse, Resource, AuthZAction, ResolvedSubject, Obligation
+  PolicySetRQ, PolicySetRQResponse, AttributeTarget, HierarchicalScope,
+  ResourceFilterMap, CustomQueryArgs, DecisionResponse, Resource, AuthZAction,
+  ResolvedSubject, Obligation
 } from './acs/interfaces';
 import * as _ from 'lodash';
 import { QueryArguments, UserQueryArguments } from './acs/resolver';
@@ -11,7 +11,6 @@ import logger from './logger';
 import { get } from './acs/cache';
 import { formatResourceType } from './acs/authz';
 import {
-  RoleAssociation,
   Subject,
   DeepPartial
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/auth';
@@ -23,46 +22,6 @@ import {
   Response_Decision
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/access_control';
 import { Effect } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/rule';
-
-export const reduceRoleAssociations = async (roleAssociations: RoleAssociation[],
-  scopeID: string): Promise<UserScope> => {
-  const urns = cfg.get('authorization:urns');
-  const scope = {
-    role_associations: [],
-    scopeOrganization: scopeID
-  };
-
-  for (let association of roleAssociations) {
-    if (!_.isEmpty(association.attributes)) {
-      const foundAttributes: Attribute[] = [];
-      for (let i = 0; i < association.attributes.length; i += 2) {
-        const attribute = association.attributes[i];
-        if (attribute.id == urns.roleScopingEntity &&
-          attribute.value == urns.organization) {
-          // const next = association.attributes[i + 1];
-          const next = attribute?.attributes;
-          let inScope = false;
-          for (let roleScopeInstObj of next) {
-            if (roleScopeInstObj.id == urns.roleScopingInstance) {
-              inScope = roleScopeInstObj.value == scopeID;
-            }
-            if (inScope) {
-              foundAttributes.push(attribute);
-            }
-          }
-        }
-      }
-      if (!_.isEmpty(foundAttributes)) {
-        scope.role_associations.push({
-          role: association.role,
-          attributes: foundAttributes
-        });
-      }
-    }
-  }
-
-  return scope;
-};
 
 export const handleError = (err: string | Error | any): any => {
   let error;
@@ -77,7 +36,7 @@ export const handleError = (err: string | Error | any): any => {
 const reduceUserScope = (hrScope: HierarchicalScope, reducedUserScope: string[],
   hierarchicalRoleScoping: string) => {
   reducedUserScope.push(hrScope.id);
-  if (hrScope.children && hierarchicalRoleScoping === 'true') {
+  if (hrScope?.children?.length > 0 && hierarchicalRoleScoping === 'true') {
     for (let childNode of hrScope.children) {
       reduceUserScope(childNode, reducedUserScope, hierarchicalRoleScoping);
     }
@@ -86,12 +45,12 @@ const reduceUserScope = (hrScope: HierarchicalScope, reducedUserScope: string[],
 
 const checkTargetScopeExists = (hrScope: HierarchicalScope, targetScope: string,
   reducedUserScope: string[], hierarchicalRoleScopingCheck: string): boolean => {
-  if (hrScope.id === targetScope) {
+  if (hrScope?.id === targetScope) {
     // found the target scope object, iterate and put the orgs in reducedUserScope array
     logger.debug(`Target entity match found in the user's hierarchical scope`);
     reduceUserScope(hrScope, reducedUserScope, hierarchicalRoleScopingCheck);
     return true;
-  } else if (hrScope.children && hierarchicalRoleScopingCheck === 'true') {
+  } else if (hrScope?.children?.length > 0 && hierarchicalRoleScopingCheck === 'true') {
     for (let childNode of hrScope.children) {
       if (checkTargetScopeExists(childNode, targetScope, reducedUserScope, hierarchicalRoleScopingCheck)) {
         return true;
@@ -114,20 +73,20 @@ const checkSubjectMatch = (user: ResolvedSubject, ruleSubjectAttributes: Attribu
   let ruleRoleValue;
   let ruleRoleScopeEntityName;
   const urns = cfg.get('authorization:urns');
-  if (ruleSubjectAttributes.length === 0) {
+  if (ruleSubjectAttributes?.length === 0) {
     return true;
   }
   for (let attribute of ruleSubjectAttributes) {
-    if (attribute.id === 'urn:restorecommerce:acs:names:unauthenticated-user' && attribute.value === 'true') {
+    if (attribute?.id === 'urn:restorecommerce:acs:names:unauthenticated-user' && attribute?.value === 'true') {
       return true;
     }
-    if (attribute.id === urns.roleScopingEntity) {
+    if (attribute?.id === urns.roleScopingEntity) {
       roleScopeEntExists = true;
       ruleRoleScopeEntityName = attribute.value;
     } else if (attribute.id === urns.role) { // urns.role -> urn:restorecommerce:acs:names:role
       roleValueExists = true;
       ruleRoleValue = attribute.value;
-    } else if (attribute.id === urns.hierarchicalRoleScoping) {
+    } else if (attribute?.id === urns.hierarchicalRoleScoping) {
       hierarchicalRoleScopingCheck = attribute.value;
     }
   }
@@ -135,16 +94,15 @@ const checkSubjectMatch = (user: ResolvedSubject, ruleSubjectAttributes: Attribu
   let userAssocScope;
   let userAssocHRScope: HierarchicalScope;
   if (roleScopeEntExists && roleValueExists) {
-    const userRoleAssocs = user.role_associations;
-    if (!_.isEmpty(userRoleAssocs)) {
-      for (let role of userRoleAssocs) {
-        if (role.role === ruleRoleValue) {
+    if (user?.role_associations?.length > 0) {
+      for (let role of user?.role_associations) {
+        if (role?.role === ruleRoleValue) {
           // check the targetScope exists in the user HR scope object
           let roleScopeEntityNameMatched = false;
-          for (let roleAttrs of role.attributes) {
+          for (let roleAttrs of role?.attributes) {
             // urn:restorecommerce:acs:names:roleScopingInstance
-            if (roleAttrs.id === urns.roleScopingEntity &&
-              roleAttrs.value === ruleRoleScopeEntityName) {
+            if (roleAttrs?.id === urns.roleScopingEntity &&
+              roleAttrs?.value === ruleRoleScopeEntityName) {
               roleScopeEntityNameMatched = true;
             }
             if (roleScopeEntityNameMatched && roleAttrs?.attributes?.length > 0) {
@@ -157,8 +115,8 @@ const checkSubjectMatch = (user: ResolvedSubject, ruleSubjectAttributes: Attribu
             }
           }
           // check if this userAssocScope's HR object contains the targetScope
-          for (let hrScope of user.hierarchical_scopes) {
-            if (hrScope.id === userAssocScope) {
+          for (let hrScope of user?.hierarchical_scopes) {
+            if (hrScope?.id === userAssocScope) {
               userAssocHRScope = hrScope;
               break;
             }
@@ -172,9 +130,8 @@ const checkSubjectMatch = (user: ResolvedSubject, ruleSubjectAttributes: Attribu
       }
     }
   } else if (!roleScopeEntExists && roleValueExists) {
-    const userRoleAssocs = user.role_associations;
-    if (!_.isEmpty(userRoleAssocs)) {
-      for (let role of userRoleAssocs) {
+    if (user?.role_associations?.length > 0) {
+      for (let role of user?.role_associations) {
         if (role.role === ruleRoleValue) {
           return true;
         }
@@ -308,31 +265,33 @@ const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
     }
   }
 
-  for (let attribute of resources) {
-    if (attribute.id == urns.resourceID) {
-      if (effect == Effect.PERMIT) {
-        filter.push({
-          field: 'id',
-          operation: Filter_Operation.eq,
-          value: attribute.value
-        });
-      } else {
-        filter.push({
-          field: 'id',
-          operation: Filter_Operation.neq,
-          value: attribute.value
+  if (resources?.length > 0) {
+    for (let attribute of resources) {
+      if (attribute.id == urns.resourceID) {
+        if (effect == Effect.PERMIT) {
+          filter.push({
+            field: 'id',
+            operation: Filter_Operation.eq,
+            value: attribute.value
+          });
+        } else {
+          filter.push({
+            field: 'id',
+            operation: Filter_Operation.neq,
+            value: attribute.value
+          });
+        }
+        // add ID filter
+      } else if (attribute.id == urns.property) {
+        // add fields filter
+        if (!query['fields']) {
+          query['fields'] = [];
+        }
+        query['fields'].push({
+          name: attribute.value.split('#')[1],
+          include: effect == Effect.PERMIT
         });
       }
-      // add ID filter
-    } else if (attribute.id == urns.property) {
-      // add fields filter
-      if (!query['fields']) {
-        query['fields'] = [];
-      }
-      query['fields'].push({
-        name: attribute.value.split('#')[1],
-        include: effect == Effect.PERMIT
-      });
     }
   }
 
@@ -393,12 +352,12 @@ export const buildFilterPermissions = async (policySet: PolicySetRQ,
   const policyEffects = [];
   const policyFiltersArr = [];
 
-  if (policySet.policies) {
+  if (policySet?.policies?.length > 0) {
     for (let policy of policySet.policies) {
       if (policy.has_rules) {
         const algorithm = policy.combining_algorithm;
         // iterate through policy_set and check subject in policy and Rule:
-        if (policy.target && policy.target.subjects) {
+        if (policy?.target?.subjects) {
           let userSubjectMatched = checkSubjectMatch(subject, policy.target.subjects);
           if (!userSubjectMatched) {
             logger.debug(`Skipping policy as policy subject and user subject don't match`);
@@ -420,9 +379,9 @@ export const buildFilterPermissions = async (policySet: PolicySetRQ,
         }
 
         let scopingUpdated = false;
-        for (let rule of policy.rules) {
+        for (let rule of policy?.rules) {
           let reducedUserScope = [];
-          if (rule.target && rule.target.subjects) {
+          if (rule?.target?.subjects) {
             let userSubjectMatched = checkSubjectMatch(subject, rule.target.subjects, reducedUserScope);
             if (!userSubjectMatched) {
               logger.debug(`Skipping rule as user subject and rule subject don't match`);
@@ -468,7 +427,7 @@ export const buildFilterPermissions = async (policySet: PolicySetRQ,
     let filterList = [];
     // fix to override the AQL query filters with ACS policy filters if they exist for ArangoDB
     // TODO remove this once the AQL filterByOwnership is removed and ACS policy filters are returned
-    if (policy.scope && applicable == Effect.PERMIT && !query['custom_query']) {
+    if (policy?.scope && applicable == Effect.PERMIT && !query['custom_query']) {
       if (!query['custom_queries']) {
         query['custom_queries'] = [];
       }
@@ -483,7 +442,7 @@ export const buildFilterPermissions = async (policySet: PolicySetRQ,
         aqlQueryFilters = true;
       }
     }
-    if (policy.filters && !aqlQueryFilters) {
+    if (policy?.filters && !aqlQueryFilters) {
       filterList = policy.filters;
     }
     for (let filter of filterList) {
@@ -546,60 +505,61 @@ export const generateOperationStatus = (code?: number, message?: string) => {
  * @param requestAttributes
  */
 export const attributesMatch = (ruleAttributes: DeepPartial<Attribute>[], requestAttributes: DeepPartial<Attribute>[]): boolean => {
-  for (let attribute of ruleAttributes) {
-    const id = attribute.id;
-    const value = attribute.value;
-    const match = !!requestAttributes.find((requestAttribute) => {
-      // return requestAttribute.id == id && requestAttribute.value == value;
-      if (requestAttribute.id == id && requestAttribute.value == value) {
-        return true;
-      } else if (requestAttribute.id == id) {
-        // rule entity
-        let pattern = value.substring(value.lastIndexOf(':') + 1);
-        let nsEntityArray = pattern.split('.');
-        // firstElement could be either entity or namespace
-        let nsOrEntity = nsEntityArray[0];
-        let entityRegexValue = nsEntityArray[nsEntityArray.length - 1];
-        let reqNS, ruleNS;
-        if (nsOrEntity.toUpperCase() != entityRegexValue.toUpperCase()) {
-          // rule name space is present
-          ruleNS = nsOrEntity.toUpperCase();
-        }
+  if (ruleAttributes?.length > 0) {
+    for (let attribute of ruleAttributes) {
+      const id = attribute.id;
+      const value = attribute.value;
+      const match = !!requestAttributes.find((requestAttribute) => {
+        // return requestAttribute.id == id && requestAttribute.value == value;
+        if (requestAttribute.id == id && requestAttribute.value == value) {
+          return true;
+        } else if (requestAttribute.id == id) {
+          // rule entity
+          let pattern = value.substring(value.lastIndexOf(':') + 1);
+          let nsEntityArray = pattern.split('.');
+          // firstElement could be either entity or namespace
+          let nsOrEntity = nsEntityArray[0];
+          let entityRegexValue = nsEntityArray[nsEntityArray.length - 1];
+          let reqNS, ruleNS;
+          if (nsOrEntity.toUpperCase() != entityRegexValue.toUpperCase()) {
+            // rule name space is present
+            ruleNS = nsOrEntity.toUpperCase();
+          }
 
-        // request entity
-        let reqValue = requestAttribute.value;
-        const reqAttributeNS = reqValue.substring(0, reqValue.lastIndexOf(':'));
-        const ruleAttributeNS = value.substring(0, value.lastIndexOf(':'));
-        // verify namespace before entity name
-        if (reqAttributeNS != ruleAttributeNS) {
+          // request entity
+          let reqValue = requestAttribute.value;
+          const reqAttributeNS = reqValue.substring(0, reqValue.lastIndexOf(':'));
+          const ruleAttributeNS = value.substring(0, value.lastIndexOf(':'));
+          // verify namespace before entity name
+          if (reqAttributeNS != ruleAttributeNS) {
+            return false;
+          }
+          let reqPattern = reqValue.substring(reqValue.lastIndexOf(':') + 1);
+          let reqNSEntityArray = reqPattern.split('.');
+          // firstElement could be either entity or namespace
+          let reqNSOrEntity = reqNSEntityArray[0];
+          let requestEntityValue = reqNSEntityArray[reqNSEntityArray.length - 1];
+          if (reqNSOrEntity.toUpperCase() != requestEntityValue.toUpperCase()) {
+            // request name space is present
+            reqNS = reqNSOrEntity.toUpperCase();
+          }
+
+          if ((reqNS && ruleNS && (reqNS === ruleNS)) || (!reqNS && !ruleNS)) {
+            const reExp = new RegExp(entityRegexValue);
+            if (requestEntityValue.match(reExp)) {
+              return true;
+            }
+          }
+        } else {
           return false;
         }
-        let reqPattern = reqValue.substring(reqValue.lastIndexOf(':') + 1);
-        let reqNSEntityArray = reqPattern.split('.');
-        // firstElement could be either entity or namespace
-        let reqNSOrEntity = reqNSEntityArray[0];
-        let requestEntityValue = reqNSEntityArray[reqNSEntityArray.length - 1];
-        if (reqNSOrEntity.toUpperCase() != requestEntityValue.toUpperCase()) {
-          // request name space is present
-          reqNS = reqNSOrEntity.toUpperCase();
-        }
+      });
 
-        if ((reqNS && ruleNS && (reqNS === ruleNS)) || (!reqNS && !ruleNS)) {
-          const reExp = new RegExp(entityRegexValue);
-          if (requestEntityValue.match(reExp)) {
-            return true;
-          }
-        }
-      } else {
+      if (!match) {
         return false;
       }
-    });
-
-    if (!match) {
-      return false;
     }
   }
-
   return true;
 };
 
@@ -652,12 +612,12 @@ export const createResourceFilterMap = async (resource: Resource[],
       policySetResponse.policy_sets.forEach((policySet) => {
         const policies = policySet.policies;
         // check if the policy and rule set is applicable to the enitity
-        if (policies && policies.length > 0) {
+        if (policies?.length > 0) {
           for (let policy of policies) {
             const policyTargetResources = policy?.target?.resources;
             if (policyTargetResources) {
               const policyMatch = attributesMatch(policyTargetResources, resourceAttributes);
-              if (policyMatch && policy.rules && policy.rules.length > 0) {
+              if (policyMatch && policy?.rules?.length > 0) {
                 for (let rule of policy.rules) {
                   const ruleMatch = attributesMatch(rule?.target?.resources, resourceAttributes);
                   if (ruleMatch) {
@@ -728,24 +688,26 @@ export const createResourceFilterMap = async (resource: Resource[],
 export const mapResourceURNObligationProperties = (obligations: Attribute[]): Obligation[] => {
   let mappedResourceObligation: Obligation[] = [];
   const urns = cfg.get('authorization:urns');
-  for (let obligationObj of obligations) {
-    if (obligationObj.id === urns.entity) {
-      const resourceValueURN = obligationObj.value;
-      const resourceNameSpace = resourceValueURN.substring(resourceValueURN.lastIndexOf(':') + 1);
-      let resource = resourceNameSpace.substring(resourceNameSpace.lastIndexOf('.') + 1);
-      let resourceWithNameSpace = resourceNameSpace.substring(0, resourceNameSpace.lastIndexOf('.'));
-      if (resource != resourceWithNameSpace) {
-        // name space exists add the entity name to obligation as well with name space
-        resource = resourceWithNameSpace;
-      }
-      const obligationAttributes = obligationObj.attributes;
-      let property = new Set<string>();
-      for (let obligationAttribute of obligationAttributes) {
-        if (obligationAttribute.id === urns.maskedProperty) {
-          property.add(obligationAttribute.value.substring(obligationAttribute.value.lastIndexOf('#') + 1));
+  if (obligations?.length > 0) {
+    for (let obligationObj of obligations) {
+      if (obligationObj?.id === urns.entity && obligationObj?.value) {
+        const resourceValueURN = obligationObj.value;
+        const resourceNameSpace = resourceValueURN.substring(resourceValueURN.lastIndexOf(':') + 1);
+        let resource = resourceNameSpace.substring(resourceNameSpace.lastIndexOf('.') + 1);
+        let resourceWithNameSpace = resourceNameSpace.substring(0, resourceNameSpace.lastIndexOf('.'));
+        if (resource != resourceWithNameSpace) {
+          // name space exists add the entity name to obligation as well with name space
+          resource = resourceWithNameSpace;
         }
+        const obligationAttributes = obligationObj.attributes;
+        let property = new Set<string>();
+        for (let obligationAttribute of obligationAttributes) {
+          if (obligationAttribute.id === urns.maskedProperty) {
+            property.add(obligationAttribute.value.substring(obligationAttribute.value.lastIndexOf('#') + 1));
+          }
+        }
+        mappedResourceObligation.push({ resource, property: Array.from(property) });
       }
-      mappedResourceObligation.push({ resource, property: Array.from(property) });
     }
   }
   return mappedResourceObligation;

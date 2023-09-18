@@ -235,7 +235,7 @@ export const accessRequest = async (subject: DeepPartial<Subject>, resource: Res
     resourceList.push(resourceObj.resource);
   });
   let resourceString;
-  if (resourceList.length === 1) {
+  if (resourceList?.length === 1) {
     resourceString = resourceList[0];
   } else {
     resourceString = JSON.stringify(resourceList);

@@ -336,9 +336,9 @@ export class ACSAuthZ implements IAuthZ {
       }, useCache, cachePrefix + ':isAllowed');
 
       response = {
-        decision: isAllowed.decision,
-        obligations: mapResourceURNObligationProperties(isAllowed.obligations),
-        operation_status: isAllowed.operation_status
+        decision: isAllowed?.decision,
+        obligations: mapResourceURNObligationProperties(isAllowed?.obligations),
+        operation_status: isAllowed?.operation_status
       };
     } catch (err) {
       logger.error('Error invoking access-control-srv isAllowed operation',  { code: err.code, message: err.message, stack: err.stack });

@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.1.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.1.0...@restorecommerce/protos@6.1.1) (2023-09-18)
+
+**Note:** Version bump only for package @restorecommerce/protos
+
+
+
+
+
 # [6.1.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.0.0...@restorecommerce/protos@6.1.0) (2023-09-18)
 
 

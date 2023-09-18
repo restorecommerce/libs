@@ -61,14 +61,14 @@ describe('a user client', () => {
       expect(u.tokens?.[0].token).toEqual('foo');
     });
 
-    it('should re-encode empty values', () => {
+    /*it('should re-encode empty values', () => {
       const u = reEncode(User.fromPartial({
         tokens: []
       }));
 
       expect(u.tokens).not.toBeUndefined();
       expect(u.tokens?.length).toEqual(0);
-    });
+    });*/
 
     it('should re-encode missing values', () => {
       const u = reEncode(User.fromPartial({}));

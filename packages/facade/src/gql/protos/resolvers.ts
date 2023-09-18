@@ -493,6 +493,12 @@ export const generateSubServiceResolvers = <T, M extends Record<string, any>, CT
                       return undefined;
                     }
 
+                    // rename master_data and ostorage name space to actual service names in proto files
+                    if (resolver.targetService == 'master_data') {
+                      resolver.targetService = 'resource';
+                    } else if (resolver.targetService == 'ostorage') {
+                      resolver.targetSubService = 'ostorage';
+                    }
                     const client = ctx[resolver.targetService as string].client;
                     const service = client[resolver.targetSubService as string];
 

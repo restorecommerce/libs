@@ -19,22 +19,22 @@ message Manufacturer {
 message ManufacturerList {
   repeated Manufacturer items = 1;
   optional uint32 total_count = 2;
-  io.restorecommerce.auth.Subject subject = 3;
+  optional io.restorecommerce.auth.Subject subject = 3;
 }
 
 message ManufacturerListResponse {
   repeated ManufacturerResponse items = 1;
-  uint32 total_count = 2;
-  io.restorecommerce.status.OperationStatus operation_status = 3;
+  optional uint32 total_count = 2;
+  optional io.restorecommerce.status.OperationStatus operation_status = 3;
 }
 
 message ManufacturerResponse {
-  Manufacturer payload = 1;
-  io.restorecommerce.status.Status status = 2;
+  optional Manufacturer payload = 1;
+  optional io.restorecommerce.status.Status status = 2;
 }
 
 message Deleted {
-  string id = 1;
+  optional string id = 1;
 }
 
 service ManufacturerService {

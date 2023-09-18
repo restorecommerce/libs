@@ -11,7 +11,7 @@ message CommandRequest {
   //  command identifier (used to demultiplex operation in the command implementation)
   optional string name = 1;
   optional google.protobuf.Any payload = 2;  // variable payload
-  io.restorecommerce.auth.Subject subject = 3;
+  optional io.restorecommerce.auth.Subject subject = 3;
 }
 
 // used to push responses to Kafka
@@ -20,7 +20,7 @@ message CommandResponse {
   // (multiple services may reply to one system command)
   // (multiple service names can be bound to one microservice)
   repeated string services = 1;
-  google.protobuf.Any payload = 2;  // variable payload
+  optional google.protobuf.Any payload = 2;  // variable payload
 }
 
 /**

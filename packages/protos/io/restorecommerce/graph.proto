@@ -19,19 +19,19 @@ message TraversalRequest {
   }
   optional Options opts = 3;
   optional bool path = 4;
-  io.restorecommerce.auth.Subject subject = 5;
+  optional io.restorecommerce.auth.Subject subject = 5;
   repeated Filters filters = 6;
 }
 
 message Vertices {
-  string collection_name = 1;
+  optional string collection_name = 1;
   repeated string start_vertex_ids = 2;
 }
 
 message Collection {
-  string collection_name = 1;
-  uint32 limit = 2;
-  uint32 offset = 3;
+  optional string collection_name = 1;
+  optional uint32 limit = 2;
+  optional uint32 offset = 3;
   repeated io.restorecommerce.resourcebase.Sort sorts = 4;
 }
 
@@ -40,7 +40,7 @@ message Options {
  repeated string exclude_vertexs = 2; // to exclude vertices
  repeated string include_edges = 3; // to include vertices
  repeated string exclude_edges = 4; // to exclude vertices
- Direction direction = 5; // either inbound or outbound, defaults to outbound direction
+ optional Direction direction = 5; // either inbound or outbound, defaults to outbound direction
  enum Direction {
    OUTBOUND = 0;
    INBOUND = 1;
@@ -86,7 +86,7 @@ message Filter {
 }
 
 message TraversalResponse {
-  google.protobuf.Any data = 1; // vertices
-  google.protobuf.Any paths = 2; // traversed vertices paths
-  io.restorecommerce.status.OperationStatus operation_status = 3;
+  optional google.protobuf.Any data = 1; // vertices
+  optional google.protobuf.Any paths = 2; // traversed vertices paths
+  optional io.restorecommerce.status.OperationStatus operation_status = 3;
 }

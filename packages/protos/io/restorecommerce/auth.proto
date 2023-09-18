@@ -38,11 +38,11 @@ message RoleAssociation {
 }
 
 message HierarchicalScopesRequest {
-  string token = 1;
+  optional string token = 1;
 }
 
 message HierarchicalScopesResponse {
-  string subject_id = 1;
+  optional string subject_id = 1;
   repeated HierarchicalScope hierarchical_scopes = 2;
-  string token = 3;
+  optional string token = 3;
 }

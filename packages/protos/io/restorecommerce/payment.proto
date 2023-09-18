@@ -38,20 +38,20 @@ message SetupRequest {
 }
 
 message SetupPayload {
-  string token = 1;
-  string confirm_initiation_url = 2;
-  string initiated_on = 3;
+  optional string token = 1;
+  optional string confirm_initiation_url = 2;
+  optional string initiated_on = 3;
 }
 
 message SetupPayloadStatus {
-  SetupPayload payload = 1;
-  io.restorecommerce.status.Status status = 2;
+  optional SetupPayload payload = 1;
+  optional io.restorecommerce.status.Status status = 2;
 }
 
 // Response object for setup calls.
 message SetupResponse {
-  SetupPayloadStatus item = 1;
-  io.restorecommerce.status.OperationStatus operation_status = 2;
+  optional SetupPayloadStatus item = 1;
+  optional io.restorecommerce.status.OperationStatus operation_status = 2;
 }
 
 // Request object for authorization or purchase call for cardless payment.
@@ -62,7 +62,7 @@ message PaymentRequest {
   optional string payment_id = 4;
   optional string payer_id = 5;
   optional string token = 6;
-  io.restorecommerce.auth.Subject subject = 7;
+  optional io.restorecommerce.auth.Subject subject = 7;
 }
 
 // Request object for capture call for both standard and cardless payments.
@@ -71,24 +71,24 @@ message CaptureRequest {
   optional int32 payment_sum = 2;
   optional string currency = 3;
   optional string payment_id = 4;
-  io.restorecommerce.auth.Subject subject = 5;
+  optional io.restorecommerce.auth.Subject subject = 5;
 }
 
 message PaymentPayload {
-  string payment_id = 1;
-  string executed_on = 2;
+  optional string payment_id = 1;
+  optional string executed_on = 2;
 }
 
 message PaymentPayloadStatus {
-  PaymentPayload payload = 1;
-  io.restorecommerce.status.Status status = 2;
+  optional PaymentPayload payload = 1;
+  optional io.restorecommerce.status.Status status = 2;
 }
 
 // Unified response object for authorization, purchase and capture calls
 // for both standard and cardless payments.
 message PaymentResponse {
-  PaymentPayloadStatus item = 1;
-  io.restorecommerce.status.OperationStatus operation_status = 2;
+  optional PaymentPayloadStatus item = 1;
+  optional io.restorecommerce.status.OperationStatus operation_status = 2;
 }
 
 // Used for building ActiveMerchant::Billing::CreditCard instance.

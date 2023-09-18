@@ -22,5 +22,5 @@ message FileList {
 }
 
 message Deleted {
-  string id = 1;
+  optional string id = 1;
 }

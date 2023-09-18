@@ -28,7 +28,7 @@ service JobService {
  * Send when a job resource got deleted.
  */
 message Deleted {
-  string id = 1;
+  optional string id = 1;
 }
 
 /**
@@ -37,18 +37,18 @@ message Deleted {
 message JobList {
   repeated Job items = 1;
   optional uint32 total_count = 2;
-  io.restorecommerce.auth.Subject subject = 3;
+  optional io.restorecommerce.auth.Subject subject = 3;
 }
 
 message JobListResponse {
   repeated JobResponse items = 1;
-  uint32 total_count = 2;
-  io.restorecommerce.status.OperationStatus operation_status = 3;
+  optional uint32 total_count = 2;
+  optional io.restorecommerce.status.OperationStatus operation_status = 3;
 }
 
 message JobResponse {
-  Job payload = 1;
-  io.restorecommerce.status.Status status = 2;
+  optional Job payload = 1;
+  optional io.restorecommerce.status.Status status = 2;
 }
 
 /**
@@ -166,7 +166,7 @@ message JobReadRequest {
 
   // Fields selector
   repeated io.restorecommerce.resourcebase.FieldFilter fields = 3;
-  io.restorecommerce.auth.Subject subject = 5;
+  optional io.restorecommerce.auth.Subject subject = 5;
 }
 
 // filter

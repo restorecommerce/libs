@@ -27,12 +27,12 @@ message Sort {
     ASCENDING = 1;
     DESCENDING = 2;
   }
-  string field = 1;
+  optional string field = 1;
   optional SortOrder order = 2;
 }
 
 message Filter {
-  string field = 1;
+  optional string field = 1;
   enum Operation {
     eq = 0;
     lt = 1;
@@ -44,8 +44,8 @@ message Filter {
     in = 7;
     neq = 8;
   }
-  Operation operation = 2;
-  string value = 3;
+  optional Operation operation = 2;
+  optional string value = 3;
   enum ValueType {
     STRING = 0; // default value type if not specified
     NUMBER = 1;
@@ -94,7 +94,7 @@ message ReadRequest {
 
   repeated string custom_queries = 8;
   optional google.protobuf.Any custom_arguments = 9;
-  io.restorecommerce.auth.Subject subject = 10;
+  optional io.restorecommerce.auth.Subject subject = 10;
   optional Search search = 11;
 }
 
@@ -103,34 +103,34 @@ message DeleteRequest {
   optional bool collection = 1;
   /// Delete specified documents
   repeated string ids = 2;
-  io.restorecommerce.auth.Subject subject = 3;
+  optional io.restorecommerce.auth.Subject subject = 3;
   repeated string views = 4; // list of views to be dropped
   repeated string analyzers = 5; // list of analyzers to be deleted
 }
 
 message DeleteResponse {
   repeated io.restorecommerce.status.Status status = 1;
-  io.restorecommerce.status.OperationStatus operation_status = 2;
+  optional io.restorecommerce.status.OperationStatus operation_status = 2;
 }
 
 /// List of resources
 message ResourceList {
   repeated Resource items = 1;
   optional uint32 total_count = 2;
-  io.restorecommerce.auth.Subject subject = 3;
+  optional io.restorecommerce.auth.Subject subject = 3;
 }
 
 // ResourceList response
 message ResourceListResponse {
   repeated ResourceResponse items = 1;
-  uint32 total_count = 2;
-  io.restorecommerce.status.OperationStatus operation_status = 3;
+  optional uint32 total_count = 2;
+  optional io.restorecommerce.status.OperationStatus operation_status = 3;
 }
 
 // resource read response
 message ResourceResponse {
-  Resource payload = 1;
-  io.restorecommerce.status.Status status = 2;
+  optional Resource payload = 1;
+  optional io.restorecommerce.status.Status status = 2;
 }
 
 // Example resource

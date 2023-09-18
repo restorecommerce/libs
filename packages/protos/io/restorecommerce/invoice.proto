@@ -64,33 +64,33 @@ enum PaymentState {
 
 message RequestInvoiceNumber {
   optional string shop_id = 1;
-  google.protobuf.Any context = 2;
-  io.restorecommerce.auth.Subject subject = 3;
+  optional google.protobuf.Any context = 2;
+  optional io.restorecommerce.auth.Subject subject = 3;
 }
 
 message InvoiceNumberResponse {
- string invoice_number = 1;
+ optional string invoice_number = 1;
 }
 
 message Deleted {
-  string id = 1;
+  optional string id = 1;
 }
 
 message InvoiceList {
   repeated Invoice items = 1;
   optional uint32 total_count = 2;
-  io.restorecommerce.auth.Subject subject = 3;
+  optional io.restorecommerce.auth.Subject subject = 3;
 }
 
 message InvoiceListResponse {
   repeated InvoiceResponse items = 1;
-  uint32 total_count = 2;
-  io.restorecommerce.status.OperationStatus operation_status = 3;
+  optional uint32 total_count = 2;
+  optional io.restorecommerce.status.OperationStatus operation_status = 3;
 }
 
 message InvoiceResponse {
-  Invoice payload = 1;
-  io.restorecommerce.status.Status status = 2;
+  optional Invoice payload = 1;
+  optional io.restorecommerce.status.Status status = 2;
 }
 
 message InvoiceId {
@@ -103,7 +103,7 @@ message InvoiceId {
 message InvoiceIdList {
   repeated InvoiceId items = 1;
   optional uint32 total_count = 2;
-  io.restorecommerce.auth.Subject subject = 3;
+  optional io.restorecommerce.auth.Subject subject = 3;
 }
 
 /*

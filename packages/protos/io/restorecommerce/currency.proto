@@ -24,24 +24,24 @@ service CurrencyService {
 }
 
 message Deleted {
-  string id = 1;
+  optional string id = 1;
 }
 
 message CurrencyList {
   repeated Currency items = 1;
   optional uint32 total_count = 2;
-  io.restorecommerce.auth.Subject subject = 3;
+  optional io.restorecommerce.auth.Subject subject = 3;
 }
 
 message CurrencyListResponse {
   repeated CurrencyResponse items = 1;
-  uint32 total_count = 2;
-  io.restorecommerce.status.OperationStatus operation_status = 3;
+  optional uint32 total_count = 2;
+  optional io.restorecommerce.status.OperationStatus operation_status = 3;
 }
 
 message CurrencyResponse {
-  Currency payload = 1;
-  io.restorecommerce.status.Status status = 2;
+  optional Currency payload = 1;
+  optional io.restorecommerce.status.Status status = 2;
 }
 
 message Currency {
@@ -74,17 +74,17 @@ message ExchangeRateQuery {
 message ExchangeRateQueryList {
   repeated ExchangeRate items = 1;
   optional uint32 total_count = 2;
-  io.restorecommerce.auth.Subject subject = 3;
+  optional io.restorecommerce.auth.Subject subject = 3;
 }
 
 message ExchangeRateResponse {
   optional string from_currency_id = 1;
-  ExchangeRate payload = 3;
+  optional ExchangeRate payload = 3;
   optional google.protobuf.Timestamp timestamp = 2;
-  io.restorecommerce.status.Status status = 4;
+  optional io.restorecommerce.status.Status status = 4;
 }
 
 message ExchangeRateListResponse {
   repeated ExchangeRateResponse items = 1;
-  io.restorecommerce.status.OperationStatus operation_status = 3;
+  optional io.restorecommerce.status.OperationStatus operation_status = 3;
 }

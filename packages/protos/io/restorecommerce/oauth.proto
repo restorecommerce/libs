@@ -23,23 +23,23 @@ message GenerateLinksResponse {
 }
 
 message ExchangeCodeRequest {
-  string service = 1;
-  string code = 2;
-  string state = 3;
+  optional string service = 1;
+  optional string code = 2;
+  optional string state = 3;
 }
 
 message ExchangeCodeResponse {
-  io.restorecommerce.user.UserResponse user = 1;
-  string email = 2;
-  io.restorecommerce.auth.Tokens token = 3;
+  optional io.restorecommerce.user.UserResponse user = 1;
+  optional string email = 2;
+  optional io.restorecommerce.auth.Tokens token = 3;
 }
 
 message GetTokenRequest {
-  io.restorecommerce.auth.Subject subject = 1;
-  string service = 2;
+  optional io.restorecommerce.auth.Subject subject = 1;
+  optional string service = 2;
 }
 
 message GetTokenResponse {
-  io.restorecommerce.status.Status status = 1;
+  optional io.restorecommerce.status.Status status = 1;
   optional string token = 2;
 }

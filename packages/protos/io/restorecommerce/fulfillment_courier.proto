@@ -57,21 +57,21 @@ message FulfillmentCourier {
 message FulfillmentCourierList {
   repeated FulfillmentCourier items = 1;
   optional uint32 total_count = 2;
-  io.restorecommerce.auth.Subject subject = 3;
+  optional io.restorecommerce.auth.Subject subject = 3;
 }
 
 message FulfillmentCourierResponse {
-  FulfillmentCourier payload = 1;
-  io.restorecommerce.status.Status status = 2;
+  optional FulfillmentCourier payload = 1;
+  optional io.restorecommerce.status.Status status = 2;
 }
 
 message FulfillmentCourierListResponse {
   repeated FulfillmentCourierResponse items = 1;
-  uint32 total_count = 2;
-  io.restorecommerce.status.OperationStatus operation_status = 3;
+  optional uint32 total_count = 2;
+  optional io.restorecommerce.status.OperationStatus operation_status = 3;
 }
 
 message Deleted {
-  string id = 1;
+  optional string id = 1;
 }
 

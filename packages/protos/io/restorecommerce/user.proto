@@ -57,19 +57,19 @@ service UserService {
 * Either name or email can be provided.
 */
 message LoginRequest {
-  string identifier = 1; // User name or email
+  optional string identifier = 1; // User name or email
   optional string password = 2; // Raw password
   optional string token = 3;
 }
 
 message OrgIDRequest {
   repeated string org_ids = 1;
-  io.restorecommerce.auth.Subject subject = 2;
+  optional io.restorecommerce.auth.Subject subject = 2;
 }
 
 message DeleteUsersByOrgResponse {
   repeated string user_ids = 1;
-  io.restorecommerce.status.OperationStatus operation_status = 2;
+  optional io.restorecommerce.status.OperationStatus operation_status = 2;
 }
 
 message FindRequest {
@@ -80,7 +80,7 @@ message FindRequest {
 }
 
 message FindByTokenRequest {
-  string token = 1;
+  optional string token = 1;
 }
 
 enum UserType {
@@ -94,11 +94,11 @@ message RegisterRequest {
   optional string id = 1;
   optional bool guest = 2;
   optional io.restorecommerce.meta.Meta meta = 3;
-  string name = 4;
+  optional string name = 4;
   optional string first_name = 5;
   optional string last_name = 6;
-  string email = 7;
-  string password = 8;
+  optional string email = 7;
+  optional string password = 8;
   optional string timezone_id = 9;
   optional string locale_id = 10;
 
@@ -108,62 +108,62 @@ message RegisterRequest {
 }
 
 message ActivateRequest {
-  string identifier = 1; /// user name or email
-  string activation_code = 2;
-  io.restorecommerce.auth.Subject subject = 3;
+  optional string identifier = 1; /// user name or email
+  optional string activation_code = 2;
+  optional io.restorecommerce.auth.Subject subject = 3;
 }
 
 message ConfirmUserInvitationRequest {
-  string identifier = 1; // user name or email
-  string password = 2;
-  string activation_code = 3;
-  io.restorecommerce.auth.Subject subject = 4;
+  optional string identifier = 1; // user name or email
+  optional string password = 2;
+  optional string activation_code = 3;
+  optional io.restorecommerce.auth.Subject subject = 4;
 }
 
 message SendInvitationEmailRequest {
-  string identifier = 1; // user name or email
-  string invited_by_user_identifier = 2;
-  io.restorecommerce.auth.Subject subject = 3;
+  optional string identifier = 1; // user name or email
+  optional string invited_by_user_identifier = 2;
+  optional io.restorecommerce.auth.Subject subject = 3;
 }
 
 message ChangePasswordRequest {
-  string password = 2;
-  string new_password = 3;
-  io.restorecommerce.auth.Subject subject = 4;
+  optional string password = 2;
+  optional string new_password = 3;
+  optional io.restorecommerce.auth.Subject subject = 4;
 }
 
 message RequestPasswordChangeRequest {
-  string identifier = 1; // user name or email
-  io.restorecommerce.auth.Subject subject = 2;
+  optional string identifier = 1; // user name or email
+  optional io.restorecommerce.auth.Subject subject = 2;
 }
 
 message ConfirmPasswordChangeRequest {
-  string identifier = 1; // user name or email
-  string activation_code = 2;
-  string password = 3;
-  io.restorecommerce.auth.Subject subject = 4;
+  optional string identifier = 1; // user name or email
+  optional string activation_code = 2;
+  optional string password = 3;
+  optional io.restorecommerce.auth.Subject subject = 4;
 }
 
 message ChangeEmailRequest {
-  string identifier = 1; // user name or email
-  string new_email = 2;
-  io.restorecommerce.auth.Subject subject = 3;
+  optional string identifier = 1; // user name or email
+  optional string new_email = 2;
+  optional io.restorecommerce.auth.Subject subject = 3;
 }
 
 message ConfirmEmailChangeRequest {
-  string identifier = 1; // user name or email
-  string activation_code = 2;
-  io.restorecommerce.auth.Subject subject = 3;
+  optional string identifier = 1; // user name or email
+  optional string activation_code = 2;
+  optional io.restorecommerce.auth.Subject subject = 3;
 }
 
 message UnregisterRequest {
-  string identifier = 1; /// User ID
-  io.restorecommerce.auth.Subject subject = 2;
+  optional string identifier = 1; /// User ID
+  optional io.restorecommerce.auth.Subject subject = 2;
 }
 
 message SendActivationEmailRequest {
-  string identifier = 1; /// User name or email
-  io.restorecommerce.auth.Subject subject = 2;
+  optional string identifier = 1; /// User name or email
+  optional io.restorecommerce.auth.Subject subject = 2;
 }
 
 /**
@@ -175,7 +175,7 @@ message SendActivationEmailRequest {
  * unregistered,
  */
 message Deleted {
-  string id = 1;
+  optional string id = 1;
 }
 
 /**
@@ -185,26 +185,26 @@ message Deleted {
  * passwordChanged,
  */
 message PasswordChanged {
-  string id = 1; /// User ID
-  string password_hash = 2;
+  optional string id = 1; /// User ID
+  optional string password_hash = 2;
 }
 
 message PasswordChangeRequested {
-  string id = 1; // User ID
+  optional string id = 1; // User ID
 }
 
 /**
  * User email id changed event.
  */
 message EmailChangeRequested {
-  string id = 1;
-  string activation_code = 2;
-  string new_email = 3;
+  optional string id = 1;
+  optional string activation_code = 2;
+  optional string new_email = 3;
 }
 
 message EmailChangeConfirmed {
-  string id = 1; /// User ID
-  string email = 2;
+  optional string id = 1; /// User ID
+  optional string email = 2;
 }
 
 /**
@@ -213,42 +213,42 @@ message EmailChangeConfirmed {
 message UserList {
   repeated User items = 1;
   optional uint32 total_count = 2;
-  io.restorecommerce.auth.Subject subject = 3;
+  optional io.restorecommerce.auth.Subject subject = 3;
 }
 
 message UserListWithRoleResponse {
   repeated UserRoleResponse items = 1;
-  uint32 total_count = 2;
-  io.restorecommerce.status.OperationStatus operation_status = 3;
+  optional uint32 total_count = 2;
+  optional io.restorecommerce.status.OperationStatus operation_status = 3;
 }
 
 message UserRoleResponse {
-  UserRole payload = 1;
-  io.restorecommerce.status.Status status = 2;
+  optional UserRole payload = 1;
+  optional io.restorecommerce.status.Status status = 2;
 }
 
 message UserListResponse {
   repeated UserResponse items = 1;
-  uint32 total_count = 2;
-  io.restorecommerce.status.OperationStatus operation_status = 3;
+  optional uint32 total_count = 2;
+  optional io.restorecommerce.status.OperationStatus operation_status = 3;
 }
 
 message UserResponse {
-  User payload = 1;
-  io.restorecommerce.status.Status status = 2;
+  optional User payload = 1;
+  optional io.restorecommerce.status.Status status = 2;
 }
 
 /**
  * User activation request.
  */
 message Activate {
-  string id = 1; /// User ID
+  optional string id = 1; /// User ID
 }
 
 message FindByRoleRequest {
-  string role = 1;
+  optional string role = 1;
   repeated io.restorecommerce.attribute.Attribute attributes = 2;
-  io.restorecommerce.auth.Subject subject = 3;
+  optional io.restorecommerce.auth.Subject subject = 3;
 }
 
 /**
@@ -311,19 +311,19 @@ message User {
  * A User resource with role
  */
 message UserRole {
-  string id = 1; /// User ID, unique, key
-  io.restorecommerce.meta.Meta meta = 2;
-  string name = 3; // The name of the user, can be used for login
-  string first_name = 4;
-  string last_name = 5;
-  string email = 6; /// Email address, can be used for login
-  string new_email = 7; /// New email address; set by `requestEmailChange` and overrides actual email upon `confirmEmailChange`
-  bool active = 8; /// If the user was activated via the activation process
-  string activation_code = 9; /// Activation code used in the activation process
-  string password = 10; /// Raw password, not stored
-  string password_hash = 11; /// Encrypted password, stored
+  optional string id = 1; /// User ID, unique, key
+  optional io.restorecommerce.meta.Meta meta = 2;
+  optional string name = 3; // The name of the user, can be used for login
+  optional string first_name = 4;
+  optional string last_name = 5;
+  optional string email = 6; /// Email address, can be used for login
+  optional string new_email = 7; /// New email address; set by `requestEmailChange` and overrides actual email upon `confirmEmailChange`
+  optional bool active = 8; /// If the user was activated via the activation process
+  optional string activation_code = 9; /// Activation code used in the activation process
+  optional string password = 10; /// Raw password, not stored
+  optional string password_hash = 11; /// Encrypted password, stored
   repeated io.restorecommerce.auth.RoleAssociation role_associations = 12; // A user can have multiple roles and different attributes coupled with each role
-  string timezone_id = 13 [
+  optional string timezone_id = 13 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.timezone.Timezone",
       target_service: "master_data",
@@ -332,7 +332,7 @@ message UserRole {
       field_name: "timezone",
     }
   ];	// timezone_id specifications
-  string locale_id = 14 [
+  optional string locale_id = 14 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.locale.Locale",
       target_service: "master_data",
@@ -341,17 +341,17 @@ message UserRole {
       field_name: "locale",
     }
   ];	// locale specifications
-  string default_scope = 15; // default hierarchical scope
-  bool unauthenticated = 16; // true in case in case of `register`; set to false after activation
-  bool guest = 17; /// Is the user a guest. A guest is a automatically generated user which can later be turned in a non-guest user.
-  io.restorecommerce.image.Image image = 18;
-  UserType user_type = 19;
-  bool invite = 20; // For user invitation
-  string invited_by_user_name = 21; // user who is inviting
-  string invited_by_user_first_name = 22; // First name of user inviting
-  string invited_by_user_last_name = 23; // Last name of user inviting
+  optional string default_scope = 15; // default hierarchical scope
+  optional bool unauthenticated = 16; // true in case in case of `register`; set to false after activation
+  optional bool guest = 17; /// Is the user a guest. A guest is a automatically generated user which can later be turned in a non-guest user.
+  optional io.restorecommerce.image.Image image = 18;
+  optional UserType user_type = 19;
+  optional bool invite = 20; // For user invitation
+  optional string invited_by_user_name = 21; // user who is inviting
+  optional string invited_by_user_first_name = 22; // First name of user inviting
+  optional string invited_by_user_last_name = 23; // Last name of user inviting
   repeated io.restorecommerce.auth.Tokens tokens = 24;
-  double last_access = 25;
-  google.protobuf.Any data = 26; /// additional data
+  optional double last_access = 25;
+  optional google.protobuf.Any data = 26; /// additional data
   repeated io.restorecommerce.role.Role roles = 27;
 }

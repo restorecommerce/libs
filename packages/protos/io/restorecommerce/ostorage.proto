@@ -26,33 +26,33 @@ service ObjectService {
 
 message CopyRequestList {
   repeated CopyRequestItem items = 1;
-  io.restorecommerce.auth.Subject subject = 2;
+  optional io.restorecommerce.auth.Subject subject = 2;
 }
 
 message CopyResponseList {
   repeated copyResponsePayloadWithStatus responses = 1;
-  io.restorecommerce.status.OperationStatus operation_status = 2;
+  optional io.restorecommerce.status.OperationStatus operation_status = 2;
 }
 
 message copyResponsePayloadWithStatus {
-  CopyResponseItem payload = 1;
-  io.restorecommerce.status.Status status = 2;
+  optional CopyResponseItem payload = 1;
+  optional io.restorecommerce.status.Status status = 2;
 }
 
 message CopyRequestItem {
-  string bucket = 1;
-  string copySource = 2;
-  string key = 3;
+  optional string bucket = 1;
+  optional string copySource = 2;
+  optional string key = 3;
   optional io.restorecommerce.meta.Meta meta = 4;
   optional Options options = 5;
 }
 
 message CopyResponseItem {
-  string bucket = 1;
-  string copySource = 2;
-  string key = 3;
-  io.restorecommerce.meta.Meta meta = 4;
-  Options options = 5;
+  optional string bucket = 1;
+  optional string copySource = 2;
+  optional string key = 3;
+  optional io.restorecommerce.meta.Meta meta = 4;
+  optional Options options = 5;
 }
 
 message Options {
@@ -68,86 +68,86 @@ message Options {
 }
 
 message Object {
-  string key = 1;
-  string bucket = 2;
+  optional string key = 1;
+  optional string bucket = 2;
   optional bytes object = 3;
   optional io.restorecommerce.meta.Meta meta = 4;
   optional string url = 5;
   optional Options options = 6;
-  io.restorecommerce.auth.Subject subject = 7;
+  optional io.restorecommerce.auth.Subject subject = 7;
 }
 
 message ObjectResponse {
-  ObjectResponsePayloadWithStatus response = 1;
-  io.restorecommerce.status.OperationStatus operation_status = 2;
+  optional ObjectResponsePayloadWithStatus response = 1;
+  optional io.restorecommerce.status.OperationStatus operation_status = 2;
 }
 
 message ObjectResponsePayloadWithStatus {
-  ObjectResponsePayload payload = 1;
-  io.restorecommerce.status.Status status = 3;
+  optional ObjectResponsePayload payload = 1;
+  optional io.restorecommerce.status.Status status = 3;
 }
 
 message ObjectResponsePayload {
-  string key = 1;
-  string bucket = 2;
-  bytes object = 3;
-  io.restorecommerce.meta.Meta meta = 4;
-  string url = 5;
-  Options options = 6;
+  optional string key = 1;
+  optional string bucket = 2;
+  optional bytes object = 3;
+  optional io.restorecommerce.meta.Meta meta = 4;
+  optional string url = 5;
+  optional Options options = 6;
 }
 
 message GetRequest {
-  string key = 1;
-  string bucket = 2;
+  optional string key = 1;
+  optional string bucket = 2;
   optional bool download = 3;
-  io.restorecommerce.auth.Subject subject = 4;
+  optional io.restorecommerce.auth.Subject subject = 4;
 }
 
 message ListResponse {
   repeated ObjectsDataWithPayloadStatus responses = 1;
-  io.restorecommerce.status.OperationStatus operation_status = 2;
+  optional io.restorecommerce.status.OperationStatus operation_status = 2;
 }
 
 message ObjectsDataWithPayloadStatus {
- ObjectData payload = 1;
- io.restorecommerce.status.Status status = 2;
+ optional ObjectData payload = 1;
+ optional io.restorecommerce.status.Status status = 2;
 }
 
 message ObjectData {
-  string object_name = 1;
-  string url = 2;
-  io.restorecommerce.meta.Meta meta = 3;
+  optional string object_name = 1;
+  optional string url = 2;
+  optional io.restorecommerce.meta.Meta meta = 3;
 }
 
 message DeleteRequest {
-  string key = 1;
-  string bucket = 2;
-  io.restorecommerce.auth.Subject subject = 3;
+  optional string key = 1;
+  optional string bucket = 2;
+  optional io.restorecommerce.auth.Subject subject = 3;
 }
 
 message PutResponse {
-  PutResponseWithPayloadStatus response = 1;
-  io.restorecommerce.status.OperationStatus operation_status = 2;
+  optional PutResponseWithPayloadStatus response = 1;
+  optional io.restorecommerce.status.OperationStatus operation_status = 2;
 }
 
 message PutResponseWithPayloadStatus {
-  Response payload = 1;
-  io.restorecommerce.status.Status status = 2;
+  optional Response payload = 1;
+  optional io.restorecommerce.status.Status status = 2;
 }
 
 message Response {
-  string url = 1;
-  string bucket = 2 ;
-  string key = 3;
-  io.restorecommerce.meta.Meta meta = 4;
+  optional string url = 1;
+  optional string bucket = 2 ;
+  optional string key = 3;
+  optional io.restorecommerce.meta.Meta meta = 4;
   repeated io.restorecommerce.attribute.Attribute tags = 5;
-  int32 length = 6; // file size of uploaded object
+  optional int32 length = 6; // file size of uploaded object
 }
 
 message ListRequest {
-  string bucket = 1;
+  optional string bucket = 1;
   optional io.restorecommerce.filter.FilterOp filters = 2; /// Filter based on fieldName|operation, value|list
-  io.restorecommerce.auth.Subject subject = 3;
+  optional io.restorecommerce.auth.Subject subject = 3;
   optional int32 max_keys = 4;
   optional string prefix = 5;
 }
@@ -163,7 +163,7 @@ message OstorageMessage {
 
 message MoveRequestList {
   repeated MoveRequestItem items = 1;
-  io.restorecommerce.auth.Subject subject = 2;
+  optional io.restorecommerce.auth.Subject subject = 2;
 }
 
 message MoveRequestItem {
@@ -176,18 +176,18 @@ message MoveRequestItem {
 
 message MoveResponseList {
   repeated MoveResponsePayloadWithStatus responses = 1;
-  io.restorecommerce.status.OperationStatus operation_status = 2;
+  optional io.restorecommerce.status.OperationStatus operation_status = 2;
 }
 
 message MoveResponsePayloadWithStatus {
-  MoveResponseItem payload = 1;
-  io.restorecommerce.status.Status status = 2;
+  optional MoveResponseItem payload = 1;
+  optional io.restorecommerce.status.Status status = 2;
 }
 
 message MoveResponseItem {
-  string bucket = 1;
-  string sourceObject = 2;
-  string key = 3;
-  io.restorecommerce.meta.Meta meta = 4;
-  Options options = 5;
+  optional string bucket = 1;
+  optional string sourceObject = 2;
+  optional string key = 3;
+  optional io.restorecommerce.meta.Meta meta = 4;
+  optional Options options = 5;
 }

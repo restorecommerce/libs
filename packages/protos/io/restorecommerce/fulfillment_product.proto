@@ -67,7 +67,7 @@ message PackingSolutionQuery {
 message PackingSolutionQueryList {
   repeated PackingSolutionQuery items = 1;
   optional uint32 total_count = 2;
-  io.restorecommerce.auth.Subject subject = 3;
+  optional io.restorecommerce.auth.Subject subject = 3;
 }
 
 message FulfillmentProduct {
@@ -112,18 +112,18 @@ message Variant {
 message FulfillmentProductList {
   repeated FulfillmentProduct items = 1;
   optional uint32 total_count = 2;
-  io.restorecommerce.auth.Subject subject = 3;
+  optional io.restorecommerce.auth.Subject subject = 3;
 }
 
 message FulfillmentProductResponse {
-  FulfillmentProduct payload = 1;
-  io.restorecommerce.status.Status status = 2;
+  optional FulfillmentProduct payload = 1;
+  optional io.restorecommerce.status.Status status = 2;
 }
 
 message FulfillmentProductListResponse {
   repeated FulfillmentProductResponse items = 1;
-  uint32 total_count = 2;
-  io.restorecommerce.status.OperationStatus operation_status = 3;
+  optional uint32 total_count = 2;
+  optional io.restorecommerce.status.OperationStatus operation_status = 3;
 }
 
 message PackingSolution {
@@ -143,9 +143,9 @@ message PackingSolutionResponse {
 message PackingSolutionListResponse {
   repeated PackingSolutionResponse items = 1;
   optional uint32 total_count = 2;
-  io.restorecommerce.status.OperationStatus operation_status = 3;
+  optional io.restorecommerce.status.OperationStatus operation_status = 3;
 }
 
 message Deleted {
-  string id = 1;
+  optional string id = 1;
 }

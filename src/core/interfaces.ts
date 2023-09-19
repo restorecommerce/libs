@@ -46,7 +46,7 @@ export interface DocumentMetadata {
   created?: any;
   modified?: any;
   modified_by?: string;
-  owners: { id?: string; value?: string }[];
+  owners?: { id?: string; value?: string }[];
 }
 
 export interface DateTimeConfig {

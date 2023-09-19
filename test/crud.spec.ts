@@ -180,7 +180,6 @@ describe('converting to filter to object', () => {
 });
 
 let meta = {
-  acls: [],
   created: new Date(),
   modified: new Date(),
   modified_by: 'Admin',
@@ -188,7 +187,6 @@ let meta = {
     id: 'urn:restorecommerce:acs:names:ownerIndicatoryEntity',
     value: 'urn:restorecommerce:acs:model:user.User',
     attributes: [{
-      attributes: [],
       id: 'urn:restorecommerce:acs:names:ownerInstance',
       value: 'Admin'
     }]
@@ -291,9 +289,9 @@ describe('ServiceBase', () => {
       db = await chassis.database.get(cfg.get('database:testdb'), server.logger) as chassis.GraphDatabaseProvider;
       await db.truncate();
       testData = [
-        { id: 'test_xy', meta, value: 1, text: 'first simple sentence for searching', active: true, created: today, status: 'GOOD', data: undefined },
-        { id: 'test_xyz', meta, value: 3, text: 'second test data', active: false, created: tomorrow, status: 'BAD', data: undefined },
-        { id: 'test_zy', meta, value: 12, text: 'third search data string', active: false, created: tomorrow, status: 'UNKNOWN', data: undefined }];
+        { id: 'test_xy', meta, value: 1, text: 'first simple sentence for searching', active: true, created: today, status: 'GOOD' },
+        { id: 'test_xyz', meta, value: 3, text: 'second test data', active: false, created: tomorrow, status: 'BAD' },
+        { id: 'test_zy', meta, value: 12, text: 'third search data string', active: false, created: tomorrow, status: 'UNKNOWN' }];
       // await db.insert('resources', testData);
       await testService.create({ items: testData });
     });
@@ -554,9 +552,9 @@ describe('ServiceBase', () => {
         result.items.should.be.Array();
         result.items.should.length(3);
         const testDataReduced = [
-          { id: '', text: '', meta: undefined, value: testData[0].value, active: false, created: undefined, status: '', data: undefined },
-          { id: '', text: '', meta: undefined, value: testData[1].value, active: false, created: undefined, status: '', data: undefined },
-          { id: '', text: '', meta: undefined, value: testData[2].value, active: false, created: undefined, status: '', data: undefined },
+          { value: testData[0].value },
+          { value: testData[1].value },
+          { value: testData[2].value },
         ];
         let resultPayload = [];
         for (let item of result.items) {
@@ -586,8 +584,8 @@ describe('ServiceBase', () => {
         result.items.should.length(2);
 
         const testDataReduced = [
-          { id: '', text: '', meta: undefined, value: testData[0].value, active: false, created: undefined, status: '', data: undefined },
-          { id: '', text: '', meta: undefined, value: testData[1].value, active: false, created: undefined, status: '', data: undefined },
+          { value: testData[0].value },
+          { value: testData[1].value },
         ];
         let resultPayload = [];
         for (let item of result.items) {
@@ -629,11 +627,11 @@ describe('ServiceBase', () => {
         await sleep.sleep(2);
         const result = await testService.read({
           search: {
-            search: 'DATA', // will match search text from above `text` data and return 2 documents
+            search: 'DATA', // will not match search text from above `text` data and should not return any documents
             case_sensitive: true
           }
         });
-        result.items.length.should.equal(0);
+        should.not.exist(result.items);
       }).timeout(5000);
     });
     describe('create', () => {
@@ -719,8 +717,7 @@ describe('ServiceBase', () => {
         const allTestData = await testService.read({});
         should.exist(allTestData);
         should.exist(allTestData.operation_status);
-        should.exist(allTestData.items);
-        allTestData.items.should.length(0);
+        should.not.exist(allTestData.items);
         allTestData.operation_status.code.should.equal(200);
         allTestData.operation_status.message.should.equal('success');
       });

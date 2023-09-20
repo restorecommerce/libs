@@ -14,9 +14,6 @@ jobs:
         with:
           node-version: '18.8.0'
 
-      - name: Upgrade npm
-        run: npm i -g npm
-
       - name: Install Dependencies
         run: npm ci
 
@@ -34,9 +31,6 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '18.8.0'
-
-      - name: Upgrade npm
-        run: npm i -g npm
 
       - name: Setup System
         uses: restorecommerce/setup-system-action@v1

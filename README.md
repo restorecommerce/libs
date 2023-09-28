@@ -1,11 +1,13 @@
 # resource-base-interface
 
-[![Version][version]](https://www.npmjs.com/package/@restorecommerce/resource-base-interface)[![Build Status][build]](https://travis-ci.org/restorecommerce/resource-base-interface?branch=master)[![Dependencies][depend]](https://david-dm.org/restorecommerce/resource-base-interface)[![Coverage Status][cover]](https://coveralls.io/github/restorecommerce/resource-base-interface?branch=master)
+[![Version][version]](https://www.npmjs.com/package/@restorecommerce/resource-base-interface)[![Build Status][build]]([https://travis-ci.org/restorecommerce/resource-base-interface?branch=master](https://github.com/restorecommerce/resource-base-interface/actions/workflows/build.yaml))[![Dependencies][depend]](https://david-dm.org/restorecommerce/resource-base-interface)[![Coverage Status][cover]](https://coveralls.io/github/restorecommerce/resource-base-interface?branch=master)
 
 [version]: http://img.shields.io/npm/v/@restorecommerce/resource-base-interface.svg?style=flat-square
-[build]: http://img.shields.io/travis/restorecommerce/resource-base-interface/master.svg?style=flat-square
+[build]: https://img.shields.io/github/actions/workflow/status/restorecommerce/resource-base-interface/build.yaml?style=flat-square
 [depend]: https://img.shields.io/david/restorecommerce/resource-base-interface.svg?style=flat-square
 [cover]: http://img.shields.io/coveralls/restorecommerce/resource-base-interface/master.svg?style=flat-square
+
+https://github.com/restorecommerce/notification-srv/actions/workflows/build.yaml[image:https://img.shields.io/github/actions/workflow/status/restorecommerce/notification-srv/build.yaml?style=flat-square[Build Status]]
 
 The `resource-base-interface` describes resource CRUD operations which can be bound to a service. Such operations are described via a [gRPC](https://grpc.io/docs/) interface with the message structures therefore being defined using [Protocol Buffers](https://developers.google.com/protocol-buffers/). This interface can be bound with any protobuf definition as long as it contains the endpoints defined in the [resource-base.proto](https://github.com/restorecommerce/protos/blob/master/io/restorecommerce/resource_base.proto) file (note that any resource message structure can be defined).
 

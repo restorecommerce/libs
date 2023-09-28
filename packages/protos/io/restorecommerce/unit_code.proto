@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package io.restorecommerce.code;
+package io.restorecommerce.unit_code;
 
 import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/meta.proto";
@@ -8,34 +8,34 @@ import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
 import "io/restorecommerce/options.proto";
 
-service CodeService {
-  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (CodeListResponse) {
+service UnitCodeService {
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (UnitCodeListResponse) {
     option (io.restorecommerce.options.is_query) = true;
   };
-  rpc Create (CodeList) returns (CodeListResponse);
+  rpc Create (UnitCodeList) returns (UnitCodeListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
-  rpc Update (CodeList) returns (CodeListResponse);
-  rpc Upsert (CodeList) returns (CodeListResponse);
+  rpc Update (UnitCodeList) returns (UnitCodeListResponse);
+  rpc Upsert (UnitCodeList) returns (UnitCodeListResponse);
 }
 
-message CodeList {
-  repeated Code items = 1;
+message UnitCodeList {
+  repeated UnitCode items = 1;
   optional uint32 total_count = 2;
   optional io.restorecommerce.auth.Subject subject = 3;
 }
 
-message CodeListResponse {
-  repeated CodeResponse items = 1;
+message UnitCodeListResponse {
+  repeated UnitCodeResponse items = 1;
   optional uint32 total_count = 2;
   optional io.restorecommerce.status.OperationStatus operation_status = 3;
 }
 
-message CodeResponse {
-  optional Code payload = 1;
+message UnitCodeResponse {
+  optional UnitCode payload = 1;
   optional io.restorecommerce.status.Status status = 2;
 }
 
-message Code {
+message UnitCode {
   optional string id = 1;
   optional io.restorecommerce.meta.Meta meta = 2;
   optional StatusCode status = 3;

@@ -35,8 +35,8 @@ export interface Resource {
 export interface CtxResource {
   id: string;
   meta: {
-    created?: number;
-    modified?: number;
+    created?: Date;
+    modified?: Date;
     modified_by?: string;
     owners: Attribute[]; // id owner is mandatory in resource others are optional
   };

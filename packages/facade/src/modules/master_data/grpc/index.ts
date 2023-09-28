@@ -44,13 +44,8 @@ import {
   TaxTypeServiceDefinition
 } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/tax_type.js';
 import {
-  CommandServiceClient,
   CommandServiceDefinition
 } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/command.js';
-import {
-  type CodeServiceClient,
-  CodeServiceDefinition
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/code.js';
 import { type GrpcClientConfig } from '@restorecommerce/grpc-client';
 
 export class ResourceSrvGrpcClient extends RestoreCommerceGrpcClient {
@@ -66,7 +61,6 @@ export class ResourceSrvGrpcClient extends RestoreCommerceGrpcClient {
   readonly organization: OrganizationServiceClient;
   readonly tax: TaxServiceClient;
   readonly tax_type: TaxTypeServiceClient;
-  readonly code: CodeServiceClient;
   readonly command: any;
 
   constructor(address: string, cfg: GrpcClientConfig) {
@@ -83,7 +77,6 @@ export class ResourceSrvGrpcClient extends RestoreCommerceGrpcClient {
     this.organization = this.createClient(cfg, OrganizationServiceDefinition, this.channel);
     this.tax = this.createClient(cfg, TaxServiceDefinition, this.channel);
     this.tax_type = this.createClient(cfg, TaxTypeServiceDefinition, this.channel);
-    this.code = this.createClient(cfg, CodeServiceDefinition, this.channel);
     this.command = this.createClient(cfg, CommandServiceDefinition, this.channel);
   }
 

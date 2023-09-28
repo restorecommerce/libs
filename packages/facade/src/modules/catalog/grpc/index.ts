@@ -19,10 +19,6 @@ import {
   type ManufacturerServiceClient,
   ManufacturerServiceDefinition
 } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/manufacturer.js';
-import {
-  type UnitCodeServiceClient,
-  UnitCodeServiceDefinition
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/unit_code.js';
 import { type GrpcClientConfig } from '@restorecommerce/grpc-client';
 
 export class CatalogSrvGrpcClient extends RestoreCommerceGrpcClient {
@@ -32,7 +28,6 @@ export class CatalogSrvGrpcClient extends RestoreCommerceGrpcClient {
   readonly product_category: ProductCategoryServiceClient;
   readonly price_group: PriceGroupServiceClient;
   readonly manufacturer: ManufacturerServiceClient;
-  readonly unit_code: UnitCodeServiceClient;
 
   constructor(address: string, cfg: GrpcClientConfig) {
     super(address, cfg);
@@ -42,7 +37,6 @@ export class CatalogSrvGrpcClient extends RestoreCommerceGrpcClient {
     this.product_category = this.createClient(cfg, ProductCategoryServiceDefinition, this.channel);
     this.price_group = this.createClient(cfg, PriceGroupServiceDefinition, this.channel);
     this.manufacturer = this.createClient(cfg, ManufacturerServiceDefinition, this.channel);
-    this.unit_code = this.createClient(cfg, UnitCodeServiceDefinition, this.channel);
   }
 
 }

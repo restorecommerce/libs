@@ -32,7 +32,6 @@ export type CatalogQuery = {
   product_category: CatalogProductCategoryQuery;
   price_group: CatalogPriceGroupQuery;
   manufacturer: CatalogManufacturerQuery;
-  unit_code: CatalogUnitCodeQuery;
 };
 
 export type CatalogProductQuery = {
@@ -749,77 +748,6 @@ export type IoRestorecommerceManufacturerManufacturerResponse = {
   status?: Maybe<IoRestorecommerceStatusStatus>;
 };
 
-export type CatalogUnitCodeQuery = {
-  __typename?: 'CatalogUnitCodeQuery';
-  Read?: Maybe<ProtoIoRestorecommerceUnitCodeUnitCodeListResponse>;
-};
-
-
-export type CatalogUnitCodeQueryReadArgs = {
-  input: IIoRestorecommerceResourcebaseReadRequest;
-};
-
-export type ProtoIoRestorecommerceUnitCodeUnitCodeListResponse = {
-  __typename?: 'ProtoIoRestorecommerceUnitCodeUnitCodeListResponse';
-  details?: Maybe<IoRestorecommerceUnitCodeUnitCodeListResponse>;
-};
-
-export type IoRestorecommerceUnitCodeUnitCodeListResponse = {
-  __typename?: 'IoRestorecommerceUnitCodeUnitCodeListResponse';
-  items?: Maybe<Array<IoRestorecommerceUnitCodeUnitCodeResponse>>;
-  totalCount?: Maybe<Scalars['Int']['output']>;
-  operationStatus?: Maybe<IoRestorecommerceStatusOperationStatus>;
-};
-
-export type IoRestorecommerceUnitCodeUnitCodeResponse = {
-  __typename?: 'IoRestorecommerceUnitCodeUnitCodeResponse';
-  payload?: Maybe<IoRestorecommerceUnitCodeUnitCode>;
-  status?: Maybe<IoRestorecommerceStatusStatus>;
-};
-
-export type IoRestorecommerceUnitCodeUnitCode = {
-  __typename?: 'IoRestorecommerceUnitCodeUnitCode';
-  id?: Maybe<Scalars['String']['output']>;
-  meta?: Maybe<IoRestorecommerceMetaMeta>;
-  status?: Maybe<IoRestorecommerceUnitCodeStatusCode>;
-  commonCode?: Maybe<Scalars['String']['output']>;
-  name?: Maybe<Scalars['String']['output']>;
-  description?: Maybe<Scalars['String']['output']>;
-  levelCategory?: Maybe<Scalars['String']['output']>;
-  symbol?: Maybe<Scalars['String']['output']>;
-  conversionFactor?: Maybe<Scalars['String']['output']>;
-  groupNumber?: Maybe<Scalars['String']['output']>;
-  sector?: Maybe<IoRestorecommerceUnitCodeSector>;
-  groupId?: Maybe<Scalars['String']['output']>;
-  quantity?: Maybe<Scalars['String']['output']>;
-};
-
-export enum IoRestorecommerceUnitCodeStatusCode {
-  Added = 0,
-  ChangedName = 1,
-  ChangedCharacteristic = 2,
-  Deprecated = 3,
-  MarkedAsDeleted = 4,
-  Reinstated = 5
-}
-
-export enum IoRestorecommerceUnitCodeSector {
-  Unknown = 0,
-  Acoustics = 1,
-  AtomicAndNuclearPhysics = 2,
-  CharacteristicNumbers = 3,
-  ElectricityAndMagnetism = 4,
-  Heat = 5,
-  LightAndRelatedElectromagneticRadiations = 6,
-  Mechanics = 7,
-  Miscellaneous = 8,
-  NuclearReactionsAndIonizingRadiations = 9,
-  PeriodicAndRelatedPhases = 10,
-  PhysicalChemistryAndMolecularPhysics = 11,
-  SolidStatePhysics = 12,
-  SpaceAndTime = 13
-}
-
 export type Mutation = {
   __typename?: 'Mutation';
   catalog: CatalogMutation;
@@ -832,7 +760,6 @@ export type CatalogMutation = {
   product_category: CatalogProductCategoryMutation;
   price_group: CatalogPriceGroupMutation;
   manufacturer: CatalogManufacturerMutation;
-  unit_code: CatalogUnitCodeMutation;
 };
 
 export type CatalogProductMutation = {
@@ -1184,46 +1111,6 @@ export type IIoRestorecommerceManufacturerManufacturer = {
   description?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type CatalogUnitCodeMutation = {
-  __typename?: 'CatalogUnitCodeMutation';
-  Mutate?: Maybe<ProtoIoRestorecommerceUnitCodeUnitCodeListResponse>;
-  Delete?: Maybe<ProtoIoRestorecommerceResourcebaseDeleteResponse>;
-};
-
-
-export type CatalogUnitCodeMutationMutateArgs = {
-  input: IIoRestorecommerceUnitCodeUnitCodeList;
-};
-
-
-export type CatalogUnitCodeMutationDeleteArgs = {
-  input: IIoRestorecommerceResourcebaseDeleteRequest;
-};
-
-export type IIoRestorecommerceUnitCodeUnitCodeList = {
-  items?: InputMaybe<Array<IIoRestorecommerceUnitCodeUnitCode>>;
-  totalCount?: InputMaybe<Scalars['Int']['input']>;
-  mode?: InputMaybe<ModeType>;
-  /** target scope */
-  scope?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type IIoRestorecommerceUnitCodeUnitCode = {
-  id?: InputMaybe<Scalars['String']['input']>;
-  meta?: InputMaybe<IIoRestorecommerceMetaMeta>;
-  status?: InputMaybe<IoRestorecommerceUnitCodeStatusCode>;
-  commonCode?: InputMaybe<Scalars['String']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
-  description?: InputMaybe<Scalars['String']['input']>;
-  levelCategory?: InputMaybe<Scalars['String']['input']>;
-  symbol?: InputMaybe<Scalars['String']['input']>;
-  conversionFactor?: InputMaybe<Scalars['String']['input']>;
-  groupNumber?: InputMaybe<Scalars['String']['input']>;
-  sector?: InputMaybe<IoRestorecommerceUnitCodeSector>;
-  groupId?: InputMaybe<Scalars['String']['input']>;
-  quantity?: InputMaybe<Scalars['String']['input']>;
-};
-
 export type Subscription = {
   __typename?: 'Subscription';
   orderingOrders?: Maybe<SubscriptionOutput>;
@@ -1415,13 +1302,6 @@ export type ResolversTypes = ResolversObject<{
   ProtoIoRestorecommerceManufacturerManufacturerListResponse: ResolverTypeWrapper<ProtoIoRestorecommerceManufacturerManufacturerListResponse>;
   IoRestorecommerceManufacturerManufacturerListResponse: ResolverTypeWrapper<IoRestorecommerceManufacturerManufacturerListResponse>;
   IoRestorecommerceManufacturerManufacturerResponse: ResolverTypeWrapper<IoRestorecommerceManufacturerManufacturerResponse>;
-  CatalogUnitCodeQuery: ResolverTypeWrapper<CatalogUnitCodeQuery>;
-  ProtoIoRestorecommerceUnitCodeUnitCodeListResponse: ResolverTypeWrapper<ProtoIoRestorecommerceUnitCodeUnitCodeListResponse>;
-  IoRestorecommerceUnitCodeUnitCodeListResponse: ResolverTypeWrapper<IoRestorecommerceUnitCodeUnitCodeListResponse>;
-  IoRestorecommerceUnitCodeUnitCodeResponse: ResolverTypeWrapper<IoRestorecommerceUnitCodeUnitCodeResponse>;
-  IoRestorecommerceUnitCodeUnitCode: ResolverTypeWrapper<IoRestorecommerceUnitCodeUnitCode>;
-  IoRestorecommerceUnitCodeStatusCode: IoRestorecommerceUnitCodeStatusCode;
-  IoRestorecommerceUnitCodeSector: IoRestorecommerceUnitCodeSector;
   Mutation: ResolverTypeWrapper<{}>;
   CatalogMutation: ResolverTypeWrapper<CatalogMutation>;
   CatalogProductMutation: ResolverTypeWrapper<CatalogProductMutation>;
@@ -1463,9 +1343,6 @@ export type ResolversTypes = ResolversObject<{
   CatalogManufacturerMutation: ResolverTypeWrapper<CatalogManufacturerMutation>;
   IIoRestorecommerceManufacturerManufacturerList: IIoRestorecommerceManufacturerManufacturerList;
   IIoRestorecommerceManufacturerManufacturer: IIoRestorecommerceManufacturerManufacturer;
-  CatalogUnitCodeMutation: ResolverTypeWrapper<CatalogUnitCodeMutation>;
-  IIoRestorecommerceUnitCodeUnitCodeList: IIoRestorecommerceUnitCodeUnitCodeList;
-  IIoRestorecommerceUnitCodeUnitCode: IIoRestorecommerceUnitCodeUnitCode;
   Subscription: ResolverTypeWrapper<{}>;
   SubscriptionOutput: ResolverTypeWrapper<SubscriptionOutput>;
   SubscriptionAction: SubscriptionAction;
@@ -1555,11 +1432,6 @@ export type ResolversParentTypes = ResolversObject<{
   ProtoIoRestorecommerceManufacturerManufacturerListResponse: ProtoIoRestorecommerceManufacturerManufacturerListResponse;
   IoRestorecommerceManufacturerManufacturerListResponse: IoRestorecommerceManufacturerManufacturerListResponse;
   IoRestorecommerceManufacturerManufacturerResponse: IoRestorecommerceManufacturerManufacturerResponse;
-  CatalogUnitCodeQuery: CatalogUnitCodeQuery;
-  ProtoIoRestorecommerceUnitCodeUnitCodeListResponse: ProtoIoRestorecommerceUnitCodeUnitCodeListResponse;
-  IoRestorecommerceUnitCodeUnitCodeListResponse: IoRestorecommerceUnitCodeUnitCodeListResponse;
-  IoRestorecommerceUnitCodeUnitCodeResponse: IoRestorecommerceUnitCodeUnitCodeResponse;
-  IoRestorecommerceUnitCodeUnitCode: IoRestorecommerceUnitCodeUnitCode;
   Mutation: {};
   CatalogMutation: CatalogMutation;
   CatalogProductMutation: CatalogProductMutation;
@@ -1600,9 +1472,6 @@ export type ResolversParentTypes = ResolversObject<{
   CatalogManufacturerMutation: CatalogManufacturerMutation;
   IIoRestorecommerceManufacturerManufacturerList: IIoRestorecommerceManufacturerManufacturerList;
   IIoRestorecommerceManufacturerManufacturer: IIoRestorecommerceManufacturerManufacturer;
-  CatalogUnitCodeMutation: CatalogUnitCodeMutation;
-  IIoRestorecommerceUnitCodeUnitCodeList: IIoRestorecommerceUnitCodeUnitCodeList;
-  IIoRestorecommerceUnitCodeUnitCode: IIoRestorecommerceUnitCodeUnitCode;
   Subscription: {};
   SubscriptionOutput: SubscriptionOutput;
 }>;
@@ -1617,7 +1486,6 @@ export type CatalogQueryResolvers<ContextType = CatalogContext, ParentType exten
   product_category?: Resolver<ResolversTypes['CatalogProductCategoryQuery'], ParentType, ContextType>;
   price_group?: Resolver<ResolversTypes['CatalogPriceGroupQuery'], ParentType, ContextType>;
   manufacturer?: Resolver<ResolversTypes['CatalogManufacturerQuery'], ParentType, ContextType>;
-  unit_code?: Resolver<ResolversTypes['CatalogUnitCodeQuery'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -2203,50 +2071,6 @@ export type IoRestorecommerceManufacturerManufacturerResponseResolvers<ContextTy
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type CatalogUnitCodeQueryResolvers<ContextType = CatalogContext, ParentType extends ResolversParentTypes['CatalogUnitCodeQuery'] = ResolversParentTypes['CatalogUnitCodeQuery']> = ResolversObject<{
-  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceUnitCodeUnitCodeListResponse']>, ParentType, ContextType, RequireFields<CatalogUnitCodeQueryReadArgs, 'input'>>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type ProtoIoRestorecommerceUnitCodeUnitCodeListResponseResolvers<ContextType = CatalogContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceUnitCodeUnitCodeListResponse'] = ResolversParentTypes['ProtoIoRestorecommerceUnitCodeUnitCodeListResponse']> = ResolversObject<{
-  details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceUnitCodeUnitCodeListResponse']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type IoRestorecommerceUnitCodeUnitCodeListResponseResolvers<ContextType = CatalogContext, ParentType extends ResolversParentTypes['IoRestorecommerceUnitCodeUnitCodeListResponse'] = ResolversParentTypes['IoRestorecommerceUnitCodeUnitCodeListResponse']> = ResolversObject<{
-  items?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceUnitCodeUnitCodeResponse']>>, ParentType, ContextType>;
-  totalCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  operationStatus?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusOperationStatus']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type IoRestorecommerceUnitCodeUnitCodeResponseResolvers<ContextType = CatalogContext, ParentType extends ResolversParentTypes['IoRestorecommerceUnitCodeUnitCodeResponse'] = ResolversParentTypes['IoRestorecommerceUnitCodeUnitCodeResponse']> = ResolversObject<{
-  payload?: Resolver<Maybe<ResolversTypes['IoRestorecommerceUnitCodeUnitCode']>, ParentType, ContextType>;
-  status?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusStatus']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type IoRestorecommerceUnitCodeUnitCodeResolvers<ContextType = CatalogContext, ParentType extends ResolversParentTypes['IoRestorecommerceUnitCodeUnitCode'] = ResolversParentTypes['IoRestorecommerceUnitCodeUnitCode']> = ResolversObject<{
-  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
-  status?: Resolver<Maybe<ResolversTypes['IoRestorecommerceUnitCodeStatusCode']>, ParentType, ContextType>;
-  commonCode?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  levelCategory?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  symbol?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  conversionFactor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  groupNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  sector?: Resolver<Maybe<ResolversTypes['IoRestorecommerceUnitCodeSector']>, ParentType, ContextType>;
-  groupId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  quantity?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type IoRestorecommerceUnitCodeStatusCodeResolvers = { ADDED: 0, CHANGED_NAME: 1, CHANGED_CHARACTERISTIC: 2, DEPRECATED: 3, MARKED_AS_DELETED: 4, REINSTATED: 5 };
-
-export type IoRestorecommerceUnitCodeSectorResolvers = { UNKNOWN: 0, ACOUSTICS: 1, ATOMIC_AND_NUCLEAR_PHYSICS: 2, CHARACTERISTIC_NUMBERS: 3, ELECTRICITY_AND_MAGNETISM: 4, HEAT: 5, LIGHT_AND_RELATED_ELECTROMAGNETIC_RADIATIONS: 6, MECHANICS: 7, MISCELLANEOUS: 8, NUCLEAR_REACTIONS_AND_IONIZING_RADIATIONS: 9, PERIODIC_AND_RELATED_PHASES: 10, PHYSICAL_CHEMISTRY_AND_MOLECULAR_PHYSICS: 11, SOLID_STATE_PHYSICS: 12, SPACE_AND_TIME: 13 };
-
 export type MutationResolvers<ContextType = CatalogContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   catalog?: Resolver<ResolversTypes['CatalogMutation'], ParentType, ContextType>;
 }>;
@@ -2257,7 +2081,6 @@ export type CatalogMutationResolvers<ContextType = CatalogContext, ParentType ex
   product_category?: Resolver<ResolversTypes['CatalogProductCategoryMutation'], ParentType, ContextType>;
   price_group?: Resolver<ResolversTypes['CatalogPriceGroupMutation'], ParentType, ContextType>;
   manufacturer?: Resolver<ResolversTypes['CatalogManufacturerMutation'], ParentType, ContextType>;
-  unit_code?: Resolver<ResolversTypes['CatalogUnitCodeMutation'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -2303,12 +2126,6 @@ export type CatalogPriceGroupMutationResolvers<ContextType = CatalogContext, Par
 export type CatalogManufacturerMutationResolvers<ContextType = CatalogContext, ParentType extends ResolversParentTypes['CatalogManufacturerMutation'] = ResolversParentTypes['CatalogManufacturerMutation']> = ResolversObject<{
   Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceManufacturerManufacturerListResponse']>, ParentType, ContextType, RequireFields<CatalogManufacturerMutationMutateArgs, 'input'>>;
   Delete?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceResourcebaseDeleteResponse']>, ParentType, ContextType, RequireFields<CatalogManufacturerMutationDeleteArgs, 'input'>>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type CatalogUnitCodeMutationResolvers<ContextType = CatalogContext, ParentType extends ResolversParentTypes['CatalogUnitCodeMutation'] = ResolversParentTypes['CatalogUnitCodeMutation']> = ResolversObject<{
-  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceUnitCodeUnitCodeListResponse']>, ParentType, ContextType, RequireFields<CatalogUnitCodeMutationMutateArgs, 'input'>>;
-  Delete?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceResourcebaseDeleteResponse']>, ParentType, ContextType, RequireFields<CatalogUnitCodeMutationDeleteArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -2402,13 +2219,6 @@ export type Resolvers<ContextType = CatalogContext> = ResolversObject<{
   ProtoIoRestorecommerceManufacturerManufacturerListResponse?: ProtoIoRestorecommerceManufacturerManufacturerListResponseResolvers<ContextType>;
   IoRestorecommerceManufacturerManufacturerListResponse?: IoRestorecommerceManufacturerManufacturerListResponseResolvers<ContextType>;
   IoRestorecommerceManufacturerManufacturerResponse?: IoRestorecommerceManufacturerManufacturerResponseResolvers<ContextType>;
-  CatalogUnitCodeQuery?: CatalogUnitCodeQueryResolvers<ContextType>;
-  ProtoIoRestorecommerceUnitCodeUnitCodeListResponse?: ProtoIoRestorecommerceUnitCodeUnitCodeListResponseResolvers<ContextType>;
-  IoRestorecommerceUnitCodeUnitCodeListResponse?: IoRestorecommerceUnitCodeUnitCodeListResponseResolvers<ContextType>;
-  IoRestorecommerceUnitCodeUnitCodeResponse?: IoRestorecommerceUnitCodeUnitCodeResponseResolvers<ContextType>;
-  IoRestorecommerceUnitCodeUnitCode?: IoRestorecommerceUnitCodeUnitCodeResolvers<ContextType>;
-  IoRestorecommerceUnitCodeStatusCode?: IoRestorecommerceUnitCodeStatusCodeResolvers;
-  IoRestorecommerceUnitCodeSector?: IoRestorecommerceUnitCodeSectorResolvers;
   Mutation?: MutationResolvers<ContextType>;
   CatalogMutation?: CatalogMutationResolvers<ContextType>;
   CatalogProductMutation?: CatalogProductMutationResolvers<ContextType>;
@@ -2419,7 +2229,6 @@ export type Resolvers<ContextType = CatalogContext> = ResolversObject<{
   CatalogProductCategoryMutation?: CatalogProductCategoryMutationResolvers<ContextType>;
   CatalogPriceGroupMutation?: CatalogPriceGroupMutationResolvers<ContextType>;
   CatalogManufacturerMutation?: CatalogManufacturerMutationResolvers<ContextType>;
-  CatalogUnitCodeMutation?: CatalogUnitCodeMutationResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
   SubscriptionOutput?: SubscriptionOutputResolvers<ContextType>;
 }>;

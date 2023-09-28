@@ -38,6 +38,7 @@ export type ResourceQuery = {
   organization: ResourceOrganizationQuery;
   tax_type: ResourceTaxTypeQuery;
   tax: ResourceTaxQuery;
+  unit_code: ResourceUnitCodeQuery;
   command: ResourceCommandQuery;
 };
 
@@ -782,6 +783,77 @@ export type IoRestorecommerceTaxTax = {
   type?: Maybe<IoRestorecommerceTaxTypeTaxType>;
 };
 
+export type ResourceUnitCodeQuery = {
+  __typename?: 'ResourceUnitCodeQuery';
+  Read?: Maybe<ProtoIoRestorecommerceUnitCodeUnitCodeListResponse>;
+};
+
+
+export type ResourceUnitCodeQueryReadArgs = {
+  input: IIoRestorecommerceResourcebaseReadRequest;
+};
+
+export type ProtoIoRestorecommerceUnitCodeUnitCodeListResponse = {
+  __typename?: 'ProtoIoRestorecommerceUnitCodeUnitCodeListResponse';
+  details?: Maybe<IoRestorecommerceUnitCodeUnitCodeListResponse>;
+};
+
+export type IoRestorecommerceUnitCodeUnitCodeListResponse = {
+  __typename?: 'IoRestorecommerceUnitCodeUnitCodeListResponse';
+  items?: Maybe<Array<IoRestorecommerceUnitCodeUnitCodeResponse>>;
+  totalCount?: Maybe<Scalars['Int']['output']>;
+  operationStatus?: Maybe<IoRestorecommerceStatusOperationStatus>;
+};
+
+export type IoRestorecommerceUnitCodeUnitCodeResponse = {
+  __typename?: 'IoRestorecommerceUnitCodeUnitCodeResponse';
+  payload?: Maybe<IoRestorecommerceUnitCodeUnitCode>;
+  status?: Maybe<IoRestorecommerceStatusStatus>;
+};
+
+export type IoRestorecommerceUnitCodeUnitCode = {
+  __typename?: 'IoRestorecommerceUnitCodeUnitCode';
+  id?: Maybe<Scalars['String']['output']>;
+  meta?: Maybe<IoRestorecommerceMetaMeta>;
+  status?: Maybe<IoRestorecommerceUnitCodeStatusCode>;
+  commonCode?: Maybe<Scalars['String']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  levelCategory?: Maybe<Scalars['String']['output']>;
+  symbol?: Maybe<Scalars['String']['output']>;
+  conversionFactor?: Maybe<Scalars['String']['output']>;
+  groupNumber?: Maybe<Scalars['String']['output']>;
+  sector?: Maybe<IoRestorecommerceUnitCodeSector>;
+  groupId?: Maybe<Scalars['String']['output']>;
+  quantity?: Maybe<Scalars['String']['output']>;
+};
+
+export enum IoRestorecommerceUnitCodeStatusCode {
+  Added = 0,
+  ChangedName = 1,
+  ChangedCharacteristic = 2,
+  Deprecated = 3,
+  MarkedAsDeleted = 4,
+  Reinstated = 5
+}
+
+export enum IoRestorecommerceUnitCodeSector {
+  Unknown = 0,
+  Acoustics = 1,
+  AtomicAndNuclearPhysics = 2,
+  CharacteristicNumbers = 3,
+  ElectricityAndMagnetism = 4,
+  Heat = 5,
+  LightAndRelatedElectromagneticRadiations = 6,
+  Mechanics = 7,
+  Miscellaneous = 8,
+  NuclearReactionsAndIonizingRadiations = 9,
+  PeriodicAndRelatedPhases = 10,
+  PhysicalChemistryAndMolecularPhysics = 11,
+  SolidStatePhysics = 12,
+  SpaceAndTime = 13
+}
+
 export type ResourceCommandQuery = {
   __typename?: 'ResourceCommandQuery';
   Read?: Maybe<ProtoIoRestorecommerceCommandCommandListResponse>;
@@ -853,6 +925,7 @@ export type ResourceMutation = {
   organization: ResourceOrganizationMutation;
   tax_type: ResourceTaxTypeMutation;
   tax: ResourceTaxMutation;
+  unit_code: ResourceUnitCodeMutation;
   command: ResourceCommandMutation;
 };
 
@@ -1325,6 +1398,46 @@ export type IIoRestorecommerceTaxTax = {
   typeId?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type ResourceUnitCodeMutation = {
+  __typename?: 'ResourceUnitCodeMutation';
+  Mutate?: Maybe<ProtoIoRestorecommerceUnitCodeUnitCodeListResponse>;
+  Delete?: Maybe<ProtoIoRestorecommerceResourcebaseDeleteResponse>;
+};
+
+
+export type ResourceUnitCodeMutationMutateArgs = {
+  input: IIoRestorecommerceUnitCodeUnitCodeList;
+};
+
+
+export type ResourceUnitCodeMutationDeleteArgs = {
+  input: IIoRestorecommerceResourcebaseDeleteRequest;
+};
+
+export type IIoRestorecommerceUnitCodeUnitCodeList = {
+  items?: InputMaybe<Array<IIoRestorecommerceUnitCodeUnitCode>>;
+  totalCount?: InputMaybe<Scalars['Int']['input']>;
+  mode?: InputMaybe<ModeType>;
+  /** target scope */
+  scope?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IIoRestorecommerceUnitCodeUnitCode = {
+  id?: InputMaybe<Scalars['String']['input']>;
+  meta?: InputMaybe<IIoRestorecommerceMetaMeta>;
+  status?: InputMaybe<IoRestorecommerceUnitCodeStatusCode>;
+  commonCode?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  levelCategory?: InputMaybe<Scalars['String']['input']>;
+  symbol?: InputMaybe<Scalars['String']['input']>;
+  conversionFactor?: InputMaybe<Scalars['String']['input']>;
+  groupNumber?: InputMaybe<Scalars['String']['input']>;
+  sector?: InputMaybe<IoRestorecommerceUnitCodeSector>;
+  groupId?: InputMaybe<Scalars['String']['input']>;
+  quantity?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type ResourceCommandMutation = {
   __typename?: 'ResourceCommandMutation';
   Mutate?: Maybe<ProtoIoRestorecommerceCommandCommandListResponse>;
@@ -1557,6 +1670,13 @@ export type ResolversTypes = ResolversObject<{
   IoRestorecommerceTaxTaxListResponse: ResolverTypeWrapper<IoRestorecommerceTaxTaxListResponse>;
   IoRestorecommerceTaxTaxResponse: ResolverTypeWrapper<IoRestorecommerceTaxTaxResponse>;
   IoRestorecommerceTaxTax: ResolverTypeWrapper<IoRestorecommerceTaxTax>;
+  ResourceUnitCodeQuery: ResolverTypeWrapper<ResourceUnitCodeQuery>;
+  ProtoIoRestorecommerceUnitCodeUnitCodeListResponse: ResolverTypeWrapper<ProtoIoRestorecommerceUnitCodeUnitCodeListResponse>;
+  IoRestorecommerceUnitCodeUnitCodeListResponse: ResolverTypeWrapper<IoRestorecommerceUnitCodeUnitCodeListResponse>;
+  IoRestorecommerceUnitCodeUnitCodeResponse: ResolverTypeWrapper<IoRestorecommerceUnitCodeUnitCodeResponse>;
+  IoRestorecommerceUnitCodeUnitCode: ResolverTypeWrapper<IoRestorecommerceUnitCodeUnitCode>;
+  IoRestorecommerceUnitCodeStatusCode: IoRestorecommerceUnitCodeStatusCode;
+  IoRestorecommerceUnitCodeSector: IoRestorecommerceUnitCodeSector;
   ResourceCommandQuery: ResolverTypeWrapper<ResourceCommandQuery>;
   ProtoIoRestorecommerceCommandCommandListResponse: ResolverTypeWrapper<ProtoIoRestorecommerceCommandCommandListResponse>;
   IoRestorecommerceCommandCommandListResponse: ResolverTypeWrapper<IoRestorecommerceCommandCommandListResponse>;
@@ -1615,6 +1735,9 @@ export type ResolversTypes = ResolversObject<{
   ResourceTaxMutation: ResolverTypeWrapper<ResourceTaxMutation>;
   IIoRestorecommerceTaxTaxList: IIoRestorecommerceTaxTaxList;
   IIoRestorecommerceTaxTax: IIoRestorecommerceTaxTax;
+  ResourceUnitCodeMutation: ResolverTypeWrapper<ResourceUnitCodeMutation>;
+  IIoRestorecommerceUnitCodeUnitCodeList: IIoRestorecommerceUnitCodeUnitCodeList;
+  IIoRestorecommerceUnitCodeUnitCode: IIoRestorecommerceUnitCodeUnitCode;
   ResourceCommandMutation: ResolverTypeWrapper<ResourceCommandMutation>;
   IIoRestorecommerceCommandCommandList: IIoRestorecommerceCommandCommandList;
   IIoRestorecommerceCommandCommand: IIoRestorecommerceCommandCommand;
@@ -1716,6 +1839,11 @@ export type ResolversParentTypes = ResolversObject<{
   IoRestorecommerceTaxTaxListResponse: IoRestorecommerceTaxTaxListResponse;
   IoRestorecommerceTaxTaxResponse: IoRestorecommerceTaxTaxResponse;
   IoRestorecommerceTaxTax: IoRestorecommerceTaxTax;
+  ResourceUnitCodeQuery: ResourceUnitCodeQuery;
+  ProtoIoRestorecommerceUnitCodeUnitCodeListResponse: ProtoIoRestorecommerceUnitCodeUnitCodeListResponse;
+  IoRestorecommerceUnitCodeUnitCodeListResponse: IoRestorecommerceUnitCodeUnitCodeListResponse;
+  IoRestorecommerceUnitCodeUnitCodeResponse: IoRestorecommerceUnitCodeUnitCodeResponse;
+  IoRestorecommerceUnitCodeUnitCode: IoRestorecommerceUnitCodeUnitCode;
   ResourceCommandQuery: ResourceCommandQuery;
   ProtoIoRestorecommerceCommandCommandListResponse: ProtoIoRestorecommerceCommandCommandListResponse;
   IoRestorecommerceCommandCommandListResponse: IoRestorecommerceCommandCommandListResponse;
@@ -1772,6 +1900,9 @@ export type ResolversParentTypes = ResolversObject<{
   ResourceTaxMutation: ResourceTaxMutation;
   IIoRestorecommerceTaxTaxList: IIoRestorecommerceTaxTaxList;
   IIoRestorecommerceTaxTax: IIoRestorecommerceTaxTax;
+  ResourceUnitCodeMutation: ResourceUnitCodeMutation;
+  IIoRestorecommerceUnitCodeUnitCodeList: IIoRestorecommerceUnitCodeUnitCodeList;
+  IIoRestorecommerceUnitCodeUnitCode: IIoRestorecommerceUnitCodeUnitCode;
   ResourceCommandMutation: ResourceCommandMutation;
   IIoRestorecommerceCommandCommandList: IIoRestorecommerceCommandCommandList;
   IIoRestorecommerceCommandCommand: IIoRestorecommerceCommandCommand;
@@ -1796,6 +1927,7 @@ export type ResourceQueryResolvers<ContextType = ResourceContext, ParentType ext
   organization?: Resolver<ResolversTypes['ResourceOrganizationQuery'], ParentType, ContextType>;
   tax_type?: Resolver<ResolversTypes['ResourceTaxTypeQuery'], ParentType, ContextType>;
   tax?: Resolver<ResolversTypes['ResourceTaxQuery'], ParentType, ContextType>;
+  unit_code?: Resolver<ResolversTypes['ResourceUnitCodeQuery'], ParentType, ContextType>;
   command?: Resolver<ResolversTypes['ResourceCommandQuery'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -2378,6 +2510,50 @@ export type IoRestorecommerceTaxTaxResolvers<ContextType = ResourceContext, Pare
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type ResourceUnitCodeQueryResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ResourceUnitCodeQuery'] = ResolversParentTypes['ResourceUnitCodeQuery']> = ResolversObject<{
+  Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceUnitCodeUnitCodeListResponse']>, ParentType, ContextType, RequireFields<ResourceUnitCodeQueryReadArgs, 'input'>>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type ProtoIoRestorecommerceUnitCodeUnitCodeListResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceUnitCodeUnitCodeListResponse'] = ResolversParentTypes['ProtoIoRestorecommerceUnitCodeUnitCodeListResponse']> = ResolversObject<{
+  details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceUnitCodeUnitCodeListResponse']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceUnitCodeUnitCodeListResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceUnitCodeUnitCodeListResponse'] = ResolversParentTypes['IoRestorecommerceUnitCodeUnitCodeListResponse']> = ResolversObject<{
+  items?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceUnitCodeUnitCodeResponse']>>, ParentType, ContextType>;
+  totalCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  operationStatus?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusOperationStatus']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceUnitCodeUnitCodeResponseResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceUnitCodeUnitCodeResponse'] = ResolversParentTypes['IoRestorecommerceUnitCodeUnitCodeResponse']> = ResolversObject<{
+  payload?: Resolver<Maybe<ResolversTypes['IoRestorecommerceUnitCodeUnitCode']>, ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusStatus']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceUnitCodeUnitCodeResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceUnitCodeUnitCode'] = ResolversParentTypes['IoRestorecommerceUnitCodeUnitCode']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['IoRestorecommerceUnitCodeStatusCode']>, ParentType, ContextType>;
+  commonCode?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  levelCategory?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  symbol?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  conversionFactor?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  groupNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  sector?: Resolver<Maybe<ResolversTypes['IoRestorecommerceUnitCodeSector']>, ParentType, ContextType>;
+  groupId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  quantity?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceUnitCodeStatusCodeResolvers = { ADDED: 0, CHANGED_NAME: 1, CHANGED_CHARACTERISTIC: 2, DEPRECATED: 3, MARKED_AS_DELETED: 4, REINSTATED: 5 };
+
+export type IoRestorecommerceUnitCodeSectorResolvers = { UNKNOWN: 0, ACOUSTICS: 1, ATOMIC_AND_NUCLEAR_PHYSICS: 2, CHARACTERISTIC_NUMBERS: 3, ELECTRICITY_AND_MAGNETISM: 4, HEAT: 5, LIGHT_AND_RELATED_ELECTROMAGNETIC_RADIATIONS: 6, MECHANICS: 7, MISCELLANEOUS: 8, NUCLEAR_REACTIONS_AND_IONIZING_RADIATIONS: 9, PERIODIC_AND_RELATED_PHASES: 10, PHYSICAL_CHEMISTRY_AND_MOLECULAR_PHYSICS: 11, SOLID_STATE_PHYSICS: 12, SPACE_AND_TIME: 13 };
+
 export type ResourceCommandQueryResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ResourceCommandQuery'] = ResolversParentTypes['ResourceCommandQuery']> = ResolversObject<{
   Read?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceCommandCommandListResponse']>, ParentType, ContextType, RequireFields<ResourceCommandQueryReadArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -2436,6 +2612,7 @@ export type ResourceMutationResolvers<ContextType = ResourceContext, ParentType 
   organization?: Resolver<ResolversTypes['ResourceOrganizationMutation'], ParentType, ContextType>;
   tax_type?: Resolver<ResolversTypes['ResourceTaxTypeMutation'], ParentType, ContextType>;
   tax?: Resolver<ResolversTypes['ResourceTaxMutation'], ParentType, ContextType>;
+  unit_code?: Resolver<ResolversTypes['ResourceUnitCodeMutation'], ParentType, ContextType>;
   command?: Resolver<ResolversTypes['ResourceCommandMutation'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
@@ -2518,6 +2695,12 @@ export type ResourceTaxTypeMutationResolvers<ContextType = ResourceContext, Pare
 export type ResourceTaxMutationResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ResourceTaxMutation'] = ResolversParentTypes['ResourceTaxMutation']> = ResolversObject<{
   Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceTaxTaxListResponse']>, ParentType, ContextType, RequireFields<ResourceTaxMutationMutateArgs, 'input'>>;
   Delete?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceResourcebaseDeleteResponse']>, ParentType, ContextType, RequireFields<ResourceTaxMutationDeleteArgs, 'input'>>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type ResourceUnitCodeMutationResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['ResourceUnitCodeMutation'] = ResolversParentTypes['ResourceUnitCodeMutation']> = ResolversObject<{
+  Mutate?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceUnitCodeUnitCodeListResponse']>, ParentType, ContextType, RequireFields<ResourceUnitCodeMutationMutateArgs, 'input'>>;
+  Delete?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceResourcebaseDeleteResponse']>, ParentType, ContextType, RequireFields<ResourceUnitCodeMutationDeleteArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -2624,6 +2807,13 @@ export type Resolvers<ContextType = ResourceContext> = ResolversObject<{
   IoRestorecommerceTaxTaxListResponse?: IoRestorecommerceTaxTaxListResponseResolvers<ContextType>;
   IoRestorecommerceTaxTaxResponse?: IoRestorecommerceTaxTaxResponseResolvers<ContextType>;
   IoRestorecommerceTaxTax?: IoRestorecommerceTaxTaxResolvers<ContextType>;
+  ResourceUnitCodeQuery?: ResourceUnitCodeQueryResolvers<ContextType>;
+  ProtoIoRestorecommerceUnitCodeUnitCodeListResponse?: ProtoIoRestorecommerceUnitCodeUnitCodeListResponseResolvers<ContextType>;
+  IoRestorecommerceUnitCodeUnitCodeListResponse?: IoRestorecommerceUnitCodeUnitCodeListResponseResolvers<ContextType>;
+  IoRestorecommerceUnitCodeUnitCodeResponse?: IoRestorecommerceUnitCodeUnitCodeResponseResolvers<ContextType>;
+  IoRestorecommerceUnitCodeUnitCode?: IoRestorecommerceUnitCodeUnitCodeResolvers<ContextType>;
+  IoRestorecommerceUnitCodeStatusCode?: IoRestorecommerceUnitCodeStatusCodeResolvers;
+  IoRestorecommerceUnitCodeSector?: IoRestorecommerceUnitCodeSectorResolvers;
   ResourceCommandQuery?: ResourceCommandQueryResolvers<ContextType>;
   ProtoIoRestorecommerceCommandCommandListResponse?: ProtoIoRestorecommerceCommandCommandListResponseResolvers<ContextType>;
   IoRestorecommerceCommandCommandListResponse?: IoRestorecommerceCommandCommandListResponseResolvers<ContextType>;
@@ -2647,6 +2837,7 @@ export type Resolvers<ContextType = ResourceContext> = ResolversObject<{
   ResourceOrganizationMutation?: ResourceOrganizationMutationResolvers<ContextType>;
   ResourceTaxTypeMutation?: ResourceTaxTypeMutationResolvers<ContextType>;
   ResourceTaxMutation?: ResourceTaxMutationResolvers<ContextType>;
+  ResourceUnitCodeMutation?: ResourceUnitCodeMutationResolvers<ContextType>;
   ResourceCommandMutation?: ResourceCommandMutationResolvers<ContextType>;
   Subscription?: SubscriptionResolvers<ContextType>;
   SubscriptionOutput?: SubscriptionOutputResolvers<ContextType>;

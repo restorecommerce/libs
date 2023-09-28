@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.6.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.5.1...@restorecommerce/facade@1.6.0) (2023-09-28)
+
+
+### Features
+
+* **facade:** add unit codes ([147fef0](https://github.com/restorecommerce/libs/commit/147fef0d28e86479f87e5f3307eeeb8a16211ea3))
+
+
+
+
+
 ## [1.5.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.5.0...@restorecommerce/facade@1.5.1) (2023-09-18)
 
 **Note:** Version bump only for package @restorecommerce/facade

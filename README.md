@@ -1,6 +1,6 @@
 # resource-base-interface
 
-[![Version][version]](https://www.npmjs.com/package/@restorecommerce/resource-base-interface)[![Build Status][build]]([https://travis-ci.org/restorecommerce/resource-base-interface?branch=master](https://github.com/restorecommerce/resource-base-interface/actions/workflows/build.yaml))[![Dependencies][depend]](https://david-dm.org/restorecommerce/resource-base-interface)[![Coverage Status][cover]](https://coveralls.io/github/restorecommerce/resource-base-interface?branch=master)
+[![Version][version]](https://www.npmjs.com/package/@restorecommerce/resource-base-interface)[![Build Status][build]](https://img.shields.io/github/actions/workflow/status/restorecommerce/resource-base-interface/build.yaml?style=flat-square)[![Dependencies][depend]](https://david-dm.org/restorecommerce/resource-base-interface)[![Coverage Status][cover]](https://coveralls.io/github/restorecommerce/resource-base-interface?branch=master)
 
 [version]: http://img.shields.io/npm/v/@restorecommerce/resource-base-interface.svg?style=flat-square
 [build]: https://img.shields.io/github/actions/workflow/status/restorecommerce/resource-base-interface/build.yaml?style=flat-square

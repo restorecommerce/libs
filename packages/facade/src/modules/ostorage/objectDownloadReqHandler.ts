@@ -68,7 +68,7 @@ export const handleGetFile = async (bucket: string, key: string, ctx: any, clien
             streamData.options = chunk.response?.payload?.options;
             // set Last-Modified
             if (chunk?.response?.payload?.meta?.modified) {
-              ctx.response.set('Last-Modified', new Date(chunk?.response?.payload?.meta?.modified));
+              ctx.response.set('Last-Modified', chunk?.response?.payload?.meta?.modified);
             }
             if (!streamData.options) {
               logger.silly(`File ${key} from bucket ${bucket} does have empty options`, streamData.options);

@@ -7,7 +7,6 @@ import type { Processor } from 'bullmq';
 import { Worker } from 'bullmq';
 import type { Data } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/job.js';
 
-
 export const marshallProtobufAny = (msg: any): any => {
   return {
     type_url: 'identity.rendering.renderRequest',
@@ -88,7 +87,7 @@ export const runWorker = async (queue: string, concurrency: number, cfg: any, lo
 
   const redisURL = new URL(redisConfig.url);
 
-  logger.info('Registering worker for queue ', queue);
+  logger.info(`Registering worker for queue ${queue}`);
   const worker = new Worker(queue, async job => {
     const filteredJob = _filterQueuedJob<JobType>(job as any, logger);
     // For recurring job add time so if service goes down we can fire jobs

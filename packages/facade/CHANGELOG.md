@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.6.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.6.3...@restorecommerce/facade@1.6.4) (2023-10-05)
+
+
+### Bug Fixes
+
+* OSS download last modified date ([ce69b3d](https://github.com/restorecommerce/libs/commit/ce69b3d6e11ade14a5dfe833c8e9cada6043b0a3))
+
+
+
+
+
 ## [1.6.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.6.2...@restorecommerce/facade@1.6.3) (2023-09-28)
 
 **Note:** Version bump only for package @restorecommerce/facade

@@ -94,8 +94,8 @@ export const runWorker = async (queue: string, concurrency: number, cfg: any, lo
     // for the missed schedules comparing the last run time
     let lastRunTime;
     if (filteredJob?.opts?.repeat &&
-      ((filteredJob.opts.repeat as any).every ||
-        (filteredJob.opts.repeat as any).cron)) {
+      ((filteredJob.opts.repeat as any)?.every ||
+        (filteredJob.opts.repeat as any)?.pattern)) {
       if (filteredJob?.data) {
         // adding time to payload data for recurring jobs
         const dateTime = new Date();

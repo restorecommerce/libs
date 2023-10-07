@@ -15,17 +15,13 @@ import {
 } from './rules_utils';
 import {
   Request,
-  Response_Decision,
-  AccessControlServiceImplementation,
-  DeepPartial,
-  ReverseQuery,
-  Response,
-  AccessControlServiceDefinition
+  Response_Decision
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/access_control';
-import { createServer, Server } from 'nice-grpc';
+import { GrpcMockServer } from '@alenon/grpc-mock-server';
+import * as proto_loader from '@grpc/proto-loader';
+import * as grpc from '@grpc/grpc-js';
 
 let authZ: ACSAuthZ;
-let mockServer: Server;
 
 const encode = (object: any): any => {
   if (_.isArray(object)) {
@@ -36,12 +32,6 @@ const encode = (object: any): any => {
     };
   }
 };
-
-interface ServerRule {
-  method: string;
-  input: any;
-  output: any;
-}
 
 const updateMetaData = (resourceList: Array<any>): Array<CtxResource> => {
   if (!_.isArray(resourceList)) {
@@ -65,23 +55,62 @@ const updateMetaData = (resourceList: Array<any>): Array<CtxResource> => {
   });
 };
 
-const startGrpcMockServer = async (implementation: AccessControlServiceImplementation) => {
-  mockServer = createServer();
-  mockServer.add(AccessControlServiceDefinition as any, implementation as any);
-  await mockServer.listen('0.0.0.0:50061');
-  logger.info('ACS Server started on port 50061');
+interface MethodWithOutput {
+  method: string,
+  output: any
+};
+
+const PROTO_PATH: string = 'node_modules/@restorecommerce/protos/io/restorecommerce/access_control.proto';
+const PKG_NAME: string = 'io.restorecommerce.access_control';
+const SERVICE_NAME: string = 'AccessControlService';
+
+const pkgDef: grpc.GrpcObject = grpc.loadPackageDefinition(
+  proto_loader.loadSync(PROTO_PATH, {
+    includeDirs: ['node_modules/@restorecommerce/protos'],
+    keepCase: true,
+    longs: String,
+    enums: String,
+    defaults: true,
+    oneofs: true
+  })
+);
+
+const mockServer = new GrpcMockServer('localhost:50061');
+
+const startGrpcMockServer = async (methodWithOutput: MethodWithOutput[]) => {
+  // create mock implementation based on the method name and output
+  const implementations = {
+    isAllowed: (call: any, callback: any) => {
+      const token = JSON.parse(call?.request?.context?.subject?.value?.toString())?.token;
+      if (token === 'invalid_token' || token === 'unauthenticated_token') {
+        callback(null, { decision: Response_Decision.DENY, operation_status: { code: 403, message: 'Access not allowed for request with subject:undefined, resource:Test, action:CREATE, target_scope:targetSubScope; the response was DENY' } });
+      } else if (token === 'valid_token') {
+        callback(null, { decision: Response_Decision.PERMIT, operation_status: { code: 200, message: 'success' } });
+      }
+    },
+    whatIsAllowed: (call: any, callback: any) => {
+      callback(null, policySetRQ);
+    }
+  };
+  try {
+    mockServer.addService(PROTO_PATH, PKG_NAME, SERVICE_NAME, implementations, {
+      includeDirs: ['node_modules/@restorecommerce/protos/'],
+      keepCase: true,
+      longs: String,
+      enums: String,
+      defaults: true,
+      oneofs: true
+    });
+    await mockServer.start();
+    logger.info('Mock ACS Server started on port 50061');
+  } catch (err) {
+    logger.error('Error starting mock ACS server', err);
+  }
 };
 
 const stopGrpcMockServer = async () => {
-  if (!mockServer) {
-    return;
-  }
-
-  await mockServer.shutdown().then(() => {
-    logger.info('Server closed successfully');
-  });
-
-  mockServer = undefined;
+  await mockServer.stop();
+  logger.info('Mock ACS Server closed successfully');
 };
 
 const start = async (): Promise<void> => {
@@ -91,6 +120,7 @@ const start = async (): Promise<void> => {
 
 const stop = async (): Promise<void> => {
   // await worker.stop();
+  await stopGrpcMockServer();
 };
 
 // user
@@ -141,21 +171,17 @@ describe('testing acs-client with multiple entities', () => {
   });
 
   beforeEach(async () => {
-    await stopGrpcMockServer();
     await flushCache('test_user_id:');
   });
 
   afterEach(async () => {
-    await stopGrpcMockServer();
   });
 
   describe('Test accessRequest', () => {
     // PERMIT tests
     it('Should PERMIT creating Location and Address resource for isAllowed operation with valid user ctx', async () => {
-      await startGrpcMockServer({
-        isAllowed: async (): Promise<DeepPartial<Response>> => ({ decision: Response_Decision.PERMIT, operation_status: { code: 200, message: 'success' }}),
-        whatIsAllowed: async (): Promise<DeepPartial<ReverseQuery>> => ({})
-      });
+      await startGrpcMockServer([{ method: 'WhatIsAllowed', output: {} },
+      { method: 'IsAllowed', output: { decision: Response_Decision.PERMIT } }]);
       // test resource to be created
       let testResource: CtxResource[] = [{
         id: 'location_id',
@@ -183,13 +209,8 @@ describe('testing acs-client with multiple entities', () => {
       response.decision.should.equal(Response_Decision.PERMIT);
       response.operation_status.code.should.equal(200);
       response.operation_status.message.should.equal('success');
-      await stopGrpcMockServer();
     });
     it('Should PERMIT Reading Location and Address resource for isAllowed Operation with valid user ctx', async () => {
-      await startGrpcMockServer({
-        isAllowed: async (): Promise<DeepPartial<Response>> => ({ decision: Response_Decision.PERMIT, operation_status: { code: 200, message: 'success' }}),
-        whatIsAllowed: async (): Promise<DeepPartial<ReverseQuery>> => ({})
-      });
       // test resource to be created
       let testResource: CtxResource[] = [{
         id: 'location_id',
@@ -217,20 +238,12 @@ describe('testing acs-client with multiple entities', () => {
       response.decision.should.equal(Response_Decision.PERMIT);
       response.operation_status.code.should.equal(200);
       response.operation_status.message.should.equal('success');
-      await stopGrpcMockServer();
     });
     it(`postgres DB - Should PERMIT Reading Location and Address resource for whatIsAllowed operation and return applicable filters for Location and Address with valid user ctx`, async () => {
       // Location Permit Rule with fallback rule
       policySetRQ.policy_sets[0].policies[0].rules = [permitLocationRule, fallbackRule];
       // Address Permit Rule with fallback rule
       policySetRQ.policy_sets[0].policies[1].rules = [permitAddressRule, fallbackRule];
-      await startGrpcMockServer({
-        isAllowed: async (): Promise<DeepPartial<Response>> => ({
-          decision: Response_Decision.PERMIT,
-          operation_status: {code: 200, message: 'success'}
-        }),
-        whatIsAllowed: async (): Promise<DeepPartial<ReverseQuery>> => policySetRQ
-      });
       // test resource to be created
       let testResource: CtxResource[] = [{
         id: 'location_id',
@@ -274,10 +287,6 @@ describe('testing acs-client with multiple entities', () => {
       policySetRQ.policy_sets[0].policies[0].rules = [permitLocationRule, fallbackRule];
       // Address Permit Rule with fallback rule
       policySetRQ.policy_sets[0].policies[1].rules = [permitAddressRule, fallbackRule];
-      await startGrpcMockServer({
-        isAllowed: async (): Promise<DeepPartial<Response>> => ({ decision: Response_Decision.PERMIT, operation_status: { code: 200, message: 'success' }}),
-        whatIsAllowed: async (): Promise<DeepPartial<ReverseQuery>> => policySetRQ
-      });
       // test resource to be created
       let testResource: CtxResource[] = [{
         id: 'location_id',
@@ -315,10 +324,6 @@ describe('testing acs-client with multiple entities', () => {
 
     // DENY tests
     it('Should DENY creating Location and Address resource for isAllowed operation with invalid user ctx', async () => {
-      await startGrpcMockServer({
-        isAllowed: async (): Promise<DeepPartial<Response>> => ({ decision: Response_Decision.DENY, operation_status: { code: 200, message: 'success' }}),
-        whatIsAllowed: async (): Promise<DeepPartial<ReverseQuery>> => ({})
-      });
       // test resource to be created
       let testResource: CtxResource[] = [{
         id: 'location_id',
@@ -335,7 +340,8 @@ describe('testing acs-client with multiple entities', () => {
           owners: []
         }
       }];
-      subject.scope = 'invalidTargetScope'; // set invalid target scope
+      subject.scope = 'invalidTargetScope'; // set invalid target scope and token
+      subject.token = 'invalid_token';
       testResource = updateMetaData(testResource);
       let ctx: ACSClientContext = { subject };
       ctx.resources = testResource;
@@ -349,10 +355,6 @@ describe('testing acs-client with multiple entities', () => {
       response.operation_status.message.should.equal('Access not allowed for request with subject:test_user_id, resource:["Location","Address"], action:CREATE, target_scope:invalidTargetScope; the response was DENY');
     });
     it('Should DENY Reading Location and Address resource for isAllowed Operation with invalid user ctx', async () => {
-      await startGrpcMockServer({
-        isAllowed: async (): Promise<DeepPartial<Response>> => ({ decision: Response_Decision.DENY, operation_status: { code: 200, message: 'success' }}),
-        whatIsAllowed: async (): Promise<DeepPartial<ReverseQuery>> => ({})
-      });
       // test resource to be created
       let testResource: CtxResource[] = [{
         id: 'location_id',
@@ -370,7 +372,8 @@ describe('testing acs-client with multiple entities', () => {
         }
       }];
       testResource = updateMetaData(testResource);
-      subject.scope = 'invalidTargetScope'; // set invalid target scope
+      subject.scope = 'invalidTargetScope'; // set invalid target scope and token
+      subject.token = 'invalid_token';
       let ctx: ACSClientContext = { subject };
       ctx.resources = testResource;
       // call accessRequest(), the response is from mock ACS
@@ -387,10 +390,6 @@ describe('testing acs-client with multiple entities', () => {
       policySetRQ.policy_sets[0].policies[0].rules = [permitLocationRule, fallbackRule];
       // Address Deny fallback rule
       policySetRQ.policy_sets[0].policies[1].rules = [fallbackRule];
-      await startGrpcMockServer({
-        isAllowed: async (): Promise<DeepPartial<Response>> => ({ decision: Response_Decision.PERMIT, operation_status: { code: 200, message: 'success' }}),
-        whatIsAllowed: async (): Promise<DeepPartial<ReverseQuery>> => policySetRQ
-      });
       // test resource to be created
       let testResource: CtxResource[] = [{
         id: 'location_id',
@@ -423,10 +422,6 @@ describe('testing acs-client with multiple entities', () => {
       policySetRQ.policy_sets[0].policies[0].rules = [permitLocationRule, fallbackRule];
       // Address Deny fallback rule
       policySetRQ.policy_sets[0].policies[1].rules = [fallbackRule];
-      await startGrpcMockServer({
-        isAllowed: async (): Promise<DeepPartial<Response>> => ({ decision: Response_Decision.PERMIT, operation_status: { code: 200, message: 'success' }}),
-        whatIsAllowed: async (): Promise<DeepPartial<ReverseQuery>> => policySetRQ
-      });
       // test resource to be created
       let testResource: CtxResource[] = [{
         id: 'location_id',
@@ -457,10 +452,6 @@ describe('testing acs-client with multiple entities', () => {
 
     // PERMIT and DENY tests with properties
     it('Should PERMIT creating Location and Address resource with name property for isAllowed operation with valid user ctx', async () => {
-      await startGrpcMockServer({
-        isAllowed: async (): Promise<DeepPartial<Response>> => ({ decision: Response_Decision.PERMIT, operation_status: { code: 200, message: 'success' }}),
-        whatIsAllowed: async (): Promise<DeepPartial<ReverseQuery>> => ({})
-      });
       // test resource to be created
       let testResource: CtxResource[] = [{
         id: 'location_id',
@@ -476,6 +467,7 @@ describe('testing acs-client with multiple entities', () => {
         }
       }];
       testResource = updateMetaData(testResource);
+      subject.token = 'valid_token';
       let ctx: ACSClientContext = { subject };
       ctx.resources = testResource;
       // call accessRequest(), the response is from mock ACS
@@ -488,10 +480,6 @@ describe('testing acs-client with multiple entities', () => {
       response.operation_status.message.should.equal('success');
     });
     it('Should DENY creating Location and Address resource with name and description property for isAllowed operation with valid user ctx', async () => {
-      await startGrpcMockServer({
-        isAllowed: async (): Promise<DeepPartial<Response>> => ({ decision: Response_Decision.DENY, operation_status: { code: 200, message: 'success' }}),
-        whatIsAllowed: async (): Promise<DeepPartial<ReverseQuery>> => ({})
-      });
       // test resource to be created
       let testResource: CtxResource[] = [{
         id: 'location_id',
@@ -508,6 +496,7 @@ describe('testing acs-client with multiple entities', () => {
           owners: []
         }
       }];
+      subject.token = 'invalid_token';
       testResource = updateMetaData(testResource);
       let ctx: ACSClientContext = { subject };
       ctx.resources = testResource;
@@ -528,10 +517,6 @@ describe('testing acs-client with multiple entities', () => {
       policySetRQ.policy_sets[0].policies[1].rules = [permitAddressRuleProperty, fallbackRule];
       // Add Obligation to mock response
       policySetRQ.obligations = addressAndLocationObligation;
-      await startGrpcMockServer({
-        isAllowed: async (): Promise<DeepPartial<Response>> => ({ decision: Response_Decision.PERMIT, operation_status: { code: 200, message: 'success' }}),
-        whatIsAllowed: async (): Promise<DeepPartial<ReverseQuery>> => policySetRQ
-      });
       // test resource to be created
       let testResource: CtxResource[] = [{
         id: 'location_id',
@@ -571,10 +556,6 @@ describe('testing acs-client with multiple entities', () => {
       policySetRQ.policy_sets[0].policies[0].rules = [permitLocationRuleProperty, fallbackRule];
       // Address Deny fallback rule
       policySetRQ.policy_sets[0].policies[1].rules = [fallbackRule];
-      await startGrpcMockServer({
-        isAllowed: async (): Promise<DeepPartial<Response>> => ({ decision: Response_Decision.PERMIT, operation_status: { code: 200, message: 'success' }}),
-        whatIsAllowed: async (): Promise<DeepPartial<ReverseQuery>> => policySetRQ
-      });
       // test resource to be created
       let testResource: CtxResource[] = [{
         id: 'location_id',
@@ -605,10 +586,9 @@ describe('testing acs-client with multiple entities', () => {
 
     describe('Test isAllowed', () => {
       it('Should DENY creating Location and Address resource with unauthenticated context', async () => {
-        await startGrpcMockServer({
-          isAllowed: async (): Promise<DeepPartial<Response>> => ({ decision: Response_Decision.DENY, operation_status: { code: 403, message: 'Access not allowed for request with subject:undefined, resource:Test, action:CREATE, target_scope:targetSubScope; the response was DENY' } }),
-          whatIsAllowed: async (): Promise<DeepPartial<ReverseQuery>> => ({})
-        });
+        const unauthSubject = {
+          token: 'unauthenticated_token'
+        };
         const isAllowedReqUnauth = {
           target:
           {
@@ -616,7 +596,9 @@ describe('testing acs-client with multiple entities', () => {
             actions: createAction,
             resources: locationAddressResources
           },
-          context: {}
+          context: {
+            subject: encode(unauthSubject)
+          }
         } as Request;
         const response = await isAllowed(isAllowedReqUnauth, authZ);
         should.exist(response.decision);
@@ -625,10 +607,7 @@ describe('testing acs-client with multiple entities', () => {
         response.operation_status.message.should.equal('Access not allowed for request with subject:undefined, resource:Test, action:CREATE, target_scope:targetSubScope; the response was DENY');
       });
       it('Should PERMIT creating Location and Address resource with valid Auth context', async () => {
-        await startGrpcMockServer({
-          isAllowed: async (): Promise<DeepPartial<Response>> => ({ decision: Response_Decision.PERMIT, operation_status: { code: 200, message: 'success' }}),
-          whatIsAllowed: async (): Promise<DeepPartial<ReverseQuery>> => ({})
-        });
+        let validSub = { token: 'valid_token' };
         const isAllowedReqAuth = {
           target:
           {
@@ -638,7 +617,7 @@ describe('testing acs-client with multiple entities', () => {
           },
           context: {
             // Need to send encoded subject and resources in context
-            subject: encode(JSON.stringify(authenticatedSubject)),
+            subject: encode(validSub),
             resources: [encode(JSON.stringify(locationAddressResources))]
           }
         } as Request;
@@ -655,10 +634,6 @@ describe('testing acs-client with multiple entities', () => {
         policySetRQ.policy_sets[0].policies[0].rules = [permitLocationRule, fallbackRule];
         // Address permit and fallback rule
         policySetRQ.policy_sets[0].policies[1].rules = [permitAddressRule, fallbackRule];
-        await startGrpcMockServer({
-          isAllowed: async (): Promise<DeepPartial<Response>> => ({}),
-          whatIsAllowed: async (): Promise<DeepPartial<ReverseQuery>> => policySetRQ
-        });
         const whatIsAllowedReqAuth = {
           target:
           {

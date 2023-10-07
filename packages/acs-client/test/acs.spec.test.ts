@@ -3,23 +3,19 @@ import { accessRequest, isAllowed, whatIsAllowed } from '../lib/acs/resolver';
 import { flushCache, initializeCache } from '../lib/acs/cache';
 import { AuthZAction, DecisionResponse, PolicySetRQResponse, Operation, ACSClientContext, CtxResource } from '../lib/acs/interfaces';
 import { initAuthZ, ACSAuthZ } from '../lib/acs/authz';
+import * as proto_loader from '@grpc/proto-loader';
+import * as grpc from '@grpc/grpc-js';
 import logger from '../lib/logger';
 import * as _ from 'lodash';
 import { cfg } from '../lib';
 import {
   Request,
-  Response_Decision,
-  AccessControlServiceImplementation,
-  DeepPartial,
-  ReverseQuery,
-  Response,
-  AccessControlServiceDefinition
+  Response_Decision
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/access_control';
-import { createServer, Server } from 'nice-grpc';
+import { GrpcMockServer } from '@alenon/grpc-mock-server';
 import { Effect } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/rule';
 
 let authZ: ACSAuthZ;
-let mockServer: Server;
 
 const permitRule = {
   id: 'permit_rule_id',
@@ -131,12 +127,6 @@ const encode = (object: any): any => {
   }
 };
 
-interface ServerRule {
-  method: string;
-  input: any;
-  output: any;
-}
-
 const updateMetaData = (resourceList: Array<any>): Array<CtxResource> => {
   if (!_.isArray(resourceList)) {
     resourceList = [resourceList];
@@ -159,32 +149,73 @@ const updateMetaData = (resourceList: Array<any>): Array<CtxResource> => {
   });
 };
 
-const startGrpcMockServer = async (implementation: AccessControlServiceImplementation) => {
-  mockServer = createServer();
-  mockServer.add(AccessControlServiceDefinition as any, implementation as any);
-  await mockServer.listen('0.0.0.0:50061');
-  logger.info('ACS Server started on port 50061');
+interface MethodWithOutput {
+  method: string,
+  output: any
+};
+
+const PROTO_PATH: string = 'node_modules/@restorecommerce/protos/io/restorecommerce/access_control.proto';
+const PKG_NAME: string = 'io.restorecommerce.access_control';
+const SERVICE_NAME: string = 'AccessControlService';
+
+const pkgDef: grpc.GrpcObject = grpc.loadPackageDefinition(
+  proto_loader.loadSync(PROTO_PATH, {
+    includeDirs: ['node_modules/@restorecommerce/protos'],
+    keepCase: true,
+    longs: String,
+    enums: String,
+    defaults: true,
+    oneofs: true
+  })
+);
+
+const mockServer = new GrpcMockServer('localhost:50061');
+
+const startGrpcMockServer = async (methodWithOutput: MethodWithOutput[]) => {
+  // create mock implementation based on the method name and output
+  const implementations = {
+    isAllowed: (call: any, callback: any) => {
+      const token = JSON.parse(call?.request?.context?.subject?.value?.toString())?.token;
+      if (token === 'invalid_token' || token === 'unauthenticated_token') {
+        callback(null, { decision: Response_Decision.DENY, operation_status: { code: 403, message: 'Access not allowed for request with subject:undefined, resource:Test, action:CREATE, target_scope:targetSubScope; the response was DENY' } });
+      } else if (token === 'valid_token') {
+        callback(null, { decision: Response_Decision.PERMIT, operation_status: { code: 200, message: 'success' } });
+      }
+    },
+    whatIsAllowed: (call: any, callback: any) => {
+      callback(null, policySetRQ);
+    }
+  };
+  try {
+    mockServer.addService(PROTO_PATH, PKG_NAME, SERVICE_NAME, implementations, {
+      includeDirs: ['node_modules/@restorecommerce/protos/'],
+      keepCase: true,
+      longs: String,
+      enums: String,
+      defaults: true,
+      oneofs: true
+    });
+    await mockServer.start();
+    logger.info('Mock ACS Server started on port 50061');
+  } catch (err) {
+    logger.error('Error starting mock ACS server', err);
+  }
 };
 
 const stopGrpcMockServer = async () => {
-  if (!mockServer) {
-    return;
-  }
-
-  await mockServer.shutdown().then(() => {
-    logger.info('Server closed successfully');
-  });
-
-  mockServer = undefined;
+  await mockServer.stop();
+  logger.info('Mock ACS Server closed successfully');
 };
 
 const start = async (): Promise<void> => {
   // init AuthZ - initialises acs-client connection object
   authZ = await initAuthZ() as ACSAuthZ;
+  await stopGrpcMockServer();
 };
 
 const stop = async (): Promise<void> => {
   // await worker.stop();
+  await stopGrpcMockServer();
 };
 
 describe('testing acs-client', () => {
@@ -206,20 +237,16 @@ describe('testing acs-client', () => {
   });
 
   beforeEach(async () => {
-    await stopGrpcMockServer();
     await flushCache('test_user_id:');
   });
 
   afterEach(async () => {
-    await stopGrpcMockServer();
   });
 
   describe('Test accessRequest', () => {
     it('Should DENY creating Test resource with unauthenticated context', async () => {
-      await startGrpcMockServer({
-        isAllowed: async (): Promise<DeepPartial<Response>> => ({decision: Response_Decision.DENY}),
-        whatIsAllowed: async (): Promise<DeepPartial<ReverseQuery>> => ({})
-      });
+      await startGrpcMockServer([{ method: 'WhatIsAllowed', output: {} },
+      { method: 'IsAllowed', output: { decision: Response_Decision.DENY } }]);
 
       // test resrouce to be created
       let testResource: CtxResource[] = [{
@@ -251,10 +278,6 @@ describe('testing acs-client', () => {
       response.operation_status.message.should.equal('Access not allowed for request with subject:test_user_id, resource:Test, action:CREATE, target_scope:targetScope; the response was DENY');
     });
     it('Should PERMIT creating Test resource with valid user Ctx', async () => {
-      await startGrpcMockServer({
-        isAllowed: async (): Promise<DeepPartial<Response>> => ({ decision: Response_Decision.PERMIT, operation_status: { code: 200, message: 'success' } }),
-        whatIsAllowed: async (): Promise<DeepPartial<ReverseQuery>> => ({})
-      });
       // test resource to be created
       let testResource: CtxResource[] = [{
         id: 'test_id',
@@ -269,6 +292,7 @@ describe('testing acs-client', () => {
         id: 'test_user_id',
         name: 'test_user',
         scope: 'targetScope',
+        token: 'valid_token',
         role_associations: [
           {
             role: 'test-role'
@@ -288,10 +312,6 @@ describe('testing acs-client', () => {
     it('Should DENY reading Test resource (DENY rule)', async () => {
       // PolicySet contains DENY rule
       policySetRQ.policy_sets[0].policies[0].rules[0] = denyRule;
-      await startGrpcMockServer({
-        isAllowed: async (): Promise<DeepPartial<Response>> => ({}),
-        whatIsAllowed: async (): Promise<DeepPartial<ReverseQuery>> => policySetRQ
-      });
       // test resource to be read of type 'ReadRequest'
       let input: CtxResource[] = [{
         id: 'test_id',
@@ -302,7 +322,7 @@ describe('testing acs-client', () => {
       let subject = {
         id: 'test_user_id',
         scope: 'targetScope',
-        token: 'invalid',
+        token: 'invalid_token',
         role_associations: [
           {
             role: 'test-role'
@@ -319,123 +339,115 @@ describe('testing acs-client', () => {
     });
     it('Should PERMIT reading Test resource (PERMIT rule) and verify input filter ' +
       'is extended to enforce applicable policies', async () => {
-      // PolicySet contains PERMIT rule
-      policySetRQ.policy_sets[0].policies[0].rules[0] = permitRule;
-      await startGrpcMockServer({
-        isAllowed: async (): Promise<DeepPartial<Response>> => ({}),
-        whatIsAllowed: async (): Promise<DeepPartial<ReverseQuery>> => policySetRQ
-      });
-      // test resource to be read of type 'ReadRequest'
-      let input: CtxResource[] = [{
-        id: 'test_id',
-        meta: {
-          owners: []
-        }
-      }];
-        // user ctx data updated in session
-      let subject = {
-        id: 'test_user_id',
-        scope: 'targetScope',
-        token: 'valid_token',
-        role_associations: [
-          {
-            role: 'test-role',
-            attributes: [
-              {
-                id: 'urn:restorecommerce:acs:names:roleScopingEntity',
-                value: 'urn:test:acs:model:organization.Organization',
-                attributes: [{
-                  id: 'urn:restorecommerce:acs:names:roleScopingInstance',
-                  value: 'targetScope'
-                }]
-              }
-            ]
+        // PolicySet contains PERMIT rule
+        policySetRQ.policy_sets[0].policies[0].rules[0] = permitRule;
+        // test resource to be read of type 'ReadRequest'
+        let input: CtxResource[] = [{
+          id: 'test_id',
+          meta: {
+            owners: []
           }
-        ],
-        hierarchical_scopes: [{
-          id: 'targetScope',
-          children: [{
-            id: 'targetSubScope'
-          }]
-        }]
-      };
-      let ctx: ACSClientContext = { subject };
-      ctx.resources = input;
-      // call accessRequest(), the response is from mock ACS
-      const readResponse = await accessRequest(subject, [{ resource: 'Test', id: input[0].id }], AuthZAction.READ, ctx, Operation.whatIsAllowed, 'postgres') as PolicySetRQResponse;
-      should.exist(readResponse.decision);
-      readResponse.decision.should.equal(Response_Decision.PERMIT);
-      readResponse.operation_status.code.should.equal(200);
-      readResponse.operation_status.message.should.equal('success');
-      // verify input is modified to enforce the applicapble poilicies
-      const filterParamKey = cfg.get('authorization:filterParamKey');
-      const expectedFilterResponse = [{ field: filterParamKey, operation: 'eq', value: 'targetScope' }, { field: filterParamKey, operation: 'eq', value: 'targetSubScope' }];
-      readResponse.filters[0].resource.should.equal('Test');
-      const filterEntityMap = readResponse.filters;
-      const filters = filterEntityMap[0].filters;
-      filters[0].filters[0].should.deepEqual(expectedFilterResponse[0]);
-      filters[0].filters[1].should.deepEqual(expectedFilterResponse[1]);
-    });
-    it('Should PERMIT reading Test resource (PERMIT rule) with HR scoping enabled and verify input filter ' +
-      'is extended to enforce applicable policies', async () => {
-      // PolicySet contains PERMIT rule
-      policySetRQ.policy_sets[0].policies[0].rules[0] = permitRule;
-      await startGrpcMockServer({
-        isAllowed: async (): Promise<DeepPartial<Response>> => ({}),
-        whatIsAllowed: async (): Promise<DeepPartial<ReverseQuery>> => policySetRQ
-      });
-      // test resource to be read of type 'ReadRequest'
-      let input: CtxResource[] = [{
-        id: 'test_id',
-        meta: {
-          owners: []
-        }
-      }];
+        }];
         // user ctx data updated in session
-      let subject = {
-        id: 'test_user_id',
-        scope: 'targetSubScope',
-        token: 'valid_token',
-        role_associations: [
-          {
-            role: 'test-role',
-            attributes: [
-              {
-                id: 'urn:restorecommerce:acs:names:roleScopingEntity',
-                value: 'urn:test:acs:model:organization.Organization',
-                attributes: [{
-                  id: 'urn:restorecommerce:acs:names:roleScopingInstance',
-                  value: 'targetScope'
-                }]
-              }
-            ]
-          }
-        ],
-        hierarchical_scopes: [
-          {
+        let subject = {
+          id: 'test_user_id',
+          scope: 'targetScope',
+          token: 'valid_token',
+          role_associations: [
+            {
+              role: 'test-role',
+              attributes: [
+                {
+                  id: 'urn:restorecommerce:acs:names:roleScopingEntity',
+                  value: 'urn:test:acs:model:organization.Organization',
+                  attributes: [{
+                    id: 'urn:restorecommerce:acs:names:roleScopingInstance',
+                    value: 'targetScope'
+                  }]
+                }
+              ]
+            }
+          ],
+          hierarchical_scopes: [{
             id: 'targetScope',
             children: [{
               id: 'targetSubScope'
             }]
+          }]
+        };
+        let ctx: ACSClientContext = { subject };
+        ctx.resources = input;
+        // call accessRequest(), the response is from mock ACS
+        const readResponse = await accessRequest(subject, [{ resource: 'Test', id: input[0].id }], AuthZAction.READ, ctx, Operation.whatIsAllowed, 'postgres') as PolicySetRQResponse;
+        should.exist(readResponse.decision);
+        readResponse.decision.should.equal(Response_Decision.PERMIT);
+        readResponse.operation_status.code.should.equal(200);
+        readResponse.operation_status.message.should.equal('success');
+        // verify input is modified to enforce the applicapble poilicies
+        const filterParamKey = cfg.get('authorization:filterParamKey');
+        const expectedFilterResponse = [{ field: filterParamKey, operation: 'eq', value: 'targetScope' }, { field: filterParamKey, operation: 'eq', value: 'targetSubScope' }];
+        readResponse.filters[0].resource.should.equal('Test');
+        const filterEntityMap = readResponse.filters;
+        const filters = filterEntityMap[0].filters;
+        filters[0].filters[0].should.deepEqual(expectedFilterResponse[0]);
+        filters[0].filters[1].should.deepEqual(expectedFilterResponse[1]);
+      });
+    it('Should PERMIT reading Test resource (PERMIT rule) with HR scoping enabled and verify input filter ' +
+      'is extended to enforce applicable policies', async () => {
+        // PolicySet contains PERMIT rule
+        policySetRQ.policy_sets[0].policies[0].rules[0] = permitRule;
+        // test resource to be read of type 'ReadRequest'
+        let input: CtxResource[] = [{
+          id: 'test_id',
+          meta: {
+            owners: []
           }
-        ]
-      };
-      let ctx: ACSClientContext = { subject };
-      ctx.resources = input;
-      // call accessRequest(), the response is from mock ACS
-      const readResponse = await accessRequest(subject, [{ resource: 'Test', id: input[0].id }], AuthZAction.READ, ctx, Operation.whatIsAllowed, 'postgres') as PolicySetRQResponse;
-      should.exist(readResponse.decision);
-      readResponse.decision.should.equal(Response_Decision.PERMIT);
-      readResponse.operation_status.code.should.equal(200);
-      readResponse.operation_status.message.should.equal('success');
-      // verify input is modified to enforce the applicapble poilicies
-      const filterParamKey = cfg.get('authorization:filterParamKey');
-      const expectedFilterResponse = { field: filterParamKey, operation: 'eq', value: 'targetSubScope' };
-      readResponse.filters[0].resource.should.equal('Test');
-      const filterEntityMap = readResponse.filters;
-      const filters = filterEntityMap[0].filters;
-      filters[0].filters[0].should.deepEqual(expectedFilterResponse);
-    });
+        }];
+        // user ctx data updated in session
+        let subject = {
+          id: 'test_user_id',
+          scope: 'targetSubScope',
+          token: 'valid_token',
+          role_associations: [
+            {
+              role: 'test-role',
+              attributes: [
+                {
+                  id: 'urn:restorecommerce:acs:names:roleScopingEntity',
+                  value: 'urn:test:acs:model:organization.Organization',
+                  attributes: [{
+                    id: 'urn:restorecommerce:acs:names:roleScopingInstance',
+                    value: 'targetScope'
+                  }]
+                }
+              ]
+            }
+          ],
+          hierarchical_scopes: [
+            {
+              id: 'targetScope',
+              children: [{
+                id: 'targetSubScope'
+              }]
+            }
+          ]
+        };
+        let ctx: ACSClientContext = { subject };
+        ctx.resources = input;
+        // call accessRequest(), the response is from mock ACS
+        const readResponse = await accessRequest(subject, [{ resource: 'Test', id: input[0].id }], AuthZAction.READ, ctx, Operation.whatIsAllowed, 'postgres') as PolicySetRQResponse;
+        should.exist(readResponse.decision);
+        readResponse.decision.should.equal(Response_Decision.PERMIT);
+        readResponse.operation_status.code.should.equal(200);
+        readResponse.operation_status.message.should.equal('success');
+        // verify input is modified to enforce the applicapble poilicies
+        const filterParamKey = cfg.get('authorization:filterParamKey');
+        const expectedFilterResponse = { field: filterParamKey, operation: 'eq', value: 'targetSubScope' };
+        readResponse.filters[0].resource.should.equal('Test');
+        const filterEntityMap = readResponse.filters;
+        const filters = filterEntityMap[0].filters;
+        filters[0].filters[0].should.deepEqual(expectedFilterResponse);
+      });
     it('Should DENY reading Test resource (PERMIT rule) with HR scoping disabled', async () => {
       const cacheEnabled = process.env.CACHE_ENABLED;
       if (cacheEnabled && cacheEnabled.toLowerCase() === 'true') {
@@ -445,10 +457,6 @@ describe('testing acs-client', () => {
       // disable HR scoping for permitRule
       permitRule.target.subjects[2].value = 'false';
       policySetRQ.policy_sets[0].policies[0].rules[0] = permitRule;
-      await startGrpcMockServer({
-        isAllowed: async (): Promise<DeepPartial<Response>> => ({}),
-        whatIsAllowed: async (): Promise<DeepPartial<ReverseQuery>> => policySetRQ
-      });
       // test resource to be read of type 'ReadRequest'
       let input: CtxResource[] = [{
         id: 'test_id',
@@ -499,10 +507,9 @@ describe('testing acs-client', () => {
   });
   describe('Test isAllowed', () => {
     it('Should DENY creating Test resource with unauthenticated context', async () => {
-      await startGrpcMockServer({
-        isAllowed: async (): Promise<DeepPartial<Response>> => ({ decision: Response_Decision.DENY, operation_status: { code: 403, message: 'Access not allowed for request with subject:undefined, resource:Test, action:CREATE, target_scope:targetSubScope; the response was DENY' } }),
-        whatIsAllowed: async (): Promise<DeepPartial<ReverseQuery>> => ({})
-      });
+      const unauthSubject = {
+        token: 'unauthenticated_token'
+      };
       const isAllowedReqUnauth = {
         target:
         {
@@ -510,7 +517,9 @@ describe('testing acs-client', () => {
           subjects: unauthenticatedSubject,
           resources
         },
-        context: {}
+        context: {
+          subject: encode(unauthSubject)
+        }
       } as Request;
       const response = await isAllowed(isAllowedReqUnauth, authZ);
       should.exist(response.decision);
@@ -519,10 +528,7 @@ describe('testing acs-client', () => {
       response.operation_status.message.should.equal('Access not allowed for request with subject:undefined, resource:Test, action:CREATE, target_scope:targetSubScope; the response was DENY');
     });
     it('Should PERMIT creating Test resource with valid Auth context', async () => {
-      await startGrpcMockServer({
-        isAllowed: async (): Promise<DeepPartial<Response>> => ({ decision: Response_Decision.PERMIT, operation_status: { code: 200, message: 'success' } }),
-        whatIsAllowed: async (): Promise<DeepPartial<ReverseQuery>> => ({})
-      });
+      let validSub = { token: 'valid_token' };
       const isAllowedReqAuth = {
         target:
         {
@@ -532,7 +538,7 @@ describe('testing acs-client', () => {
         },
         context: {
           // Need to send encoded subject and resources in context
-          subject: encode(JSON.stringify(authenticatedSubject)),
+          subject: encode(validSub),
           resources: [encode(JSON.stringify(resources))]
         }
       } as Request;
@@ -547,10 +553,6 @@ describe('testing acs-client', () => {
     it('Should return applicable policy set for read operation', async () => {
       // PolicySet contains DENY rule
       policySetRQ.policy_sets[0].policies[0].rules[0] = permitRule;
-      await startGrpcMockServer({
-        isAllowed: async (): Promise<DeepPartial<Response>> => ({}),
-        whatIsAllowed: async (): Promise<DeepPartial<ReverseQuery>> => policySetRQ
-      });
       const whatIsAllowedReqAuth = {
         target:
         {

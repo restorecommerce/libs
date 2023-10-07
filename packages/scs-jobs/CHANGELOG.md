@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.0...@restorecommerce/scs-jobs@0.1.1) (2023-10-07)
+
+
+### Bug Fixes
+
+* **scs-jobs:** add true to test as currently no tests exist, the unit tests for worker are found in SCS repo ([3a10919](https://github.com/restorecommerce/libs/commit/3a109197d948e1c53630d8044e5b9ef6e8f739aa))
+* **scs-jobs:** run missed schedules ([53305d1](https://github.com/restorecommerce/libs/commit/53305d1c335494d841543c4f07665df0f878e545))
+
+
+
+
+
 # 0.1.0 (2023-10-05)
 
 

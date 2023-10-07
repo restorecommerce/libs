@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/koa-health-check@1.0.3...@restorecommerce/koa-health-check@1.0.4) (2023-10-07)
+
+
+### Bug Fixes
+
+* **docs:** update repository & homepage URLs for npmjs.com ([1b5fb62](https://github.com/restorecommerce/libs/commit/1b5fb62179611bc2b82ef15282dd54ed3369b8c6))
+
+
+
+
+
 ## [1.0.3](https://github.com/restorecommerce/koa-cloud-health/compare/@restorecommerce/koa-health-check@1.0.2...@restorecommerce/koa-health-check@1.0.3) (2023-07-11)
 
 **Note:** Version bump only for package @restorecommerce/koa-health-check

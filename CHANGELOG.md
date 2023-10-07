@@ -1,3 +1,7 @@
+### 1.4.0 (September 19th, 2023)
+
+- up node version and dependencies
+
 ### 1.3.0 (September 19th, 2023)
 
 - up deps (made all fields optional in proto files)

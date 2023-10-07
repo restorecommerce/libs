@@ -18,7 +18,6 @@ import {
   CRUDDefinition,
   CRUDClient
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/test/test';
-const sleep = require('sleep');
 
 registerProtoMeta(
   resourceProto,
@@ -596,7 +595,9 @@ describe('ServiceBase', () => {
         result.operation_status.message.should.equal('success');
       });
       it('fulltext search - should return only matching documents as per search string (default case insensitive)', async () => {
-        await sleep.sleep(2);
+        await new Promise((resolve, reject) => {
+            setTimeout(resolve, 2000);
+          });
         const result = await testService.read({
           search: {
             search: 'EaRc' // will match search text from above `text` data and return 2 documents
@@ -610,7 +611,9 @@ describe('ServiceBase', () => {
       }).timeout(5000);
 
       it('fulltext search - should return only matching documents as per search string (default case insensitive)', async () => {
-        await sleep.sleep(2);
+        await new Promise((resolve, reject) => {
+            setTimeout(resolve, 2000);
+          });
         const result = await testService.read({
           search: {
             search: 'data' // will match search text from above `text` data and return 2 documents
@@ -624,7 +627,9 @@ describe('ServiceBase', () => {
       }).timeout(5000);
 
       it('fulltext search - should not return any matching documents as per search string with case sensitive search', async () => {
-        await sleep.sleep(2);
+        await new Promise((resolve, reject) => {
+            setTimeout(resolve, 2000);
+          });
         const result = await testService.read({
           search: {
             search: 'DATA', // will not match search text from above `text` data and should not return any documents

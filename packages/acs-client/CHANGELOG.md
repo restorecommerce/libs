@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.20](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@1.1.19...@restorecommerce/acs-client@1.1.20) (2023-10-07)
+
+
+### Bug Fixes
+
+* **acs-client:** unit tests migrate to latest grpc-mock ([394f754](https://github.com/restorecommerce/libs/commit/394f754866d0b4d211e1faa0a3e0fe296d371ca0))
+
+
+
+
+
 ## [1.1.19](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@1.1.18...@restorecommerce/acs-client@1.1.19) (2023-09-28)
 
 

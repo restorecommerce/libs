@@ -70,6 +70,7 @@ message RequestInvoiceNumber {
 
 message InvoiceNumberResponse {
  optional string invoice_number = 1;
+ optional io.restorecommerce.status.OperationStatus operation_status = 2;
 }
 
 message Deleted {

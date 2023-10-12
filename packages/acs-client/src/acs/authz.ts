@@ -16,7 +16,7 @@ import {
 import { createChannel, createClient } from '@restorecommerce/grpc-client';
 import { cfg, updateConfig } from '../config';
 import logger from '../logger';
-import { flushCache, getOrFill } from './cache';
+import { flushCache, getOrFill, initializeCache } from './cache';
 import { Events, registerProtoMeta } from '@restorecommerce/kafka-client';
 import { mapResourceURNObligationProperties } from '../utils';
 import {
@@ -471,8 +471,7 @@ export const initAuthZ = async (config?: any): Promise<void | ACSAuthZ> => {
     const kafkaCfg = cfg.get('events:kafka');
     // gRPC interface for access-control-srv
     if (authzCfg.enabled) {
-      const grpcClientConfig = cfg.get('client');
-      const grpcACSConfig = grpcClientConfig['acs-srv'];
+      const grpcACSConfig = cfg.get('client:acs-srv');
       const channel = createChannel(grpcACSConfig.address);
       const acsClient: AccessControlServiceClient = createClient({
         ...grpcACSConfig,
@@ -494,6 +493,7 @@ export const initAuthZ = async (config?: any): Promise<void | ACSAuthZ> => {
           }
         }
       }
+      await initializeCache();
       return authZ;
     }
   }

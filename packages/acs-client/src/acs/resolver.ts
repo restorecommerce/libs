@@ -103,9 +103,15 @@ export const isAllowedRequest = async (subject: Subject,
  * is not used and ACS request is made to `access-control-srv`
  * @returns {DecisionResponse | PolicySetRQResponse}
  */
-export const accessRequest = async (subject: DeepPartial<Subject>, resource: Resource[],
-  action: AuthZAction, ctx: ACSClientContext, operation?: Operation,
-  database?: 'arangoDB' | 'postgres', useCache = true): Promise<DecisionResponse | PolicySetRQResponse> => {
+export const accessRequest = async (
+  subject: DeepPartial<Subject>,
+  resource: Resource[],
+  action: AuthZAction,
+  ctx: ACSClientContext,
+  operation?: Operation,
+  database?: 'arangoDB' | 'postgres',
+  useCache = true
+): Promise<DecisionResponse | PolicySetRQResponse> => {
   if (_.isEmpty(subject) || !subject.token ) {
     // check if unauthenticated user is configured in config.json
     if (cfg.get('authorization:unauthenticated_user')) {
@@ -119,11 +125,9 @@ export const accessRequest = async (subject: DeepPartial<Subject>, resource: Res
     }
   }
 
-  let subClone = _.cloneDeep(subject);
-  let token;
-  if (subject && subject.token) {
-    token = subject.token;
-  }
+  const subClone = _.cloneDeep(subject);
+  const token = subject?.token;
+
   // if apiKey mode is enabled
   if (token) {
     const configuredApiKey = cfg.get('authentication:apiKey');
@@ -131,59 +135,63 @@ export const accessRequest = async (subject: DeepPartial<Subject>, resource: Res
       return { decision: Response_Decision.PERMIT, operation_status: generateOperationStatus(200, 'success') };
     }
   }
-  let authzEnabled = cfg.get('authorization:enabled');
-  let authzEnforced = cfg.get('authorization:enforce');
+
   // by default if the config for authorization enabling and enforcement is missing
   // enable it by default (true)
-  if (authzEnabled === undefined) {
-    authzEnabled = true;
-  }
-  if (authzEnforced === undefined) {
-    authzEnforced = true;
-  }
+  const authzEnabled = cfg.get('authorization:enabled') ?? true;
+  const authzEnforced = cfg.get('authorization:enforce') ?? true;
+
   // if authorization is disabled
   if (!authzEnabled) {
-    return { decision: Response_Decision.PERMIT, operation_status: generateOperationStatus(200, 'success') };
+    return {
+      decision: Response_Decision.PERMIT,
+      operation_status: generateOperationStatus(200, 'success')
+    };
   }
 
   if (_.isEmpty(subject)) {
-    return { decision: Response_Decision.DENY, operation_status: generateOperationStatus(errors.USER_NOT_LOGGED_IN.code, errors.USER_NOT_LOGGED_IN.message) };
+    return {
+      decision: Response_Decision.DENY,
+      operation_status: generateOperationStatus(
+        errors.USER_NOT_LOGGED_IN.code,
+        errors.USER_NOT_LOGGED_IN.message,
+      )
+    };
   }
 
-  let subjectID;
-  let targetScope = subject.scope;
   // resolve userID by token
-  if (subject && subject.id) {
-    subjectID = subject.id;
-  }
-
-  if (!_.isArray(resource)) {
-    resource = [resource];
-  }
+  const subjectID = subject?.id;
+  const targetScope = subject?.scope;
+  resource = _.isArray(resource) ? resource : [resource];
 
   if (_.isEmpty(resource)) {
-    const msg = `Access not allowed for request with subject:${subjectID}, ` +
-      `resource:${resource}, action:${action}, target_scope:${targetScope}; the response was INDETERMINATE`;
+    const msg = `Access not allowed for request with subject:${
+      subjectID
+    }, resource:${
+      resource
+    }, action:${
+      action
+    }, target_scope:${
+      targetScope
+    }; the response was INDETERMINATE`;
     const details = 'Entity missing';
     logger.verbose(msg);
     logger.verbose('Details:', { details });
-    return { decision: Response_Decision.DENY, operation_status: generateOperationStatus(Number(errors.ACTION_NOT_ALLOWED.code), msg) };
+    return {
+      decision: Response_Decision.DENY,
+      operation_status: generateOperationStatus(
+        Number(errors.ACTION_NOT_ALLOWED.code),
+        msg,
+      )
+    };
   }
 
   // default ACS operation is isAllowed
-  if (!operation) {
-    operation = Operation.isAllowed;
-  }
-
+  operation ??= Operation.isAllowed;
   // default database is arangoDB
-  if (!database) {
-    database = 'arangoDB';
-  }
-
+  database ??= 'arangoDB';
   // ctx.resources
-  if (ctx.resources && !_.isArray(ctx.resources)) {
-    ctx.resources = [ctx.resources];
-  }
+  ctx.resources = _.isArray(ctx?.resources) ? ctx.resources : [ctx.resources];
 
   // whatIsAllowed Operation
   if (operation === Operation.whatIsAllowed) {
@@ -199,20 +207,35 @@ export const accessRequest = async (subject: DeepPartial<Subject>, resource: Res
     }
 
     // handle case if policySet is empty
-    if ((!policySetResponse || _.isEmpty(policySetResponse.policy_sets)) && authzEnforced) {
-      const msg = `Access not allowed for request with subject:${subjectID}, ` +
-        `resource:${resource}, action:${action}, target_scope:${targetScope}; the response was INDETERMINATE`;
+    if (authzEnforced && (!policySetResponse || _.isEmpty(policySetResponse.policy_sets))) {
+      const msg = `Access not allowed for request with subject:${
+        subjectID
+      }, resource:${
+        resource
+      }, action:${
+        action
+      }, target_scope:${
+        targetScope
+      }; the response was INDETERMINATE`;
       const details = 'no matching policy/rule could be found';
       logger.verbose(msg);
       logger.verbose('Details:', { details });
-      return { decision: Response_Decision.DENY, operation_status: generateOperationStatus(Number(errors.ACTION_NOT_ALLOWED.code), msg) };
+      return {
+        decision: Response_Decision.DENY,
+        operation_status: generateOperationStatus(
+          Number(errors.ACTION_NOT_ALLOWED.code),
+          msg
+        )
+      };
     }
 
-    if ((!policySetResponse || _.isEmpty(policySetResponse.policy_sets)) && !authzEnforced) {
-      logger.verbose(`The Access response was INDETERMIATE for a request with subject:` +
-        `${subjectID}, resource:${resource}, action:${action}, target_scope:${targetScope} ` +
-        `as no matching policy/rule could be found, but since ACS enforcement ` +
-        `config is disabled overriding the ACS result`);
+    if (!authzEnforced && (!policySetResponse || _.isEmpty(policySetResponse.policy_sets))) {
+      logger.verbose([
+        `The Access response was INDETERMIATE for a request with subject:`,
+        `${subjectID}, resource:${resource}, action:${action}, target_scope:${targetScope}`,
+        `as no matching policy/rule could be found, but since ACS enforcement`,
+        `config is disabled overriding the ACS result`
+      ].join(' '));
     }
 
     // create filters to enforce applicable policies and custom query / args if applicable
@@ -225,7 +248,7 @@ export const accessRequest = async (subject: DeepPartial<Subject>, resource: Res
 
     policySetResponse.filters = (resourceFilters as FilterMapResponse).resourceFilterMap;
     policySetResponse.custom_query_args = (resourceFilters as FilterMapResponse).customQueryArgs;
-    policySetResponse.decision = Response_Decision.PERMIT; // Adding Permit to read response (since we no longer throw errorrs)
+    policySetResponse.decision = Response_Decision.PERMIT; // Adding Permit to read response (since we no longer throw errors)
     policySetResponse.operation_status = generateOperationStatus(200, 'success');
     return policySetResponse;
   }
@@ -259,8 +282,11 @@ export const accessRequest = async (subject: DeepPartial<Subject>, resource: Res
       } else if (decisionResponse.decision === Response_Decision.DENY) {
         details = `Subject:${subjectID} does not have access to requested target scope ${targetScope}`;
       }
-      const msg = `Access not allowed for request with subject:${subjectID}, ` +
-        `resource:${resourceString}, action:${action}, target_scope:${targetScope}; the response was ${Response_Decision[decisionResponse.decision]}`;
+      const msg = [
+        `Access not allowed for request with subject:${subjectID},`,
+        `resource:${resourceString}, action:${action}, target_scope:${targetScope};`,
+        `the response was ${Response_Decision[decisionResponse.decision]}`,
+      ].join(' ');
       logger.verbose(msg);
       logger.verbose('Details:', { details });
       return { decision: Response_Decision.DENY, operation_status: generateOperationStatus(Number(errors.ACTION_NOT_ALLOWED.code), msg) };
@@ -273,8 +299,11 @@ export const accessRequest = async (subject: DeepPartial<Subject>, resource: Res
     } else if (decisionResponse.decision === Response_Decision.DENY) {
       details = `Subject:${subjectID} does not have access to requested target scope ${targetScope}`;
     }
-    logger.verbose(`Access not allowed for request with subject:${subjectID}, ` +
-      `resource:${resourceString}, action:${action}, target_scope:${targetScope}; the response was ${Response_Decision[decisionResponse.decision]}`);
+    logger.verbose([
+      `Access not allowed for request with subject:${subjectID},`,
+      `resource:${resourceString}, action:${action}, target_scope:${targetScope};`,
+      `the response was ${Response_Decision[decisionResponse.decision]}`,
+    ].join(' '));
     logger.verbose(`${details}, Overriding the ACS result as ACS enforce config is disabled`);
     decisionResponse.decision = Response_Decision.PERMIT;
   }

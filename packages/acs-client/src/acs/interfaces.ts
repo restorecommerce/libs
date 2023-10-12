@@ -7,9 +7,14 @@ import {
 import { Meta } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/meta';
 import { FilterOp } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base';
 import {
-  Response_Decision
+  Response_Decision,
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/access_control';
 import { Effect } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/rule';
+
+export {
+  Response_Decision as Decision,
+  Context,
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/access_control';
 
 export enum AuthZAction {
   CREATE = 'CREATE',
@@ -235,10 +240,4 @@ export interface TargetReq {
   subjects: Attribute[];
   resources: Attribute[];
   actions: Attribute[];
-}
-
-export interface Context {
-  subject: any;
-  resources: any[];
-  security: any;
 }

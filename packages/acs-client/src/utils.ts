@@ -114,6 +114,7 @@ const checkSubjectMatch = (user: ResolvedSubject, ruleSubjectAttributes: Attribu
               }
             }
           }
+
           // check if this userAssocScope's HR object contains the targetScope
           for (let hrScope of user?.hierarchical_scopes) {
             if (hrScope?.id === userAssocScope) {
@@ -121,17 +122,25 @@ const checkSubjectMatch = (user: ResolvedSubject, ruleSubjectAttributes: Attribu
               break;
             }
           }
+
           // check HR scope matching for subject if hierarchicalRoleScopingCheck is 'true'
-          if (userAssocHRScope && checkTargetScopeExists(userAssocHRScope,
-            user.scope, reducedUserScope, hierarchicalRoleScopingCheck)) {
+          if (!userAssocHRScope) {
+            return false;
+          }
+          else if (checkTargetScopeExists(
+            userAssocHRScope,
+            user.scope,
+            reducedUserScope,
+            hierarchicalRoleScopingCheck
+          )) {
             return true;
           }
         }
       }
     }
-  } else if (!roleScopeEntExists && roleValueExists) {
+  } else if (roleValueExists) {
     if (user?.role_associations?.length > 0) {
-      for (let role of user?.role_associations) {
+      for (let role of user.role_associations) {
         if (role.role === ruleRoleValue) {
           return true;
         }
@@ -150,9 +159,17 @@ const validateCondition = (condition: string, request: any): any => {
   }
 };
 
-const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
-  userTotalScope: string[], urns: any, scopingUpdated, reqResources,
-  condition?: string, reqSubject?: DeepPartial<Subject>, database?: string): QueryParams => {
+const buildQueryFromTarget = (
+  target: AttributeTarget,
+  effect: Effect,
+  userTotalScope: string[],
+  urns: any,
+  scopingUpdated,
+  reqResources,
+  condition?: string,
+  reqSubject?: DeepPartial<Subject>,
+  database?: string
+): QueryParams => {
   const { subjects, resources } = target;
   let ruleCondition = false;
   let filter = [];
@@ -316,31 +333,22 @@ const buildQueryFromTarget = (target: AttributeTarget, effect: Effect,
   return query;
 };
 
-export const buildFilterPermissions = async (policySet: PolicySetRQ,
-  subject: ResolvedSubject, reqResources: any, database: string): Promise<QueryArguments | UserQueryArguments> => {
-  let hierarchical_scopes = subject && subject.hierarchical_scopes ? subject.hierarchical_scopes : [];
-  let role_associations = subject && subject.role_associations ? subject.role_associations : [];
-  if (_.isEmpty(role_associations) || _.isEmpty(hierarchical_scopes)) {
-    let token = subject.token;
-    let redisHRScopesKey;
-    if (subject && subject.id) {
-      redisHRScopesKey = `cache:${subject.id}:${token}:hrScopes`;
-      hierarchical_scopes = await get(redisHRScopesKey);
-      if (_.isEmpty(hierarchical_scopes)) {
-        redisHRScopesKey = `cache:${subject.id}:hrScopes`;
-        hierarchical_scopes = await get(redisHRScopesKey);
-      }
-      if (!hierarchical_scopes) {
-        hierarchical_scopes = [];
-      }
-      let redisSubject = await get(`cache:${subject.id}:subject`);
-      if (redisSubject && redisSubject.role_associations) {
-        role_associations = redisSubject.role_associations;
-      }
-      if (!role_associations) {
-        role_associations = [];
-      }
-    }
+export const buildFilterPermissions = async (
+  policySet: PolicySetRQ,
+  subject: ResolvedSubject,
+  reqResources: any,
+  database: string
+): Promise<QueryArguments | UserQueryArguments> => {
+  let hierarchical_scopes = subject?.hierarchical_scopes;
+  let role_associations = subject?.role_associations;
+  if (subject?.id) {
+    hierarchical_scopes ??= await get(`cache:${subject.id}:${subject.token}:hrScopes`)
+    ?? await get(`cache:${subject.id}:hrScopes`)
+    ?? [];
+    role_associations ??= await get(`cache:${subject.id}:subject`).then(
+      subject => subject?.role_associations
+    )
+    ?? [];
   }
   Object.assign(subject, { hierarchical_scopes, role_associations });
   const urns = cfg.get('authorization:urns');
@@ -388,9 +396,19 @@ export const buildFilterPermissions = async (policySet: PolicySetRQ,
               continue;
             }
           }
-          const filterPermissions = buildQueryFromTarget(rule.target, rule.effect,
-            reducedUserScope, urns, scopingUpdated, reqResources,
-            rule.condition, subject, database);
+
+          const filterPermissions = buildQueryFromTarget(
+            rule.target,
+            rule.effect,
+            reducedUserScope,
+            urns,
+            scopingUpdated,
+            reqResources,
+            rule.condition,
+            subject,
+            database
+          );
+
           if (!_.isEmpty(filterPermissions)) {
             scopingUpdated = filterPermissions.scopingUpdated;
             delete filterPermissions.scopingUpdated;
@@ -585,10 +603,16 @@ export interface FilterMapResponse {
  * if this param is missing defaults to `arangoDB`
  *
  */
-export const createResourceFilterMap = async (resource: Resource[],
-  policySetResponse: PolicySetRQResponse, resources: any, action: AuthZAction,
-  subject: DeepPartial<Subject>, subjectID: string, authzEnforced: boolean,
-  targetScope: string, database: 'arangoDB' | 'postgres'): Promise<FilterMapResponse | DecisionResponse> => {
+export const createResourceFilterMap = async (
+  resource: Resource[],
+  policySetResponse: PolicySetRQResponse,
+  resources: any, action: AuthZAction,
+  subject: DeepPartial<Subject>,
+  subjectID: string,
+  authzEnforced: boolean,
+  targetScope: string,
+  database: 'arangoDB' | 'postgres'
+): Promise<FilterMapResponse | DecisionResponse> => {
   let resourceFilterMap = [];
   let customQueryArgs = [];
   for (let resourceObj of resource) {
@@ -641,22 +665,12 @@ export const createResourceFilterMap = async (resource: Resource[],
         }
       });
     }
-    let permissionArguments = await buildFilterPermissions(resourcePolicies.policy_sets[0], subject as ResolvedSubject, resources, database);
-    if (!permissionArguments && authzEnforced) {
-      const msg = `Access not allowed for request with subject:${subjectID}, ` +
-        `resource:${resourceName}, action:${action}, target_scope:${targetScope}; the response was DENY`;
-      const details = `Subject:${subjectID} does not have access to target scope ${targetScope}}`;
-      logger.verbose(msg);
-      logger.verbose('Details:', { details });
-      return { decision: Response_Decision.DENY, operation_status: generateOperationStatus(Number(errors.ACTION_NOT_ALLOWED.code), msg) };
-    }
-
-    if (!permissionArguments && !authzEnforced) {
-      logger.verbose(`The Access response was DENY for a request from subject:${subjectID}, ` +
-        `resource:${resourceName}, action:${action}, target_scope:${targetScope}, ` +
-        `but since ACS enforcement config is disabled overriding the ACS result`);
-      return { decision: Response_Decision.PERMIT, operation_status: { code: 200, message: 'success' } };
-    }
+    let permissionArguments = await buildFilterPermissions(
+      resourcePolicies.policy_sets[0],
+      subject as ResolvedSubject,
+      resources,
+      database
+    );
 
     if (permissionArguments) {
       if (!_.isArray(permissionArguments.filters)) {
@@ -670,6 +684,25 @@ export const createResourceFilterMap = async (resource: Resource[],
           custom_arguments: permissionArguments.custom_arguments
         });
       }
+    }
+    else if (authzEnforced) {
+      const msg = [
+        `Access not allowed for request with subject:${subjectID},`,
+        `resource:${resourceName}, action:${action}, target_scope:${targetScope};`,
+        `the response was DENY`,
+      ].join(' ');
+      const details = `Subject:${subjectID} does not have access to target scope ${targetScope}}`;
+      logger.verbose(msg);
+      logger.verbose('Details:', { details });
+      return { decision: Response_Decision.DENY, operation_status: generateOperationStatus(Number(errors.ACTION_NOT_ALLOWED.code), msg) };
+    }
+    else {
+      logger.verbose([
+        `The Access response was DENY for a request from subject:${subjectID},`,
+        `resource:${resourceName}, action:${action}, target_scope:${targetScope},`,
+        `but since ACS enforcement config is disabled overriding the ACS result`,
+      ].join(' '));
+      return { decision: Response_Decision.PERMIT, operation_status: { code: 200, message: 'success' } };
     }
   }
   return {

@@ -19,15 +19,7 @@ export const initializeCache = async () => {
   }
 
   attempted = true;
-
-  let redis;
-
   try {
-    redis = await import('redis');
-  } catch (e) {
-  }
-
-  if (redis) {
     const redisConfig = cfg.get('authorization:cache');
     const redisSubConfig = cfg.get('redis');
     if (redisConfig) {
@@ -44,6 +36,9 @@ export const initializeCache = async () => {
       redisSubjectInstance.on('error', (err) => logger.error('Redis Client Error in ACS cache',  { code: err.code, message: err.message, stack: err.stack }));
       await redisSubjectInstance.connect();
     }
+  }
+  catch (e) {
+    attempted = false;
   }
 };
 
@@ -117,6 +112,7 @@ export const getOrFill = async <T, M>(keyData: T, filler: (data: T) => Promise<M
  */
 export const get = async (key: string): Promise<any> => {
   if (!redisSubjectInstance) {
+    logger.warn('No Redis Subject Instance!');
     return;
   }
   const redisResponse = await redisSubjectInstance.get(key);

@@ -1,5 +1,6 @@
 import * as path from 'path';
 import * as nconf from 'nconf';
+import { Provider as ServiceConfig } from 'nconf';
 
 export interface ServiceConfigLogger {
   verbose(...args: any[]): any;
@@ -25,8 +26,6 @@ export interface ServiceConfigOptions {
   stageVar?: string;
   logger?: ServiceConfigLogger;
 }
-
-export type ServiceConfig = nconf.Provider;
 
 // read the layered configurations and merge into one
 export function createServiceConfig(baseDir: string, opts:ServiceConfigOptions = {}): ServiceConfig {
@@ -62,3 +61,5 @@ export function createServiceConfig(baseDir: string, opts:ServiceConfigOptions =
 
   return nconfInstance;
 };
+
+export { ServiceConfig };

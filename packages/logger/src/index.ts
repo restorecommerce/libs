@@ -72,4 +72,4 @@ export function createLogger(opts: RestoreLoggerOptions = {}): Logger {
   return logger;
 };
 
-export { globalLoggerCtxKey };
+export { globalLoggerCtxKey, Logger };

@@ -105,7 +105,7 @@ message RegisterRequest {
   optional string default_scope = 11; // default hierarchical scope
   optional UserType user_type = 12;
   optional string captcha_code = 13;
-  optional google.protobuf.Any data = 26; // data
+  optional google.protobuf.Any data = 14; // data
  }
 
 message ActivateRequest {

@@ -28,8 +28,8 @@ message Context {
 
 message Response {
   enum Decision {
-    DENY = 0;
-    PERMIT = 1;
+    PERMIT = 0;
+    DENY = 1;
     NOT_APPLICABLE = 2;
     INDETERMINATE = 3;
   }

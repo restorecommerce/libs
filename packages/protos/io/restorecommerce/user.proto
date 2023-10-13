@@ -305,6 +305,7 @@ message User {
   repeated io.restorecommerce.auth.Tokens tokens = 24;
   optional double last_access = 25;
   optional google.protobuf.Any data = 26; /// additional data
+  optional string data_protection_declaration_issued_date = 27; // Date of accepting data protection declaration by the user
 }
 
 /**

@@ -718,6 +718,7 @@ export type IIoRestorecommerceUserRegisterRequest = {
   defaultScope?: InputMaybe<Scalars['String']['input']>;
   userType?: InputMaybe<IoRestorecommerceUserUserType>;
   captchaCode?: InputMaybe<Scalars['String']['input']>;
+  data?: InputMaybe<IGoogleProtobufAny>;
 };
 
 export type ProtoIoRestorecommerceStatusOperationStatusObj = {

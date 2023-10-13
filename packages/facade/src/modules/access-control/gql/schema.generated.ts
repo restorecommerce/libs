@@ -63,8 +63,8 @@ export type IoRestorecommerceAccessControlResponse = {
 };
 
 export enum IoRestorecommerceAccessControlResponseDecision {
-  Permit = 0,
-  Deny = 1,
+  Deny = 0,
+  Permit = 1,
   NotApplicable = 2,
   Indeterminate = 3
 }
@@ -902,7 +902,7 @@ export type IoRestorecommerceAccessControlResponseResolvers<ContextType = Access
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type IoRestorecommerceAccessControlResponseDecisionResolvers = { PERMIT: 0, DENY: 1, NOT_APPLICABLE: 2, INDETERMINATE: 3 };
+export type IoRestorecommerceAccessControlResponseDecisionResolvers = { DENY: 0, PERMIT: 1, NOT_APPLICABLE: 2, INDETERMINATE: 3 };
 
 export type IoRestorecommerceAttributeAttributeResolvers<ContextType = AccessControlContext, ParentType extends ResolversParentTypes['IoRestorecommerceAttributeAttribute'] = ResolversParentTypes['IoRestorecommerceAttributeAttribute']> = ResolversObject<{
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;

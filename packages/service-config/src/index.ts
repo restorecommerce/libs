@@ -1,5 +1,4 @@
 import * as path from 'path';
-import * as nconf from 'nconf';
 import { Provider as ServiceConfig } from 'nconf';
 
 export interface ServiceConfigLogger {
@@ -29,7 +28,7 @@ export interface ServiceConfigOptions {
 
 // read the layered configurations and merge into one
 export function createServiceConfig(baseDir: string, opts:ServiceConfigOptions = {}): ServiceConfig {
-  const nconfInstance = new nconf.Provider();
+  const nconfInstance = new ServiceConfig();
   const logger = opts.logger;
 
   // static data from runtime

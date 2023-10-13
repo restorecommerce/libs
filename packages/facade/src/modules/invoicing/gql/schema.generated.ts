@@ -1166,6 +1166,7 @@ export type ProtoIoRestorecommerceInvoiceInvoiceNumberResponse = {
 export type IoRestorecommerceInvoiceInvoiceNumberResponse = {
   __typename?: 'IoRestorecommerceInvoiceInvoiceNumberResponse';
   invoiceNumber?: Maybe<Scalars['String']['output']>;
+  operationStatus?: Maybe<IoRestorecommerceStatusOperationStatus>;
 };
 
 export type IIoRestorecommerceInvoiceRequestInvoiceNumber = {
@@ -2332,6 +2333,7 @@ export type ProtoIoRestorecommerceInvoiceInvoiceNumberResponseResolvers<ContextT
 
 export type IoRestorecommerceInvoiceInvoiceNumberResponseResolvers<ContextType = InvoicingContext, ParentType extends ResolversParentTypes['IoRestorecommerceInvoiceInvoiceNumberResponse'] = ResolversParentTypes['IoRestorecommerceInvoiceInvoiceNumberResponse']> = ResolversObject<{
   invoiceNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  operationStatus?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusOperationStatus']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

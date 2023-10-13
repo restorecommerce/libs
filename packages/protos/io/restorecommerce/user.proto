@@ -9,6 +9,7 @@ import "io/restorecommerce/attribute.proto";
 import "io/restorecommerce/image.proto";
 import "io/restorecommerce/status.proto";
 import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
 import "io/restorecommerce/role.proto";
 import "io/restorecommerce/options.proto";
 
@@ -305,7 +306,7 @@ message User {
   repeated io.restorecommerce.auth.Tokens tokens = 24;
   optional double last_access = 25;
   optional google.protobuf.Any data = 26; /// additional data
-  optional string data_protection_declaration_issued_date = 27; // Date of accepting data protection declaration by the user
+  optional google.protobuf.Timestamp data_protection_declaration_issued_date = 27; // Date of accepting data protection declaration by the user
 }
 
 /**

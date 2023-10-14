@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.2.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.1.2...@restorecommerce/protos@6.2.0) (2023-10-14)
+
+
+### Bug Fixes
+
+* **proto:** fix user proto ([edbcd77](https://github.com/restorecommerce/libs/commit/edbcd77af9db0de1f1fab90148740983b42a6b3a))
+* **proto:** update user proto to provide google protobuf any data for register request ([3b2e871](https://github.com/restorecommerce/libs/commit/3b2e871f839dd1cffb6ff1cea037911d3ae0aa9c))
+
+
+### Features
+
+* **acs-decorators:** add decorators for simple access control ([713a464](https://github.com/restorecommerce/libs/commit/713a46409c79371d7b0940cb4aa448cbe8abaf5a))
+
+
+### Reverts
+
+* **access_control.proto:** revert enum order ([8aaa4e6](https://github.com/restorecommerce/libs/commit/8aaa4e63675ec2bd040602236ff82b0fe80e6d14))
+
+
+
+
+
 ## [6.1.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.1.1...@restorecommerce/protos@6.1.2) (2023-09-28)
 
 **Note:** Version bump only for package @restorecommerce/protos

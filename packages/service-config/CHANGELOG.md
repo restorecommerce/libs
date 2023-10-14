@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.8](https://github.com/restorecommerce/libs/compare/@restorecommerce/service-config@1.0.7...@restorecommerce/service-config@1.0.8) (2023-10-14)
+
+
+### Bug Fixes
+
+* **acs:** fix decorator declaration ([9847528](https://github.com/restorecommerce/libs/commit/98475283139362e8f5d8d04ac243bb32087b17c2))
+* **logger, service-config:** fix export statements ([e6a4d24](https://github.com/restorecommerce/libs/commit/e6a4d24fb61afc7820ccab95a852b13df32c048e))
+
+
+
+
+
 ## [1.0.7](https://github.com/restorecommerce/libs/compare/@restorecommerce/service-config@1.0.6...@restorecommerce/service-config@1.0.7) (2023-10-07)
 
 **Note:** Version bump only for package @restorecommerce/service-config

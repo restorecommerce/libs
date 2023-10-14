@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.6.6](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.6.5...@restorecommerce/facade@1.6.6) (2023-10-14)
+
+
+### Bug Fixes
+
+* **acs:** fix decorator declaration ([9847528](https://github.com/restorecommerce/libs/commit/98475283139362e8f5d8d04ac243bb32087b17c2))
+
+
+### Reverts
+
+* **access_control.proto:** revert enum order ([8aaa4e6](https://github.com/restorecommerce/libs/commit/8aaa4e63675ec2bd040602236ff82b0fe80e6d14))
+
+
+
+
+
 ## [1.6.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.6.4...@restorecommerce/facade@1.6.5) (2023-10-07)
 
 **Note:** Version bump only for package @restorecommerce/facade

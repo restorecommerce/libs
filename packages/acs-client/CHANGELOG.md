@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@1.1.20...@restorecommerce/acs-client@1.2.0) (2023-10-14)
+
+
+### Bug Fixes
+
+* **acs:** fix decorator declaration ([9847528](https://github.com/restorecommerce/libs/commit/98475283139362e8f5d8d04ac243bb32087b17c2))
+* **logger, service-config:** fix export statements ([e6a4d24](https://github.com/restorecommerce/libs/commit/e6a4d24fb61afc7820ccab95a852b13df32c048e))
+* **package-lock:** update package-lock ([de777d3](https://github.com/restorecommerce/libs/commit/de777d39c59eab10f29379a2bb6769fd16452a14))
+
+
+### Features
+
+* **acs-decorators:** add decorators for simple access control ([713a464](https://github.com/restorecommerce/libs/commit/713a46409c79371d7b0940cb4aa448cbe8abaf5a))
+
+
+
+
+
 ## [1.1.20](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@1.1.19...@restorecommerce/acs-client@1.1.20) (2023-10-07)
 
 

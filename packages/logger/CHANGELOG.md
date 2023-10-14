@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.6](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@1.2.5...@restorecommerce/logger@1.2.6) (2023-10-14)
+
+
+### Bug Fixes
+
+* **logger, service-config:** fix export statements ([e6a4d24](https://github.com/restorecommerce/libs/commit/e6a4d24fb61afc7820ccab95a852b13df32c048e))
+
+
+
+
+
 ## [1.2.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@1.2.4...@restorecommerce/logger@1.2.5) (2023-10-07)
 
 **Note:** Version bump only for package @restorecommerce/logger

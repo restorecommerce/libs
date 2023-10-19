@@ -280,7 +280,12 @@ export const logFieldsHandler = (object: any, precompiled?: PrecompiledFieldOpti
   if (_.isEmpty(precompiled?.maskFields) && _.isEmpty(precompiled?.omitFields) && _.isEmpty(precompiled?.bufferFields)) {
     return object;
   }
-  let objectFieldsMod = _.cloneDeep(object);
+  let objectFieldsMod;
+  try {
+    objectFieldsMod = JSON.parse(JSON.stringify(object));
+  } catch (error) {
+    console.log('Error parsing logger object', object);
+  }
   // since multiple comma separated  objects can be passed as fields for logging
   if (!_.isArray(objectFieldsMod)) {
     objectFieldsMod = [objectFieldsMod];

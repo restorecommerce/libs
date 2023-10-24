@@ -4,6 +4,7 @@ import { protoMetadata as metaPackageIoRestorecommerceProduct_category } from '@
 import { protoMetadata as metaPackageIoRestorecommercePrice_group } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/price_group.js';
 import { protoMetadata as metaPackageIoRestorecommerceManufacturer } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/manufacturer.js';
 import { type ProtoMetadata, registerPackagesRecursive } from '../../../gql/protos/index.js';
+import { registerProtoMeta } from '@restorecommerce/kafka-client';
 
 export const subServices: ProtoMetadata[] = [
   metaPackageIoRestorecommerceProduct,
@@ -15,4 +16,5 @@ export const subServices: ProtoMetadata[] = [
 
 export const registerTypings = () => {
   registerPackagesRecursive(...subServices);
+  registerProtoMeta(...subServices);
 };

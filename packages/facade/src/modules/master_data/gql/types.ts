@@ -12,6 +12,7 @@ import { protoMetadata as metaPackageIoRestorecommerceTax_type } from '@restorec
 import { protoMetadata as metaPackageIoRestorecommerceUnitCode } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/unit_code.js';
 import { protoMetadata as metaPackageIoRestorecommerceCommand } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/command.js';
 import { type ProtoMetadata, registerPackagesRecursive } from '../../../gql/protos/index.js';
+import { registerProtoMeta } from '@restorecommerce/kafka-client';
 
 export const subServices: ProtoMetadata[] = [
   metaPackageIoRestorecommerceAddress,
@@ -31,4 +32,5 @@ export const subServices: ProtoMetadata[] = [
 
 export const registerTypings = () => {
   registerPackagesRecursive(...subServices);
+  registerProtoMeta(...subServices);
 };

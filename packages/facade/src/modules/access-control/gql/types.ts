@@ -3,6 +3,7 @@ import { protoMetadata as metaPackageIoRestorecommerceRule } from '@restorecomme
 import { protoMetadata as metaPackageIoRestorecommercePolicy_set } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/policy_set.js';
 import { protoMetadata as metaPackageIoRestorecommerceAccess_control } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/access_control.js';
 import { type ProtoMetadata, registerPackagesRecursive } from '../../../gql/protos/index.js';
+import { registerProtoMeta } from '@restorecommerce/kafka-client';
 
 export const subServices: ProtoMetadata[] = [
   metaPackageIoRestorecommerceAccess_control,
@@ -13,4 +14,5 @@ export const subServices: ProtoMetadata[] = [
 
 export const registerTypings = () => {
   registerPackagesRecursive(...subServices);
+  registerProtoMeta(...subServices);
 };

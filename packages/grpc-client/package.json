@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/grpc-client",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "Generic GRPC client",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -18,7 +18,7 @@
   "dependencies": {
     "@grpc/grpc-js": "^1.9.5",
     "@grpc/proto-loader": "^0.7.10",
-    "@restorecommerce/logger": "^1.2.6",
+    "@restorecommerce/logger": "^1.2.7",
     "cls-rtracer": "^2.6.3",
     "lodash": "^4.17.21",
     "nice-grpc": "^2.1.5",

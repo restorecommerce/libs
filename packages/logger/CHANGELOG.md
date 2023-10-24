@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.7](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@1.2.6...@restorecommerce/logger@1.2.7) (2023-10-24)
+
+
+### Bug Fixes
+
+* **logger:** replace cloneDeep with JSON stringify and parse (as lodash clonedeep spits an error logging context object) ([c22626a](https://github.com/restorecommerce/libs/commit/c22626a52c63153fa421fd75c22f4b63c265df21))
+
+
+
+
+
 ## [1.2.6](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@1.2.5...@restorecommerce/logger@1.2.6) (2023-10-14)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.6.7](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.6.6...@restorecommerce/facade@1.6.7) (2023-10-24)
+
+
+### Bug Fixes
+
+* **facade:** convert all schemas to support subscriptions ([2d14d02](https://github.com/restorecommerce/libs/commit/2d14d02f502e6f6e64a4e530327ffd0aadbbe8c2))
+
+
+
+
+
 ## [1.6.6](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.6.5...@restorecommerce/facade@1.6.6) (2023-10-14)
 
 

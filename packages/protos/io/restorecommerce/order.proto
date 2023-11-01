@@ -88,7 +88,7 @@ message Item {
 message Order {
   option (restorecommerce.options.kafka_subscriber) = {
     plural: "orders"
-    topic: "io.restorecommerce.orders.resource"
+    topic: "io.restorecommerce.ordering.resource"
     created: "orderCreated"
     updated: "orderUpdated"
     deleted: "orderDeleted"

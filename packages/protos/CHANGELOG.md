@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.2.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.2.0...@restorecommerce/protos@6.2.1) (2023-11-01)
+
+
+### Bug Fixes
+
+* **protos:** update order kafka topic ([d302554](https://github.com/restorecommerce/libs/commit/d30255408bfc4246478457fbd780fbcbb6d8aa5b))
+
+
+
+
+
 # [6.2.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.1.2...@restorecommerce/protos@6.2.0) (2023-10-14)
 
 

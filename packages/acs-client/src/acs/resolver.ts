@@ -1,26 +1,49 @@
 import * as _ from 'lodash';
 import {
-  UnauthenticatedContext, ACSClientContext,
-  UnauthenticatedData, DecisionResponse, PolicySetRQResponse, Operation, Resource
-} from './interfaces';
-import { AuthZAction } from './interfaces';
-import logger from '../logger';
-import { errors, cfg } from '../config';
-import { generateOperationStatus, createResourceFilterMap, FilterMapResponse, mapResourceURNObligationProperties } from '../utils';
-import { createClient, createChannel } from '@restorecommerce/grpc-client';
-import { UnAuthZ, ACSAuthZ, authZ } from './authz';
-import { Subject, DeepPartial } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/auth';
+  generateOperationStatus,
+  createResourceFilterMap,
+  FilterMapResponse,
+  mapResourceURNObligationProperties,
+} from '../utils';
+import {
+  createClient,
+  createChannel,
+} from '@restorecommerce/grpc-client';
+import {
+  Subject,
+  DeepPartial,
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/auth';
 import {
   Request,
-  Response_Decision
+  Response_Decision,
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/access_control';
-import { FilterOp } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base';
-import { AccessControlServiceDefinition } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/access_control';
+import {
+  FilterOp,
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base';
+import {
+  AccessControlServiceDefinition,
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/access_control';
+import {
+  UnAuthZ,
+  ACSAuthZ,
+  authZ,
+} from './authz';
+import {
+  UnauthenticatedContext,
+  ACSClientContext,
+  UnauthenticatedData,
+  DecisionResponse,
+  PolicySetRQResponse,
+  Operation,
+  Resource,
+  AuthZAction,
+} from './interfaces';
+import logger from '../logger';
+import { errors, cfg } from '../config';
 
 
 const subjectIsUnauthenticated = (subject: any): subject is UnauthenticatedContext => {
-  return !!subject
-    && 'unauthenticated' in subject && subject['unauthenticated'];
+  return subject?.unauthenticated === true;
 };
 
 const whatIsAllowedRequest = async (subject: DeepPartial<Subject>, resources: Resource[],

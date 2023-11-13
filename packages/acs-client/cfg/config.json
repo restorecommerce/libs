@@ -9,10 +9,10 @@
     "fieldOptions": {
       "bufferFields": [
         {
-          "fieldPath": "request.context.subject"
+          "fieldPath": "request.target.context.subject"
         },
         {
-          "fieldPath": "request.context.resources"
+          "fieldPath": "request.target.context.resources"
         }
       ]
     }

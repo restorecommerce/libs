@@ -1,0 +1,10 @@
+{
+  "logger": {
+    "console": {
+      "handleExceptions": false,
+      "level": "crit",
+      "colorize": true,
+      "prettyPrint": true
+    }
+  }
+}

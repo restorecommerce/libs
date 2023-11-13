@@ -16,7 +16,7 @@ import {
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/auth';
 import { Attribute } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/attribute';
 import {
-  Filter_Operation, FilterOp_Operator, FilterOp, FieldFilter
+  Filter_Operation, FilterOp_Operator, FieldFilter
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base';
 import {
   Response_Decision
@@ -92,7 +92,6 @@ const checkSubjectMatch = (user: ResolvedSubject, ruleSubjectAttributes: Attribu
   }
 
   let userAssocScope;
-  let userAssocHRScope: HierarchicalScope;
   if (roleScopeEntExists && roleValueExists) {
     if (user?.role_associations?.length > 0) {
       for (let role of user?.role_associations) {
@@ -116,12 +115,9 @@ const checkSubjectMatch = (user: ResolvedSubject, ruleSubjectAttributes: Attribu
           }
 
           // check if this userAssocScope's HR object contains the targetScope
-          for (let hrScope of user?.hierarchical_scopes) {
-            if (hrScope?.id === userAssocScope) {
-              userAssocHRScope = hrScope;
-              break;
-            }
-          }
+          const userAssocHRScope =  user?.hierarchical_scopes.find(
+            hrScope => hrScope?.id === userAssocScope
+          );
 
           // check HR scope matching for subject if hierarchicalRoleScopingCheck is 'true'
           if (!userAssocHRScope) {
@@ -139,13 +135,9 @@ const checkSubjectMatch = (user: ResolvedSubject, ruleSubjectAttributes: Attribu
       }
     }
   } else if (roleValueExists) {
-    if (user?.role_associations?.length > 0) {
-      for (let role of user.role_associations) {
-        if (role.role === ruleRoleValue) {
-          return true;
-        }
-      }
-    }
+    return user?.role_associations?.some(
+      ra => ra.role === ruleRoleValue
+    );
   }
   return false;
 };
@@ -339,18 +331,26 @@ export const buildFilterPermissions = async (
   reqResources: any,
   database: string
 ): Promise<QueryArguments | UserQueryArguments> => {
-  let hierarchical_scopes = subject?.hierarchical_scopes;
-  let role_associations = subject?.role_associations;
   if (subject?.id) {
-    hierarchical_scopes ??= await get(`cache:${subject.id}:${subject.token}:hrScopes`)
-    ?? await get(`cache:${subject.id}:hrScopes`)
-    ?? [];
-    role_associations ??= await get(`cache:${subject.id}:subject`).then(
-      subject => subject?.role_associations
-    )
-    ?? [];
+    if (!subject.hierarchical_scopes?.length) {
+      subject.hierarchical_scopes = await get(`cache:${subject.id}:${subject.token}:hrScopes`);
+    }
+
+    if (!subject.hierarchical_scopes?.length) {
+      subject.hierarchical_scopes = await get(`cache:${subject.id}:hrScopes`);
+    }
+
+    if (!subject.role_associations?.length) {
+      subject.role_associations = await get(`cache:${subject.id}:subject`).then(
+        subject => subject?.role_associations ?? []
+      );
+    }
   }
-  Object.assign(subject, { hierarchical_scopes, role_associations });
+  else {
+    subject.hierarchical_scopes ??= [];
+    subject.role_associations ??= [];
+  }
+
   const urns = cfg.get('authorization:urns');
   let query: any = {
     filters: []
@@ -689,7 +689,7 @@ export const createResourceFilterMap = async (
       const msg = [
         `Access not allowed for request with subject:${subjectID},`,
         `resource:${resourceName}, action:${action}, target_scope:${targetScope};`,
-        `the response was DENY`,
+        `the response was ${Response_Decision.DENY}`
       ].join(' ');
       const details = `Subject:${subjectID} does not have access to target scope ${targetScope}}`;
       logger.verbose(msg);
@@ -698,8 +698,8 @@ export const createResourceFilterMap = async (
     }
     else {
       logger.verbose([
-        `The Access response was DENY for a request from subject:${subjectID},`,
-        `resource:${resourceName}, action:${action}, target_scope:${targetScope},`,
+        `The Access response was ${Response_Decision.DENY} for a request from subject:${subjectID}`,
+        `resource:${resourceName}, action:${action}, target_scope:${targetScope}`,
         `but since ACS enforcement config is disabled overriding the ACS result`,
       ].join(' '));
       return { decision: Response_Decision.PERMIT, operation_status: { code: 200, message: 'success' } };

@@ -185,18 +185,17 @@ export const accessRequest = async (
   // resolve userID by token
   const subjectID = subject?.id;
   const targetScope = subject?.scope;
-  resource = _.isArray(resource) ? resource : [resource];
+  if (resource && !_.isArray(resource)) {
+    resource = [resource];
+  }
+  const resourceName = resource?.map(r => r.resource).join(',');
 
   if (_.isEmpty(resource)) {
-    const msg = `Access not allowed for request with subject:${
-      subjectID
-    }, resource:${
-      resource
-    }, action:${
-      action
-    }, target_scope:${
-      targetScope
-    }; the response was INDETERMINATE`;
+    const msg = [
+      `Access not allowed for request with`,
+      `subject:${ subjectID }, resource:${ resourceName }, action:${ action }, target_scope:${ targetScope };`,
+      `the response was ${ Response_Decision.INDETERMINATE }`,
+    ].join(' ');
     const details = 'Entity missing';
     logger.verbose(msg);
     logger.verbose('Details:', { details });
@@ -214,32 +213,45 @@ export const accessRequest = async (
   // default database is arangoDB
   database ??= 'arangoDB';
   // ctx.resources
-  ctx.resources = _.isArray(ctx?.resources) ? ctx.resources : [ctx.resources];
+  if (ctx.resources && !_.isArray(ctx.resources)) {
+    ctx.resources = [ctx.resources];
+  }
 
   // whatIsAllowed Operation
   if (operation === Operation.whatIsAllowed) {
-    // const resourceName = request.entity;
     let policySetResponse: PolicySetRQResponse;
     try {
       // retrieving set of applicable policies/rules from ACS
       // Note: it is assumed that there is only one policy set
-      policySetResponse = await whatIsAllowedRequest(subClone, resource, action, ctx, useCache);
+      policySetResponse = await whatIsAllowedRequest(
+        subClone,
+        resource,
+        action,
+        ctx,
+        useCache,
+      );
     } catch (err) {
-      logger.error('Error calling whatIsAllowed operation', { code: err.code, message: err.message, stack: err.stack });
-      return { decision: Response_Decision.DENY, operation_status: generateOperationStatus(err.code, err.message) };
+      logger.error(
+        'Error calling whatIsAllowed operation',
+        {
+          code: err.code,
+          message: err.message,
+          stack: err.stack,
+        }
+      );
+      return {
+        decision: Response_Decision.DENY,
+        operation_status: generateOperationStatus(err.code, err.message)
+      };
     }
 
     // handle case if policySet is empty
     if (authzEnforced && (!policySetResponse || _.isEmpty(policySetResponse.policy_sets))) {
-      const msg = `Access not allowed for request with subject:${
-        subjectID
-      }, resource:${
-        resource
-      }, action:${
-        action
-      }, target_scope:${
-        targetScope
-      }; the response was INDETERMINATE`;
+      const msg = [
+        `Access not allowed for request with subject:${ subjectID },`,
+        `resource:${ resourceName }, action:${ action }, target_scope:${ targetScope };`,
+        'the response was INDETERMINATE'
+      ].join(' ');
       const details = 'no matching policy/rule could be found';
       logger.verbose(msg);
       logger.verbose('Details:', { details });
@@ -254,10 +266,10 @@ export const accessRequest = async (
 
     if (!authzEnforced && (!policySetResponse || _.isEmpty(policySetResponse.policy_sets))) {
       logger.verbose([
-        `The Access response was INDETERMIATE for a request with subject:`,
-        `${subjectID}, resource:${resource}, action:${action}, target_scope:${targetScope}`,
+        `The Access response was INDETERMIATE for a request with subject:${ subjectID },`,
+        `resource:${ resourceName }, action:${ action }, target_scope:${ targetScope }`,
         `as no matching policy/rule could be found, but since ACS enforcement`,
-        `config is disabled overriding the ACS result`
+        `config is disabled overriding the ACS result`,
       ].join(' '));
     }
 
@@ -276,16 +288,6 @@ export const accessRequest = async (
     return policySetResponse;
   }
 
-  let resourceList = [];
-  resource.forEach((resourceObj) => {
-    resourceList.push(resourceObj.resource);
-  });
-  let resourceString;
-  if (resourceList?.length === 1) {
-    resourceString = resourceList[0];
-  } else {
-    resourceString = JSON.stringify(resourceList);
-  }
   // default deny
   let decisionResponse: DecisionResponse = { decision: Response_Decision.DENY, operation_status: { code: 0, message: '' } };
   // isAllowed operation
@@ -298,7 +300,7 @@ export const accessRequest = async (
       return { decision: Response_Decision.DENY, operation_status: generateOperationStatus(err.code, err.message) };
     }
 
-    if (decisionResponse && decisionResponse.decision != Response_Decision.PERMIT && authzEnforced) {
+    if (authzEnforced && decisionResponse && decisionResponse.decision != Response_Decision.PERMIT) {
       let details = '';
       if (decisionResponse.decision === Response_Decision.INDETERMINATE) {
         details = 'No matching policy / rule was found';
@@ -306,27 +308,31 @@ export const accessRequest = async (
         details = `Subject:${subjectID} does not have access to requested target scope ${targetScope}`;
       }
       const msg = [
-        `Access not allowed for request with subject:${subjectID},`,
-        `resource:${resourceString}, action:${action}, target_scope:${targetScope};`,
+        `Access not allowed for request with subject:${ subjectID },`,
+        `resource:${ resourceName }, action:${ action }, target_scope:${ targetScope };`,
         `the response was ${Response_Decision[decisionResponse.decision]}`,
       ].join(' ');
       logger.verbose(msg);
       logger.verbose('Details:', { details });
-      return { decision: Response_Decision.DENY, operation_status: generateOperationStatus(Number(errors.ACTION_NOT_ALLOWED.code), msg) };
+      return {
+        decision: Response_Decision.DENY,
+        operation_status: generateOperationStatus(Number(errors.ACTION_NOT_ALLOWED.code), msg)
+      };
     }
   }
+
   if (!authzEnforced && decisionResponse && decisionResponse.decision != Response_Decision.PERMIT) {
     let details = '';
     if (decisionResponse.decision === Response_Decision.INDETERMINATE) {
       details = 'No matching policy / rule was found';
     } else if (decisionResponse.decision === Response_Decision.DENY) {
-      details = `Subject:${subjectID} does not have access to requested target scope ${targetScope}`;
+      details = `Subject:${ subjectID } does not have access to requested target scope ${ targetScope }`;
     }
     logger.verbose([
-      `Access not allowed for request with subject:${subjectID},`,
-      `resource:${resourceString}, action:${action}, target_scope:${targetScope};`,
+      `Access not allowed for request with subject:${ subjectID },`,
+      `resource:${ resourceName }, action:${ action }, target_scope:${ targetScope };`,
       `the response was ${Response_Decision[decisionResponse.decision]}`,
-    ].join(' '));
+    ]).join(' ');
     logger.verbose(`${details}, Overriding the ACS result as ACS enforce config is disabled`);
     decisionResponse.decision = Response_Decision.PERMIT;
   }
@@ -374,7 +380,11 @@ export const whatIsAllowed = async (request: Request, authZ: ACSAuthZ): Promise<
     response.obligations = mapResourceURNObligationProperties(whatIsAllowedResponse.obligations);
   } catch (err) {
     logger.error('Error invoking acs-srv whatIsAllowed method', { code: err.code, message: err.message, stack: err.stack });
-    return { decision: Response_Decision.DENY, policy_sets: [], operation_status: generateOperationStatus(err.code, err.message) };
+    return {
+      decision: Response_Decision.DENY,
+      policy_sets: [],
+      operation_status: generateOperationStatus(err.code, err.message)
+    };
   }
 
   return response;

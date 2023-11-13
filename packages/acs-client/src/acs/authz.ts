@@ -16,7 +16,7 @@ import {
 import { createChannel, createClient } from '@restorecommerce/grpc-client';
 import { cfg, updateConfig } from '../config';
 import logger from '../logger';
-import { flushCache, getOrFill, initializeCache } from './cache';
+import { flushCache, getOrFill, initializeCache, setCacheStatus } from './cache';
 import { Events, registerProtoMeta } from '@restorecommerce/kafka-client';
 import { mapResourceURNObligationProperties } from '../utils';
 import {
@@ -493,7 +493,6 @@ export const initAuthZ = async (config?: any): Promise<void | ACSAuthZ> => {
           }
         }
       }
-      await initializeCache();
       return authZ;
     }
   }

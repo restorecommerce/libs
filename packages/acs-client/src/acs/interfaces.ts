@@ -214,8 +214,8 @@ export interface PolicySetRQResponse extends AccessControlObjectInterface {
   filters?: ResourceFilterMap[];
   custom_query_args?: CustomQueryArgs[];
   obligations?: Obligation[];
-  decision: Response_Decision;
-  operation_status: {
+  decision?: Response_Decision;
+  operation_status?: {
     code: number;
     message: string;
   };

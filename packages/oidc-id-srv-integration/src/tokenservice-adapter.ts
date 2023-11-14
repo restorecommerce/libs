@@ -56,7 +56,7 @@ export function createIdentityServiceAdapterClass(tokenService: TokenServiceClie
       if (delegate(this.type)) {
         logger.debug('Invoking token service upsert', { type: this.type });
         await tokenService.upsert({
-          expires_in: expiresIn,
+          expires_in: new Date(expiresIn),
           id,
           payload: marshallProtobufAny(payload),
           type: this.type

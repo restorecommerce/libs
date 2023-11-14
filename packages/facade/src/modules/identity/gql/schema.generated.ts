@@ -108,7 +108,7 @@ export type IoRestorecommerceUserUserRole = {
   invitedByUserFirstName?: Maybe<Scalars['String']['output']>;
   invitedByUserLastName?: Maybe<Scalars['String']['output']>;
   tokens?: Maybe<Array<IoRestorecommerceAuthTokens>>;
-  lastAccess?: Maybe<Scalars['Float']['output']>;
+  lastAccess?: Maybe<Scalars['DateTime']['output']>;
   data?: Maybe<GoogleProtobufAny>;
   roles?: Maybe<Array<IoRestorecommerceRoleRole>>;
 };
@@ -375,7 +375,7 @@ export type IoRestorecommerceUserUser = {
   invitedByUserFirstName?: Maybe<Scalars['String']['output']>;
   invitedByUserLastName?: Maybe<Scalars['String']['output']>;
   tokens?: Maybe<Array<IoRestorecommerceAuthTokens>>;
-  lastAccess?: Maybe<Scalars['Float']['output']>;
+  lastAccess?: Maybe<Scalars['DateTime']['output']>;
   data?: Maybe<GoogleProtobufAny>;
 };
 
@@ -636,7 +636,7 @@ export type IIoRestorecommerceUserUser = {
   invitedByUserFirstName?: InputMaybe<Scalars['String']['input']>;
   invitedByUserLastName?: InputMaybe<Scalars['String']['input']>;
   tokens?: InputMaybe<Array<IIoRestorecommerceAuthTokens>>;
-  lastAccess?: InputMaybe<Scalars['Float']['input']>;
+  lastAccess?: InputMaybe<Scalars['IDateTime']['input']>;
   data?: InputMaybe<IGoogleProtobufAny>;
 };
 
@@ -901,7 +901,7 @@ export type IdentityTokenMutationConsumeArgs = {
 export type IIoRestorecommerceTokenTokenData = {
   id?: InputMaybe<Scalars['String']['input']>;
   payload?: InputMaybe<IGoogleProtobufAny>;
-  expiresIn?: InputMaybe<Scalars['Float']['input']>;
+  expiresIn?: InputMaybe<Scalars['IDateTime']['input']>;
   type?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -1404,7 +1404,7 @@ export type IoRestorecommerceUserUserRoleResolvers<ContextType = IdentityContext
   invitedByUserFirstName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   invitedByUserLastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   tokens?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAuthTokens']>>, ParentType, ContextType>;
-  lastAccess?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  lastAccess?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   data?: Resolver<Maybe<ResolversTypes['GoogleProtobufAny']>, ParentType, ContextType>;
   roles?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceRoleRole']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -1571,7 +1571,7 @@ export type IoRestorecommerceUserUserResolvers<ContextType = IdentityContext, Pa
   invitedByUserFirstName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   invitedByUserLastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   tokens?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAuthTokens']>>, ParentType, ContextType>;
-  lastAccess?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  lastAccess?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   data?: Resolver<Maybe<ResolversTypes['GoogleProtobufAny']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;

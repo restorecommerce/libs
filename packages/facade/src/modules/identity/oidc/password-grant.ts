@@ -74,7 +74,7 @@ export const registerPasswordGrantType = (config: OIDCPasswordGrantTypeConfig) =
 
     let last_access;
     if (claims?.data?.lastAccess) {
-      last_access = claims.data.lastAccess;
+      last_access = new Date(claims.data.lastAccess);
     }
 
     if (claims?.data?.tokens) {

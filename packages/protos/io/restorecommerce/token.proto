@@ -5,6 +5,7 @@ package io.restorecommerce.token;
 import "io/restorecommerce/auth.proto";
 import "google/protobuf/any.proto";
 import "io/restorecommerce/options.proto";
+import "google/protobuf/timestamp.proto";
 
 /*
 * Microservice definition.
@@ -22,7 +23,7 @@ service TokenService {
 message TokenData {
   optional string id = 1;
   optional google.protobuf.Any payload = 2;
-  optional double expires_in = 3;
+  optional google.protobuf.Timestamp expires_in = 3;
   optional string type = 4;
   optional io.restorecommerce.auth.Subject subject = 5;
 }

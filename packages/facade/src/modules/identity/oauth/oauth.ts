@@ -25,7 +25,7 @@ const upsertUserToken = async (ids: IdentitySrvGrpcClient, accountId: string | u
     .encode();
 
   // 1 Month
-  const expiresIn = Date.now() + (1000 * 60 * 60 * 24 * 30);
+  const expiresIn = new Date(Date.now() + (1000 * 60 * 60 * 24 * 30));
 
   await ids.token.upsert({
     id: uuid.v4().replace(/-/g, ''),
@@ -33,7 +33,7 @@ const upsertUserToken = async (ids: IdentitySrvGrpcClient, accountId: string | u
     expiresIn,
     payload: marshallProtobufAny({
       accountId,
-      exp: expiresIn,
+      exp: expiresIn.getTime(),
       jti: token
     })
   });

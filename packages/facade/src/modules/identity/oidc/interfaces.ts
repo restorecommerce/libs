@@ -85,7 +85,7 @@ export interface TokenResponseBody {
   subject_id?: string;
   token_name?: string;
   default_scope?: string;
-  last_access?: number;
+  last_access?: Date;
 }
 
 export class InvalidPasswordGrant extends errors.InvalidGrant {

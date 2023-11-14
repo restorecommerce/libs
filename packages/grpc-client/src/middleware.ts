@@ -45,19 +45,19 @@ export const loggingMiddleware = (logger: ReturnType<typeof createLogger>, omitt
       return yield* call.next(call.request, options);
     } catch (err) {
       if (err instanceof ClientError) {
-        logger?.error(`[rid: ${options.rid}] Error serving request: Client Error`, {
+        logger?.error(`[rid: ${options.rid}] Error serving request ${path}: Client Error`, {
           code: err.code,
           message: err.message,
           stack: err.stack,
           details: err.details
         });
       } else if (isAbortError(err)) {
-        logger?.error(`[rid: ${options.rid}] Error serving request: cancel`, {
+        logger?.error(`[rid: ${options.rid}] Error serving request ${path}: cancel`, {
           message: (err as Error).message,
           stack: (err as Error).stack,
         });
       } else {
-        logger?.error(`[rid: ${options.rid}] Error serving request`, {
+        logger?.error(`[rid: ${options.rid}] Error serving request ${path}`, {
           message: (err as Error).message,
           stack: (err as Error).stack,
         });

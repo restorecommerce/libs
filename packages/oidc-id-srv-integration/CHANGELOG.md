@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.26](https://github.com/restorecommerce/libs/compare/@restorecommerce/oidc-id-srv-integration@1.0.25...@restorecommerce/oidc-id-srv-integration@1.0.26) (2023-11-14)
+
+
+### Bug Fixes
+
+* typing for oidc-srv-integration ([b2af15f](https://github.com/restorecommerce/libs/commit/b2af15f7961374698e87a2ad0a22cdfedbd6fc23))
+
+
+
+
+
 ## [1.0.25](https://github.com/restorecommerce/libs/compare/@restorecommerce/oidc-id-srv-integration@1.0.24...@restorecommerce/oidc-id-srv-integration@1.0.25) (2023-11-01)
 
 **Note:** Version bump only for package @restorecommerce/oidc-id-srv-integration

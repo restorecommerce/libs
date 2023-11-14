@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.2.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.2.1...@restorecommerce/protos@6.2.2) (2023-11-14)
+
+
+### Bug Fixes
+
+* **proto:** changed expires_in and last_access on token and user proto respectively to google.protobuf.Time and regenrated types and schema. ([c3c4701](https://github.com/restorecommerce/libs/commit/c3c4701c01d9243cc26c20f52298ef9ee56e511e))
+
+
+
+
+
 ## [6.2.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.2.0...@restorecommerce/protos@6.2.1) (2023-11-01)
 
 

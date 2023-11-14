@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@1.2.2...@restorecommerce/acs-client@1.3.0) (2023-11-14)
+
+
+### Features
+
+* **acs-client:** add default meta data injector as decorator ([faefd71](https://github.com/restorecommerce/libs/commit/faefd713ee87eda5a8f1a03655102ffaea175d29))
+
+
+
+
+
 ## [1.2.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@1.2.1...@restorecommerce/acs-client@1.2.2) (2023-11-01)
 
 **Note:** Version bump only for package @restorecommerce/acs-client

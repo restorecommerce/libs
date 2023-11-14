@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/oidc-id-srv-integration",
-  "version": "1.0.25",
+  "version": "1.0.26",
   "description": "",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -15,9 +15,9 @@
   },
   "homepage": "https://github.com/restorecommerce/oidc-id-srv-integration#readme",
   "dependencies": {
-    "@restorecommerce/grpc-client": "^2.0.6",
+    "@restorecommerce/grpc-client": "^2.0.7",
     "@restorecommerce/logger": "^1.2.7",
-    "@restorecommerce/rc-grpc-clients": "^5.1.6",
+    "@restorecommerce/rc-grpc-clients": "^5.1.7",
     "@restorecommerce/service-config": "^1.0.9",
     "lodash": "^4.17.19",
     "oidc-provider": "^8.4.0",

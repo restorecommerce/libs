@@ -16,12 +16,12 @@ message Subject {
 
 message Tokens {
   optional string name = 1; // token name
-  optional double expires_in = 2; // expiration date for token
+  optional google.protobuf.Timestamp expires_in = 2; // expiration date for token
   optional string token = 3; // token
   repeated string scopes = 4; // identifier for role_association
   optional string type = 5; // type of token eg: access_token, refresh_token
   optional bool interactive = 6;
-  optional double last_login = 7;
+  optional google.protobuf.Timestamp last_login = 7;
 }
 
 message HierarchicalScope {

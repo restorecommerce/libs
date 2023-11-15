@@ -176,12 +176,12 @@ export enum IoRestorecommerceUserUserType {
 export type IoRestorecommerceAuthTokens = {
   __typename?: 'IoRestorecommerceAuthTokens';
   name?: Maybe<Scalars['String']['output']>;
-  expiresIn?: Maybe<Scalars['Float']['output']>;
+  expiresIn?: Maybe<Scalars['DateTime']['output']>;
   token?: Maybe<Scalars['String']['output']>;
   scopes?: Maybe<Array<Scalars['String']['output']>>;
   type?: Maybe<Scalars['String']['output']>;
   interactive?: Maybe<Scalars['Boolean']['output']>;
-  lastLogin?: Maybe<Scalars['Float']['output']>;
+  lastLogin?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type GoogleProtobufAny = {
@@ -1930,12 +1930,12 @@ export type IoRestorecommerceUserUserTypeResolvers = { ORG_USER: 0, INDIVIDUAL_U
 
 export type IoRestorecommerceAuthTokensResolvers<ContextType = OrderingContext, ParentType extends ResolversParentTypes['IoRestorecommerceAuthTokens'] = ResolversParentTypes['IoRestorecommerceAuthTokens']> = ResolversObject<{
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  expiresIn?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  expiresIn?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   token?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   scopes?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   interactive?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  lastLogin?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  lastLogin?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

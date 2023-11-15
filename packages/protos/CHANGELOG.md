@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.2.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.2.2...@restorecommerce/protos@6.2.3) (2023-11-15)
+
+
+### Bug Fixes
+
+* **protos:** changed expries_in to timestamp and regenerated schema ([b519d8d](https://github.com/restorecommerce/libs/commit/b519d8d54cc39ecd9804401698fd452c219336a5))
+
+
+
+
+
 ## [6.2.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.2.1...@restorecommerce/protos@6.2.2) (2023-11-14)
 
 

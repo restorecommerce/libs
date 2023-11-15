@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.6.10](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.6.9...@restorecommerce/facade@1.6.10) (2023-11-15)
+
+
+### Bug Fixes
+
+* **protos:** changed expries_in to timestamp and regenerated schema ([b519d8d](https://github.com/restorecommerce/libs/commit/b519d8d54cc39ecd9804401698fd452c219336a5))
+
+
+
+
+
 ## [1.6.9](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.6.8...@restorecommerce/facade@1.6.9) (2023-11-14)
 
 

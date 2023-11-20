@@ -50,7 +50,7 @@ export const DefaultACSClientContextFactory = async <T extends ResourceList>(
   resources: [],
 });
 
-export function DefaultResourceFacorty<T extends ResourceList>(
+export function DefaultResourceFactory<T extends ResourceList>(
   resourceName: string
 ): ResourceFactory<T> {
   return async (

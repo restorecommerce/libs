@@ -1,3 +1,7 @@
+### 1.4.2 (November 20th, 2023)
+
+- updated all dependencies
+
 ### 1.4.1 (November 15th, 2023)
 
 - updated token proto for expires_in, last_login and user proto for last_access

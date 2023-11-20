@@ -30,17 +30,17 @@
   },
   "dependencies": {
     "debug": "^4.3.4",
-    "winston": "^3.10.0"
+    "winston": "^3.11.0"
   },
   "devDependencies": {
-    "@types/mocha": "^10.0.2",
-    "@types/node": "^20.8.2",
-    "@typescript-eslint/eslint-plugin": "^6.7.4",
-    "@typescript-eslint/eslint-plugin-tslint": "^6.7.4",
-    "@typescript-eslint/parser": "^6.7.4",
+    "@types/mocha": "^10.0.4",
+    "@types/node": "^20.9.2",
+    "@typescript-eslint/eslint-plugin": "^6.11.0",
+    "@typescript-eslint/eslint-plugin-tslint": "^6.11.0",
+    "@typescript-eslint/parser": "^6.11.0",
     "coveralls": "^3.1.1",
-    "eslint": "^8.50.0",
-    "eslint-plugin-prefer-arrow-functions": "^3.1.4",
+    "eslint": "^8.54.0",
+    "eslint-plugin-prefer-arrow-functions": "^3.2.4",
     "is-generator": "^1.0.3",
     "isomorphic-fetch": "^3.0.0",
     "koa": "^2.14.2",

@@ -22,7 +22,7 @@
     "@apollo/server": "^4.7.1",
     "@as-integrations/koa": "^1.1.0",
     "@cloudnative/health": "^2.1.2",
-    "@grpc/grpc-js": "^1.8.14",
+    "@grpc/grpc-js": "^1.9.11",
     "@grpc/proto-loader": "^0.7.7",
     "@koa/cors": "^4.0.0",
     "@restorecommerce/grpc-client": "^2.0.7",

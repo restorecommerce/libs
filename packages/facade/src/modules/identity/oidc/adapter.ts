@@ -87,7 +87,7 @@ export function createIdentityServiceAdapterClass(remoteTokenService: tokenServi
       if (delegateToRemoteService(this.type)) {
         try {
           await remoteTokenService.upsert({
-            expiresIn: new Date(expiresIn),
+            expiresIn: new Date(Date.now() + (1000 * expiresIn)),
             id,
             payload: marshallProtobufAny(payload),
             type: this.type,

@@ -6,10 +6,6 @@ import {
   mapResourceURNObligationProperties,
 } from '../utils';
 import {
-  createClient,
-  createChannel,
-} from '@restorecommerce/grpc-client';
-import {
   Subject,
   DeepPartial,
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/auth';
@@ -21,12 +17,9 @@ import {
   FilterOp,
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base';
 import {
-  AccessControlServiceDefinition,
-} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/access_control';
-import {
-  UnAuthZ,
   ACSAuthZ,
   authZ,
+  unauthZ,
 } from './authz';
 import {
   UnauthenticatedContext,
@@ -49,13 +42,7 @@ const subjectIsUnauthenticated = (subject: any): subject is UnauthenticatedConte
 const whatIsAllowedRequest = async (subject: DeepPartial<Subject>, resources: Resource[],
   actions: AuthZAction, ctx: ACSClientContext, useCache: boolean) => {
   if (subjectIsUnauthenticated(subject)) {
-    const grpcConfig = cfg.get('client:acs-srv');
-    const channel = createChannel(grpcConfig.address);
-    const acsClient = createClient({
-      ...grpcConfig,
-      logger
-    }, AccessControlServiceDefinition, channel);
-    return await new UnAuthZ(acsClient).whatIsAllowed({
+    return await unauthZ.whatIsAllowed({
       target: {
         subjects: (subject as UnauthenticatedData), resources, actions
       },
@@ -80,13 +67,7 @@ const whatIsAllowedRequest = async (subject: DeepPartial<Subject>, resources: Re
 export const isAllowedRequest = async (subject: Subject,
   resources: Resource[], actions: AuthZAction, ctx: ACSClientContext, useCache: boolean): Promise<DecisionResponse> => {
   if (subjectIsUnauthenticated(subject)) {
-    const grpcConfig = cfg.get('client:acs-srv');
-    const channel = createChannel(grpcConfig.address);
-    const acsClient = createClient({
-      ...grpcConfig,
-      logger
-    }, AccessControlServiceDefinition, channel);
-    return await new UnAuthZ(acsClient).isAllowed({
+    return await unauthZ.isAllowed({
       target: {
         subjects: (subject as UnauthenticatedData), resources, actions
       },

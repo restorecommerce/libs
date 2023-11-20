@@ -16,7 +16,7 @@ import {
 import { createChannel, createClient } from '@restorecommerce/grpc-client';
 import { cfg, updateConfig } from '../config';
 import logger from '../logger';
-import { flushCache, getOrFill, initializeCache, setCacheStatus } from './cache';
+import { flushCache, getOrFill } from './cache';
 import { Events, registerProtoMeta } from '@restorecommerce/kafka-client';
 import { mapResourceURNObligationProperties } from '../utils';
 import {
@@ -38,6 +38,7 @@ registerProtoMeta(
 
 export declare type Authorizer = ACSAuthZ;
 export let authZ: Authorizer;
+export let unauthZ: UnAuthZ;
 const urns = cfg.get('authorization:urns');
 
 export const createActionTarget = (action: any): Attribute[] => {
@@ -453,8 +454,12 @@ const acsEvents = [
   'ruleDeleted',
 ];
 
-const eventListener = async (msg: any,
-  context: any, config: any, eventName: string): Promise<any> => {
+const eventListener = async (
+  msg: any,
+  context: any,
+  config: any,
+  eventName: string
+): Promise<any> => {
   if (acsEvents.indexOf(eventName) > -1) {
     // no prefix provided, flush complete cache
     logger.info(`Received event ${eventName} and hence evicting ACS cache`);
@@ -468,16 +473,19 @@ export const initAuthZ = async (config?: any): Promise<void | ACSAuthZ> => {
       updateConfig(config);
     }
     const authzCfg = cfg.get('authorization');
-    const kafkaCfg = cfg.get('events:kafka');
+    const kafkaCfg = cfg.get('authorization:events:kafka') ?? cfg.get('events:kafka');
     // gRPC interface for access-control-srv
     if (authzCfg.enabled) {
-      const grpcACSConfig = cfg.get('client:acs-srv');
-      const channel = createChannel(grpcACSConfig.address);
-      const acsClient: AccessControlServiceClient = createClient({
-        ...grpcACSConfig,
-        logger
-      }, AccessControlServiceDefinition, channel);
+      const grpcACSConfig = cfg.get('authorization:client:acs-srv') ?? cfg.get('client:acs-srv');
+      const acsClient: AccessControlServiceClient = createClient(
+        {
+          ...grpcACSConfig,
+          logger
+        }, AccessControlServiceDefinition,
+        createChannel(grpcACSConfig.address),
+      );
       authZ = new ACSAuthZ(acsClient);
+      unauthZ = new UnAuthZ(acsClient);
       // listeners for rules / policies / policySets modified, so as to
       // delete the Cache as it would be invalid if ACS resources are modified
       if (kafkaCfg && kafkaCfg.evictACSCache) {

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.6.12](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.6.11...@restorecommerce/facade@1.6.12) (2023-11-21)
+
+
+### Bug Fixes
+
+* facade expires_in to date object ([5edf937](https://github.com/restorecommerce/libs/commit/5edf9375ae589c12b644284bdcfde7e802081d3e))
+
+
+
+
+
 ## [1.6.11](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.6.10...@restorecommerce/facade@1.6.11) (2023-11-20)
 
 **Note:** Version bump only for package @restorecommerce/facade

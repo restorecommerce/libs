@@ -118,15 +118,11 @@ export const accessRequest = async (
 ): Promise<DecisionResponse | PolicySetRQResponse> => {
   if (_.isEmpty(subject) || !subject.token ) {
     // check if unauthenticated user is configured in config.json
-    if (cfg.get('authorization:unauthenticated_user')) {
-      subject = {
-        id: cfg.get('authorization:unauthenticated_user:id'),
-        token: cfg.get('authorization:unauthenticated_user:token')
-      };
-    } else {
+    subject = cfg.get('authorization:users:unauthenticated_user')
+      // fallback to old configs
+      ?? cfg.get('authorization:unauthenticated_user')
       // when subject is not passed (if auth header is not set)
-      subject = { unauthenticated: true };
-    }
+      ?? { unauthenticated: true };
   }
 
   const subClone = _.cloneDeep(subject);

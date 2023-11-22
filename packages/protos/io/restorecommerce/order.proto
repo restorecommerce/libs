@@ -31,7 +31,7 @@ service OrderService {
   rpc Update (OrderList) returns (OrderListResponse);
   rpc Upsert (OrderList) returns (OrderListResponse);
   rpc Evaluate (OrderList) returns (OrderListResponse);
-  rpc Submit (OrderList) returns (OrderListResponse);
+  rpc Submit (OrderList) returns (OrderSubmitListResponse);
   rpc Withdraw (OrderIdList) returns (OrderListResponse);
   rpc Cancel (OrderIdList) returns (OrderListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
@@ -145,6 +145,13 @@ message OrderList {
   repeated Order items = 1;
   optional uint32 total_count = 2;
   optional io.restorecommerce.auth.Subject subject = 3;
+}
+
+message OrderSubmitListResponse {
+  repeated OrderResponse orders = 1;
+  repeated io.restorecommerce.fulfillment.FulfillmentResponse fulfillments = 2;
+  repeated io.restorecommerce.invoice.InvoiceResponse invoices = 3;
+  optional io.restorecommerce.status.OperationStatus operation_status = 4;
 }
 
 message OrderListResponse {

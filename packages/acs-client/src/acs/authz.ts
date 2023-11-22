@@ -472,11 +472,11 @@ export const initAuthZ = async (config?: any): Promise<void | ACSAuthZ> => {
     if (config) {
       updateConfig(config);
     }
-    const authzCfg = cfg.get('authorization');
-    const kafkaCfg = cfg.get('authorization:events:kafka') ?? cfg.get('events:kafka');
     // gRPC interface for access-control-srv
-    if (authzCfg.enabled) {
-      const grpcACSConfig = cfg.get('authorization:client:acs-srv') ?? cfg.get('client:acs-srv');
+    if (cfg.get('authorization:enabled')) {
+      const kafkaCfg = cfg.get('authorization:events:kafka') ?? cfg.get('events:kafka');
+      const acsName = cfg.get('authorization:service') ?? 'acs-srv';
+      const grpcACSConfig = cfg.get('authorization:client')?.[acsName] ?? cfg.get('client')?.[acsName];
       const acsClient: AccessControlServiceClient = createClient(
         {
           ...grpcACSConfig,

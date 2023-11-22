@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.7.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.6.12...@restorecommerce/facade@1.7.0) (2023-11-22)
+
+
+### Features
+
+* up schema for order proto and meta proto changes ([8b9a79c](https://github.com/restorecommerce/libs/commit/8b9a79cb729af88b7921cb3abda116e0af5a6985))
+
+
+
+
+
 ## [1.6.12](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.6.11...@restorecommerce/facade@1.6.12) (2023-11-21)
 
 

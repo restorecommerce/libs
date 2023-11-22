@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.3.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.2.3...@restorecommerce/protos@6.3.0) (2023-11-22)
+
+
+### Bug Fixes
+
+* added created_by field to meta of proto ([3896a40](https://github.com/restorecommerce/libs/commit/3896a407365e8ae7ca4f37fab1369b31861a9aa9))
+
+
+### Features
+
+* **proto:** ordering-srv submit response now includes fulfillments and invoices ([146dc70](https://github.com/restorecommerce/libs/commit/146dc70bef2c8a87fded0caff4816b0f428c878b))
+
+
+
+
+
 ## [6.2.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.2.2...@restorecommerce/protos@6.2.3) (2023-11-15)
 
 

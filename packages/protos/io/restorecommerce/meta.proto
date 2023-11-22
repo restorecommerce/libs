@@ -10,7 +10,8 @@ import "google/protobuf/timestamp.proto";
 message Meta {
     optional google.protobuf.Timestamp created = 1; // timestamp
     optional google.protobuf.Timestamp modified = 2; // timestamp
-    optional string modified_by = 3; // ID from last User who modified it
+    optional string modified_by = 3; // ID from last User who modified resource
     repeated io.restorecommerce.attribute.Attribute owners = 4;
     repeated io.restorecommerce.attribute.Attribute acls = 5;
+    optional string created_by = 6; // ID from User who created resource
 }

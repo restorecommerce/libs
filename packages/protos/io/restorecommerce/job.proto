@@ -56,13 +56,11 @@ message JobResponse {
  */
 message Job {
   optional string id = 1; // Job ID
-
-  optional string type = 11; // Job type
-  optional Data data = 12; // Job-specific data with variable payload
-
-  optional string when = 21; // Used to specify the time at which the job is run
-
-  optional JobOptions options = 30; // The job options
+  optional string type = 2; // Job type
+  optional Data data = 3; // Job-specific data with variable payload
+  optional string queue_name = 4; // Queue name to which the job should be added to
+  optional string when = 5; // Used to specify the time at which the job is run
+  optional JobOptions options = 6; // The job options
 }
 
 /**

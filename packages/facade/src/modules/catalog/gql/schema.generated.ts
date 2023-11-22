@@ -83,6 +83,7 @@ export type IoRestorecommerceMetaMeta = {
   modifiedBy?: Maybe<Scalars['String']['output']>;
   owners?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
   acls?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
+  createdBy?: Maybe<Scalars['String']['output']>;
 };
 
 export type IoRestorecommerceAttributeAttribute = {
@@ -804,6 +805,7 @@ export type IIoRestorecommerceMetaMeta = {
   modifiedBy?: InputMaybe<Scalars['String']['input']>;
   owners?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
   acls?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
+  createdBy?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type IIoRestorecommerceAttributeAttribute = {
@@ -1532,6 +1534,7 @@ export type IoRestorecommerceMetaMetaResolvers<ContextType = CatalogContext, Par
   modifiedBy?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   owners?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
   acls?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
+  createdBy?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

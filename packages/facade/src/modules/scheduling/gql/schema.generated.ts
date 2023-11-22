@@ -63,6 +63,7 @@ export type IoRestorecommerceJobJob = {
   id?: Maybe<Scalars['String']['output']>;
   type?: Maybe<Scalars['String']['output']>;
   data?: Maybe<IoRestorecommerceJobData>;
+  queueName?: Maybe<Scalars['String']['output']>;
   when?: Maybe<Scalars['String']['output']>;
   options?: Maybe<IoRestorecommerceJobJobOptions>;
 };
@@ -214,6 +215,7 @@ export type IIoRestorecommerceJobJob = {
   id?: InputMaybe<Scalars['String']['input']>;
   type?: InputMaybe<Scalars['String']['input']>;
   data?: InputMaybe<IIoRestorecommerceJobData>;
+  queueName?: InputMaybe<Scalars['String']['input']>;
   when?: InputMaybe<Scalars['String']['input']>;
   options?: InputMaybe<IIoRestorecommerceJobJobOptions>;
 };
@@ -551,6 +553,7 @@ export type IoRestorecommerceJobJobResolvers<ContextType = SchedulingContext, Pa
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   data?: Resolver<Maybe<ResolversTypes['IoRestorecommerceJobData']>, ParentType, ContextType>;
+  queueName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   when?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   options?: Resolver<Maybe<ResolversTypes['IoRestorecommerceJobJobOptions']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;

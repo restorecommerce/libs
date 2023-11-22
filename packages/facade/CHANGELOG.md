@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.8.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.7.0...@restorecommerce/facade@1.8.0) (2023-11-22)
+
+
+### Features
+
+* **facade:** up schema for rc-grpc-clients ([9946c54](https://github.com/restorecommerce/libs/commit/9946c5459a3c8318d0556a947e590235ed64703f))
+
+
+
+
+
 # [1.7.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.6.12...@restorecommerce/facade@1.7.0) (2023-11-22)
 
 

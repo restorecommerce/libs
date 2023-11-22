@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.4.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.3.0...@restorecommerce/protos@6.4.0) (2023-11-22)
+
+
+### Features
+
+* **proto:** add queue name to job protos ([0c09086](https://github.com/restorecommerce/libs/commit/0c09086c7e41a7759a62970ad182d9816c30e773))
+
+
+
+
+
 # [6.3.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.2.3...@restorecommerce/protos@6.3.0) (2023-11-22)
 
 

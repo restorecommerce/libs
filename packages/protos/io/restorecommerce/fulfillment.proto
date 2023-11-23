@@ -202,7 +202,7 @@ message Fulfillment {
       field_name: "shop",
     }
   ];
-  optional io.restorecommerce.reference.Reference reference = 6;
+  repeated io.restorecommerce.reference.Reference references = 6;
   optional Packaging packaging = 7;
   repeated Label labels = 8; //set by service
   repeated Tracking trackings = 9; //set by service

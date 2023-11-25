@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.8.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.8.0...@restorecommerce/facade@1.8.1) (2023-11-25)
+
+
+### Bug Fixes
+
+* **facade:** fix to send client_id in token find response(this will be persisted to DB from token payload on identity-srv) ([0ebf12f](https://github.com/restorecommerce/libs/commit/0ebf12f4b7bb82e00ef878dc76c26576ad95ea76))
+* **facade:** regenerated schema for token and fulfillment proto changes ([ef7e225](https://github.com/restorecommerce/libs/commit/ef7e225b1fa79ddea1ca3aa82c919420e14a4b8a))
+
+
+
+
+
 # [1.8.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.7.0...@restorecommerce/facade@1.8.0) (2023-11-22)
 
 

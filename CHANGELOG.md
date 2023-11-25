@@ -1,3 +1,7 @@
+### 1.4.3 (November 25th, 2023)
+
+- updated all dependencies (added created_by to meta object)
+
 ### 1.4.2 (November 20th, 2023)
 
 - updated all dependencies

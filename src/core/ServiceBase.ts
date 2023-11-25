@@ -241,7 +241,7 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
     let docs: any = {};
     try {
       const createDocs = _.cloneDeep(request.items);
-      let createResponse = await this.resourceapi.create(createDocs);
+      let createResponse = await this.resourceapi.create(createDocs, request.subject);
       const dispatch = [];
       const events: Topic = this.events.entity;
       if (this.isEventsEnabled) {
@@ -343,7 +343,7 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
     let docs: any = {};
     try {
       let updateDocs = _.cloneDeep(request.items);
-      let updateResponse = await this.resourceapi.update(updateDocs);
+      let updateResponse = await this.resourceapi.update(updateDocs, request.subject);
       if (this.isEventsEnabled) {
         const dispatch = [];
         const events = this.events.entity;
@@ -383,7 +383,7 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
     try {
       let upsertDocs = _.cloneDeep(request.items);
       let upsertResponse = await this.resourceapi.upsert(upsertDocs,
-        this.events.entity, this.name);
+        this.events.entity, this.name, request.subject);
       let responseWithStatus = this.generateResponseWithStatus(upsertResponse, upsertDocs);
       const operation_status = {
         code: 200,

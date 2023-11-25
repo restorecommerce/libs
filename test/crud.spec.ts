@@ -181,6 +181,7 @@ describe('converting to filter to object', () => {
 let meta = {
   created: new Date(),
   modified: new Date(),
+  created_by: 'Admin',
   modified_by: 'Admin',
   owners: [{
     id: 'urn:restorecommerce:acs:names:ownerIndicatoryEntity',
@@ -292,7 +293,7 @@ describe('ServiceBase', () => {
         { id: 'test_xyz', meta, value: 3, text: 'second test data', active: false, created: tomorrow, status: 'BAD' },
         { id: 'test_zy', meta, value: 12, text: 'third search data string', active: false, created: tomorrow, status: 'UNKNOWN' }];
       // await db.insert('resources', testData);
-      await testService.create({ items: testData });
+      await testService.create({ items: testData, subject: { id: 'Admin' } });
     });
     describe('read', () => {
       it('should return all three elements with no arguments', async () => {
@@ -596,8 +597,8 @@ describe('ServiceBase', () => {
       });
       it('fulltext search - should return only matching documents as per search string (default case insensitive)', async () => {
         await new Promise((resolve, reject) => {
-            setTimeout(resolve, 2000);
-          });
+          setTimeout(resolve, 2000);
+        });
         const result = await testService.read({
           search: {
             search: 'EaRc' // will match search text from above `text` data and return 2 documents
@@ -612,8 +613,8 @@ describe('ServiceBase', () => {
 
       it('fulltext search - should return only matching documents as per search string (default case insensitive)', async () => {
         await new Promise((resolve, reject) => {
-            setTimeout(resolve, 2000);
-          });
+          setTimeout(resolve, 2000);
+        });
         const result = await testService.read({
           search: {
             search: 'data' // will match search text from above `text` data and return 2 documents
@@ -628,8 +629,8 @@ describe('ServiceBase', () => {
 
       it('fulltext search - should not return any matching documents as per search string with case sensitive search', async () => {
         await new Promise((resolve, reject) => {
-            setTimeout(resolve, 2000);
-          });
+          setTimeout(resolve, 2000);
+        });
         const result = await testService.read({
           search: {
             search: 'DATA', // will not match search text from above `text` data and should not return any documents
@@ -643,8 +644,9 @@ describe('ServiceBase', () => {
       it('should create new documents and validate duplicate element error', async () => {
         const meta = {
           acl: [],
+          created_by: 'Admin',
           modified_by: 'Admin',
-          owner: [{
+          owners: [{
             id: 'urn:restorecommerce:acs:names:ownerIndicatoryEntity',
             value: 'urn:restorecommerce:acs:model:user.User',
             attributes: [{
@@ -673,7 +675,7 @@ describe('ServiceBase', () => {
           meta
         };
         const newTestData = [newTestDataFirst, newTestDataSecond, testDuplicate];
-        const result = await testService.create({ items: newTestData });
+        const result = await testService.create({ items: newTestData, subject: { id: 'Admin' } });
         should.exist(result);
         should.exist(result.items);
         result.items.should.be.length(3);
@@ -766,7 +768,7 @@ describe('ServiceBase', () => {
           data.text = 'test-patch';
           return data;
         });
-        const result = await testService.update({ items: patch });
+        const result = await testService.update({ items: patch, subject: { id: 'Admin' } });
         should.exist(result);
         should.exist(result.operation_status);
         should.exist(result.items);
@@ -791,7 +793,7 @@ describe('ServiceBase', () => {
           value: 2,
           text: 'new value'
         }];
-        const result = await testService.update({ items: patch });
+        const result = await testService.update({ items: patch, subject: { id: 'Admin' } });
         result.items.should.length(1);
         should.exist(result.operation_status);
         // validate status of item
@@ -821,7 +823,7 @@ describe('ServiceBase', () => {
           text: '',
           meta
         }];
-        const result = await testService.upsert({ items: replace });
+        const result = await testService.upsert({ items: replace, subject: { id: 'Admin' } });
         should.exist(result);
         result.items.length.should.equal(3);
         result.items[0].payload.id.should.equal('test_newput');
@@ -851,7 +853,7 @@ describe('ServiceBase', () => {
           { id: 'test_xy', value: 1, meta },
           { id: 'test_xyz', value: 3, meta },
           { id: 'test_zy', value: 12, meta }];
-        const result2 = await testService.create({ items: objectMissingField });
+        const result2 = await testService.create({ items: objectMissingField, subject: { id: 'Admin' } });
         should.exist(result2);
         should.exist(result2.operation_status);
         should.exist(result2.items);
@@ -875,7 +877,7 @@ describe('ServiceBase', () => {
           const bufferObjects = [
             { value: 1, data: bufData, meta, text: 'test1' },
             { value: 2, data: bufData, meta, text: 'test2' }];
-          let resp = await testService.create({ items: bufferObjects });
+          let resp = await testService.create({ items: bufferObjects, subject: { id: 'Admin' } });
           // Read directly from DB and compare the JSON data
           // because normal read() operation again encodes and sends the data back.
           // This way, we check if the data was actually encoded by reading it from the DB.

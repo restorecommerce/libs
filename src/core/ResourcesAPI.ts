@@ -6,6 +6,7 @@ import { BaseDocument, DocumentMetadata } from './interfaces';
 import { DatabaseProvider, GraphDatabaseProvider } from '@restorecommerce/chassis-srv';
 import { DeepPartial } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/attribute';
 import { Search } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base';
+import { Subject } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/auth';
 import { fieldHandler } from './utils';
 
 let redisClient: any;
@@ -25,7 +26,7 @@ const isEmptyObject = (obj: any): any => {
   return !Object.keys(obj).length;
 };
 
-const setDefaults = async (obj: { meta?: DocumentMetadata;[key: string]: any }, collectionName: string): Promise<any> => {
+const setDefaults = async (obj: { meta?: DocumentMetadata;[key: string]: any }, collectionName: string, subject: Subject): Promise<any> => {
   const o = obj;
 
   if (_.isEmpty(o.meta)) {
@@ -61,6 +62,8 @@ const setDefaults = async (obj: { meta?: DocumentMetadata;[key: string]: any }, 
   if (_.isNil(o.meta.created) || o.meta.created === 0) {
     o.meta.created = new Date();
   }
+  o.meta.created_by = subject?.id;
+  o.meta.modified_by = subject?.id;
   o.meta.modified = new Date();
   if (_.isNil(o.id) || o.id === 0 || isEmptyObject(o.id)) {
     o.id = uuidGen();
@@ -68,7 +71,7 @@ const setDefaults = async (obj: { meta?: DocumentMetadata;[key: string]: any }, 
   return o;
 };
 
-const updateMetadata = (docMeta: DocumentMetadata, newDoc: BaseDocument): BaseDocument => {
+const updateMetadata = (docMeta: DocumentMetadata, newDoc: BaseDocument, subject: Subject): BaseDocument => {
   if (_.isEmpty(newDoc.meta)) {
     // docMeta.owner = newDoc.owner;
     throw new errors.InvalidArgument(`Update request holds no valid metadata for document ${newDoc.id}`);
@@ -79,7 +82,7 @@ const updateMetadata = (docMeta: DocumentMetadata, newDoc: BaseDocument): BaseDo
     docMeta.owners = newDoc.meta.owners;
   }
 
-  docMeta.modified_by = newDoc.meta.modified_by;
+  docMeta.modified_by = subject?.id;
   docMeta.modified = new Date();
 
   newDoc.meta = docMeta;
@@ -191,7 +194,7 @@ export class ResourcesAPIBase {
   *
   * @param {array.object} documents
   */
-  async create(documents: BaseDocument[]): Promise<any> {
+  async create(documents: BaseDocument[], subject: Subject): Promise<any> {
     const collection = this.collectionName;
     let result = [];
     try {
@@ -205,7 +208,7 @@ export class ResourcesAPIBase {
       }
 
       documents = await Promise.all(documents.map(async (doc) => {
-        return await setDefaults(doc, collection);
+        return await setDefaults(doc, collection, subject);
       }));
 
       if (this.bufferFields && documents?.length > 0) {
@@ -385,7 +388,7 @@ export class ResourcesAPIBase {
    * @param [array.object] documents
    */
   async upsert(documents: BaseDocument[],
-    events: Topic, resourceName: string): Promise<BaseDocument[]> {
+    events: Topic, resourceName: string, subject: Subject): Promise<BaseDocument[]> {
     let result = [];
     let createDocsResult = [];
     let updateDocsResult = [];
@@ -408,17 +411,17 @@ export class ResourcesAPIBase {
         let eventName: string;
         if (_.isEmpty(foundDocs)) {
           // insert
-          setDefaults(doc, this.collectionName);
+          setDefaults(doc, this.collectionName, subject);
           createDocuments.push(doc);
           eventName = 'Created';
         } else {
           // convert dateTimeStamp fields
-          if(this.timeStampFields) {
+          if (this.timeStampFields) {
             foundDocs = this.encodeOrDecode(foundDocs, this.timeStampFields, 'convertMilisecToDateObj');
           }
           // update
           const dbDoc = foundDocs[0];
-          updateMetadata(dbDoc.meta, doc);
+          updateMetadata(dbDoc.meta, doc, subject);
           updateDocuments.push(doc);
           eventName = 'Modified';
         }
@@ -428,11 +431,11 @@ export class ResourcesAPIBase {
       }));
 
       if (createDocuments?.length > 0) {
-        createDocsResult = await this.create(createDocuments);
+        createDocsResult = await this.create(createDocuments, subject);
       }
 
       if (updateDocuments?.length > 0) {
-        updateDocsResult = await this.update(updateDocuments);
+        updateDocsResult = await this.update(updateDocuments, subject);
       }
 
       result = _.union(createDocuments, updateDocuments);
@@ -465,7 +468,7 @@ export class ResourcesAPIBase {
    * @param [array.object] documents
    * A list of documents or partial documents. Each document must contain an id field.
    */
-  async update(documents: BaseDocument[]): Promise<BaseDocument[]> {
+  async update(documents: BaseDocument[], subject: Subject): Promise<BaseDocument[]> {
     let updateResponse = [];
     try {
       const collectionName = this.collectionName;
@@ -477,7 +480,7 @@ export class ResourcesAPIBase {
         let dbDoc;
         if (foundDocs && foundDocs.length === 1) {
           dbDoc = foundDocs[0];
-          doc = updateMetadata(dbDoc.meta, doc);
+          doc = updateMetadata(dbDoc.meta, doc, subject);
         } else {
           dbDoc = doc; // doc not existing assigning to generate error message in response
         }
@@ -556,7 +559,7 @@ export class ResourcesAPIBase {
 
   private encodeOrDecode(documents: any, fieldPaths: string[], fieldHanlder: string): any {
     for (let doc of documents) {
-      for(let fieldPath of fieldPaths) {
+      for (let fieldPath of fieldPaths) {
         doc = fieldHandler(doc, fieldPath, fieldHanlder);
       }
     }

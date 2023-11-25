@@ -183,6 +183,7 @@ export type IoRestorecommerceAuthTokens = {
   type?: Maybe<Scalars['String']['output']>;
   interactive?: Maybe<Scalars['Boolean']['output']>;
   lastLogin?: Maybe<Scalars['DateTime']['output']>;
+  clientId?: Maybe<Scalars['String']['output']>;
 };
 
 export type GoogleProtobufAny = {
@@ -1076,7 +1077,7 @@ export type IoRestorecommerceFulfillmentFulfillment = {
   customer?: Maybe<IoRestorecommerceCustomerCustomer>;
   shopId?: Maybe<Scalars['String']['output']>;
   shop?: Maybe<IoRestorecommerceShopShop>;
-  reference?: Maybe<IoRestorecommerceReferenceReference>;
+  references?: Maybe<Array<IoRestorecommerceReferenceReference>>;
   packaging?: Maybe<IoRestorecommerceFulfillmentPackaging>;
   labels?: Maybe<Array<IoRestorecommerceFulfillmentLabel>>;
   trackings?: Maybe<Array<IoRestorecommerceFulfillmentTracking>>;
@@ -1956,6 +1957,7 @@ export type IoRestorecommerceAuthTokensResolvers<ContextType = OrderingContext, 
   type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   interactive?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   lastLogin?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  clientId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -2522,7 +2524,7 @@ export type IoRestorecommerceFulfillmentFulfillmentResolvers<ContextType = Order
   customer?: Resolver<Maybe<ResolversTypes['IoRestorecommerceCustomerCustomer']>, ParentType, ContextType>;
   shopId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   shop?: Resolver<Maybe<ResolversTypes['IoRestorecommerceShopShop']>, ParentType, ContextType>;
-  reference?: Resolver<Maybe<ResolversTypes['IoRestorecommerceReferenceReference']>, ParentType, ContextType>;
+  references?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceReferenceReference']>>, ParentType, ContextType>;
   packaging?: Resolver<Maybe<ResolversTypes['IoRestorecommerceFulfillmentPackaging']>, ParentType, ContextType>;
   labels?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceFulfillmentLabel']>>, ParentType, ContextType>;
   trackings?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceFulfillmentTracking']>>, ParentType, ContextType>;

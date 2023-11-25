@@ -192,6 +192,7 @@ export type IoRestorecommerceAuthTokens = {
   type?: Maybe<Scalars['String']['output']>;
   interactive?: Maybe<Scalars['Boolean']['output']>;
   lastLogin?: Maybe<Scalars['DateTime']['output']>;
+  clientId?: Maybe<Scalars['String']['output']>;
 };
 
 export type GoogleProtobufAny = {
@@ -1719,6 +1720,7 @@ export type IoRestorecommerceAuthTokensResolvers<ContextType = InvoicingContext,
   type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   interactive?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   lastLogin?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  clientId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

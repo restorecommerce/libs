@@ -41,7 +41,7 @@ export function createIdentityServiceAdapterClass(remoteTokenService: tokenServi
           await remoteTokenService.destroy({
             id,
             type: this.type,
-            subject: Subject.fromPartial({token: id})
+            subject: Subject.fromPartial({ token: id })
           });
         } catch (error) {
           logger.error(`Error destroying ${this.type} token ${id}`, error);
@@ -55,12 +55,20 @@ export function createIdentityServiceAdapterClass(remoteTokenService: tokenServi
       logger.verbose(`Finding ${this.type} token ${id}`);
       if (delegateToRemoteService(this.type)) {
         try {
-          let result = await remoteTokenService.find({
+          let response: any = await remoteTokenService.find({
             id,
             type: this.type,
-            subject: Subject.fromPartial({token: id})
+            subject: Subject.fromPartial({ token: id })
           });
-          return result ? unmarshallProtobufAny(result) : undefined;
+          let tokenResponse: AdapterPayload | undefined;
+          if (response) {
+            tokenResponse = unmarshallProtobufAny(response);
+            if (tokenResponse) {
+              // oidc-provider expects "exp" to be in epochTime in seconds
+              tokenResponse.exp = tokenResponse?.exp ? Math.floor(new Date(tokenResponse?.exp)?.getTime() / 1000) : undefined;
+            }
+          }
+          return tokenResponse;
         } catch (error) {
           logger.error(`Error finding ${this.type} token ${id}`, error);
           return undefined;
@@ -109,7 +117,7 @@ export function createIdentityServiceAdapterClass(remoteTokenService: tokenServi
         try {
           await remoteTokenService.revokeByGrantId({
             grantId,
-            subject: Subject.fromPartial({token: grantId})
+            subject: Subject.fromPartial({ token: grantId })
           });
         } catch (error) {
           logger.error(`Error revoking grant id ${grantId}`, error);

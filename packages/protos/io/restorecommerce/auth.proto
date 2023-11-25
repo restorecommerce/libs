@@ -22,6 +22,7 @@ message Tokens {
   optional string type = 5; // type of token eg: access_token, refresh_token
   optional bool interactive = 6;
   optional google.protobuf.Timestamp last_login = 7;
+  optional string client_id = 8;
 }
 
 message HierarchicalScope {

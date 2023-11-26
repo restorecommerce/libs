@@ -1,3 +1,7 @@
+### 1.4.4 (November 26th, 2023)
+
+- removed deprecated method (collection.load)
+
 ### 1.4.3 (November 25th, 2023)
 
 - updated all dependencies (added created_by to meta object)

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.8.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.8.1...@restorecommerce/facade@1.8.2) (2023-11-26)
+
+
+### Bug Fixes
+
+* logger config ([1f31f47](https://github.com/restorecommerce/libs/commit/1f31f478c76a047ce0ac1f554069fa764101e300))
+* logger message typing ([7791bde](https://github.com/restorecommerce/libs/commit/7791bdede91ea3cd2f824b4410d28075b30199f2))
+
+
+
+
+
 ## [1.8.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.8.0...@restorecommerce/facade@1.8.1) (2023-11-25)
 
 

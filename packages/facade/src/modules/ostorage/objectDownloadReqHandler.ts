@@ -8,6 +8,12 @@ const { isEmpty } = pkg;
 
 const cfg = createServiceConfig(process.cwd());
 const loggerCfg = cfg.get('logger');
+if (loggerCfg) {
+  loggerCfg.esTransformer = (msg) => {
+    msg.fields = JSON.stringify(msg.fields);
+    return msg;
+  };
+}
 
 let logger = createLogger(loggerCfg);
 

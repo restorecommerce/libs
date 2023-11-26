@@ -90,7 +90,7 @@ export function createIdentityServiceAdapterClass(remoteTokenService: tokenServi
     }
 
     async upsert(id: string, payload: AdapterPayload, expiresIn: number): Promise<undefined | void> {
-      logger.error(`Upserting ${this.type} token ${id}`, payload);
+      logger.info(`Upserting ${this.type} token ${id}`, payload);
 
       if (delegateToRemoteService(this.type)) {
         try {

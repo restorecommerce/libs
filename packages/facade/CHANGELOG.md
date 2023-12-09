@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.9.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.8.2...@restorecommerce/facade@1.9.0) (2023-12-09)
+
+
+### Features
+
+* header and metadata upstream passing ([fd6df10](https://github.com/restorecommerce/libs/commit/fd6df103b2ef50143bca1dc7716760103a2ce27c))
+
+
+
+
+
 ## [1.8.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.8.1...@restorecommerce/facade@1.8.2) (2023-11-26)
 
 

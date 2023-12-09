@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/grpc-client",
-  "version": "2.0.8",
+  "version": "2.1.0",
   "description": "Generic GRPC client",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",

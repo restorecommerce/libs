@@ -6,7 +6,13 @@ import {
   createChannel,
 } from 'nice-grpc';
 import { CompatServiceDefinition, NormalizedServiceDefinition } from 'nice-grpc/lib/service-definitions';
-import { internalDeadlineMiddleware, loggingMiddleware, tracingMiddleware, WithRequestID } from './middleware';
+import {
+  internalDeadlineMiddleware,
+  loggingMiddleware,
+  metaMiddleware,
+  tracingMiddleware,
+  WithRequestID
+} from './middleware';
 import { createLogger } from '@restorecommerce/logger';
 import { deadlineMiddleware } from 'nice-grpc-client-middleware-deadline';
 
@@ -24,7 +30,8 @@ export function createClient<Service extends CompatServiceDefinition>(
 ): Client<Service> {
   let factory = createClientFactoryInternal()
     .use<WithRequestID>(loggingMiddleware(config.logger, config.omittedFields))
-    .use<WithRequestID>(tracingMiddleware);
+    .use<WithRequestID>(tracingMiddleware)
+    .use<WithRequestID>(metaMiddleware);
 
   if (config.timeout) {
     factory = factory.use(deadlineMiddleware);

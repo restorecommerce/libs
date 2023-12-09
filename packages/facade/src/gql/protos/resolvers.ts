@@ -30,6 +30,7 @@ import * as stream from 'node:stream';
 import _ from 'lodash';
 import { Events } from '@restorecommerce/kafka-client';
 import S2A from './stream-to-async-iterator.js';
+import { Metadata } from 'nice-grpc';
 
 const inputMethodType = new Map<string, string>();
 
@@ -160,7 +161,13 @@ export const getGQLResolverFunctions =
               req = streamToAsyncIterable(req, readableStreamKey[0]);
             }
           }
-          const rawResult = await methodFunc(req);
+          const contextRequest = (context as any).req;
+          const rawResult = await methodFunc(req, {
+            metadata: Metadata({
+              headers: JSON.stringify(contextRequest.headers),
+              'origin-ip': contextRequest.client.address().address
+            })
+          });
           const result = postProcessGQLValue(rawResult, outputTyping.output);
 
           const grpcClientConfig = cfg.client;

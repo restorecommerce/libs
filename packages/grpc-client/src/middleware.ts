@@ -3,14 +3,18 @@ import {
   CallOptions,
   ClientError,
   ClientMiddleware,
+  Metadata,
 } from 'nice-grpc';
 import {isAbortError} from 'abort-controller-x';
 import { v1 as uuidv1 } from 'uuid';
 import { createLogger } from '@restorecommerce/logger';
 import * as _ from 'lodash';
 import { DeadlineOptions } from 'nice-grpc-client-middleware-deadline';
+import { AsyncLocalStorage } from 'node:async_hooks';
 
 const tracingHeader = 'x-request-id';
+
+export const metadataPassThrough = new AsyncLocalStorage();
 
 export interface WithRequestID {
   rid?: string;
@@ -77,4 +81,25 @@ export const internalDeadlineMiddleware = (timeout: number): ClientMiddleware =>
       deadline: timeout
     });
   }
+}
+
+export async function* metaMiddleware<Request, Response>(
+  call: ClientMiddlewareCall<Request, Response>,
+  options: CallOptions,
+) {
+  const val = metadataPassThrough.getStore();
+  if (val) {
+    if (!options.metadata) {
+      options.metadata = Metadata();
+    }
+
+    const parsed = JSON.parse(val as string) as Record<string, string>;
+    for (const k of Object.keys(parsed)) {
+      options.metadata.set(k, parsed[k]);
+    }
+  }
+
+  return yield* call.next(call.request, {
+    ...options,
+  });
 }

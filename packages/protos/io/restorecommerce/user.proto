@@ -74,7 +74,7 @@ message DeleteUsersByOrgResponse {
 }
 
 message FindRequest {
-  optional string id = 1; /// User ID
+  optional string id = 1; // User ID
   optional string name = 2;
   optional string email = 3;
   io.restorecommerce.auth.Subject subject = 4;
@@ -110,7 +110,7 @@ message RegisterRequest {
  }
 
 message ActivateRequest {
-  optional string identifier = 1; /// user name or email
+  optional string identifier = 1; // user name or email
   optional string activation_code = 2;
   optional io.restorecommerce.auth.Subject subject = 3;
 }
@@ -159,12 +159,12 @@ message ConfirmEmailChangeRequest {
 }
 
 message UnregisterRequest {
-  optional string identifier = 1; /// User ID
+  optional string identifier = 1; // User ID
   optional io.restorecommerce.auth.Subject subject = 2;
 }
 
 message SendActivationEmailRequest {
-  optional string identifier = 1; /// User name or email
+  optional string identifier = 1; // User name or email
   optional io.restorecommerce.auth.Subject subject = 2;
 }
 
@@ -187,7 +187,7 @@ message Deleted {
  * passwordChanged,
  */
 message PasswordChanged {
-  optional string id = 1; /// User ID
+  optional string id = 1; // User ID
   optional string password_hash = 2;
 }
 
@@ -205,7 +205,7 @@ message EmailChangeRequested {
 }
 
 message EmailChangeConfirmed {
-  optional string id = 1; /// User ID
+  optional string id = 1; // User ID
   optional string email = 2;
 }
 
@@ -244,7 +244,7 @@ message UserResponse {
  * User activation request.
  */
 message Activate {
-  optional string id = 1; /// User ID
+  optional string id = 1; // User ID
 }
 
 message FindByRoleRequest {
@@ -265,17 +265,17 @@ message User {
     deleted: "userDeleted"
   };
 
-  optional string id = 1; /// User ID, unique, key
+  optional string id = 1; // User ID, unique, key
   optional io.restorecommerce.meta.Meta meta = 2;
   optional string name = 3; // The name of the user, can be used for login
   optional string first_name = 4;
   optional string last_name = 5;
-  optional string email = 6; /// Email address, can be used for login
-  optional string new_email = 7; /// New email address; set by `requestEmailChange` and overrides actual email upon `confirmEmailChange`
-  optional bool active = 8; /// If the user was activated via the activation process
-  optional string activation_code = 9; /// Activation code used in the activation process
-  optional string password = 10; /// Raw password, not stored
-  optional string password_hash = 11; /// Encrypted password, stored
+  optional string email = 6; // Email address, can be used for login
+  optional string new_email = 7; // New email address; set by `requestEmailChange` and overrides actual email upon `confirmEmailChange`
+  optional bool active = 8; // If the user was activated via the activation process
+  optional string activation_code = 9; // Activation code used in the activation process
+  optional string password = 10; // Raw password, not stored
+  optional string password_hash = 11; // Encrypted password, stored
   repeated io.restorecommerce.auth.RoleAssociation role_associations = 12; // A user can have multiple roles and different attributes coupled with each role
   optional string timezone_id = 13 [
     (io.restorecommerce.options.resolver) = {
@@ -296,34 +296,34 @@ message User {
     }
   ];  // locale specifications
   optional string default_scope = 15; // default hierarchical scope
-  optional bool unauthenticated = 16; // true in case in case of `register`; set to false after activation
-  optional bool guest = 17; /// Is the user a guest. A guest is a automatically generated user which can later be turned in a non-guest user.
-  optional io.restorecommerce.image.Image image = 18;
-  optional UserType user_type = 19;
-  optional bool invite = 20; // For user invitation
-  optional string invited_by_user_name = 21; // user who is inviting
-  optional string invited_by_user_first_name = 22; // First name of user inviting
-  optional string invited_by_user_last_name = 23; // Last name of user inviting
-  repeated io.restorecommerce.auth.Tokens tokens = 24;
-  optional google.protobuf.Timestamp last_access = 25;
-  optional google.protobuf.Any data = 26; /// additional data
+  optional bool guest = 16; // Is the user a guest. A guest is a automatically generated user which can later be turned in a non-guest user.
+  optional io.restorecommerce.image.Image image = 17;
+  optional UserType user_type = 18;
+  optional bool invite = 19; // true if user has been invited by another user
+  optional string invited_by_user_name = 20; // User who is inviting
+  optional string invited_by_user_first_name = 21; // First name of user inviting
+  optional string invited_by_user_last_name = 22; // Last name of user inviting
+  repeated io.restorecommerce.auth.Tokens tokens = 23;
+  optional google.protobuf.Timestamp last_access = 24; // When the user has last been used
+  repeated io.restorecommerce.attribute.Attribute properties = 25; // additional properties
+  optional google.protobuf.Any data = 26; // additional data
 }
 
 /**
  * A User resource with role
  */
 message UserRole {
-  optional string id = 1; /// User ID, unique, key
+  optional string id = 1; // User ID, unique, key
   optional io.restorecommerce.meta.Meta meta = 2;
   optional string name = 3; // The name of the user, can be used for login
   optional string first_name = 4;
   optional string last_name = 5;
-  optional string email = 6; /// Email address, can be used for login
-  optional string new_email = 7; /// New email address; set by `requestEmailChange` and overrides actual email upon `confirmEmailChange`
-  optional bool active = 8; /// If the user was activated via the activation process
-  optional string activation_code = 9; /// Activation code used in the activation process
-  optional string password = 10; /// Raw password, not stored
-  optional string password_hash = 11; /// Encrypted password, stored
+  optional string email = 6; // Email address, can be used for login
+  optional string new_email = 7; // New email address; set by `requestEmailChange` and overrides actual email upon `confirmEmailChange`
+  optional bool active = 8; // If the user was activated via the activation process
+  optional string activation_code = 9; // Activation code used in the activation process
+  optional string password = 10; // Raw password, not stored
+  optional string password_hash = 11; // Encrypted password, stored
   repeated io.restorecommerce.auth.RoleAssociation role_associations = 12; // A user can have multiple roles and different attributes coupled with each role
   optional string timezone_id = 13 [
     (io.restorecommerce.options.resolver) = {
@@ -345,7 +345,7 @@ message UserRole {
   ];	// locale specifications
   optional string default_scope = 15; // default hierarchical scope
   optional bool unauthenticated = 16; // true in case in case of `register`; set to false after activation
-  optional bool guest = 17; /// Is the user a guest. A guest is a automatically generated user which can later be turned in a non-guest user.
+  optional bool guest = 17; // Is the user a guest. A guest is a automatically generated user which can later be turned in a non-guest user.
   optional io.restorecommerce.image.Image image = 18;
   optional UserType user_type = 19;
   optional bool invite = 20; // For user invitation
@@ -354,6 +354,6 @@ message UserRole {
   optional string invited_by_user_last_name = 23; // Last name of user inviting
   repeated io.restorecommerce.auth.Tokens tokens = 24;
   optional google.protobuf.Timestamp last_access = 25;
-  optional google.protobuf.Any data = 26; /// additional data
+  optional google.protobuf.Any data = 26; // additional data
   repeated io.restorecommerce.role.Role roles = 27;
 }

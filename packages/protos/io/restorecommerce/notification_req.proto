@@ -7,7 +7,7 @@ import "io/restorecommerce/reference.proto";
 
 service NotificationReqService {
   // direct notifications
-  rpc Send (NotificationReq) returns (io.restorecommerce.status.OperationStatusObj); /// generic fallback
+  rpc Send (NotificationReq) returns (io.restorecommerce.status.OperationStatusObj); // generic fallback
 }
 
 // mimics nodemailer properties for easy configuration
@@ -33,8 +33,8 @@ message NotificationReq {
   }
   optional string subject = 3;
   optional string body = 4;  // text/HTML content
-  optional string transport = 5; /// 'email', 'log', ... default == 'log'
-  optional string provider = 6; /// specific transport provider, eg: 'console' for transport == 'log'
+  optional string transport = 5; // 'email', 'log', ... default == 'log'
+  optional string provider = 6; // specific transport provider, eg: 'console' for transport == 'log'
   repeated Attachment attachments = 7;
   optional io.restorecommerce.reference.Reference reference = 8;
 }

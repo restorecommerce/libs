@@ -146,7 +146,7 @@ message Response {
 
 message ListRequest {
   optional string bucket = 1;
-  optional io.restorecommerce.filter.FilterOp filters = 2; /// Filter based on fieldName|operation, value|list
+  optional io.restorecommerce.filter.FilterOp filters = 2; // Filter based on fieldName|operation, value|list
   optional io.restorecommerce.auth.Subject subject = 3;
   optional int32 max_keys = 4;
   optional string prefix = 5;

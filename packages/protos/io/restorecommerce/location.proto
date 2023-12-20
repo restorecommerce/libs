@@ -79,6 +79,6 @@ message Location {
       field_name: "address",
     }
   ];
-  optional google.protobuf.Any data = 9; /// additional data
+  optional google.protobuf.Any data = 9; // additional data
   optional string type = 10; // location type
 }

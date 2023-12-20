@@ -54,7 +54,7 @@ message OrganizationResponse {
 }
 
 message Organization {
-  optional string id = 1; /// Organization ID, unique, key
+  optional string id = 1; // Organization ID, unique, key
   optional io.restorecommerce.meta.Meta meta = 2;
   optional string parent_id = 3 [
     (io.restorecommerce.options.resolver) = {
@@ -91,5 +91,5 @@ message Organization {
       field_name: "paymentMethods",
     }
   ];
-  optional google.protobuf.Any data = 14; /// additional data
+  optional google.protobuf.Any data = 14; // additional data
 }

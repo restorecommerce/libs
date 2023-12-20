@@ -34,7 +34,7 @@ service FulfillmentProductService {
 }
 
 message Preferences {
-  repeated io.restorecommerce.attribute.Attribute couriers = 1; //ID, name or type
+  repeated io.restorecommerce.attribute.Attribute couriers = 1; // ID, name or type
   repeated io.restorecommerce.attribute.Attribute options = 2;
 }
 

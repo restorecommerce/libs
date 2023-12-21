@@ -160,6 +160,7 @@ export function access_controlled_function<T extends ResourceList>(kwargs: {
           : kwargs.database;
 
         const subject = context?.subject;
+        subject.id = null;
         if (subject?.token) {
           const user = await this.__userService.findByToken({ token: subject.token });
           if (user?.payload?.id) {

@@ -344,16 +344,16 @@ message UserRole {
     }
   ];	// locale specifications
   optional string default_scope = 15; // default hierarchical scope
-  optional bool unauthenticated = 16; // true in case in case of `register`; set to false after activation
-  optional bool guest = 17; // Is the user a guest. A guest is a automatically generated user which can later be turned in a non-guest user.
-  optional io.restorecommerce.image.Image image = 18;
-  optional UserType user_type = 19;
-  optional bool invite = 20; // For user invitation
-  optional string invited_by_user_name = 21; // user who is inviting
-  optional string invited_by_user_first_name = 22; // First name of user inviting
-  optional string invited_by_user_last_name = 23; // Last name of user inviting
-  repeated io.restorecommerce.auth.Tokens tokens = 24;
-  optional google.protobuf.Timestamp last_access = 25;
+  optional bool guest = 16; // Is the user a guest. A guest is a automatically generated user which can later be turned in a non-guest user.
+  optional io.restorecommerce.image.Image image = 17;
+  optional UserType user_type = 18;
+  optional bool invite = 19; // true if user has been invited by another user
+  optional string invited_by_user_name = 20; // User who is inviting
+  optional string invited_by_user_first_name = 21; // First name of user inviting
+  optional string invited_by_user_last_name = 22; // Last name of user inviting
+  repeated io.restorecommerce.auth.Tokens tokens = 23;
+  optional google.protobuf.Timestamp last_access = 24; // When the user has last been used
+  repeated io.restorecommerce.attribute.Attribute properties = 25; // additional properties
   optional google.protobuf.Any data = 26; // additional data
   repeated io.restorecommerce.role.Role roles = 27;
 }

@@ -99,7 +99,6 @@ export type IoRestorecommerceUserUserRole = {
   localeId?: Maybe<Scalars['String']['output']>;
   locale?: Maybe<IoRestorecommerceLocaleLocale>;
   defaultScope?: Maybe<Scalars['String']['output']>;
-  unauthenticated?: Maybe<Scalars['Boolean']['output']>;
   guest?: Maybe<Scalars['Boolean']['output']>;
   image?: Maybe<IoRestorecommerceImageImage>;
   userType?: Maybe<IoRestorecommerceUserUserType>;
@@ -109,6 +108,7 @@ export type IoRestorecommerceUserUserRole = {
   invitedByUserLastName?: Maybe<Scalars['String']['output']>;
   tokens?: Maybe<Array<IoRestorecommerceAuthTokens>>;
   lastAccess?: Maybe<Scalars['DateTime']['output']>;
+  properties?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
   data?: Maybe<GoogleProtobufAny>;
   roles?: Maybe<Array<IoRestorecommerceRoleRole>>;
 };
@@ -368,7 +368,6 @@ export type IoRestorecommerceUserUser = {
   localeId?: Maybe<Scalars['String']['output']>;
   locale?: Maybe<IoRestorecommerceLocaleLocale>;
   defaultScope?: Maybe<Scalars['String']['output']>;
-  unauthenticated?: Maybe<Scalars['Boolean']['output']>;
   guest?: Maybe<Scalars['Boolean']['output']>;
   image?: Maybe<IoRestorecommerceImageImage>;
   userType?: Maybe<IoRestorecommerceUserUserType>;
@@ -378,6 +377,7 @@ export type IoRestorecommerceUserUser = {
   invitedByUserLastName?: Maybe<Scalars['String']['output']>;
   tokens?: Maybe<Array<IoRestorecommerceAuthTokens>>;
   lastAccess?: Maybe<Scalars['DateTime']['output']>;
+  properties?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
   data?: Maybe<GoogleProtobufAny>;
 };
 
@@ -629,7 +629,6 @@ export type IIoRestorecommerceUserUser = {
   timezoneId?: InputMaybe<Scalars['String']['input']>;
   localeId?: InputMaybe<Scalars['String']['input']>;
   defaultScope?: InputMaybe<Scalars['String']['input']>;
-  unauthenticated?: InputMaybe<Scalars['Boolean']['input']>;
   guest?: InputMaybe<Scalars['Boolean']['input']>;
   image?: InputMaybe<IIoRestorecommerceImageImage>;
   userType?: InputMaybe<IoRestorecommerceUserUserType>;
@@ -639,6 +638,7 @@ export type IIoRestorecommerceUserUser = {
   invitedByUserLastName?: InputMaybe<Scalars['String']['input']>;
   tokens?: InputMaybe<Array<IIoRestorecommerceAuthTokens>>;
   lastAccess?: InputMaybe<Scalars['IDateTime']['input']>;
+  properties?: InputMaybe<Array<IIoRestorecommerceAttributeAttribute>>;
   data?: InputMaybe<IGoogleProtobufAny>;
 };
 
@@ -1399,7 +1399,6 @@ export type IoRestorecommerceUserUserRoleResolvers<ContextType = IdentityContext
   localeId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   locale?: Resolver<Maybe<ResolversTypes['IoRestorecommerceLocaleLocale']>, ParentType, ContextType>;
   defaultScope?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  unauthenticated?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   guest?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   image?: Resolver<Maybe<ResolversTypes['IoRestorecommerceImageImage']>, ParentType, ContextType>;
   userType?: Resolver<Maybe<ResolversTypes['IoRestorecommerceUserUserType']>, ParentType, ContextType>;
@@ -1409,6 +1408,7 @@ export type IoRestorecommerceUserUserRoleResolvers<ContextType = IdentityContext
   invitedByUserLastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   tokens?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAuthTokens']>>, ParentType, ContextType>;
   lastAccess?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  properties?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
   data?: Resolver<Maybe<ResolversTypes['GoogleProtobufAny']>, ParentType, ContextType>;
   roles?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceRoleRole']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -1568,7 +1568,6 @@ export type IoRestorecommerceUserUserResolvers<ContextType = IdentityContext, Pa
   localeId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   locale?: Resolver<Maybe<ResolversTypes['IoRestorecommerceLocaleLocale']>, ParentType, ContextType>;
   defaultScope?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  unauthenticated?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   guest?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   image?: Resolver<Maybe<ResolversTypes['IoRestorecommerceImageImage']>, ParentType, ContextType>;
   userType?: Resolver<Maybe<ResolversTypes['IoRestorecommerceUserUserType']>, ParentType, ContextType>;
@@ -1578,6 +1577,7 @@ export type IoRestorecommerceUserUserResolvers<ContextType = IdentityContext, Pa
   invitedByUserLastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   tokens?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAuthTokens']>>, ParentType, ContextType>;
   lastAccess?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  properties?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
   data?: Resolver<Maybe<ResolversTypes['GoogleProtobufAny']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;

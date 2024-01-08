@@ -114,7 +114,6 @@ export type IoRestorecommerceUserUser = {
   localeId?: Maybe<Scalars['String']['output']>;
   locale?: Maybe<IoRestorecommerceLocaleLocale>;
   defaultScope?: Maybe<Scalars['String']['output']>;
-  unauthenticated?: Maybe<Scalars['Boolean']['output']>;
   guest?: Maybe<Scalars['Boolean']['output']>;
   image?: Maybe<IoRestorecommerceImageImage>;
   userType?: Maybe<IoRestorecommerceUserUserType>;
@@ -124,6 +123,7 @@ export type IoRestorecommerceUserUser = {
   invitedByUserLastName?: Maybe<Scalars['String']['output']>;
   tokens?: Maybe<Array<IoRestorecommerceAuthTokens>>;
   lastAccess?: Maybe<Scalars['DateTime']['output']>;
+  properties?: Maybe<Array<IoRestorecommerceAttributeAttribute>>;
   data?: Maybe<GoogleProtobufAny>;
 };
 
@@ -2055,7 +2055,6 @@ export type IoRestorecommerceUserUserResolvers<ContextType = FulfillmentContext,
   localeId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   locale?: Resolver<Maybe<ResolversTypes['IoRestorecommerceLocaleLocale']>, ParentType, ContextType>;
   defaultScope?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  unauthenticated?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   guest?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   image?: Resolver<Maybe<ResolversTypes['IoRestorecommerceImageImage']>, ParentType, ContextType>;
   userType?: Resolver<Maybe<ResolversTypes['IoRestorecommerceUserUserType']>, ParentType, ContextType>;
@@ -2065,6 +2064,7 @@ export type IoRestorecommerceUserUserResolvers<ContextType = FulfillmentContext,
   invitedByUserLastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   tokens?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAuthTokens']>>, ParentType, ContextType>;
   lastAccess?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  properties?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceAttributeAttribute']>>, ParentType, ContextType>;
   data?: Resolver<Maybe<ResolversTypes['GoogleProtobufAny']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;

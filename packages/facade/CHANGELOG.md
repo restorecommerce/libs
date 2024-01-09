@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.11.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.9.1...@restorecommerce/facade@1.11.0) (2024-01-09)
+
+
+### Features
+
+* **gql:** re-generate gql schema ([17113d8](https://github.com/restorecommerce/libs/commit/17113d8797cdcd361b4c5133c2cc1686ef4c7ebf))
+
+
+
+
+
 # [1.10.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.9.1...@restorecommerce/facade@1.10.0) (2024-01-08)
 
 

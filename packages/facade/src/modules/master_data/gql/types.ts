@@ -7,6 +7,7 @@ import { protoMetadata as metaPackageIoRestorecommerceContact_point } from '@res
 import { protoMetadata as metaPackageIoRestorecommerceLocale } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/locale.js';
 import { protoMetadata as metaPackageIoRestorecommerceLocation } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/location.js';
 import { protoMetadata as metaPackageIoRestorecommerceOrganization } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/organization.js';
+import { protoMetadata as metaPackageIoRestorecommerceShop } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/shop.js';
 import { protoMetadata as metaPackageIoRestorecommerceTax } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/tax.js';
 import { protoMetadata as metaPackageIoRestorecommerceTax_type } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/tax_type.js';
 import { protoMetadata as metaPackageIoRestorecommerceUnitCode } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/unit_code.js';
@@ -24,6 +25,7 @@ export const subServices: ProtoMetadata[] = [
   metaPackageIoRestorecommerceLocale,
   metaPackageIoRestorecommerceLocation,
   metaPackageIoRestorecommerceOrganization,
+  metaPackageIoRestorecommerceShop,
   metaPackageIoRestorecommerceTax_type,
   metaPackageIoRestorecommerceTax,
   metaPackageIoRestorecommerceUnitCode,

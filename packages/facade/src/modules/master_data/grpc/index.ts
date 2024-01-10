@@ -36,6 +36,10 @@ import {
   OrganizationServiceDefinition
 } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/organization.js';
 import {
+  type ShopServiceClient,
+  ShopServiceDefinition
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/shop.js';
+import {
   type TaxServiceClient,
   TaxServiceDefinition
 } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/tax.js';
@@ -63,6 +67,7 @@ export class ResourceSrvGrpcClient extends RestoreCommerceGrpcClient {
   readonly locale: LocaleServiceClient;
   readonly location: LocationServiceClient;
   readonly organization: OrganizationServiceClient;
+  readonly shop: ShopServiceClient;
   readonly tax: TaxServiceClient;
   readonly tax_type: TaxTypeServiceClient;
   readonly unit_code: UnitCodeServiceClient;
@@ -80,6 +85,7 @@ export class ResourceSrvGrpcClient extends RestoreCommerceGrpcClient {
     this.locale = this.createClient(cfg, LocaleServiceDefinition, this.channel);
     this.location = this.createClient(cfg, LocationServiceDefinition, this.channel);
     this.organization = this.createClient(cfg, OrganizationServiceDefinition, this.channel);
+    this.shop = this.createClient(cfg, ShopServiceDefinition, this.channel);
     this.tax = this.createClient(cfg, TaxServiceDefinition, this.channel);
     this.tax_type = this.createClient(cfg, TaxTypeServiceDefinition, this.channel);
     this.unit_code = this.createClient(cfg, UnitCodeServiceDefinition, this.channel);

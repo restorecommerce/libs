@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.4.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@1.4.3...@restorecommerce/acs-client@1.4.5) (2024-01-10)
+
+
+### Bug Fixes
+
+* **acs:** force subject id ([c9aa0a7](https://github.com/restorecommerce/libs/commit/c9aa0a78f5e4d96c26943dd7e87b16dfb388c9d9))
+
+
+
+
+
 ## [1.4.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@1.4.3...@restorecommerce/acs-client@1.4.4) (2023-12-22)
 
 

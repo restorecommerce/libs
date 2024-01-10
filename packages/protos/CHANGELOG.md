@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.6.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.4.1...@restorecommerce/protos@6.6.0) (2024-01-10)
+
+
+### Features
+
+* **user.proto:** add properties to UserRole ([82b408c](https://github.com/restorecommerce/libs/commit/82b408ca4ba2c673d58b32a99e0705b3d0ad87c1))
+
+
+
+
+
 # [6.5.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.4.1...@restorecommerce/protos@6.5.0) (2023-12-22)
 
 

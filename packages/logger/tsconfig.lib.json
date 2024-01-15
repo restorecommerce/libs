@@ -7,6 +7,9 @@
     "strict": true,
     "ignoreDeprecations": "5.0",
     "suppressImplicitAnyIndexErrors": true,
+    "typeRoots": [
+      "./node_modules/@types"
+    ],
   },
   "include": ["./src/**/*.ts", "./src/**/*.d.ts"]
 }

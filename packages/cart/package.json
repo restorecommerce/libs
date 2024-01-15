@@ -40,7 +40,7 @@
   "scripts": {
     "test": "jest --runInBand --testTimeout=30000",
     "lint": "eslint src --ext .ts",
-    "build:tsc": "tsc -d",
+    "build:tsc": "tsc -p tsconfig.lib.json",
     "build:clean": "rimraf lib",
     "build": "npm-run-all lint build:clean build:tsc",
     "coveralls": "nyc report --reporter=text-lcov | coveralls"

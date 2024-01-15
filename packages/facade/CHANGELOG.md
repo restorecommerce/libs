@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.12.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.12.0...@restorecommerce/facade@1.12.1) (2024-01-15)
+
+**Note:** Version bump only for package @restorecommerce/facade
+
+
+
+
+
 # [1.12.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.9.0...@restorecommerce/facade@1.12.0) (2024-01-10)
 
 

@@ -6,3 +6,5 @@
 lerna-debug.log
 node_modules
 tmp
+
+.nx/cache

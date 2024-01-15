@@ -65,7 +65,7 @@
     "targets": {
       "build": {
         "outputs": [
-          "./lib"
+          "{projectRoot}/lib"
         ]
       }
     }

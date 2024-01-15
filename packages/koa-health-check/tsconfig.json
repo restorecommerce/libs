@@ -9,9 +9,6 @@
     "noUnusedLocals": true,
     "declaration": true,
     "outDir": "lib",
-    "typeRoots": [
-      "node_modules/@types"
-    ],
     "skipLibCheck": true
   },
   "include": [

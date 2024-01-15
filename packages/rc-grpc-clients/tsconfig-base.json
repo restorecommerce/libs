@@ -1,9 +1,6 @@
 {
   "extends": "../../node_modules/@restorecommerce/dev/tsconfig.json",
   "compilerOptions": {
-    "typeRoots": [
-      "./node_modules/@types"
-    ],
     "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
     "module": "NodeNext"

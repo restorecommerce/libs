@@ -41,7 +41,7 @@
     "build": "npm-run-all build:clean build:compile",
     "build:clean": "rimraf -rf ./dist",
     "build:compile": "tsc -p ./tsconfig.lib.json",
-    "test": "jest",
+    "test": "jest --forceExit",
     "prepublishOnly": "npm run build"
   },
   "engines": {

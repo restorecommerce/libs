@@ -8,10 +8,7 @@
     "allowSyntheticDefaultImports": true,
     "noUnusedLocals": false,
     "skipLibCheck": false,
-    "outDir": "lib",
-    "typeRoots": [
-      "node_modules/@types"
-    ]
+    "outDir": "lib"
   },
   "include": [
     "./src/**/*.ts"

@@ -320,7 +320,7 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
     const apolloGraphQLRouter = new Router();
     apolloGraphQLRouter.use(bodyParser({ jsonLimit: this.jsonLimit }));
     apolloGraphQLRouter.all('/graphql',
-      koaMiddleware(gqlServer, {
+      koaMiddleware(gqlServer as any, {
         context: async ({ ctx }) => ctx,
       })
     );

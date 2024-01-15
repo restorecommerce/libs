@@ -13,17 +13,14 @@
       "ES2022",
       "dom"
     ],
-    "module": "ESNext",
+    "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
     "strictNullChecks": true,
-    "target": "ES2022",
-    "typeRoots": [
-      "./node_modules/@types"
-    ]
+    "target": "ES2022"
   },
   "ts-node": {
     "transpileOnly": true,

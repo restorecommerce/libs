@@ -176,7 +176,7 @@ export class Client {
 
     const apolloLinkOpts: HttpLink.Options = {
       uri: normalUrl,
-      fetch
+      fetch: fetch as any
     };
 
     if (this.opts.headers) {
@@ -198,7 +198,7 @@ export class Client {
     });
 
     const response = await apolloClient.mutate({
-      mutation: gql`${mutation}`,
+      mutation: gql`${mutation}` as any,
       variables
     });
 

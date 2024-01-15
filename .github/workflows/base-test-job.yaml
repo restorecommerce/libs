@@ -56,7 +56,7 @@ jobs:
             cache-1-nx-${{ inputs.package }}-${{ hashFiles('package-lock.json') }}-
 
       - name: Build
-        run: npm run build -- --scope="@restorecommerce/${{ inputs.package }}" --include-dependencies
+        run: npm run build -- -p="@restorecommerce/${{ inputs.package }}"
 
       - name: Test
         run: npm run test

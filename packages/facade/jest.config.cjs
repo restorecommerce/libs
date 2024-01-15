@@ -16,7 +16,10 @@ module.exports = {
       {
         useESM: true,
         tsconfig: 'tsconfig.test.json',
-        isolatedModules: true
+        isolatedModules: true,
+        // tsconfig: {
+        //   module: 'NodeNext'
+        // }
       },
     ],
   },

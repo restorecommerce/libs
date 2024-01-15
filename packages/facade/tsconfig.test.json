@@ -1,7 +1,9 @@
 {
   "extends": "./tsconfig-base.json",
   "compilerOptions": {
-    "types": ["jest", "node", "@types/jest"]
+    "types": ["jest", "node", "@types/jest"],
+    "module": "ESNext",
+    "moduleResolution": "Node10"
   },
   "include": [
     "./tests/**/*.ts",

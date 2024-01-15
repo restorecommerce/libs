@@ -20,7 +20,9 @@
   },
   "targetDefaults": {
     "build": {
-      "cache": true
+      "cache": true,
+      "dependsOn": ["^build"]
     }
-  }
+  },
+  "nxCloudAccessToken": "ZmJmN2YxNzAtMmVkMC00YTZhLTg4ZTUtY2IzYTliZmM0ODFjfHJlYWQtd3JpdGU="
 }

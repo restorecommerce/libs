@@ -7,8 +7,8 @@
   "scripts": {
     "publish": "lerna publish --conventional-commits",
     "changed": "lerna changed",
-    "test": "lerna run test",
-    "build": "lerna run build"
+    "test": "nx run-many -t test",
+    "build": "nx run-many -t build"
   },
   "repository": {
     "type": "git",

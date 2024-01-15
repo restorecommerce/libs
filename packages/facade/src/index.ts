@@ -63,6 +63,7 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
   private allResolvers: GraphQLResolverMap<any> = {};
 
   private _server?: Server;
+  private _gqlServer?: ApolloServer;
   private _initialized = false;
   readonly logger: Logger;
   readonly port: number;
@@ -180,10 +181,19 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
   }
 
   async stop(): Promise<void> {
-    return new Promise<void>(async (resolve, reject) => {
+    return await new Promise<void>(async (resolve, reject) => {
       await this.runFnQueue(this.stopFns);
 
-      this.server?.close((err) => {
+      await this._gqlServer?.stop().catch((err) => {
+        if (err) {
+          this.logger.error(`Error stopping GQLServer`, err);
+        } else {
+          this.logger.info(`GQLServer stopped`);
+          this._gqlServer = undefined;
+        }
+      });
+
+      this._server?.close((err) => {
         if (err) {
           this.logger.error(`Error stopping service`, err);
           reject(err);
@@ -269,7 +279,7 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
       }, wsServer);
     });
 
-    const gqlServer = new ApolloServer({
+    this._gqlServer = new ApolloServer({
       gateway,
       introspection: true,
       allowBatchedHttpRequests: true,
@@ -300,7 +310,7 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
       },
     });
 
-    await gqlServer.start();
+    await this._gqlServer.start();
 
     // set maxFile size and maximum files via Facade config of `createFacade`
     const maxFileSize = this.fileUploadOptionsConfig?.maxFileSize ? this.fileUploadOptionsConfig.maxFileSize : 10000000;
@@ -320,7 +330,7 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
     const apolloGraphQLRouter = new Router();
     apolloGraphQLRouter.use(bodyParser({ jsonLimit: this.jsonLimit }));
     apolloGraphQLRouter.all('/graphql',
-      koaMiddleware(gqlServer as any, {
+      koaMiddleware(this._gqlServer as any, {
         context: async ({ ctx }) => ctx,
       })
     );

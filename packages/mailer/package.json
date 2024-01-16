@@ -32,7 +32,6 @@
     "@typescript-eslint/eslint-plugin-tslint": "^6.11.0",
     "@typescript-eslint/parser": "^6.11.0",
     "assert": "^2.1.0",
-    "co-mocha": "^1.2.2",
     "coveralls": "^3.1.1",
     "eslint": "^8.54.0",
     "eslint-plugin-prefer-arrow-functions": "^3.2.4",

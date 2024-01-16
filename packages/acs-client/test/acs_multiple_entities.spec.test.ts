@@ -106,7 +106,7 @@ const startGrpcMockServer = async () => {
   };
   try {
     mockServer.addService(PROTO_PATH, PKG_NAME, SERVICE_NAME, implementations, {
-      includeDirs: ['node_modules/@restorecommerce/protos/'],
+      includeDirs: ['../protos/'],
       keepCase: true,
       longs: String,
       enums: String,

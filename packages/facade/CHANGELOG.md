@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.12.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.12.1...@restorecommerce/facade@1.12.2) (2024-01-17)
+
+
+### Bug Fixes
+
+* **facade:** await GQL Server on Facade.stop ([f955860](https://github.com/restorecommerce/libs/commit/f955860604bea848024e2205cdb66e2d42a617bf))
+
+
+
+
+
 ## [1.12.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.12.0...@restorecommerce/facade@1.12.1) (2024-01-15)
 
 **Note:** Version bump only for package @restorecommerce/facade

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.4.7](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@1.4.6...@restorecommerce/acs-client@1.4.7) (2024-01-17)
+
+
+### Bug Fixes
+
+* **test:** fix GRPC Mock Server include path ([3552036](https://github.com/restorecommerce/libs/commit/355203649fe93b8f5fffc8a254e8105b75fd6f20))
+
+
+
+
+
 ## [1.4.6](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@1.4.5...@restorecommerce/acs-client@1.4.6) (2024-01-15)
 
 **Note:** Version bump only for package @restorecommerce/acs-client

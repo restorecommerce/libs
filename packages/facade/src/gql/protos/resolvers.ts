@@ -550,8 +550,8 @@ export const generateSubServiceResolvers = <T, M extends Record<string, any>, CT
                       req.subject!.token = authToken.split(' ')[1];
                     }
 
-                    if (!req.subject.token && 'origin' in (ctx as any).request!.req.headers) {
-                      req.subject.token = await fetchUnauthenticatedUserToken(ctx, (ctx as any).request!.req.headers['origin']);
+                    if (!req.subject!.token && 'origin' in (ctx as any).request!.req.headers) {
+                      req.subject!.token = await fetchUnauthenticatedUserToken(ctx, (ctx as any).request!.req.headers['origin']);
                     }
 
                     const methodFunc = service[camelCase(resolver.targetMethod as string)] || service[resolver.targetMethod as string];

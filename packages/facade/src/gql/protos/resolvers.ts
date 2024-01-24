@@ -31,6 +31,8 @@ import _ from 'lodash';
 import { Events } from '@restorecommerce/kafka-client';
 import S2A from './stream-to-async-iterator.js';
 import { Metadata } from 'nice-grpc';
+import { IdentitySrvGrpcClient } from '../../modules/identity/grpc/index.js';
+import { TenantRequest } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/user.js';
 
 const inputMethodType = new Map<string, string>();
 
@@ -53,6 +55,19 @@ const streamToAsyncIterable = async function* (request: any, readableStreamKey: 
   for await (const chunk of new S2A(readStream)) {
     yield Object.assign({}, request, { [readableStreamKey]: chunk });
   }
+}
+
+const fetchUnauthenticatedUserToken = async (ctx: any, domain: string) => {
+  if (!('identity' in ctx)) {
+    return undefined;
+  }
+
+  const identityClient = ctx['identity'] as { client: IdentitySrvGrpcClient };
+  const response = await identityClient.client.user.getUnauthenticatedSubjectTokenForTenant(TenantRequest.fromPartial({
+    domain
+  }));
+
+  return response?.token;
 }
 
 export const getGQLResolverFunctions =
@@ -123,9 +138,9 @@ export const getGQLResolverFunctions =
 
           // convert enum strings to integers
           // req = convertEnumToInt(typing, req);
-          if (subjectField !== null) {
-            req.subject = getTyping(authSubjectType)!.processor.fromPartial({});
 
+          req.subject = getTyping(authSubjectType)!.processor.fromPartial({});
+          if (subjectField !== null) {
             const authToken = (context as any).request!.req.headers['authorization'];
             if (authToken && authToken.startsWith('Bearer ')) {
               req.subject.token = authToken.split(' ')[1];
@@ -133,6 +148,10 @@ export const getGQLResolverFunctions =
             if (scope) {
               req.subject.scope = scope;
             }
+          }
+
+          if (!req.subject.token && 'origin' in (context as any).request!.req.headers) {
+            req.subject.token = await fetchUnauthenticatedUserToken(context, (context as any).request!.req.headers['origin']);
           }
 
           let realMethod = method.name;
@@ -529,6 +548,10 @@ export const generateSubServiceResolvers = <T, M extends Record<string, any>, CT
                     const authToken = ctx.request!.req.headers['authorization'];
                     if (authToken && authToken.startsWith('Bearer ')) {
                       req.subject!.token = authToken.split(' ')[1];
+                    }
+
+                    if (!req.subject.token && 'origin' in (ctx as any).request!.req.headers) {
+                      req.subject.token = await fetchUnauthenticatedUserToken(ctx, (ctx as any).request!.req.headers['origin']);
                     }
 
                     const methodFunc = service[camelCase(resolver.targetMethod as string)] || service[resolver.targetMethod as string];

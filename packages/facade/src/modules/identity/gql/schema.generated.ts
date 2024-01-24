@@ -528,6 +528,7 @@ export type IdentityUserMutation = {
   ConfirmUserInvitation?: Maybe<ProtoIoRestorecommerceStatusOperationStatusObj>;
   SendInvitationEmail?: Maybe<ProtoIoRestorecommerceStatusOperationStatusObj>;
   SendActivationEmail?: Maybe<ProtoIoRestorecommerceStatusOperationStatusObj>;
+  GetUnauthenticatedSubjectTokenForTenant?: Maybe<ProtoIoRestorecommerceUserTenantResponse>;
 };
 
 
@@ -603,6 +604,11 @@ export type IdentityUserMutationSendInvitationEmailArgs = {
 
 export type IdentityUserMutationSendActivationEmailArgs = {
   input: IIoRestorecommerceUserSendActivationEmailRequest;
+};
+
+
+export type IdentityUserMutationGetUnauthenticatedSubjectTokenForTenantArgs = {
+  input: IIoRestorecommerceUserTenantRequest;
 };
 
 export type IIoRestorecommerceUserUserList = {
@@ -803,6 +809,20 @@ export type IIoRestorecommerceUserSendInvitationEmailRequest = {
 
 export type IIoRestorecommerceUserSendActivationEmailRequest = {
   identifier?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type ProtoIoRestorecommerceUserTenantResponse = {
+  __typename?: 'ProtoIoRestorecommerceUserTenantResponse';
+  details?: Maybe<IoRestorecommerceUserTenantResponse>;
+};
+
+export type IoRestorecommerceUserTenantResponse = {
+  __typename?: 'IoRestorecommerceUserTenantResponse';
+  token?: Maybe<Scalars['String']['output']>;
+};
+
+export type IIoRestorecommerceUserTenantRequest = {
+  domain?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type IdentityRoleMutation = {
@@ -1206,6 +1226,9 @@ export type ResolversTypes = ResolversObject<{
   IIoRestorecommerceUserConfirmUserInvitationRequest: IIoRestorecommerceUserConfirmUserInvitationRequest;
   IIoRestorecommerceUserSendInvitationEmailRequest: IIoRestorecommerceUserSendInvitationEmailRequest;
   IIoRestorecommerceUserSendActivationEmailRequest: IIoRestorecommerceUserSendActivationEmailRequest;
+  ProtoIoRestorecommerceUserTenantResponse: ResolverTypeWrapper<ProtoIoRestorecommerceUserTenantResponse>;
+  IoRestorecommerceUserTenantResponse: ResolverTypeWrapper<IoRestorecommerceUserTenantResponse>;
+  IIoRestorecommerceUserTenantRequest: IIoRestorecommerceUserTenantRequest;
   IdentityRoleMutation: ResolverTypeWrapper<IdentityRoleMutation>;
   IIoRestorecommerceRoleRoleList: IIoRestorecommerceRoleRoleList;
   IIoRestorecommerceRoleRole: IIoRestorecommerceRoleRole;
@@ -1318,6 +1341,9 @@ export type ResolversParentTypes = ResolversObject<{
   IIoRestorecommerceUserConfirmUserInvitationRequest: IIoRestorecommerceUserConfirmUserInvitationRequest;
   IIoRestorecommerceUserSendInvitationEmailRequest: IIoRestorecommerceUserSendInvitationEmailRequest;
   IIoRestorecommerceUserSendActivationEmailRequest: IIoRestorecommerceUserSendActivationEmailRequest;
+  ProtoIoRestorecommerceUserTenantResponse: ProtoIoRestorecommerceUserTenantResponse;
+  IoRestorecommerceUserTenantResponse: IoRestorecommerceUserTenantResponse;
+  IIoRestorecommerceUserTenantRequest: IIoRestorecommerceUserTenantRequest;
   IdentityRoleMutation: IdentityRoleMutation;
   IIoRestorecommerceRoleRoleList: IIoRestorecommerceRoleRoleList;
   IIoRestorecommerceRoleRole: IIoRestorecommerceRoleRole;
@@ -1686,6 +1712,7 @@ export type IdentityUserMutationResolvers<ContextType = IdentityContext, ParentT
   ConfirmUserInvitation?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceStatusOperationStatusObj']>, ParentType, ContextType, RequireFields<IdentityUserMutationConfirmUserInvitationArgs, 'input'>>;
   SendInvitationEmail?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceStatusOperationStatusObj']>, ParentType, ContextType, RequireFields<IdentityUserMutationSendInvitationEmailArgs, 'input'>>;
   SendActivationEmail?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceStatusOperationStatusObj']>, ParentType, ContextType, RequireFields<IdentityUserMutationSendActivationEmailArgs, 'input'>>;
+  GetUnauthenticatedSubjectTokenForTenant?: Resolver<Maybe<ResolversTypes['ProtoIoRestorecommerceUserTenantResponse']>, ParentType, ContextType, RequireFields<IdentityUserMutationGetUnauthenticatedSubjectTokenForTenantArgs, 'input'>>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1722,6 +1749,16 @@ export type ProtoIoRestorecommerceUserDeleteUsersByOrgResponseResolvers<ContextT
 export type IoRestorecommerceUserDeleteUsersByOrgResponseResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['IoRestorecommerceUserDeleteUsersByOrgResponse'] = ResolversParentTypes['IoRestorecommerceUserDeleteUsersByOrgResponse']> = ResolversObject<{
   userIds?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   operationStatus?: Resolver<Maybe<ResolversTypes['IoRestorecommerceStatusOperationStatus']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type ProtoIoRestorecommerceUserTenantResponseResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['ProtoIoRestorecommerceUserTenantResponse'] = ResolversParentTypes['ProtoIoRestorecommerceUserTenantResponse']> = ResolversObject<{
+  details?: Resolver<Maybe<ResolversTypes['IoRestorecommerceUserTenantResponse']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceUserTenantResponseResolvers<ContextType = IdentityContext, ParentType extends ResolversParentTypes['IoRestorecommerceUserTenantResponse'] = ResolversParentTypes['IoRestorecommerceUserTenantResponse']> = ResolversObject<{
+  token?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -1870,6 +1907,8 @@ export type Resolvers<ContextType = IdentityContext> = ResolversObject<{
   IoRestorecommerceStatusOperationStatusObj?: IoRestorecommerceStatusOperationStatusObjResolvers<ContextType>;
   ProtoIoRestorecommerceUserDeleteUsersByOrgResponse?: ProtoIoRestorecommerceUserDeleteUsersByOrgResponseResolvers<ContextType>;
   IoRestorecommerceUserDeleteUsersByOrgResponse?: IoRestorecommerceUserDeleteUsersByOrgResponseResolvers<ContextType>;
+  ProtoIoRestorecommerceUserTenantResponse?: ProtoIoRestorecommerceUserTenantResponseResolvers<ContextType>;
+  IoRestorecommerceUserTenantResponse?: IoRestorecommerceUserTenantResponseResolvers<ContextType>;
   IdentityRoleMutation?: IdentityRoleMutationResolvers<ContextType>;
   IdentityAuthenticationLogMutation?: IdentityAuthenticationLogMutationResolvers<ContextType>;
   IdentityTokenMutation?: IdentityTokenMutationResolvers<ContextType>;

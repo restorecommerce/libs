@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.7.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.6.0...@restorecommerce/protos@6.7.0) (2024-01-24)
+
+
+### Features
+
+* unauthenticated tokens ([fe89507](https://github.com/restorecommerce/libs/commit/fe895071c137bf15c68c03f1c5545612f2614bdc))
+
+
+
+
+
 # [6.6.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.4.1...@restorecommerce/protos@6.6.0) (2024-01-10)
 
 

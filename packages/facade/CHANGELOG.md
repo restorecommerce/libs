@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.13.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.12.2...@restorecommerce/facade@1.13.0) (2024-01-24)
+
+
+### Bug Fixes
+
+* **facade:** subject always exists ([3c137fd](https://github.com/restorecommerce/libs/commit/3c137fddc15ff4e637c16d6efadab1720b7aaf13))
+
+
+### Features
+
+* unauthenticated tokens ([fe89507](https://github.com/restorecommerce/libs/commit/fe895071c137bf15c68c03f1c5545612f2614bdc))
+
+
+
+
+
 ## [1.12.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.12.1...@restorecommerce/facade@1.12.2) (2024-01-17)
 
 

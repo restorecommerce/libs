@@ -73,8 +73,8 @@ export class JobProcessor {
   }
 
   async start(tasks?: any, job?: Job, verbose = false, ignoreErrors = false, ignoreSelfSigned = false): Promise<any> {
-    job = job || new Job();
-    tasks = tasks || this.jobInfo.tasks;
+    job = job ?? new Job();
+    tasks = tasks ?? this.jobInfo.tasks;
 
     const concurrency = this.jobInfo.options.concurrency;
     this.taskStream = ps.map({concurrent: concurrency}, (task: any) => {
@@ -129,15 +129,13 @@ export class JobProcessor {
       depth: 1,
       lstat: true
     };
-    const pathSegments = [process.cwd()];
-    if (!_.isUndefined(this.jobInfo.base)) {
-      pathSegments.push(this.jobInfo.base);
-    }
-    if (!_.isUndefined(task.src)) {
-      pathSegments.push(task.src);
-    }
+    const pathSegments = [
+      process.cwd(),
+      this.jobInfo?.base,
+      task.src
+    ].filter((p) => !!p);
 
-    pathOptions.fileFilter = task.filter || pathOptions.fileFilter;
+    pathOptions.fileFilter = task.filter ?? pathOptions.fileFilter;
 
     if (task.depth) {
       pathOptions.depth = task.depth;
@@ -145,7 +143,7 @@ export class JobProcessor {
       delete pathOptions.depth;
     }
 
-    const fileItemStream = readdirp(path.join.apply(this, pathSegments), pathOptions);
+    const fileItemStream = readdirp(path.join(...pathSegments), pathOptions);
 
     await new Promise((resolve, reject) => {
       fileItemStream

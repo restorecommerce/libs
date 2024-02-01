@@ -23,8 +23,8 @@
     "target": "ES2022"
   },
   "ts-node": {
-    "transpileOnly": true,
+    "experimentalResolver": true,
     "files": true,
-    "experimentalResolver": true
+    "transpileOnly": true
   }
 }

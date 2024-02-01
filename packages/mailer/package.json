@@ -15,7 +15,7 @@
     "commerce"
   ],
   "dependencies": {
-    "nodemailer": "^6.9.8",
+    "nodemailer": "^6.9.9",
     "nodemailer-html-to-text": "^3.2.0",
     "nodemailer-mandrill-transport": "^1.2.0",
     "nodemailer-stub-transport": "^1.1.0",

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.6](https://github.com/restorecommerce/libs/compare/@restorecommerce/dev@0.0.5...@restorecommerce/dev@0.0.6) (2024-02-01)
+
+
+### Bug Fixes
+
+* unlock dev peer dependencies ([8fe8b28](https://github.com/restorecommerce/libs/commit/8fe8b2860478af484f29d59631fed2a732071ca9))
+
+
+
+
+
 ## [0.0.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/dev@0.0.4...@restorecommerce/dev@0.0.5) (2024-01-15)
 
 **Note:** Version bump only for package @restorecommerce/dev

@@ -81,19 +81,21 @@ module.exports = {
     'unicorn/prefer-module': 'error',
     'unicorn/prefer-node-protocol': 'error',
     'file-extension-in-import-ts/file-extension-in-import-ts': 'error',
-    '@typescript-eslint/consistent-type-imports': [
-      'error',
-      {
-        'prefer': 'type-imports',
-        'disallowTypeAnnotations': true,
-        'fixStyle': 'inline-type-imports'
-      }
-    ],
-    '@typescript-eslint/consistent-type-exports': [
-      'error',
-      {
-        'fixMixedExportsWithInlineTypeSpecifier': true
-      }
-    ]
+    // '@typescript-eslint/consistent-type-imports': [
+    //   'error',
+    //   {
+    //     'prefer': 'type-imports',
+    //     'disallowTypeAnnotations': true,
+    //     'fixStyle': 'inline-type-imports'
+    //   }
+    // ],
+    // '@typescript-eslint/consistent-type-exports': [
+    //   'error',
+    //   {
+    //     'fixMixedExportsWithInlineTypeSpecifier': true
+    //   }
+    // ]
+    '@typescript-eslint/consistent-type-imports': 0,
+    '@typescript-eslint/consistent-type-exports': 0
   }
 };

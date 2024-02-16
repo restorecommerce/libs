@@ -1,8 +1,8 @@
-import {} from 'mocha';
+import { } from 'mocha';
 import * as should from 'should';
 import { accessRequest, isAllowed, whatIsAllowed } from '../lib/acs/resolver';
 import { flushCache, initializeCache } from '../lib/acs/cache';
-import { 
+import {
   AuthZAction,
   DecisionResponse,
   PolicySetRQResponse,
@@ -335,8 +335,7 @@ describe('Testing acs-client', () => {
           id: resources[0].id
         }],
         AuthZAction.CREATE,
-        ctx,
-        Operation.isAllowed
+        ctx
       ) as DecisionResponse;
 
       should.exist(response);
@@ -386,8 +385,7 @@ describe('Testing acs-client', () => {
         subject,
         [{ resource: 'Test', id: resources[0].id }],
         AuthZAction.CREATE,
-        ctx,
-        Operation.isAllowed
+        ctx
       ) as DecisionResponse;
 
       should.equal(response.decision, Response_Decision.PERMIT);
@@ -422,15 +420,13 @@ describe('Testing acs-client', () => {
         subject,
         resources,
       };
-      
+
       // call accessRequest(), the response is from mock ACS
       const response = await accessRequest(
-        subject, 
+        subject,
         [{ resource: 'Test', id: resources[0].id }],
         AuthZAction.READ,
-        ctx,
-        Operation.whatIsAllowed,
-        'postgres'
+        ctx, { operation: Operation.whatIsAllowed, database: 'postgres' }
       ) as PolicySetRQResponse;
 
       should.equal(response.decision, Response_Decision.DENY);
@@ -445,7 +441,7 @@ describe('Testing acs-client', () => {
     });
 
     it(
-      'Should PERMIT reading Test resource (PERMIT rule) and verify input filter ' + 
+      'Should PERMIT reading Test resource (PERMIT rule) and verify input filter ' +
       'is extended to enforce applicable policies',
       async () => {
         // PolicySet contains PERMIT rule
@@ -497,9 +493,7 @@ describe('Testing acs-client', () => {
           subject,
           [{ resource: 'Test', id: resources[0].id }],
           AuthZAction.READ,
-          ctx,
-          Operation.whatIsAllowed,
-          'postgres'
+          ctx, { operation: Operation.whatIsAllowed, database: 'postgres' }
         ) as PolicySetRQResponse;
 
         should.exist(readResponse.decision);
@@ -531,7 +525,7 @@ describe('Testing acs-client', () => {
       async () => {
         // PolicySet contains PERMIT rule
         PolicySetRQFactory.rules = [permitRule];
-        
+
         // test resource to be read of type 'ReadRequest'
         const resources: CtxResource[] = [{
           id: 'test_id',
@@ -580,9 +574,7 @@ describe('Testing acs-client', () => {
           subject,
           [{ resource: 'Test', id: resources[0].id }],
           AuthZAction.READ,
-          ctx,
-          Operation.whatIsAllowed,
-          'postgres'
+          ctx, { operation: Operation.whatIsAllowed, database: 'postgres' }
         ) as PolicySetRQResponse;
 
         should.equal(readResponse.decision, Response_Decision.PERMIT);
@@ -655,16 +647,14 @@ describe('Testing acs-client', () => {
           subject,
           [{ resource: 'Test', id: resources[0].id }],
           AuthZAction.READ,
-          ctx,
-          Operation.whatIsAllowed,
-          'postgres'
+          ctx, { operation: Operation.whatIsAllowed, database: 'postgres' }
         ) as PolicySetRQResponse;
 
         should.equal(readResponse.decision, Response_Decision.DENY);
         should.equal(readResponse.operation_status?.code, 403);
         should.equal(
           readResponse.operation_status?.message,
-          'Access not allowed for request with subject:test_user_id, ' + 
+          'Access not allowed for request with subject:test_user_id, ' +
           'resource:Test, action:READ, target_scope:targetSubScope; the response was DENY'
         );
       }
@@ -724,7 +714,7 @@ describe('Testing acs-client', () => {
       'Should return applicable policy set for read operation',
       async () => {
         PolicySetRQFactory.rules = [permitRule];
-        
+
         const whatIsAllowedReqAuth = {
           target:
           {

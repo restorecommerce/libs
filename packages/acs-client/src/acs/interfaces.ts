@@ -114,7 +114,7 @@ export interface AuthZ<TSubject, TContext = any, TResource = Resource, TAction =
    * Check is the subject is allowed to do an action on a specific resource
    */
   isAllowed(request: Request<Target<TSubject, TResource, TAction>, TContext>,
-    ctx: ACSClientContext, useCache: boolean): Promise<DecisionResponse>;
+    ctx: ACSClientContext, useCache: boolean, roleScopingEntityURN: string): Promise<DecisionResponse>;
 }
 
 export interface Credentials {
@@ -151,7 +151,7 @@ export interface AuthZResponse extends Response {
 
 export interface IAuthZ extends AuthZ<Subject | UnauthenticatedData, AuthZContext, Resource[], AuthZAction> {
   whatIsAllowed: (request: Request<AuthZWhatIsAllowedTarget | NoAuthWhatIsAllowedTarget, AuthZContext>,
-    ctx: ACSClientContext, useCache: boolean) => Promise<PolicySetRQResponse>;
+    ctx: ACSClientContext, useCache: boolean, roleScopingEntityURN: string) => Promise<PolicySetRQResponse>;
 }
 
 export interface UserCredentials extends Credentials {
@@ -240,4 +240,11 @@ export interface TargetReq {
   subjects: Attribute[];
   resources: Attribute[];
   actions: Attribute[];
+}
+
+export interface ACSClientOptions {
+  operation?: Operation;
+  database?: 'arangoDB' | 'postgres';
+  useCache?: boolean; // default value is true
+  roleScopingEntityURN?: string; // default value is Organization
 }

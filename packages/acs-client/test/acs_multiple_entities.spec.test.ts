@@ -1,4 +1,4 @@
-import {} from 'mocha';
+import { } from 'mocha';
 import * as should from 'should';
 import {
   accessRequest,
@@ -226,7 +226,7 @@ describe('testing acs-client with multiple entities', () => {
           ],
           AuthZAction.CREATE,
           ctx,
-          Operation.isAllowed
+          { operation: Operation.isAllowed }
         ) as DecisionResponse;
 
         should.equal(response.decision, Response_Decision.PERMIT);
@@ -267,7 +267,7 @@ describe('testing acs-client with multiple entities', () => {
         ],
         AuthZAction.READ,
         ctx,
-        Operation.isAllowed
+        { operation: Operation.isAllowed }
       ) as DecisionResponse;
 
       should.equal(response.decision, Response_Decision.PERMIT);
@@ -276,10 +276,10 @@ describe('testing acs-client with multiple entities', () => {
     });
 
     it([
-        'postgres DB - Should PERMIT Reading Location and Address resource',
-        'for whatIsAllowed operation and return applicable filters',
-        'for Location and Address with valid user ctx',
-      ].join(' '),
+      'postgres DB - Should PERMIT Reading Location and Address resource',
+      'for whatIsAllowed operation and return applicable filters',
+      'for Location and Address with valid user ctx',
+    ].join(' '),
       async () => {
         // Location Permit Rule with fallback rule
         MultiplePolicySetRQFactory.locationPolicyRules = [permitLocationRule, fallbackRule];
@@ -295,9 +295,7 @@ describe('testing acs-client with multiple entities', () => {
           subject,
           [{ resource: 'Location' }, { resource: 'Address' }],
           AuthZAction.READ,
-          ctx,
-          Operation.whatIsAllowed,
-          'postgres'
+          ctx, { operation: Operation.whatIsAllowed, database: 'postgres' }
         ) as PolicySetRQResponse;
 
         should.equal(response.decision, Response_Decision.PERMIT);
@@ -320,7 +318,7 @@ describe('testing acs-client with multiple entities', () => {
       'ArangoDB - Should PERMIT Reading Location and Address resource for',
       'whatIsAllowed operation and return applicable custom query and arguments',
       'for Location and Address with valid user ctx',
-      ].join(' '),
+    ].join(' '),
       async () => {
         // Location Permit Rule with fallback rule
         MultiplePolicySetRQFactory.locationPolicyRules = [permitLocationRule, fallbackRule];
@@ -350,7 +348,7 @@ describe('testing acs-client with multiple entities', () => {
         // call accessRequest(), the response is from mock ACS
         const response = await accessRequest(subject,
           [{ resource: 'Location' }, { resource: 'Address' }],
-          AuthZAction.READ, ctx, Operation.whatIsAllowed, 'arangoDB') as PolicySetRQResponse;
+          AuthZAction.READ, ctx, { operation: Operation.whatIsAllowed, database: 'arangoDB' }) as PolicySetRQResponse;
         const expectedCustomArgs = {
           entity: 'urn:test:acs:model:organization.Organization',
           instance: ['targetScope', 'targetSubScope']
@@ -408,10 +406,9 @@ describe('testing acs-client with multiple entities', () => {
             { resource: 'Address', id: 'address_id' },
           ],
           AuthZAction.CREATE,
-          ctx,
-          Operation.isAllowed
+          ctx
         ) as DecisionResponse;
-        
+
         should.equal(response.decision, Response_Decision.DENY);
         should.equal(response.operation_status.code, 403);
         should.equal(
@@ -462,8 +459,7 @@ describe('testing acs-client with multiple entities', () => {
           { resource: 'Address', id: 'address_id' }
         ],
         AuthZAction.READ,
-        ctx,
-        Operation.isAllowed
+        ctx
       ) as DecisionResponse;
 
       should.exist(response);
@@ -505,9 +501,7 @@ describe('testing acs-client with multiple entities', () => {
             { resource: 'Address' }
           ],
           AuthZAction.READ,
-          ctx,
-          Operation.whatIsAllowed,
-          'postgres'
+          ctx, { operation: Operation.whatIsAllowed, database: 'postgres' }
         ) as PolicySetRQResponse;
 
         should.equal(response.decision, Response_Decision.DENY);
@@ -542,9 +536,7 @@ describe('testing acs-client with multiple entities', () => {
             { resource: 'Address' }
           ],
           AuthZAction.READ,
-          ctx,
-          Operation.whatIsAllowed,
-          'arangoDB',
+          ctx, { operation: Operation.whatIsAllowed, database: 'arangoDB' }
         ) as PolicySetRQResponse;
 
         should.equal(response.decision, Response_Decision.DENY);
@@ -592,8 +584,7 @@ describe('testing acs-client with multiple entities', () => {
             { resource: 'Address', id: 'address_id', property: ['name'] }
           ],
           AuthZAction.CREATE,
-          ctx,
-          Operation.isAllowed
+          ctx
         ) as DecisionResponse;
 
         should.equal(response.decision, Response_Decision.PERMIT);
@@ -640,8 +631,7 @@ describe('testing acs-client with multiple entities', () => {
             { resource: 'Address', id: 'address_id', property: ['name', 'description'] }
           ],
           AuthZAction.CREATE,
-          ctx,
-          Operation.isAllowed
+          ctx
         ) as DecisionResponse;
 
         should.equal(response.decision, Response_Decision.DENY);
@@ -659,10 +649,10 @@ describe('testing acs-client with multiple entities', () => {
 
     // TODO add read test here - PERMIT with properties
     it([
-        'Validate Obligation - Should PERMIT reading Location and Address resource',
-        'with name and description property with Obligation',
-        'for whatIsAllowed operation with valid user ctx (obligation for description)',
-      ].join(' '),
+      'Validate Obligation - Should PERMIT reading Location and Address resource',
+      'with name and description property with Obligation',
+      'for whatIsAllowed operation with valid user ctx (obligation for description)',
+    ].join(' '),
       async () => {
         // Location permit and fallback rule
         MultiplePolicySetRQFactory.locationPolicyRules = [permitLocationRuleProperty, fallbackRule];
@@ -680,8 +670,7 @@ describe('testing acs-client with multiple entities', () => {
             { resource: 'Address', id: 'address_id', property: ['name', 'description'] }
           ],
           AuthZAction.READ,
-          ctx,
-          Operation.whatIsAllowed
+          ctx, { operation: Operation.whatIsAllowed }
         ) as PolicySetRQResponse;
 
         // validate mapped obligation object from acs-client
@@ -715,9 +704,7 @@ describe('testing acs-client with multiple entities', () => {
             { resource: 'Address', id: 'address_id', property: ['name', 'description'] }
           ],
           AuthZAction.READ,
-          ctx,
-          Operation.whatIsAllowed,
-          'postgres'
+          ctx, { operation: Operation.whatIsAllowed, database: 'postgres' }
         ) as PolicySetRQResponse;
 
         should.equal(response.decision, Response_Decision.DENY);
@@ -750,7 +737,7 @@ describe('testing acs-client with multiple entities', () => {
           }
         } as Request;
         const response = await isAllowed(isAllowedReqUnauth, authZ);
-        
+
         should.equal(response.decision, Response_Decision.DENY);
         should.equal(response.operation_status?.code, 403);
         should.equal(
@@ -810,7 +797,7 @@ describe('testing acs-client with multiple entities', () => {
         } as Request;
         // call accessRequest(), the response is from mock ACS
         const policySetRQResponse = await whatIsAllowed(whatIsAllowedReqAuth, authZ);
-        
+
         should.equal(policySetRQResponse.policy_sets?.length, 1);
         should.equal(policySetRQResponse.policy_sets?.[0].id, 'test_policy_set_id');
         should.equal(policySetRQResponse.policy_sets?.[0].policies?.length, 2); // Location and Address policy

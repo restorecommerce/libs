@@ -80,7 +80,7 @@ export const DefaultMetaDataInjector = async <T extends ResourceList>(
         owners: [
           request.subject?.scope ? {
             id: urns.ownerIndicatoryEntity,
-            value: urns.organization,
+            value: urns.organization, // to be passed here to change
             attributes: [{
               id: urns.ownerInstance,
               value: request.subject.scope
@@ -101,7 +101,7 @@ export const DefaultMetaDataInjector = async <T extends ResourceList>(
   return request;
 };
 
-export function access_controlled_service<T extends { new (...args: any): {} }>(baseService: T): any {
+export function access_controlled_service<T extends { new(...args: any): {} }>(baseService: T): any {
   return class extends baseService {
     public readonly __userService: Client<UserServiceDefinition>;
     public readonly __acsDatabaseProvider: DatabaseProvider;
@@ -147,15 +147,15 @@ export function access_controlled_function<T extends ResourceList>(kwargs: {
         const request = arguments[0];
         const args = [...arguments].slice(1);
 
-        const context = typeof(kwargs.context) === 'function'
+        const context = typeof (kwargs.context) === 'function'
           ? await kwargs.context(this, request, ...args)
           : kwargs.context;
 
-        const resource = typeof(kwargs.resource) === 'function'
+        const resource = typeof (kwargs.resource) === 'function'
           ? await kwargs.resource(this, request, ...args)
           : kwargs.resource;
 
-        const database = typeof(kwargs.database) === 'function'
+        const database = typeof (kwargs.database) === 'function'
           ? await kwargs.database(this, request, ...args)
           : kwargs.database;
 
@@ -173,9 +173,10 @@ export function access_controlled_function<T extends ResourceList>(kwargs: {
           resource ?? [],
           kwargs.action,
           context,
-          kwargs.operation,
-          database ?? this.__acsDatabaseProvider ?? 'arangoDB',
-          kwargs.useCache ?? false
+          {
+            operation: kwargs.operation, database: database ?? this.__acsDatabaseProvider ?? 'arangoDB',
+            useCache: kwargs.useCache ?? false
+          }
         );
 
         if (response?.decision !== Response_Decision.PERMIT) {
@@ -197,7 +198,7 @@ export function access_controlled_function<T extends ResourceList>(kwargs: {
 }
 
 export function injects_meta_data<T extends ResourceList>(
-  metaDataInjector: MetaDataInjector<T> = DefaultMetaDataInjector<T>,
+  metaDataInjector: MetaDataInjector<T> = DefaultMetaDataInjector < T >,
 ) {
   return function (
     target: any,

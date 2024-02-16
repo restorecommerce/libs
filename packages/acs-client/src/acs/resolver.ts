@@ -30,6 +30,7 @@ import {
   Operation,
   Resource,
   AuthZAction,
+  ACSClientOptions,
 } from './interfaces';
 import logger from '../logger';
 import { errors, cfg } from '../config';
@@ -40,7 +41,7 @@ const subjectIsUnauthenticated = (subject: any): subject is UnauthenticatedConte
 };
 
 const whatIsAllowedRequest = async (subject: DeepPartial<Subject>, resources: Resource[],
-  actions: AuthZAction, ctx: ACSClientContext, useCache: boolean) => {
+  actions: AuthZAction, ctx: ACSClientContext, useCache: boolean, roleScopingEntityURN: string) => {
   if (subjectIsUnauthenticated(subject)) {
     return await unauthZ.whatIsAllowed({
       target: {
@@ -49,7 +50,7 @@ const whatIsAllowedRequest = async (subject: DeepPartial<Subject>, resources: Re
       context: {
         security: {}
       }
-    }, ctx, useCache);
+    }, ctx, useCache, roleScopingEntityURN);
   } else {
     return await authZ.whatIsAllowed({
       context: {
@@ -60,12 +61,12 @@ const whatIsAllowedRequest = async (subject: DeepPartial<Subject>, resources: Re
         resources,
         actions
       }
-    }, ctx, useCache);
+    }, ctx, useCache, roleScopingEntityURN);
   }
 };
 
 export const isAllowedRequest = async (subject: Subject,
-  resources: Resource[], actions: AuthZAction, ctx: ACSClientContext, useCache: boolean): Promise<DecisionResponse> => {
+  resources: Resource[], actions: AuthZAction, ctx: ACSClientContext, useCache: boolean, roleScopingEntityURN: string): Promise<DecisionResponse> => {
   if (subjectIsUnauthenticated(subject)) {
     return await unauthZ.isAllowed({
       target: {
@@ -74,7 +75,7 @@ export const isAllowedRequest = async (subject: Subject,
       context: {
         security: {}
       }
-    }, ctx, useCache);
+    }, ctx, useCache, roleScopingEntityURN);
   } else {
     return await authZ.isAllowed({
       context: {
@@ -85,7 +86,7 @@ export const isAllowedRequest = async (subject: Subject,
         resources,
         actions
       }
-    }, ctx, useCache);
+    }, ctx, useCache, roleScopingEntityURN);
   }
 };
 
@@ -112,9 +113,7 @@ export const accessRequest = async (
   resource: Resource[],
   action: AuthZAction,
   ctx: ACSClientContext,
-  operation?: Operation,
-  database?: 'arangoDB' | 'postgres',
-  useCache = true
+  options?: ACSClientOptions
 ): Promise<DecisionResponse | PolicySetRQResponse> => {
   if (_.isEmpty(subject) || !subject.token ) {
     // check if unauthenticated user is configured in config.json
@@ -186,9 +185,12 @@ export const accessRequest = async (
   }
 
   // default ACS operation is isAllowed
-  operation ??= Operation.isAllowed;
+  const operation = options?.operation ? options.operation : Operation.isAllowed;
   // default database is arangoDB
-  database ??= 'arangoDB';
+  const database = options?.database ? options.database : 'arangoDB';
+  const useCache = options?.useCache ? options.useCache : true;
+  // default value is RC organization
+  const roleScopingEntityURN = options?.roleScopingEntityURN ? options.roleScopingEntityURN: 'urn:restorecommerce:model:organization.Organization';
   // ctx.resources
   if (ctx.resources && !_.isArray(ctx.resources)) {
     ctx.resources = [ctx.resources];
@@ -205,7 +207,7 @@ export const accessRequest = async (
         resource,
         action,
         ctx,
-        useCache,
+        useCache, roleScopingEntityURN
       );
     } catch (err) {
       logger.error(
@@ -271,7 +273,7 @@ export const accessRequest = async (
   if (operation === Operation.isAllowed) {
     // authorization
     try {
-      decisionResponse = await isAllowedRequest(subClone as Subject, resource, action, ctx, useCache);
+      decisionResponse = await isAllowedRequest(subClone as Subject, resource, action, ctx, useCache, roleScopingEntityURN);
     } catch (err) {
       logger.error('Error calling isAllowed operation', { code: err.code, message: err.message, stack: err.stack });
       return { decision: Response_Decision.DENY, operation_status: generateOperationStatus(err.code, err.message) };

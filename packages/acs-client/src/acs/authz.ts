@@ -62,7 +62,7 @@ export const createActionTarget = (action: any): Attribute[] => {
   }
 };
 
-export const createSubjectTarget = (subject: DeepPartial<Subject>): Attribute[] => {
+export const createSubjectTarget = (subject: DeepPartial<Subject>, orgScopeURN): Attribute[] => {
   if (subject.unauthenticated) {
     return [{
       id: urns.unauthenticated_user,
@@ -79,10 +79,11 @@ export const createSubjectTarget = (subject: DeepPartial<Subject>): Attribute[] 
   ];
 
   if (subject.scope) {
+    orgScopeURN = orgScopeURN ? orgScopeURN : 'urn:restorecommerce:acs:model:organization.Organization';
     flattened = flattened.concat([
       {
         id: urns.roleScopingEntity,
-        value: urns.orgScope,
+        value: orgScopeURN,
         attributes: [{
           id: urns.roleScopingInstance,
           value: subject.scope,
@@ -197,11 +198,12 @@ export class UnAuthZ implements IAuthZ {
     }
   }
 
-  async isAllowed(request: Request<NoAuthTarget, AuthZContext>, ctx: ACSClientContext, useCache: boolean): Promise<DecisionResponse> {
+  async isAllowed(request: Request<NoAuthTarget, AuthZContext>,
+    ctx: ACSClientContext, useCache: boolean, roleScopingEntityURN: string): Promise<DecisionResponse> {
     const authZRequest = {
       target: {
         actions: createActionTarget(request.target.actions),
-        subjects: createSubjectTarget(request.target.subjects),
+        subjects: createSubjectTarget(request.target.subjects, roleScopingEntityURN),
         resources: createResourceTarget(request.target.resources, request.target.actions)
       },
       context: {
@@ -244,11 +246,11 @@ export class UnAuthZ implements IAuthZ {
   }
 
   async whatIsAllowed(request: Request<NoAuthWhatIsAllowedTarget, AuthZContext>,
-    ctx: ACSClientContext, useCache: boolean): Promise<PolicySetRQResponse> {
+    ctx: ACSClientContext, useCache: boolean, roleScopingEntityURN: string): Promise<PolicySetRQResponse> {
     const authZRequest = {
       target: {
         actions: createActionTarget(request.target.actions),
-        subjects: createSubjectTarget(request.target.subjects),
+        subjects: createSubjectTarget(request.target.subjects, roleScopingEntityURN),
         resources: createResourceTarget(request.target.resources, request.target.actions)
       },
       context: {
@@ -267,7 +269,7 @@ export class UnAuthZ implements IAuthZ {
         obligations: mapResourceURNObligationProperties(whatIsAllowed.obligations)
       } as any; // TODO Decision?
     } catch (err) {
-      logger.error('Error invoking access-control-srv whatIsAllowed operation',  { code: err.code, message: err.message, stack: err.stack });
+      logger.error('Error invoking access-control-srv whatIsAllowed operation', { code: err.code, message: err.message, stack: err.stack });
       if (!err.code) {
         err.code = 500;
       }
@@ -307,8 +309,8 @@ export class ACSAuthZ implements IAuthZ {
    * @param useCache
    * @returns {DecisionResponse}
    */
-  async isAllowed(request: Request<AuthZTarget, AuthZContext>, ctx: ACSClientContext, useCache): Promise<DecisionResponse> {
-    const authZRequest = this.prepareRequest(request);
+  async isAllowed(request: Request<AuthZTarget, AuthZContext>, ctx: ACSClientContext, useCache, roleScopingEntityURN: string): Promise<DecisionResponse> {
+    const authZRequest = this.prepareRequest(request, roleScopingEntityURN);
     authZRequest.context = {
       subject: {},
       resources: [],
@@ -342,7 +344,7 @@ export class ACSAuthZ implements IAuthZ {
         operation_status: isAllowed?.operation_status
       };
     } catch (err) {
-      logger.error('Error invoking access-control-srv isAllowed operation',  { code: err.code, message: err.message, stack: err.stack });
+      logger.error('Error invoking access-control-srv isAllowed operation', { code: err.code, message: err.message, stack: err.stack });
       if (!err.code) {
         err.code = 500;
       }
@@ -368,8 +370,8 @@ export class ACSAuthZ implements IAuthZ {
   * @param resource
   */
   async whatIsAllowed(request: Request<AuthZWhatIsAllowedTarget, AuthZContext>,
-    ctx: ACSClientContext, useCache: boolean): Promise<PolicySetRQResponse> {
-    const authZRequest = this.prepareRequest(request);
+    ctx: ACSClientContext, useCache: boolean, roleScopingEntityURN: string): Promise<PolicySetRQResponse> {
+    const authZRequest = this.prepareRequest(request, roleScopingEntityURN);
     authZRequest.context = {
       subject: {},
       resources: [],
@@ -397,7 +399,7 @@ export class ACSAuthZ implements IAuthZ {
         obligations: mapResourceURNObligationProperties(whatIsAllowed.obligations)
       } as any; // TODO Decision?
     } catch (err) {
-      logger.error('Error invoking access-control-srv whatIsAllowed operation',  { code: err.code, message: err.message, stack: err.stack });
+      logger.error('Error invoking access-control-srv whatIsAllowed operation', { code: err.code, message: err.message, stack: err.stack });
       if (!err.code) {
         err.code = 500;
       }
@@ -429,12 +431,12 @@ export class ACSAuthZ implements IAuthZ {
     }
   }
 
-  prepareRequest(request: Request<AuthZTarget | AuthZWhatIsAllowedTarget, AuthZContext>): any {
+  prepareRequest(request: Request<AuthZTarget | AuthZWhatIsAllowedTarget, AuthZContext>, roleScopingEntityURN): any {
     let { subjects, resources, actions } = request.target;
     const authZRequest: any = {
       target: {
         actions: createActionTarget(actions),
-        subjects: createSubjectTarget(subjects),
+        subjects: createSubjectTarget(subjects, roleScopingEntityURN),
       },
     };
     authZRequest.target.resources = createResourceTarget(resources, actions);

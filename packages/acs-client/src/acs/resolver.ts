@@ -190,7 +190,7 @@ export const accessRequest = async (
   const database = options?.database ? options.database : 'arangoDB';
   const useCache = options?.useCache ? options.useCache : true;
   // default value is RC organization
-  const roleScopingEntityURN = options?.roleScopingEntityURN ? options.roleScopingEntityURN: 'urn:restorecommerce:model:organization.Organization';
+  const roleScopingEntityURN = options?.roleScopingEntityURN ? options.roleScopingEntityURN: 'urn:restorecommerce:acs:model:organization.Organization';
   // ctx.resources
   if (ctx.resources && !_.isArray(ctx.resources)) {
     ctx.resources = [ctx.resources];

@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/rc-grpc-clients",
-  "version": "5.1.18",
+  "version": "5.1.19",
   "description": "Restorecommerce GRPC service implementations",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -27,7 +27,7 @@
     "ts-proto-descriptors": "^1.15.0"
   },
   "devDependencies": {
-    "@restorecommerce/dev": "^0.0.6",
+    "@restorecommerce/dev": "^0.0.7",
     "@restorecommerce/protos": "^6.7.0",
     "@types/jest": "^29.5.3",
     "@types/node": "^20.4.1",

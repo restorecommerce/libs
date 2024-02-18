@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.7](https://github.com/restorecommerce/libs/compare/@restorecommerce/dev@0.0.6...@restorecommerce/dev@0.0.7) (2024-02-18)
+
+
+### Bug Fixes
+
+* dev config to override export import rule for services.getSymbolAtLocation not defined error ([ab23b9a](https://github.com/restorecommerce/libs/commit/ab23b9aafbced0cc2450a99e4a27e81c840a2270))
+
+
+
+
+
 ## [0.0.6](https://github.com/restorecommerce/libs/compare/@restorecommerce/dev@0.0.5...@restorecommerce/dev@0.0.6) (2024-02-01)
 
 

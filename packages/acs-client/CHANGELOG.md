@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.4.10](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@1.4.9...@restorecommerce/acs-client@1.4.10) (2024-02-18)
+
+
+### Bug Fixes
+
+* CI build ([1700807](https://github.com/restorecommerce/libs/commit/1700807552249e52beb602122e81b8bb06d1ac6c))
+* extend acs-client for passing roleScopingEntity URN in options ([c2c1165](https://github.com/restorecommerce/libs/commit/c2c116545c06b235bd337673defd3bbb931177f3))
+
+
+
+
+
 ## [1.4.9](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@1.4.8...@restorecommerce/acs-client@1.4.9) (2024-02-01)
 
 **Note:** Version bump only for package @restorecommerce/acs-client

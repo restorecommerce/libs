@@ -19,7 +19,10 @@ jobs:
           git config --global user.email "bot@restorecommerce.io"
           git config --global user.name "Bot"
 
-      - name: Checkout PR
+      - name: Install hub
+        run: apt install -y hub
+
+      - name: Merge PR
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |

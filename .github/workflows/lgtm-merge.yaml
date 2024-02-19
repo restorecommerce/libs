@@ -8,7 +8,7 @@ on:
 jobs:
   pr_commented:
     name: Merge
-    if: ${{ github.event.issue.pull_request && github.event.comment.body == "/merge" }}
+    if: ${{ github.event.issue.pull_request && github.event.comment.body == '/merge' }}
     runs-on: ubuntu-latest
     steps:
       - name: Clone git repo

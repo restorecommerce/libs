@@ -29,4 +29,9 @@ jobs:
           PR_URL="${{ github.event.issue.pull_request.url }}"
           PR_NUM=${PR_URL##*/}
           echo "Merging PR #$PR_NUM based on URL: $PR_URL"
-          hub pr merge $PR_NUM --message "${{ github.event.issue.title }}" --rebase
+          hub pr checkout $PR_NUM
+          git status
+          SOURCE_BRANCH=$(git branch --show-current)
+          git checkout ${{ github.event.issue.pull_request.base.ref }}
+          echo "Would Merge $SOURCE_BRANCH"
+

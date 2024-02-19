@@ -20,7 +20,7 @@ jobs:
           git config --global user.name "Bot"
 
       - name: Install hub
-        run: apt install -y hub
+        run: sudo apt install -y hub
 
       - name: Merge PR
         env:

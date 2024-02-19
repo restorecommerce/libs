@@ -19,9 +19,6 @@ jobs:
           git config --global user.email "bot@restorecommerce.io"
           git config --global user.name "Bot"
 
-      - name: Install hub
-        run: sudo apt install -y hub
-
       - name: Merge PR
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -30,9 +27,8 @@ jobs:
           PR_URL="${{ github.event.issue.pull_request.url }}"
           PR_NUM=${PR_URL##*/}
           echo "Merging PR #$PR_NUM based on URL: $PR_URL"
-          hub pr checkout $PR_NUM
-          git status
-          SOURCE_BRANCH=$(git branch --show-current)
-          git checkout ${{ github.event.issue.pull_request.base.ref }}
-          echo "Would Merge $SOURCE_BRANCH"
+          HEAD_REF=$(gh pr view $PR_NUM --json headRefName -t "{{ .headRefName }}")
+          BASE_BRANCH=$(gh pr view $PR_NUM --json baseRefName -t "{{ .baseRefName }}")
+          git checkout $BASE_BRANCH
+          echo "Would Merge HEAD_REF"
 

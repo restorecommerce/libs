@@ -32,5 +32,5 @@ jobs:
           HEAD_REF=$(gh pr view $PR_NUM --json headRefName -t "{{ .headRefName }}")
           BASE_BRANCH=$(gh pr view $PR_NUM --json baseRefName -t "{{ .baseRefName }}")
           git checkout $BASE_BRANCH
-          echo "Would Merge HEAD_REF"
+          git merge --ff $HEAD_REF
 

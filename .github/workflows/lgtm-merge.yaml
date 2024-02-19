@@ -33,6 +33,6 @@ jobs:
           hub pr checkout $PR_NUM
           git status
           SOURCE_BRANCH=$(git branch --show-current)
-          git checkout ${{ github.event.pull_request.base.ref }}
+          git checkout ${{ github.event.issue.pull_request.base.ref }}
           echo "Would Merge $SOURCE_BRANCH"
 

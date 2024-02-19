@@ -1,0 +1,29 @@
+name: Merge
+
+on:
+  issue_comment:
+    types:
+      - created
+
+jobs:
+  pr_commented:
+    name: Merge
+    if: ${{ github.event.issue.pull_request && github.event.comment.body == "/merge" }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone git repo
+        uses: actions/checkout@v4
+
+      - name: Configure Git Agent
+        run: |
+          git config --global user.email "bot@restorecommerce.io"
+          git config --global user.name "Bot"
+
+      - name: Checkout PR
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_URL="${{ github.event.issue.pull_request.url }}"
+          PR_NUM=${PR_URL##*/}
+          echo "Merging PR #$PR_NUM based on URL: $PR_URL"
+          # hub pr merge $PR_NUM --message "${{ github.event.issue.title }}"

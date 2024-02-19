@@ -36,7 +36,7 @@ jobs:
         run: npm run build -- -p="@restorecommerce/${{ inputs.package }}"
 
       - name: Version
-        run: npx lerna version
+        run: npx lerna version --conventional-commits
 
       - name: Release
         run: npx lerna publish from-package --verify-access --no-private

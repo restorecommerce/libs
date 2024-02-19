@@ -6,17 +6,18 @@ on:
       - master
 
 jobs:
-  build:
+  release:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup NodeJS
         uses: actions/setup-node@v4
         with:
           node-version: '18.17'
-          fetch-depth: 0
 
       - name: Upgrade npm
         run: npm i -g npm

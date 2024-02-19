@@ -36,8 +36,11 @@ jobs:
       - name: Build
         run: npm run build -- -p="@restorecommerce/${{ inputs.package }}"
 
-      - name: Version
-        run: npx lerna version --conventional-commits
-
       - name: Release
-        run: npx lerna publish from-package --verify-access --no-private
+        run: npx lerna publish --verify-access --no-private --conventional-commits
+
+      - name: Sync next branch
+        run: |
+          git checkout next
+          git merge master
+          git push -u origin next

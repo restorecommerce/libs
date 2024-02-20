@@ -37,6 +37,8 @@ jobs:
         run: npm run build -- -p="@restorecommerce/${{ inputs.package }}"
 
       - name: Release
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npx lerna publish --verify-access --no-private --conventional-commits
 
       - name: Sync next branch

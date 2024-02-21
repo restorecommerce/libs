@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.7](https://github.com/restorecommerce/handlebars-helperized/compare/@restorecommerce/handlebars-helperized@1.0.6...@restorecommerce/handlebars-helperized@1.0.7) (2024-02-21)
+
+
+### Bug Fixes
+
+* handlebars-helperized and mailer module ([ed596c4](https://github.com/restorecommerce/handlebars-helperized/commit/ed596c487c3d750c50ad0f628650317fc00920a3))
+
+
+
+
+
 ## [1.0.6](https://github.com/restorecommerce/handlebars-helperized/compare/@restorecommerce/handlebars-helperized@1.0.5...@restorecommerce/handlebars-helperized@1.0.6) (2023-11-20)
 
 **Note:** Version bump only for package @restorecommerce/handlebars-helperized

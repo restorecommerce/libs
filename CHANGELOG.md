@@ -1,3 +1,8 @@
+
+### 1.4.5 (February 21st, 2024)
+
+- update deps
+
 ### 1.4.4 (November 26th, 2023)
 
 - removed deprecated method (collection.load)

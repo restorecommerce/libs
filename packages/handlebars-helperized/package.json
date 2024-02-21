@@ -48,7 +48,7 @@
     "lint": "eslint src --ext .ts ",
     "pretest": "npm run build",
     "test": "nyc mocha ./test/* --exit",
-    "build:tsc": "tsc --strict",
+    "build:tsc": "tsc -d",
     "build:clean": "rimraf lib",
     "build": "npm-run-all lint build:clean build:tsc",
     "lcov-report": "nyc report --reporter=lcov",

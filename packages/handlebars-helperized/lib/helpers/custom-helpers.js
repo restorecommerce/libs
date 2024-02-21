@@ -1,4 +1,3 @@
-"use strict";
 let customHandlebarsExtensions = (hbs, opts) => {
     // increment a given numerical string by one
     hbs.registerHelper('increment', (value, hash) => {
@@ -9,3 +8,4 @@ let customHandlebarsExtensions = (hbs, opts) => {
     });
 };
 module.exports = customHandlebarsExtensions;
+//# sourceMappingURL=custom-helpers.js.map

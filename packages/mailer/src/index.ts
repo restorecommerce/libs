@@ -35,4 +35,4 @@ class Mailer {
   }
 }
 
-export default Mailer;
+export { Mailer };

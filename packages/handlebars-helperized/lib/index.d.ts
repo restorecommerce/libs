@@ -16,4 +16,4 @@ declare class Renderer {
     */
     render(context: Object): any;
 }
-export default Renderer;
+export { Renderer };

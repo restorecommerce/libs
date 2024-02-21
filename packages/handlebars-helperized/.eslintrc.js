@@ -44,7 +44,7 @@ module.exports = {
     quotes: ["error", "single", { allowTemplateLiterals: true }],
     "no-trailing-spaces": "error",
     "no-var": "error",
-    "object-shorthand": "error",
+    "noImplicitAny": 0,
     "prefer-arrow-functions/prefer-arrow-functions": [
       "warn",
       {

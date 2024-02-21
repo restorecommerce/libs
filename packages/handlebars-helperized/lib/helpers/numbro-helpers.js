@@ -1,4 +1,3 @@
-"use strict";
 const numbro = require('numbro');
 const allLanguages = require('numbro/dist/languages.min');
 Object.values(allLanguages).forEach((data) => {
@@ -45,3 +44,4 @@ let numbroHandlebarsExtension = (hbs, opts) => {
     });
 };
 module.exports = numbroHandlebarsExtension;
+//# sourceMappingURL=numbro-helpers.js.map

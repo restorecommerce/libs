@@ -1,4 +1,3 @@
-"use strict";
 const tripleStache = /\{\{\{\s*(.*?)\s*\}\}\}/g;
 const doubleStache = /\{\{\s*(.*?)\s*\}\}/g;
 let localizationHandlebarsExtension = (hbs, opts) => {
@@ -18,3 +17,4 @@ let localizationHandlebarsExtension = (hbs, opts) => {
     });
 };
 module.exports = localizationHandlebarsExtension;
+//# sourceMappingURL=l10n-helpers.js.map

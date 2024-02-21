@@ -3,11 +3,19 @@ npm-debug.log
 
 coverage/
 
-.vscode
 .project
 .settings
+.directory
+.vscode
+.nyc_output
+.idea
 
+*.js
 *.log
 *~
 .idea/
 .nyc_output
+lib/*/**
+test/*.js
+test/*.d.ts
+!.eslintrc.js

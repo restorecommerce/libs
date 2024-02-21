@@ -5,8 +5,8 @@
 // eslint-disable-next-line
 const should = require('should');
 const moment = require('moment-timezone');
-let Renderer = require('../lib');
-Renderer = Renderer.default;
+let { Renderer } = require('../lib');
+// Renderer = Renderer.default;
 
 /**
  * Documented API testing (stuff on README should work as expected)

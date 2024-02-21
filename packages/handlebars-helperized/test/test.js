@@ -5,8 +5,8 @@
 // eslint-disable-next-line
 const should = require('should');
 const fs = require('fs');
-let Renderer = require('../lib');
-Renderer = Renderer.default;
+let { Renderer } = require('../lib');
+// Renderer = Renderer.default;
 
 const data = {
   firstName: 'John',

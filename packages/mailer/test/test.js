@@ -2,8 +2,8 @@
 
 const assert = require('assert');
 const Mail = require('nodemailer/lib/mailer');
-let Mailer = require('../lib/index');
-Mailer = Mailer.default;
+let { Mailer } = require('../lib/index');
+// Mailer = Mailer.default;
 
 console.log(Mailer);
 

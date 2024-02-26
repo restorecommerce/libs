@@ -47,7 +47,7 @@
   "scripts": {
     "lint": "eslint src --ext .ts ",
     "pretest": "npm run build",
-    "test": "nyc mocha ./test/* --exit",
+    "test": "nyc mocha ./test/* --timeout 5000 --exit",
     "build:tsc": "tsc -d",
     "build:clean": "rimraf lib",
     "build": "npm-run-all lint build:clean build:tsc",

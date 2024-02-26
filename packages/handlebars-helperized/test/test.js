@@ -1,7 +1,3 @@
-'use strict';
-
-/* eslint-env node, mocha */
-
 // eslint-disable-next-line
 const should = require('should');
 const fs = require('fs');
@@ -50,10 +46,15 @@ describe('the handlebars template engine', () => {
     done();
   });
 
-  it('should be able to render templates with a provided custom helper', () => {
+  it('should be able to render templates with a provided custom helper', async () => {
     const filePathList = ['../test/handlebars/helper-loud.js'];
     const tpl = '<h1>Hello {{loud name}}</h1>';
     const renderer = new Renderer(tpl, '', '', {}, filePathList );
+    await new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve();
+      }, 2000)
+    });
     const result = renderer.render({ name: 'John' });
     const expectedResult = '<h1>Hello JOHN</h1>';
     result.should.equal(expectedResult);

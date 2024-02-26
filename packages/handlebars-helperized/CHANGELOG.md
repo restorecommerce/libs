@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.8](https://github.com/restorecommerce/handlebars-helperized/compare/@restorecommerce/handlebars-helperized@1.0.7...@restorecommerce/handlebars-helperized@1.0.8) (2024-02-26)
+
+
+### Bug Fixes
+
+* up handlebars-helperized to use import instead of require ([ad8a550](https://github.com/restorecommerce/handlebars-helperized/commit/ad8a5503e48d62ed93222876cf8585ee9293163e))
+
+
+
+
+
 ## [1.0.7](https://github.com/restorecommerce/handlebars-helperized/compare/@restorecommerce/handlebars-helperized@1.0.6...@restorecommerce/handlebars-helperized@1.0.7) (2024-02-21)
 
 

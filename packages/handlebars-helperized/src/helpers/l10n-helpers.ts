@@ -17,4 +17,4 @@ let localizationHandlebarsExtension = (hbs: any, opts: any) => {
   });
 };
 
-module.exports = localizationHandlebarsExtension;
+export { localizationHandlebarsExtension };

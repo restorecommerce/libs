@@ -8,4 +8,4 @@ let customHandlebarsExtensions = (hbs: any, opts: any) => {
   });
 };
 
-module.exports = customHandlebarsExtensions;
+export { customHandlebarsExtensions };

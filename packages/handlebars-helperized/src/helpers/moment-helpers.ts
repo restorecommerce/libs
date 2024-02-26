@@ -61,4 +61,4 @@ let  momentHandlebarsExtension = (hbs: any, opts: any) => {
   });
 };
 
-module.exports = momentHandlebarsExtension;
+export { momentHandlebarsExtension };

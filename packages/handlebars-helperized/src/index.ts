@@ -1,5 +1,11 @@
 import juice from 'juice';
 import defaults from 'lodash/defaults';
+// the basic building block is the handlebars rendering engine
+import hbs from 'handlebars';
+import { localizationHandlebarsExtension } from './helpers/l10n-helpers';
+import { numbroHandlebarsExtension } from './helpers/numbro-helpers';
+import { momentHandlebarsExtension } from './helpers/moment-helpers';
+import { customHandlebarsExtensions } from './helpers/custom-helpers';
 
 const defaultOpts = {
   locale: 'en_US',
@@ -10,19 +16,20 @@ const defaultOpts = {
 const init = (options: object | undefined, customHelpersList: any) => {
   // default values if nothing given
   const opts = defaults(options, defaultOpts);
-  // the basic building block is the handlebars rendering engine
-  const hbs = require('handlebars');
   // more functionality directly added via custom plugins from ./lib
-  require('./helpers/l10n-helpers.js')(hbs, opts); // localization
-  require('./helpers/numbro-helpers.js')(hbs, opts); // numbers & currencies
-  require('./helpers/moment-helpers.js')(hbs, opts); // dates, times & durations
-  require('./helpers/custom-helpers.js')(hbs, opts); // everything else
+  localizationHandlebarsExtension(hbs, opts); // localization
+  numbroHandlebarsExtension(hbs, opts); // numbers & currencies
+  momentHandlebarsExtension(hbs, opts); // dates, times & durations
+  customHandlebarsExtensions(hbs, opts); // everything else
 
   // add custom helpers from rendering-srv
   if (customHelpersList) {
     for (let customHelper of customHelpersList) {
       const filePath = customHelper;
-      require(filePath)(hbs, opts);
+      // require(filePath)(hbs, opts);
+      (async () => (await import(filePath)).default(hbs, opts))().catch(err => {
+        console.log(`Error importing file ${filePath}`, { code: err.code, message: err.message, stack: err.stack });
+      });
     }
   }
   // extend rendering with layout functionality

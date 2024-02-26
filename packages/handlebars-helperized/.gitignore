@@ -15,6 +15,7 @@ coverage/
 *~
 .idea/
 .nyc_output
+lib
 lib/*/**
 test/*.js
 test/*.d.ts

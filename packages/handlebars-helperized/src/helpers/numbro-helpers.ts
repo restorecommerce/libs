@@ -50,4 +50,4 @@ let numbroHandlebarsExtension = (hbs: any, opts: any) => {
   });
 };
 
-module.exports = numbroHandlebarsExtension;
+export { numbroHandlebarsExtension };

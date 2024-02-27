@@ -9,11 +9,6 @@ jobs:
   release:
     runs-on: ubuntu-20.04
     steps:
-      - name: Test
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm whoami && exit 1
-
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -49,7 +44,7 @@ jobs:
       - name: Release
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npx lerna publish --verify-access --no-private --conventional-commits --yes
+        run: npx lerna publish --no-verify-access --no-private --conventional-commits --yes
 
       - name: Sync next branch
         run: |

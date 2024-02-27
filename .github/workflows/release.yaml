@@ -33,6 +33,11 @@ jobs:
           restore-keys: |
             cache-1-nx-${{ inputs.package }}-${{ hashFiles('package-lock.json') }}-
 
+      - name: Git Config
+        run: |
+          git config --global user.email "bot@restorecommerce.io"
+          git config --global user.name "Restorecommerce Bot"
+
       - name: Build
         run: npm run build -- -p="@restorecommerce/${{ inputs.package }}"
 

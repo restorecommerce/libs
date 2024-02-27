@@ -71,7 +71,7 @@ export class ResourceSrvGrpcClient extends RestoreCommerceGrpcClient {
   readonly tax: TaxServiceClient;
   readonly tax_type: TaxTypeServiceClient;
   readonly unit_code: UnitCodeServiceClient;
-  readonly command: any;
+  readonly command: any = undefined;
 
   constructor(address: string, cfg: GrpcClientConfig) {
     super(address, cfg);

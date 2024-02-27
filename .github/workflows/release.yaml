@@ -41,13 +41,14 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Version
-        run: npx lerna version from-package --no-private --conventional-commits --yes --loglevel debug
-
-      - name: Release
+      - name: NPM Token
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish
+        run: |
+          echo "//registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN" > .npmrc
+
+      - name: Release
+        run: npx lerna publish --no-verify-access --no-private --conventional-commits --yes --loglevel debug
 
       - name: Sync next branch
         run: |

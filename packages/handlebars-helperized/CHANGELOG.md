@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.9](https://github.com/restorecommerce/handlebars-helperized/compare/@restorecommerce/handlebars-helperized@1.0.8...@restorecommerce/handlebars-helperized@1.0.9) (2024-02-27)
+
+
+### Bug Fixes
+
+* unit test ([0800d98](https://github.com/restorecommerce/handlebars-helperized/commit/0800d98b2345ae2c47ecfc58d68ccfc739a90f99))
+
+
+
+
+
 ## [1.0.8](https://github.com/restorecommerce/handlebars-helperized/compare/@restorecommerce/handlebars-helperized@1.0.7...@restorecommerce/handlebars-helperized@1.0.8) (2024-02-26)
 
 

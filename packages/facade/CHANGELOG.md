@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.13.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.13.2...@restorecommerce/facade@1.13.3) (2024-02-27)
+
+
+### Bug Fixes
+
+* file import for facade module ([20ab234](https://github.com/restorecommerce/libs/commit/20ab23465708ff4e1f2f1d68b0ed572e9aa9a9df))
+* typing error for strict null check ([d67a864](https://github.com/restorecommerce/libs/commit/d67a864d56390749c6167b52b182efb3149a615f))
+
+
+
+
+
 ## [1.13.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.13.1...@restorecommerce/facade@1.13.2) (2024-02-18)
 
 **Note:** Version bump only for package @restorecommerce/facade

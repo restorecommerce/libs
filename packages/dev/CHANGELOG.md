@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.8](https://github.com/restorecommerce/libs/compare/@restorecommerce/dev@0.0.7...@restorecommerce/dev@0.0.8) (2024-02-27)
+
+
+### Bug Fixes
+
+* disable strict nullchecks ([cf7be75](https://github.com/restorecommerce/libs/commit/cf7be75e06c05567af334eb8448ed781f70a6322))
+
+
+
+
+
 ## [0.0.7](https://github.com/restorecommerce/libs/compare/@restorecommerce/dev@0.0.6...@restorecommerce/dev@0.0.7) (2024-02-18)
 
 

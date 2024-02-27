@@ -3,9 +3,9 @@ import fs from 'node:fs';
 import { IdentityContext } from '../interfaces.js';
 import hbs from 'handlebars';
 import { type OIDCHbsTemplates } from './interfaces.js';
-import * as url from 'node:url';
+import dirname from 'es-dirname';
 
-const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
+const __dirname = dirname();
 
 export interface OIDCTemplateError {
   key: string;

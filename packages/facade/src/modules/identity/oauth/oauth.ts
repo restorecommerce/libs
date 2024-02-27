@@ -12,11 +12,11 @@ import {
   UserType
 } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/user.js';
 import * as jose from 'jose';
-import * as url from 'node:url';
 import Router from 'koa-router';
 import { koaBody as bodyParser } from 'koa-body';
+import dirname from 'es-dirname';
 
-const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
+const __dirname = dirname();
 
 const upsertUserToken = async (ids: IdentitySrvGrpcClient, accountId: string | undefined): Promise<string> => {
   const token = new jose.UnsecuredJWT({})

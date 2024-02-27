@@ -9,6 +9,11 @@ jobs:
   release:
     runs-on: ubuntu-20.04
     steps:
+      - name: Test
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm whoami && exit 1
+
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -39,7 +44,7 @@ jobs:
           git config --global user.name "Restorecommerce Bot"
 
       - name: Build
-        run: npm run build -- -p="@restorecommerce/${{ inputs.package }}"
+        run: npm run build
 
       - name: Release
         env:

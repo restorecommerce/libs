@@ -74,7 +74,7 @@ export const fieldHandler = (obj: any, fieldPath: string, fieldHandlerType: stri
 
   let fieldExists = baseGet(obj, dotFieldPath);
   // only if the configured field exist check recursively for all entries in object
-  if (fieldExists && array) {
+  if (array) {
     // use setNestedPath
     setNestedPath(obj, fieldPath, fieldHandlerType);
   } else if (fieldExists) {

@@ -1,4 +1,8 @@
 
+### 1.4.6 (February 29th, 2024)
+
+- update deps
+
 ### 1.4.5 (February 21st, 2024)
 
 - update deps

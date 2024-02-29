@@ -41,7 +41,7 @@ const setNestedPath = (object: any, fieldPath: string, fieldHandlerType: string)
   }
   if (prefix && suffix) {
     let array = _.get(object, prefix);
-    array.forEach((obj: any) => {
+    array?.forEach((obj: any) => {
       let fieldExists = _.get(obj, suffix);
       if (fieldExists) {
         updateObject(obj, suffix, fieldExists, fieldHandlerType);

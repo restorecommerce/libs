@@ -1,4 +1,8 @@
 
+### 1.4.7 (February 29th, 2024)
+
+- add null check
+
 ### 1.4.6 (February 29th, 2024)
 
 - update deps

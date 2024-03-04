@@ -77,9 +77,10 @@ message Item {
     }
   ];
   optional string variant_id = 3;
-  optional int32 quantity = 4;
-  optional io.restorecommerce.price.Price unit_price = 5; //Set by service
-  optional io.restorecommerce.amount.Amount amount = 6; //Set by service
+  optional string parent_item_id = 4;
+  optional int32 quantity = 5;
+  optional io.restorecommerce.price.Price unit_price = 6; //Set by service
+  optional io.restorecommerce.amount.Amount amount = 7; //Set by service
 }
 
 /**

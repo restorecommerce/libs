@@ -46,9 +46,10 @@ message Association {
       field_name: "product",
     }
   ];
-  optional AssociationType type = 2;
-  repeated string tags = 3;
-  optional google.protobuf.Any data = 4;
+  optional string variant_id = 2;
+  optional AssociationType type = 3;
+  repeated string tags = 4;
+  optional google.protobuf.Any data = 5;
 }
 
 // Product resource entity
@@ -186,8 +187,17 @@ message PhysicalVariant {
   repeated io.restorecommerce.file.File files = 7;
   optional string stock_keeping_unit = 8;
   optional string parent_variant_id = 9;
-  optional Package package = 10;
-  repeated io.restorecommerce.property.Property properties = 11;
+  repeated io.restorecommerce.property.Property properties = 10;
+  repeated string tax_ids = 11 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.tax.Tax",
+      target_service: "master_data",
+      target_sub_service: "tax",
+      target_method: "Read",
+      field_name: "tax",
+    }
+  ];
+  optional Package package = 12;
 }
 
 message ServiceVariant {
@@ -201,6 +211,15 @@ message ServiceVariant {
   optional string stock_keeping_unit = 8;
   optional string parent_variant_id = 9;
   repeated io.restorecommerce.property.Property properties = 10;
+  repeated string tax_ids = 11 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.tax.Tax",
+      target_service: "master_data",
+      target_sub_service: "tax",
+      target_method: "Read",
+      field_name: "tax",
+    }
+  ];
 }
 
 message VirtualVariant {
@@ -214,6 +233,15 @@ message VirtualVariant {
   optional string stock_keeping_unit = 8;
   optional string parent_variant_id = 9;
   repeated io.restorecommerce.property.Property properties = 10;
+  repeated string tax_ids = 11 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.tax.Tax",
+      target_service: "master_data",
+      target_sub_service: "tax",
+      target_method: "Read",
+      field_name: "tax",
+    }
+  ];
 }
 
 message Bundle {

@@ -23,15 +23,22 @@ const init = (options: object | undefined, customHelpersList: any) => {
   customHandlebarsExtensions(hbs, opts); // everything else
 
   // add custom helpers from rendering-srv
-  if (customHelpersList) {
-    for (let customHelper of customHelpersList) {
-      const filePath = customHelper;
-      // require(filePath)(hbs, opts);
+  customHelpersList?.forEach(async (customHelper) => {
+    const filePath = customHelper;
+    // require(filePath)(hbs, opts);
+
+    // check for double default
+    let fileImport = await import(filePath);
+    if (fileImport?.default?.default) {
+      (async () => (await import(filePath)).default.default(hbs, opts))().catch(err => {
+        console.log(`Error importing file ${filePath}`, { code: err.code, message: err.message, stack: err.stack });
+      });
+    } else {
       (async () => (await import(filePath)).default(hbs, opts))().catch(err => {
         console.log(`Error importing file ${filePath}`, { code: err.code, message: err.message, stack: err.stack });
       });
     }
-  }
+  });
   // extend rendering with layout functionality
   const handlebarsLayouts = require('handlebars-layouts');
   handlebarsLayouts.register(hbs);

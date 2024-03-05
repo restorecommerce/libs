@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.13.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.13.4...@restorecommerce/facade@1.13.5) (2024-03-05)
+
+
+### Bug Fixes
+
+* remove whitespace ([6255518](https://github.com/restorecommerce/libs/commit/625551848625d3b3370ba499dde292efcce96b0e))
+
+
+
+
+
 ## [1.13.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.13.3...@restorecommerce/facade@1.13.4) (2024-03-05)
 
 **Note:** Version bump only for package @restorecommerce/facade

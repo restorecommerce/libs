@@ -18,7 +18,8 @@
     ],
     "lib": [
       "es2020.promise",
-      "dom"
+      "dom",
+      "ES6"
     ]
   },
   "include": [

@@ -1277,8 +1277,10 @@ export type IoRestorecommerceProductPhysicalVariant = {
   files?: Maybe<Array<IoRestorecommerceFileFile>>;
   stockKeepingUnit?: Maybe<Scalars['String']['output']>;
   parentVariantId?: Maybe<Scalars['String']['output']>;
-  package?: Maybe<IoRestorecommerceProductPackage>;
   properties?: Maybe<Array<IoRestorecommercePropertyProperty>>;
+  taxIds?: Maybe<Array<Scalars['String']['output']>>;
+  tax?: Maybe<Array<IoRestorecommerceTaxTax>>;
+  package?: Maybe<IoRestorecommerceProductPackage>;
 };
 
 export type IoRestorecommerceFileFile = {
@@ -1318,6 +1320,8 @@ export type IoRestorecommerceProductServiceVariant = {
   stockKeepingUnit?: Maybe<Scalars['String']['output']>;
   parentVariantId?: Maybe<Scalars['String']['output']>;
   properties?: Maybe<Array<IoRestorecommercePropertyProperty>>;
+  taxIds?: Maybe<Array<Scalars['String']['output']>>;
+  tax?: Maybe<Array<IoRestorecommerceTaxTax>>;
 };
 
 export type IoRestorecommerceProductVirtualProduct = {
@@ -1337,6 +1341,8 @@ export type IoRestorecommerceProductVirtualVariant = {
   stockKeepingUnit?: Maybe<Scalars['String']['output']>;
   parentVariantId?: Maybe<Scalars['String']['output']>;
   properties?: Maybe<Array<IoRestorecommercePropertyProperty>>;
+  taxIds?: Maybe<Array<Scalars['String']['output']>>;
+  tax?: Maybe<Array<IoRestorecommerceTaxTax>>;
 };
 
 export type IoRestorecommerceProductBundle = {
@@ -1362,6 +1368,7 @@ export type IoRestorecommerceProductAssociation = {
   __typename?: 'IoRestorecommerceProductAssociation';
   productId?: Maybe<Scalars['String']['output']>;
   product?: Maybe<IoRestorecommerceProductProduct>;
+  variantId?: Maybe<Scalars['String']['output']>;
   type?: Maybe<IoRestorecommerceProductAssociationType>;
   tags?: Maybe<Array<Scalars['String']['output']>>;
   data?: Maybe<GoogleProtobufAny>;
@@ -2805,8 +2812,10 @@ export type IoRestorecommerceProductPhysicalVariantResolvers<ContextType = Fulfi
   files?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceFileFile']>>, ParentType, ContextType>;
   stockKeepingUnit?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   parentVariantId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  package?: Resolver<Maybe<ResolversTypes['IoRestorecommerceProductPackage']>, ParentType, ContextType>;
   properties?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommercePropertyProperty']>>, ParentType, ContextType>;
+  taxIds?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  tax?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceTaxTax']>>, ParentType, ContextType>;
+  package?: Resolver<Maybe<ResolversTypes['IoRestorecommerceProductPackage']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -2846,6 +2855,8 @@ export type IoRestorecommerceProductServiceVariantResolvers<ContextType = Fulfil
   stockKeepingUnit?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   parentVariantId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   properties?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommercePropertyProperty']>>, ParentType, ContextType>;
+  taxIds?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  tax?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceTaxTax']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -2865,6 +2876,8 @@ export type IoRestorecommerceProductVirtualVariantResolvers<ContextType = Fulfil
   stockKeepingUnit?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   parentVariantId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   properties?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommercePropertyProperty']>>, ParentType, ContextType>;
+  taxIds?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
+  tax?: Resolver<Maybe<Array<ResolversTypes['IoRestorecommerceTaxTax']>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -2890,6 +2903,7 @@ export type IoRestorecommerceProductBundleProductResolvers<ContextType = Fulfill
 export type IoRestorecommerceProductAssociationResolvers<ContextType = FulfillmentContext, ParentType extends ResolversParentTypes['IoRestorecommerceProductAssociation'] = ResolversParentTypes['IoRestorecommerceProductAssociation']> = ResolversObject<{
   productId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   product?: Resolver<Maybe<ResolversTypes['IoRestorecommerceProductProduct']>, ParentType, ContextType>;
+  variantId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   type?: Resolver<Maybe<ResolversTypes['IoRestorecommerceProductAssociationType']>, ParentType, ContextType>;
   tags?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>;
   data?: Resolver<Maybe<ResolversTypes['GoogleProtobufAny']>, ParentType, ContextType>;

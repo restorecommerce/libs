@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.13.6](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.13.5...@restorecommerce/facade@1.13.6) (2024-03-05)
+
+
+### Bug Fixes
+
+* add empty line ([a0c94fa](https://github.com/restorecommerce/libs/commit/a0c94fae7ceca88742f896ef6ebbe1ba64b5fdde))
+
+
+
+
+
 ## [1.13.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.13.4...@restorecommerce/facade@1.13.5) (2024-03-05)
 
 

@@ -16,10 +16,10 @@ jobs:
 
       - name: Merge PR
         run: |
-          git checkout main
+          git checkout master
           git merge --ff origin/next
-          git push -u origin main
+          git push -u origin master
 
       - uses: peter-evans/repository-dispatch@v3
         with:
-          event-type: release_main
+          event-type: release_master

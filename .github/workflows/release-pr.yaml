@@ -38,6 +38,6 @@ jobs:
         run: |
           set -ex
           export PR_NUMBER=$(gh pr list -B main -H next --json number | jq -r '.[0].number')
-          if [[ "$(git rev-parse master)" == "$(git rev-parse next)" ]]; then exit 0; fi
+          if [[ "$(git rev-parse origin/master)" == "$(git rev-parse origin/next)" ]]; then exit 0; fi
           if [[ "$PR_NUMBER" == "null" ]]; then gh pr create -B main -H next -t "chore: release" -F changes.md; fi
           if [[ "$PR_NUMBER" != "null" ]]; then gh pr edit $PR_NUMBER -F changes.md; fi

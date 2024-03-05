@@ -1,0 +1,41 @@
+name: Release PR
+
+on:
+  push:
+    branches:
+      - next
+
+permissions:
+  contents: read
+
+jobs:
+  release_pr:
+    permissions:
+      issues: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Install Dependencies
+        run: npm clean-install
+
+      - name: Generate Changes
+        run: |
+          echo '# Release Changes' > changes.md
+          echo 'n' | npx lerna version --no-changelog --no-commit-hooks --no-git-tag-version --no-push 2> /dev/null | head -n -3 | tee -a changes.md
+          printf '\n---\n\n### Approve this PR to release above packages!' >> changes.md
+
+      - name: Create PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          export PR_NUMBER=$(gh pr list -B main -H next --json number | jq -r '.[0].number')
+          if [[ "$PR_NUMBER" == "null" ]]; then gh pr create -B main -H next -t "chore: release" -F changes.md; fi
+          if [[ "$PR_NUMBER" != "null" ]]; then gh pr edit $PR_NUMBER -F changes.md; fi

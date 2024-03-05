@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.7](https://github.com/restorecommerce/libs/compare/@restorecommerce/gql-bot@1.0.6...@restorecommerce/gql-bot@1.0.7) (2024-03-05)
+
+**Note:** Version bump only for package @restorecommerce/gql-bot
+
+
+
+
+
 ## [1.0.6](https://github.com/restorecommerce/libs/compare/@restorecommerce/gql-bot@1.0.5...@restorecommerce/gql-bot@1.0.6) (2024-02-01)
 
 **Note:** Version bump only for package @restorecommerce/gql-bot

@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.9](https://github.com/restorecommerce/libs/compare/@restorecommerce/dev@0.0.8...@restorecommerce/dev@0.0.9) (2024-03-05)
+
+**Note:** Version bump only for package @restorecommerce/dev
+
+
+
+
+
 ## [0.0.8](https://github.com/restorecommerce/libs/compare/@restorecommerce/dev@0.0.7...@restorecommerce/dev@0.0.8) (2024-02-27)
 
 

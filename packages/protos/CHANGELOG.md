@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.8.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.7.0...@restorecommerce/protos@6.8.0) (2024-03-05)
+
+
+### Features
+
+* **protos:** add tax_ids to Product.Variant, parenting in Order.Items ([2d66f4a](https://github.com/restorecommerce/libs/commit/2d66f4ac8831c84fd624d38c6a8e190f69a85703))
+
+
+
+
+
 # [6.7.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.6.0...@restorecommerce/protos@6.7.0) (2024-01-24)
 
 

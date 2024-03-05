@@ -72,4 +72,3 @@ const createTestFacade = () => {
 const facade = createTestFacade();
 
 facade.start();
-

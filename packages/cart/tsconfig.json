@@ -3,6 +3,7 @@
     "target": "ES2019",
     "module": "commonjs",
     "moduleResolution": "node",
+    "declaration": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,

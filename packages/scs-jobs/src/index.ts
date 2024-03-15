@@ -156,7 +156,12 @@ export const runWorker = async (queue: string, concurrency: number, cfg: any, lo
   worker.on('error', err => logger.error(`worker#${queue} error`, err));
   worker.on('closed', () => logger.verbose(`worker#${queue} closed`));
   worker.on('progress', (j, p) => logger.debug(`worker#${queue} job#${j.id} progress`, p));
-  worker.on('failed', (j, err) => logger.error(`worker#${queue} job#${j.id} failed`, err));
+  worker.on('failed', async (j, err) => {
+    logger.error(`worker#${queue} job#${j.id} failed`, err);
+    await jobEvents.emit('jobFailed', { id: j.id, schedule_type: j.data.schedule_type, error: err.message, type: j.name }).catch(err => {
+      logger.error(`Error emitting jobFailed event for ${j.name}`, err);
+    });
+  });
   worker.on('closing', msg => logger.verbose(`worker#${queue} closing: ${msg}`));
   worker.on('completed', j => logger.info(`worker#${queue} job#${j.id} completed`));
   worker.on('stalled', j => logger.warn(`worker#${queue} job#${j} stalled`));

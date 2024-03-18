@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.20](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.19...@restorecommerce/scs-jobs@0.1.20) (2024-03-18)
+
+
+### Bug Fixes
+
+* **scs-jobs:** emit job failed error to kafka as well ([ffd61e7](https://github.com/restorecommerce/libs/commit/ffd61e7008e92252e33b6d074000639a081033fa))
+
+
+
+
+
 ## [0.1.19](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.18...@restorecommerce/scs-jobs@0.1.19) (2024-03-05)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs

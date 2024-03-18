@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.22](https://github.com/restorecommerce/libs/compare/@restorecommerce/rc-grpc-clients@5.1.21...@restorecommerce/rc-grpc-clients@5.1.22) (2024-03-18)
+
+
+### Bug Fixes
+
+* **cart:** compile declarations for cart ([d9aef13](https://github.com/restorecommerce/libs/commit/d9aef13e7c14296aead00f30b144ac38735454f1))
+* **rc-grpc-client:** restorecommerce/proto is no dependency of rc-qrpc-client ([0f89165](https://github.com/restorecommerce/libs/commit/0f891650c5305f19a42e77f9ea35305c5e20a829))
+
+
+
+
+
 ## [5.1.21](https://github.com/restorecommerce/libs/compare/@restorecommerce/rc-grpc-clients@5.1.20...@restorecommerce/rc-grpc-clients@5.1.21) (2024-03-05)
 
 **Note:** Version bump only for package @restorecommerce/rc-grpc-clients

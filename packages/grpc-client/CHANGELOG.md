@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.2.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/grpc-client@2.1.2...@restorecommerce/grpc-client@2.2.0) (2024-03-18)
+
+
+### Features
+
+* **grpc-client:** Add retry mechanism to grpc-client ([b3d7320](https://github.com/restorecommerce/libs/commit/b3d7320ae660779137aa64d39f12db2b504e99d1))
+
+
+
+
+
 ## [2.1.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/grpc-client@2.1.1...@restorecommerce/grpc-client@2.1.2) (2024-03-05)
 
 **Note:** Version bump only for package @restorecommerce/grpc-client

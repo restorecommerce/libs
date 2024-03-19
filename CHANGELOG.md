@@ -1,4 +1,8 @@
 
+### 1.4.8 (March 19th, 2024)
+
+- up deps
+
 ### 1.4.7 (February 29th, 2024)
 
 - add null check

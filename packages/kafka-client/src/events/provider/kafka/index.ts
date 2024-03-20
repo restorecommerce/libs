@@ -67,16 +67,21 @@ export class Topic {
     return new Promise((resolve, reject) => {
       this.provider.admin.listTopics().then((topics) => {
         if (topics.indexOf(this.name) < 0) {
-          this.provider.admin.createTopics({
-            topics: [{
-              topic: this.name
-            }],
-          }).then(() => {
-            this.provider.logger.info(`Topic ${this.name} created successfully`);
-            resolve();
-          }).catch(err => {
-            this.provider.logger.error(`Cannot create topic ${this.name}:`,  { code: err.code, message: err.message, stack: err.stack });
-            reject(err);
+          const operation = retry.operation();
+          operation.attempt(async () => {
+            this.provider.admin.createTopics({
+              topics: [{
+                topic: this.name
+              }],
+            }).then(() => {
+              this.provider.logger.info(`Topic ${this.name} created successfully`);
+              resolve();
+            }).catch(err => {
+              this.provider.logger.error(`Cannot create topic ${this.name}:`, { code: err.code, message: err.message, stack: err.stack });
+              operation.retry(err);
+              const attemptNo = (operation.attempts as () => number)();
+              this.provider.logger.info(`Retry creating the Topic, attempt no: ${attemptNo}`);
+            });
           });
         } else {
           this.provider.logger.warn(`Topic ${this.name} already exists`);
@@ -156,7 +161,7 @@ export class Topic {
         return this.provider.admin.fetchTopicOffsets(this.name).then(data => {
           resolve(parseInt(data[0].offset, 10));
         }).catch(err => {
-          this.provider.logger.error('Error occurred retrieving topic offset:',  { code: err.code, message: err.message, stack: err.stack });
+          this.provider.logger.error('Error occurred retrieving topic offset:', { code: err.code, message: err.message, stack: err.stack });
           reject(err);
         });
       }
@@ -164,7 +169,7 @@ export class Topic {
       return this.provider.admin.fetchTopicOffsetsByTimestamp(this.name, time).then(data => {
         resolve(parseInt(data[0].offset, 10));
       }).catch(err => {
-        this.provider.logger.error('Error occurred retrieving topic offset:',  { code: err.code, message: err.message, stack: err.stack });
+        this.provider.logger.error('Error occurred retrieving topic offset:', { code: err.code, message: err.message, stack: err.stack });
         reject(err);
       });
     });
@@ -183,7 +188,7 @@ export class Topic {
           cb(null);
           return;
         }
-        this.waitQueue.push({offset, cb});
+        this.waitQueue.push({ offset, cb });
       };
     })());
   }
@@ -245,7 +250,7 @@ export class Topic {
         this.provider.logger.info(`Consumer disconnected from topic ${this.name}`);
         this.consumer = undefined;
       }).catch((err) => {
-        this.provider.logger.error(`Error occurred unsubscribing ${eventName} on topic ${this.name}`,  { code: err.code, message: err.message, stack: err.stack });
+        this.provider.logger.error(`Error occurred unsubscribing ${eventName} on topic ${this.name}`, { code: err.code, message: err.message, stack: err.stack });
       });
     }
   }
@@ -268,7 +273,7 @@ export class Topic {
         this.commit();
       } catch (error) {
         // do not commit offset
-        logger.error(`topic ${context.topic} error`,  { code: error.code, message: error.message, stack: error.stack });
+        logger.error(`topic ${context.topic} error`, { code: error.code, message: error.message, stack: error.stack });
         throw error;
       }
     }
@@ -303,7 +308,7 @@ export class Topic {
       await this.consumer.connect().then(() => {
         this.provider.logger.info(`Consumer for topic '${this.name}' connected`);
       }).catch(err => {
-        this.provider.logger.error(`Consumer for topic '${this.name}' connection error`,  { code: err.code, message: err.message, stack: err.stack });
+        this.provider.logger.error(`Consumer for topic '${this.name}' connection error`, { code: err.code, message: err.message, stack: err.stack });
       });
 
       await this.consumer.subscribe({
@@ -311,7 +316,7 @@ export class Topic {
       }).then(() => {
         this.provider.logger.info(`Consumer for topic '${this.name}' subscribed`);
       }).catch(err => {
-        this.provider.logger.error(`Consumer for topic '${this.name}' subscriber error`,  { code: err.code, message: err.message, stack: err.stack });
+        this.provider.logger.error(`Consumer for topic '${this.name}' subscriber error`, { code: err.code, message: err.message, stack: err.stack });
       });
 
       // On receiving the message on Kafka consumer put the message to async Queue.
@@ -329,7 +334,7 @@ export class Topic {
           }
         }
       }).catch(err => {
-        this.provider.logger.error(`Consumer for topic '${this.name}' failed to run`,  { code: err.code, message: err.message, stack: err.stack });
+        this.provider.logger.error(`Consumer for topic '${this.name}' failed to run`, { code: err.code, message: err.message, stack: err.stack });
       });
 
       this.consumer.seek({
@@ -360,10 +365,10 @@ export class Topic {
   }
 
   private startToReceiveMessages(): void {
-    this.asyncQueue = async.queue(({topic, partition, message}: MessageWithContext, done) => {
+    this.asyncQueue = async.queue(({ topic, partition, message }: MessageWithContext, done) => {
       if (this.drainEvent) {
         setImmediate(() => {
-          this.drainEvent({topic, partition, message}, (err) => {
+          this.drainEvent({ topic, partition, message }, (err) => {
             if (err) {
               done(err);
             }
@@ -411,7 +416,7 @@ export class Topic {
           partition: 0 // ?
         }
       ]).then(resolve).catch(err => {
-        this.provider.logger.error('Error committing offset',  { code: err.code, message: err.message, stack: err.stack });
+        this.provider.logger.error('Error committing offset', { code: err.code, message: err.message, stack: err.stack });
         reject(err);
       });
     });
@@ -451,7 +456,7 @@ export class Topic {
    * @param opts
    */
   async on(eventName: string, listener: any, opts: SubscriptionOptions = {}): Promise<void> {
-    let {startingOffset, queue, forceOffset} = opts;
+    let { startingOffset, queue, forceOffset } = opts;
     if (!(this.subscribed.indexOf(eventName) > -1)) {
       if (_.isNil(startingOffset) || (this.config.latestOffset && !forceOffset)) {
         // override the startingOffset with the latestOffset from Kafka
@@ -543,8 +548,8 @@ export class Kafka {
             },
             ...this.config.kafka,
             logCreator: () => {
-              return ({level, log}) => {
-                const {message, ...extra} = log;
+              return ({ level, log }) => {
+                const { message, ...extra } = log;
                 this.logger.log(toWinstonLogLevel(level), '[kafka-client] ' + message, extra);
               };
             },
@@ -659,7 +664,7 @@ export class Kafka {
           this.omitFields(keys, msg, this.config[eventName].enableLogging);
         }
       }
-      this.logger.debug(`Sending event ${eventName} to topic ${topicName}`, {messages});
+      this.logger.debug(`Sending event ${eventName} to topic ${topicName}`, { messages });
       return new Promise((resolve, reject) => {
         this.producer.send({
           topic: topicName,
@@ -670,12 +675,12 @@ export class Kafka {
           }
           resolve(data);
         }).catch((err) => {
-          this.logger.error(`error sending event ${eventName} to topic ${topicName}`,  { code: err.code, message: err.message, stack: err.stack });
+          this.logger.error(`error sending event ${eventName} to topic ${topicName}`, { code: err.code, message: err.message, stack: err.stack });
           reject(err);
         });
       });
     } catch (err) {
-      this.logger.error(`error on sending event ${eventName} to topic ${topicName}`,  { code: err.code, message: err.message, stack: err.stack });
+      this.logger.error(`error on sending event ${eventName} to topic ${topicName}`, { code: err.code, message: err.message, stack: err.stack });
       throw err;
     }
   }

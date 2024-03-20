@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.23](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.1.22...@restorecommerce/kafka-client@1.1.23) (2024-03-20)
+
+
+### Bug Fixes
+
+* **kafka-client:** Add retry mechanism to kafka-client ([f838d31](https://github.com/restorecommerce/kafka-client/commit/f838d31e9ec62bf96861dd00cb9c2780a22bb415))
+
+
+
+
+
 ## [1.1.22](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.1.21...@restorecommerce/kafka-client@1.1.22) (2024-03-18)
 
 **Note:** Version bump only for package @restorecommerce/kafka-client

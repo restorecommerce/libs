@@ -4,6 +4,7 @@ import type Application from 'koa';
 import { Events, registerProtoMeta } from '@restorecommerce/kafka-client';
 import { createServiceConfig } from '@restorecommerce/service-config';
 import { protoMetadata as commandInterfaceMeta } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/commandinterface.js';
+import * as retry from 'retry';
 
 // const Router = require('koa-router');
 
@@ -93,11 +94,17 @@ const initApiKey = (logger: Logger, apiKey: boolean | string) => {
   } else {
     bootstrapApiKey = apiKey as string;
   }
-  exectueSetAPIKeyCommand(bootstrapApiKey, logger).then((resp) => {
-    logger.info('SetApiKey command response', resp);
-    logger.info(`Bootstrap API Key is: ${bootstrapApiKey}`);
-  }).catch(err => {
-    logger.error('Error executing setApiKey command', err);
+  const operation = retry.operation();
+  operation.attempt(async () => {
+    exectueSetAPIKeyCommand(bootstrapApiKey, logger).then((resp) => {
+      logger.info('SetApiKey command response', resp);
+      logger.info(`Bootstrap API Key is: ${bootstrapApiKey}`);
+    }).catch(err => {
+      logger.error('Error executing setApiKey command', err);
+      operation.retry(err);
+      const attemptNo = (operation.attempts as () => number)();
+      logger.info(`Retry exectueSetAPIKeyCommand, attempt no: ${attemptNo}`);
+    });
   });
 };
 

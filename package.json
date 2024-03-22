@@ -21,8 +21,8 @@
   "homepage": "https://github.com/restorecommerce/libs#readme",
   "devDependencies": {
     "cz-conventional-changelog": "^3.3.0",
-    "lerna": "^8.0.2",
-    "nx": "^17.2.8",
+    "lerna": "^8.1.2",
+    "nx": "^18.1.2",
     "eslint-plugin-unicorn": "^50.0.1",
     "eslint-plugin-file-extension-in-import-ts": "^2.1.0"
   },

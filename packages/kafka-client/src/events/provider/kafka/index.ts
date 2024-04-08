@@ -410,7 +410,7 @@ export class Topic {
         }
       });
     } else {
-      // do manual commit from microservice after consuming and processing the message.
+      this.commitOffset();
     }
   }
 
@@ -427,6 +427,20 @@ export class Topic {
         reject(err);
       });
     });
+  }
+
+  /**
+   * Manually commit the current offset.
+   */
+  async commitOffset(): Promise<void> {
+    try {
+      // Commit the current offset
+      await this.commitCurrentOffsets();
+      this.provider.logger.verbose('Offset committed manually');
+    } catch (error) {
+      this.provider.logger.error('Failed to commit offset manually', { code: error.code, message: error.message, stack: error.stack });
+      throw error;
+    }
   }
 
   /**

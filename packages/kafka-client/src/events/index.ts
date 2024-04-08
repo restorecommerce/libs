@@ -98,7 +98,7 @@ export class Events {
    * @param  {string} name Topic name
    * @return {Topic}      Topic
    */
-  topic(name: string): Promise<Topic> {
+  topic(name: string, manualOffsetCommit: boolean): Promise<Topic> {
     if (_.isNil(name)) {
       throw new Error('missing argument name');
     }
@@ -107,6 +107,6 @@ export class Events {
     }
     // topic() api called inside Local / Kafka class - which then
     // invokes the actual topic constructor
-    return this.provider.topic(name, this.config);
+    return this.provider.topic(name, this.config, manualOffsetCommit);
   }
 }

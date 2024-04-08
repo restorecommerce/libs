@@ -423,6 +423,20 @@ export class Topic {
   }
 
   /**
+   * Manually commit the current offset.
+   */
+  async commitOffset(): Promise<void> {
+    try {
+      // Commit the current offset
+      await this.commitCurrentOffsets();
+      this.provider.logger.verbose('Offset committed manually');
+    } catch (error) {
+      this.provider.logger.error('Failed to commit offset manually', { code: error.code, message: error.message, stack: error.stack });
+      throw error;
+    }
+  }
+
+  /**
    * Internal function for receiving event messages from Kafka and
    * forwarding them to local listeners.
    * @param {string} eventName
@@ -439,6 +453,9 @@ export class Topic {
         this.provider.logger.debug(`kafka received event with topic ${context.topic} and event name ${eventName}`, { decodedMsg });
         this.emitter.emit(eventName, decodedMsg, context,
           this.config, eventName);
+
+        // Manual offset commit
+        this.commitOffset();
       }
     }
   }

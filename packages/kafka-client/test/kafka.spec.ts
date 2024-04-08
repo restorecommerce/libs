@@ -43,9 +43,11 @@ describe('Kafka provider test', () => {
   const client: Events = new Events(kafkaConfig.events.kafka, logger);
   const topicName = 'com.example.test';
   const eventName = 'exampleEvent';
+  let initialOffset: number;
   before(async () => {
     // start the client
     await client.start();
+    initialOffset = await (await client.topic(topicName)).$offset(-1);
   });
   after(async function() {
     // stop the client
@@ -112,5 +114,39 @@ describe('Kafka provider test', () => {
         should.exist(countArr);
         countArr.length.should.equal(5);
       });
+  });
+
+  describe('Manual Commit', () => {
+    it('should manually commit offset after processing message', async () => {
+      // Create topic object
+      const topic: Topic = await client.topic(topicName);
+      let offset: number;
+
+      // Subscribe to topic for example-event with listener as callback.
+      await topic.on(eventName, async (message, context) => {
+        // Ensure that message is processed
+        should.exist(message);
+        // Simulate processing time
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
+        // Manually commit offset after processing the message
+        await topic.commitOffset();
+      });
+
+      // Get the current offset
+      offset = await topic.$offset(-1);
+
+      // Emit the message to Kafka
+      await topic.emit(eventName, { value: 'value', count: 1 });
+
+      // Wait for processing to complete
+      await new Promise(resolve => setTimeout(resolve, 2000));
+
+      // Get the latest offset after processing
+      const finalOffset = await topic.$offset(-1);
+
+      // Verify that offset has been manually committed and updated accordingly
+      should(finalOffset).be.above(initialOffset);
+    });
   });
 });

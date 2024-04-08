@@ -130,7 +130,7 @@ describe('Kafka provider test', () => {
         await new Promise(resolve => setTimeout(resolve, 1000));
 
         // Manually commit offset after processing the message
-        await topic.commitOffset();
+        await topic.commitCurrentOffsets();
       });
 
       // Get the current offset

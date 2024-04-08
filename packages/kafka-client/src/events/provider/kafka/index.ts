@@ -41,6 +41,7 @@ export class Topic {
   drainEvent: (context: MessageWithContext, done: (err) => void) => void;
   // default process one message at at time
   asyncLimit = 1;
+  manualOffsetCommit: boolean;
 
   /**
    * Kafka topic.
@@ -53,7 +54,7 @@ export class Topic {
    * @param provider
    * @param config
    */
-  constructor(name: string, provider: Kafka, config: any) {
+  constructor(name: string, provider: Kafka, config: any, manualOffsetCommit = false) {
     this.name = name;
     this.emitter = new EventEmitter();
     this.provider = provider;
@@ -61,6 +62,7 @@ export class Topic {
     this.waitQueue = [];
     this.currentOffset = 0;
     this.config = config;
+    this.manualOffsetCommit = manualOffsetCommit;
   }
 
   async createIfNotExists(): Promise<void> {
@@ -392,19 +394,24 @@ export class Topic {
   }
 
   private commit(): any {
-    this.commitCurrentOffsets().then(() => {
-      this.provider.logger.verbose('Offsets committed successfully');
-    }).catch(error => {
-      this.provider.logger.warn('Failed to commit offsets, resuming anyway after:', error);
-      // Fix for kafkaJS onCrash issue for KafkaJSNonRetriableError, to reset the consumers
-      this.provider.logger.warn('Commit error name', { name: error.name });
-      this.provider.logger.warn('Commit error message', { message: error.message });
-      if ((error.name === 'KafkaJSNonRetriableError' || error.name === 'KafkaJSError') && error.message === 'The coordinator is not aware of this member') {
-        this.provider.logger.info('Reset Consumer connection due to KafkaJSNonRetriableError');
-        this.$resetConsumer(this.subscribed, this.currentOffset);
-        this.provider.logger.info('Consumer connection reset successfully');
-      }
-    });
+    // Check if manual offset commit is enabled
+    if (!this.manualOffsetCommit) {
+      this.commitCurrentOffsets().then(() => {
+        this.provider.logger.verbose('Offsets committed successfully');
+      }).catch(error => {
+        this.provider.logger.warn('Failed to commit offsets, resuming anyway after:', error);
+        // Fix for kafkaJS onCrash issue for KafkaJSNonRetriableError, to reset the consumers
+        this.provider.logger.warn('Commit error name', { name: error.name });
+        this.provider.logger.warn('Commit error message', { message: error.message });
+        if ((error.name === 'KafkaJSNonRetriableError' || error.name === 'KafkaJSError') && error.message === 'The coordinator is not aware of this member') {
+          this.provider.logger.info('Reset Consumer connection due to KafkaJSNonRetriableError');
+          this.$resetConsumer(this.subscribed, this.currentOffset);
+          this.provider.logger.info('Consumer connection reset successfully');
+        }
+      });
+    } else {
+      // do manual commit from microservice after consuming and processing the message.
+    }
   }
 
   async commitCurrentOffsets(): Promise<void> {
@@ -420,20 +427,6 @@ export class Topic {
         reject(err);
       });
     });
-  }
-
-  /**
-   * Manually commit the current offset.
-   */
-  async commitOffset(): Promise<void> {
-    try {
-      // Commit the current offset
-      await this.commitCurrentOffsets();
-      this.provider.logger.verbose('Offset committed manually');
-    } catch (error) {
-      this.provider.logger.error('Failed to commit offset manually', { code: error.code, message: error.message, stack: error.stack });
-      throw error;
-    }
   }
 
   /**
@@ -453,9 +446,6 @@ export class Topic {
         this.provider.logger.debug(`kafka received event with topic ${context.topic} and event name ${eventName}`, { decodedMsg });
         this.emitter.emit(eventName, decodedMsg, context,
           this.config, eventName);
-
-        // Manual offset commit
-        this.commitOffset();
       }
     }
   }

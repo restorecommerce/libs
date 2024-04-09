@@ -409,8 +409,6 @@ export class Topic {
           this.provider.logger.info('Consumer connection reset successfully');
         }
       });
-    } else {
-      this.commitOffset();
     }
   }
 

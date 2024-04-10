@@ -45,6 +45,7 @@ message LocaleResponse {
 message Locale {
   optional string id = 1;
   optional io.restorecommerce.meta.Meta meta = 2;
-  optional string value = 3;
+  optional string value = 3; // official symbole
   optional string description = 4;
+  optional string name = 5; // display name
 }

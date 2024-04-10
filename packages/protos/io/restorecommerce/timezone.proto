@@ -42,8 +42,19 @@ message TimezoneResponse {
   optional io.restorecommerce.status.Status status = 2;
 }
 
+message TimezoneOffset {
+  optional int32 hours = 1;
+  optional int32 minutes = 2;
+}
+
 message Timezone {
   optional string id = 1;
   optional io.restorecommerce.meta.Meta meta = 2;
-  optional string description = 3;
+  optional string name = 3; // display name
+  optional string value = 4; // official name
+  optional string abbreviation_std = 5;
+  optional string abbreviation_dst = 6;
+  optional TimezoneOffset offset_std = 7;
+  optional TimezoneOffset offset_dst = 8;
+  optional string description = 9;
 }

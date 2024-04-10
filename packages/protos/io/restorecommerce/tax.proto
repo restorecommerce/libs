@@ -69,4 +69,6 @@ message Tax {
       field_name: "type",
     }
   ];
+  optional string name = 7;
+  optional string abbreviation = 8;
 }

@@ -125,15 +125,7 @@ message IndividualProduct {
       }
     ];
   }
-  repeated string tax_ids = 8 [
-    (io.restorecommerce.options.resolver) = {
-      target_type: ".io.restorecommerce.tax.Tax",
-      target_service: "master_data",
-      target_sub_service: "tax",
-      target_method: "Read",
-      field_name: "tax",
-    }
-  ];
+  repeated string tax_ids = 8;
   optional string gtin = 10;
   oneof nature {
     PhysicalProduct physical = 11;
@@ -188,15 +180,7 @@ message PhysicalVariant {
   optional string stock_keeping_unit = 8;
   optional string parent_variant_id = 9;
   repeated io.restorecommerce.property.Property properties = 10;
-  repeated string tax_ids = 11 [
-    (io.restorecommerce.options.resolver) = {
-      target_type: ".io.restorecommerce.tax.Tax",
-      target_service: "master_data",
-      target_sub_service: "tax",
-      target_method: "Read",
-      field_name: "tax",
-    }
-  ];
+  repeated string tax_ids = 11;
   optional Package package = 12;
 }
 
@@ -211,15 +195,7 @@ message ServiceVariant {
   optional string stock_keeping_unit = 8;
   optional string parent_variant_id = 9;
   repeated io.restorecommerce.property.Property properties = 10;
-  repeated string tax_ids = 11 [
-    (io.restorecommerce.options.resolver) = {
-      target_type: ".io.restorecommerce.tax.Tax",
-      target_service: "master_data",
-      target_sub_service: "tax",
-      target_method: "Read",
-      field_name: "tax",
-    }
-  ];
+  repeated string tax_ids = 11;
 }
 
 message VirtualVariant {
@@ -233,15 +209,7 @@ message VirtualVariant {
   optional string stock_keeping_unit = 8;
   optional string parent_variant_id = 9;
   repeated io.restorecommerce.property.Property properties = 10;
-  repeated string tax_ids = 11 [
-    (io.restorecommerce.options.resolver) = {
-      target_type: ".io.restorecommerce.tax.Tax",
-      target_service: "master_data",
-      target_sub_service: "tax",
-      target_method: "Read",
-      field_name: "tax",
-    }
-  ];
+  repeated string tax_ids = 11;
 }
 
 message Bundle {

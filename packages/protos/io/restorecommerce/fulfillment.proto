@@ -90,14 +90,14 @@ service FulfillmentService {
 }
 
 enum State {
-  FAILED = 0;
+  PENDING = 0;
   INVALID = 1;
-  CREATED = 2;
-  SUBMITTED = 3;
-  IN_TRANSIT = 4;
-  FULFILLED = 5;
-  WITHDRAWN = 6;
-  CANCELLED = 7;
+  SUBMITTED = 2;
+  IN_TRANSIT = 3;
+  COMPLETED = 4;
+  WITHDRAWN = 5;
+  CANCELLED = 6;
+  FAILED = 7;
 }
 
 message Item {

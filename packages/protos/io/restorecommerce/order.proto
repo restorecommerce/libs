@@ -21,6 +21,7 @@ import "io/restorecommerce/invoice.proto";
 import "io/restorecommerce/user.proto";
 import "io/restorecommerce/customer.proto";
 import "io/restorecommerce/shop.proto";
+import "io/restorecommerce/product.proto";
 
 
 service OrderService {
@@ -50,14 +51,13 @@ service OrderService {
 }
 
 enum OrderState {
-  FAILED = 0;
+  PENDING = 0;
   INVALID = 1;
-  CREATED = 2;
-  SUBMITTED = 3;
-  IN_PROCESS = 4;
-  DONE = 5;
-  WITHDRAWN = 6;
-  CANCELLED = 7;
+  SUBMITTED = 2;
+  COMPLETED = 3;
+  WITHDRAWN = 4;
+  CANCELLED = 5;
+  FAILED = 6;
 }
 
 enum FulfillmentInvoiceMode {

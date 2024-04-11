@@ -339,7 +339,19 @@ export type IoRestorecommerceTimezoneTimezone = {
   __typename?: 'IoRestorecommerceTimezoneTimezone';
   id?: Maybe<Scalars['String']['output']>;
   meta?: Maybe<IoRestorecommerceMetaMeta>;
+  name?: Maybe<Scalars['String']['output']>;
+  value?: Maybe<Scalars['String']['output']>;
+  abbreviationStd?: Maybe<Scalars['String']['output']>;
+  abbreviationDst?: Maybe<Scalars['String']['output']>;
+  offsetStd?: Maybe<IoRestorecommerceTimezoneTimezoneOffset>;
+  offsetDst?: Maybe<IoRestorecommerceTimezoneTimezoneOffset>;
   description?: Maybe<Scalars['String']['output']>;
+};
+
+export type IoRestorecommerceTimezoneTimezoneOffset = {
+  __typename?: 'IoRestorecommerceTimezoneTimezoneOffset';
+  hours?: Maybe<Scalars['Int']['output']>;
+  minutes?: Maybe<Scalars['Int']['output']>;
 };
 
 export type ResourceContactPointTypeQuery = {
@@ -468,6 +480,7 @@ export type IoRestorecommerceLocaleLocale = {
   meta?: Maybe<IoRestorecommerceMetaMeta>;
   value?: Maybe<Scalars['String']['output']>;
   description?: Maybe<Scalars['String']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
 };
 
 export type IoRestorecommerceImageImage = {
@@ -824,6 +837,8 @@ export type IoRestorecommerceTaxTax = {
   variant?: Maybe<Scalars['String']['output']>;
   typeId?: Maybe<Scalars['String']['output']>;
   type?: Maybe<IoRestorecommerceTaxTypeTaxType>;
+  name?: Maybe<Scalars['String']['output']>;
+  abbreviation?: Maybe<Scalars['String']['output']>;
 };
 
 export type ResourceUnitCodeQuery = {
@@ -1142,7 +1157,18 @@ export type IIoRestorecommerceTimezoneTimezoneList = {
 export type IIoRestorecommerceTimezoneTimezone = {
   id?: InputMaybe<Scalars['String']['input']>;
   meta?: InputMaybe<IIoRestorecommerceMetaMeta>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  value?: InputMaybe<Scalars['String']['input']>;
+  abbreviationStd?: InputMaybe<Scalars['String']['input']>;
+  abbreviationDst?: InputMaybe<Scalars['String']['input']>;
+  offsetStd?: InputMaybe<IIoRestorecommerceTimezoneTimezoneOffset>;
+  offsetDst?: InputMaybe<IIoRestorecommerceTimezoneTimezoneOffset>;
   description?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type IIoRestorecommerceTimezoneTimezoneOffset = {
+  hours?: InputMaybe<Scalars['Int']['input']>;
+  minutes?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type ResourceContactPointTypeMutation = {
@@ -1287,6 +1313,7 @@ export type IIoRestorecommerceLocaleLocale = {
   meta?: InputMaybe<IIoRestorecommerceMetaMeta>;
   value?: InputMaybe<Scalars['String']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type ResourceLocationMutation = {
@@ -1475,6 +1502,8 @@ export type IIoRestorecommerceTaxTax = {
   rate?: InputMaybe<Scalars['Float']['input']>;
   variant?: InputMaybe<Scalars['String']['input']>;
   typeId?: InputMaybe<Scalars['String']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  abbreviation?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type ResourceUnitCodeMutation = {
@@ -1697,6 +1726,7 @@ export type ResolversTypes = ResolversObject<{
   IoRestorecommerceTimezoneTimezoneListResponse: ResolverTypeWrapper<IoRestorecommerceTimezoneTimezoneListResponse>;
   IoRestorecommerceTimezoneTimezoneResponse: ResolverTypeWrapper<IoRestorecommerceTimezoneTimezoneResponse>;
   IoRestorecommerceTimezoneTimezone: ResolverTypeWrapper<IoRestorecommerceTimezoneTimezone>;
+  IoRestorecommerceTimezoneTimezoneOffset: ResolverTypeWrapper<IoRestorecommerceTimezoneTimezoneOffset>;
   ResourceContactPointTypeQuery: ResolverTypeWrapper<ResourceContactPointTypeQuery>;
   ProtoIoRestorecommerceContactPointTypeContactPointTypeListResponse: ResolverTypeWrapper<ProtoIoRestorecommerceContactPointTypeContactPointTypeListResponse>;
   IoRestorecommerceContactPointTypeContactPointTypeListResponse: ResolverTypeWrapper<IoRestorecommerceContactPointTypeContactPointTypeListResponse>;
@@ -1791,6 +1821,7 @@ export type ResolversTypes = ResolversObject<{
   ResourceTimezoneMutation: ResolverTypeWrapper<ResourceTimezoneMutation>;
   IIoRestorecommerceTimezoneTimezoneList: IIoRestorecommerceTimezoneTimezoneList;
   IIoRestorecommerceTimezoneTimezone: IIoRestorecommerceTimezoneTimezone;
+  IIoRestorecommerceTimezoneTimezoneOffset: IIoRestorecommerceTimezoneTimezoneOffset;
   ResourceContactPointTypeMutation: ResolverTypeWrapper<ResourceContactPointTypeMutation>;
   IIoRestorecommerceContactPointTypeContactPointTypeList: IIoRestorecommerceContactPointTypeContactPointTypeList;
   IIoRestorecommerceContactPointTypeContactPointType: IIoRestorecommerceContactPointTypeContactPointType;
@@ -1877,6 +1908,7 @@ export type ResolversParentTypes = ResolversObject<{
   IoRestorecommerceTimezoneTimezoneListResponse: IoRestorecommerceTimezoneTimezoneListResponse;
   IoRestorecommerceTimezoneTimezoneResponse: IoRestorecommerceTimezoneTimezoneResponse;
   IoRestorecommerceTimezoneTimezone: IoRestorecommerceTimezoneTimezone;
+  IoRestorecommerceTimezoneTimezoneOffset: IoRestorecommerceTimezoneTimezoneOffset;
   ResourceContactPointTypeQuery: ResourceContactPointTypeQuery;
   ProtoIoRestorecommerceContactPointTypeContactPointTypeListResponse: ProtoIoRestorecommerceContactPointTypeContactPointTypeListResponse;
   IoRestorecommerceContactPointTypeContactPointTypeListResponse: IoRestorecommerceContactPointTypeContactPointTypeListResponse;
@@ -1964,6 +1996,7 @@ export type ResolversParentTypes = ResolversObject<{
   ResourceTimezoneMutation: ResourceTimezoneMutation;
   IIoRestorecommerceTimezoneTimezoneList: IIoRestorecommerceTimezoneTimezoneList;
   IIoRestorecommerceTimezoneTimezone: IIoRestorecommerceTimezoneTimezone;
+  IIoRestorecommerceTimezoneTimezoneOffset: IIoRestorecommerceTimezoneTimezoneOffset;
   ResourceContactPointTypeMutation: ResourceContactPointTypeMutation;
   IIoRestorecommerceContactPointTypeContactPointTypeList: IIoRestorecommerceContactPointTypeContactPointTypeList;
   IIoRestorecommerceContactPointTypeContactPointType: IIoRestorecommerceContactPointTypeContactPointType;
@@ -2213,7 +2246,19 @@ export type IoRestorecommerceTimezoneTimezoneResponseResolvers<ContextType = Res
 export type IoRestorecommerceTimezoneTimezoneResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceTimezoneTimezone'] = ResolversParentTypes['IoRestorecommerceTimezoneTimezone']> = ResolversObject<{
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  value?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  abbreviationStd?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  abbreviationDst?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  offsetStd?: Resolver<Maybe<ResolversTypes['IoRestorecommerceTimezoneTimezoneOffset']>, ParentType, ContextType>;
+  offsetDst?: Resolver<Maybe<ResolversTypes['IoRestorecommerceTimezoneTimezoneOffset']>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
+export type IoRestorecommerceTimezoneTimezoneOffsetResolvers<ContextType = ResourceContext, ParentType extends ResolversParentTypes['IoRestorecommerceTimezoneTimezoneOffset'] = ResolversParentTypes['IoRestorecommerceTimezoneTimezoneOffset']> = ResolversObject<{
+  hours?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  minutes?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -2332,6 +2377,7 @@ export type IoRestorecommerceLocaleLocaleResolvers<ContextType = ResourceContext
   meta?: Resolver<Maybe<ResolversTypes['IoRestorecommerceMetaMeta']>, ParentType, ContextType>;
   value?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -2640,6 +2686,8 @@ export type IoRestorecommerceTaxTaxResolvers<ContextType = ResourceContext, Pare
   variant?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   typeId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   type?: Resolver<Maybe<ResolversTypes['IoRestorecommerceTaxTypeTaxType']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  abbreviation?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -2895,6 +2943,7 @@ export type Resolvers<ContextType = ResourceContext> = ResolversObject<{
   IoRestorecommerceTimezoneTimezoneListResponse?: IoRestorecommerceTimezoneTimezoneListResponseResolvers<ContextType>;
   IoRestorecommerceTimezoneTimezoneResponse?: IoRestorecommerceTimezoneTimezoneResponseResolvers<ContextType>;
   IoRestorecommerceTimezoneTimezone?: IoRestorecommerceTimezoneTimezoneResolvers<ContextType>;
+  IoRestorecommerceTimezoneTimezoneOffset?: IoRestorecommerceTimezoneTimezoneOffsetResolvers<ContextType>;
   ResourceContactPointTypeQuery?: ResourceContactPointTypeQueryResolvers<ContextType>;
   ProtoIoRestorecommerceContactPointTypeContactPointTypeListResponse?: ProtoIoRestorecommerceContactPointTypeContactPointTypeListResponseResolvers<ContextType>;
   IoRestorecommerceContactPointTypeContactPointTypeListResponse?: IoRestorecommerceContactPointTypeContactPointTypeListResponseResolvers<ContextType>;

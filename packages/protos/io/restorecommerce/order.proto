@@ -52,12 +52,10 @@ service OrderService {
 
 enum OrderState {
   PENDING = 0;
-  INVALID = 1;
-  SUBMITTED = 2;
-  COMPLETED = 3;
-  WITHDRAWN = 4;
-  CANCELLED = 5;
-  FAILED = 6;
+  SUBMITTED = 1;
+  COMPLETED = 2;
+  WITHDRAWN = 3;
+  CANCELLED = 4;
 }
 
 enum FulfillmentInvoiceMode {

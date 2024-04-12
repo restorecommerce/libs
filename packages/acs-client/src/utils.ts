@@ -43,21 +43,23 @@ const reduceUserScope = (hrScope: HierarchicalScope, reducedUserScope: string[],
   }
 };
 
-const checkTargetScopeExists = (hrScope: HierarchicalScope, targetScope: string,
+const checkTargetScopeExists = (hrScopes: HierarchicalScope[], targetScope: string,
   reducedUserScope: string[], hierarchicalRoleScopingCheck: string): boolean => {
-  if (hrScope?.id === targetScope) {
-    // found the target scope object, iterate and put the orgs in reducedUserScope array
-    logger.debug(`Target entity match found in the user's hierarchical scope`);
-    reduceUserScope(hrScope, reducedUserScope, hierarchicalRoleScopingCheck);
-    return true;
-  } else if (hrScope?.children?.length > 0 && hierarchicalRoleScopingCheck === 'true') {
-    for (let childNode of hrScope.children) {
-      if (checkTargetScopeExists(childNode, targetScope, reducedUserScope, hierarchicalRoleScopingCheck)) {
-        return true;
+  return hrScopes.some((hrScope) => {
+    if (hrScope?.id === targetScope) {
+      // found the target scope object, iterate and put the orgs in reducedUserScope array
+      logger.debug(`Target entity match found in the user's hierarchical scope`);
+      reduceUserScope(hrScope, reducedUserScope, hierarchicalRoleScopingCheck);
+      return true;
+    } else if (hrScope?.children?.length > 0 && hierarchicalRoleScopingCheck === 'true') {
+      for (let childNode of hrScope.children) {
+        if (checkTargetScopeExists([childNode], targetScope, reducedUserScope, hierarchicalRoleScopingCheck)) {
+          return true;
+        }
       }
     }
-  }
-  return false;
+    return false;
+  });
 };
 
 const checkSubjectMatch = (user: ResolvedSubject, ruleSubjectAttributes: Attribute[],
@@ -66,10 +68,7 @@ const checkSubjectMatch = (user: ResolvedSubject, ruleSubjectAttributes: Attribu
   // role URN exists
   // 2) Now check if the subject rule role value matches with one of the users ctx role_associations
   // then get the corresponding scope instance and check if the targetScope is present in user HR scope Object
-  let roleScopeEntExists = false;
-  let roleValueExists = false;
-  // by default HR scoping check is considered
-  let hierarchicalRoleScopingCheck = 'true';
+  let hierarchicalRoleScopingCheck = 'true'; // by default HR scoping check is considered
   let ruleRoleValue;
   let ruleRoleScopeEntityName;
   const urns = cfg.get('authorization:urns');
@@ -81,60 +80,47 @@ const checkSubjectMatch = (user: ResolvedSubject, ruleSubjectAttributes: Attribu
       return true;
     }
     if (attribute?.id === urns.roleScopingEntity) {
-      roleScopeEntExists = true;
       ruleRoleScopeEntityName = attribute.value;
     } else if (attribute.id === urns.role) { // urns.role -> urn:restorecommerce:acs:names:role
-      roleValueExists = true;
       ruleRoleValue = attribute.value;
     } else if (attribute?.id === urns.hierarchicalRoleScoping) {
       hierarchicalRoleScopingCheck = attribute.value;
     }
   }
 
-  let userAssocScope;
-  if (roleScopeEntExists && roleValueExists) {
-    if (user?.role_associations?.length > 0) {
-      for (let role of user?.role_associations) {
-        if (role?.role === ruleRoleValue) {
-          // check the targetScope exists in the user HR scope object
-          let roleScopeEntityNameMatched = false;
-          for (let roleAttrs of role?.attributes) {
-            // urn:restorecommerce:acs:names:roleScopingInstance
-            if (roleAttrs?.id === urns.roleScopingEntity &&
-              roleAttrs?.value === ruleRoleScopeEntityName) {
-              roleScopeEntityNameMatched = true;
+  if (ruleRoleValue && ruleRoleScopeEntityName) {
+    const matchingRoleScopedInstance: string[] = user?.role_associations?.filter((roleObj) => {
+      return roleObj?.attributes?.some((roleAttributeObj) => {
+        if (roleAttributeObj?.id === urns?.roleScopingEntity
+          && roleAttributeObj?.value === ruleRoleScopeEntityName) {
+          return roleAttributeObj?.attributes?.some((roleScopingInstanceObj) => {
+            if (roleScopingInstanceObj?.id === urns?.roleScopingInstance) {
+              return roleScopingInstanceObj?.value;
             }
-            if (roleScopeEntityNameMatched && roleAttrs?.attributes?.length > 0) {
-              for (let roleScopeInstObj of roleAttrs.attributes) {
-                if (roleScopeInstObj.id === urns.roleScopingInstance) {
-                  userAssocScope = roleScopeInstObj.value;
-                  break;
-                }
-              }
-            }
-          }
-
-          // check if this userAssocScope's HR object contains the targetScope
-          const userAssocHRScope =  user?.hierarchical_scopes.find(
-            hrScope => hrScope?.id === userAssocScope
-          );
-
-          // check HR scope matching for subject if hierarchicalRoleScopingCheck is 'true'
-          if (!userAssocHRScope) {
-            return false;
-          }
-          else if (checkTargetScopeExists(
-            userAssocHRScope,
-            user.scope,
-            reducedUserScope,
-            hierarchicalRoleScopingCheck
-          )) {
-            return true;
-          }
+          });
         }
-      }
+      });
+    }).flatMap((roleObj) => roleObj?.attributes?.map(
+      roleObjAttr => roleObjAttr?.attributes?.map((attrInstObj) => attrInstObj.value)[0]
+    ));
+
+    // validate HR scope root ID contains the role scope instances
+    const hrScopeExist = user?.hierarchical_scopes?.every((hrScope) => matchingRoleScopedInstance.includes(hrScope.id));
+    if (!hrScopeExist) {
+      logger.info('Hierarchial scopes for matching role does not exist', { role: ruleRoleValue, instances: matchingRoleScopedInstance });
+      return false;
+    } else if (hrScopeExist && user.scope) {
+      return checkTargetScopeExists(
+        user?.hierarchical_scopes?.filter((hrScope) => matchingRoleScopedInstance.includes(hrScope.id)),
+        user.scope,
+        reducedUserScope,
+        hierarchicalRoleScopingCheck
+      );
+    } else {
+      // HR scope match exist but user has not provided scope so still a match is considered
+      return hrScopeExist;
     }
-  } else if (roleValueExists) {
+  } else if (ruleRoleValue) {
     return user?.role_associations?.some(
       ra => ra.role === ruleRoleValue
     );
@@ -347,8 +333,8 @@ export const buildFilterPermissions = async (
     }
   }
   else {
-    subject.hierarchical_scopes ??= [];
-    subject.role_associations ??= [];
+    subject.hierarchical_scopes ??=[];
+    subject.role_associations ??=[];
   }
 
   const urns = cfg.get('authorization:urns');

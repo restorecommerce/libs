@@ -62,7 +62,7 @@ export const createActionTarget = (action: any): Attribute[] => {
   }
 };
 
-export const createSubjectTarget = (subject: DeepPartial<Subject>, orgScopeURN): Attribute[] => {
+export const createSubjectTarget = (subject: DeepPartial<Subject>): Attribute[] => {
   if (subject.unauthenticated) {
     return [{
       id: urns.unauthenticated_user,
@@ -79,16 +79,11 @@ export const createSubjectTarget = (subject: DeepPartial<Subject>, orgScopeURN):
   ];
 
   if (subject.scope) {
-    orgScopeURN = orgScopeURN ? orgScopeURN : 'urn:restorecommerce:acs:model:organization.Organization';
     flattened = flattened.concat([
       {
-        id: urns.roleScopingEntity,
-        value: orgScopeURN,
-        attributes: [{
-          id: urns.roleScopingInstance,
-          value: subject.scope,
-          attributes: []
-        }]
+        id: urns.roleScopingInstance,
+        value: subject.scope,
+        attributes: []
       }
     ]);
   }
@@ -199,11 +194,11 @@ export class UnAuthZ implements IAuthZ {
   }
 
   async isAllowed(request: Request<NoAuthTarget, AuthZContext>,
-    ctx: ACSClientContext, useCache: boolean, roleScopingEntityURN: string): Promise<DecisionResponse> {
+    ctx: ACSClientContext, useCache: boolean): Promise<DecisionResponse> {
     const authZRequest = {
       target: {
         actions: createActionTarget(request.target.actions),
-        subjects: createSubjectTarget(request.target.subjects, roleScopingEntityURN),
+        subjects: createSubjectTarget(request.target.subjects),
         resources: createResourceTarget(request.target.resources, request.target.actions)
       },
       context: {
@@ -246,11 +241,11 @@ export class UnAuthZ implements IAuthZ {
   }
 
   async whatIsAllowed(request: Request<NoAuthWhatIsAllowedTarget, AuthZContext>,
-    ctx: ACSClientContext, useCache: boolean, roleScopingEntityURN: string): Promise<PolicySetRQResponse> {
+    ctx: ACSClientContext, useCache: boolean): Promise<PolicySetRQResponse> {
     const authZRequest = {
       target: {
         actions: createActionTarget(request.target.actions),
-        subjects: createSubjectTarget(request.target.subjects, roleScopingEntityURN),
+        subjects: createSubjectTarget(request.target.subjects),
         resources: createResourceTarget(request.target.resources, request.target.actions)
       },
       context: {
@@ -309,8 +304,8 @@ export class ACSAuthZ implements IAuthZ {
    * @param useCache
    * @returns {DecisionResponse}
    */
-  async isAllowed(request: Request<AuthZTarget, AuthZContext>, ctx: ACSClientContext, useCache, roleScopingEntityURN: string): Promise<DecisionResponse> {
-    const authZRequest = this.prepareRequest(request, roleScopingEntityURN);
+  async isAllowed(request: Request<AuthZTarget, AuthZContext>, ctx: ACSClientContext, useCache): Promise<DecisionResponse> {
+    const authZRequest = this.prepareRequest(request);
     authZRequest.context = {
       subject: {},
       resources: [],
@@ -370,8 +365,8 @@ export class ACSAuthZ implements IAuthZ {
   * @param resource
   */
   async whatIsAllowed(request: Request<AuthZWhatIsAllowedTarget, AuthZContext>,
-    ctx: ACSClientContext, useCache: boolean, roleScopingEntityURN: string): Promise<PolicySetRQResponse> {
-    const authZRequest = this.prepareRequest(request, roleScopingEntityURN);
+    ctx: ACSClientContext, useCache: boolean): Promise<PolicySetRQResponse> {
+    const authZRequest = this.prepareRequest(request);
     authZRequest.context = {
       subject: {},
       resources: [],
@@ -431,12 +426,12 @@ export class ACSAuthZ implements IAuthZ {
     }
   }
 
-  prepareRequest(request: Request<AuthZTarget | AuthZWhatIsAllowedTarget, AuthZContext>, roleScopingEntityURN): any {
+  prepareRequest(request: Request<AuthZTarget | AuthZWhatIsAllowedTarget, AuthZContext>): any {
     let { subjects, resources, actions } = request.target;
     const authZRequest: any = {
       target: {
         actions: createActionTarget(actions),
-        subjects: createSubjectTarget(subjects, roleScopingEntityURN),
+        subjects: createSubjectTarget(subjects),
       },
     };
     authZRequest.target.resources = createResourceTarget(resources, actions);

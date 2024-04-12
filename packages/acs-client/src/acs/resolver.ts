@@ -41,7 +41,7 @@ const subjectIsUnauthenticated = (subject: any): subject is UnauthenticatedConte
 };
 
 const whatIsAllowedRequest = async (subject: DeepPartial<Subject>, resources: Resource[],
-  actions: AuthZAction, ctx: ACSClientContext, useCache: boolean, roleScopingEntityURN: string) => {
+  actions: AuthZAction, ctx: ACSClientContext, useCache: boolean) => {
   if (subjectIsUnauthenticated(subject)) {
     return await unauthZ.whatIsAllowed({
       target: {
@@ -50,7 +50,7 @@ const whatIsAllowedRequest = async (subject: DeepPartial<Subject>, resources: Re
       context: {
         security: {}
       }
-    }, ctx, useCache, roleScopingEntityURN);
+    }, ctx, useCache);
   } else {
     return await authZ.whatIsAllowed({
       context: {
@@ -61,12 +61,12 @@ const whatIsAllowedRequest = async (subject: DeepPartial<Subject>, resources: Re
         resources,
         actions
       }
-    }, ctx, useCache, roleScopingEntityURN);
+    }, ctx, useCache);
   }
 };
 
 export const isAllowedRequest = async (subject: Subject,
-  resources: Resource[], actions: AuthZAction, ctx: ACSClientContext, useCache: boolean, roleScopingEntityURN: string): Promise<DecisionResponse> => {
+  resources: Resource[], actions: AuthZAction, ctx: ACSClientContext, useCache: boolean): Promise<DecisionResponse> => {
   if (subjectIsUnauthenticated(subject)) {
     return await unauthZ.isAllowed({
       target: {
@@ -75,7 +75,7 @@ export const isAllowedRequest = async (subject: Subject,
       context: {
         security: {}
       }
-    }, ctx, useCache, roleScopingEntityURN);
+    }, ctx, useCache);
   } else {
     return await authZ.isAllowed({
       context: {
@@ -86,7 +86,7 @@ export const isAllowedRequest = async (subject: Subject,
         resources,
         actions
       }
-    }, ctx, useCache, roleScopingEntityURN);
+    }, ctx, useCache);
   }
 };
 
@@ -161,6 +161,7 @@ export const accessRequest = async (
   // resolve userID by token
   const subjectID = subject?.id;
   const targetScope = subject?.scope;
+  const targetScopeMessage = targetScope ? `, target_scope:${ targetScope };` : ';';
   if (resource && !_.isArray(resource)) {
     resource = [resource];
   }
@@ -169,7 +170,7 @@ export const accessRequest = async (
   if (_.isEmpty(resource)) {
     const msg = [
       `Access not allowed for request with`,
-      `subject:${ subjectID }, resource:${ resourceName }, action:${ action }, target_scope:${ targetScope };`,
+      `subject:${ subjectID }, resource:${ resourceName }, action:${ action }${targetScopeMessage}`,
       `the response was ${ Response_Decision.INDETERMINATE }`,
     ].join(' ');
     const details = 'Entity missing';
@@ -189,8 +190,6 @@ export const accessRequest = async (
   // default database is arangoDB
   const database = options?.database ? options.database : 'arangoDB';
   const useCache = options?.useCache ? options.useCache : true;
-  // default value is RC organization
-  const roleScopingEntityURN = options?.roleScopingEntityURN ? options.roleScopingEntityURN: 'urn:restorecommerce:acs:model:organization.Organization';
   // ctx.resources
   if (ctx.resources && !_.isArray(ctx.resources)) {
     ctx.resources = [ctx.resources];
@@ -207,7 +206,7 @@ export const accessRequest = async (
         resource,
         action,
         ctx,
-        useCache, roleScopingEntityURN
+        useCache
       );
     } catch (err) {
       logger.error(
@@ -228,7 +227,7 @@ export const accessRequest = async (
     if (authzEnforced && (!policySetResponse || _.isEmpty(policySetResponse.policy_sets))) {
       const msg = [
         `Access not allowed for request with subject:${ subjectID },`,
-        `resource:${ resourceName }, action:${ action }, target_scope:${ targetScope };`,
+        `resource:${ resourceName }, action:${ action }${targetScopeMessage}`,
         'the response was INDETERMINATE'
       ].join(' ');
       const details = 'no matching policy/rule could be found';
@@ -246,13 +245,14 @@ export const accessRequest = async (
     if (!authzEnforced && (!policySetResponse || _.isEmpty(policySetResponse.policy_sets))) {
       logger.verbose([
         `The Access response was INDETERMIATE for a request with subject:${ subjectID },`,
-        `resource:${ resourceName }, action:${ action }, target_scope:${ targetScope }`,
+        `resource:${ resourceName }, action:${ action }${targetScopeMessage}`,
         `as no matching policy/rule could be found, but since ACS enforcement`,
         `config is disabled overriding the ACS result`,
       ].join(' '));
     }
 
     // create filters to enforce applicable policies and custom query / args if applicable
+    // TODO check and modify this
     const resourceFilters = await createResourceFilterMap(resource, policySetResponse,
       ctx.resources, action, subClone, subjectID, authzEnforced, targetScope, database);
 
@@ -273,7 +273,7 @@ export const accessRequest = async (
   if (operation === Operation.isAllowed) {
     // authorization
     try {
-      decisionResponse = await isAllowedRequest(subClone as Subject, resource, action, ctx, useCache, roleScopingEntityURN);
+      decisionResponse = await isAllowedRequest(subClone as Subject, resource, action, ctx, useCache);
     } catch (err) {
       logger.error('Error calling isAllowed operation', { code: err.code, message: err.message, stack: err.stack });
       return { decision: Response_Decision.DENY, operation_status: generateOperationStatus(err.code, err.message) };
@@ -288,7 +288,7 @@ export const accessRequest = async (
       }
       const msg = [
         `Access not allowed for request with subject:${ subjectID },`,
-        `resource:${ resourceName }, action:${ action }, target_scope:${ targetScope };`,
+        `resource:${ resourceName }, action:${ action }${targetScopeMessage}`,
         `the response was ${Response_Decision[decisionResponse.decision]}`,
       ].join(' ');
       logger.verbose(msg);
@@ -309,7 +309,7 @@ export const accessRequest = async (
     }
     logger.verbose([
       `Access not allowed for request with subject:${ subjectID },`,
-      `resource:${ resourceName }, action:${ action }, target_scope:${ targetScope };`,
+      `resource:${ resourceName }, action:${ action }${targetScopeMessage}`,
       `the response was ${Response_Decision[decisionResponse.decision]}`,
     ]).join(' ');
     logger.verbose(`${details}, Overriding the ACS result as ACS enforce config is disabled`);

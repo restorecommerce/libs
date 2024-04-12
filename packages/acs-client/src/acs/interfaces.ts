@@ -246,5 +246,4 @@ export interface ACSClientOptions {
   operation?: Operation;
   database?: 'arangoDB' | 'postgres';
   useCache?: boolean; // default value is true
-  roleScopingEntityURN?: string; // default value is Organization
 }

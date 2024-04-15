@@ -53,7 +53,7 @@
     "generate:test": "protoc --experimental_allow_proto3_optional --ts_proto_opt=outputClientImpl=false,env=node,useOptionals=true,outputJsonMethods=true,outputSchema=true,useExactTypes=false,outputServices=nice-grpc,outputServices=generic-definitions --proto_path=./tests/protos --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=./tests/generated ./tests/protos/echo/*.proto"
   },
   "engines": {
-    "node": ">= 12.18.0"
+    "node": ">= 20.0.0"
   },
   "publishConfig": {
     "access": "public"

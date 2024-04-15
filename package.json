@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/resource-base-interface",
-  "version": "1.4.8",
+  "version": "1.5.0",
   "description": "Restorecommerce Resource Base Interface",
   "main": "lib/index.js",
   "author": "n-fuse GmbH",
@@ -17,33 +17,36 @@
     "interface"
   ],
   "dependencies": {
-    "@restorecommerce/chassis-srv": "^1.4.9",
-    "@restorecommerce/grpc-client": "^2.2.0",
-    "@restorecommerce/kafka-client": "^1.1.22",
-    "@restorecommerce/rc-grpc-clients": "^5.1.22",
+    "@restorecommerce/chassis-srv": "^1.5.0",
+    "@restorecommerce/grpc-client": "^2.2.1",
+    "@restorecommerce/kafka-client": "^1.2.1",
+    "@restorecommerce/rc-grpc-clients": "^5.1.23",
     "@restorecommerce/service-config": "^1.0.12",
     "lodash": "^4.17.21",
     "redis": "^4.6.13"
+  },
+  "overrides": {
+    "@grpc/grpc-js": "^1.10.6"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.0",
     "@types/mocha": "^10.0.6",
     "@types/redis": "^4.0.11",
-    "@typescript-eslint/eslint-plugin": "^7.3.1",
+    "@typescript-eslint/eslint-plugin": "^7.6.0",
     "@typescript-eslint/eslint-plugin-tslint": "^7.0.2",
-    "@typescript-eslint/parser": "^7.3.1",
+    "@typescript-eslint/parser": "^7.6.0",
     "arangojs": "^8.7.0",
     "cross-env": "^7.0.3",
     "eslint": "^8.57.0",
     "eslint-plugin-prefer-arrow-functions": "^3.3.2",
-    "mocha": "^10.3.0",
+    "mocha": "^10.4.0",
     "npm-run-all": "^4.1.5",
     "nyc": "^15.1.0",
     "rimraf": "^5.0.5",
     "should": "^13.2.3",
     "ts-node": "^10.9.2",
     "tslint": "^6.1.3",
-    "typescript": "^5.4.2"
+    "typescript": "^5.4.5"
   },
   "scripts": {
     "test": "npm run lint && nyc npm run mocha",

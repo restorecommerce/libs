@@ -1,4 +1,8 @@
 
+### 1.5.0 (April 15th, 2024)
+
+- up deps
+
 ### 1.4.8 (March 19th, 2024)
 
 - up deps

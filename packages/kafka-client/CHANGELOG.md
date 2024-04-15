@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.1](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.2.0...@restorecommerce/kafka-client@1.2.1) (2024-04-15)
+
+**Note:** Version bump only for package @restorecommerce/kafka-client
+
+
+
+
+
 # [1.2.0](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.1.23...@restorecommerce/kafka-client@1.2.0) (2024-04-15)
 
 

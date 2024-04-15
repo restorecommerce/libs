@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/grpc-client@2.2.0...@restorecommerce/grpc-client@2.2.1) (2024-04-15)
+
+
+### Bug Fixes
+
+* up deps ([c6e0aa0](https://github.com/restorecommerce/libs/commit/c6e0aa053f7ee9b4e4afdfcaacf425ebb956224c))
+* up node-engine version for grpc-client to trigger release ([f3af5fc](https://github.com/restorecommerce/libs/commit/f3af5fcb5e1408126a6d72d4c4078c5463318fde))
+
+
+
+
+
 # [2.2.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/grpc-client@2.1.2...@restorecommerce/grpc-client@2.2.0) (2024-03-18)
 
 

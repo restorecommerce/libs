@@ -109,15 +109,21 @@ const checkSubjectMatch = (user: ResolvedSubject, ruleSubjectAttributes: Attribu
     if (!hrScopeExist) {
       logger.info('Hierarchial scopes for matching role does not exist', { role: ruleRoleValue, instances: matchingRoleScopedInstance });
       return false;
-    } else if (hrScopeExist && user.scope) {
+    } else if (hrScopeExist && user?.scope) {
       return checkTargetScopeExists(
-        user?.hierarchical_scopes?.filter((hrScope) => matchingRoleScopedInstance.includes(hrScope.id)),
-        user.scope,
+        user?.hierarchical_scopes?.filter((hrScope) => matchingRoleScopedInstance?.includes(hrScope?.id)),
+        user?.scope,
         reducedUserScope,
         hierarchicalRoleScopingCheck
       );
     } else {
       // HR scope match exist but user has not provided scope so still a match is considered
+      if (!user?.scope) {
+        // if no scope is provided then use the complete HR tree for user scopes
+        user?.hierarchical_scopes?.filter((hrScope) => matchingRoleScopedInstance?.includes(hrScope?.id)).forEach((eachHRScope) => {
+          reduceUserScope(eachHRScope, reducedUserScope, hierarchicalRoleScopingCheck);
+        });
+      }
       return hrScopeExist;
     }
   } else if (ruleRoleValue) {

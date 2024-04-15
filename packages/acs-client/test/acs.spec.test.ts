@@ -590,6 +590,84 @@ describe('Testing acs-client', () => {
     );
 
     it(
+      'Should PERMIT reading Test resource when no scope is provided (PERMIT rule) with HR scoping ' +
+      'enabled and verify since no scope is provided all applicable HR scope instances are returned',
+      async () => {
+        // PolicySet contains PERMIT rule
+        PolicySetRQFactory.rules = [permitRule];
+
+        // test resource to be read of type 'ReadRequest'
+        const resources: CtxResource[] = [{
+          id: 'test_id',
+          meta: {
+            owners: []
+          }
+        }];
+
+        // user ctx data updated in session
+        const subject = {
+          id: 'test_user_id',
+          token: 'valid_token',
+          role_associations: [
+            {
+              role: 'test-role',
+              attributes: [
+                {
+                  id: 'urn:restorecommerce:acs:names:roleScopingEntity',
+                  value: 'urn:test:acs:model:organization.Organization',
+                  attributes: [{
+                    id: 'urn:restorecommerce:acs:names:roleScopingInstance',
+                    value: 'targetScope'
+                  }]
+                }
+              ]
+            }
+          ],
+          hierarchical_scopes: [
+            {
+              id: 'targetScope',
+              children: [{
+                id: 'targetSubScope'
+              }]
+            }
+          ]
+        };
+
+        const ctx: ACSClientContext = {
+          subject,
+          resources,
+        };
+
+        // call accessRequest(), the response is from mock ACS
+        const readResponse = await accessRequest(
+          subject,
+          [{ resource: 'Test', id: resources[0].id }],
+          AuthZAction.READ,
+          ctx, { operation: Operation.whatIsAllowed, database: 'postgres' }
+        ) as PolicySetRQResponse;
+
+        should.equal(readResponse.decision, Response_Decision.PERMIT);
+        should.equal(readResponse.operation_status?.code, 200);
+        should.equal(readResponse.operation_status?.message, 'success');
+        // verify input is modified to enforce the applicapble poilicies
+        const filterParamKey = cfg.get('authorization:filterParamKey');
+        const expectedFilterResponse = [{
+          field: filterParamKey,
+          operation: 'eq',
+          value: 'targetScope'
+        }, {
+          field: filterParamKey,
+          operation: 'eq',
+          value: 'targetSubScope'
+        }];
+        should.equal(readResponse.filters?.[0]?.resource, 'Test');
+        const filters = readResponse.filters?.[0].filters;
+        should.deepEqual(filters?.[0]?.filters?.[0], expectedFilterResponse[0]);
+        should.deepEqual(filters?.[0]?.filters?.[1], expectedFilterResponse[1]);
+      }
+    );
+
+    it(
       'Should DENY reading Test resource (PERMIT rule) with HR scoping disabled',
       async () => {
         const cacheEnabled = process.env.CACHE_ENABLED;

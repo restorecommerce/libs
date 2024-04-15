@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.1.23...@restorecommerce/kafka-client@1.2.0) (2024-04-15)
+
+
+### Bug Fixes
+
+* up deps ([c6e0aa0](https://github.com/restorecommerce/kafka-client/commit/c6e0aa053f7ee9b4e4afdfcaacf425ebb956224c))
+
+
+### Features
+
+* add manualOffsetCommit flag ([2e4baf5](https://github.com/restorecommerce/kafka-client/commit/2e4baf5ad96b3250e175a934cdb2bca9af87d351))
+* adjust flag ([f070795](https://github.com/restorecommerce/kafka-client/commit/f0707953b9bd852bc99d5b009cbfc7c45190aaec))
+* manual commit ([856bcf6](https://github.com/restorecommerce/kafka-client/commit/856bcf6075a77aceed836365499af725ede1edbc))
+* manualOffsetCommit is optional ([dffadbb](https://github.com/restorecommerce/kafka-client/commit/dffadbbd8cf9ee81e8c6795f2c1b69a575f4ad8c))
+
+
+
+
+
 ## [1.1.23](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.1.22...@restorecommerce/kafka-client@1.1.23) (2024-03-20)
 
 

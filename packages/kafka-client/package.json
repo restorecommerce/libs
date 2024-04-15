@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/kafka-client",
-  "version": "1.1.23",
+  "version": "1.2.0",
   "description": "Opinionated Kafka Client for Microservices",
   "main": "./lib/index.js",
   "author": "n-fuse GmbH",

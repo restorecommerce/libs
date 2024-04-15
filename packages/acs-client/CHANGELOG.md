@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.5.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@1.4.15...@restorecommerce/acs-client@1.5.0) (2024-04-15)
+
+
+### Bug Fixes
+
+* up deps ([c6e0aa0](https://github.com/restorecommerce/libs/commit/c6e0aa053f7ee9b4e4afdfcaacf425ebb956224c))
+
+
+### Features
+
+* **acs-client:** fix reduced user scope calculation when target scope is provided and add unit test with no target scope provided ([4426eca](https://github.com/restorecommerce/libs/commit/4426ecabd6311bc043279ce24c00d5f5dc967689))
+* **acs-client:** remove role-scoping entity from acs-request ([15a0583](https://github.com/restorecommerce/libs/commit/15a058381e76c71224361cac9272ba8085011e36))
+
+
+
+
+
 ## [1.4.15](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@1.4.14...@restorecommerce/acs-client@1.4.15) (2024-03-20)
 
 **Note:** Version bump only for package @restorecommerce/acs-client

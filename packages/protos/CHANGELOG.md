@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.8.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.8.0...@restorecommerce/protos@6.8.1) (2024-04-15)
+
+
+### Bug Fixes
+
+* **order_state:** remove FAILED and INVALID from order_state ([6a0c6bf](https://github.com/restorecommerce/libs/commit/6a0c6bfb54d00e5c169bd2d688f773baff8a88c8))
+* **product:** add missing imports for resolver ([be68bdf](https://github.com/restorecommerce/libs/commit/be68bdfa5a281454a641808895bd227cdbc6e605))
+* **timezone:** more information in timezone, fix invalid resolver on product.taxIds ([106ef81](https://github.com/restorecommerce/libs/commit/106ef81533ce279129c5d8be89f7070382a705da))
+
+
+
+
+
 # [6.8.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.7.0...@restorecommerce/protos@6.8.0) (2024-03-05)
 
 

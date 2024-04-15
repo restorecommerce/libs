@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.13.10](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.13.9...@restorecommerce/facade@1.13.10) (2024-04-15)
+
+
+### Bug Fixes
+
+* **facade:** up schema for changes in proto files ([7fc1219](https://github.com/restorecommerce/libs/commit/7fc1219147a832006a24a60c6fe9af57b06017ba))
+* **fulfillment_product:** register fulfillment_product to facade modules ([b84841e](https://github.com/restorecommerce/libs/commit/b84841e97862ddac989d524fd0659a1fa55751cd))
+* up deps ([c6e0aa0](https://github.com/restorecommerce/libs/commit/c6e0aa053f7ee9b4e4afdfcaacf425ebb956224c))
+
+
+
+
+
 ## [1.13.9](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.13.8...@restorecommerce/facade@1.13.9) (2024-03-22)
 
 

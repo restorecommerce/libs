@@ -32,30 +32,21 @@ const arangoHttpErrCodeMap = new Map([
  * CRUD resource operations.
  */
 export class ServiceBase<T extends ResourceListResponse, M extends ResourceList> implements ServiceImplementation {
-  logger: Logger;
-  name: string;
-  events: any;
-  resourceapi: ResourcesAPIBase;
-  isEventsEnabled: boolean;
   /**
    * @constructor
-   * @param entityName entityName Name of the resource.
-   * @param entityEvents entityEvents Event topic for the resource.
+   * @param name entityName Name of the resource.
+   * @param events entityEvents Event topic for the resource.
    * @param logger logger Chassis logger.
    * @param resourceapi resourceapi ResourceAPI object.
    * @param isEventsEnabled.
    */
-  constructor(entityName: string, entityEvents: any, logger: Logger,
-    resourceapi: ResourcesAPIBase, isEventsEnabled?: boolean) {
-    this.logger = logger;
-    this.name = entityName;
-    this.events = {
-      entity: entityEvents
-    };
-    this.resourceapi = resourceapi;
-    this.resourceapi.logger = logger;
-    this.isEventsEnabled = isEventsEnabled;
-  }
+  constructor(
+    public readonly name: string,
+    public readonly events: Topic,
+    public readonly logger: Logger,
+    public readonly resourceapi: ResourcesAPIBase,
+    public isEventsEnabled?: boolean
+  ) {}
 
   /**
    * Endpoint read.
@@ -243,7 +234,7 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
       const createDocs = _.cloneDeep(request.items);
       let createResponse = await this.resourceapi.create(createDocs, request.subject);
       const dispatch = [];
-      const events: Topic = this.events.entity;
+      const events: Topic = this.events;
       if (this.isEventsEnabled) {
         _.forEach(createResponse, (item) => {
           if (!item.error) {
@@ -279,7 +270,7 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
   async delete(request: DeleteRequest, context): Promise<DeepPartial<DeleteResponse>> {
     let deleteResponse = { status: [], operation_status: {} };
     try {
-      const events = this.events.entity;
+      const events = this.events;
       let docs: any;
       if (request.collection) {
         docs = await this.resourceapi.deleteCollection();
@@ -346,7 +337,7 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
       let updateResponse = await this.resourceapi.update(updateDocs, request.subject);
       if (this.isEventsEnabled) {
         const dispatch = [];
-        const events = this.events.entity;
+        const events = this.events;
         _.forEach(updateResponse, (update) => {
           if (!update.error) {
             dispatch.push(events.emit(`${this.name}Modified`, update));
@@ -382,8 +373,12 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
     let docs: any = {};
     try {
       let upsertDocs = _.cloneDeep(request.items);
-      let upsertResponse = await this.resourceapi.upsert(upsertDocs,
-        this.events.entity, this.name, request.subject);
+      let upsertResponse = await this.resourceapi.upsert(
+        upsertDocs,
+        this.events,
+        this.name,
+        request.subject
+      );
       let responseWithStatus = this.generateResponseWithStatus(upsertResponse, upsertDocs);
       const operation_status = {
         code: 200,

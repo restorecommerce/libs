@@ -20,8 +20,7 @@ import {
 import { Arango } from '@restorecommerce/chassis-srv/lib/database/provider/arango/base.js';
 import { createLogger } from '@restorecommerce/logger';
 import { BindConfig } from '@restorecommerce/chassis-srv/lib/microservice/transport/provider/grpc/index.js';
-import { 
-  CommandInterfaceServiceImplementation,
+import {
   ProtoMetadata,
   protoMetadata as CommandInterfaceMeta,
   CommandInterfaceServiceDefinition,
@@ -74,7 +73,7 @@ export abstract class WorkerBase {
   }
 
   get db() {
-    return this.db;
+    return this._db;
   }
 
   protected set db(value: DatabaseProvider) {

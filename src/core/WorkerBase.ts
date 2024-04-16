@@ -31,7 +31,7 @@ import { ServiceBase } from './ServiceBase';
 import { createServiceConfig } from '@restorecommerce/service-config';
 
 export type ServiceConfig = Provider;
-export type ReflectionService = ServiceImplementation<any>
+export type ReflectionService = ServiceImplementation<any>;
 export interface ServiceBindConfig<T extends CompatServiceDefinition> extends BindConfig<T> {
   name: string;
   meta: ProtoMetadata;
@@ -79,7 +79,7 @@ export abstract class WorkerBase {
   protected set db(value: DatabaseProvider) {
     this._db = value;
   }
-  
+
   get offsetStore() {
     return this._offsetStore;
   }
@@ -130,7 +130,7 @@ export abstract class WorkerBase {
         (err: any) => this.logger?.error(`Job ${msg?.type} failed: ${err}`)
       );
     }
-  }
+  };
 
   /**
    * Override this factory function and return a list of ServiceBindConfig[].
@@ -163,11 +163,11 @@ export abstract class WorkerBase {
     this.commandInterface = [...this.services.values()].find(
       service => service instanceof CommandInterface
     ) as CommandInterface;
-    
+
     if (this.commandInterface) {
       return;
     }
-    
+
     const serviceName = this.cfg.get('serviceNames:cis');
     if (!serviceName) {
       this.logger?.warn(
@@ -239,7 +239,7 @@ export abstract class WorkerBase {
   protected async bindHealthCheck() {
     this.logger?.debug('bind HealthCheckService');
     const name = this.cfg.get('serviceNames:health');
-    
+
     if (!name) {
       this.logger?.warn(
         'HealthCheckService not initialized',
@@ -310,7 +310,7 @@ export abstract class WorkerBase {
             eventName as string,
             this.serviceActions.get(eventName),
             { startingOffset: offsetValue }
-          )
+          );
         }
       );
       this.topics.set(key, topic);
@@ -334,13 +334,13 @@ export abstract class WorkerBase {
       };
       this.logger = logger = createLogger(logger_cfg);
     }
-    
+
     this.server = new Server(this.cfg.get('server'), this.logger);
     this.db = await database.get(this.cfg.get('database:main'), this.logger);
     const redisConfig = this.cfg.get('redis');
     redisConfig.db = this.cfg.get('redis:db-indexes:db-subject');
     this.redisClient = createClient(redisConfig);
-    
+
     await this.bindEvents();
     const serviceConfigs = await this.initServices();
     await this.bindServices(serviceConfigs);

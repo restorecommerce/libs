@@ -65,6 +65,6 @@
     "build": "npm-run-all lint build:clean build:tsc"
   },
   "engines": {
-    "node": ">= 18.8.0"
+    "node": ">= 20.0.0"
   }
 }

@@ -1,0 +1,49 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+    types: [release_master]
+
+jobs:
+  release:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: master
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Install Dependencies
+        run: npm clean-install
+
+      - name: Git Config
+        run: |
+          git config --global user.email "bot@restorecommerce.io"
+          git config --global user.name "Restorecommerce Bot"
+
+      - name: Build
+        run: npm run build --verbose
+
+      - name: NPM Token
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          echo "//registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN" > .npmrc
+
+      - name: Release
+        run: npx publish --no-verify-access --no-private --conventional-commits --yes --loglevel debug
+
+      - name: Sync next branch
+        run: |
+          git checkout next
+          git merge master
+          git push -u origin next 

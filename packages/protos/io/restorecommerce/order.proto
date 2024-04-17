@@ -124,15 +124,13 @@ message Order {
   ];
   repeated Item items = 6;
   optional OrderState order_state = 7;                                         // Set by service
-  optional io.restorecommerce.fulfillment.State fulfillment_state = 8;    // Set by kafka
-  optional io.restorecommerce.invoice.PaymentState payment_state = 9;            // Set by kafka
-  repeated io.restorecommerce.amount.Amount total_amounts = 10;                // Set by service --- repeated in case of variant currency?
-  optional io.restorecommerce.address.ShippingAddress shipping_address = 11;
-  optional io.restorecommerce.address.BillingAddress billing_address = 12;
-  optional string notification_email = 13;
-  optional string customer_order_nr = 14;
-  optional string customer_remark = 15;
-  optional io.restorecommerce.fulfillment_product.Preferences packaging_preferences = 16;
+  repeated io.restorecommerce.amount.Amount total_amounts = 8;                // Set by service --- repeated in case of variant currency?
+  optional io.restorecommerce.address.ShippingAddress shipping_address = 9;
+  optional io.restorecommerce.address.BillingAddress billing_address = 10;
+  optional string notification_email = 11;
+  optional string customer_order_nr = 12;
+  optional string customer_remark = 13;
+  optional io.restorecommerce.fulfillment_product.Preferences packaging_preferences = 14;
 }
 
 message OrderIdList {

@@ -89,7 +89,7 @@ service FulfillmentService {
   rpc TriggerInvoice (FulfillmentInvoiceRequestList) returns (io.restorecommerce.status.StatusListResponse);
 }
 
-enum State {
+enum FulfillmentState {
   PENDING = 0;
   INVALID = 1;
   SUBMITTED = 2;
@@ -207,7 +207,7 @@ message Fulfillment {
   repeated Label labels = 8; //set by service
   repeated Tracking trackings = 9; //set by service
   repeated io.restorecommerce.amount.Amount total_amounts = 10; //set by service
-  optional State state = 11; //set by service
+  optional FulfillmentState fulfillment_state = 11; //set by service
 }
 
 message FulfillmentList {

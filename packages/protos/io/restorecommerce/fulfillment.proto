@@ -133,7 +133,7 @@ message Label {
   }
   optional string parcel_id = 4;
   optional string shipment_number = 5; //filled on Order
-  optional State state = 6; //update by Track
+  optional FulfillmentState state = 6; //update by Track
   optional io.restorecommerce.status.Status status = 7; //API status
 }
 

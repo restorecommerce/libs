@@ -1,3 +1,4 @@
+import * as _ from 'lodash';
 import * as uuid from 'uuid';
 import { Logger } from 'winston';
 import { Provider as ServiceConfig } from 'nconf';
@@ -168,7 +169,7 @@ export function access_controlled_function<T extends ResourceList>(kwargs: {
           }
         }
 
-        const response = await accessRequest(
+        const accessResponse = await accessRequest(
           subject,
           resource ?? [],
           kwargs.action,
@@ -179,9 +180,16 @@ export function access_controlled_function<T extends ResourceList>(kwargs: {
           }
         );
 
-        if (response?.decision !== Response_Decision.PERMIT) {
-          return response;
+        if (accessResponse?.decision !== Response_Decision.PERMIT) {
+          return accessResponse;
         }
+
+        const appResponse = await method.apply(this, arguments);
+        const property = accessResponse.obligations?.flatMap(
+          obligation => obligation.property
+        );
+
+        return appResponse //_.omitDeep(appResponse, property);
       }
       catch (err) {
         return {
@@ -192,7 +200,6 @@ export function access_controlled_function<T extends ResourceList>(kwargs: {
           }
         };
       }
-      return await method.apply(this, arguments);
     };
   };
 }

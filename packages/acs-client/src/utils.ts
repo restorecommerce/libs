@@ -69,8 +69,8 @@ const checkSubjectMatch = (user: ResolvedSubject, ruleSubjectAttributes: Attribu
   // 2) Now check if the subject rule role value matches with one of the users ctx role_associations
   // then get the corresponding scope instance and check if the targetScope is present in user HR scope Object
   let hierarchicalRoleScopingCheck = 'true'; // by default HR scoping check is considered
-  let ruleRoleValue;
-  let ruleRoleScopeEntityName;
+  let ruleRoleValue: string;
+  let ruleRoleScopeEntityName: string;
   const urns = cfg.get('authorization:urns');
   if (ruleSubjectAttributes?.length === 0) {
     return true;
@@ -94,7 +94,8 @@ const checkSubjectMatch = (user: ResolvedSubject, ruleSubjectAttributes: Attribu
     const matchingRoleScopedInstance: string[] = user?.role_associations?.filter((roleObj) => {
       return roleObj?.attributes?.some((roleAttributeObj) => {
         if (roleAttributeObj?.id === urns?.roleScopingEntity
-          && roleAttributeObj?.value === ruleRoleScopeEntityName) {
+          && roleAttributeObj?.value === ruleRoleScopeEntityName
+        ) {
           return roleAttributeObj?.attributes?.some((roleScopingInstanceObj) => {
             if (roleScopingInstanceObj?.id === urns?.roleScopingInstance) {
               return roleScopingInstanceObj?.value;
@@ -353,8 +354,8 @@ export const buildFilterPermissions = async (
     }
   }
   else {
-    subject.hierarchical_scopes ??=[];
-    subject.role_associations ??=[];
+    subject.hierarchical_scopes ??= [];
+    subject.role_associations ??= [];
   }
 
   const urns = cfg.get('authorization:urns');
@@ -372,7 +373,7 @@ export const buildFilterPermissions = async (
         const algorithm = policy.combining_algorithm;
         // iterate through policy_set and check subject in policy and Rule:
         if (policy?.target?.subjects) {
-          let userSubjectMatched = checkSubjectMatch(subject, policy.target.subjects);
+          const userSubjectMatched = checkSubjectMatch(subject, policy.target.subjects);
           if (!userSubjectMatched) {
             logger.debug(`Skipping policy as policy subject and user subject don't match`);
             continue;
@@ -396,7 +397,7 @@ export const buildFilterPermissions = async (
         for (let rule of policy?.rules) {
           let reducedUserScope = [];
           if (rule?.target?.subjects) {
-            let userSubjectMatched = checkSubjectMatch(subject, rule.target.subjects, reducedUserScope);
+            const userSubjectMatched = checkSubjectMatch(subject, rule.target.subjects, reducedUserScope);
             if (!userSubjectMatched) {
               logger.debug(`Skipping rule as user subject and rule subject don't match`);
               continue;

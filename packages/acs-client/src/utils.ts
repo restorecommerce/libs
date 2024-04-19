@@ -83,8 +83,10 @@ const checkSubjectMatch = (user: ResolvedSubject, ruleSubjectAttributes: Attribu
       ruleRoleScopeEntityName = attribute.value;
     } else if (attribute.id === urns.role) { // urns.role -> urn:restorecommerce:acs:names:role
       ruleRoleValue = attribute.value;
+      logger.debug(`Found Rule's Subject role ${ruleRoleValue}`);
     } else if (attribute?.id === urns.hierarchicalRoleScoping) {
       hierarchicalRoleScopingCheck = attribute.value;
+      logger.debug('HR Scoping URN set on rule', { hierarchicalRoleScopingCheck });
     }
   }
 
@@ -103,15 +105,17 @@ const checkSubjectMatch = (user: ResolvedSubject, ruleSubjectAttributes: Attribu
     }).flatMap((roleObj) => roleObj?.attributes?.map(
       roleObjAttr => roleObjAttr?.attributes?.map((attrInstObj) => attrInstObj.value)[0]
     ));
-
+    logger.debug('Role scoped instances for matching entity', { id: user?.id, ruleRoleScopeEntityName, matchingRoleScopedInstance });
     // validate HR scope root ID contains the role scope instances
     const hrScopeExist = user?.hierarchical_scopes?.every((hrScope) => matchingRoleScopedInstance.includes(hrScope.id));
+    logger.debug('HR Scopes exist', { hrScopeExist });
     if (!hrScopeExist) {
       logger.info('Hierarchial scopes for matching role does not exist', { role: ruleRoleValue, instances: matchingRoleScopedInstance });
       return false;
     } else if (hrScopeExist && user?.scope) {
+      logger.debug('Target scope set and HR scopes exist, validate target scope from HR scopes', { targetScope: user?.scope });
       return checkTargetScopeExists(
-        user?.hierarchical_scopes?.filter((hrScope) => matchingRoleScopedInstance?.includes(hrScope?.id)),
+        user?.hierarchical_scopes?.filter((hrScope) => matchingRoleScopedInstance?.includes(hrScope?.id) && hrScope?.role === ruleRoleValue),
         user?.scope,
         reducedUserScope,
         hierarchicalRoleScopingCheck
@@ -119,8 +123,9 @@ const checkSubjectMatch = (user: ResolvedSubject, ruleSubjectAttributes: Attribu
     } else {
       // HR scope match exist but user has not provided scope so still a match is considered
       if (!user?.scope) {
+        logger.debug('Target scope not provided using full HR tree for matched role', { role: ruleRoleValue });
         // if no scope is provided then use the complete HR tree for user scopes
-        user?.hierarchical_scopes?.filter((hrScope) => matchingRoleScopedInstance?.includes(hrScope?.id)).forEach((eachHRScope) => {
+        user?.hierarchical_scopes?.filter((hrScope) => matchingRoleScopedInstance?.includes(hrScope?.id) && hrScope?.role === ruleRoleValue).forEach((eachHRScope) => {
           reduceUserScope(eachHRScope, reducedUserScope, hierarchicalRoleScopingCheck);
         });
       }
@@ -253,7 +258,16 @@ const buildQueryFromTarget = (
     scopingUpdated = true;
   } else if (database && database === 'postgres' && effect == Effect.PERMIT) {
     query['filters'] = [];
-    const filterParamKey = cfg.get('authorization:filterParamKey');
+    const filterKeyMapArray = cfg?.get('authorization:filterParamKey');
+    let filterParamKey;
+    if (Array.isArray(filterKeyMapArray)) {
+      filterParamKey = filterKeyMapArray?.find((obj) => obj?.scopingEntity === scopingAttribute?.value)?.value;
+    }
+    if (!filterParamKey) {
+      // default filter Paramkey for PostgresDB
+      filterParamKey = 'orgKey';
+    }
+    logger.debug('Filter paramter key for Postgres DB', { filterParamKey });
     for (let eachScope of userTotalScope) {
       query['filters'].push({ field: filterParamKey, operation: 'eq', value: eachScope });
     }
@@ -442,13 +456,35 @@ export const buildFilterPermissions = async (
         query['custom_queries'] = [];
       }
 
-      if (!_.includes(query['custom_queries'], policy.scope.custom_query)) {
-        query['custom_queries'].push(policy.scope.custom_query);
+      // example Policy
+      // {"scope":{"custom_query":"filterByOwnership",
+      // "custom_arguments":{"entity":"urn:restorecommerce:acs:model:organization.Organization","instance":["restorecommerce-demo-customer-000-organization"] }
+      // }, "filters":[],"scopingUpdated":true}
+      if (policy?.scope?.custom_query && policy?.scope?.custom_arguments?.instance?.length > 0) {
+        let customQueryExist = false;
+        if (query['custom_queries']?.length > 0) {
+          customQueryExist = query['custom_queries'].some((obj) => obj === policy.scope.custom_query);
+        }
+        // policy.scope.custom_query -> filterByOwnerShip does not exist or is a different AQL query
+        if (!customQueryExist) {
+          query['custom_queries'].push(policy.scope.custom_query);
+        }
 
         if (!query['custom_arguments']) {
-          query['custom_arguments'] = {};
+          query['custom_arguments'] = [];
         }
-        _.merge(query['custom_arguments'], policy.scope.custom_arguments);
+
+        const customArgEntityExist = query['custom_arguments']?.find((obj) => obj?.entity === policy?.scope?.custom_arguments?.entity);
+        if (!customArgEntityExist) {
+          query['custom_arguments']?.push(policy?.scope?.custom_arguments);
+        } else {
+          // same entity already exists, update instances on this object
+          query['custom_arguments']?.forEach((obj) => {
+            if (obj?.entity === policy?.scope?.custom_arguments?.entity) {
+              obj?.instance?.push(...policy?.scope?.custom_arguments?.instance);
+            }
+          });
+        }
         aqlQueryFilters = true;
       }
     }

@@ -159,6 +159,7 @@ const subject = {
   ],
   hierarchical_scopes: [{
     id: 'targetScope',
+    role: 'test-role',
     children: [{
       id: 'targetSubScope'
     }]
@@ -349,10 +350,10 @@ describe('testing acs-client with multiple entities', () => {
         const response = await accessRequest(subject,
           [{ resource: 'Location' }, { resource: 'Address' }],
           AuthZAction.READ, ctx, { operation: Operation.whatIsAllowed, database: 'arangoDB' }) as PolicySetRQResponse;
-        const expectedCustomArgs = {
+        const expectedCustomArgs = [{
           entity: 'urn:test:acs:model:organization.Organization',
           instance: ['targetScope', 'targetSubScope']
-        };
+        }];
         // validate custom query args for Location
         should.equal(response.custom_query_args?.[0].resource, 'Location');
         should.equal(response.custom_query_args?.[0].custom_queries[0], 'filterByOwnership');

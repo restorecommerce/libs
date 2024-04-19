@@ -138,7 +138,12 @@
       "skipACL": "urn:restorecommerce:acs:names:skipACL",
       "maskedProperty": "urn:restorecommerce:acs:names:obligation:maskedProperty"
     },
-    "filterParamKey": "orgKey",
+    "filterParamKey": [
+      {
+        "scopingEntity": "urn:test:acs:model:organization.Organization",
+        "value": "orgKey"
+      }
+    ],
     "hierarchicalResources": [
       {
         "collection": "organizations",

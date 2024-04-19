@@ -477,6 +477,7 @@ describe('Testing acs-client', () => {
           ],
           hierarchical_scopes: [{
             id: 'targetScope',
+            role: 'test-role',
             children: [{
               id: 'targetSubScope'
             }]
@@ -501,7 +502,7 @@ describe('Testing acs-client', () => {
         should.equal(readResponse.operation_status?.code, 200);
         should.equal(readResponse.operation_status?.message, 'success');
         // verify input is modified to enforce the applicapble poilicies
-        const filterParamKey = cfg.get('authorization:filterParamKey');
+        const filterParamKey = cfg.get('authorization:filterParamKey')[0].value;
         const expectedFilterResponse = [{
           field: filterParamKey,
           operation: 'eq',
@@ -557,6 +558,7 @@ describe('Testing acs-client', () => {
           hierarchical_scopes: [
             {
               id: 'targetScope',
+              role: 'test-role',
               children: [{
                 id: 'targetSubScope'
               }]
@@ -581,7 +583,7 @@ describe('Testing acs-client', () => {
         should.equal(readResponse.operation_status?.code, 200);
         should.equal(readResponse.operation_status?.message, 'success');
         // verify input is modified to enforce the applicapble poilicies
-        const filterParamKey = cfg.get('authorization:filterParamKey');
+        const filterParamKey = cfg.get('authorization:filterParamKey')[0].value;
         const expectedFilterResponse = { field: filterParamKey, operation: 'eq', value: 'targetSubScope' };
         should.equal(readResponse.filters?.[0]?.resource, 'Test');
         const filters = readResponse.filters?.[0].filters;
@@ -626,6 +628,7 @@ describe('Testing acs-client', () => {
           hierarchical_scopes: [
             {
               id: 'targetScope',
+              role: 'test-role',
               children: [{
                 id: 'targetSubScope'
               }]
@@ -650,7 +653,7 @@ describe('Testing acs-client', () => {
         should.equal(readResponse.operation_status?.code, 200);
         should.equal(readResponse.operation_status?.message, 'success');
         // verify input is modified to enforce the applicapble poilicies
-        const filterParamKey = cfg.get('authorization:filterParamKey');
+        const filterParamKey = cfg.get('authorization:filterParamKey')[0].value;
         const expectedFilterResponse = [{
           field: filterParamKey,
           operation: 'eq',
@@ -708,6 +711,7 @@ describe('Testing acs-client', () => {
           hierarchical_scopes: [
             {
               id: 'targetScope',
+              role: 'test-role',
               children: [{
                 id: 'targetSubScope'
               }]

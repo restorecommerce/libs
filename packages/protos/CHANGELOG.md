@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.8.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.8.1...@restorecommerce/protos@6.8.2) (2024-04-19)
+
+
+### Bug Fixes
+
+* **ordering:** remove fulfillment state and payment state from order ([73ab259](https://github.com/restorecommerce/libs/commit/73ab25928fb7ce3cc9b19e7ac06cda31b2f0f78e))
+* **protos:** rename State to FulfillmentState ([4debc8b](https://github.com/restorecommerce/libs/commit/4debc8bfcb7e870ca827826cb3d58c2f6aa20840))
+
+
+
+
+
 ## [6.8.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.8.0...@restorecommerce/protos@6.8.1) (2024-04-15)
 
 

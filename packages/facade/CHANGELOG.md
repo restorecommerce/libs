@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.13.12](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.13.11...@restorecommerce/facade@1.13.12) (2024-04-19)
+
+
+### Bug Fixes
+
+* **acs-client:** added unit test for validating policy filters for matching both Org and User scoping entities case ([89319a4](https://github.com/restorecommerce/libs/commit/89319a43de8e0bf878cf6c12b7f8eaada78748c1))
+
+
+
+
+
 ## [1.13.11](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.13.10...@restorecommerce/facade@1.13.11) (2024-04-15)
 
 **Note:** Version bump only for package @restorecommerce/facade

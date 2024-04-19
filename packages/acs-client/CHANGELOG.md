@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.6.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@1.5.1...@restorecommerce/acs-client@1.6.0) (2024-04-19)
+
+
+### Bug Fixes
+
+* **acs-client:** added unit test for validating policy filters for matching both Org and User scoping entities case ([89319a4](https://github.com/restorecommerce/libs/commit/89319a43de8e0bf878cf6c12b7f8eaada78748c1))
+* **protos:** rename State to FulfillmentState ([4debc8b](https://github.com/restorecommerce/libs/commit/4debc8bfcb7e870ca827826cb3d58c2f6aa20840))
+
+
+### Features
+
+* **acs-client:** extend acs-client to validate multiple matching entities and instances for a given subject ([a89c396](https://github.com/restorecommerce/libs/commit/a89c396b3b597b54cdb3e58286bb5673b4758802))
+
+
+
+
+
 ## [1.5.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@1.5.0...@restorecommerce/acs-client@1.5.1) (2024-04-15)
 
 **Note:** Version bump only for package @restorecommerce/acs-client

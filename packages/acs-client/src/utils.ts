@@ -108,7 +108,7 @@ const checkSubjectMatch = (user: ResolvedSubject, ruleSubjectAttributes: Attribu
     ));
     logger.debug('Role scoped instances for matching entity', { id: user?.id, ruleRoleScopeEntityName, matchingRoleScopedInstance });
     // validate HR scope root ID contains the role scope instances
-    const hrScopeExist = user?.hierarchical_scopes?.every((hrScope) => matchingRoleScopedInstance.includes(hrScope.id));
+    const hrScopeExist = user?.hierarchical_scopes?.some((hrScope) => matchingRoleScopedInstance.includes(hrScope.id));
     logger.debug('HR Scopes exist', { hrScopeExist });
     if (!hrScopeExist) {
       logger.info('Hierarchial scopes for matching role does not exist', { role: ruleRoleValue, instances: matchingRoleScopedInstance });
@@ -121,15 +121,13 @@ const checkSubjectMatch = (user: ResolvedSubject, ruleSubjectAttributes: Attribu
         reducedUserScope,
         hierarchicalRoleScopingCheck
       );
-    } else {
+    } else if (hrScopeExist && !user.scope) {
       // HR scope match exist but user has not provided scope so still a match is considered
-      if (!user?.scope) {
-        logger.debug('Target scope not provided using full HR tree for matched role', { role: ruleRoleValue });
-        // if no scope is provided then use the complete HR tree for user scopes
-        user?.hierarchical_scopes?.filter((hrScope) => matchingRoleScopedInstance?.includes(hrScope?.id) && hrScope?.role === ruleRoleValue).forEach((eachHRScope) => {
-          reduceUserScope(eachHRScope, reducedUserScope, hierarchicalRoleScopingCheck);
-        });
-      }
+      logger.debug('Target scope not provided using full HR tree for matched role', { role: ruleRoleValue });
+      // if no scope is provided then use the complete HR tree for user scopes
+      user?.hierarchical_scopes?.filter((hrScope) => matchingRoleScopedInstance?.includes(hrScope?.id) && hrScope?.role === ruleRoleValue).forEach((eachHRScope) => {
+        reduceUserScope(eachHRScope, reducedUserScope, hierarchicalRoleScopingCheck);
+      });
       return hrScopeExist;
     }
   } else if (ruleRoleValue) {
@@ -354,8 +352,8 @@ export const buildFilterPermissions = async (
     }
   }
   else {
-    subject.hierarchical_scopes ??= [];
-    subject.role_associations ??= [];
+    subject.hierarchical_scopes ??=[];
+    subject.role_associations ??=[];
   }
 
   const urns = cfg.get('authorization:urns');

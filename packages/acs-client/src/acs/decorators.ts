@@ -189,7 +189,7 @@ export function access_controlled_function<T extends ResourceList>(kwargs: {
           obligation => obligation.property
         );
 
-        return appResponse //_.omitDeep(appResponse, property);
+        return appResponse; // _.omitDeep(appResponse, property);
       }
       catch (err) {
         return {

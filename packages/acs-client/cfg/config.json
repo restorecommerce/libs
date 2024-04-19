@@ -142,6 +142,10 @@
       {
         "scopingEntity": "urn:test:acs:model:organization.Organization",
         "value": "orgKey"
+      },
+      {
+        "scopingEntity": "urn:test:acs:model:user.User",
+        "value": "userKey"
       }
     ],
     "hierarchicalResources": [

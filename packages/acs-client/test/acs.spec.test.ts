@@ -49,6 +49,31 @@ const permitRule: RuleRQ = {
   effect: Effect.PERMIT
 };
 
+const permitRuleUserScope: RuleRQ = {
+  id: 'permit_rule_id',
+  target: {
+    actions: [],
+    resources: [{
+      id: 'urn:restorecommerce:acs:names:model:entity',
+      value: 'urn:test:acs:model:Test.Test'
+    }],
+    subjects: [
+      {
+        id: 'urn:restorecommerce:acs:names:role',
+        value: 'user-role'
+      },
+      {
+        id: 'urn:restorecommerce:acs:names:roleScopingEntity',
+        value: 'urn:test:acs:model:user.User'
+      },
+      {
+        id: 'urn:restorecommerce:acs:names:hierarchicalRoleScoping',
+        value: 'false'
+      }]
+  },
+  effect: Effect.PERMIT
+};
+
 const permitRuleNoHrs: RuleRQ = {
   id: 'no_hrs_permit_rule_id',
   target: {
@@ -351,7 +376,7 @@ describe('Testing acs-client', () => {
       );
     });
 
-    it('Should PERMIT creating Test resource with valid user Ctx', async () => {
+    it('Should PERMIT creating Test resource with valid Org scope matching Ctx', async () => {
       // test resource to be created
       const resources: CtxResource[] = updateMetaData([{
         id: 'test_id',
@@ -371,6 +396,57 @@ describe('Testing acs-client', () => {
         role_associations: [
           {
             role: 'test-role'
+          }
+        ]
+      };
+
+      const ctx: ACSClientContext = {
+        subject,
+        resources,
+      };
+
+      // call accessRequest(), the response is from mock ACS
+      const response = await accessRequest(
+        subject,
+        [{ resource: 'Test', id: resources[0].id }],
+        AuthZAction.CREATE,
+        ctx
+      ) as DecisionResponse;
+
+      should.equal(response.decision, Response_Decision.PERMIT);
+      should.equal(response.operation_status?.code, 200);
+      should.equal(response.operation_status?.message, 'success');
+    });
+
+    it('Should PERMIT creating Test resource with valid User scope matching Ctx', async () => {
+      // test resource to be created
+      const resources: CtxResource[] = updateMetaData([{
+        id: 'test_id',
+        name: 'Test',
+        description: 'This is a test description',
+        meta: {
+          owners: [
+            {
+              id: 'urn:restorecommerce:acs:names:ownerIndicatoryEntity',
+              value: 'urn:test:acs:model:user.User',
+              attributes: [{
+                id: 'urn:restorecommerce:acs:names:ownerInstance',
+                value: 'test_user_id'
+              }]
+            }
+          ]
+        }
+      }]);
+
+      // user ctx data updated in session
+      const subject = {
+        id: 'test_user_id',
+        name: 'test_user',
+        scope: 'targetScope',
+        token: 'valid_token',
+        role_associations: [
+          {
+            role: 'user-role'
           }
         ]
       };
@@ -517,6 +593,236 @@ describe('Testing acs-client', () => {
         const filters = filterEntityMap?.[0].filters;
         should.deepEqual(filters?.[0]?.filters?.[0], expectedFilterResponse[0]);
         should.deepEqual(filters?.[0]?.filters?.[1], expectedFilterResponse[1]);
+      }
+    );
+
+    it(
+      'Should DENY reading Test resource (PERMIT rule) with invalid user target scope',
+      async () => {
+        // PolicySet contains PERMIT rule
+        PolicySetRQFactory.rules = [permitRuleUserScope];
+
+        // test resource to be read of type 'ReadRequest'
+        const resources: CtxResource[] = [{
+          id: 'test_id',
+          meta: {
+            owners: []
+          }
+        }];
+
+        // user ctx data updated in session
+        const subject = {
+          id: 'test_user_id',
+          scope: 'invalidUserId',
+          token: 'valid_token',
+          role_associations: [
+            {
+              role: 'user-role',
+              attributes: [
+                {
+                  id: 'urn:restorecommerce:acs:names:roleScopingEntity',
+                  value: 'urn:test:acs:model:user.User',
+                  attributes: [{
+                    id: 'urn:restorecommerce:acs:names:roleScopingInstance',
+                    value: 'test_user_id'
+                  }]
+                }
+              ]
+            }
+          ],
+          hierarchical_scopes: [{
+            id: 'test_user_id',
+            role: 'user-role',
+            children: []
+          }]
+        };
+
+        const ctx: ACSClientContext = {
+          subject,
+          resources,
+        };
+
+        // call accessRequest(), the response is from mock ACS
+        const readResponse = await accessRequest(
+          subject,
+          [{ resource: 'Test', id: resources[0].id }],
+          AuthZAction.READ,
+          ctx, { operation: Operation.whatIsAllowed, database: 'postgres' }
+        ) as PolicySetRQResponse;
+
+        should.equal(readResponse.decision, Response_Decision.DENY);
+        should.equal(readResponse.operation_status?.code, 403);
+        should.equal(
+          readResponse.operation_status?.message,
+          'Access not allowed for request with subject:test_user_id, ' +
+          'resource:Test, action:READ, target_scope:invalidUserId; the response was DENY'
+        );
+      }
+    );
+
+    it(
+      'Should PERMIT reading Test resource (PERMIT rule User scope) without target scope and verify input filter ' +
+      'is extended to enforce applicable policies for matching user role',
+      async () => {
+        // PolicySet contains PERMIT rule
+        PolicySetRQFactory.rules = [permitRuleUserScope];
+
+        // test resource to be read of type 'ReadRequest'
+        const resources: CtxResource[] = [{
+          id: 'test_id',
+          meta: {
+            owners: []
+          }
+        }];
+
+        // user ctx data updated in session
+        const subject = {
+          id: 'test_user_id',
+          // scope: 'targetScope',
+          token: 'valid_token',
+          role_associations: [
+            {
+              role: 'user-role',
+              attributes: [
+                {
+                  id: 'urn:restorecommerce:acs:names:roleScopingEntity',
+                  value: 'urn:test:acs:model:user.User',
+                  attributes: [{
+                    id: 'urn:restorecommerce:acs:names:roleScopingInstance',
+                    value: 'test_user_id'
+                  }]
+                }
+              ]
+            }
+          ],
+          hierarchical_scopes: [{
+            id: 'test_user_id',
+            role: 'user-role',
+            children: []
+          }]
+        };
+
+        const ctx: ACSClientContext = {
+          subject,
+          resources,
+        };
+
+        // call accessRequest(), the response is from mock ACS
+        const readResponse = await accessRequest(
+          subject,
+          [{ resource: 'Test', id: resources[0].id }],
+          AuthZAction.READ,
+          ctx, { operation: Operation.whatIsAllowed, database: 'postgres' }
+        ) as PolicySetRQResponse;
+
+        should.exist(readResponse.decision);
+        should.equal(readResponse.decision, Response_Decision.PERMIT);
+        should.equal(readResponse.operation_status?.code, 200);
+        should.equal(readResponse.operation_status?.message, 'success');
+        // verify input is modified to enforce the applicapble poilicies
+        const filterParamKey = cfg.get('authorization:filterParamKey')[1].value;
+        const expectedFilterResponse = [{
+          field: filterParamKey,
+          operation: 'eq',
+          value: 'test_user_id'
+        }];
+        should.equal(readResponse.filters?.[0]?.resource, 'Test');
+        const filterEntityMap = readResponse.filters;
+        const filters = filterEntityMap?.[0].filters;
+        should.deepEqual(filters?.[0]?.filters?.[0], expectedFilterResponse[0]);
+      }
+    );
+
+    it(
+      'Should PERMIT reading Test resource (PERMIT rule Org Scope and User scope) without target scope and ' +
+      'verify input filter is extended to enforce applicable policies for matching user role',
+      async () => {
+        // PolicySet contains PERMIT rule for OrgScoping and UserScoping entity
+        PolicySetRQFactory.rules = [permitRule, permitRuleUserScope];
+
+        // test resource to be read of type 'ReadRequest'
+        const resources: CtxResource[] = [{
+          id: 'test_id',
+          meta: {
+            owners: []
+          }
+        }];
+
+        // user ctx data updated in session
+        const subject = {
+          id: 'test_user_id',
+          // scope: 'targetScope',
+          token: 'valid_token',
+          role_associations: [
+            {
+              role: 'test-role',
+              attributes: [
+                {
+                  id: 'urn:restorecommerce:acs:names:roleScopingEntity',
+                  value: 'urn:test:acs:model:organization.Organization',
+                  attributes: [{
+                    id: 'urn:restorecommerce:acs:names:roleScopingInstance',
+                    value: 'targetScope'
+                  }]
+                }
+              ]
+            },
+            {
+              role: 'user-role',
+              attributes: [
+                {
+                  id: 'urn:restorecommerce:acs:names:roleScopingEntity',
+                  value: 'urn:test:acs:model:user.User',
+                  attributes: [{
+                    id: 'urn:restorecommerce:acs:names:roleScopingInstance',
+                    value: 'test_user_id'
+                  }]
+                }
+              ]
+            }
+          ],
+          hierarchical_scopes: [{
+            id: 'targetScope',
+            role: 'test-role',
+            children: [{
+              id: 'targetSubScope'
+            }]
+          }, {
+            id: 'test_user_id',
+            role: 'user-role',
+            children: []
+          }]
+        };
+
+        const ctx: ACSClientContext = {
+          subject,
+          resources,
+        };
+
+        // call accessRequest(), the response is from mock ACS
+        const readResponse = await accessRequest(
+          subject,
+          [{ resource: 'Test', id: resources[0].id }],
+          AuthZAction.READ,
+          ctx, { operation: Operation.whatIsAllowed, database: 'postgres' }
+        ) as PolicySetRQResponse;
+
+        should.exist(readResponse.decision);
+        should.equal(readResponse.decision, Response_Decision.PERMIT);
+        should.equal(readResponse.operation_status?.code, 200);
+        should.equal(readResponse.operation_status?.message, 'success');
+        // verify input is modified to enforce the applicapble both Org and User poilicy
+        const orgFilterKey = cfg.get('authorization:filterParamKey')[0].value;
+        const userFilterKey = cfg.get('authorization:filterParamKey')[1].value;
+        const expectedFilterResponse = [
+          { field: orgFilterKey, operation: "eq", value: "targetScope" },
+          { field: orgFilterKey, operation: "eq", value: "targetSubScope" },
+          { field: userFilterKey, operation: "eq", value: "test_user_id" }
+        ];
+        should.equal(readResponse.filters?.[0]?.resource, 'Test');
+        const filterEntityMap = readResponse.filters;
+        const filters = filterEntityMap?.[0].filters;
+        should.deepEqual(filters?.[0]?.filters?.[0], expectedFilterResponse[0]);
       }
     );
 

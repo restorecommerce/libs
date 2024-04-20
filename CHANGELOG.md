@@ -1,4 +1,8 @@
 
+### 1.6.0 (April 20th, 2024)
+
+- up custom arguments prefix (so that array can be supported for bind vars)
+
 ### 1.5.0 (April 15th, 2024)
 
 - up deps

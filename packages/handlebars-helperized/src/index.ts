@@ -15,7 +15,7 @@ const defaultOpts = {
 };
 
 // Initializes and configures a custom handlebars instance
-const init = (options: object | undefined, customHelpersList: any) => {
+const init = async (options: object | undefined, customHelpersList: any): Promise<(typeof hbs)> => {
   // default values if nothing given
   const opts = defaults(options, defaultOpts);
   // more functionality directly added via custom plugins from ./lib
@@ -25,7 +25,7 @@ const init = (options: object | undefined, customHelpersList: any) => {
   customHandlebarsExtensions(hbs, opts); // everything else
 
   // add custom helpers from rendering-srv
-  customHelpersList?.forEach(async (customHelper: any) => {
+  for (const customHelper of (customHelpersList || [])) {
     const filePath = customHelper;
     // require(filePath)(hbs, opts);
 
@@ -40,7 +40,7 @@ const init = (options: object | undefined, customHelpersList: any) => {
         console.log(`Error importing file ${filePath}`, { code: err.code, message: err.message, stack: err.stack });
       });
     }
-  });
+  }
   // extend rendering with layout functionality
   handlebarsLayouts.register(hbs);
   return hbs;
@@ -55,17 +55,28 @@ class Renderer {
   @param {Array} customHelpersList contains a list of custom helpers (optional)
   */
 
-  hbs: any;
+  loadingHbs: Promise<(typeof hbs)>;
+  hbs: (typeof hbs);
   style: string | undefined;
   template: any;
 
   constructor(template: string, layout?: string | undefined, style?: string | undefined, opts?: object | undefined, customHelpersList?: any) {
-    this.hbs = init(opts, customHelpersList);
     this.style = style;
-    if (layout) {
-      this.hbs.registerPartial('layout', layout);
-    }
-    this.template = this.hbs.compile(template);
+    this.loadingHbs = init(opts, customHelpersList);
+    this.loadingHbs.then((hbs) => {
+      this.hbs = hbs;
+      if (layout) {
+        this.hbs.registerPartial('layout', layout);
+      }
+      this.template = this.hbs.compile(template);
+    });
+  }
+
+  /**
+   * Wait for the renderer to initialize
+   */
+  waitLoad(): Promise<void> {
+    return this.loadingHbs.then();
   }
 
   /**

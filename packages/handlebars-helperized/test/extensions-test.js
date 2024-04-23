@@ -19,7 +19,7 @@ const load = function loadTemplateFile(name) {
  */
 describe('the handlebars extensions', () => {
   describe('localization', () => {
-    it('should translate placeholders', () => {
+    it('should translate placeholders', async () => {
       const tpl = load('payment-notification');
       const opts = {
         texts: {
@@ -28,7 +28,8 @@ describe('the handlebars extensions', () => {
         }
       };
       const renderer = new Renderer(tpl, null, null, opts);
-      const context = { orderIRI: 'http://example.com/42' };
+      await renderer.waitLoad();
+      const context = {orderIRI: 'http://example.com/42'};
       const result = renderer.render(context);
       const expectedResult = `<h1 class="vclAlignCentered">Hello Admin</h1>\n\n` +
         `<p class="vclAlignCentered">\n  Payment Received: http://example.com/42\n</p>\n`;
@@ -37,9 +38,10 @@ describe('the handlebars extensions', () => {
   });
 
   describe('numbers', () => {
-    it('should resolve placeholders', () => {
+    it('should resolve placeholders', async () => {
       const tpl = load('numbers');
       const renderer = new Renderer(tpl, null, null, {});
+      await renderer.waitLoad();
       const result = renderer.render({});
       const expectedResult = 'number: 42\nprice: 42.00\nbytes: 42B\n';
       result.should.equal(expectedResult);
@@ -48,14 +50,15 @@ describe('the handlebars extensions', () => {
 
 
   describe('datetimes', () => {
-    it('should format timestamps', () => {
+    it('should format timestamps', async () => {
       const tpl = load('times');
       const renderer = new Renderer(tpl, null, null, {});
+      await renderer.waitLoad();
       const ts = '03-19-2019 13:37:00';
       const format = 'MM-DD-YYYY HH:mm:ss';
       const tz = moment.tz.guess();
       const yesterday = moment.tz(ts, format, tz);
-      const context = { yesterday };
+      const context = {yesterday};
       const result = renderer.render(context);
       const ago = yesterday.fromNow();
       const expectedResult = 'ago: ' + ago + `\ndf: 03/19/2019\ndtf: March 19, 2019 1:37 PM\n`;
@@ -64,7 +67,7 @@ describe('the handlebars extensions', () => {
   });
 
   describe('integration', () => {
-    it('should all work on a real-world example simultanously', () => {
+    it('should all work on a real-world example simultanously', async () => {
       const opts = {
         texts: {
           'emails.invoice.title': 'Professor Oak',
@@ -90,6 +93,7 @@ describe('the handlebars extensions', () => {
       };
       const tpl = load('invoice');
       const renderer = new Renderer(tpl, null, null, opts);
+      await renderer.waitLoad();
       const ts = '03-19-2019 13:37:00';
       const format = 'MM-DD-YYYY HH:mm:ss';
       const tz = moment.tz.guess();

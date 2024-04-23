@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0](https://github.com/restorecommerce/handlebars-helperized/compare/@restorecommerce/handlebars-helperized@1.2.0...@restorecommerce/handlebars-helperized@1.3.0) (2024-04-23)
+
+
+### Features
+
+* add wait function to the Renderer ([#84](https://github.com/restorecommerce/handlebars-helperized/issues/84)) ([1347d8f](https://github.com/restorecommerce/handlebars-helperized/commit/1347d8f1dd46c0cd75c9a288811b9fb455d8049f))
+
+
+
+
+
 # [1.2.0](https://github.com/restorecommerce/handlebars-helperized/compare/@restorecommerce/handlebars-helperized@1.0.11...@restorecommerce/handlebars-helperized@1.2.0) (2024-04-23)
 
 

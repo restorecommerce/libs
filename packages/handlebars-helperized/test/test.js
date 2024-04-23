@@ -1,7 +1,8 @@
 // eslint-disable-next-line
-const should = require('should');
-const fs = require('fs');
-let { Renderer } = require('../lib');
+import 'should';
+import fs from 'fs';
+import { Renderer } from '../lib/index.js';
+
 // Renderer = Renderer.default;
 
 const data = {

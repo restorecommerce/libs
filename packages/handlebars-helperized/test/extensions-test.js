@@ -3,10 +3,11 @@
 /* eslint-env node, mocha */
 
 // eslint-disable-next-line
-const should = require('should');
-const fs = require('fs');
-const moment = require('moment-timezone');
-let { Renderer } = require('../lib');
+import 'should';
+import fs from 'fs';
+import moment from 'moment-timezone';
+import { Renderer } from '../lib/index.js';
+
 // Renderer = Renderer.default;
 
 const load = function loadTemplateFile(name) {

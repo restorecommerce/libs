@@ -3,9 +3,10 @@
 /* eslint-env node, mocha */
 
 // eslint-disable-next-line
-const should = require('should');
-const moment = require('moment-timezone');
-let { Renderer } = require('../lib');
+import 'should';
+import moment from 'moment-timezone';
+import { Renderer } from '../lib/index.js';
+
 // Renderer = Renderer.default;
 
 /**

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.10](https://github.com/restorecommerce/libs/compare/@restorecommerce/dev@0.0.9...@restorecommerce/dev@0.0.10) (2024-04-23)
+
+
+### Bug Fixes
+
+* ignore .d.ts files ([5e74ffc](https://github.com/restorecommerce/libs/commit/5e74ffc41758cbc941a744397ef633a3843b63b7))
+
+
+
+
+
 ## [0.0.9](https://github.com/restorecommerce/libs/compare/@restorecommerce/dev@0.0.8...@restorecommerce/dev@0.0.9) (2024-03-05)
 
 **Note:** Version bump only for package @restorecommerce/dev

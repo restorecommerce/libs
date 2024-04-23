@@ -1,4 +1,3 @@
-import * as _ from 'lodash';
 import {
   ACSClientContext,
   AuthZAction,
@@ -18,7 +17,10 @@ import { cfg, updateConfig } from '../config';
 import logger from '../logger';
 import { flushCache, getOrFill } from './cache';
 import { Events, registerProtoMeta } from '@restorecommerce/kafka-client';
-import { mapResourceURNObligationProperties } from '../utils';
+import {
+  _,
+  mapResourceURNObligationProperties
+} from '../utils';
 import {
   AccessControlServiceClient,
   AccessControlServiceDefinition

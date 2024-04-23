@@ -1,4 +1,3 @@
-import * as _ from 'lodash';
 import * as uuid from 'uuid';
 import { Logger } from 'winston';
 import { Provider as ServiceConfig } from 'nconf';
@@ -28,11 +27,14 @@ import {
   Resource,
   AuthZAction,
   ACSClientContext,
+  DecisionResponse,
+  PolicySetRQResponse,
 } from './interfaces';
 import {
   accessRequest,
 } from './resolver';
 import { cfg } from '../config';
+import { _ } from '../utils';
 
 /* eslint-disable prefer-arrow-functions/prefer-arrow-functions */
 export type DatabaseProvider = 'arangoDB' | 'postgres';
@@ -169,7 +171,7 @@ export function access_controlled_function<T extends ResourceList>(kwargs: {
           }
         }
 
-        const accessResponse = await accessRequest(
+        const acsResponse: DecisionResponse & PolicySetRQResponse = await accessRequest(
           subject,
           resource ?? [],
           kwargs.action,
@@ -180,16 +182,25 @@ export function access_controlled_function<T extends ResourceList>(kwargs: {
           }
         );
 
-        if (accessResponse?.decision !== Response_Decision.PERMIT) {
-          return accessResponse;
+        if (acsResponse?.decision !== Response_Decision.PERMIT) {
+          return acsResponse;
+        }
+
+        if (arguments.length) {
+          arguments[0].custom_queries = acsResponse?.custom_query_args?.flatMap(
+            arg => arg.custom_queries
+          );
+          arguments[0].custom_arguments = acsResponse?.custom_query_args?.flatMap(
+            arg => arg.custom_arguments
+          );
         }
 
         const appResponse = await method.apply(this, arguments);
-        const property = accessResponse.obligations?.flatMap(
+        const property = acsResponse.obligations?.flatMap(
           obligation => obligation.property
         );
 
-        return appResponse; // _.omitDeep(appResponse, property);
+        return _.omitDeep(appResponse, property);
       }
       catch (err) {
         return {

@@ -2,7 +2,7 @@ import { cfg } from '../config';
 import logger from '../logger';
 import * as crypto from 'crypto';
 import { createClient, RedisClientType } from 'redis';
-import * as _ from 'lodash';
+import { _ } from '../utils';
 
 let attempted = false;
 let redisInstance: RedisClientType<any, any>;

@@ -83,9 +83,9 @@ export interface Obligation {
 }
 
 export interface DecisionResponse {
-  decision: Response_Decision;
+  decision?: Response_Decision;
   obligations?: Obligation[];
-  operation_status: {
+  operation_status?: {
     code?: number;
     message?: string;
   };
@@ -216,8 +216,8 @@ export interface PolicySetRQResponse extends AccessControlObjectInterface {
   obligations?: Obligation[];
   decision?: Response_Decision;
   operation_status?: {
-    code: number;
-    message: string;
+    code?: number;
+    message?: string;
   };
 }
 

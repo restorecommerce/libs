@@ -1,9 +1,11 @@
+import lodash from 'lodash-es';
+import deepdash from 'deepdash-es';
+export const _ = deepdash(lodash);
 import {
   PolicySetRQ, PolicySetRQResponse, AttributeTarget, HierarchicalScope,
   ResourceFilterMap, CustomQueryArgs, DecisionResponse, Resource, AuthZAction,
   ResolvedSubject, Obligation
 } from './acs/interfaces';
-import * as _ from 'lodash';
 import { QueryArguments, UserQueryArguments } from './acs/resolver';
 import { errors, cfg } from './config';
 import nodeEval from 'node-eval';

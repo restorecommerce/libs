@@ -1,11 +1,13 @@
 import juice from 'juice';
-import defaults from 'lodash/defaults';
+import { defaults } from 'lodash-es';
 // the basic building block is the handlebars rendering engine
 import hbs from 'handlebars';
-import { localizationHandlebarsExtension } from './helpers/l10n-helpers';
-import { numbroHandlebarsExtension } from './helpers/numbro-helpers';
-import { momentHandlebarsExtension } from './helpers/moment-helpers';
-import { customHandlebarsExtensions } from './helpers/custom-helpers';
+import { localizationHandlebarsExtension } from './helpers/l10n-helpers.js';
+import { numbroHandlebarsExtension } from './helpers/numbro-helpers.js';
+import { momentHandlebarsExtension } from './helpers/moment-helpers.js';
+import { customHandlebarsExtensions } from './helpers/custom-helpers.js';
+// @ts-ignore
+import handlebarsLayouts from 'handlebars-layouts';
 
 const defaultOpts = {
   locale: 'en_US',
@@ -23,7 +25,7 @@ const init = (options: object | undefined, customHelpersList: any) => {
   customHandlebarsExtensions(hbs, opts); // everything else
 
   // add custom helpers from rendering-srv
-  customHelpersList?.forEach(async (customHelper) => {
+  customHelpersList?.forEach(async (customHelper: any) => {
     const filePath = customHelper;
     // require(filePath)(hbs, opts);
 
@@ -40,7 +42,6 @@ const init = (options: object | undefined, customHelpersList: any) => {
     }
   });
   // extend rendering with layout functionality
-  const handlebarsLayouts = require('handlebars-layouts');
   handlebarsLayouts.register(hbs);
   return hbs;
 };

@@ -1,5 +1,6 @@
-const numbro = require('numbro');
-const allLanguages = require('numbro/dist/languages.min');
+import numbro from 'numbro';
+// @ts-ignore
+import allLanguages from 'numbro/dist/languages.min.js';
 
 Object.values(allLanguages).forEach((data) => {
   numbro.registerLanguage(data);

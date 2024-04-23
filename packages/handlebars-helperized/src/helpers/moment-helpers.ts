@@ -11,31 +11,31 @@ let  momentHandlebarsExtension = (hbs: any, opts: any) => {
       v *= 1000;
     }
     const tz = options.hash.timezone || moment.tz.guess();
-    return moment.tz(v, tz).locale(opts.locale).fromNow();
+    return moment(v).tz(tz).locale(opts.locale).fromNow();
   });
 
   // Date format short
   hbs.registerHelper('df', (value: any, options: any) => {
     const tz = options.hash.timezone || moment.tz.guess();
-    return moment.tz(value, tz).locale(opts.locale).format('L');
+    return moment(value).tz(tz).locale(opts.locale).format('L');
   });
 
   // Date format Long
   hbs.registerHelper('dfl', (value: any, options: any) => {
     const tz = options.hash.timezone || moment.tz.guess();
-    return moment.tz(value, tz).locale(opts.locale).format('LL');
+    return moment(value).tz(tz).locale(opts.locale).format('LL');
   });
 
   // Time format
   hbs.registerHelper('tf', (value: any, options: any) => {
     const tz = options.hash.timezone || moment.tz.guess();
-    return moment.tz(value, tz).locale(opts.locale).format('LT');
+    return moment(value).tz(tz).locale(opts.locale).format('LT');
   });
 
   // Date-Time format
   hbs.registerHelper('dtf', (value: any, options: any) => {
     const tz = options.hash.timezone || moment.tz.guess();
-    return moment.tz(value, tz).locale(opts.locale).format('LLL');
+    return moment(value).tz(tz).locale(opts.locale).format('LLL');
   });
 
   // Date-Time format with given format

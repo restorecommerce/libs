@@ -18,18 +18,21 @@
     "layout",
     "i18n"
   ],
+  "type": "module",
   "dependencies": {
     "handlebars": "^4.7.8",
     "handlebars-layouts": "^3.1.4",
     "juice": "^10.0.0",
-    "lodash.defaults": "4.2.0",
+    "lodash-es": "^4.17.21",
     "moment-timezone": "^0.5.45",
-    "numbro": "^2.4.0"
+    "numbro": "^2.5.0"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.201",
-    "@types/mocha": "^10.0.4",
-    "@types/node": "^18.7.14",
+    "@restorecommerce/dev": "^0.0.9",
+    "@types/lodash": "^4.17.0",
+    "@types/lodash-es": "^4.17.12",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "^20.12.7",
     "@typescript-eslint/eslint-plugin": "^6.11.0",
     "@typescript-eslint/eslint-plugin-tslint": "^6.11.0",
     "@typescript-eslint/parser": "^6.11.0",
@@ -38,7 +41,7 @@
     "eslint": "^8.54.0",
     "eslint-plugin-prefer-arrow-functions": "^3.2.4",
     "is-generator": "^1.0.3",
-    "mocha": "^10.2.0",
+    "mocha": "^10.4.0",
     "npm-run-all": "^4.1.5",
     "nyc": "^15.1.0",
     "should": "^13.2.3",
@@ -55,7 +58,7 @@
     "coveralls": "nyc --reporter text --reporter lcov npm test"
   },
   "engines": {
-    "node": ">= 8.0.0"
+    "node": ">= 16.0.0"
   },
   "nx": {
     "targets": {

@@ -23,34 +23,35 @@ const style = fs.readFileSync('./test/templates/basic.css', 'utf-8');
  * Core functionality testing
  */
 describe('the handlebars template engine', () => {
-  it('should be able to render basic templates', (done) => {
+  it('should be able to render basic templates', async () => {
     const renderer = new Renderer(basicTpl);
+    await renderer.waitLoad();
     let result = renderer.render(data);
     result = result.replace(/\s/g, '');
     result.should.equal('<div>JohnDoe</div>');
-    done();
   });
 
-  it('should be able to render templates with layouts', (done) => {
+  it('should be able to render templates with layouts', async () => {
     const renderer = new Renderer(layoutUseTpl, layoutTpl);
+    await renderer.waitLoad();
     let result = renderer.render(data);
     result = result.replace(/\s/g, '');
     result.should.equal('<div>HeaderDefaultContentMainOverwrittenContent</div>');
-    done();
   });
 
-  it('should be able to render templates with a style', (done) => {
+  it('should be able to render templates with a style', async () => {
     const renderer = new Renderer(basicTpl, layoutUseTpl, style);
+    await renderer.waitLoad();
     let result = renderer.render(data);
     result = result.replace(/\r?\n|\r/g, '');
     result.should.equal('<div style="color: red; text-align: center;">John Doe</div>');
-    done();
   });
 
   it('should be able to render templates with a provided custom helper', async () => {
     const filePathList = ['../test/handlebars/helper-loud.js'];
     const tpl = '<h1>Hello {{loud name}}</h1>';
     const renderer = new Renderer(tpl, '', '', {}, filePathList );
+    await renderer.waitLoad();
     await new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve();

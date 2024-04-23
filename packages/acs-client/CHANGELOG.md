@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.6.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@1.6.0...@restorecommerce/acs-client@1.6.2) (2024-04-23)
+
+
+### Bug Fixes
+
+* **acs-client:** add obligations and custom-query to decorators, add pdf-rendering.proto ([d84995d](https://github.com/restorecommerce/libs/commit/d84995d965136ffde44afe9f42b962f61bcd2173))
+
+
+
+
+
 ## [1.6.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@1.6.0...@restorecommerce/acs-client@1.6.1) (2024-04-23)
 
 **Note:** Version bump only for package @restorecommerce/acs-client

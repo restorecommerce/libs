@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/restorecommerce/handlebars-helperized/compare/@restorecommerce/handlebars-helperized@1.0.11...@restorecommerce/handlebars-helperized@1.2.0) (2024-04-23)
+
+
+### Features
+
+* convert handlebars-helperized to ESM ([2e9b037](https://github.com/restorecommerce/handlebars-helperized/commit/2e9b037fb8aefe5c741f1ef5b2a0cb98e8c60ce5))
+
+
+
+
+
 # [1.1.0](https://github.com/restorecommerce/handlebars-helperized/compare/@restorecommerce/handlebars-helperized@1.0.11...@restorecommerce/handlebars-helperized@1.1.0) (2024-04-23)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.8.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.8.2...@restorecommerce/protos@6.8.3) (2024-04-23)
+
+
+### Bug Fixes
+
+* **acs-client:** add obligations and custom-query to decorators, add pdf-rendering.proto ([d84995d](https://github.com/restorecommerce/libs/commit/d84995d965136ffde44afe9f42b962f61bcd2173))
+
+
+
+
+
 ## [6.8.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.8.1...@restorecommerce/protos@6.8.2) (2024-04-19)
 
 

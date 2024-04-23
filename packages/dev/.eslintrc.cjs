@@ -11,6 +11,7 @@ module.exports = {
     ],
     sourceType: 'module'
   },
+  ignorePatterns: '*.d.ts',
   parser: '@typescript-eslint/parser',
   plugins: [
     '@typescript-eslint',

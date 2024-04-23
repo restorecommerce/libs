@@ -1,5 +1,5 @@
-import lodash from 'lodash-es';
-import deepdash from 'deepdash-es';
+import lodash from 'lodash';
+import deepdash from 'deepdash';
 export const _ = deepdash(lodash);
 import {
   PolicySetRQ, PolicySetRQResponse, AttributeTarget, HierarchicalScope,

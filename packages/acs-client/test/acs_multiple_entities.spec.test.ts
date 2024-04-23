@@ -272,8 +272,8 @@ describe('testing acs-client with multiple entities', () => {
       ) as DecisionResponse;
 
       should.equal(response.decision, Response_Decision.PERMIT);
-      should.equal(response.operation_status.code, 200);
-      should.equal(response.operation_status.message, 'success');
+      should.equal(response?.operation_status?.code, 200);
+      should.equal(response?.operation_status?.message, 'success');
     });
 
     it([
@@ -410,10 +410,10 @@ describe('testing acs-client with multiple entities', () => {
           ctx
         ) as DecisionResponse;
 
-        should.equal(response.decision, Response_Decision.DENY);
-        should.equal(response.operation_status.code, 403);
+        should.equal(response?.decision, Response_Decision.DENY);
+        should.equal(response?.operation_status?.code, 403);
         should.equal(
-          response.operation_status.message,
+          response?.operation_status?.message,
           [
             'Access not allowed for request with subject:test_user_id,',
             'resource:Location,Address, action:CREATE,',
@@ -465,9 +465,9 @@ describe('testing acs-client with multiple entities', () => {
 
       should.exist(response);
       should.equal(response.decision, Response_Decision.DENY);
-      should.equal(response.operation_status.code, 403);
+      should.equal(response?.operation_status?.code, 403);
       should.equal(
-        response.operation_status.message,
+        response?.operation_status?.message,
         [
           'Access not allowed for request with subject:test_user_id,',
           'resource:Location,Address, action:READ, target_scope:invalidTargetScope;',
@@ -589,8 +589,8 @@ describe('testing acs-client with multiple entities', () => {
         ) as DecisionResponse;
 
         should.equal(response.decision, Response_Decision.PERMIT);
-        should.equal(response.operation_status.code, 200);
-        should.equal(response.operation_status.message, 'success');
+        should.equal(response.operation_status?.code, 200);
+        should.equal(response.operation_status?.message, 'success');
       }
     );
 
@@ -636,9 +636,9 @@ describe('testing acs-client with multiple entities', () => {
         ) as DecisionResponse;
 
         should.equal(response.decision, Response_Decision.DENY);
-        should.equal(response.operation_status.code, 403);
+        should.equal(response.operation_status?.code, 403);
         should.equal(
-          response.operation_status.message,
+          response.operation_status?.message,
           [
             'Access not allowed for request with subject:test_user_id,',
             'resource:Location,Address, action:CREATE,',

@@ -32,13 +32,13 @@ const init = async (options: object | undefined, customHelpersList: any): Promis
     // check for double default
     let fileImport = await import(filePath);
     if (fileImport?.default?.default) {
-      (async () => (await import(filePath)).default.default(hbs, opts))().catch(err => {
+      await new Promise((r) => (async () => fileImport.default.default(hbs, opts))().catch(err => {
         console.log(`Error importing file ${filePath}`, { code: err.code, message: err.message, stack: err.stack });
-      });
+      }).then(r));
     } else {
-      (async () => (await import(filePath)).default(hbs, opts))().catch(err => {
+      await new Promise((r) => (async () => fileImport.default(hbs, opts))().catch(err => {
         console.log(`Error importing file ${filePath}`, { code: err.code, message: err.message, stack: err.stack });
-      });
+      }).then(r));
     }
   }
   // extend rendering with layout functionality

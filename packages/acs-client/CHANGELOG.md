@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.6.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@1.6.2...@restorecommerce/acs-client@1.6.3) (2024-04-24)
+
+
+### Bug Fixes
+
+* **acs-client:** use deepdash for obligations in decorators ([06eda9c](https://github.com/restorecommerce/libs/commit/06eda9c52f8e40c77d202ec963014529894a2efe))
+
+
+
+
+
 ## [1.6.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@1.6.0...@restorecommerce/acs-client@1.6.2) (2024-04-23)
 
 

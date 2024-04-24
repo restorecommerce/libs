@@ -56,5 +56,5 @@ jobs:
       - name: Sync next branch
         run: |
           git checkout next
-          git merge master
+          git merge --ff-only master
           git push -u origin next

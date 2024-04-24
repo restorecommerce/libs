@@ -5,6 +5,7 @@ package io.restorecommerce.shop;
 import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
+import "io/restorecommerce/attribute.proto";
 import "io/restorecommerce/status.proto";
 import "io/restorecommerce/options.proto";
 
@@ -59,4 +60,5 @@ message Shop {
       field_name: "organization",
     }
   ];
+  repeated io.restorecommerce.attribute.Attribute settings = 8;
 }

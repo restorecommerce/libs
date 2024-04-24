@@ -43,6 +43,11 @@ export type ResourceFactory<T extends ResourceList> = (self: any, request: T, ..
 export type DatabaseSelector<T extends ResourceList> = (self: any, request: T, ...args: any) => Promise<DatabaseProvider>;
 export type MetaDataInjector<T extends ResourceList> = (self: any, request: T, ...args: any) => Promise<T>;
 
+export interface AccessControlledService {
+  readonly __userService: Client<UserServiceDefinition>;
+  readonly __acsDatabaseProvider: DatabaseProvider;
+}
+
 export const DefaultACSClientContextFactory = async <T extends ResourceList>(
   self: any,
   request: T,
@@ -105,7 +110,7 @@ export const DefaultMetaDataInjector = async <T extends ResourceList>(
 };
 
 export function access_controlled_service<T extends { new(...args: any): {} }>(baseService: T): any {
-  return class extends baseService {
+  return class extends baseService implements AccessControlledService {
     public readonly __userService: Client<UserServiceDefinition>;
     public readonly __acsDatabaseProvider: DatabaseProvider;
 
@@ -143,8 +148,9 @@ export function access_controlled_function<T extends ResourceList>(kwargs: {
   ) {
     const method = descriptor.value!;
     descriptor.value = async function () {
+      const that = this as AccessControlledService;
       try {
-        if (!this.__userService) {
+        if (!that.__userService) {
           throw new Error('An @access_controlled_function must be member of an @access_controlled_service class');
         }
         const request = arguments[0];
@@ -165,7 +171,7 @@ export function access_controlled_function<T extends ResourceList>(kwargs: {
         const subject = context?.subject;
         subject.id = null;
         if (subject?.token) {
-          const user = await this.__userService.findByToken({ token: subject.token });
+          const user = await that.__userService.findByToken({ token: subject.token });
           if (user?.payload?.id) {
             subject.id = user.payload.id;
           }
@@ -177,7 +183,7 @@ export function access_controlled_function<T extends ResourceList>(kwargs: {
           kwargs.action,
           context,
           {
-            operation: kwargs.operation, database: database ?? this.__acsDatabaseProvider ?? 'arangoDB',
+            operation: kwargs.operation, database: database ?? that.__acsDatabaseProvider ?? 'arangoDB',
             useCache: kwargs.useCache ?? false
           }
         );
@@ -186,13 +192,12 @@ export function access_controlled_function<T extends ResourceList>(kwargs: {
           return acsResponse;
         }
 
-        if (arguments.length) {
-          arguments[0].custom_queries = acsResponse?.custom_query_args?.flatMap(
-            arg => arg.custom_queries
+        if (request) {
+          const arg = acsResponse?.custom_query_args?.find(
+            arg => resource?.some(r => r.resource === arg.resource)
           );
-          arguments[0].custom_arguments = acsResponse?.custom_query_args?.flatMap(
-            arg => arg.custom_arguments
-          );
+          request.custom_queries = arg?.custom_queries;
+          request.custom_arguments = arg?.custom_arguments;
         }
 
         const appResponse = await method.apply(this, arguments);
@@ -200,9 +205,9 @@ export function access_controlled_function<T extends ResourceList>(kwargs: {
           obligation => obligation.property
         );
 
-        return _.omitDeep(appResponse, property);
+        return property?.length ? _.omitDeep(appResponse, property) : appResponse;
       }
-      catch (err) {
+      catch (err: any) {
         return {
           decision: Response_Decision.DENY,
           operation_status: {

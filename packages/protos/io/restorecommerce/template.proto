@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package io.restorecommerce.template;
+
+import "io/restorecommerce/resource_base.proto";
+import "io/restorecommerce/meta.proto";
+import "io/restorecommerce/auth.proto";
+import "io/restorecommerce/status.proto";
+import "io/restorecommerce/options.proto";
+
+
+/*
+* Microservice definition.
+*/
+service TemplateService {
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (TemplateListResponse) {
+    option (io.restorecommerce.options.is_query) = true;
+  };
+  rpc Create (TemplateList) returns (TemplateListResponse);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
+  rpc Update (TemplateList) returns (TemplateListResponse);
+  rpc Upsert (TemplateList) returns (TemplateListResponse);
+}
+
+message Deleted {
+  optional string id = 1;
+}
+
+message TemplateList {
+  repeated Template items = 1;
+  optional uint32 total_count = 2;
+  optional io.restorecommerce.auth.Subject subject = 3;
+}
+
+message TemplateListResponse {
+  repeated TemplateResponse items = 1;
+  optional uint32 total_count = 2;
+  optional io.restorecommerce.status.OperationStatus operation_status = 3;
+}
+
+message TemplateResponse {
+  optional Template payload = 1;
+  optional io.restorecommerce.status.Status status = 2;
+}
+
+message Template {
+  optional string id = 1;
+  optional io.restorecommerce.meta.Meta meta = 2;
+  optional string name = 3;
+  optional string description = 4;
+  optional io.restorecommerce.reference.Reference reference = 4;
+  repeated io.restorecommerce.file.File files = 5;
+  repeated io.restorecommerce.image.Image images = 6;
+  repeated io.restorecommerce.attribute.Attribute attributes = 7;
+}

@@ -4,11 +4,13 @@ package io.restorecommerce.template;
 
 import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/attribute.proto";
+import "io/restorecommerce/image.proto";
+import "io/restorecommerce/file.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
+import "io/restorecommerce/reference.proto";
 import "io/restorecommerce/options.proto";
-
 
 /*
 * Microservice definition.
@@ -49,8 +51,8 @@ message Template {
   optional io.restorecommerce.meta.Meta meta = 2;
   optional string name = 3;
   optional string description = 4;
-  optional io.restorecommerce.reference.Reference reference = 4;
-  repeated io.restorecommerce.file.File files = 5;
-  repeated io.restorecommerce.image.Image images = 6;
-  repeated io.restorecommerce.attribute.Attribute attributes = 7;
+  optional io.restorecommerce.reference.Reference reference = 5;
+  repeated io.restorecommerce.file.File files = 6;
+  repeated io.restorecommerce.image.Image images = 7;
+  repeated io.restorecommerce.attribute.Attribute attributes = 8;
 }

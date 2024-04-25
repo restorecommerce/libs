@@ -201,8 +201,12 @@ export function access_controlled_function<T extends ResourceList>(kwargs: {
         }
 
         const appResponse = await method.apply(this, arguments);
-        const property = acsResponse.obligations?.flatMap(
-          obligation => obligation.property
+        const property = acsResponse.obligations?.filter(
+          o => resource.some(r => r.resource === o.resource)
+        ).flatMap(
+          o => o.property
+        ).flatMap(
+          p => [p, new RegExp(p)]
         );
 
         return property?.length ? _.omitDeep(appResponse, property) : appResponse;

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.26](https://github.com/restorecommerce/libs/compare/@restorecommerce/rc-grpc-clients@5.1.25...@restorecommerce/rc-grpc-clients@5.1.26) (2024-04-25)
+
+
+### Bug Fixes
+
+* **rc-grpc-client:** add protos to Dev deps ([2a6b30d](https://github.com/restorecommerce/libs/commit/2a6b30d2b152c748a385ed69557e068a26a1e9b3))
+
+
+
+
+
 ## [5.1.25](https://github.com/restorecommerce/libs/compare/@restorecommerce/rc-grpc-clients@5.1.23...@restorecommerce/rc-grpc-clients@5.1.25) (2024-04-23)
 
 **Note:** Version bump only for package @restorecommerce/rc-grpc-clients

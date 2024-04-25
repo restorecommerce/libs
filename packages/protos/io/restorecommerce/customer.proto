@@ -5,6 +5,7 @@ package io.restorecommerce.customer;
 import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
+import "io/restorecommerce/attribute.proto";
 import "io/restorecommerce/status.proto";
 import "io/restorecommerce/options.proto";
 
@@ -51,6 +52,7 @@ message Customer {
     Commercial commercial = 4;
     PublicSector public_sector = 5;
   };
+  repeated io.restorecommerce.attribute.Attribute settings = 6;
 }
 
 message Private {

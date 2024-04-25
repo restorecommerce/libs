@@ -3,6 +3,7 @@ syntax = "proto3";
 package io.restorecommerce.template;
 
 import "io/restorecommerce/resource_base.proto";
+import "io/restorecommerce/attribute.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";

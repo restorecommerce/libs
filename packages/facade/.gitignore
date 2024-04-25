@@ -1,3 +1,4 @@
 dist
 coverage
 codegen
+*.generated.ts

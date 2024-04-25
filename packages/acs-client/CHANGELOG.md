@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.6.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@1.6.3...@restorecommerce/acs-client@1.6.4) (2024-04-25)
+
+
+### Bug Fixes
+
+* **acs:** regExp for deep obligations ([b4f1d6c](https://github.com/restorecommerce/libs/commit/b4f1d6cca3994975306aba2ebe2e51a38a286082))
+* **template.proto:** add template resource ([fdc5dc2](https://github.com/restorecommerce/libs/commit/fdc5dc21e00f36b434b0fcb41276f674accb80fc))
+
+
+
+
+
 ## [1.6.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@1.6.2...@restorecommerce/acs-client@1.6.3) (2024-04-24)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/acs-client",
-  "version": "1.6.3",
+  "version": "1.6.4",
   "description": "Access Control Service Client",
   "author": "n-fuse GmbH",
   "repository": {
@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "@alenon/grpc-mock-server": "^3.1.7",
-    "@restorecommerce/protos": "^6.8.3",
+    "@restorecommerce/protos": "^6.8.4",
     "@types/koa": "^2.13.11",
     "@types/mocha": "^10.0.4",
     "@types/node": "^20.8.2",

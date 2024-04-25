@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.8.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.8.3...@restorecommerce/protos@6.8.4) (2024-04-25)
+
+
+### Bug Fixes
+
+* **template.proto:** add template resource ([fdc5dc2](https://github.com/restorecommerce/libs/commit/fdc5dc21e00f36b434b0fcb41276f674accb80fc))
+* **template:** fix imports ([a981ad3](https://github.com/restorecommerce/libs/commit/a981ad343e5003f184edeff5863ea1d2631dd4c6))
+* **templates:** fix templates, add settings to customer ([e726970](https://github.com/restorecommerce/libs/commit/e726970c27ec8b323e667fff37d90f76b0ed0365))
+
+
+
+
+
 ## [6.8.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.8.2...@restorecommerce/protos@6.8.3) (2024-04-23)
 
 

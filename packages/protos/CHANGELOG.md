@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.8.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.8.4...@restorecommerce/protos@6.8.5) (2024-04-26)
+
+
+### Bug Fixes
+
+* **facade:** add templates, fix rc-grpc-client generate command ([a029445](https://github.com/restorecommerce/libs/commit/a029445c2a91226bfc1453a41913f7a95c9264fa))
+
+
+
+
+
 ## [6.8.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.8.3...@restorecommerce/protos@6.8.4) (2024-04-25)
 
 

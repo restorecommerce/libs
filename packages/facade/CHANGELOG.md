@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.13.17](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.13.16...@restorecommerce/facade@1.13.17) (2024-04-26)
+
+
+### Bug Fixes
+
+* **facade:** add templates, fix rc-grpc-client generate command ([a029445](https://github.com/restorecommerce/libs/commit/a029445c2a91226bfc1453a41913f7a95c9264fa))
+* **facade:** register pdf-rendering service ([5a74895](https://github.com/restorecommerce/libs/commit/5a74895f44efc2407eca23cb4d85f4a2c270df8a))
+
+
+
+
+
 ## [1.13.16](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.13.15...@restorecommerce/facade@1.13.16) (2024-04-25)
 
 **Note:** Version bump only for package @restorecommerce/facade

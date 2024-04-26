@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.27](https://github.com/restorecommerce/libs/compare/@restorecommerce/rc-grpc-clients@5.1.26...@restorecommerce/rc-grpc-clients@5.1.27) (2024-04-26)
+
+
+### Bug Fixes
+
+* **facade:** add templates, fix rc-grpc-client generate command ([a029445](https://github.com/restorecommerce/libs/commit/a029445c2a91226bfc1453a41913f7a95c9264fa))
+* **facade:** register pdf-rendering service ([5a74895](https://github.com/restorecommerce/libs/commit/5a74895f44efc2407eca23cb4d85f4a2c270df8a))
+
+
+
+
+
 ## [5.1.26](https://github.com/restorecommerce/libs/compare/@restorecommerce/rc-grpc-clients@5.1.25...@restorecommerce/rc-grpc-clients@5.1.26) (2024-04-25)
 
 

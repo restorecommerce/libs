@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.13.19](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.13.18...@restorecommerce/facade@1.13.19) (2024-04-26)
+
+
+### Bug Fixes
+
+* **facade:** register pdf-renderer in modules/index.ts ([a714578](https://github.com/restorecommerce/libs/commit/a7145782a105cf448b296b68644f30f07e800700))
+
+
+
+
+
 ## [1.13.18](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.13.17...@restorecommerce/facade@1.13.18) (2024-04-26)
 
 

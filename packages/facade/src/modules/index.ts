@@ -11,3 +11,4 @@ export * from './scheduling/index.js';
 export * from './notification/index.js';
 export * from './access-control/index.js';
 export * from './ostorage/index.js';
+export * from './pdf-rendering/index.js';

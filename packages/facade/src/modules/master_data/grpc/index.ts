@@ -52,10 +52,6 @@ import {
   UnitCodeServiceDefinition
 } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/unit_code.js';
 import {
-  type PdfRenderingServiceClient,
-  PdfRenderingServiceDefinition
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/pdf_rendering.js';
-import {
   type TemplateServiceClient,
   TemplateServiceDefinition
 } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/template.js';
@@ -79,7 +75,6 @@ export class ResourceSrvGrpcClient extends RestoreCommerceGrpcClient {
   readonly tax: TaxServiceClient;
   readonly tax_type: TaxTypeServiceClient;
   readonly unit_code: UnitCodeServiceClient;
-  readonly pdf_rendering: PdfRenderingServiceClient;
   readonly template: TemplateServiceClient;
   readonly command: any = undefined;
 
@@ -99,7 +94,6 @@ export class ResourceSrvGrpcClient extends RestoreCommerceGrpcClient {
     this.tax = this.createClient(cfg, TaxServiceDefinition, this.channel);
     this.tax_type = this.createClient(cfg, TaxTypeServiceDefinition, this.channel);
     this.unit_code = this.createClient(cfg, UnitCodeServiceDefinition, this.channel);
-    this.pdf_rendering = this.createClient(cfg, PdfRenderingServiceDefinition, this.channel);
     this.template = this.createClient(cfg, TemplateServiceDefinition, this.channel);
     this.command = this.createClient(cfg, CommandServiceDefinition, this.channel);
   }

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.13.18](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.13.17...@restorecommerce/facade@1.13.18) (2024-04-26)
+
+
+### Bug Fixes
+
+* **facade:** seperate pdf-rendering as individual service interface ([b566688](https://github.com/restorecommerce/libs/commit/b56668884241a9bc946abb11e24f3c8d86af3f74))
+
+
+
+
+
 ## [1.13.17](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.13.16...@restorecommerce/facade@1.13.17) (2024-04-26)
 
 

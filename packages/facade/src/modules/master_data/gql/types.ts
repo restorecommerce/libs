@@ -12,6 +12,7 @@ import { protoMetadata as metaPackageIoRestorecommerceTax } from '@restorecommer
 import { protoMetadata as metaPackageIoRestorecommerceTax_type } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/tax_type.js';
 import { protoMetadata as metaPackageIoRestorecommerceUnitCode } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/unit_code.js';
 import { protoMetadata as metaPackageIoRestorecommercePdfRendering } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/pdf_rendering.js';
+import { protoMetadata as metaPackageIoRestorecommerceTemplate } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/template.js';
 import { protoMetadata as metaPackageIoRestorecommerceCommand } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/command.js';
 import { type ProtoMetadata, registerPackagesRecursive } from '../../../gql/protos/index.js';
 import { registerProtoMeta } from '@restorecommerce/kafka-client';
@@ -31,6 +32,7 @@ export const subServices: ProtoMetadata[] = [
   metaPackageIoRestorecommerceTax,
   metaPackageIoRestorecommerceUnitCode,
   metaPackageIoRestorecommercePdfRendering,
+  metaPackageIoRestorecommerceTemplate,
   metaPackageIoRestorecommerceCommand,
 ];
 

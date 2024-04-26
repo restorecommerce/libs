@@ -94,12 +94,12 @@ message ResponsePayloadWithStatus {
 
 message ResponsePayload {
   oneof response {
-    ResponsePDF pdf = 1;
+    ResponsePdf pdf = 1;
     ResponseS3Upload upload_result = 2;
   }
 }
 
-message ResponsePDF {
+message ResponsePdf {
   bytes data = 1;
 }
 
@@ -125,10 +125,10 @@ message InfoResponse {
 // Puppeteer
 
 message PuppeteerOptions {
-  optional PDFOptions pdf_options = 1;
+  optional PdfOptions pdf_options = 1;
 }
 
-message PDFOptions {
+message PdfOptions {
   enum PaperFormat {
     A0 = 0;
     A1 = 1;

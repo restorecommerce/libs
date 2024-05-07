@@ -4,6 +4,7 @@ import { protoMetadata as metaPackageIoRestorecommerceTimezone } from '@restorec
 import { protoMetadata as metaPackageIoRestorecommerceContact_point_type } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/contact_point_type.js';
 import { protoMetadata as metaPackageIoRestorecommerceCustomer } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/customer.js';
 import { protoMetadata as metaPackageIoRestorecommerceContact_point } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/contact_point.js';
+import { protoMetadata as metaPackageIoRestorecommerceCredential } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/credential.js';
 import { protoMetadata as metaPackageIoRestorecommerceLocale } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/locale.js';
 import { protoMetadata as metaPackageIoRestorecommerceLocation } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/location.js';
 import { protoMetadata as metaPackageIoRestorecommerceOrganization } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/organization.js';
@@ -23,6 +24,7 @@ export const subServices: ProtoMetadata[] = [
   metaPackageIoRestorecommerceContact_point_type,
   metaPackageIoRestorecommerceCustomer,
   metaPackageIoRestorecommerceContact_point,
+  metaPackageIoRestorecommerceCredential,
   metaPackageIoRestorecommerceLocale,
   metaPackageIoRestorecommerceLocation,
   metaPackageIoRestorecommerceOrganization,

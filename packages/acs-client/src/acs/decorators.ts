@@ -59,16 +59,18 @@ export const DefaultACSClientContextFactory = async <T extends ResourceList>(
 });
 
 export function DefaultResourceFactory<T extends ResourceList>(
-  resourceName: string
+  ...resourceNames: string[]
 ): ResourceFactory<T> {
   return async (
     self: any,
     request: T,
     context: any,
-  ) => [{
-    resource: resourceName,
-    id: request.items?.map((item: any) => item.id)
-  }];
+  ) => resourceNames.map(
+    resourceName => ({
+      resource: resourceName,
+      id: request.items?.map((item: any) => item.id)
+    })
+  );
 }
 
 export const DefaultMetaDataInjector = async <T extends ResourceList>(
@@ -213,7 +215,6 @@ export function access_controlled_function<T extends ResourceList>(kwargs: {
       }
       catch (err: any) {
         return {
-          decision: Response_Decision.DENY,
           operation_status: {
             code: err.code ?? 500,
             message: err.details ?? err.message ?? err,

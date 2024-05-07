@@ -748,7 +748,7 @@ export const createResourceFilterMap = async (
  *
  */
 export const mapResourceURNObligationProperties = (obligations: Attribute[]): Obligation[] => {
-  let mappedResourceObligation: Obligation[] = [];
+  const mappedResourceObligation: Obligation[] = [];
   const urns = cfg.get('authorization:urns');
   if (obligations?.length > 0) {
     for (let obligationObj of obligations) {

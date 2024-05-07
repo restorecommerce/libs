@@ -36,7 +36,7 @@ message NotificationListResponse {
 }
 
 message NotificationResponse {
-  optional Notification items = 1;
+  optional Notification payload = 1;
   optional io.restorecommerce.status.Status status = 2;
 }
 

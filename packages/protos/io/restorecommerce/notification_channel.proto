@@ -33,7 +33,7 @@ message NotificationChannelListResponse {
 }
 
 message NotificationChannelResponse {
-  optional NotificationChannel items = 1;
+  optional NotificationChannel payload = 1;
   optional io.restorecommerce.status.Status status = 2;
 }
 

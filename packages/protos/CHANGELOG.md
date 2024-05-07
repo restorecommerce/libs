@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.8.6](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.8.5...@restorecommerce/protos@6.8.6) (2024-05-07)
+
+
+### Bug Fixes
+
+* **fulfillment_courier:** add credential_id ([f9a4608](https://github.com/restorecommerce/libs/commit/f9a4608289d2ae6b7b76346e39c550a05b2b7eb4))
+* **protos:** notification and notification_channel proto files ([a98ad17](https://github.com/restorecommerce/libs/commit/a98ad17181c1dd69779be37c1250f4ad336f9a43))
+
+
+
+
+
 ## [6.8.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.8.4...@restorecommerce/protos@6.8.5) (2024-04-26)
 
 

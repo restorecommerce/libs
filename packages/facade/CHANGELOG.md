@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.13.20](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.13.19...@restorecommerce/facade@1.13.20) (2024-05-07)
+
+
+### Bug Fixes
+
+* **credentials:** expose credential service, acs-client decorators support multi resource ([fbb6dde](https://github.com/restorecommerce/libs/commit/fbb6ddebfc1f65d4bad940c20096ff7f6b6e2d3a))
+
+
+
+
+
 ## [1.13.19](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.13.18...@restorecommerce/facade@1.13.19) (2024-04-26)
 
 

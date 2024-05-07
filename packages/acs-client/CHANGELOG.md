@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.6.7](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@1.6.6...@restorecommerce/acs-client@1.6.7) (2024-05-07)
+
+
+### Bug Fixes
+
+* **credentials:** expose credential service, acs-client decorators support multi resource ([fbb6dde](https://github.com/restorecommerce/libs/commit/fbb6ddebfc1f65d4bad940c20096ff7f6b6e2d3a))
+
+
+
+
+
 ## [1.6.6](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@1.6.5...@restorecommerce/acs-client@1.6.6) (2024-04-26)
 
 **Note:** Version bump only for package @restorecommerce/acs-client

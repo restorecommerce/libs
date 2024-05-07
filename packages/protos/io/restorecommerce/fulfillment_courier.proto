@@ -51,7 +51,8 @@ message FulfillmentCourier {
   optional string logo = 6;
   optional string website = 7;
   optional string stub_type = 8;
-  optional google.protobuf.Any configuration = 9;
+  optional string credential_id = 9;
+  optional google.protobuf.Any configuration = 10;
 }
 
 message FulfillmentCourierList {

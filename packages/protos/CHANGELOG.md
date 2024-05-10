@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.8.7](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.8.6...@restorecommerce/protos@6.8.7) (2024-05-10)
+
+
+### Bug Fixes
+
+* **read:** set missing query flag for facade ([f82bbc9](https://github.com/restorecommerce/libs/commit/f82bbc986f5b8cf4e69f0e55ca83be7d7f45e2e9))
+
+
+
+
+
 ## [6.8.6](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.8.5...@restorecommerce/protos@6.8.6) (2024-05-07)
 
 

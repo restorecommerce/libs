@@ -1,4 +1,8 @@
 
+### 1.6.1 (May 14th, 2024)
+
+- up chassis-srv for removing response logging
+
 ### 1.6.0 (April 20th, 2024)
 
 - up custom arguments prefix (so that array can be supported for bind vars)

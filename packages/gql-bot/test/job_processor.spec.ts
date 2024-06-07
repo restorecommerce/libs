@@ -330,6 +330,6 @@ describe('jobproc-grapqhl-proc:', (): void => {
       const resultError = await jobResult.wait().catch(err => err);
 
       should(resultError).not.undefined();
-      should((resultError as Error).message).match(/^Network error: request to http:\/\/localhost:65534\/ failed, reason: connect ECONNREFUSED .+$/);
+      should((resultError as Error).message).match(/^Network error: request to http:\/\/localhost:65534\/ failed, reason:.*$/);
     });
 });

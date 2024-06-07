@@ -251,7 +251,7 @@ describe('jobproc-grapqhl-proc:', (): void => {
       const resultError = await jobResult.wait().catch(err => err);
 
       should(resultError).not.undefined();
-      should((resultError as Error).message).equal('Network error: Unexpected token < in JSON at position 0');
+      should((resultError as Error).message).equal(`Network error: Unexpected token '<', "<html>\r\n<h"... is not valid JSON`);
     });
 
   it('a job should skip errors when ignored',

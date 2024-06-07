@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.6](https://github.com/restorecommerce/libs/compare/@restorecommerce/cart@1.0.5...@restorecommerce/cart@1.0.6) (2024-06-07)
+
+
+### Bug Fixes
+
+* make everything build ([827230b](https://github.com/restorecommerce/libs/commit/827230b3e92323f1efb75ad30b36b6cc881f4e04))
+
+
+
+
+
 ## [1.0.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/cart@1.0.4...@restorecommerce/cart@1.0.5) (2024-03-18)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/handlebars-helperized",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Opinionated handlebars based templating engine for rendering e-mail like content",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -28,7 +28,7 @@
     "numbro": "^2.5.0"
   },
   "devDependencies": {
-    "@restorecommerce/dev": "^0.0.11",
+    "@restorecommerce/dev": "^0.0.12",
     "@types/lodash": "^4.17.0",
     "@types/lodash-es": "^4.17.12",
     "@types/mocha": "^10.0.6",

@@ -7,7 +7,7 @@ import {
   type FulfillmentCourierServiceClient,
   FulfillmentCourierServiceDefinition
 } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/fulfillment_courier.js';
-import { 
+import {
   type FulfillmentProductServiceClient,
   FulfillmentProductServiceDefinition
 } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/fulfillment_product.js';

@@ -1,7 +1,7 @@
 import { FederatedOstorageSchema } from './gql/federation.js';
-import { namespace, OstorageConfig, OstorageModule } from "./interfaces.js";
-import { OstorageSrvGrpcClient } from "./grpc/index.js";
-import { createFacadeModuleFactory } from "../../utils.js";
+import { namespace, OstorageConfig, OstorageModule } from './interfaces.js';
+import { OstorageSrvGrpcClient } from './grpc/index.js';
+import { createFacadeModuleFactory } from '../../utils.js';
 import { handleGetFile } from './objectDownloadReqHandler.js';
 import Router from 'koa-router';
 import bodyParser from 'koa-bodyparser';

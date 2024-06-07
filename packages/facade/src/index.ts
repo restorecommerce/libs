@@ -10,9 +10,9 @@ import { GraphQLSchema, printSchema } from 'graphql';
 import { ApolloGateway, LocalGraphQLDataSource, RemoteGraphQLDataSource, IntrospectAndCompose } from '@apollo/gateway';
 import { facadeStatusModule } from './modules/index.js';
 import { type Facade, type FacadeBaseContext, type FacadeModule, type FacadeModuleBase, type FacadeModulesContext, FileUploadOptionsConfig } from './interfaces.js';
-/* eslint-disable */
+
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
-/* eslint-disable */
+
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 
 import { createServer } from 'node:http';

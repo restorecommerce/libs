@@ -18,7 +18,7 @@
   "type": "module",
   "dependencies": {
     "@apollo/federation": "^0.38.1",
-    "@apollo/gateway": "^2.8.0",
+    "@apollo/gateway": "=2.3.6",
     "@apollo/server": "^4.10.4",
     "@as-integrations/koa": "^1.1.0",
     "@cloudnative/health": "^2.1.2",
@@ -103,9 +103,12 @@
     "supertest": "^7.0.0",
     "ts-jest": "^29.1.2",
     "ts-jest-resolver": "^2.0.1",
-    "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "tsx": "^4.13.2"
+  },
+  "overrides": {
+    "@apollo/gateway": "2.3.6"
   },
   "scripts": {
     "build": "npm-run-all build:clean generate build:compile build:codegen:clean build:codegen:compile copyhbs",
@@ -118,10 +121,10 @@
     "postinstall": "rm -rf ../../node_modules/@josephg/resolvable/index.ts",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest --runInBand --testTimeout=30000",
     "test:watch": "jest --watch",
-    "dev:serve": "TS_NODE_PROJECT=tsconfig.test.json nodemon -e ts,hbs -w ./tests -w ./src -x ts-node-esm --project tsconfig.test.json -r ts-node/register tests/server.ts",
-    "generate": "ts-node-esm --project tsconfig.generate.json -r tsconfig-paths/register generate.ts",
+    "dev:serve": "tsx watch --tsconfig tsconfig.test.json tests/server.ts",
+    "generate": "tsx --tsconfig tsconfig.generate.json generate.ts",
     "prepublishOnly": "npm run build",
-    "debug-run": "ts-node-esm --project tsconfig.debug.json debug-run.ts",
+    "debug-run": "tsx --tsconfig tsconfig.debug.json debug-run.ts",
     "copyhbs": "sh copy-hbs.sh",
     "lint": "eslint './**/*.ts'"
   },

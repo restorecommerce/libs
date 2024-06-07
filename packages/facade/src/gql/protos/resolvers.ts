@@ -55,7 +55,7 @@ const streamToAsyncIterable = async function* (request: any, readableStreamKey: 
   for await (const chunk of new S2A(readStream)) {
     yield Object.assign({}, request, { [readableStreamKey]: chunk });
   }
-}
+};
 
 const fetchUnauthenticatedUserToken = async (ctx: any, domain: string) => {
   if (!('identity' in ctx)) {
@@ -68,11 +68,11 @@ const fetchUnauthenticatedUserToken = async (ctx: any, domain: string) => {
   }));
 
   return response?.token;
-}
+};
 
 export const getGQLResolverFunctions =
   <T extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, T>, SRV = any, R = ResolverFn<any, any, ServiceClient<CTX, keyof CTX, T>, any>, B extends keyof T = any, NS extends keyof CTX = any>
-    (service: ServiceDescriptorProto, key: NS, serviceKey: B, cfg: ServiceConfig): { [key in keyof SRV]: R } => {
+  (service: ServiceDescriptorProto, key: NS, serviceKey: B, cfg: ServiceConfig): { [key in keyof SRV]: R } => {
     if (!service.method) {
       return {} as { [key in keyof SRV]: R };
     }
@@ -284,8 +284,8 @@ const subscriptionResolvers: Record<string, {
 }> = {};
 
 export const registerResolverFunction = <T extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, T>>
-  (namespace: string, name: string, func: ResolverFn<any, any, ServiceClient<CTX, keyof CTX, T>, any>,
-    mutation = false, subspace: string | undefined = undefined, service?: ServiceDescriptorProto) => {
+(namespace: string, name: string, func: ResolverFn<any, any, ServiceClient<CTX, keyof CTX, T>, any>,
+  mutation = false, subspace: string | undefined = undefined, service?: ServiceDescriptorProto) => {
   if (!namespaceResolverRegistry.has(namespace)) {
     namespaceResolverRegistry.set(namespace, new Map());
   }
@@ -466,7 +466,7 @@ export const generateSubServiceResolvers = <T, M extends Record<string, any>, CT
                     return (await new Promise<boolean>(
                       (resolve, reject) => (deferred = { resolve, reject }),
                     ))
-                      ? { done: true, value: undefined }
+                      ? { done: true }
                       : { value: { [fieldName]: pending.shift()! } };
                   },
                   throw: async (err: Error) => {
@@ -474,7 +474,7 @@ export const generateSubServiceResolvers = <T, M extends Record<string, any>, CT
                   },
                   return: async () => {
                     await events.stop();
-                    return { done: true, value: undefined };
+                    return { done: true };
                   },
                 };
               }

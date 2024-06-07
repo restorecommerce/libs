@@ -1,5 +1,5 @@
 {
-  "extends": "../dev/tsconfig.json",
+  "extends": "../../node_modules/@restorecommerce/dev/tsconfig.json",
   "compilerOptions": {
     "paths": {
       "@modules": ["src/modules/index"],

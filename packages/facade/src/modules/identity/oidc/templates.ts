@@ -3,9 +3,8 @@ import fs from 'node:fs';
 import { IdentityContext } from '../interfaces.js';
 import hbs from 'handlebars';
 import { type OIDCHbsTemplates } from './interfaces.js';
-import dirname from 'es-dirname';
 
-const __dirname = dirname();
+const __dirname = import.meta.dirname;
 
 export interface OIDCTemplateError {
   key: string;

@@ -1,8 +1,8 @@
 import { createServiceConfig } from '@restorecommerce/service-config';
 import { createLogger } from '@restorecommerce/logger';
-import { isNumber } from 'util';
+import { isNumber } from 'node:util';
 import intoStream from 'into-stream';
-import { Transform } from 'stream';
+import { Transform } from 'node:stream';
 import pkg from 'lodash';
 const { isEmpty } = pkg;
 

@@ -20,7 +20,7 @@ import { join, dirname } from 'node:path';
 import * as url from 'node:url';
 
 const CONFIG_PATH = dirname(url.fileURLToPath(import.meta.url));
-import jwks from './tests/jwks.json' assert { type: 'json' };
+import jwks from './tests/jwks.json' with { type: 'json' };
 
 const createTestFacade = () => {
   const serviceConfig = createServiceConfig(join(CONFIG_PATH, 'tests'));

@@ -3,8 +3,8 @@ import { createServiceConfig, ServiceConfig } from '../src/index'
 describe('the configuration', () => {
   it('should use the provided logger', (done) => {
     const logger = {
-      messages: [],
-      verbose(message) {
+      messages: [] as any[],
+      verbose(message: any) {
         this.messages.push(message);
       },
     };

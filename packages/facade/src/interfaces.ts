@@ -69,7 +69,7 @@ export interface Facade<TModules extends FacadeModuleBase[] = []> {
 }
 
 export interface FileUploadOptionsConfig {
-  fileUploadOptions: FileUploadOptions
+  fileUploadOptions: FileUploadOptions;
 };
 
 interface FileUploadOptions {

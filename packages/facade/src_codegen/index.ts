@@ -1,5 +1,5 @@
 
-import * as fs from 'fs';
+import * as fs from 'node:fs';
 import * as typescriptPlugin from '@graphql-codegen/typescript';
 import * as typescriptResolversPlugin from '@graphql-codegen/typescript-resolvers';
 import { codegen } from '@graphql-codegen/core';

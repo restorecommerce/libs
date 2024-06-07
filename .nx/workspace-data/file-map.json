@@ -1,0 +1,3193 @@
+{
+  "version": "6.0",
+  "nxVersion": "19.2.0",
+  "deps": {
+    "cz-conventional-changelog": "^3.3.0",
+    "eslint-plugin-file-extension-in-import-ts": "^2.1.0",
+    "eslint-plugin-unicorn": "^53.0.0",
+    "lerna": "^8.1.3",
+    "nx": "^19.2.0"
+  },
+  "pathMappings": {},
+  "nxJsonPlugins": [],
+  "pluginsConfig": {
+    "@nrwl/js": {
+      "analyzeSourceFiles": false
+    }
+  },
+  "fileMap": {
+    "nonProjectFiles": [
+      {
+        "file": ".gitignore",
+        "hash": "16559156598569429985"
+      },
+      {
+        "file": ".github/workflows/release.yaml",
+        "hash": "15198324103660664181"
+      },
+      {
+        "file": ".github/workflows/build-test-grpc-client.yaml",
+        "hash": "14641081545462895436"
+      },
+      {
+        "file": ".github/workflows/build-test-logger.yaml",
+        "hash": "9580925141961880019"
+      },
+      {
+        "file": ".github/workflows/base-build-job.yaml",
+        "hash": "16839837260972842079"
+      },
+      {
+        "file": ".github/workflows/release-pr.yaml",
+        "hash": "5750936281140567241"
+      },
+      {
+        "file": ".editorconfig",
+        "hash": "6659929835606576556"
+      },
+      {
+        "file": "tsconfig.json",
+        "hash": "1922927985411498258"
+      },
+      {
+        "file": ".nvmrc",
+        "hash": "10966898939545316353"
+      },
+      {
+        "file": ".eslintrc.cjs",
+        "hash": "739052961169782787"
+      },
+      {
+        "file": "DEVELOPMENT.md",
+        "hash": "18432546705455199732"
+      },
+      {
+        "file": ".github/workflows/lgtm-merge.yaml",
+        "hash": "13538284282721984007"
+      },
+      {
+        "file": ".github/workflows/build-test-oidc-srv-integration.yaml",
+        "hash": "5416789518326096216"
+      },
+      {
+        "file": ".github/workflows/build-test-facade.yaml",
+        "hash": "1251963446433264669"
+      },
+      {
+        "file": "nx.json",
+        "hash": "17523836329797403613"
+      },
+      {
+        "file": ".github/workflows/build-test-acs-client.yaml",
+        "hash": "4554919054415523297"
+      },
+      {
+        "file": ".github/workflows/pr-lint.yaml",
+        "hash": "2189067298318162419"
+      },
+      {
+        "file": ".github/workflows/test-koa-req-res-logger.yaml",
+        "hash": "2368887406555654793"
+      },
+      {
+        "file": ".github/workflows/test-cluster-service.yaml",
+        "hash": "4385042962417488315"
+      },
+      {
+        "file": ".github/workflows/approve-merge.yaml",
+        "hash": "11754825428409094243"
+      },
+      {
+        "file": ".github/workflows/base-test-job.yaml",
+        "hash": "17434355911822364446"
+      },
+      {
+        "file": ".github/workflows/build-test-rc-grpc-clients.yaml",
+        "hash": "6267775527056059440"
+      },
+      {
+        "file": "LICENSE",
+        "hash": "4662904181876261655"
+      },
+      {
+        "file": "package-lock.json",
+        "hash": "11812663807280930381"
+      },
+      {
+        "file": "tsconfig-base.json",
+        "hash": "4092947542600440859"
+      },
+      {
+        "file": ".github/workflows/build-test-protos.yaml",
+        "hash": "18344111193609152159"
+      },
+      {
+        "file": ".github/workflows/build-test-kafka-client.yaml",
+        "hash": "851046168917359789"
+      },
+      {
+        "file": ".github/workflows/build-test-cart.yaml",
+        "hash": "1067944814927526990"
+      },
+      {
+        "file": ".github/workflows/test-mailer.yaml",
+        "hash": "4401436515597333279"
+      },
+      {
+        "file": "README.md",
+        "hash": "8945815117674600161"
+      },
+      {
+        "file": ".github/workflows/build-test-gql-bot.yaml",
+        "hash": "11097707873456329547"
+      },
+      {
+        "file": ".github/workflows/test-handlebars-helperized.yaml",
+        "hash": "3145430146343493574"
+      },
+      {
+        "file": "libs.code-workspace",
+        "hash": "9601996814358579298"
+      },
+      {
+        "file": ".github/workflows/build-test-service-config.yaml",
+        "hash": "6641332046928786206"
+      },
+      {
+        "file": "lerna.json",
+        "hash": "5736537907536557537"
+      },
+      {
+        "file": "package.json",
+        "hash": "7906212540724991551"
+      }
+    ],
+    "projectFileMap": {
+      "@restorecommerce/logger": [
+        {
+          "file": "packages/logger/.gitignore",
+          "hash": "1653509657718073684"
+        },
+        {
+          "file": "packages/logger/.npmignore",
+          "hash": "2025785589057821602"
+        },
+        {
+          "file": "packages/logger/CHANGELOG.md",
+          "hash": "9346047020746996645"
+        },
+        {
+          "file": "packages/logger/README.md",
+          "hash": "13782936013945934520"
+        },
+        {
+          "file": "packages/logger/elasticsearch-index-template.json",
+          "hash": "7237077772788232178"
+        },
+        {
+          "file": "packages/logger/jest.config.js",
+          "hash": "8546095683555540213"
+        },
+        {
+          "file": "packages/logger/kibana/Logs-Index-Pattern.ndjson",
+          "hash": "2067642116900855230"
+        },
+        {
+          "file": "packages/logger/package.json",
+          "hash": "2885209059659133885",
+          "deps": [
+            "npm:@types/jest",
+            "npm:@types/lodash",
+            "npm:@types/node",
+            "npm:@types/should",
+            "npm:coveralls",
+            "npm:eslint@9.4.0",
+            "npm:jest",
+            "npm:npm-run-all",
+            "npm:nyc",
+            "npm:rimraf",
+            "npm:ts-jest",
+            "npm:typescript",
+            "npm:cls-hooked",
+            "npm:cls-rtracer",
+            "npm:lodash",
+            "npm:source-map-support",
+            "npm:winston",
+            "npm:winston-elasticsearch"
+          ]
+        },
+        {
+          "file": "packages/logger/src/console.ts",
+          "hash": "6962803402207717536"
+        },
+        {
+          "file": "packages/logger/src/elasticsearch.ts",
+          "hash": "3553814981628918366"
+        },
+        {
+          "file": "packages/logger/src/file.ts",
+          "hash": "17661507139543392458"
+        },
+        {
+          "file": "packages/logger/src/index.ts",
+          "hash": "4265473616524190574"
+        },
+        {
+          "file": "packages/logger/src/utils.ts",
+          "hash": "4708856607969252579"
+        },
+        {
+          "file": "packages/logger/tests/test.ts",
+          "hash": "4048288368492972477"
+        },
+        {
+          "file": "packages/logger/tsconfig-base.json",
+          "hash": "6964454339689211368"
+        },
+        {
+          "file": "packages/logger/tsconfig.json",
+          "hash": "5807930388399349722"
+        },
+        {
+          "file": "packages/logger/tsconfig.lib.json",
+          "hash": "5098891430727156923"
+        },
+        {
+          "file": "packages/logger/tsconfig.test.json",
+          "hash": "2445213765357593660"
+        }
+      ],
+      "@restorecommerce/facade": [
+        {
+          "file": "packages/facade/.eslintignore",
+          "hash": "10267441272628777951"
+        },
+        {
+          "file": "packages/facade/.eslintrc.cjs",
+          "hash": "6391573526608371325"
+        },
+        {
+          "file": "packages/facade/.gitignore",
+          "hash": "13130047491218728842"
+        },
+        {
+          "file": "packages/facade/.npmignore",
+          "hash": "5202336574667569955"
+        },
+        {
+          "file": "packages/facade/CHANGELOG.md",
+          "hash": "17052596614384740349"
+        },
+        {
+          "file": "packages/facade/README.md",
+          "hash": "5845374138521919368"
+        },
+        {
+          "file": "packages/facade/copy-hbs.sh",
+          "hash": "14456547166481884542"
+        },
+        {
+          "file": "packages/facade/debug-run.ts",
+          "hash": "391043333226597889"
+        },
+        {
+          "file": "packages/facade/generate.ts",
+          "hash": "15201725810925807096"
+        },
+        {
+          "file": "packages/facade/jest.config.cjs",
+          "hash": "9547178260651388719"
+        },
+        {
+          "file": "packages/facade/package.json",
+          "hash": "3614380670160800125",
+          "deps": [
+            "npm:@graphql-codegen/core",
+            "npm:@graphql-codegen/typescript",
+            "npm:@graphql-codegen/typescript-resolvers",
+            "@restorecommerce/dev",
+            "npm:@types/array.prototype.flat",
+            "npm:@types/co",
+            "npm:@types/debug",
+            "npm:@types/ejs",
+            "npm:@types/express",
+            "npm:@types/express-serve-static-core",
+            "npm:@types/graphql-upload",
+            "npm:@types/jest",
+            "npm:@types/koa",
+            "npm:@types/koa__cors",
+            "npm:@types/koa-bodyparser",
+            "npm:@types/koa-helmet",
+            "npm:@types/koa-mount",
+            "npm:@types/koa-router",
+            "npm:@types/koa-websocket",
+            "npm:@types/lodash",
+            "npm:@types/lru-cache",
+            "npm:@types/node",
+            "npm:@types/oauth",
+            "npm:@types/oidc-provider",
+            "npm:@types/request-ip",
+            "npm:@types/supertest",
+            "npm:@types/useragent",
+            "npm:@types/uuid",
+            "npm:@types/ws",
+            "npm:eslint@9.4.0",
+            "npm:jest",
+            "npm:nodemon",
+            "npm:npm-run-all",
+            "npm:rimraf",
+            "npm:supertest",
+            "npm:ts-jest",
+            "npm:ts-jest-resolver",
+            "npm:ts-node",
+            "npm:tsconfig-paths",
+            "npm:typescript",
+            "npm:@apollo/federation",
+            "npm:@apollo/gateway",
+            "npm:@apollo/server",
+            "npm:@as-integrations/koa",
+            "npm:@cloudnative/health",
+            "npm:@grpc/grpc-js",
+            "npm:@grpc/proto-loader",
+            "npm:@koa/cors",
+            "@restorecommerce/grpc-client",
+            "@restorecommerce/kafka-client",
+            "@restorecommerce/logger",
+            "@restorecommerce/rc-grpc-clients",
+            "@restorecommerce/service-config",
+            "npm:array.prototype.flat",
+            "npm:co",
+            "npm:debug@4.3.5",
+            "npm:es-dirname",
+            "npm:federation-subscription-tools",
+            "npm:graphql",
+            "npm:graphql-upload",
+            "npm:graphql-ws",
+            "npm:handlebars",
+            "npm:into-stream",
+            "npm:jose",
+            "npm:koa@2.15.3",
+            "npm:koa-body",
+            "npm:koa-bodyparser@4.4.1",
+            "npm:koa-compose",
+            "npm:koa-helmet",
+            "npm:koa-mount",
+            "npm:koa-router@12.0.1",
+            "npm:koa-websocket@7.0.0",
+            "npm:lodash",
+            "npm:lru-cache",
+            "npm:nanoid",
+            "npm:nice-grpc",
+            "npm:node-fetch",
+            "npm:oauth",
+            "npm:oidc-provider",
+            "npm:querystring",
+            "npm:request-ip",
+            "npm:rxjs",
+            "npm:ts-proto-descriptors",
+            "npm:useragent",
+            "npm:uuid",
+            "npm:winston",
+            "npm:ws"
+          ]
+        },
+        {
+          "file": "packages/facade/src/gql/index.ts",
+          "hash": "12093594158556003554"
+        },
+        {
+          "file": "packages/facade/src/gql/protos/federation.ts",
+          "hash": "667999302997869004"
+        },
+        {
+          "file": "packages/facade/src/gql/protos/graphql.ts",
+          "hash": "8101179456172905333"
+        },
+        {
+          "file": "packages/facade/src/gql/protos/index.ts",
+          "hash": "800734385584638248"
+        },
+        {
+          "file": "packages/facade/src/gql/protos/registry.ts",
+          "hash": "7448473447076295108"
+        },
+        {
+          "file": "packages/facade/src/gql/protos/resolvers.ts",
+          "hash": "9830735138166310963"
+        },
+        {
+          "file": "packages/facade/src/gql/protos/schema.ts",
+          "hash": "17569451990324071448"
+        },
+        {
+          "file": "packages/facade/src/gql/protos/stream-to-async-iterator.ts",
+          "hash": "3196112954347783923"
+        },
+        {
+          "file": "packages/facade/src/gql/protos/types.ts",
+          "hash": "7802111514273075803"
+        },
+        {
+          "file": "packages/facade/src/gql/protos/utils.ts",
+          "hash": "562240405605005133"
+        },
+        {
+          "file": "packages/facade/src/gql/types/AccessControlTypes.ts",
+          "hash": "7889313083409847455"
+        },
+        {
+          "file": "packages/facade/src/gql/types/DateType.ts",
+          "hash": "14436118523949883517"
+        },
+        {
+          "file": "packages/facade/src/gql/types/FilterType.ts",
+          "hash": "12200406843745477052"
+        },
+        {
+          "file": "packages/facade/src/gql/types/MetaType.ts",
+          "hash": "3958263981580061077"
+        },
+        {
+          "file": "packages/facade/src/gql/types/ScopeType.ts",
+          "hash": "2338196677539425296"
+        },
+        {
+          "file": "packages/facade/src/gql/types/SortType.ts",
+          "hash": "13791123957117487656"
+        },
+        {
+          "file": "packages/facade/src/gql/types/StatusType.ts",
+          "hash": "5179091854010396119"
+        },
+        {
+          "file": "packages/facade/src/gql/types/index.ts",
+          "hash": "18222394396278110584"
+        },
+        {
+          "file": "packages/facade/src/index.ts",
+          "hash": "5586116632297070731"
+        },
+        {
+          "file": "packages/facade/src/interfaces.ts",
+          "hash": "2887073868145662935"
+        },
+        {
+          "file": "packages/facade/src/middlewares/index.ts",
+          "hash": "16735396617495045463"
+        },
+        {
+          "file": "packages/facade/src/middlewares/req-res-logger/README.md",
+          "hash": "2767799783509386421"
+        },
+        {
+          "file": "packages/facade/src/middlewares/req-res-logger/index.ts",
+          "hash": "14457913875642120862"
+        },
+        {
+          "file": "packages/facade/src/modules/access-control/gql/federation.ts",
+          "hash": "4273954715106470631"
+        },
+        {
+          "file": "packages/facade/src/modules/access-control/gql/schema.ts",
+          "hash": "7764877027253929124"
+        },
+        {
+          "file": "packages/facade/src/modules/access-control/gql/types.ts",
+          "hash": "7092305266772423289"
+        },
+        {
+          "file": "packages/facade/src/modules/access-control/grpc/index.ts",
+          "hash": "11360476823915050792"
+        },
+        {
+          "file": "packages/facade/src/modules/access-control/index.ts",
+          "hash": "9378271651050696160"
+        },
+        {
+          "file": "packages/facade/src/modules/access-control/interfaces.ts",
+          "hash": "15010124362356873880"
+        },
+        {
+          "file": "packages/facade/src/modules/catalog/gql/federation.ts",
+          "hash": "2991730340790535352"
+        },
+        {
+          "file": "packages/facade/src/modules/catalog/gql/schema.ts",
+          "hash": "11106321045388752287"
+        },
+        {
+          "file": "packages/facade/src/modules/catalog/gql/types.ts",
+          "hash": "2478577556121929288"
+        },
+        {
+          "file": "packages/facade/src/modules/catalog/grpc/index.ts",
+          "hash": "11708196800649321217"
+        },
+        {
+          "file": "packages/facade/src/modules/catalog/index.ts",
+          "hash": "1203278664118732257"
+        },
+        {
+          "file": "packages/facade/src/modules/catalog/interfaces.ts",
+          "hash": "13948721806426456588"
+        },
+        {
+          "file": "packages/facade/src/modules/facade-status/gql/index.ts",
+          "hash": "12481397890556927033"
+        },
+        {
+          "file": "packages/facade/src/modules/facade-status/gql/resolvers.ts",
+          "hash": "15743758587381758112"
+        },
+        {
+          "file": "packages/facade/src/modules/facade-status/gql/schema.ts",
+          "hash": "8719213363971969067"
+        },
+        {
+          "file": "packages/facade/src/modules/facade-status/gql/types.ts",
+          "hash": "5157034928608402809"
+        },
+        {
+          "file": "packages/facade/src/modules/facade-status/index.ts",
+          "hash": "17448206854444071636"
+        },
+        {
+          "file": "packages/facade/src/modules/facade-status/interfaces.ts",
+          "hash": "7296377170635481512"
+        },
+        {
+          "file": "packages/facade/src/modules/fulfillment/gql/federation.ts",
+          "hash": "15253084006818521707"
+        },
+        {
+          "file": "packages/facade/src/modules/fulfillment/gql/schema.ts",
+          "hash": "11569479441160155149"
+        },
+        {
+          "file": "packages/facade/src/modules/fulfillment/gql/types.ts",
+          "hash": "16728532365175858462"
+        },
+        {
+          "file": "packages/facade/src/modules/fulfillment/grpc/index.ts",
+          "hash": "724994971817842168"
+        },
+        {
+          "file": "packages/facade/src/modules/fulfillment/index.ts",
+          "hash": "3277229307914166447"
+        },
+        {
+          "file": "packages/facade/src/modules/fulfillment/interfaces.ts",
+          "hash": "12204862598577311540"
+        },
+        {
+          "file": "packages/facade/src/modules/identity/api-key/api-key.ts",
+          "hash": "18000990216102764792"
+        },
+        {
+          "file": "packages/facade/src/modules/identity/gql/federation.ts",
+          "hash": "791865326982523719"
+        },
+        {
+          "file": "packages/facade/src/modules/identity/gql/schema.ts",
+          "hash": "9550963316756053529"
+        },
+        {
+          "file": "packages/facade/src/modules/identity/gql/types.ts",
+          "hash": "6158558520528164673"
+        },
+        {
+          "file": "packages/facade/src/modules/identity/grpc/index.ts",
+          "hash": "5502118675511824967"
+        },
+        {
+          "file": "packages/facade/src/modules/identity/index.ts",
+          "hash": "9677067051142964206"
+        },
+        {
+          "file": "packages/facade/src/modules/identity/interfaces.ts",
+          "hash": "933839313447481903"
+        },
+        {
+          "file": "packages/facade/src/modules/identity/oauth/oauth.ts",
+          "hash": "15136377118414837709"
+        },
+        {
+          "file": "packages/facade/src/modules/identity/oauth/views/account.hbs",
+          "hash": "6876188447096150697"
+        },
+        {
+          "file": "packages/facade/src/modules/identity/oauth/views/layout.hbs",
+          "hash": "1313230494154228769"
+        },
+        {
+          "file": "packages/facade/src/modules/identity/oauth/views/login.hbs",
+          "hash": "11680355746103238332"
+        },
+        {
+          "file": "packages/facade/src/modules/identity/oauth/views/register.hbs",
+          "hash": "9516166635585294209"
+        },
+        {
+          "file": "packages/facade/src/modules/identity/oidc/adapter.ts",
+          "hash": "746004929324667363"
+        },
+        {
+          "file": "packages/facade/src/modules/identity/oidc/in-memory-adapter.ts",
+          "hash": "2975851538068352277"
+        },
+        {
+          "file": "packages/facade/src/modules/identity/oidc/index.ts",
+          "hash": "17337655382785136017"
+        },
+        {
+          "file": "packages/facade/src/modules/identity/oidc/interfaces.ts",
+          "hash": "16074093888229573029"
+        },
+        {
+          "file": "packages/facade/src/modules/identity/oidc/password-grant.ts",
+          "hash": "8458966632211487648"
+        },
+        {
+          "file": "packages/facade/src/modules/identity/oidc/router.ts",
+          "hash": "9009138227214517361"
+        },
+        {
+          "file": "packages/facade/src/modules/identity/oidc/templates.ts",
+          "hash": "14561509427077759136"
+        },
+        {
+          "file": "packages/facade/src/modules/identity/oidc/user.ts",
+          "hash": "10102846183120626655"
+        },
+        {
+          "file": "packages/facade/src/modules/identity/oidc/utils.ts",
+          "hash": "7237607379115845334"
+        },
+        {
+          "file": "packages/facade/src/modules/identity/oidc/views/consent.hbs",
+          "hash": "7087639446740706575"
+        },
+        {
+          "file": "packages/facade/src/modules/identity/oidc/views/layout.hbs",
+          "hash": "886107683251290695"
+        },
+        {
+          "file": "packages/facade/src/modules/identity/oidc/views/login.hbs",
+          "hash": "17787432890012455219"
+        },
+        {
+          "file": "packages/facade/src/modules/index.ts",
+          "hash": "14485992170224457476"
+        },
+        {
+          "file": "packages/facade/src/modules/indexing/gql/federation.ts",
+          "hash": "7475095660476010413"
+        },
+        {
+          "file": "packages/facade/src/modules/indexing/gql/schema.ts",
+          "hash": "5512790669322954176"
+        },
+        {
+          "file": "packages/facade/src/modules/indexing/gql/types.ts",
+          "hash": "13500089652845923527"
+        },
+        {
+          "file": "packages/facade/src/modules/indexing/grpc/index.ts",
+          "hash": "9312963398625067184"
+        },
+        {
+          "file": "packages/facade/src/modules/indexing/index.ts",
+          "hash": "1141869492074244227"
+        },
+        {
+          "file": "packages/facade/src/modules/indexing/interfaces.ts",
+          "hash": "11342305232949915935"
+        },
+        {
+          "file": "packages/facade/src/modules/invoicing/gql/federation.ts",
+          "hash": "14031656413119007180"
+        },
+        {
+          "file": "packages/facade/src/modules/invoicing/gql/schema.ts",
+          "hash": "15628350807141764892"
+        },
+        {
+          "file": "packages/facade/src/modules/invoicing/gql/types.ts",
+          "hash": "13509759925759087457"
+        },
+        {
+          "file": "packages/facade/src/modules/invoicing/grpc/index.ts",
+          "hash": "3176770347673437291"
+        },
+        {
+          "file": "packages/facade/src/modules/invoicing/index.ts",
+          "hash": "4998152229719231342"
+        },
+        {
+          "file": "packages/facade/src/modules/invoicing/interfaces.ts",
+          "hash": "6326368944518080717"
+        },
+        {
+          "file": "packages/facade/src/modules/master_data/gql/federation.ts",
+          "hash": "2350785919085259603"
+        },
+        {
+          "file": "packages/facade/src/modules/master_data/gql/schema.ts",
+          "hash": "14818332414924579091"
+        },
+        {
+          "file": "packages/facade/src/modules/master_data/gql/types.ts",
+          "hash": "13046763177462440337"
+        },
+        {
+          "file": "packages/facade/src/modules/master_data/grpc/index.ts",
+          "hash": "11123028100349336986"
+        },
+        {
+          "file": "packages/facade/src/modules/master_data/index.ts",
+          "hash": "11496359803003553178"
+        },
+        {
+          "file": "packages/facade/src/modules/master_data/interfaces.ts",
+          "hash": "7143891049553393051"
+        },
+        {
+          "file": "packages/facade/src/modules/notification/gql/federation.ts",
+          "hash": "718560256842780595"
+        },
+        {
+          "file": "packages/facade/src/modules/notification/gql/schema.ts",
+          "hash": "6208248183306416452"
+        },
+        {
+          "file": "packages/facade/src/modules/notification/gql/types.ts",
+          "hash": "9467857571607211401"
+        },
+        {
+          "file": "packages/facade/src/modules/notification/grpc/index.ts",
+          "hash": "1675940686416936482"
+        },
+        {
+          "file": "packages/facade/src/modules/notification/index.ts",
+          "hash": "2517440813914783860"
+        },
+        {
+          "file": "packages/facade/src/modules/notification/interfaces.ts",
+          "hash": "17289376355581076775"
+        },
+        {
+          "file": "packages/facade/src/modules/ordering/gql/federation.ts",
+          "hash": "5148303653471214044"
+        },
+        {
+          "file": "packages/facade/src/modules/ordering/gql/schema.ts",
+          "hash": "1383472700419915727"
+        },
+        {
+          "file": "packages/facade/src/modules/ordering/gql/types.ts",
+          "hash": "17404408254397033435"
+        },
+        {
+          "file": "packages/facade/src/modules/ordering/grpc/index.ts",
+          "hash": "13034974676440768909"
+        },
+        {
+          "file": "packages/facade/src/modules/ordering/index.ts",
+          "hash": "8135315250963260931"
+        },
+        {
+          "file": "packages/facade/src/modules/ordering/interfaces.ts",
+          "hash": "255708223365869451"
+        },
+        {
+          "file": "packages/facade/src/modules/ostorage/gql/federation.ts",
+          "hash": "7098587680398831011"
+        },
+        {
+          "file": "packages/facade/src/modules/ostorage/gql/schema.ts",
+          "hash": "17817651633221079082"
+        },
+        {
+          "file": "packages/facade/src/modules/ostorage/gql/types.ts",
+          "hash": "10505757196981953519"
+        },
+        {
+          "file": "packages/facade/src/modules/ostorage/grpc/index.ts",
+          "hash": "10486505778726637443"
+        },
+        {
+          "file": "packages/facade/src/modules/ostorage/index.ts",
+          "hash": "17949574161544985533"
+        },
+        {
+          "file": "packages/facade/src/modules/ostorage/interfaces.ts",
+          "hash": "12059957974598583585"
+        },
+        {
+          "file": "packages/facade/src/modules/ostorage/objectDownloadReqHandler.ts",
+          "hash": "3446279933485117532"
+        },
+        {
+          "file": "packages/facade/src/modules/payment/gql/federation.ts",
+          "hash": "8177452764854906276"
+        },
+        {
+          "file": "packages/facade/src/modules/payment/gql/schema.ts",
+          "hash": "2190748383991490265"
+        },
+        {
+          "file": "packages/facade/src/modules/payment/gql/types.ts",
+          "hash": "11354925263922376684"
+        },
+        {
+          "file": "packages/facade/src/modules/payment/grpc/index.ts",
+          "hash": "14890805277939894562"
+        },
+        {
+          "file": "packages/facade/src/modules/payment/index.ts",
+          "hash": "3818269604558197865"
+        },
+        {
+          "file": "packages/facade/src/modules/payment/interfaces.ts",
+          "hash": "11893020791048888705"
+        },
+        {
+          "file": "packages/facade/src/modules/pdf-rendering/gql/federation.ts",
+          "hash": "5992507666017243137"
+        },
+        {
+          "file": "packages/facade/src/modules/pdf-rendering/gql/schema.ts",
+          "hash": "8681323712884600418"
+        },
+        {
+          "file": "packages/facade/src/modules/pdf-rendering/gql/types.ts",
+          "hash": "4125989214069573838"
+        },
+        {
+          "file": "packages/facade/src/modules/pdf-rendering/grpc/index.ts",
+          "hash": "5699520198083240739"
+        },
+        {
+          "file": "packages/facade/src/modules/pdf-rendering/index.ts",
+          "hash": "11310376817651489837"
+        },
+        {
+          "file": "packages/facade/src/modules/pdf-rendering/interfaces.ts",
+          "hash": "17387345300271110616"
+        },
+        {
+          "file": "packages/facade/src/modules/scheduling/gql/federation.ts",
+          "hash": "10177528396029827054"
+        },
+        {
+          "file": "packages/facade/src/modules/scheduling/gql/schema.ts",
+          "hash": "4158056222376960800"
+        },
+        {
+          "file": "packages/facade/src/modules/scheduling/gql/types.ts",
+          "hash": "16333312747224687288"
+        },
+        {
+          "file": "packages/facade/src/modules/scheduling/grpc/index.ts",
+          "hash": "10739059319403160693"
+        },
+        {
+          "file": "packages/facade/src/modules/scheduling/index.ts",
+          "hash": "12849147924333171558"
+        },
+        {
+          "file": "packages/facade/src/modules/scheduling/interfaces.ts",
+          "hash": "17553333212937698098"
+        },
+        {
+          "file": "packages/facade/src/typings.d.ts",
+          "hash": "8662951994837020577"
+        },
+        {
+          "file": "packages/facade/src/utils.ts",
+          "hash": "10412413857278471645"
+        },
+        {
+          "file": "packages/facade/src_codegen/index.ts",
+          "hash": "8213623849216746414"
+        },
+        {
+          "file": "packages/facade/tests/cfg/config.json",
+          "hash": "11827967305891112699"
+        },
+        {
+          "file": "packages/facade/tests/custom.spec.ts",
+          "hash": "16546501830124893969"
+        },
+        {
+          "file": "packages/facade/tests/facade.spec.ts",
+          "hash": "778825760349957724"
+        },
+        {
+          "file": "packages/facade/tests/facade.ts",
+          "hash": "7273283467102494890"
+        },
+        {
+          "file": "packages/facade/tests/generate-keys.js",
+          "hash": "15501285433093484129"
+        },
+        {
+          "file": "packages/facade/tests/interfaces.ts",
+          "hash": "3636417498725170779"
+        },
+        {
+          "file": "packages/facade/tests/jwks.json",
+          "hash": "12844877977849892477"
+        },
+        {
+          "file": "packages/facade/tests/protos.spec.ts",
+          "hash": "18421180955018616445"
+        },
+        {
+          "file": "packages/facade/tests/server.ts",
+          "hash": "7535394470769524012"
+        },
+        {
+          "file": "packages/facade/tests/token-service-stub.ts",
+          "hash": "6281666448677974905"
+        },
+        {
+          "file": "packages/facade/tests/utils.ts",
+          "hash": "9725770426955377975"
+        },
+        {
+          "file": "packages/facade/tests/views/layout.ejs",
+          "hash": "17835870368536858018"
+        },
+        {
+          "file": "packages/facade/tests/views/login.ejs",
+          "hash": "14579600622773260150"
+        },
+        {
+          "file": "packages/facade/tsconfig-base.json",
+          "hash": "1792734852960565691"
+        },
+        {
+          "file": "packages/facade/tsconfig.codegen.json",
+          "hash": "13829137206071622274"
+        },
+        {
+          "file": "packages/facade/tsconfig.debug.json",
+          "hash": "14767612822226233208"
+        },
+        {
+          "file": "packages/facade/tsconfig.generate.json",
+          "hash": "17445202887094094986"
+        },
+        {
+          "file": "packages/facade/tsconfig.json",
+          "hash": "5807930388399349722"
+        },
+        {
+          "file": "packages/facade/tsconfig.lib.json",
+          "hash": "9210016305564634112"
+        },
+        {
+          "file": "packages/facade/tsconfig.test.json",
+          "hash": "16422513979283274803"
+        }
+      ],
+      "@restorecommerce/mailer": [
+        {
+          "file": "packages/mailer/.editorconfig",
+          "hash": "6659929835606576556"
+        },
+        {
+          "file": "packages/mailer/.gitignore",
+          "hash": "3995281797352390323"
+        },
+        {
+          "file": "packages/mailer/.npmignore",
+          "hash": "12599461826657265376"
+        },
+        {
+          "file": "packages/mailer/CHANGELOG.md",
+          "hash": "14922560396827966963"
+        },
+        {
+          "file": "packages/mailer/README.md",
+          "hash": "10469176996460853290"
+        },
+        {
+          "file": "packages/mailer/package.json",
+          "hash": "3961431394080432097",
+          "deps": [
+            "npm:@types/mocha",
+            "npm:@types/node",
+            "npm:@types/nodemailer",
+            "npm:@types/nodemailer-html-to-text",
+            "npm:@types/nodemailer-stub-transport",
+            "npm:@typescript-eslint/eslint-plugin",
+            "npm:@typescript-eslint/eslint-plugin-tslint@7.0.2",
+            "npm:@typescript-eslint/parser",
+            "npm:assert",
+            "npm:coveralls",
+            "npm:eslint",
+            "npm:eslint-plugin-prefer-arrow-functions",
+            "npm:is-generator",
+            "npm:mocha",
+            "npm:npm-run-all",
+            "npm:nyc",
+            "npm:should",
+            "npm:typescript",
+            "npm:nodemailer",
+            "npm:nodemailer-html-to-text",
+            "npm:nodemailer-mandrill-transport",
+            "npm:nodemailer-stub-transport",
+            "npm:nodemailer-wellknown",
+            "npm:winston"
+          ]
+        },
+        {
+          "file": "packages/mailer/src/index.ts",
+          "hash": "9829465967516506461"
+        },
+        {
+          "file": "packages/mailer/tsconfig.json",
+          "hash": "11355287092874503801"
+        },
+        {
+          "file": "packages/mailer/lib/index.d.ts",
+          "hash": "7910439795011920518"
+        },
+        {
+          "file": "packages/mailer/lib/index.js",
+          "hash": "996616188412860298"
+        }
+      ],
+      "@restorecommerce/rc-grpc-clients": [
+        {
+          "file": "packages/rc-grpc-clients/.gitignore",
+          "hash": "12500103046432802914"
+        },
+        {
+          "file": "packages/rc-grpc-clients/.npmignore",
+          "hash": "2025785589057821602"
+        },
+        {
+          "file": "packages/rc-grpc-clients/CHANGELOG.md",
+          "hash": "1847268801625041239"
+        },
+        {
+          "file": "packages/rc-grpc-clients/README.md",
+          "hash": "5981114065169222093"
+        },
+        {
+          "file": "packages/rc-grpc-clients/jest.config.js",
+          "hash": "12260946033596585410"
+        },
+        {
+          "file": "packages/rc-grpc-clients/package.json",
+          "hash": "4225833215712998771",
+          "deps": [
+            "@restorecommerce/dev",
+            "@restorecommerce/protos",
+            "npm:@types/jest",
+            "npm:jest",
+            "npm:npm-run-all",
+            "npm:protoc",
+            "npm:rimraf",
+            "npm:ts-jest",
+            "npm:ts-proto",
+            "npm:typescript",
+            "npm:@grpc/grpc-js",
+            "@restorecommerce/grpc-client",
+            "npm:@types/google-protobuf",
+            "npm:google-protobuf",
+            "npm:nice-grpc",
+            "npm:nice-grpc-common",
+            "npm:protobufjs",
+            "npm:rxjs",
+            "npm:ts-proto-descriptors"
+          ]
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/grpc-client.ts",
+          "hash": "9881414067097006623"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/index.ts",
+          "hash": "5605402816048260860"
+        },
+        {
+          "file": "packages/rc-grpc-clients/tests/test.spec.ts",
+          "hash": "12228035068398386122"
+        },
+        {
+          "file": "packages/rc-grpc-clients/tsconfig-base.json",
+          "hash": "8147100737427473362"
+        },
+        {
+          "file": "packages/rc-grpc-clients/tsconfig.json",
+          "hash": "5807930388399349722"
+        },
+        {
+          "file": "packages/rc-grpc-clients/tsconfig.lib.json",
+          "hash": "10572017974773577951"
+        },
+        {
+          "file": "packages/rc-grpc-clients/tsconfig.test.json",
+          "hash": "13144656280327269109"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/role.ts",
+          "hash": "17432785595898102029"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/google/protobuf/descriptor.ts",
+          "hash": "8485027352523160953"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/commandinterface.ts",
+          "hash": "393987552107002009"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/notification.ts",
+          "hash": "9969680813517634750"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/options.ts",
+          "hash": "8967741213141625571"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/job.ts",
+          "hash": "15724625407397857792"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/policy.ts",
+          "hash": "4348323446645408047"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/image.ts",
+          "hash": "11850844540123352782"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/amount.ts",
+          "hash": "4316781761002269475"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/order.ts",
+          "hash": "1027344367731579749"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/rendering.ts",
+          "hash": "9214310199802105749"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/timezone.ts",
+          "hash": "15652270857587922321"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/google/protobuf/any.ts",
+          "hash": "8954626647216527730"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/credential.ts",
+          "hash": "11930526078230265930"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/price_group.ts",
+          "hash": "1505049957645728624"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/product_prototype.ts",
+          "hash": "11263704527465787952"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/fulfillment.ts",
+          "hash": "11788626779816160132"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/country.ts",
+          "hash": "12829254405046021048"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/search.ts",
+          "hash": "1086856564516836855"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/ostorage.ts",
+          "hash": "8398837038759391586"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/invoice.ts",
+          "hash": "2557120261896606729"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/notification_req.ts",
+          "hash": "36370854424532168"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/organization.ts",
+          "hash": "14481981314946984287"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/google/protobuf/empty.ts",
+          "hash": "11379263033269825557"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/file.ts",
+          "hash": "5282739844961268793"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/resource_base.ts",
+          "hash": "7195671745164541475"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/property.ts",
+          "hash": "8655556751215868033"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/contact_point.ts",
+          "hash": "1121145894371579040"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/payment.ts",
+          "hash": "12634840389843380543"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/pdf_rendering.ts",
+          "hash": "3808065175101677572"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/fulfillment_product.ts",
+          "hash": "1279008020370789486"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/notification_channel.ts",
+          "hash": "14679991345747808046"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/fulfillment_courier.ts",
+          "hash": "15805389184620914830"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/geometry.ts",
+          "hash": "2725048388695754870"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/auth.ts",
+          "hash": "9531527556748565538"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/price.ts",
+          "hash": "5113546241003053577"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/rule.ts",
+          "hash": "3388166999238631633"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/authentication_log.ts",
+          "hash": "756486851922733653"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/google/protobuf/timestamp.ts",
+          "hash": "14042877671353697289"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/shop.ts",
+          "hash": "10391050399648723227"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/access_control.ts",
+          "hash": "6977478381845510634"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/user.ts",
+          "hash": "2953145596004029413"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/attribute.ts",
+          "hash": "5171263791275680549"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/contact_point_type.ts",
+          "hash": "4663330930964109023"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/location.ts",
+          "hash": "7552686800311269217"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/policy_set.ts",
+          "hash": "7305741827725338925"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/grpc/health/v1/health.ts",
+          "hash": "5522646337712377074"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/oauth.ts",
+          "hash": "9677405365622453974"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/payment_method.ts",
+          "hash": "10115018850485410144"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/test/test.ts",
+          "hash": "15445853621607525285"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/product.ts",
+          "hash": "8738305223557692409"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/address.ts",
+          "hash": "15287415881135947564"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/reference.ts",
+          "hash": "10473369429648562107"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/tax.ts",
+          "hash": "6392832017046317832"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/status.ts",
+          "hash": "1648860888592267740"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/meta.ts",
+          "hash": "9568111120630200448"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/google/protobuf/wrappers.ts",
+          "hash": "16568251385440783573"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/manufacturer.ts",
+          "hash": "4461028048284334703"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/filter.ts",
+          "hash": "12874081254738184338"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/command.ts",
+          "hash": "4113635942309144336"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/tax_type.ts",
+          "hash": "9318214499371682298"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/template.ts",
+          "hash": "3021618744287334432"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/locale.ts",
+          "hash": "2347998820774941251"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/currency.ts",
+          "hash": "8624634367742516486"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/grpc/reflection/v1alpha/reflection.ts",
+          "hash": "4879419301213003889"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/product_category.ts",
+          "hash": "1064429333870686770"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/graph.ts",
+          "hash": "1890743584277992049"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/echo/echo.ts",
+          "hash": "17766596049044236076"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/customer.ts",
+          "hash": "6575029940125187842"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/token.ts",
+          "hash": "18033939959163718878"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated/io/restorecommerce/unit_code.ts",
+          "hash": "1525144068973495379"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/geometry.ts",
+          "hash": "2725048388695754870"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/payment_method.ts",
+          "hash": "1092535912565473665"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/tax_type.ts",
+          "hash": "10004916226236914918"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/shop.ts",
+          "hash": "16642770844870954088"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/authentication_log.ts",
+          "hash": "9662813706006320763"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/oauth.ts",
+          "hash": "9677405365622453974"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/template.ts",
+          "hash": "1706710464916406828"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/google/protobuf/any.ts",
+          "hash": "5437786724266482248"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/attribute.ts",
+          "hash": "5171263791275680549"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/currency.ts",
+          "hash": "11959695616026447120"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/google/protobuf/wrappers.ts",
+          "hash": "16568251385440783573"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/echo/echo.ts",
+          "hash": "17766596049044236076"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/product_prototype.ts",
+          "hash": "15288559051438685176"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/payment.ts",
+          "hash": "12023219594001158364"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/meta.ts",
+          "hash": "12171899489981130340"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/manufacturer.ts",
+          "hash": "18105240654565431211"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/organization.ts",
+          "hash": "8004124947643323632"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/country.ts",
+          "hash": "13229233083339488832"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/product.ts",
+          "hash": "10193104484910372293"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/commandinterface.ts",
+          "hash": "393987552107002009"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/fulfillment_product.ts",
+          "hash": "15112505140710681895"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/price.ts",
+          "hash": "15548313517386526933"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/image.ts",
+          "hash": "1569586678178783970"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/file.ts",
+          "hash": "2069936863286777961"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/credential.ts",
+          "hash": "7788147228996432858"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/test/test.ts",
+          "hash": "4338299312579213763"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/fulfillment.ts",
+          "hash": "5005726863883177768"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/graph.ts",
+          "hash": "495377181833329975"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/google/protobuf/empty.ts",
+          "hash": "11379263033269825557"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/job.ts",
+          "hash": "14786062111368816501"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/amount.ts",
+          "hash": "1037165382362899849"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/grpc/health/v1/health.ts",
+          "hash": "5522646337712377074"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/token.ts",
+          "hash": "11505675394765143046"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/notification.ts",
+          "hash": "920247820918814980"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/ostorage.ts",
+          "hash": "12257560632117977877"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/rule.ts",
+          "hash": "9375864228166703148"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/filter.ts",
+          "hash": "12874081254738184338"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/unit_code.ts",
+          "hash": "12531715169061882379"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/contact_point_type.ts",
+          "hash": "12043736347968182640"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/policy.ts",
+          "hash": "5039086851840793614"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/locale.ts",
+          "hash": "5536910953000880862"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/timezone.ts",
+          "hash": "6722081430013419817"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/price_group.ts",
+          "hash": "10790147147807369387"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/fulfillment_courier.ts",
+          "hash": "1050192684954456548"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/product_category.ts",
+          "hash": "6301799440093470456"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/google/protobuf/descriptor.ts",
+          "hash": "15687357643727732539"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/invoice.ts",
+          "hash": "18077921204077572216"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/google/protobuf/timestamp.ts",
+          "hash": "14042877671353697289"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/policy_set.ts",
+          "hash": "18072660884021380842"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/user.ts",
+          "hash": "1658502043664363689"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/status.ts",
+          "hash": "16058342378314189503"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/customer.ts",
+          "hash": "14390093794166855692"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/auth.ts",
+          "hash": "16530497981635105623"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/tax.ts",
+          "hash": "17055170793725589405"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/access_control.ts",
+          "hash": "2139616572705967470"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/search.ts",
+          "hash": "1086856564516836855"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/command.ts",
+          "hash": "2892446277477865002"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/grpc/reflection/v1alpha/reflection.ts",
+          "hash": "8473145623606249329"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/pdf_rendering.ts",
+          "hash": "5356650226484179602"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/options.ts",
+          "hash": "11396406776317285531"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/address.ts",
+          "hash": "8833974157594821407"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/order.ts",
+          "hash": "4311327475820000334"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/rendering.ts",
+          "hash": "7623243952273545664"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/reference.ts",
+          "hash": "14104707267722683341"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/notification_req.ts",
+          "hash": "5934225468898488474"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/property.ts",
+          "hash": "14515447986507802387"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/role.ts",
+          "hash": "16643318259636392952"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/contact_point.ts",
+          "hash": "213333034571715429"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/notification_channel.ts",
+          "hash": "12624870949983204684"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/location.ts",
+          "hash": "15450937008189518615"
+        },
+        {
+          "file": "packages/rc-grpc-clients/src/generated-server/io/restorecommerce/resource_base.ts",
+          "hash": "9076217888308228339"
+        }
+      ],
+      "@restorecommerce/cart": [
+        {
+          "file": "packages/cart/.editorconfig",
+          "hash": "6659929835606576556"
+        },
+        {
+          "file": "packages/cart/.eslintrc.js",
+          "hash": "9610419797671795771"
+        },
+        {
+          "file": "packages/cart/.gitignore",
+          "hash": "3066615943316760416"
+        },
+        {
+          "file": "packages/cart/.npmignore",
+          "hash": "2673269607225355317"
+        },
+        {
+          "file": "packages/cart/.travis.yml",
+          "hash": "15223081302448337023"
+        },
+        {
+          "file": "packages/cart/CHANGELOG.md",
+          "hash": "9950261185393219847"
+        },
+        {
+          "file": "packages/cart/README.md",
+          "hash": "15552288955628186918"
+        },
+        {
+          "file": "packages/cart/jest.config.js",
+          "hash": "6310202704269962697"
+        },
+        {
+          "file": "packages/cart/package.json",
+          "hash": "2988174107814008219",
+          "deps": [
+            "npm:@types/jest",
+            "npm:@types/should",
+            "npm:@typescript-eslint/eslint-plugin@6.19.0",
+            "npm:@typescript-eslint/eslint-plugin-tslint",
+            "npm:@typescript-eslint/parser@6.19.0",
+            "npm:eslint",
+            "npm:eslint-plugin-prefer-arrow-functions",
+            "npm:i18n-iso-countries",
+            "npm:jest",
+            "npm:js-yaml",
+            "npm:npm-run-all",
+            "npm:nyc",
+            "npm:should",
+            "npm:ts-jest",
+            "npm:typescript",
+            "npm:decimal.js",
+            "npm:store"
+          ]
+        },
+        {
+          "file": "packages/cart/test/bench.spec.ts",
+          "hash": "15962785159907676871"
+        },
+        {
+          "file": "packages/cart/test/index.spec.ts",
+          "hash": "18105577924329304109"
+        },
+        {
+          "file": "packages/cart/tsconfig.json",
+          "hash": "10084261333260770856"
+        },
+        {
+          "file": "packages/cart/tsconfig.lib.json",
+          "hash": "6818185640649297266"
+        },
+        {
+          "file": "packages/cart/tsconfig.test.json",
+          "hash": "8550427108780319933"
+        },
+        {
+          "file": "packages/cart/utils/vatgenerator.ts",
+          "hash": "9520145607185735462"
+        }
+      ],
+      "@restorecommerce/scs-jobs": [
+        {
+          "file": "packages/scs-jobs/.dockerignore",
+          "hash": "8497568538957960239"
+        },
+        {
+          "file": "packages/scs-jobs/.editorconfig",
+          "hash": "6659929835606576556"
+        },
+        {
+          "file": "packages/scs-jobs/.eslintrc.js",
+          "hash": "11462151807905696411"
+        },
+        {
+          "file": "packages/scs-jobs/.gitignore",
+          "hash": "10986982283910656335"
+        },
+        {
+          "file": "packages/scs-jobs/.mocharc.json",
+          "hash": "3053185295852411270"
+        },
+        {
+          "file": "packages/scs-jobs/.npmignore",
+          "hash": "15426877607847494511"
+        },
+        {
+          "file": "packages/scs-jobs/CHANGELOG.md",
+          "hash": "7861997964089088013"
+        },
+        {
+          "file": "packages/scs-jobs/README.md",
+          "hash": "5337311853269435264"
+        },
+        {
+          "file": "packages/scs-jobs/package.json",
+          "hash": "2246413206503686076",
+          "deps": [
+            "npm:npm-run-all",
+            "@restorecommerce/grpc-client",
+            "@restorecommerce/kafka-client",
+            "@restorecommerce/logger",
+            "@restorecommerce/rc-grpc-clients",
+            "npm:bullmq",
+            "npm:lodash",
+            "npm:redis",
+            "npm:winston"
+          ]
+        },
+        {
+          "file": "packages/scs-jobs/src/index.ts",
+          "hash": "5778383372047976951"
+        },
+        {
+          "file": "packages/scs-jobs/src/types.ts",
+          "hash": "14402552542133616630"
+        },
+        {
+          "file": "packages/scs-jobs/tsconfig.json",
+          "hash": "285450692628713038"
+        },
+        {
+          "file": "packages/scs-jobs/tsconfig.test.json",
+          "hash": "15699975753648361231"
+        }
+      ],
+      "@restorecommerce/kafka-client": [
+        {
+          "file": "packages/kafka-client/.editorconfig",
+          "hash": "6659929835606576556"
+        },
+        {
+          "file": "packages/kafka-client/.eslintrc.js",
+          "hash": "643698069135184728"
+        },
+        {
+          "file": "packages/kafka-client/.gitignore",
+          "hash": "5073239372625306845"
+        },
+        {
+          "file": "packages/kafka-client/.mocharc.json",
+          "hash": "3053185295852411270"
+        },
+        {
+          "file": "packages/kafka-client/.npmignore",
+          "hash": "16890513170132998323"
+        },
+        {
+          "file": "packages/kafka-client/CHANGELOG.md",
+          "hash": "9917494378079410330"
+        },
+        {
+          "file": "packages/kafka-client/README.md",
+          "hash": "15958944251582129896"
+        },
+        {
+          "file": "packages/kafka-client/package.json",
+          "hash": "8841274991072913217",
+          "deps": [
+            "npm:@types/async",
+            "npm:@types/mocha",
+            "npm:@types/node",
+            "npm:@typescript-eslint/eslint-plugin@6.19.0",
+            "npm:@typescript-eslint/eslint-plugin-tslint@7.0.2",
+            "npm:@typescript-eslint/parser@6.19.0",
+            "npm:coveralls",
+            "npm:cross-env",
+            "npm:eslint",
+            "npm:eslint-plugin-prefer-arrow-functions",
+            "npm:mocha",
+            "npm:npm-run-all",
+            "npm:nyc",
+            "npm:rimraf",
+            "npm:should",
+            "npm:ts-node",
+            "npm:typescript",
+            "@restorecommerce/logger",
+            "@restorecommerce/rc-grpc-clients",
+            "npm:async",
+            "npm:cls-rtracer",
+            "npm:events",
+            "npm:kafkajs",
+            "npm:lodash",
+            "npm:protobufjs",
+            "npm:retry",
+            "npm:winston"
+          ]
+        },
+        {
+          "file": "packages/kafka-client/protos/test/test.proto",
+          "hash": "7030495919201443242"
+        },
+        {
+          "file": "packages/kafka-client/src/events/index.ts",
+          "hash": "5711269953581166562"
+        },
+        {
+          "file": "packages/kafka-client/src/events/provider/kafka/index.ts",
+          "hash": "83541085947542602"
+        },
+        {
+          "file": "packages/kafka-client/src/events/provider/local/index.ts",
+          "hash": "14228202183347016278"
+        },
+        {
+          "file": "packages/kafka-client/src/index.ts",
+          "hash": "10428341337708216743"
+        },
+        {
+          "file": "packages/kafka-client/src/protos.ts",
+          "hash": "13183841088418748445"
+        },
+        {
+          "file": "packages/kafka-client/test/events_remove.spec.ts",
+          "hash": "6539385392874935280"
+        },
+        {
+          "file": "packages/kafka-client/test/events_subscribe.spec.ts",
+          "hash": "9634844372734235375"
+        },
+        {
+          "file": "packages/kafka-client/test/kafka.spec.ts",
+          "hash": "107126418587114478"
+        },
+        {
+          "file": "packages/kafka-client/tsconfig.json",
+          "hash": "14700339609847196496"
+        },
+        {
+          "file": "packages/kafka-client/tsconfig.test.json",
+          "hash": "556454655472819518"
+        }
+      ],
+      "@restorecommerce/handlebars-helperized": [
+        {
+          "file": "packages/handlebars-helperized/.editorconfig",
+          "hash": "6659929835606576556"
+        },
+        {
+          "file": "packages/handlebars-helperized/.eslintrc.cjs",
+          "hash": "8454211371792569493"
+        },
+        {
+          "file": "packages/handlebars-helperized/.gitignore",
+          "hash": "12269695266842112687"
+        },
+        {
+          "file": "packages/handlebars-helperized/.npmignore",
+          "hash": "6884102137612221227"
+        },
+        {
+          "file": "packages/handlebars-helperized/CHANGELOG.md",
+          "hash": "13835032033714511778"
+        },
+        {
+          "file": "packages/handlebars-helperized/README.md",
+          "hash": "4333203867707630860"
+        },
+        {
+          "file": "packages/handlebars-helperized/package.json",
+          "hash": "15433264764012656353",
+          "deps": [
+            "@restorecommerce/dev",
+            "npm:@types/lodash",
+            "npm:@types/lodash-es",
+            "npm:@types/mocha",
+            "npm:@types/node",
+            "npm:@typescript-eslint/eslint-plugin",
+            "npm:@typescript-eslint/eslint-plugin-tslint@7.0.2",
+            "npm:@typescript-eslint/parser",
+            "npm:assert",
+            "npm:coveralls",
+            "npm:eslint",
+            "npm:eslint-plugin-prefer-arrow-functions",
+            "npm:is-generator",
+            "npm:mocha",
+            "npm:npm-run-all",
+            "npm:nyc",
+            "npm:should",
+            "npm:typescript",
+            "npm:handlebars",
+            "npm:handlebars-layouts",
+            "npm:juice",
+            "npm:lodash-es",
+            "npm:moment-timezone",
+            "npm:numbro"
+          ]
+        },
+        {
+          "file": "packages/handlebars-helperized/src/helpers/custom-helpers.ts",
+          "hash": "10554334121246856724"
+        },
+        {
+          "file": "packages/handlebars-helperized/src/helpers/l10n-helpers.ts",
+          "hash": "7219126403065567755"
+        },
+        {
+          "file": "packages/handlebars-helperized/src/helpers/moment-helpers.ts",
+          "hash": "12674136029455156443"
+        },
+        {
+          "file": "packages/handlebars-helperized/src/helpers/numbro-helpers.ts",
+          "hash": "2045858417138773668"
+        },
+        {
+          "file": "packages/handlebars-helperized/src/index.d.ts",
+          "hash": "10963527482560000375"
+        },
+        {
+          "file": "packages/handlebars-helperized/src/index.ts",
+          "hash": "14289240877543045773"
+        },
+        {
+          "file": "packages/handlebars-helperized/test/templates/basic.css",
+          "hash": "15358629678047266475"
+        },
+        {
+          "file": "packages/handlebars-helperized/test/templates/basic.hbs",
+          "hash": "14921779697226955144"
+        },
+        {
+          "file": "packages/handlebars-helperized/test/templates/default-layout.html",
+          "hash": "4752907436860945574"
+        },
+        {
+          "file": "packages/handlebars-helperized/test/templates/invoice.hbs",
+          "hash": "14625919933451210232"
+        },
+        {
+          "file": "packages/handlebars-helperized/test/templates/layout-use.hbs",
+          "hash": "8274473114804059670"
+        },
+        {
+          "file": "packages/handlebars-helperized/test/templates/layout.hbs",
+          "hash": "18312864671228833703"
+        },
+        {
+          "file": "packages/handlebars-helperized/test/templates/numbers.hbs",
+          "hash": "16008776802505723294"
+        },
+        {
+          "file": "packages/handlebars-helperized/test/templates/payment-notification.hbs",
+          "hash": "9257604559174564817"
+        },
+        {
+          "file": "packages/handlebars-helperized/test/templates/times.hbs",
+          "hash": "13634525103604243271"
+        },
+        {
+          "file": "packages/handlebars-helperized/tsconfig-base.json",
+          "hash": "18093184092218694257"
+        },
+        {
+          "file": "packages/handlebars-helperized/tsconfig.json",
+          "hash": "15293492573679500420"
+        }
+      ],
+      "@restorecommerce/oidc-id-srv-integration": [
+        {
+          "file": "packages/oidc-id-srv-integration/.editorconfig",
+          "hash": "6659929835606576556"
+        },
+        {
+          "file": "packages/oidc-id-srv-integration/.eslintrc.js",
+          "hash": "318990289970658886"
+        },
+        {
+          "file": "packages/oidc-id-srv-integration/.gitignore",
+          "hash": "856877440096812329"
+        },
+        {
+          "file": "packages/oidc-id-srv-integration/.npmignore",
+          "hash": "5580334723577810596"
+        },
+        {
+          "file": "packages/oidc-id-srv-integration/CHANGELOG.md",
+          "hash": "7145883119983716029"
+        },
+        {
+          "file": "packages/oidc-id-srv-integration/README.md",
+          "hash": "16812213576697104836"
+        },
+        {
+          "file": "packages/oidc-id-srv-integration/package.json",
+          "hash": "5482551396753221568",
+          "deps": [
+            "npm:koa",
+            "npm:koa-bodyparser",
+            "npm:koa-ejs",
+            "npm:koa-mount",
+            "npm:koa-router",
+            "npm:koa-websocket",
+            "npm:@types/koa",
+            "npm:@types/koa-bodyparser",
+            "npm:@types/koa-ejs",
+            "npm:@types/koa-mount",
+            "npm:@types/koa-router",
+            "npm:@types/lodash",
+            "npm:@types/nanoid",
+            "npm:@types/nconf",
+            "npm:@types/oidc-provider",
+            "npm:@types/redis",
+            "npm:@typescript-eslint/eslint-plugin@6.19.0",
+            "npm:@typescript-eslint/eslint-plugin-tslint",
+            "npm:@typescript-eslint/parser@6.19.0",
+            "npm:eslint",
+            "npm:eslint-plugin-prefer-arrow-functions",
+            "npm:npm-run-all",
+            "npm:rimraf",
+            "npm:typescript",
+            "@restorecommerce/grpc-client",
+            "@restorecommerce/logger",
+            "@restorecommerce/rc-grpc-clients",
+            "@restorecommerce/service-config",
+            "npm:lodash",
+            "npm:oidc-provider",
+            "npm:path",
+            "npm:redis"
+          ]
+        },
+        {
+          "file": "packages/oidc-id-srv-integration/src/config.ts",
+          "hash": "11304063861199860552"
+        },
+        {
+          "file": "packages/oidc-id-srv-integration/src/index.ts",
+          "hash": "14898859777332924742"
+        },
+        {
+          "file": "packages/oidc-id-srv-integration/src/interfaces.ts",
+          "hash": "15998736928228866568"
+        },
+        {
+          "file": "packages/oidc-id-srv-integration/src/logger.ts",
+          "hash": "4775761947191033948"
+        },
+        {
+          "file": "packages/oidc-id-srv-integration/src/provider.ts",
+          "hash": "3453921360946390005"
+        },
+        {
+          "file": "packages/oidc-id-srv-integration/src/redis.ts",
+          "hash": "16457290504261025097"
+        },
+        {
+          "file": "packages/oidc-id-srv-integration/src/routs.ts",
+          "hash": "11356723394373183261"
+        },
+        {
+          "file": "packages/oidc-id-srv-integration/src/tokenservice-adapter.ts",
+          "hash": "15382885809704778968"
+        },
+        {
+          "file": "packages/oidc-id-srv-integration/src/utls.ts",
+          "hash": "9651384911671206439"
+        },
+        {
+          "file": "packages/oidc-id-srv-integration/src/views/_layout.ejs",
+          "hash": "16047785889026150847"
+        },
+        {
+          "file": "packages/oidc-id-srv-integration/src/views/interaction.ejs",
+          "hash": "13963408127987442705"
+        },
+        {
+          "file": "packages/oidc-id-srv-integration/src/views/login.ejs",
+          "hash": "3098574425482806178"
+        },
+        {
+          "file": "packages/oidc-id-srv-integration/src/views/repost.ejs",
+          "hash": "7336944080931277171"
+        },
+        {
+          "file": "packages/oidc-id-srv-integration/src/views/select_account.ejs",
+          "hash": "3107366043377079647"
+        },
+        {
+          "file": "packages/oidc-id-srv-integration/tsconfig.json",
+          "hash": "6967683585116357771"
+        },
+        {
+          "file": "packages/oidc-id-srv-integration/tsconfig.test.json",
+          "hash": "15996781201621631893"
+        }
+      ],
+      "@restorecommerce/acs-client": [
+        {
+          "file": "packages/acs-client/.dockerignore",
+          "hash": "2664195730324007274"
+        },
+        {
+          "file": "packages/acs-client/.editorconfig",
+          "hash": "6659929835606576556"
+        },
+        {
+          "file": "packages/acs-client/.eslintrc.js",
+          "hash": "9754666951352964023"
+        },
+        {
+          "file": "packages/acs-client/.gitignore",
+          "hash": "5334700218921245556"
+        },
+        {
+          "file": "packages/acs-client/.mocharc.json",
+          "hash": "6387284447000908743"
+        },
+        {
+          "file": "packages/acs-client/.npmignore",
+          "hash": "5580334723577810596"
+        },
+        {
+          "file": "packages/acs-client/CHANGELOG.md",
+          "hash": "6284899429921835775"
+        },
+        {
+          "file": "packages/acs-client/README.md",
+          "hash": "17917731723203137300"
+        },
+        {
+          "file": "packages/acs-client/cfg/config.json",
+          "hash": "16097115196630084748"
+        },
+        {
+          "file": "packages/acs-client/cfg/config_test.json",
+          "hash": "17567378019184189940"
+        },
+        {
+          "file": "packages/acs-client/package.json",
+          "hash": "10422614083401378335",
+          "deps": [
+            "npm:@alenon/grpc-mock-server",
+            "@restorecommerce/protos",
+            "npm:@types/koa",
+            "npm:@types/mocha",
+            "npm:@types/node",
+            "npm:@types/redis",
+            "npm:@typescript-eslint/eslint-plugin@6.19.0",
+            "npm:@typescript-eslint/eslint-plugin-tslint",
+            "npm:@typescript-eslint/parser@6.19.0",
+            "npm:coveralls",
+            "npm:cross-env",
+            "npm:eslint",
+            "npm:eslint-plugin-prefer-arrow-functions",
+            "npm:mocha",
+            "npm:nice-grpc",
+            "npm:nodemon",
+            "npm:npm-run-all",
+            "npm:nyc",
+            "npm:rimraf",
+            "npm:should",
+            "npm:ts-node",
+            "npm:typescript",
+            "@restorecommerce/grpc-client",
+            "@restorecommerce/kafka-client",
+            "@restorecommerce/logger",
+            "@restorecommerce/rc-grpc-clients",
+            "@restorecommerce/service-config",
+            "npm:deepdash",
+            "npm:lodash",
+            "npm:nconf",
+            "npm:node-eval",
+            "npm:redis",
+            "npm:winston"
+          ]
+        },
+        {
+          "file": "packages/acs-client/src/acs/authz.ts",
+          "hash": "3774664656917038555"
+        },
+        {
+          "file": "packages/acs-client/src/acs/cache.ts",
+          "hash": "5958711356747059385"
+        },
+        {
+          "file": "packages/acs-client/src/acs/decorators.ts",
+          "hash": "10340104602098982518"
+        },
+        {
+          "file": "packages/acs-client/src/acs/errors.ts",
+          "hash": "3667040188796009910"
+        },
+        {
+          "file": "packages/acs-client/src/acs/interfaces.ts",
+          "hash": "7051147597349406577"
+        },
+        {
+          "file": "packages/acs-client/src/acs/middleware.ts",
+          "hash": "10377215105700505696"
+        },
+        {
+          "file": "packages/acs-client/src/acs/resolver.ts",
+          "hash": "7363692609048952554"
+        },
+        {
+          "file": "packages/acs-client/src/config.ts",
+          "hash": "15716421460351418945"
+        },
+        {
+          "file": "packages/acs-client/src/index.ts",
+          "hash": "9888591418754534085"
+        },
+        {
+          "file": "packages/acs-client/src/logger.ts",
+          "hash": "4890635201854396418"
+        },
+        {
+          "file": "packages/acs-client/src/utils.ts",
+          "hash": "14993915881105243192"
+        },
+        {
+          "file": "packages/acs-client/test/acs.spec.test.ts",
+          "hash": "9406935833704430517"
+        },
+        {
+          "file": "packages/acs-client/test/acs_multiple_entities.spec.test.ts",
+          "hash": "8554405054732711217"
+        },
+        {
+          "file": "packages/acs-client/test/rules_utils.ts",
+          "hash": "3696720423775867936"
+        },
+        {
+          "file": "packages/acs-client/tsconfig.json",
+          "hash": "7135988196470248850"
+        },
+        {
+          "file": "packages/acs-client/tsconfig.test.json",
+          "hash": "15607362227986683141"
+        },
+        {
+          "file": "packages/acs-client/lib/config.d.ts",
+          "hash": "12345420997739433824"
+        },
+        {
+          "file": "packages/acs-client/lib/config.js.map",
+          "hash": "2162849223781714276"
+        },
+        {
+          "file": "packages/acs-client/lib/acs/interfaces.js.map",
+          "hash": "6372303497503086099"
+        },
+        {
+          "file": "packages/acs-client/lib/acs/interfaces.js",
+          "hash": "15999658539435139874"
+        },
+        {
+          "file": "packages/acs-client/lib/config.js",
+          "hash": "11947768793386281836"
+        }
+      ],
+      "@restorecommerce/cluster-service": [
+        {
+          "file": "packages/cluster-service/.editorconfig",
+          "hash": "6659929835606576556"
+        },
+        {
+          "file": "packages/cluster-service/.gitignore",
+          "hash": "2513856281730972853"
+        },
+        {
+          "file": "packages/cluster-service/.npmignore",
+          "hash": "12599461826657265376"
+        },
+        {
+          "file": "packages/cluster-service/CHANGELOG.md",
+          "hash": "9385579717692009348"
+        },
+        {
+          "file": "packages/cluster-service/README.md",
+          "hash": "16513019074866184725"
+        },
+        {
+          "file": "packages/cluster-service/index.js",
+          "hash": "11659843996581161359"
+        },
+        {
+          "file": "packages/cluster-service/package.json",
+          "hash": "9355916406353565040",
+          "deps": [
+            "npm:coveralls",
+            "npm:is-generator",
+            "npm:mocha",
+            "npm:nyc",
+            "npm:should",
+            "npm:forever-monitor",
+            "npm:recluster"
+          ]
+        },
+        {
+          "file": "packages/cluster-service/test/service.js",
+          "hash": "5026669921437516347"
+        },
+        {
+          "file": "packages/cluster-service/test/test.js",
+          "hash": "4146609783125978373"
+        }
+      ],
+      "@restorecommerce/protos": [
+        {
+          "file": "packages/protos/.gitignore",
+          "hash": "5858037551331461726"
+        },
+        {
+          "file": "packages/protos/.npmignore",
+          "hash": "14100751820476639486"
+        },
+        {
+          "file": "packages/protos/CHANGELOG.md",
+          "hash": "10697044336219294731"
+        },
+        {
+          "file": "packages/protos/README.md",
+          "hash": "13504809226642879791"
+        },
+        {
+          "file": "packages/protos/echo/echo.proto",
+          "hash": "14180543139046836962"
+        },
+        {
+          "file": "packages/protos/google/protobuf/any.proto",
+          "hash": "11469743162159149253"
+        },
+        {
+          "file": "packages/protos/google/protobuf/descriptor.proto",
+          "hash": "10122722600214950176"
+        },
+        {
+          "file": "packages/protos/google/protobuf/empty.proto",
+          "hash": "17835731760298588266"
+        },
+        {
+          "file": "packages/protos/google/protobuf/timestamp.proto",
+          "hash": "3395875532779001312"
+        },
+        {
+          "file": "packages/protos/google/protobuf/wrappers.proto",
+          "hash": "2342256582988208246"
+        },
+        {
+          "file": "packages/protos/grpc/health/v1/health.proto",
+          "hash": "7657267972434063285"
+        },
+        {
+          "file": "packages/protos/grpc/reflection/v1alpha/reflection.proto",
+          "hash": "13337270460052887762"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/access_control.proto",
+          "hash": "13581665377201797617"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/address.proto",
+          "hash": "11153312856811627281"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/amount.proto",
+          "hash": "10072776618752329788"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/attribute.proto",
+          "hash": "3581238766618979660"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/auth.proto",
+          "hash": "6058437605614644160"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/authentication_log.proto",
+          "hash": "10711308883191817167"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/command.proto",
+          "hash": "6469072157590226479"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/commandinterface.proto",
+          "hash": "15505317110551242889"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/contact_point.proto",
+          "hash": "18282495601968523732"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/contact_point_type.proto",
+          "hash": "4007663757459413248"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/country.proto",
+          "hash": "14401052236892778159"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/credential.proto",
+          "hash": "10908952643091811277"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/currency.proto",
+          "hash": "13375419073629567431"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/customer.proto",
+          "hash": "8450462291940804221"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/file.proto",
+          "hash": "7283834039040206816"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/filter.proto",
+          "hash": "14441872409869426097"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/fulfillment.proto",
+          "hash": "12168252287857810983"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/fulfillment_courier.proto",
+          "hash": "6025590495217764758"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/fulfillment_product.proto",
+          "hash": "5808329586602798138"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/geometry.proto",
+          "hash": "6210721542566149979"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/graph.proto",
+          "hash": "2342872066500925077"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/image.proto",
+          "hash": "9384293975948577864"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/invoice.proto",
+          "hash": "16321868464041624004"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/job.proto",
+          "hash": "12926442821259623023"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/locale.proto",
+          "hash": "9778656462788427846"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/location.proto",
+          "hash": "12897939607651451684"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/manufacturer.proto",
+          "hash": "6697483199188967084"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/meta.proto",
+          "hash": "11679946516125716379"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/notification.proto",
+          "hash": "14455735574587569745"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/notification_channel.proto",
+          "hash": "4279117992339212123"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/notification_req.proto",
+          "hash": "17719950853161855783"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/oauth.proto",
+          "hash": "14023609685774040285"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/options.proto",
+          "hash": "5944478323520649348"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/order.proto",
+          "hash": "14221190927178472930"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/organization.proto",
+          "hash": "1317736696617364292"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/ostorage.proto",
+          "hash": "4110438234554223338"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/payment.proto",
+          "hash": "6735925747923393168"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/payment_method.proto",
+          "hash": "11390496127004835073"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/pdf_rendering.proto",
+          "hash": "17423326438374738763"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/policy.proto",
+          "hash": "8933406131183353157"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/policy_set.proto",
+          "hash": "6110693469752720524"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/price.proto",
+          "hash": "3377827500193555408"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/price_group.proto",
+          "hash": "5745000105806669859"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/product.proto",
+          "hash": "14478540836530555272"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/product_category.proto",
+          "hash": "17398472280519612018"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/product_prototype.proto",
+          "hash": "15963700642915901688"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/property.proto",
+          "hash": "5325469257557662415"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/reference.proto",
+          "hash": "16704824250814784879"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/rendering.proto",
+          "hash": "4758208935314296650"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/resource_base.proto",
+          "hash": "14095437731907362618"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/role.proto",
+          "hash": "13381445140392986003"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/rule.proto",
+          "hash": "2782387586140313641"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/search.proto",
+          "hash": "3867588818096295485"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/shop.proto",
+          "hash": "6046649379568668074"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/status.proto",
+          "hash": "3239265452952010854"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/tax.proto",
+          "hash": "1265634481960444297"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/tax_type.proto",
+          "hash": "3833812951796843964"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/template.proto",
+          "hash": "8144589352006905714"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/timezone.proto",
+          "hash": "13329303389648614977"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/token.proto",
+          "hash": "10273178287599219355"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/unit_code.proto",
+          "hash": "6410578182927094348"
+        },
+        {
+          "file": "packages/protos/io/restorecommerce/user.proto",
+          "hash": "7701857958160908789"
+        },
+        {
+          "file": "packages/protos/package.json",
+          "hash": "7482768309634277441"
+        },
+        {
+          "file": "packages/protos/test/test.proto",
+          "hash": "382987799301254148"
+        }
+      ],
+      "@restorecommerce/service-config": [
+        {
+          "file": "packages/service-config/.gitignore",
+          "hash": "3973356395675902886"
+        },
+        {
+          "file": "packages/service-config/.npmignore",
+          "hash": "2025785589057821602"
+        },
+        {
+          "file": "packages/service-config/CHANGELOG.md",
+          "hash": "15252695289587511056"
+        },
+        {
+          "file": "packages/service-config/README.md",
+          "hash": "17998231708812402700"
+        },
+        {
+          "file": "packages/service-config/jest.config.js",
+          "hash": "8546095683555540213"
+        },
+        {
+          "file": "packages/service-config/package.json",
+          "hash": "9735215545459955663",
+          "deps": [
+            "npm:@types/jest",
+            "npm:@types/nconf",
+            "npm:@types/node",
+            "npm:cross-env",
+            "npm:jest",
+            "npm:npm-run-all",
+            "npm:rimraf",
+            "npm:ts-jest",
+            "npm:typescript",
+            "@restorecommerce/logger",
+            "npm:nconf"
+          ]
+        },
+        {
+          "file": "packages/service-config/src/index.ts",
+          "hash": "3419758249822131037"
+        },
+        {
+          "file": "packages/service-config/tests/cfg/config.json",
+          "hash": "3346623580772598668"
+        },
+        {
+          "file": "packages/service-config/tests/test.ts",
+          "hash": "8679029262296621272"
+        },
+        {
+          "file": "packages/service-config/tsconfig-base.json",
+          "hash": "10329969355547585558"
+        },
+        {
+          "file": "packages/service-config/tsconfig.json",
+          "hash": "5807930388399349722"
+        },
+        {
+          "file": "packages/service-config/tsconfig.lib.json",
+          "hash": "17595585772182139718"
+        },
+        {
+          "file": "packages/service-config/tsconfig.test.json",
+          "hash": "2445213765357593660"
+        }
+      ],
+      "@restorecommerce/koa-req-res-logger": [
+        {
+          "file": "packages/koa-req-res-logger/.editorconfig",
+          "hash": "6659929835606576556"
+        },
+        {
+          "file": "packages/koa-req-res-logger/.eslintrc.js",
+          "hash": "1744504053465572463"
+        },
+        {
+          "file": "packages/koa-req-res-logger/.gitignore",
+          "hash": "2135824348139791262"
+        },
+        {
+          "file": "packages/koa-req-res-logger/.npmignore",
+          "hash": "11411584869736900163"
+        },
+        {
+          "file": "packages/koa-req-res-logger/CHANGELOG.md",
+          "hash": "4602796910861998092"
+        },
+        {
+          "file": "packages/koa-req-res-logger/README.md",
+          "hash": "18232151666077257679"
+        },
+        {
+          "file": "packages/koa-req-res-logger/package.json",
+          "hash": "7663220698395940943",
+          "deps": [
+            "npm:@types/mocha",
+            "npm:@types/node",
+            "npm:@typescript-eslint/eslint-plugin",
+            "npm:@typescript-eslint/eslint-plugin-tslint@7.0.2",
+            "npm:@typescript-eslint/parser",
+            "npm:coveralls",
+            "npm:eslint",
+            "npm:eslint-plugin-prefer-arrow-functions",
+            "npm:is-generator",
+            "npm:isomorphic-fetch",
+            "npm:koa@2.15.3",
+            "npm:koa-bodyparser@4.4.1",
+            "npm:mocha",
+            "npm:npm-run-all",
+            "npm:nyc",
+            "npm:should",
+            "npm:typescript",
+            "npm:debug@4.3.5",
+            "npm:winston"
+          ]
+        },
+        {
+          "file": "packages/koa-req-res-logger/src/index.ts",
+          "hash": "17186244249746061604"
+        },
+        {
+          "file": "packages/koa-req-res-logger/test/test.js",
+          "hash": "1013112740674157627"
+        },
+        {
+          "file": "packages/koa-req-res-logger/tsconfig.json",
+          "hash": "11355287092874503801"
+        }
+      ],
+      "@restorecommerce/dev": [
+        {
+          "file": "packages/dev/.eslintrc.cjs",
+          "hash": "7171687137814153148"
+        },
+        {
+          "file": "packages/dev/CHANGELOG.md",
+          "hash": "17197490930933600357"
+        },
+        {
+          "file": "packages/dev/package.json",
+          "hash": "5918477283781705664",
+          "deps": [
+            "npm:@types/node",
+            "npm:eslint",
+            "npm:typescript",
+            "npm:@typescript-eslint/eslint-plugin",
+            "npm:@typescript-eslint/parser",
+            "npm:eslint-plugin-file-extension-in-import-ts",
+            "npm:eslint-plugin-prefer-arrow-functions",
+            "npm:eslint-plugin-unicorn"
+          ]
+        },
+        {
+          "file": "packages/dev/tsconfig.json",
+          "hash": "10512332740900694905"
+        }
+      ],
+      "@restorecommerce/koa-health-check": [
+        {
+          "file": "packages/koa-health-check/.eslintrc.js",
+          "hash": "17259328233788545139"
+        },
+        {
+          "file": "packages/koa-health-check/.gitignore",
+          "hash": "11080138885571010905"
+        },
+        {
+          "file": "packages/koa-health-check/.npmignore",
+          "hash": "11411584869736900163"
+        },
+        {
+          "file": "packages/koa-health-check/CHANGELOG.md",
+          "hash": "8699073629817233501"
+        },
+        {
+          "file": "packages/koa-health-check/README.md",
+          "hash": "6897326810332825390"
+        },
+        {
+          "file": "packages/koa-health-check/package.json",
+          "hash": "3474762175748131164",
+          "deps": [
+            "npm:@istanbuljs/nyc-config-typescript",
+            "npm:@types/chai",
+            "npm:@types/koa",
+            "npm:@types/mocha",
+            "npm:@types/node",
+            "npm:@types/sinon",
+            "npm:@typescript-eslint/eslint-plugin",
+            "npm:@typescript-eslint/eslint-plugin-tslint@7.0.2",
+            "npm:@typescript-eslint/parser",
+            "npm:chai",
+            "npm:coveralls",
+            "npm:eslint",
+            "npm:eslint-plugin-prefer-arrow-functions",
+            "npm:mocha",
+            "npm:nyc",
+            "npm:source-map-support",
+            "npm:ts-node",
+            "npm:@cloudnative/health",
+            "npm:connect",
+            "npm:koa@2.15.3",
+            "npm:npm-run-all",
+            "npm:rimraf",
+            "npm:typescript"
+          ]
+        },
+        {
+          "file": "packages/koa-health-check/src/index.ts",
+          "hash": "5075027244339390893"
+        },
+        {
+          "file": "packages/koa-health-check/src/koa-cloud-health-connect.ts",
+          "hash": "18087797841781433269"
+        },
+        {
+          "file": "packages/koa-health-check/test/KoaConnectHealth.test.ts",
+          "hash": "14552877488465890656"
+        },
+        {
+          "file": "packages/koa-health-check/test/mocha.opts",
+          "hash": "12631834600811764258"
+        },
+        {
+          "file": "packages/koa-health-check/test/test-helper.ts",
+          "hash": "7825906704703600068"
+        },
+        {
+          "file": "packages/koa-health-check/tsconfig.json",
+          "hash": "9954510723320912565"
+        },
+        {
+          "file": "packages/koa-health-check/tsconfig.test.json",
+          "hash": "8550427108780319933"
+        }
+      ],
+      "@restorecommerce/gql-bot": [
+        {
+          "file": "packages/gql-bot/.editorconfig",
+          "hash": "15828181845714978933"
+        },
+        {
+          "file": "packages/gql-bot/.eslintrc.js",
+          "hash": "643698069135184728"
+        },
+        {
+          "file": "packages/gql-bot/.gitignore",
+          "hash": "17131727179619094896"
+        },
+        {
+          "file": "packages/gql-bot/.mocharc.json",
+          "hash": "3053185295852411270"
+        },
+        {
+          "file": "packages/gql-bot/.npmignore",
+          "hash": "11411584869736900163"
+        },
+        {
+          "file": "packages/gql-bot/CHANGELOG.md",
+          "hash": "7869282091266739372"
+        },
+        {
+          "file": "packages/gql-bot/README.md",
+          "hash": "14081728904017940386"
+        },
+        {
+          "file": "packages/gql-bot/package.json",
+          "hash": "8607707911397595686",
+          "deps": [
+            "npm:@types/color-hash",
+            "npm:@types/mocha",
+            "npm:@typescript-eslint/eslint-plugin@6.19.0",
+            "npm:@typescript-eslint/parser@6.19.0",
+            "npm:coveralls",
+            "npm:eslint",
+            "npm:eslint-plugin-prefer-arrow-functions",
+            "npm:mocha",
+            "npm:nock",
+            "npm:npm-run-all",
+            "npm:nyc",
+            "npm:should",
+            "npm:ts-node",
+            "npm:typescript",
+            "npm:apollo-cache-inmemory@1.6.6",
+            "npm:apollo-client@2.6.10",
+            "npm:apollo-link-http@1.5.17",
+            "npm:chalk",
+            "npm:color-hash",
+            "npm:graphql@15.8.0",
+            "npm:graphql-tag",
+            "npm:js-yaml",
+            "npm:lodash",
+            "npm:node-fetch@2.7.0",
+            "npm:promise-streams",
+            "npm:readdirp",
+            "npm:through2",
+            "npm:yaml-document-stream"
+          ]
+        },
+        {
+          "file": "packages/gql-bot/src/client.ts",
+          "hash": "14050378308509437750"
+        },
+        {
+          "file": "packages/gql-bot/src/index.ts",
+          "hash": "6856896619175789750"
+        },
+        {
+          "file": "packages/gql-bot/src/job_processor.ts",
+          "hash": "17766746910002002772"
+        },
+        {
+          "file": "packages/gql-bot/src/job_processor_gql.ts",
+          "hash": "13414974279712975426"
+        },
+        {
+          "file": "packages/gql-bot/src/utils.ts",
+          "hash": "7320560945614780626"
+        },
+        {
+          "file": "packages/gql-bot/test/folder/createOrganizations.yaml",
+          "hash": "100949755873138661"
+        },
+        {
+          "file": "packages/gql-bot/test/folder/createUsers.yaml",
+          "hash": "15594165760811338833"
+        },
+        {
+          "file": "packages/gql-bot/test/job1.json",
+          "hash": "16178611915808729966"
+        },
+        {
+          "file": "packages/gql-bot/test/job2.json",
+          "hash": "11217751570865083093"
+        },
+        {
+          "file": "packages/gql-bot/test/job3.json",
+          "hash": "764741915228225525"
+        },
+        {
+          "file": "packages/gql-bot/test/job_processor.spec.ts",
+          "hash": "13339159684089382313"
+        },
+        {
+          "file": "packages/gql-bot/tsconfig.json",
+          "hash": "2093592424098778680"
+        },
+        {
+          "file": "packages/gql-bot/tsconfig.test.json",
+          "hash": "8550427108780319933"
+        }
+      ],
+      "@restorecommerce/grpc-client": [
+        {
+          "file": "packages/grpc-client/.gitignore",
+          "hash": "3973356395675902886"
+        },
+        {
+          "file": "packages/grpc-client/.npmignore",
+          "hash": "2025785589057821602"
+        },
+        {
+          "file": "packages/grpc-client/CHANGELOG.md",
+          "hash": "1464608826536500798"
+        },
+        {
+          "file": "packages/grpc-client/README.md",
+          "hash": "12618586527767677908"
+        },
+        {
+          "file": "packages/grpc-client/jest.config.js",
+          "hash": "8546095683555540213"
+        },
+        {
+          "file": "packages/grpc-client/package.json",
+          "hash": "2928153630565668075",
+          "deps": [
+            "npm:@types/jest",
+            "npm:@types/lodash",
+            "npm:@types/node",
+            "npm:@types/retry",
+            "npm:@types/uuid",
+            "npm:jest",
+            "npm:npm-run-all",
+            "npm:typescript",
+            "npm:@grpc/grpc-js",
+            "npm:@grpc/proto-loader",
+            "@restorecommerce/logger",
+            "npm:cls-rtracer",
+            "npm:lodash",
+            "npm:nice-grpc",
+            "npm:nice-grpc-client-middleware-deadline",
+            "npm:nice-grpc-client-middleware-retry",
+            "npm:protobufjs",
+            "npm:retry",
+            "npm:rxjs",
+            "npm:uuid",
+            "npm:winston"
+          ]
+        },
+        {
+          "file": "packages/grpc-client/src/index.ts",
+          "hash": "7536322058928030491"
+        },
+        {
+          "file": "packages/grpc-client/src/middleware.ts",
+          "hash": "16436470135818754692"
+        },
+        {
+          "file": "packages/grpc-client/tests/generated/echo/echo.ts",
+          "hash": "9485890209963783242"
+        },
+        {
+          "file": "packages/grpc-client/tests/generated/google/protobuf/any.ts",
+          "hash": "13534737013997099616"
+        },
+        {
+          "file": "packages/grpc-client/tests/grpc.test.ts",
+          "hash": "12381793049098086339"
+        },
+        {
+          "file": "packages/grpc-client/tests/mock/index.ts",
+          "hash": "15686437091068166628"
+        },
+        {
+          "file": "packages/grpc-client/tests/mock/server.ts",
+          "hash": "10879566600923683652"
+        },
+        {
+          "file": "packages/grpc-client/tests/protos/echo/echo.proto",
+          "hash": "257706048544821490"
+        },
+        {
+          "file": "packages/grpc-client/tests/protos/google/protobuf/any.proto",
+          "hash": "11469743162159149253"
+        },
+        {
+          "file": "packages/grpc-client/tsconfig-base.json",
+          "hash": "10329969355547585558"
+        },
+        {
+          "file": "packages/grpc-client/tsconfig.json",
+          "hash": "5807930388399349722"
+        },
+        {
+          "file": "packages/grpc-client/tsconfig.lib.json",
+          "hash": "17595585772182139718"
+        },
+        {
+          "file": "packages/grpc-client/tsconfig.test.json",
+          "hash": "2445213765357593660"
+        }
+      ]
+    }
+  }
+}

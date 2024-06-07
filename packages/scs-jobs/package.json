@@ -21,7 +21,7 @@
     "@restorecommerce/kafka-client": "^1.2.7",
     "@restorecommerce/logger": "^1.2.10",
     "@restorecommerce/rc-grpc-clients": "^5.1.29",
-    "bullmq": "^5.2.1",
+    "bullmq": "^5.7.15",
     "lodash": "^4.17.21",
     "redis": "^4.6.8",
     "winston": "^3.11.0"

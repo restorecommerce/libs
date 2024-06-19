@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.31](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.30...@restorecommerce/scs-jobs@0.1.31) (2024-06-19)
+
+
+### Bug Fixes
+
+* **scs-jobs:** marshall jobDone result ([21a7c26](https://github.com/restorecommerce/libs/commit/21a7c269aed1cadf3d00baa3df97586b0d336a3d))
+
+
+
+
+
 ## [0.1.30](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.29...@restorecommerce/scs-jobs@0.1.30) (2024-06-07)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs

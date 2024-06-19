@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.32](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.31...@restorecommerce/scs-jobs@0.1.32) (2024-06-19)
+
+
+### Bug Fixes
+
+* **scs-jobs:** marshall result ([13e92e1](https://github.com/restorecommerce/libs/commit/13e92e1485c2ebe3108b8a15bacb3868cbbfa00b))
+
+
+
+
+
 ## [0.1.31](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.30...@restorecommerce/scs-jobs@0.1.31) (2024-06-19)
 
 

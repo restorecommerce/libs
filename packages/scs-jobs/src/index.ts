@@ -138,8 +138,9 @@ export const runWorker = async (queue: string, concurrency: number, cfg: any, lo
     const start = Date.now();
     const result = await cb(job);
     logger.verbose(`job@${filteredJob.name}#${filteredJob.id} completed in ${Date.now() - start}ms`, filteredJob);
-
-    const marshalledResult = marshallProtobufAny(result);
+    let marshalledResult;
+    if (result)
+      marshalledResult = marshallProtobufAny(result);
     await jobEvents.emit('jobDone', {
       id: job.id, type: job.name, schedule_type: job.data.schedule_type, result: marshalledResult
     });

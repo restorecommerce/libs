@@ -52,15 +52,15 @@ function createTransformer(opts: RestoreLoggerElasticsearchTransportOptions, pre
     transformed.fields = logData.meta;
     if (typeof transformed.fields !== 'object') {
       const transformedFields = logFieldsHandler(JSON.parse(transformed.fields), precompiled);
-      transformed.fields ={ message: transformedFields };
+      transformed.fields = { message: transformedFields };
     }
 
     if (opts.esTransformer && typeof opts.esTransformer === 'function') {
       transformed = opts.esTransformer(transformed);
     }
 
-    if (opts.stringifyMeta === true && typeof transformed.fields === 'object') {
-      transformed.message = JSON.stringify(transformed.fields, getCircularReplacer());
+    if (opts.stringifyMeta !== false && typeof transformed.fields === 'object') {
+      transformed.fields = JSON.stringify(transformed.fields, getCircularReplacer());
     }
 
     return transformed;

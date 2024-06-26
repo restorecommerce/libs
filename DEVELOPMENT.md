@@ -7,7 +7,7 @@ to normalize the commit messages. Commit messages are not linted.
 
 ## Bootstrapping
 
-Run `npm run install`.
+Run `npm install`.
 
 This will install all deps recursively.
 

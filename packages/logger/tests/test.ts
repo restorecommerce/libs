@@ -20,6 +20,7 @@ const opts: RestoreLoggerOptions = {
     prettyPrint: true
   },
   elasticsearch: {
+    stringifyMeta: true,
     level: "silly",
     clientOpts: {
       node: "http://localhost:9200"
@@ -63,7 +64,7 @@ describe('a logger', () => {
       logger.info({ test: 'test' });
       done();
     });
-    it('log with level, a message and object', (done) => {
+    it('log with level, a message and objects', (done) => {
       logger.log('debug', 'Message with multiple objects',
         { test: 'test' },
         { test2: 'test2' });

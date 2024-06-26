@@ -57,6 +57,10 @@ function createTransformer(opts: RestoreLoggerElasticsearchTransportOptions, pre
       transformed = opts.esTransformer(transformed);
     }
 
+    if (opts.stringifyMeta === true && typeof transformed.fields === 'object') {
+      transformed.message = JSON.stringify(transformed.fields, getCircularReplacer());
+    }
+
     return transformed;
   };
 }
@@ -74,6 +78,7 @@ function createTransformer(opts: RestoreLoggerElasticsearchTransportOptions, pre
 
 export interface RestoreLoggerElasticsearchTransportOptions extends ElasticsearchTransportOptions {
   sourcePointer?: any;
+  stringifyMeta?: boolean;
   esTransformer?: Function;
   fieldOptions?: RestoreFieldsOptions;
 }

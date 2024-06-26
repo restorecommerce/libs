@@ -17,7 +17,7 @@ export interface RestoreLoggerOptions extends WinstonLoggerOptions {
 
 export interface BufferField {
   fieldPath: string;
-  enableLogging?: boolean; // default value is false 
+  enableLogging?: boolean; // default value is false
 }
 
 export interface RestoreFieldsOptions {

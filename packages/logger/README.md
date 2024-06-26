@@ -24,7 +24,7 @@ the options hash:
 {
   "loggerName": "somelogger",        // Optional name
   "sourcePointer": true,             // Whether the source file and line where the log statement was issued should be logged [default: `false`]
-  "esTransformer": function()  //
+  "esTransformer": function(),       // Transformer function to transform the structured data (meta data) logged as JS object
   "console": {
     "handleExceptions": false,
     "level": "silly",
@@ -35,6 +35,7 @@ the options hash:
     ...
   },
   "elasticsearch": {
+    "stringifyMeta": true,           // Whether the structured data (meta data) logged as JS object should be stringified [default: `true`]
     ...
   }
 }

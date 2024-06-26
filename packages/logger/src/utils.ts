@@ -39,12 +39,12 @@ const parse = (stack: string): any[] => {
         }
 
         if (methodStart > 0) {
-          object = functionName.substr(0, methodStart);
-          method = functionName.substr(methodStart + 1);
+          object = functionName.substring(0, methodStart);
+          method = functionName.substring(methodStart + 1);
           const objectEnd = object.indexOf('.Module');
           if (objectEnd > 0) {
-            functionName = functionName.substr(objectEnd + 1);
-            object = object.substr(0, objectEnd);
+            functionName = functionName.substring(objectEnd + 1);
+            object = object.substring(0, objectEnd);
           }
         }
       }

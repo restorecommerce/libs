@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@1.2.11...@restorecommerce/logger@1.3.0) (2024-06-26)
+
+
+### Bug Fixes
+
+* **logger:** Fix ts error ([157704f](https://github.com/restorecommerce/libs/commit/157704f03b0d26d4ec138be563c121a08d80087b))
+
+
+### Features
+
+* **logger:** stringify meta data for ES transport by default ([21361a9](https://github.com/restorecommerce/libs/commit/21361a94a8779d3d87005811465c136fb9d54a84))
+
+
+
+
+
 ## [1.2.11](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@1.2.10...@restorecommerce/logger@1.2.11) (2024-06-07)
 
 **Note:** Version bump only for package @restorecommerce/logger

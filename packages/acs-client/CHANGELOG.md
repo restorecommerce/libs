@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.6.10](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@1.6.9...@restorecommerce/acs-client@1.6.10) (2024-06-26)
+
+
+### Bug Fixes
+
+* **grpc-client:** upgrade deps ([4bbfc0c](https://github.com/restorecommerce/libs/commit/4bbfc0c0df84d21f789790968eb42cd1cc358077))
+
+
+
+
+
 ## [1.6.9](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@1.6.8...@restorecommerce/acs-client@1.6.9) (2024-06-07)
 
 **Note:** Version bump only for package @restorecommerce/acs-client

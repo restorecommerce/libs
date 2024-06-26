@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.9](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.2.8...@restorecommerce/kafka-client@1.2.9) (2024-06-26)
+
+
+### Bug Fixes
+
+* **grpc-client:** upgrade deps ([4bbfc0c](https://github.com/restorecommerce/kafka-client/commit/4bbfc0c0df84d21f789790968eb42cd1cc358077))
+
+
+
+
+
 ## [1.2.8](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.2.7...@restorecommerce/kafka-client@1.2.8) (2024-06-07)
 
 **Note:** Version bump only for package @restorecommerce/kafka-client

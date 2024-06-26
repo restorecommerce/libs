@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.11](https://github.com/restorecommerce/libs/compare/@restorecommerce/mailer@1.0.10...@restorecommerce/mailer@1.0.11) (2024-06-26)
+
+
+### Bug Fixes
+
+* **mailer:** upgrade deps ([b6ed1cb](https://github.com/restorecommerce/libs/commit/b6ed1cba08b2f41e9f8f79618c43cedf5b2ad66e))
+
+
+
+
+
 ## [1.0.10](https://github.com/restorecommerce/libs/compare/@restorecommerce/mailer@1.0.9...@restorecommerce/mailer@1.0.10) (2024-06-07)
 
 **Note:** Version bump only for package @restorecommerce/mailer

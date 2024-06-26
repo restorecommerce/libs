@@ -137,7 +137,7 @@ export const getRealTrace = (): any => {
 }
 
 // A symbol used as key in the global name space to put the AsyncLocalStorage store under
-export const globalLoggerCtxKey = Symbol('loggerCtx');
+export const globalLoggerCtxKey: symbol = Symbol('loggerCtx');
 
 export const getCircularReplacer = () => {
   const seen = new WeakSet();

@@ -21,7 +21,9 @@ function createTransformer(opts: RestoreLoggerElasticsearchTransportOptions, pre
     const source = opts.source; // needed, as it will be read internally
     let transformed: any = {};
 
+    // @ts-ignore:
     if (global[globalLoggerCtxKey]) {
+      // @ts-ignore:
       const store = global[globalLoggerCtxKey].getStore();
       if (store && store.size > 0) {
         for (let [key, value] of store.entries()) {

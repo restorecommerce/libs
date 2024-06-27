@@ -96,7 +96,7 @@ export const isAllowedRequest = async (subject: Subject,
  * to enforce the applicapble poilicies. The response is `Decision`
  * or policy set reverse query `PolicySetRQ` depending on the requeste operation `isAllowed()` or
  * `whatIsAllowed()` respectively.
- * @param {Subject} subject Contains subject information or ApiKey
+ * @param {Subject} subject Contains subject information
  * @param {Resource[]} resource Contains resource name, resource instance and optional resource properties
  * @param {AuthZAction} action Action to be performed on resource
  * @param {ACSClientContext} ctx Context containing Subject and Context Resources for ACS
@@ -125,15 +125,6 @@ export const accessRequest = async (
   }
 
   const subClone = _.cloneDeep(subject);
-  const token = subject?.token;
-
-  // if apiKey mode is enabled
-  if (token) {
-    const configuredApiKey = cfg.get('authentication:apiKey');
-    if (configuredApiKey === token) {
-      return { decision: Response_Decision.PERMIT, operation_status: generateOperationStatus(200, 'success') };
-    }
-  }
 
   // by default if the config for authorization enabling and enforcement is missing
   // enable it by default (true)

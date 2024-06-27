@@ -2,7 +2,6 @@ import { createFacadeModuleFactory } from '../../utils.js';
 import { FederatedResourceSchema } from './gql/federation.js';
 import { createOIDC } from './oidc/index.js';
 import { type IdentityConfig, type IdentityModule } from './interfaces.js';
-import { setupApiKey } from './api-key/api-key.js';
 import { IdentitySrvGrpcClient } from './grpc/index.js';
 import { createOAuth } from './oauth/oauth.js';
 import mount from 'koa-mount';
@@ -15,18 +14,6 @@ export const identityModule = createFacadeModuleFactory<IdentityConfig, Identity
     ...config.config.client,
     logger: facade.logger,
   });
-
-  if (!!config.apiKey) {
-    const apiKey = setupApiKey({
-      logger: facade.logger,
-      apiKey: config.apiKey
-    });
-
-    if (apiKey) {
-      facade.koa.use(apiKey.router.routes());
-      facade.koa.use(apiKey.app);
-    }
-  }
 
   if (config.oidc) {
     const {provider, router} = createOIDC({

@@ -624,7 +624,7 @@ export interface FilterMapResponse {
  * @param {PolicSetResponse} policySetResponse contains set of applicable policies for entities list
  * @param {any} resources context resources
  * @param {AuthZAction} action Action to be performed on resource
- * @param {Subject} subject Contains subject information or ApiKey
+ * @param {Subject} subject Contains subject information
  * @param {string} subjectID resolved subject identifier from token
  * @param {boolean} authzEnforced authorization enforcement flag
  * @param {string} targetScope target scope

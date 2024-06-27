@@ -52,8 +52,7 @@ const createTestFacade = () => {
         ],
         jwks,
       },
-      oauth: true,
-      apiKey: 'api_key'
+      oauth: true
     }))
     .useModule(resourceModule({config: serviceConfig.get('master_data')}))
     .useModule(accessControlModule({config: serviceConfig.get('access_control')}))

@@ -12,7 +12,6 @@ export interface IdentityConfig  {
   config: IdentityServiceConfig;
   identitySrvClientConfig: GrpcClientConfig;
   oidc?: OIDCConfig;
-  apiKey?: boolean | string;
   oauth?: boolean;
 }
 

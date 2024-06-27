@@ -1,4 +1,8 @@
 
+### 1.6.2 (June 27th, 2024)
+
+- up deps
+
 ### 1.6.1 (May 14th, 2024)
 
 - up chassis-srv for removing response logging

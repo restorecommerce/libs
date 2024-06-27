@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.13.24...@restorecommerce/facade@2.0.0) (2024-06-27)
+
+
+### Features
+
+* remove apiKey and sync mechanism as seed accounts are used for importing data ([02733fa](https://github.com/restorecommerce/libs/commit/02733faf070a072039f2ee59e78a6bb134931363))
+
+
+### BREAKING CHANGES
+
+* seed accounts are used for data import
+
+
+
+
+
 ## [1.13.24](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@1.13.23...@restorecommerce/facade@1.13.24) (2024-06-26)
 
 **Note:** Version bump only for package @restorecommerce/facade

@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@1.6.11...@restorecommerce/acs-client@2.0.0) (2024-06-27)
+
+
+### Features
+
+* remove apiKey and sync mechanism as seed accounts are used for importing data ([02733fa](https://github.com/restorecommerce/libs/commit/02733faf070a072039f2ee59e78a6bb134931363))
+
+
+### BREAKING CHANGES
+
+* seed accounts are used for data import
+
+
+
+
+
 ## [1.6.11](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@1.6.10...@restorecommerce/acs-client@1.6.11) (2024-06-26)
 
 **Note:** Version bump only for package @restorecommerce/acs-client

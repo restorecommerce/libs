@@ -139,6 +139,7 @@ message Order {
   optional CustomerType customer_type = 14;
   optional string customer_vat_id = 15;
   optional io.restorecommerce.fulfillment_product.Preferences packaging_preferences = 16;
+  optional string payment_method_id = 17;
 }
 
 message OrderIdList {

@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.8.8](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.8.7...@restorecommerce/protos@6.8.8) (2024-07-24)
+
+
+### Bug Fixes
+
+* **customer_type:** move CustomerType enum to customer.proto ([533a28f](https://github.com/restorecommerce/libs/commit/533a28f968cd3b7b8e3f57cca713c90d6092df1b))
+* **order.proto:** add customer_type and customer_vat_id ([0885d85](https://github.com/restorecommerce/libs/commit/0885d8598b766e4088fc40b8075a860c647a5993))
+* **order.proto:** add payment_method_id ([5517842](https://github.com/restorecommerce/libs/commit/5517842726f197d1f39ea6f93908db27f663a600))
+
+
+
+
+
 ## [6.8.7](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.8.6...@restorecommerce/protos@6.8.7) (2024-05-10)
 
 

@@ -63,12 +63,6 @@ enum FulfillmentInvoiceMode {
   EXCLUDE = 1;
 }
 
-enum CustomerType {
-  PRIVATE = 0;
-  COMMERCIAL = 1;
-  PUBLIC_SECTOR = 2;
-}
-
 message Item {
   optional string id = 1;
   optional string product_id = 2 [
@@ -136,7 +130,7 @@ message Order {
   optional string notification_email = 11;
   optional string customer_order_nr = 12;
   optional string customer_remark = 13;
-  optional CustomerType customer_type = 14;
+  optional io.restorecommerce.customer.CustomerType customer_type = 14;
   optional string customer_vat_id = 15;
   optional io.restorecommerce.fulfillment_product.Preferences packaging_preferences = 16;
   optional string payment_method_id = 17;

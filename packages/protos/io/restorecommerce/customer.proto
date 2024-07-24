@@ -27,6 +27,12 @@ service CustomerService {
   rpc Upsert (CustomerList) returns (CustomerListResponse);
 }
 
+enum CustomerType {
+  PRIVATE = 0;
+  COMMERCIAL = 1;
+  PUBLIC_SECTOR = 2;
+}
+
 message CustomerList {
   repeated Customer items = 1;
   optional uint32 total_count = 2;

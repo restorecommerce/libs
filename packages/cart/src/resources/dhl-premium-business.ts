@@ -21,10 +21,10 @@ export default {
       ],
       "name": "1 (EU)",
       "offers": {
-        "basePrice": 10.60,
+        "basePrice": 12.40,
         "maxWeight": 31500,
         "roundingPrice": "ROUND_UP",
-        "stepPrice": 0.80,
+        "stepPrice": 0.90,
         "stepWeight": 1000,
         "type": "package"
       }
@@ -36,10 +36,10 @@ export default {
       ],
       "name": "1 (non-EU)",
       "offers": {
-        "basePrice": 18.60,
+        "basePrice": 12.31,
         "maxWeight": 31500,
         "roundingPrice": "ROUND_UP",
-        "stepPrice": 0.95,
+        "stepPrice": 0.90,
         "stepWeight": 1000,
         "type": "package"
       }
@@ -59,10 +59,10 @@ export default {
       ],
       "name": "2 (EU)",
       "offers": {
-        "basePrice": 11.20,
+        "basePrice": 12.50,
         "maxWeight": 31500,
         "roundingPrice": "ROUND_UP",
-        "stepPrice": 0.85,
+        "stepPrice": 0.90,
         "stepWeight": 1000,
         "type": "package"
       }
@@ -84,10 +84,10 @@ export default {
       ],
       "name": "3 (EU)",
       "offers": {
-        "basePrice": 11.40,
+        "basePrice": 12.60,
         "maxWeight": 31500,
         "roundingPrice": "ROUND_UP",
-        "stepPrice": 0.90,
+        "stepPrice": 1.00,
         "stepWeight": 1000,
         "type": "package"
       }
@@ -107,10 +107,10 @@ export default {
       ],
       "name": "3 (non-EU)",
       "offers": {
-        "basePrice": 17.3,
+        "basePrice": 20.30,
         "maxWeight": 31500,
         "roundingPrice": "ROUND_UP",
-        "stepPrice": 1.7,
+        "stepPrice": 1.8,
         "stepWeight": 1000,
         "type": "package"
       }
@@ -188,10 +188,10 @@ export default {
         "VN"
       ],
       "offers": {
-        "basePrice": 26.35,
+        "basePrice": 28.40,
         "maxWeight": 31500,
         "roundingPrice": "ROUND_UP",
-        "stepPrice": 6.10,
+        "stepPrice": 5.90,
         "stepWeight": 1000,
         "type": "package"
       }
@@ -298,7 +298,7 @@ export default {
         "basePrice": 36.0,
         "maxWeight": 31500,
         "roundingPrice": "ROUND_UP",
-        "stepPrice": 7.4,
+        "stepPrice": 7.90,
         "stepWeight": 1000,
         "type": "package"
       }
@@ -310,32 +310,32 @@ export default {
       "offers": [
         {
           "maxWeight": 1000,
-          "price": 4.30,
+          "price": 4.85,
           "type": "package"
         },
         {
           "maxWeight": 3000,
-          "price": 4.95,
+          "price": 5.55,
           "type": "package"
         },
         {
           "maxWeight": 5000,
-          "price": 5.80,
+          "price": 6.50,
           "type": "package"
         },
         {
           "maxWeight": 10000,
-          "price": 7.75,
+          "price": 8.30,
           "type": "package"
         },
         {
           "maxWeight": 20000,
-          "price": 11.80,
+          "price": 12.95,
           "type": "package"
         },
         {
           "maxWeight": 31500,
-          "price": 13.80,
+          "price": 15.45,
           "type": "package"
         }
       ]

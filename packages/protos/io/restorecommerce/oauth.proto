@@ -5,13 +5,20 @@ package io.restorecommerce.oauth;
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/user.proto";
 import "io/restorecommerce/status.proto";
+import "io/restorecommerce/options.proto";
 import "google/protobuf/empty.proto";
 
 service OAuthService {
-  rpc AvailableServices(google.protobuf.Empty) returns (ServicesResponse);
-  rpc GenerateLinks(google.protobuf.Empty) returns (GenerateLinksResponse);
+  rpc GenerateLinks(google.protobuf.Empty) returns (GenerateLinksResponse)  {
+    option (io.restorecommerce.options.is_query) = true;
+  };
+  rpc GetToken(GetTokenRequest) returns (GetTokenResponse) {
+    option (io.restorecommerce.options.is_query) = true;
+  };
+  rpc AvailableServices(google.protobuf.Empty) returns (ServicesResponse){
+    option (io.restorecommerce.options.is_query) = true;
+  };
   rpc ExchangeCode(ExchangeCodeRequest) returns (ExchangeCodeResponse);
-  rpc GetToken(GetTokenRequest) returns (GetTokenResponse);
 }
 
 message ServicesResponse {

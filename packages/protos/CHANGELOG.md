@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.8.9](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.8.8...@restorecommerce/protos@6.8.9) (2024-08-14)
+
+
+### Bug Fixes
+
+* **oauth:** flag oauth queries, make shop domain repeatable ([7d3eaac](https://github.com/restorecommerce/libs/commit/7d3eaac1037729adf2ba5dc1bbef2021ca56fac6))
+
+
+
+
+
 ## [6.8.8](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.8.7...@restorecommerce/protos@6.8.8) (2024-07-24)
 
 

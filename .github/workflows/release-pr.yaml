@@ -24,7 +24,7 @@ jobs:
           node-version-file: '.nvmrc'
 
       - name: Install Dependencies
-        run: npm clean-install
+        run: npm i
 
       - name: Generate Changes
         run: |

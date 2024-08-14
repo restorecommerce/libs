@@ -45,7 +45,7 @@ jobs:
           shutdown: ${{ inputs.shutdown }}
 
       - name: Install Dependencies
-        run: npm ci
+        run: npm i
 
       - name: Cache Nx
         uses: actions/cache@v3

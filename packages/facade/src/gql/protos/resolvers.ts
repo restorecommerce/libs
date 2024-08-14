@@ -122,8 +122,8 @@ export const getGQLResolverFunctions =
 
       (obj as any)[methodName] = async (args: any, context: ServiceClient<CTX, keyof CTX, T>) => {
         // remap namespace and serviceKey if given
-        key = (cfg as any)?.[key]?.namespace ?? key;
-        serviceKey = (cfg as any)?.[key]?.serviceKey ?? serviceKey;
+        key = (cfg as any)?.namespace ?? key;
+        serviceKey = (cfg as any)?.serviceKey ?? serviceKey;
         const client = context[key].client;
         const service = client[serviceKey];
         try {

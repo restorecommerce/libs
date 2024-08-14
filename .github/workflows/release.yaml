@@ -52,9 +52,6 @@ jobs:
 
       - name: Release
         run: npx lerna publish --no-verify-access --no-private --conventional-commits --yes --loglevel debug
-      
-      - name: Sync Package-Lock
-        run: npm i
 
       - name: Sync next branch
         run: |

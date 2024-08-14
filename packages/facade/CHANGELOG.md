@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.0.2...@restorecommerce/facade@2.0.3) (2024-08-14)
+
+
+### Bug Fixes
+
+* **facade:** config is object ([ed35950](https://github.com/restorecommerce/libs/commit/ed35950d83a3536d60ceabd997c73fb7e907b70a))
+* **resolver:** direct access on sub service config ([ae11ef3](https://github.com/restorecommerce/libs/commit/ae11ef3e733708a9d7fad928191eff049e793aa4))
+
+
+
+
+
 ## [2.0.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.0.1...@restorecommerce/facade@2.0.2) (2024-08-14)
 
 

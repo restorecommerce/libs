@@ -31,7 +31,9 @@ service OrderService {
   rpc Create (OrderList) returns (OrderListResponse);
   rpc Update (OrderList) returns (OrderListResponse);
   rpc Upsert (OrderList) returns (OrderListResponse);
-  rpc Evaluate (OrderList) returns (OrderListResponse);
+  rpc Evaluate (OrderList) returns (OrderListResponse) {
+    option (io.restorecommerce.options.is_query) = true;
+  };
   rpc Submit (OrderList) returns (OrderSubmitListResponse);
   rpc Withdraw (OrderIdList) returns (OrderListResponse);
   rpc Cancel (OrderIdList) returns (OrderListResponse);

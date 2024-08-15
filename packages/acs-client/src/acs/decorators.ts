@@ -1,5 +1,5 @@
 import * as uuid from 'uuid';
-import { Logger } from 'winston';
+import { Logger } from '@restorecommerce/logger';
 import { Provider as ServiceConfig } from 'nconf';
 import {
   Client,
@@ -42,6 +42,7 @@ export type ACSClientContextFactory<T extends ResourceList> = (self: any, reques
 export type ResourceFactory<T extends ResourceList> = (self: any, request: T, ...args: any) => Promise<Resource[]>;
 export type DatabaseSelector<T extends ResourceList> = (self: any, request: T, ...args: any) => Promise<DatabaseProvider>;
 export type MetaDataInjector<T extends ResourceList> = (self: any, request: T, ...args: any) => Promise<T>;
+export type SubjectResolver<T extends ResourceList> = (self: any, request: T, ...args: any) => Promise<T>;
 
 export interface AccessControlledService {
   readonly __userService: Client<UserServiceDefinition>;
@@ -58,9 +59,9 @@ export const DefaultACSClientContextFactory = async <T extends ResourceList>(
   resources: [],
 });
 
-export function DefaultResourceFactory<T extends ResourceList>(
+export const DefaultResourceFactory = <T extends ResourceList>(
   ...resourceNames: string[]
-): ResourceFactory<T> {
+): ResourceFactory<T> => {
   return async (
     self: any,
     request: T,
@@ -71,7 +72,25 @@ export function DefaultResourceFactory<T extends ResourceList>(
       id: request.items?.map((item: any) => item.id)
     })
   );
-}
+};
+
+export const DefaultSubjectResolver = async <T extends ResourceList>(
+  self: any,
+  request: T,
+  ...args: any
+): Promise<T> => {
+  const subject = request.subject;
+  if (subject?.id) {
+    delete subject.id;
+  }
+  if (subject?.token) {
+    const user = await self.__userService.findByToken({ token: subject.token });
+    if (user?.payload?.id) {
+      subject.id = user.payload.id;
+    }
+  }
+  return request;
+};
 
 export const DefaultMetaDataInjector = async <T extends ResourceList>(
   self: any,
@@ -225,8 +244,25 @@ export function access_controlled_function<T extends ResourceList>(kwargs: {
   };
 }
 
+export function resolves_subject<T extends ResourceList>(
+  subjectResolver: SubjectResolver<T> = DefaultSubjectResolver<T>,
+) {
+  return function (
+    target: any,
+    propertyName: string,
+    descriptor: TypedPropertyDescriptor<any>,
+  ) {
+    const method = descriptor.value!;
+    descriptor.value = async function () {
+      const args = [...arguments].slice(1);
+      const request = await subjectResolver(this, arguments[0], ...args);
+      return await method.apply(this, [request, ...args]);
+    };
+  };
+};
+
 export function injects_meta_data<T extends ResourceList>(
-  metaDataInjector: MetaDataInjector<T> = DefaultMetaDataInjector < T >,
+  metaDataInjector: MetaDataInjector<T> = DefaultMetaDataInjector<T>,
 ) {
   return function (
     target: any,

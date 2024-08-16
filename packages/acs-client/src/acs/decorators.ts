@@ -14,7 +14,8 @@ import {
   Response_Decision
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/access_control';
 import {
-  ResourceList
+  ResourceList,
+  ResourceListResponse
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base';
 import {
   initAuthZ,
@@ -35,6 +36,7 @@ import {
 } from './resolver';
 import { cfg } from '../config';
 import { _ } from '../utils';
+import { Filter_Operation, Filter_ValueType } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/filter';
 
 /* eslint-disable prefer-arrow-functions/prefer-arrow-functions */
 export type DatabaseProvider = 'arangoDB' | 'postgres';
@@ -98,6 +100,34 @@ export const DefaultMetaDataInjector = async <T extends ResourceList>(
   ...args: any
 ): Promise<T> => {
   const urns = cfg.get('authorization:urns');
+  const ids = [...new Set(
+      request.items?.map(
+        (item) => item.id
+      ).filter(
+        id => id
+      )
+    )
+  ];
+  const meta_map = ids.length && await self.read({
+    filters: [{
+      filters: [{
+        field: 'id',
+        operation: Filter_Operation.in,
+        value: JSON.stringify(ids),
+        type: Filter_ValueType.ARRAY,
+        filters: [],
+      }]
+    }],
+    limit: ids.length,
+    subject: request.subject
+  }).then(
+    (response: ResourceListResponse) => new Map(response.items?.filter(
+      item => item.payload
+    ).map(
+      item => [item.payload.id, item.payload.meta]
+    ))
+  );
+
   request.items?.forEach((item) => {
     if (!item.id?.length) {
       item.id = uuid.v4().replace(/-/g, '');
@@ -105,6 +135,7 @@ export const DefaultMetaDataInjector = async <T extends ResourceList>(
 
     if (!item.meta?.owners?.length) {
       item.meta = {
+        ...meta_map.get(item.id),
         ...item.meta,
         owners: [
           request.subject?.scope ? {

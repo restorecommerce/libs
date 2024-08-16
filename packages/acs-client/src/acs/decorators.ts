@@ -79,7 +79,7 @@ export const DefaultSubjectResolver = async <T extends ResourceList>(
   request: T,
   ...args: any
 ): Promise<T> => {
-  const subject = request.subject;
+  const subject = request?.subject;
   if (subject?.id) {
     delete subject.id;
   }
@@ -190,7 +190,9 @@ export function access_controlled_function<T extends ResourceList>(kwargs: {
           : kwargs.database;
 
         const subject = context?.subject;
-        subject.id = null;
+        if (subject) {
+          subject.id = null;
+        }
         if (subject?.token) {
           const user = await that.__userService.findByToken({ token: subject.token });
           if (user?.payload?.id) {

@@ -1,9 +1,9 @@
 'use strict';
 
 import * as mocha from 'mocha';
-import { GraphResourcesServiceBase } from '../lib';
-import { ResourcesAPIBase } from '../lib';
-import { ServiceBase } from '../lib';
+import { GraphResourcesServiceBase } from '../src/index';
+import { ResourcesAPIBase } from '../src/index';
+import { ServiceBase } from '../src/index';
 import * as chassis from '@restorecommerce/chassis-srv';
 import { createClient, createChannel, Channel } from '@restorecommerce/grpc-client';
 import { registerProtoMeta } from '@restorecommerce/kafka-client';

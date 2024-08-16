@@ -1,6 +1,7 @@
 'use strict';
 
-import { ResourcesAPIBase, ServiceBase, toObject, convertToObject } from '../lib';
+import * as mocha from 'mocha';
+import { ResourcesAPIBase, ServiceBase, toObject, convertToObject } from '../src/index';
 import * as chassis from '@restorecommerce/chassis-srv';
 import { Channel, createChannel, createClient } from '@restorecommerce/grpc-client';
 import { Events, registerProtoMeta, Topic } from '@restorecommerce/kafka-client';

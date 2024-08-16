@@ -7,7 +7,7 @@ import { DatabaseProvider, GraphDatabaseProvider } from '@restorecommerce/chassi
 import { DeepPartial } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/attribute';
 import { Search } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base';
 import { Subject } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/auth';
-import { fieldHandler } from './utils';
+import { fieldHandler } from './utils.js';
 
 let redisClient: any;
 
@@ -93,19 +93,24 @@ const updateMetadata = (docMeta: DocumentMetadata, newDoc: BaseDocument, subject
  * Resource API base provides functions for CRUD operations.
  */
 export class ResourcesAPIBase {
-  bufferFields: string[];
-  requiredFields: any;
-  timeStampFields: string[];
-  resourceName: string;
-  logger: any;
+  public readonly bufferFields: string[];
+  public readonly requiredFields: any;
+  public readonly timeStampFields: string[];
+  public readonly resourceName: string;
   /**
    * @constructor
    * @param  {object} db Chassis arangodb provider.
    * @param {string} collectionName Name of database collection.
    * @param {any} fieldHandlerConf The collection's field generators configuration.
    */
-  constructor(private db: DatabaseProvider, private collectionName: string, fieldHandlerConf?: any,
-    private edgeCfg?: any, private graphName?: string, logger?: any) {
+  constructor(
+    public readonly db: DatabaseProvider,
+    public readonly collectionName: string,
+    fieldHandlerConf?: any,
+    public readonly edgeCfg?: any,
+    public readonly graphName?: string,
+    public readonly logger?: any
+  ) {
     this.resourceName = collectionName.substring(0, collectionName.length - 1);
 
     if (!fieldHandlerConf) {
@@ -396,10 +401,10 @@ export class ResourcesAPIBase {
       let createDocuments = [];
       let updateDocuments = [];
       let dispatch = [];
+      if (this.bufferFields && documents) {
+        documents = this.encodeOrDecode(documents, this.bufferFields, 'decode');
+      }
       dispatch = await Promise.all(documents.map(async (doc) => {
-        if (this.bufferFields && doc) {
-          doc = this.encodeOrDecode([doc], this.bufferFields, 'decode')[0];
-        }
         let foundDocs;
         if (doc && doc.id) {
           foundDocs = await this.db.find(this.collectionName, { id: doc.id }, {
@@ -472,11 +477,15 @@ export class ResourcesAPIBase {
     let updateResponse = [];
     try {
       const collectionName = this.collectionName;
+      if (this.bufferFields && documents) {
+        documents = this.encodeOrDecode(documents, this.bufferFields, 'decode');
+      }
       let docsWithUpMetadata = await Promise.all(documents.map(async (doc) => {
-        if (this.bufferFields && doc) {
-          doc = this.encodeOrDecode([_.cloneDeep(doc)], this.bufferFields, 'decode')[0];
-        }
-        let foundDocs = await this.db.find(collectionName, { id: doc.id });
+        let foundDocs = await this.db.find(
+          collectionName,
+          { id: doc.id },
+          { limit: 1 }
+        );
         let dbDoc;
         if (foundDocs && foundDocs.length === 1) {
           dbDoc = foundDocs[0];

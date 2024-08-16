@@ -215,10 +215,17 @@ export const toObject = (input) => {
   return finalObj;
 };
 
-import { ResourcesAPIBase } from './core/ResourcesAPI';
-export { ResourcesAPIBase };
-import { ServiceBase } from './core/ServiceBase';
-export { ServiceBase };
-import { GraphResourcesServiceBase } from './core/GraphResourcesServiceBase';
-export { GraphResourcesServiceBase };
-export { Filter, FilterOp, FilterOperation, FilterValueType, OperatorType, TraversalOptions, GraphFilters, GraphFilter } from './core/interfaces';
+export { ResourcesAPIBase } from './core/ResourcesAPI';
+export { ServiceBase } from './core/ServiceBase';
+export { WorkerBase } from './core/WorkerBase';
+export { GraphResourcesServiceBase } from './core/GraphResourcesServiceBase';
+export {
+  Filter,
+  FilterOp,
+  FilterOperation,
+  FilterValueType,
+  GraphFilters,
+  GraphFilter,
+  OperatorType,
+  TraversalOptions,
+} from './core/interfaces';

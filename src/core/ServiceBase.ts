@@ -1,8 +1,8 @@
 import * as _ from 'lodash';
-import { toObject } from '../index';
+import { toObject } from '../index.js';
 import { ResourcesAPIBase } from './ResourcesAPI';
 import { Topic } from '@restorecommerce/kafka-client';
-import { Logger } from 'winston';
+import { Logger } from '@restorecommerce/logger';
 import {
   DeepPartial,
   DeleteRequest,
@@ -178,10 +178,10 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
   private generateResponseWithStatus(responseItems: any[], inputItems: any[], deleteIds?: boolean) {
     let statusArray = [];
     let responseItemsWithStatus = [];
-    if (!_.isArray(responseItems)) {
-      responseItems = [responseItems];
+    if (!Array.isArray(responseItems)) {
+      responseItems = responseItems ? [responseItems] : [];
     }
-    if (!_.isArray(inputItems)) {
+    if (!Array.isArray(inputItems)) {
       inputItems = [inputItems];
     }
     for (let i = 0; i < responseItems.length; i++) {

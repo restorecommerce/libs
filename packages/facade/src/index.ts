@@ -46,6 +46,7 @@ interface RestoreCommerceFacadeImplConfig {
   kafka?: KafkaProviderConfig['kafka'];
   fileUploadOptions?: FileUploadOptionsConfig['fileUploadOptions'];
   jsonLimit?: string;
+  extraServices?: { name: string, url: string }[];
 }
 
 interface FacadeApolloServiceMap {
@@ -72,11 +73,12 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
   readonly kafkaConfig?: KafkaProviderConfig['kafka'];
   readonly fileUploadOptionsConfig?: FileUploadOptionsConfig['fileUploadOptions'];
   readonly jsonLimit?: string;
+  readonly extraServices?: { name: string, url: string }[];
 
   private startFns: Array<(() => Promise<void>)> = [];
   private stopFns: Array<(() => Promise<void>)> = [];
 
-  constructor({ koa, logger, port, hostname, env, kafka, fileUploadOptions, jsonLimit }: RestoreCommerceFacadeImplConfig) {
+  constructor({ koa, logger, port, hostname, env, kafka, fileUploadOptions, jsonLimit, extraServices }: RestoreCommerceFacadeImplConfig) {
     this.logger = logger;
     this.port = port ?? 5000;
     this.hostname = hostname ?? '127.0.0.1';
@@ -85,6 +87,7 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
     this.kafkaConfig = kafka;
     this.fileUploadOptionsConfig = fileUploadOptions;
     this.jsonLimit = jsonLimit ? jsonLimit : '50mb';
+    this.extraServices = extraServices;
 
     setUseSubscriptions(!!kafka);
   }
@@ -205,12 +208,19 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
   }
 
   private async mountApolloServer() {
-    const serviceList = Object.keys(this.apolloServices).map(key => {
+    let serviceList = Object.keys(this.apolloServices).map(key => {
       return {
         name: key,
         url: this.apolloServices[key].url ?? `local`,
       };
     });
+
+    if (this.extraServices) {
+      serviceList = [
+        ...serviceList,
+        ...this.extraServices,
+      ];
+    }
 
     const gateway = new ApolloGateway({
       logger: this.logger,
@@ -346,6 +356,7 @@ export interface FacadeConfig {
   kafka?: KafkaProviderConfig['kafka'];
   fileUploadOptions?: FileUploadOptionsConfig['fileUploadOptions'];
   jsonLimit?: string;
+  extraServices?: { name: string, url: string }[];
 }
 
 export const createFacade = (config: FacadeConfig): Facade => {
@@ -378,6 +389,7 @@ export const createFacade = (config: FacadeConfig): Facade => {
     env: config.env,
     kafka: config.kafka,
     fileUploadOptions: config.fileUploadOptions,
-    jsonLimit: config.jsonLimit
+    jsonLimit: config.jsonLimit,
+    extraServices: config.extraServices
   }).useModule(facadeStatusModule);
 };

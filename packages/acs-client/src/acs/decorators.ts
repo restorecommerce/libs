@@ -36,7 +36,10 @@ import {
 } from './resolver';
 import { cfg } from '../config';
 import { _ } from '../utils';
-import { Filter_Operation, Filter_ValueType } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/filter';
+import {
+  Filter_Operation,
+  Filter_ValueType
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/filter';
 
 /* eslint-disable prefer-arrow-functions/prefer-arrow-functions */
 export type DatabaseProvider = 'arangoDB' | 'postgres';

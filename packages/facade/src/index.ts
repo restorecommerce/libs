@@ -1,5 +1,4 @@
-import { createLogger } from '@restorecommerce/logger';
-import { type Logger } from 'winston';
+import { createLogger, type Logger } from '@restorecommerce/logger';
 import { type Server, ServerResponse } from 'node:http';
 
 import Koa from 'koa';
@@ -30,7 +29,6 @@ import { setUseSubscriptions } from './gql/protos/utils.js';
 import bodyParser from 'koa-bodyparser';
 import cors from '@koa/cors';
 import graphqlUploadKoa from 'graphql-upload/graphqlUploadKoa.mjs';
-import helmet from 'koa-helmet';
 import Router from 'koa-router';
 
 export * from './modules/index.js';

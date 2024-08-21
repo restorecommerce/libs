@@ -1,4 +1,9 @@
-import { type ExtractModuleContext, type Facade, type FacadeModule, type FacadeModuleFactory } from './interfaces.js';
+import {
+  type ExtractModuleContext,
+  type Facade,
+  type FacadeModule,
+  type FacadeModuleFactory,
+} from './interfaces.js';
 
 export type FacadeModuleFactoryCb<TConfig, TModule extends FacadeModule> = (facade: Facade<[TModule]>, config: TConfig) => void;
 

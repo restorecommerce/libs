@@ -1,5 +1,5 @@
 import type Koa from 'koa';
-import { type Logger } from 'winston';
+import { type Logger } from '@restorecommerce/logger';
 import { type Server } from 'node:http';
 import { type AddressInfo } from 'node:net';
 

@@ -46,12 +46,6 @@ export const decodeBufferFields = (items: any[], bufferFields: string[]): any =>
   }
 };
 
-interface EnumMetaData {
-  name: string;
-  number: number;
-  options?: any;
-}
-
 /**
  * recursively find the id and updates the object with given value, this function
  * also takes care to handle if there is an array at any position in the path

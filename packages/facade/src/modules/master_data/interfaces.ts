@@ -11,7 +11,7 @@ export interface ResourceConfig {
 }
 
 export interface ResourceContext extends FacadeContext {
-  resource: {
+  master_data: {
     client: ResourceSrvGrpcClient;
   };
 }

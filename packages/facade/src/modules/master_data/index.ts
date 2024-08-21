@@ -5,10 +5,13 @@ import { createFacadeModuleFactory } from '../../utils.js';
 
 export const resourceModule = createFacadeModuleFactory<ResourceConfig, ResourceModule>(namespace, (facade, config) => {
   const resource = {
-    client: new ResourceSrvGrpcClient(config.config.client.address, {
-      ...config.config.client,
-      logger: facade.logger,
-    })
+    client: new ResourceSrvGrpcClient(
+      config.config.client.address,
+      {
+        ...config.config.client,
+        logger: facade.logger,
+      }
+    )
   };
 
   facade.addApolloService({
@@ -17,7 +20,7 @@ export const resourceModule = createFacadeModuleFactory<ResourceConfig, Resource
   });
 
   facade.koa.use(async (ctx, next) => {
-    ctx.resource = resource;
+    ctx.master_data = resource;
     await next();
   });
 });

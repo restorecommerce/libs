@@ -5,10 +5,13 @@ import "google/protobuf/any.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
 import "io/restorecommerce/resource_base.proto";
+import "io/restorecommerce/options.proto";
 
 // Service provides the CRUD operations
 service GraphService {
-  rpc Traversal (TraversalRequest) returns (stream TraversalResponse);
+  rpc Traversal (TraversalRequest) returns (stream TraversalResponse) {
+    option (io.restorecommerce.options.is_query) = true;
+  };
 }
 
 message TraversalRequest {

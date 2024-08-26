@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@2.0.2...@restorecommerce/acs-client@2.0.3) (2024-08-26)
+
+
+### Bug Fixes
+
+* **decorator:** add decorator subject resolver, add query flag to odering.evaluate ([3e1064d](https://github.com/restorecommerce/libs/commit/3e1064d0aaf61ec3e149511b756f7f037ab2bc70))
+* **decorators:** ignore empty subject ([8763805](https://github.com/restorecommerce/libs/commit/8763805adbc68cd4a832aaa322d24091014d0bbe))
+* **decorators:** read meta from DB on injects_meta_data ([b2a058d](https://github.com/restorecommerce/libs/commit/b2a058d6b57ebc6a2253cb64af4723aa0fb8c7d9))
+* **facade:** rename configs of resource to master_data, namespace remapping not required! ([c766148](https://github.com/restorecommerce/libs/commit/c766148fee4ae74fb4fd02c81e47cfc4af2c07d7))
+* **test:** lint all, fix direct oauth interface ([ac6c978](https://github.com/restorecommerce/libs/commit/ac6c9781bfa09316f1c19702b2b08650490e3e39))
+
+
+
+
+
 ## [2.0.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@2.0.1...@restorecommerce/acs-client@2.0.2) (2024-08-14)
 
 **Note:** Version bump only for package @restorecommerce/acs-client

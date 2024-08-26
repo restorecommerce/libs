@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.1.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.0.2...@restorecommerce/facade@2.1.0) (2024-08-26)
+
+
+### Bug Fixes
+
+* **facade:** config is object ([ed35950](https://github.com/restorecommerce/libs/commit/ed35950d83a3536d60ceabd997c73fb7e907b70a))
+* **facade:** rename configs of resource to master_data, namespace remapping not required! ([67fce15](https://github.com/restorecommerce/libs/commit/67fce15b98f35563168b25a8093f2f5c35f8714e))
+* **facade:** rename configs of resource to master_data, namespace remapping not required! ([c766148](https://github.com/restorecommerce/libs/commit/c766148fee4ae74fb4fd02c81e47cfc4af2c07d7))
+* **facade:** sub-services need to follow snake_case identiy.o_auth ([0effc1c](https://github.com/restorecommerce/libs/commit/0effc1cd859f1e9e792d7a1079047eea956d1f0b))
+* **resolver:** direct access on sub service config ([ae11ef3](https://github.com/restorecommerce/libs/commit/ae11ef3e733708a9d7fad928191eff049e793aa4))
+* **test:** lint all, fix direct oauth interface ([ac6c978](https://github.com/restorecommerce/libs/commit/ac6c9781bfa09316f1c19702b2b08650490e3e39))
+
+
+### Features
+
+* **facade:** support extra external gql services ([2eac414](https://github.com/restorecommerce/libs/commit/2eac4146d8958c943a8520b6fc0f01db6f4264ac))
+
+
+
+
+
 ## [2.0.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.0.2...@restorecommerce/facade@2.0.3) (2024-08-14)
 
 

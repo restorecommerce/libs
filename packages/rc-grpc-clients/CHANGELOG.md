@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.35](https://github.com/restorecommerce/libs/compare/@restorecommerce/rc-grpc-clients@5.1.34...@restorecommerce/rc-grpc-clients@5.1.35) (2024-08-26)
+
+**Note:** Version bump only for package @restorecommerce/rc-grpc-clients
+
+
+
+
+
 ## [5.1.34](https://github.com/restorecommerce/libs/compare/@restorecommerce/rc-grpc-clients@5.1.33...@restorecommerce/rc-grpc-clients@5.1.34) (2024-08-14)
 
 **Note:** Version bump only for package @restorecommerce/rc-grpc-clients

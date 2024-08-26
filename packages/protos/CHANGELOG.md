@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.8.10](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.8.9...@restorecommerce/protos@6.8.10) (2024-08-26)
+
+
+### Bug Fixes
+
+* **decorator:** add decorator subject resolver, add query flag to odering.evaluate ([3e1064d](https://github.com/restorecommerce/libs/commit/3e1064d0aaf61ec3e149511b756f7f037ab2bc70))
+* **protos:** flag graph traversal as query ([2359c1a](https://github.com/restorecommerce/libs/commit/2359c1a2be5b9bcf832d635ea18fc89a9c880eeb))
+
+
+
+
+
 ## [6.8.9](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.8.8...@restorecommerce/protos@6.8.9) (2024-08-14)
 
 

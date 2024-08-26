@@ -27,7 +27,7 @@ export class IdentitySrvGrpcClient extends RestoreCommerceGrpcClient {
   readonly role: RoleServiceClient;
   readonly authentication_log: AuthenticationLogServiceClient;
   readonly token: TokenServiceClient;
-  readonly oauth: OAuthServiceClient;
+  readonly o_auth: OAuthServiceClient;
 
   constructor(address: string, cfg: GrpcClientConfig) {
     super(address, cfg);
@@ -36,7 +36,7 @@ export class IdentitySrvGrpcClient extends RestoreCommerceGrpcClient {
     this.role = this.createClient(cfg, RoleServiceDefinition, this.channel);
     this.authentication_log = this.createClient(cfg, AuthenticationLogServiceDefinition, this.channel);
     this.token = this.createClient(cfg, TokenServiceDefinition, this.channel);
-    this.oauth = this.createClient(cfg, OAuthServiceDefinition, this.channel);
+    this.o_auth = this.createClient(cfg, OAuthServiceDefinition, this.channel);
   }
 
 }

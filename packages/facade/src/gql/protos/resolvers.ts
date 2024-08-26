@@ -1,4 +1,10 @@
-import { authSubjectType, type ProtoMetadata, type ServiceClient, type ServiceConfig, type SubSpaceServiceConfig } from './types.js';
+import {
+  authSubjectType,
+  type ProtoMetadata,
+  type ServiceClient,
+  type ServiceConfig,
+  type SubSpaceServiceConfig
+} from './types.js';
 import flat from 'array.prototype.flat';
 import { getTyping } from './registry.js';
 import {
@@ -8,7 +14,6 @@ import {
 import {
   camelCase,
   capitalize,
-  convertEnumToInt,
   decodeBufferFields,
   getKeys,
   snakeToCamel,
@@ -123,7 +128,7 @@ export const getGQLResolverFunctions =
       (obj as any)[methodName] = async (args: any, context: ServiceClient<CTX, keyof CTX, T>) => {
         // remap namespace and serviceKey if given
         key = cfg?.namespace ?? key;
-        serviceKey = cfg?.serviceKey ?? serviceKey;
+        serviceKey = cfg?.serviceKeyMap?.[serviceKey] ?? cfg?.serviceKey ?? serviceKey;
         const client = context[key].client;
         const service = client[serviceKey];
         try {
@@ -306,7 +311,15 @@ export const registerResolverFunction = <T extends Record<string, any>, CTX exte
     }
   }
   if (service) {
-    const key = namespace?.toLocaleLowerCase() + '.' + subspace?.toLocaleLowerCase() + '.' + name?.toLocaleLowerCase();
+    const key = [
+      namespace,
+      subspace,
+      name
+    ].filter(
+      s => s
+    ).join(
+      '.'
+    ).toLocaleLowerCase();
     const value = service.method.find((m) => m.name === name);
     if (key && value?.inputType) {
       inputMethodType.set(key, value.inputType);
@@ -370,7 +383,15 @@ export const generateResolver = (...namespaces: string[]) => {
   return resolvers;
 };
 
-export const generateSubServiceResolvers = <T, M extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, M>>(subServices: ProtoMetadata[], config: SubSpaceServiceConfig, namespace: string): T => {
+export const generateSubServiceResolvers = <
+  T,
+  M extends Record<string, any>,
+  CTX extends ServiceClient<CTX, keyof CTX, M>
+>(
+  subServices: ProtoMetadata[],
+  config: SubSpaceServiceConfig,
+  namespace: string,
+): T => {
   subServices.forEach((meta) => {
     meta.fileDescriptor.service.forEach(service => {
       if (service.name) {
@@ -515,15 +536,9 @@ export const generateSubServiceResolvers = <T, M extends Record<string, any>, CT
                       return undefined;
                     }
 
-                    // rename master_data and ostorage name space to actual service names in proto files
-                    if (resolver.targetService == 'master_data') {
-                      resolver.targetService = 'resource';
-                    } else if (resolver.targetService == 'ostorage') {
-                      resolver.targetSubService = 'ostorage';
-                    }
-                    const client = ctx[resolver.targetService as string].client;
-                    const service = client[resolver.targetSubService as string];
-
+                    resolver.targetService = config?.namespace ?? resolver.targetService
+                    const client = ctx[resolver.targetService].client;
+                    const service = client[resolver.targetSubService];
                     const idList: string[] = Array.isArray(parent[fieldJsonName]) ? parent[fieldJsonName] : [parent[fieldJsonName]];
 
                     // TODO Support custom input messages
@@ -550,7 +565,7 @@ export const generateSubServiceResolvers = <T, M extends Record<string, any>, CT
                       req.subject!.token = await fetchUnauthenticatedUserToken(ctx, (ctx as any).request!.req.headers['origin']);
                     }
 
-                    const methodFunc = service[camelCase(resolver.targetMethod as string)] || service[resolver.targetMethod as string];
+                    const methodFunc = service[camelCase(resolver.targetMethod)] || service[resolver.targetMethod];
                     const result = await methodFunc(req);
 
                     if (result && result.items && result.items.length) {

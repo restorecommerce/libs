@@ -104,12 +104,12 @@ export const DefaultMetaDataInjector = async <T extends ResourceList>(
 ): Promise<T> => {
   const urns = cfg.get('authorization:urns');
   const ids = [...new Set(
-      request.items?.map(
-        (item) => item.id
-      ).filter(
-        id => id
-      )
+    request.items?.map(
+      (item) => item.id
+    ).filter(
+      id => id
     )
+  )
   ];
   const meta_map = ids.length && await self.read({
     filters: [{

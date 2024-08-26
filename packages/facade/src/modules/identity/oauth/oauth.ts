@@ -178,7 +178,7 @@ export const createOAuth = (): KoaRouter<{}, IdentityContext> => {
 
   router.get('/oauth2/:service', async (ctx, next) => {
     const ids = ctx.identitySrvClient as IdentitySrvGrpcClient;
-    const user = await ids.oauth.exchangeCode({
+    const user = await ids.o_auth.exchangeCode({
       service: ctx.params.service,
       code: ctx.request.query['code'] as string,
       state: ctx.request.query['state'] as string

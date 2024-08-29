@@ -17,7 +17,14 @@ import { type ServiceDescriptorProto } from 'ts-proto-descriptors';
 
 export const Mutate = ['Create', 'Update', 'Upsert'];
 
-export const preprocessGQLInput = async (data: any, model: GraphQLInputObjectType | GraphQLEnumType | GraphQLInputField | GraphQLInputType): Promise<any> => {
+export const preProcessGQLInput = async (
+  data: any,
+  model: GraphQLInputObjectType | GraphQLEnumType | GraphQLInputField | GraphQLInputType
+): Promise<any> => {
+  if (data === undefined) {
+    return undefined;
+  }
+  
   if (model instanceof GraphQLEnumType) {
     return data;
   }
@@ -40,11 +47,17 @@ export const preprocessGQLInput = async (data: any, model: GraphQLInputObjectTyp
       };
     } else {
       const fields = model.getFields();
-      for (let key of Object.keys(fields)) {
-        if (data && key in data) {
-          data[key] = await preprocessGQLInput(data[key], fields[key].type);
-        }
-      }
+      const converted = await Promise.all(
+        Object.keys(fields).filter(
+          key => key in data
+        ).map(
+          key => preProcessGQLInput(data[key], fields[key].type)
+        )
+      );
+      return {
+        ...data,
+        ...converted,
+      };
     }
   }
 
@@ -55,13 +68,15 @@ export const preprocessGQLInput = async (data: any, model: GraphQLInputObjectTyp
   }
 
   if (model instanceof GraphQLNonNull) {
-    return await preprocessGQLInput(data, model.ofType);
+    return await preProcessGQLInput(data, model.ofType);
   }
 
   if (model instanceof GraphQLList) {
-    for (let i = 0; i < data.length; i++) {
-      data[i] = await preprocessGQLInput(data[i], model.ofType);
-    }
+    return await Promise.all(
+      data.map(
+        (d: any) => preProcessGQLInput(d, model.ofType)
+      )
+    );
   }
 
   if (model instanceof GraphQLScalarType) {
@@ -82,12 +97,16 @@ export const preprocessGQLInput = async (data: any, model: GraphQLInputObjectTyp
 };
 
 export const postProcessGQLValue = (data: any, model: GraphQLOutputType): any => {
+  if (data === undefined) {
+    return undefined;
+  }
+
   if (model instanceof GraphQLEnumType) {
     return data;
   }
 
   if (model instanceof GraphQLObjectType) {
-    if (model.name === 'GoogleProtobufAny' && data?.value) {
+    if (model.name === 'GoogleProtobufAny' && data.value) {
       // TODO Use encoded once resource base supports it
 
       const decoded = JSON.parse((data.value as Buffer).toString());
@@ -98,10 +117,14 @@ export const postProcessGQLValue = (data: any, model: GraphQLOutputType): any =>
       };
     } else {
       const fields = model.getFields();
-      for (let key of Object.keys(fields)) {
-        if (data && key in data) {
-          data[key] = postProcessGQLValue(data[key], fields[key].type);
-        }
+      const converted = Object.keys(fields).filter(
+        key => key in data
+      ).map(
+        key => postProcessGQLValue(data[key], fields[key].type)
+      );
+      return {
+        ...data,
+        ...converted,
       }
     }
   }
@@ -111,9 +134,9 @@ export const postProcessGQLValue = (data: any, model: GraphQLOutputType): any =>
   }
 
   if (model instanceof GraphQLList) {
-    for (let i = 0; i < data.length; i++) {
-      data[i] = postProcessGQLValue(data[i], model.ofType);
-    }
+    return data.map(
+      (d: any) => postProcessGQLValue(d, model.ofType)
+    );
   }
 
   return data;

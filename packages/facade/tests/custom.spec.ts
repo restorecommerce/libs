@@ -82,7 +82,7 @@ describe('extend', () => {
   beforeAll(async () => {
     facade = createTestFacade();
     await facade.start();
-    request = agent(facade.server);
+    request = agent(facade.server) as any;
     // await new Promise(resolve => setTimeout(resolve, 20000))
   });
 

@@ -9,7 +9,7 @@ import flat from 'array.prototype.flat';
 import { getTyping } from './registry.js';
 import {
   getWhitelistBlacklistConfig, Mutate, postProcessGQLValue,
-  preprocessGQLInput,
+  preProcessGQLInput,
 } from './graphql.js';
 import {
   camelCase,
@@ -75,9 +75,18 @@ const fetchUnauthenticatedUserToken = async (ctx: any, domain: string) => {
   return response?.token;
 };
 
-export const getGQLResolverFunctions =
-  <T extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, T>, SRV = any, R = ResolverFn<any, any, ServiceClient<CTX, keyof CTX, T>, any>, B extends keyof T = any, NS extends keyof CTX = any>
-  (service: ServiceDescriptorProto, key: NS, serviceKey: B, cfg: ServiceConfig): { [key in keyof SRV]: R } => {
+export const getGQLResolverFunctions = <
+    T extends Record<string, any>,
+    CTX extends ServiceClient<CTX, keyof CTX, T>,
+    SRV = any,
+    R = ResolverFn<any, any, ServiceClient<CTX, keyof CTX, T>, any>,
+    B extends keyof T = any, NS extends keyof CTX = any
+  > (
+    service: ServiceDescriptorProto,
+    key: NS,
+    serviceKey: B,
+    cfg: ServiceConfig
+  ): { [key in keyof SRV]: R } => {
     if (!service.method) {
       return {} as { [key in keyof SRV]: R };
     }
@@ -132,13 +141,10 @@ export const getGQLResolverFunctions =
         const client = context[key].client;
         const service = client[serviceKey];
         try {
-          const converted = await preprocessGQLInput(args.input, typing.input);
+          const converted = await preProcessGQLInput(args.input, typing.input);
           const scope = args?.input?.scope;
 
           let req = typing.processor.fromPartial(converted);
-
-          // convert enum strings to integers
-          // req = convertEnumToInt(typing, req);
 
           req.subject = getTyping(authSubjectType)!.processor.fromPartial({});
           if (subjectField !== null) {
@@ -151,7 +157,11 @@ export const getGQLResolverFunctions =
             }
           }
 
-          if (!req.subject.token && 'origin' in (context as any).request!.req.headers) {
+          if (
+            cfg?.disableUnauthenticatedUserTenant?.toString() != 'true'
+            && !req.subject.token
+            && 'origin' in (context as any).request!.req.headers
+          ) {
             req.subject.token = await fetchUnauthenticatedUserToken(context, (context as any).request!.req.headers['origin']);
           }
 
@@ -170,13 +180,11 @@ export const getGQLResolverFunctions =
             }
           }
 
-          const methodFunc = service[camelCase(realMethod)] || service[realMethod];
+          const methodFunc = service[camelCase(realMethod)] ?? service[realMethod];
           if (method.clientStreaming) {
-            const readableStreamKey = Object.keys(req).filter((key) => {
-              if (req[key] instanceof stream.Stream.Readable) {
-                return key;
-              }
-            });
+            const readableStreamKey = Object.keys(req).filter(
+              (key) => req[key] instanceof stream.Stream.Readable
+            );
             if (readableStreamKey.length > 0) {
               req = streamToAsyncIterable(req, readableStreamKey[0]);
             }
@@ -521,7 +529,7 @@ export const generateSubServiceResolvers = <
         for (const key of Object.keys(meta.options.messages)) {
           const message = meta.options.messages[key];
           if (message.fields) {
-            const typing = getTyping('.' + meta.fileDescriptor.package + '.' + key);
+            const typing = getTyping(`.${meta.fileDescriptor.package}.${key}`);
             if (typing) {
               const result: any = {};
               for (const fieldName of Object.keys(message.fields)) {
@@ -531,7 +539,7 @@ export const generateSubServiceResolvers = <
                   const resolver = field['resolver'] as Resolver;
 
                   // TODO This creates an N+1 problem!
-                  result[resolver.fieldName as string] = async (parent: any, _: any, ctx: any) => {
+                  result[resolver.fieldName] = async (parent: any, _: any, ctx: any) => {
                     if (!parent || !(fieldJsonName in parent) || parent[fieldJsonName] === undefined) {
                       return undefined;
                     }
@@ -539,18 +547,18 @@ export const generateSubServiceResolvers = <
                     resolver.targetService = config?.namespace ?? resolver.targetService
                     const client = ctx[resolver.targetService].client;
                     const service = client[resolver.targetSubService];
-                    const idList: string[] = Array.isArray(parent[fieldJsonName]) ? parent[fieldJsonName] : [parent[fieldJsonName]];
+                    const ids: string[] = Array.isArray(parent[fieldJsonName]) ? parent[fieldJsonName] : [parent[fieldJsonName]];
 
                     // TODO Support custom input messages
                     const req = ReadRequest.fromPartial({
                       filters: [{
-                        filters: idList.map(id => ({
+                        filters: {
                           field: 'id',
-                          operation: Filter_Operation.eq,
-                          value: id,
-                          type: Filter_ValueType.STRING
-                        })),
-                        operator: FilterOp_Operator.or
+                          operation: Filter_Operation.in,
+                          value: JSON.stringify(ids),
+                          type: Filter_ValueType.ARRAY
+                        },
+                        limit: ids.length
                       }]
                     } as any);
 
@@ -561,14 +569,18 @@ export const generateSubServiceResolvers = <
                       req.subject!.token = authToken.split(' ')[1];
                     }
 
-                    if (!req.subject!.token && 'origin' in (ctx as any).request!.req.headers) {
+                    if (
+                      config?.disableUnauthenticatedUserTenant?.toString() !== 'true'
+                      && !req.subject!.token
+                      && 'origin' in (ctx as any).request!.req.headers
+                    ) {
                       req.subject!.token = await fetchUnauthenticatedUserToken(ctx, (ctx as any).request!.req.headers['origin']);
                     }
 
                     const methodFunc = service[camelCase(resolver.targetMethod)] || service[resolver.targetMethod];
                     const result = await methodFunc(req);
 
-                    if (result && result.items && result.items.length) {
+                    if (result?.items?.length) {
                       if (Array.isArray(parent[fieldJsonName])) {
                         return result.items.map((item: any) => item.payload);
                       } else {

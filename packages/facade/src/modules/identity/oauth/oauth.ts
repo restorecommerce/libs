@@ -135,7 +135,7 @@ export const createOAuth = (): KoaRouter<{}, IdentityContext> => {
       token
     });
 
-    if (!user || !user.payload) {
+    if (!user?.payload) {
       ctx.body = 'user not logged in';
       return next();
     }
@@ -180,11 +180,11 @@ export const createOAuth = (): KoaRouter<{}, IdentityContext> => {
     const ids = ctx.identitySrvClient as IdentitySrvGrpcClient;
     const user = await ids.o_auth.exchangeCode({
       service: ctx.params.service,
-      code: ctx.request.query['code'] as string,
-      state: ctx.request.query['state'] as string
+      code: ctx.request.query.code?.toString(),
+      state: ctx.request.query.state?.toString()
     });
 
-    if (!user.user || !user.user.payload || !user.token || (user.user.status && user.user.status.code !== 200)) {
+    if (!user.user || !user.user.payload || !user.token || user.user.status?.code !== 200) {
       ctx.type = 'html';
       ctx.body = await register(user.email || '');
       return next();

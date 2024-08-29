@@ -8,7 +8,9 @@ import {
 import flat from 'array.prototype.flat';
 import { getTyping } from './registry.js';
 import {
-  getWhitelistBlacklistConfig, Mutate, postProcessGQLValue,
+  getWhitelistBlacklistConfig,
+  Mutate,
+  postProcessGQLOutput,
   preProcessGQLInput,
 } from './graphql.js';
 import {
@@ -27,7 +29,7 @@ import {
 import { ReadRequest } from '@restorecommerce/rc-grpc-clients';
 import {
   Filter_Operation,
-  Filter_ValueType, FilterOp_Operator
+  Filter_ValueType
 } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/resource_base.js';
 import { type DescriptorProto, type ServiceDescriptorProto } from 'ts-proto-descriptors';
 import { type GraphQLResolveInfo } from 'graphql';
@@ -196,7 +198,7 @@ export const getGQLResolverFunctions = <
               'origin-ip': contextRequest.client.address().address
             })
           });
-          const result = postProcessGQLValue(rawResult, outputTyping.output);
+          const result = postProcessGQLOutput(rawResult, outputTyping.output);
 
           const grpcClientConfig = cfg.client;
           const bufferFields = getKeys((grpcClientConfig as any)?.bufferFields);

@@ -1,8 +1,12 @@
 import {
   protoMetadata,
 } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/order.js';
+import {
+  Meta
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/meta.js';
 import { GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLScalarType } from 'graphql';
 import { getTyping, registerPackagesRecursive } from '../src/gql/protos/index.js';
+import { preProcessGQLInput, postProcessGQLOutput } from '../src/gql/protos/graphql.js'
 
 describe('proto-meta', () => {
   it('should register typings', () => {
@@ -33,4 +37,24 @@ describe('proto-meta', () => {
 
     expect(fields.meta.type).toEqual(getTyping('.io.restorecommerce.meta.Meta')!.output);
   });
+
+  it('should pre/post-process input/output correctly', async () =>{
+    const model = getTyping('.io.restorecommerce.meta.Meta');
+    const input: Meta = {
+      created: new Date(),
+      createdBy: 'user',
+      owners: [
+        {
+          id: 'some-type-identifier',
+          value: 'user'
+        }
+      ],
+      acls: null,
+    };
+
+    const preProcessed = await preProcessGQLInput(input, model.input);
+    const postProcessed = postProcessGQLOutput(preProcessed, model.output);
+
+    expect(preProcessed).toEqual(postProcessed);
+  })
 });

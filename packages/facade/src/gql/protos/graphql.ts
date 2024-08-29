@@ -21,7 +21,7 @@ export const preProcessGQLInput = async (
   data: any,
   model: GraphQLInputObjectType | GraphQLEnumType | GraphQLInputField | GraphQLInputType
 ): Promise<any> => {
-  if (data === undefined) {
+  if (data === null || data === undefined) {
     return undefined;
   }
   
@@ -96,8 +96,8 @@ export const preProcessGQLInput = async (
   return data;
 };
 
-export const postProcessGQLValue = (data: any, model: GraphQLOutputType): any => {
-  if (data === undefined) {
+export const postProcessGQLOutput = (data: any, model: GraphQLOutputType): any => {
+  if (data === null || data === undefined) {
     return undefined;
   }
 
@@ -120,7 +120,7 @@ export const postProcessGQLValue = (data: any, model: GraphQLOutputType): any =>
       const converted = Object.keys(fields).filter(
         key => key in data
       ).map(
-        key => postProcessGQLValue(data[key], fields[key].type)
+        key => postProcessGQLOutput(data[key], fields[key].type)
       );
       return {
         ...data,
@@ -130,12 +130,12 @@ export const postProcessGQLValue = (data: any, model: GraphQLOutputType): any =>
   }
 
   if (model instanceof GraphQLNonNull) {
-    return postProcessGQLValue(data, model.ofType);
+    return postProcessGQLOutput(data, model.ofType);
   }
 
   if (model instanceof GraphQLList) {
     return data.map(
-      (d: any) => postProcessGQLValue(d, model.ofType)
+      (d: any) => postProcessGQLOutput(d, model.ofType)
     );
   }
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.1.0...@restorecommerce/facade@2.1.1) (2024-08-29)
+
+
+### Bug Fixes
+
+* **facade:** ignore null data in pre- and postProcessGQL resolver ([f7ddb3a](https://github.com/restorecommerce/libs/commit/f7ddb3ae1d01a24db5e4dacb9e978a38f26c35e5))
+
+
+
+
+
 # [2.1.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.0.2...@restorecommerce/facade@2.1.0) (2024-08-26)
 
 

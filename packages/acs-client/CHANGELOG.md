@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@2.0.3...@restorecommerce/acs-client@2.0.4) (2024-08-29)
+
+
+### Bug Fixes
+
+* **acs-client:** cache tolerants empty rules, support multi policy-set ([84574cf](https://github.com/restorecommerce/libs/commit/84574cf17779955ae3c325a5810506b00e846dc7))
+
+
+
+
+
 ## [2.0.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@2.0.2...@restorecommerce/acs-client@2.0.3) (2024-08-26)
 
 

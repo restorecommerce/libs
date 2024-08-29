@@ -68,15 +68,15 @@ export const getOrFill = async <T, M>(keyData: T, filler: (data: T) => Promise<M
   let redisKeyResponse = await redisInstance.get(redisKey);
   if (redisKeyResponse && useCache) {
     const response = JSON.parse(redisKeyResponse) as PolicySetRQResponse & DecisionResponse;
-    const no_cache = response?.evaluation_cacheable || response?.policy_sets?.some(
+    const evaluation_cacheable = response?.evaluation_cacheable || response?.policy_sets?.some(
       policy_set => policy_set?.policies?.some(
-        policy => policy?.evaluation_cacheable === false || policy.rules?.some(
-          rule => rule?.evaluation_cacheable === false
+        policy => policy?.evaluation_cacheable !== false && policy.rules?.some(
+          rule => rule?.evaluation_cacheable
         )
       )
     );
 
-    if (!no_cache) {
+    if (evaluation_cacheable) {
       logger.debug('Found key in cache: ' + redisKey);
       return response as M;
     }

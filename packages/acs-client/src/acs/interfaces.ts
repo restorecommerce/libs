@@ -8,13 +8,34 @@ import { Meta } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/
 import { FilterOp } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base';
 import {
   Response_Decision,
+  ReverseQuery,
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/access_control';
 import { Effect } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/rule';
-
-export {
+import {
+  PolicySetRQ,
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/policy_set';
+import {
+  PolicyRQ,
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/policy';
+import {
+  RuleRQ,
+  Target as AttributeTarget,
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/rule';
+import {
   Response_Decision as Decision,
   Context,
+  Response,
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/access_control';
+
+export {
+  Decision,
+  Context,
+  RuleRQ,
+  PolicyRQ,
+  PolicySetRQ,
+  Response as ACSResponse,
+  AttributeTarget,
+};
 
 export enum AuthZAction {
   CREATE = 'CREATE',
@@ -31,7 +52,7 @@ export enum Operation {
   whatIsAllowed = 'whatIsAllowed'
 }
 
-export interface Resource {
+export interface ACSResource {
   resource: string;
   id?: string | string[]; // for what is allowed operation id is not mandatory
   property?: string[];
@@ -82,13 +103,8 @@ export interface Obligation {
   property: string[];
 }
 
-export interface DecisionResponse {
-  decision?: Response_Decision;
+export type DecisionResponse = Response & {
   obligations?: Obligation[];
-  operation_status?: {
-    code?: number;
-    message?: string;
-  };
 };
 
 export interface Target<TSubject, TResource, TAction> {
@@ -102,14 +118,10 @@ export interface Request<TTarget, TContext> {
   context: TContext;
 }
 
-export interface Response {
-  decision: Response_Decision;
-}
-
 /**
  * isAllowed Authorization interface
  */
-export interface AuthZ<TSubject, TContext = any, TResource = Resource, TAction = AuthZAction> {
+export interface AuthZ<TSubject, TContext = any, TResource = ACSResource, TAction = AuthZAction> {
   /**
    * Check is the subject is allowed to do an action on a specific resource
    */
@@ -122,11 +134,11 @@ export interface Credentials {
   [key: string]: any;
 }
 
-export type AuthZTarget = Target<Subject, Resource[], AuthZAction>;
-export type NoAuthTarget = Target<UnauthenticatedData, Resource[], AuthZAction>;
+export type AuthZTarget = Target<Subject, ACSResource[], AuthZAction>;
+export type NoAuthTarget = Target<UnauthenticatedData, ACSResource[], AuthZAction>;
 
-export type AuthZWhatIsAllowedTarget = Target<Subject, Resource[], AuthZAction>;
-export type NoAuthWhatIsAllowedTarget = Target<UnauthenticatedData, Resource[], AuthZAction>;
+export type AuthZWhatIsAllowedTarget = Target<Subject, ACSResource[], AuthZAction>;
+export type NoAuthWhatIsAllowedTarget = Target<UnauthenticatedData, ACSResource[], AuthZAction>;
 
 export interface AuthZContext {
   // session-related tokens
@@ -149,9 +161,13 @@ export interface AuthZResponse extends Response {
   obligation: string;
 }
 
-export interface IAuthZ extends AuthZ<Subject | UnauthenticatedData, AuthZContext, Resource[], AuthZAction> {
-  whatIsAllowed: (request: Request<AuthZWhatIsAllowedTarget | NoAuthWhatIsAllowedTarget, AuthZContext>,
-    ctx: ACSClientContext, useCache: boolean, roleScopingEntityURN: string) => Promise<PolicySetRQResponse>;
+export interface IAuthZ extends AuthZ<Subject | UnauthenticatedData, AuthZContext, ACSResource[], AuthZAction> {
+  whatIsAllowed: (
+    request: Request<AuthZWhatIsAllowedTarget | NoAuthWhatIsAllowedTarget, AuthZContext>,
+    ctx: ACSClientContext,
+    useCache: boolean,
+    roleScopingEntityURN: string
+  ) => Promise<PolicySetRQResponse>;
 }
 
 export interface UserCredentials extends Credentials {
@@ -191,11 +207,6 @@ export interface AccessControlObjectInterface {
   condition?: string;
 }
 
-export interface PolicySetRQ extends AccessControlObjectInterface {
-  // CA and policies
-  combining_algorithm?: string;
-  policies?: PolicyRQ[];
-}
 
 export interface ResourceFilterMap {
   resource: string;
@@ -209,32 +220,12 @@ export interface CustomQueryArgs {
 }
 
 // Reverse query response
-export interface PolicySetRQResponse extends AccessControlObjectInterface {
-  policy_sets?: PolicySetRQ[];
+export type PolicySetRQResponse = ReverseQuery & {
   filters?: ResourceFilterMap[];
   custom_query_args?: CustomQueryArgs[];
   obligations?: Obligation[];
   decision?: Response_Decision;
-  operation_status?: {
-    code?: number;
-    message?: string;
-  };
-}
-
-export interface PolicyRQ extends AccessControlObjectInterface {
-  rules?: RuleRQ[];
-  has_rules?: boolean;
-  combining_algorithm?: string;
-}
-
-export interface RuleRQ extends AccessControlObjectInterface { }
-
-export interface AttributeTarget {
-  // each map is an attribute with (key, value) pairs
-  subjects: Attribute[];
-  resources: Attribute[];
-  actions: Attribute[];
-}
+};
 
 export interface TargetReq {
   subjects: Attribute[];

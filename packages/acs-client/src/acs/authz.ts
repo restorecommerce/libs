@@ -10,7 +10,7 @@ import {
   NoAuthWhatIsAllowedTarget,
   PolicySetRQResponse,
   Request,
-  Resource,
+  ACSResource,
 } from './interfaces';
 import { createChannel, createClient } from '@restorecommerce/grpc-client';
 import { cfg, updateConfig } from '../config';
@@ -106,7 +106,7 @@ export const formatResourceType = (type: string, namespacePrefix?: string): stri
   }
 };
 
-export const createResourceTarget = (resource: Resource[], action: AuthZAction) => {
+export const createResourceTarget = (resource: ACSResource[], action: AuthZAction) => {
   const flattened: Attribute[] = [];
   resource.forEach((resourceObj) => {
     if (action != AuthZAction.EXECUTE) {
@@ -211,9 +211,14 @@ export class UnAuthZ implements IAuthZ {
 
     let response: DecisionResponse;
     try {
-      const isAllowed = await getOrFill(authZRequest, async (req) => {
-        return await this.acs.isAllowed(authZRequest);
-      }, useCache, 'UnAuthZ:isAllowed');
+      const isAllowed = await getOrFill(
+        authZRequest,
+        async (_) => {
+          return await this.acs.isAllowed(authZRequest);
+        },
+        useCache,
+        'UnAuthZ:isAllowed'
+      );
 
       response = {
         decision: isAllowed.decision,
@@ -257,9 +262,14 @@ export class UnAuthZ implements IAuthZ {
     };
     let response: PolicySetRQResponse;
     try {
-      const whatIsAllowed = await getOrFill(authZRequest, async (req) => {
-        return await this.acs.whatIsAllowed(authZRequest);
-      }, useCache, 'UnAuthZ:whatIsAllowed');
+      const whatIsAllowed = await getOrFill(
+        authZRequest,
+        async (req) => {
+          return await this.acs.whatIsAllowed(authZRequest);
+        },
+        useCache,
+        'UnAuthZ:whatIsAllowed'
+      );
 
       response = {
         ...whatIsAllowed,

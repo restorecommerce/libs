@@ -3,6 +3,10 @@ import logger from '../logger';
 import * as crypto from 'crypto';
 import { createClient, RedisClientType } from 'redis';
 import { _ } from '../utils';
+import {
+  PolicySetRQResponse,
+  DecisionResponse,
+} from './interfaces';
 
 let attempted = false;
 let redisInstance: RedisClientType<any, any>;
@@ -50,7 +54,7 @@ export const initializeCache = async () => {
  * @param prefix The prefix to apply to the object key in the cache
  */
 export const getOrFill = async <T, M>(keyData: T, filler: (data: T) => Promise<M>,
-  useCache: boolean, prefix?: string): Promise<M | undefined> => {
+  useCache: boolean, prefix?: string): Promise<M> => {
   if (!redisInstance || !cacheEnabled) {
     return filler(keyData);
   }
@@ -63,26 +67,18 @@ export const getOrFill = async <T, M>(keyData: T, filler: (data: T) => Promise<M
   }
   let redisKeyResponse = await redisInstance.get(redisKey);
   if (redisKeyResponse && useCache) {
-    const response = JSON.parse(redisKeyResponse);
-    let evaluation_cacheable = response.evaluation_cacheable;
-    if (response && !_.isEmpty(response.policy_sets)) {
-      const policies = response.policy_sets[0].policies;
-      if (policies?.length > 0) {
-        for (let policy of policies) {
-          for (let rule of policy.rules) {
-            if (!rule.evaluation_cacheable || (rule.evaluation_cacheable === false)) {
-              evaluation_cacheable = rule.evaluation_cacheable;
-              break;
-            } else if (rule.evaluation_cacheable) {
-              evaluation_cacheable = rule.evaluation_cacheable;
-            }
-          }
-        }
-      }
-    }
-    if (evaluation_cacheable) {
+    const response = JSON.parse(redisKeyResponse) as PolicySetRQResponse & DecisionResponse;
+    const no_cache = response?.evaluation_cacheable || response?.policy_sets?.some(
+      policy_set => policy_set?.policies?.some(
+        policy => policy?.evaluation_cacheable === false || policy.rules?.some(
+          rule => rule?.evaluation_cacheable === false
+        )
+      )
+    );
+
+    if (!no_cache) {
       logger.debug('Found key in cache: ' + redisKey);
-      return response;
+      return response as M;
     }
   }
 

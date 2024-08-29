@@ -25,11 +25,12 @@ import {
 } from './cache';
 import {
   Operation,
-  Resource,
+  ACSResource,
   AuthZAction,
   ACSClientContext,
   DecisionResponse,
   PolicySetRQResponse,
+  Obligation,
 } from './interfaces';
 import {
   accessRequest,
@@ -44,7 +45,7 @@ import {
 /* eslint-disable prefer-arrow-functions/prefer-arrow-functions */
 export type DatabaseProvider = 'arangoDB' | 'postgres';
 export type ACSClientContextFactory<T extends ResourceList> = (self: any, request: T, ...args: any) => Promise<ACSClientContext>;
-export type ResourceFactory<T extends ResourceList> = (self: any, request: T, ...args: any) => Promise<Resource[]>;
+export type ResourceFactory<T extends ResourceList> = (self: any, request: T, ...args: any) => Promise<ACSResource[]>;
 export type DatabaseSelector<T extends ResourceList> = (self: any, request: T, ...args: any) => Promise<DatabaseProvider>;
 export type MetaDataInjector<T extends ResourceList> = (self: any, request: T, ...args: any) => Promise<T>;
 export type SubjectResolver<T extends ResourceList> = (self: any, request: T, ...args: any) => Promise<T>;
@@ -192,7 +193,7 @@ export function access_controlled_function<T extends ResourceList>(kwargs: {
   action: AuthZAction;
   operation: Operation;
   context?: ACSClientContext | ACSClientContextFactory<T>;
-  resource?: Resource[] | ResourceFactory<T>;
+  resource?: ACSResource[] | ResourceFactory<T>;
   database?: DatabaseProvider | DatabaseSelector<T>;
   useCache?: boolean;
 }) {
@@ -259,7 +260,7 @@ export function access_controlled_function<T extends ResourceList>(kwargs: {
 
         const appResponse = await method.apply(this, arguments);
         const property = acsResponse.obligations?.filter(
-          o => resource.some(r => r.resource === o.resource)
+          (o: Obligation) => resource.some((r) => r.resource === o.resource)
         ).flatMap(
           o => o.property
         ).flatMap(

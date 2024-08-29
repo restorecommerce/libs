@@ -3,7 +3,7 @@ import deepdash from 'deepdash';
 export const _ = deepdash(lodash);
 import {
   PolicySetRQ, PolicySetRQResponse, AttributeTarget, HierarchicalScope,
-  ResourceFilterMap, CustomQueryArgs, DecisionResponse, Resource, AuthZAction,
+  ResourceFilterMap, CustomQueryArgs, DecisionResponse, ACSResource, AuthZAction,
   ResolvedSubject, Obligation
 } from './acs/interfaces';
 import { QueryArguments, UserQueryArguments } from './acs/resolver';
@@ -620,7 +620,7 @@ export interface FilterMapResponse {
  * It iterates through each resource and filter the applicable policies and
  * provide them to buildFilterPermissions to create filters for each of the resource requested
  *
- * @param {Resource[]} resource Contains resource name, resource instance and optional resource properties
+ * @param {ACSResource[]} resource Contains resource name, resource instance and optional resource properties
  * @param {PolicSetResponse} policySetResponse contains set of applicable policies for entities list
  * @param {any} resources context resources
  * @param {AuthZAction} action Action to be performed on resource
@@ -633,7 +633,7 @@ export interface FilterMapResponse {
  *
  */
 export const createResourceFilterMap = async (
-  resource: Resource[],
+  resource: ACSResource[],
   policySetResponse: PolicySetRQResponse,
   resources: any, action: AuthZAction,
   subject: DeepPartial<Subject>,

@@ -28,7 +28,7 @@ import {
   DecisionResponse,
   PolicySetRQResponse,
   Operation,
-  Resource,
+  ACSResource,
   AuthZAction,
   ACSClientOptions,
 } from './interfaces';
@@ -40,7 +40,7 @@ const subjectIsUnauthenticated = (subject: any): subject is UnauthenticatedConte
   return subject?.unauthenticated === true;
 };
 
-const whatIsAllowedRequest = async (subject: DeepPartial<Subject>, resources: Resource[],
+const whatIsAllowedRequest = async (subject: DeepPartial<Subject>, resources: ACSResource[],
   actions: AuthZAction, ctx: ACSClientContext, useCache: boolean) => {
   if (subjectIsUnauthenticated(subject)) {
     return await unauthZ.whatIsAllowed({
@@ -66,7 +66,7 @@ const whatIsAllowedRequest = async (subject: DeepPartial<Subject>, resources: Re
 };
 
 export const isAllowedRequest = async (subject: Subject,
-  resources: Resource[], actions: AuthZAction, ctx: ACSClientContext, useCache: boolean): Promise<DecisionResponse> => {
+  resources: ACSResource[], actions: AuthZAction, ctx: ACSClientContext, useCache: boolean): Promise<DecisionResponse> => {
   if (subjectIsUnauthenticated(subject)) {
     return await unauthZ.isAllowed({
       target: {
@@ -97,7 +97,7 @@ export const isAllowedRequest = async (subject: Subject,
  * or policy set reverse query `PolicySetRQ` depending on the requeste operation `isAllowed()` or
  * `whatIsAllowed()` respectively.
  * @param {Subject} subject Contains subject information
- * @param {Resource[]} resource Contains resource name, resource instance and optional resource properties
+ * @param {ACSResource[]} resource Contains resource name, resource instance and optional resource properties
  * @param {AuthZAction} action Action to be performed on resource
  * @param {ACSClientContext} ctx Context containing Subject and Context Resources for ACS
  * @param {Operation} operation Operation to perform `isAllowed` or `whatIsAllowed`,
@@ -110,7 +110,7 @@ export const isAllowedRequest = async (subject: Subject,
  */
 export const accessRequest = async (
   subject: DeepPartial<Subject>,
-  resource: Resource[],
+  resource: ACSResource[],
   action: AuthZAction,
   ctx: ACSClientContext,
   options?: ACSClientOptions

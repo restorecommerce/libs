@@ -47,17 +47,14 @@ export const preProcessGQLInput = async (
       };
     } else {
       const fields = model.getFields();
-      const converted = await Promise.all(
+      await Promise.all(
         Object.keys(fields).filter(
           key => key in data
         ).map(
-          key => preProcessGQLInput(data[key], fields[key].type)
+          async key => data[key] = await preProcessGQLInput(data[key], fields[key].type)
         )
       );
-      return {
-        ...data,
-        ...converted,
-      };
+      return data;
     }
   }
 
@@ -106,10 +103,9 @@ export const postProcessGQLOutput = (data: any, model: GraphQLOutputType): any =
   }
 
   if (model instanceof GraphQLObjectType) {
-    if (model.name === 'GoogleProtobufAny' && data.value) {
+    if (model.name === 'GoogleProtobufAny') {
       // TODO Use encoded once resource base supports it
-
-      const decoded = JSON.parse((data.value as Buffer).toString());
+      const decoded = JSON.parse(data?.value?.toString());
 
       return {
         ...data,

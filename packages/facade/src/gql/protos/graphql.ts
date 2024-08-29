@@ -105,7 +105,7 @@ export const postProcessGQLOutput = (data: any, model: GraphQLOutputType): any =
   if (model instanceof GraphQLObjectType) {
     if (model.name === 'GoogleProtobufAny') {
       // TODO Use encoded once resource base supports it
-      const decoded = JSON.parse(data?.value?.toString());
+      const decoded = JSON.parse((data?.value as Buffer).toString());
 
       return {
         ...data,
@@ -113,15 +113,12 @@ export const postProcessGQLOutput = (data: any, model: GraphQLOutputType): any =
       };
     } else {
       const fields = model.getFields();
-      const converted = Object.keys(fields).filter(
+      Object.keys(fields).filter(
         key => key in data
       ).map(
-        key => postProcessGQLOutput(data[key], fields[key].type)
+        key => data[key] = postProcessGQLOutput(data[key], fields[key].type)
       );
-      return {
-        ...data,
-        ...converted,
-      }
+      return data;
     }
   }
 

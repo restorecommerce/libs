@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.1.1...@restorecommerce/facade@2.1.2) (2024-08-29)
+
+
+### Bug Fixes
+
+* **facade:** error in processing nested objects ([9fef5ec](https://github.com/restorecommerce/libs/commit/9fef5ec00d595b7cbfe4ad0ad012f20bef058a7b))
+
+
+
+
+
 ## [2.1.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.1.0...@restorecommerce/facade@2.1.1) (2024-08-29)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.1.3...@restorecommerce/facade@2.1.4) (2024-08-30)
+
+
+### Bug Fixes
+
+* **facade:** improve proto processor tests ([eeb340b](https://github.com/restorecommerce/libs/commit/eeb340b9d02f62688606f1ab55980e5e2331daa6))
+
+
+
+
+
 ## [2.1.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.1.2...@restorecommerce/facade@2.1.3) (2024-08-30)
 
 

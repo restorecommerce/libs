@@ -22,7 +22,7 @@ export const preProcessGQLInput = async (
   model: GraphQLInputObjectType | GraphQLEnumType | GraphQLInputField | GraphQLInputType
 ): Promise<any> => {
   if (data === null || data === undefined) {
-    return undefined;
+    return data;
   }
   
   if (model instanceof GraphQLEnumType) {
@@ -47,14 +47,17 @@ export const preProcessGQLInput = async (
       };
     } else {
       const fields = model.getFields();
-      await Promise.all(
+      const converted = Object.assign({}, ...(await Promise.all(
         Object.keys(fields).filter(
           key => key in data
         ).map(
-          async key => data[key] = await preProcessGQLInput(data[key], fields[key].type)
+          async key => ({ [key]: await preProcessGQLInput(data[key], fields[key].type) })
         )
-      );
-      return data;
+      )));
+      return {
+        ...data,
+        ...converted,
+      }
     }
   }
 
@@ -95,7 +98,7 @@ export const preProcessGQLInput = async (
 
 export const postProcessGQLOutput = (data: any, model: GraphQLOutputType): any => {
   if (data === null || data === undefined) {
-    return undefined;
+    return data;
   }
 
   if (model instanceof GraphQLEnumType) {
@@ -105,7 +108,7 @@ export const postProcessGQLOutput = (data: any, model: GraphQLOutputType): any =
   if (model instanceof GraphQLObjectType) {
     if (model.name === 'GoogleProtobufAny') {
       // TODO Use encoded once resource base supports it
-      const decoded = JSON.parse((data?.value as Buffer).toString());
+      const decoded = JSON.parse(data?.value?.toString());
 
       return {
         ...data,
@@ -113,12 +116,15 @@ export const postProcessGQLOutput = (data: any, model: GraphQLOutputType): any =
       };
     } else {
       const fields = model.getFields();
-      Object.keys(fields).filter(
+      const converted = Object.assign({}, ...Object.keys(fields).filter(
         key => key in data
       ).map(
-        key => data[key] = postProcessGQLOutput(data[key], fields[key].type)
-      );
-      return data;
+        key => ({ [key]: postProcessGQLOutput(data[key], fields[key].type) })
+      ));
+      return {
+        ...data,
+        ...converted,
+      };
     }
   }
 

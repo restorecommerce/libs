@@ -2,8 +2,8 @@ import {
   protoMetadata,
 } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/order.js';
 import {
-  Meta
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/meta.js';
+  User
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/user.js';
 import { GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLScalarType } from 'graphql';
 import { getTyping, registerPackagesRecursive } from '../src/gql/protos/index.js';
 import { preProcessGQLInput, postProcessGQLOutput } from '../src/gql/protos/graphql.js'
@@ -39,22 +39,36 @@ describe('proto-meta', () => {
   });
 
   it('should pre/post-process input/output correctly', async () =>{
-    const model = getTyping('.io.restorecommerce.meta.Meta');
-    const input: Meta = {
-      created: new Date(),
-      createdBy: 'user',
-      owners: [
-        {
-          id: 'some-type-identifier',
-          value: 'user'
-        }
-      ],
-      acls: null,
+    const model = getTyping('.io.restorecommerce.user.User');
+    const input: User = {
+      id: 'user_1_test',
+      firstName: 'Markus',
+      lastName: 'Muster',
+      data: {
+        typeUrl: 'to.neverland',
+        value: {
+          birthday: new Date('1987-06-05'),
+        } as any
+      },
+      meta: {
+        created: '2024-08-30' as any,
+        createdBy: 'user',
+        owners: [
+          {
+            id: 'some-type-identifier',
+            value: 'user'
+          }
+        ],
+        acls: null,
+      }
+      
     };
 
     const preProcessed = await preProcessGQLInput(input, model.input);
     const postProcessed = postProcessGQLOutput(preProcessed, model.output);
 
-    expect(preProcessed).toEqual(postProcessed);
+    expect(preProcessed.meta.created).toBeInstanceOf(Date);
+    expect(preProcessed.data.value).toBeInstanceOf(Buffer);
+    expect(postProcessed.data.value.birthday).toBeDefined();
   })
 });

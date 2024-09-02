@@ -51,10 +51,13 @@ jobs:
           echo "//registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN" > .npmrc
 
       - name: Release
-        run: npx lerna publish --no-verify-access --no-private --conventional-commits --yes --loglevel debug
+        run: |
+          git status
+          npx lerna publish --no-verify-access --no-private --conventional-commits --yes --loglevel debug
 
       - name: Sync next branch
         run: |
+          git status
           git checkout next
           git merge --ff-only master
           git push -u origin next

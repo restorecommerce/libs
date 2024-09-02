@@ -24,7 +24,7 @@
     "eslint-plugin-file-extension-in-import-ts": "^2.1.0",
     "eslint-plugin-unicorn": "^53.0.0",
     "lerna": "=8.1.2",
-    "nx": "^19.2.0",
+    "nx": "=18.3.5",
     "tar": "^7.2.0"
   },
   "workspaces": [

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.1.4...@restorecommerce/facade@2.1.5) (2024-09-02)
+
+
+### Bug Fixes
+
+* force facade release ([2177c3e](https://github.com/restorecommerce/libs/commit/2177c3e2de6dee7df51eb12326b84eefff6539c9))
+
+
+
+
+
 ## [2.1.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.1.3...@restorecommerce/facade@2.1.4) (2024-08-30)
 
 

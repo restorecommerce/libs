@@ -72,7 +72,7 @@ export const createSubjectTarget = (subject: DeepPartial<Subject>): Attribute[] 
       attributes: []
     }];
   }
-  let flattened: Attribute[] = [
+  const flattened: Attribute[] = [
     {
       id: urns.subjectID,
       value: subject.id,
@@ -81,13 +81,13 @@ export const createSubjectTarget = (subject: DeepPartial<Subject>): Attribute[] 
   ];
 
   if (subject.scope) {
-    flattened = flattened.concat([
+    flattened.push(
       {
         id: urns.roleScopingInstance,
         value: subject.scope,
         attributes: []
       }
-    ]);
+    );
   }
   return flattened;
 };

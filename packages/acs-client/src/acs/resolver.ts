@@ -244,8 +244,17 @@ export const accessRequest = async (
 
     // create filters to enforce applicable policies and custom query / args if applicable
     // TODO check and modify this
-    const resourceFilters = await createResourceFilterMap(resource, policySetResponse,
-      ctx.resources, action, subClone, subjectID, authzEnforced, targetScope, database);
+    const resourceFilters = await createResourceFilterMap(
+      resource,
+      policySetResponse,
+      ctx.resources,
+      action,
+      subClone,
+      subjectID,
+      authzEnforced,
+      targetScope,
+      database
+    );
 
     if ((resourceFilters as DecisionResponse).decision) {
       return resourceFilters as DecisionResponse;

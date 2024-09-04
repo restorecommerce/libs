@@ -24,7 +24,24 @@ import { Effect } from '@restorecommerce/rc-grpc-clients/dist/generated-server/i
 
 let authZ: ACSAuthZ;
 
-const permitRule: RuleRQ = {
+const permitRuleWithoutOrgScoping: RuleRQ = {
+  id: 'permit_rule_without_org_scope_id',
+  target: {
+    actions: [],
+    resources: [{
+      id: 'urn:restorecommerce:acs:names:model:entity',
+      value: 'urn:test:acs:model:Test.Test'
+    }],
+    subjects: [
+      {
+        id: 'urn:restorecommerce:acs:names:role',
+        value: 'test-role'
+      }]
+  },
+  effect: Effect.PERMIT
+};
+
+const permitRuleOrgScope: RuleRQ = {
   id: 'permit_rule_id',
   target: {
     actions: [],
@@ -117,6 +134,7 @@ const denyRule: RuleRQ = {
 
 const PolicySetRQFactory = new class {
   rules: RuleRQ[] = [];
+  combiningAlgorithm: string = 'urn:oasis:names:tc:xacml:3.0:rule-combining-algorithm:permit-overrides';
 
   public get() {
     return {
@@ -126,7 +144,7 @@ const PolicySetRQFactory = new class {
           id: 'test_policy_set_id',
           policies: [
             {
-              combining_algorithm: 'urn:oasis:names:tc:xacml:3.0:rule-combining-algorithm:permit-overrides',
+              combining_algorithm: this.combiningAlgorithm,
               id: 'test_policy_id',
               target: {
                 actions: [],
@@ -517,11 +535,11 @@ describe('Testing acs-client', () => {
     });
 
     it(
-      'Should PERMIT reading Test resource (PERMIT rule) and verify input filter ' +
+      'Should PERMIT reading Test resource (PERMIT rule with org scoping) and verify input filter ' +
       'is extended to enforce applicable policies',
       async () => {
         // PolicySet contains PERMIT rule
-        PolicySetRQFactory.rules = [permitRule];
+        PolicySetRQFactory.rules = [permitRuleOrgScope];
 
         // test resource to be read of type 'ReadRequest'
         const resources: CtxResource[] = [{
@@ -738,7 +756,7 @@ describe('Testing acs-client', () => {
       'verify input filter is extended to enforce applicable policies for matching user role',
       async () => {
         // PolicySet contains PERMIT rule for OrgScoping and UserScoping entity
-        PolicySetRQFactory.rules = [permitRule, permitRuleUserScope];
+        PolicySetRQFactory.rules = [permitRuleOrgScope, permitRuleUserScope];
 
         // test resource to be read of type 'ReadRequest'
         const resources: CtxResource[] = [{
@@ -827,11 +845,11 @@ describe('Testing acs-client', () => {
     );
 
     it(
-      'Should PERMIT reading Test resource (PERMIT rule) with HR scoping enabled and verify input filter ' +
+      'Should PERMIT reading Test resource (PERMIT rule with org scope) with HR scoping enabled and verify input filter ' +
       'is extended to enforce applicable policies',
       async () => {
         // PolicySet contains PERMIT rule
-        PolicySetRQFactory.rules = [permitRule];
+        PolicySetRQFactory.rules = [permitRuleOrgScope];
 
         // test resource to be read of type 'ReadRequest'
         const resources: CtxResource[] = [{
@@ -898,11 +916,11 @@ describe('Testing acs-client', () => {
     );
 
     it(
-      'Should PERMIT reading Test resource when no scope is provided (PERMIT rule) with HR scoping ' +
+      'Should PERMIT reading Test resource when no scope is provided (PERMIT rule with org scope) with HR scoping ' +
       'enabled and verify since no scope is provided all applicable HR scope instances are returned',
       async () => {
         // PolicySet contains PERMIT rule
-        PolicySetRQFactory.rules = [permitRule];
+        PolicySetRQFactory.rules = [permitRuleOrgScope];
 
         // test resource to be read of type 'ReadRequest'
         const resources: CtxResource[] = [{
@@ -1095,13 +1113,212 @@ describe('Testing acs-client', () => {
       should.equal(response?.operation_status?.code, 200);
       should.equal(response?.operation_status?.message, 'success');
     });
+
+    it('ArangoDB - Should PERMIT reading Test resource with valid Auth context without any filters being applied ' +
+      'as permitRuleWithoutOrgScoping will override filters from permitRuleOrgScope', async () => {
+        // PolicySet contains PERMIT rule with orgscope, permit rule without scoping and deny rule
+        PolicySetRQFactory.rules = [permitRuleOrgScope, permitRuleWithoutOrgScoping, denyRule];
+
+        // test resource to be read of type 'ReadRequest'
+        const resources: CtxResource[] = [{
+          id: 'test_id',
+          meta: {
+            owners: []
+          }
+        }];
+
+        // user ctx data updated in session
+        const subject = {
+          id: 'test_user_id',
+          token: 'valid_token',
+          role_associations: [
+            {
+              role: 'test-role',
+              attributes: [
+                {
+                  id: 'urn:restorecommerce:acs:names:roleScopingEntity',
+                  value: 'urn:test:acs:model:organization.Organization',
+                  attributes: [{
+                    id: 'urn:restorecommerce:acs:names:roleScopingInstance',
+                    value: 'targetScope'
+                  }]
+                }
+              ]
+            }
+          ],
+          hierarchical_scopes: [
+            {
+              id: 'targetScope',
+              role: 'test-role',
+              children: [{
+                id: 'targetSubScope'
+              }]
+            }
+          ]
+        };
+
+        const ctx: ACSClientContext = {
+          subject,
+          resources,
+        };
+
+        // call accessRequest(), the response is from mock ACS
+        const readResponse = await accessRequest(
+          subject,
+          [{ resource: 'Test', id: resources[0].id }],
+          AuthZAction.READ,
+          ctx, { operation: Operation.whatIsAllowed }
+        ) as PolicySetRQResponse;
+
+        should.equal(readResponse.decision, Response_Decision.PERMIT);
+        should.equal(readResponse.operation_status?.code, 200);
+        should.equal(readResponse.operation_status?.message, 'success');
+        // verify no custom query filters are applied (due to overriding rule)
+        should.equal(readResponse.filters?.[0]?.resource, 'Test');
+        should.deepEqual(readResponse.filters?.[0].filters, []);
+        should.deepEqual(readResponse.custom_query_args, []);
+      }
+    );
+
+    it('Postgres - Should PERMIT reading Test resource with valid Auth context without any filters being applied ' +
+      'as permitRuleWithoutOrgScoping will override filters from permitRuleOrgScope', async () => {
+        // PolicySet contains PERMIT rule with orgscope, permit rule without scoping and deny rule
+        PolicySetRQFactory.rules = [permitRuleOrgScope, permitRuleWithoutOrgScoping, denyRule];
+
+        // test resource to be read of type 'ReadRequest'
+        const resources: CtxResource[] = [{
+          id: 'test_id',
+          meta: {
+            owners: []
+          }
+        }];
+
+        // user ctx data updated in session
+        const subject = {
+          id: 'test_user_id',
+          token: 'valid_token',
+          role_associations: [
+            {
+              role: 'test-role',
+              attributes: [
+                {
+                  id: 'urn:restorecommerce:acs:names:roleScopingEntity',
+                  value: 'urn:test:acs:model:organization.Organization',
+                  attributes: [{
+                    id: 'urn:restorecommerce:acs:names:roleScopingInstance',
+                    value: 'targetScope'
+                  }]
+                }
+              ]
+            }
+          ],
+          hierarchical_scopes: [
+            {
+              id: 'targetScope',
+              role: 'test-role',
+              children: [{
+                id: 'targetSubScope'
+              }]
+            }
+          ]
+        };
+
+        const ctx: ACSClientContext = {
+          subject,
+          resources,
+        };
+
+        // call accessRequest(), the response is from mock ACS
+        const readResponse = await accessRequest(
+          subject,
+          [{ resource: 'Test', id: resources[0].id }],
+          AuthZAction.READ,
+          ctx, { operation: Operation.whatIsAllowed, database: 'postgres' }
+        ) as PolicySetRQResponse;
+
+        should.equal(readResponse.decision, Response_Decision.PERMIT);
+        should.equal(readResponse.operation_status?.code, 200);
+        should.equal(readResponse.operation_status?.message, 'success');
+        // verify no filters are applied (due to overriding rule)
+        should.equal(readResponse.filters?.[0]?.resource, 'Test');
+        should.deepEqual(readResponse.filters?.[0].filters, []);
+        should.deepEqual(readResponse.custom_query_args, []);
+      }
+    );
+
+    it('ArangoDB - Should PERMIT reading Test resource with valid Auth context without any filters being applied ' +
+      'as permitRuleWithoutOrgScoping will override filters from permitRuleOrgScope With DENY Combining algorithm in Policy', async () => {
+        // PolicySet contains PERMIT rule with orgscope, permit rule without scoping (removed DENY rule)
+        PolicySetRQFactory.combiningAlgorithm = 'urn:oasis:names:tc:xacml:3.0:rule-combining-algorithm:deny-overrides';
+        PolicySetRQFactory.rules = [permitRuleOrgScope, permitRuleWithoutOrgScoping];
+
+        // test resource to be read of type 'ReadRequest'
+        const resources: CtxResource[] = [{
+          id: 'test_id',
+          meta: {
+            owners: []
+          }
+        }];
+
+        // user ctx data updated in session
+        const subject = {
+          id: 'test_user_id',
+          token: 'valid_token',
+          role_associations: [
+            {
+              role: 'test-role',
+              attributes: [
+                {
+                  id: 'urn:restorecommerce:acs:names:roleScopingEntity',
+                  value: 'urn:test:acs:model:organization.Organization',
+                  attributes: [{
+                    id: 'urn:restorecommerce:acs:names:roleScopingInstance',
+                    value: 'targetScope'
+                  }]
+                }
+              ]
+            }
+          ],
+          hierarchical_scopes: [
+            {
+              id: 'targetScope',
+              role: 'test-role',
+              children: [{
+                id: 'targetSubScope'
+              }]
+            }
+          ]
+        };
+
+        const ctx: ACSClientContext = {
+          subject,
+          resources,
+        };
+
+        // call accessRequest(), the response is from mock ACS
+        const readResponse = await accessRequest(
+          subject,
+          [{ resource: 'Test', id: resources[0].id }],
+          AuthZAction.READ,
+          ctx, { operation: Operation.whatIsAllowed }
+        ) as PolicySetRQResponse;
+
+        should.equal(readResponse.decision, Response_Decision.PERMIT);
+        should.equal(readResponse.operation_status?.code, 200);
+        should.equal(readResponse.operation_status?.message, 'success');
+        // verify no custom query filters are applied (due to overriding rule)
+        should.equal(readResponse.filters?.[0]?.resource, 'Test');
+        should.deepEqual(readResponse.filters?.[0].filters, []);
+        should.deepEqual(readResponse.custom_query_args, []);
+      }
+    );
   });
 
   describe('Test whatIsAllowed', () => {
     it(
       'Should return applicable policy set for read operation',
       async () => {
-        PolicySetRQFactory.rules = [permitRule];
+        PolicySetRQFactory.rules = [permitRuleOrgScope];
 
         const whatIsAllowedReqAuth = {
           target:

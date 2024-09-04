@@ -191,7 +191,7 @@ const buildQueryFromTarget = (
     try {
       filterId = validateCondition(condition, request);
       // special filter added to filter user read for his own entity
-      if (typeof filterId === 'boolean') {
+      if (typeof filterId === 'boolean' && filterId === true) {
         return;
       } else if (typeof filterId === 'string') {
         if (filterId && !scopingUpdated) {
@@ -249,7 +249,7 @@ const buildQueryFromTarget = (
   if (!!scopingAttribute && effect == Effect.PERMIT && database === 'arangoDB' && !ruleCondition) { // note: there is currently no query to exclude scopes
     // userTotalScope is an array accumulated scopes for each rule
     query['scope'] = {
-      custom_query: 'filterByOwnership',
+      custom_query: cfg.get('authorization:custom_query_name') ?? 'filterByOwnership',
       custom_arguments: {
         // value: Buffer.from(JSON.stringify({
         entity: scopingAttribute.value,
@@ -422,6 +422,12 @@ export const buildFilterPermissions = async (
           }
           if (!_.isEmpty(filterPermissions)) {
             policyFiltersArr.push(filterPermissions);
+            // if reducedUserScope is empty - no filters are applied further
+            // as this is a rule without scoping and should override the filters
+            // from other Rules which have scoping entity
+            if (_.isEmpty(reducedUserScope) && rule.effect === effect) {
+              return { filters: [] } as QueryArguments;
+            }
           }
         }
         policyEffects.push(effect);

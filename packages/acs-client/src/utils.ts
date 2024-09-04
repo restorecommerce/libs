@@ -191,7 +191,7 @@ const buildQueryFromTarget = (
     try {
       filterId = validateCondition(condition, request);
       // special filter added to filter user read for his own entity
-      if (typeof filterId === 'boolean' && filterId === true) {
+      if (filterId === true) {
         return;
       } else if (typeof filterId === 'string') {
         if (filterId && !scopingUpdated) {
@@ -228,14 +228,7 @@ const buildQueryFromTarget = (
           filter.push(filterId);
         }
       }
-      else if (filterId && !scopingUpdated) {
-        ruleCondition = true;
-        filter.push({
-          field: 'id',
-          operation: Filter_Operation.eq,
-          value: filterId
-        });
-      } else {
+      else {
         return;
       }
     } catch (err) {

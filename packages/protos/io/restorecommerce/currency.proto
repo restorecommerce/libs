@@ -55,6 +55,7 @@ message Currency {
   * Regular rates are retrived from API by calling QueryExchangeRate.
   */
   repeated ExchangeRate custom_exchange_rates = 6;
+  optional int64 precision = 7; // -2 --> 1e^-2 --> 0.01
 }
 
 message ExchangeRate {

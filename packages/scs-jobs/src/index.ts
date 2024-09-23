@@ -145,11 +145,14 @@ export const runWorker = async (
     const start = Date.now();
     const result = await cb(job);
     logger.verbose(`job@${filteredJob.name}#${filteredJob.id} completed in ${Date.now() - start}ms`, filteredJob);
-    let marshalledResult;
+    let marshalledResult: any;
     if (result)
       marshalledResult = marshallProtobufAny(result);
     await jobEvents.emit('jobDone', {
-      id: job.id, type: job.name, schedule_type: job.data.schedule_type, result: marshalledResult
+      id: job.id,
+      type: job.name,
+      schedule_type: job.data.schedule_type,
+      result: marshalledResult
     });
 
     return result;
@@ -188,7 +191,7 @@ export type RunWorkerFunc = typeof runWorker;
 export type DefaultExportFunc = (
   cfg: ServiceConfig,
   logger: Logger,
-  events: Event,
+  events: Events,
   runWorker: RunWorkerFunc,
 ) => Promise<void>;
 export * from './types.js';

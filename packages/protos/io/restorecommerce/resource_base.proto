@@ -138,3 +138,7 @@ message Resource {
   optional string id = 1;
   optional io.restorecommerce.meta.Meta meta = 2;
 }
+
+message Deleted {
+  optional string id = 1;
+}

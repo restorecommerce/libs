@@ -322,7 +322,7 @@ describe('Tax calculation', () => {
     cart.addItems([
       {
         sku: 'cr2-blue',
-        price: new Decimal('12.95'), // Euro
+        price: new Decimal('13.6'), // Euro
         taxType: 'vat_reduced',
         weight: 210, // grams
         height: 2.20, // cm
@@ -380,13 +380,13 @@ describe('Tax calculation', () => {
           desc: '+ VAT 19%'
         },
         vat_reduced: {
-          netPrice: '90.65',
+          netPrice: '95.2',
           rate: '1.07',
           desc: '+ VAT 7%'
         }
       },
-      totalNet: '131.93',
-      totalGross: '146.12',
+      totalNet: '136.48',
+      totalGross: '150.99',
       shipment: {
         price: '20.99',
         taxType: 'vat_standard',
@@ -431,20 +431,20 @@ describe('Tax calculation', () => {
     assert.deepStrictEqual(JSON.parse(JSON.stringify(r)), {
       taxes: {
         vat_standard:
-          {
-            netPrice: '20.29',
-            rate: '1',
-            desc: 'VAT Free'
-          },
+        {
+          netPrice: '20.29',
+          rate: '1',
+          desc: 'VAT Free'
+        },
         vat_reduced:
-          {
-            netPrice: '90.65',
-            rate: '1',
-            desc: 'VAT Free'
-          }
+        {
+          netPrice: '95.2',
+          rate: '1',
+          desc: 'VAT Free'
+        }
       },
-      totalNet: '110.94', // 123,14 - 13,20 for shipping
-      totalGross: '110.94', // VAT Free
+      totalNet: '115.49',
+      totalGross: '115.49', // VAT Free
     });
   });
 });

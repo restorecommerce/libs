@@ -182,7 +182,7 @@ describe('benchmarks', () => {
           height: undefined,
           human: {offer: 'Package up to 20kg'},
           maxWeight: 20000,
-          price: new Decimal(12.95),
+          price: new Decimal(13.6),
           type: 'package',
           width: undefined
         }],

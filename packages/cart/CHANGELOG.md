@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.9](https://github.com/restorecommerce/libs/compare/@restorecommerce/cart@1.0.8...@restorecommerce/cart@1.0.9) (2024-09-23)
+
+
+### Bug Fixes
+
+* **cart:** fix cart test against HARDCODE pricing, great! ([60c50a3](https://github.com/restorecommerce/libs/commit/60c50a3186d361bc03a5fa2a0f2e698ffb52c3f7))
+
+
+
+
+
 ## [1.0.8](https://github.com/restorecommerce/libs/compare/@restorecommerce/cart@1.0.7...@restorecommerce/cart@1.0.8) (2024-08-29)
 
 

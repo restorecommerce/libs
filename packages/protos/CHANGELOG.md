@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.8.11](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.8.10...@restorecommerce/protos@6.8.11) (2024-09-23)
+
+
+### Bug Fixes
+
+* **protos:** add Deleted message to resource-base for general usage ([9d1fbab](https://github.com/restorecommerce/libs/commit/9d1fbabb233caebc24b73f31ccf572403bac66c3))
+* **protos:** health check should have query flag ([58117a3](https://github.com/restorecommerce/libs/commit/58117a3ae596e347a7de5e7f19101bd877fbce86))
+* **ptotos:** add currency.precision i.e (-2) ==> 1.00 ([ca84487](https://github.com/restorecommerce/libs/commit/ca844877909249584f795163812cc5bbebc16d07))
+
+
+
+
+
 ## [6.8.10](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.8.9...@restorecommerce/protos@6.8.10) (2024-08-26)
 
 

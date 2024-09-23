@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.38](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.37...@restorecommerce/scs-jobs@0.1.38) (2024-09-23)
+
+
+### Bug Fixes
+
+* **scs-jobs:** user prototypes, export relevant types ([6f69ac6](https://github.com/restorecommerce/libs/commit/6f69ac62e18188933eb27a4931e2beaa72a19d1a))
+
+
+
+
+
 ## [0.1.37](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.36...@restorecommerce/scs-jobs@0.1.37) (2024-08-26)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs

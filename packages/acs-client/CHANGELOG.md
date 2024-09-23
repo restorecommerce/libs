@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.0.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@2.0.4...@restorecommerce/acs-client@3.0.0) (2024-09-23)
+
+
+### Bug Fixes
+
+* **scs-jobs:** user prototypes, export relevant types ([6f69ac6](https://github.com/restorecommerce/libs/commit/6f69ac62e18188933eb27a4931e2beaa72a19d1a))
+
+
+### Features
+
+* override filters if at-least one rule is found in policy response which does not have scoping ([58c783f](https://github.com/restorecommerce/libs/commit/58c783f33840ebc6a5d58fdbc7a5865da5ca2c38))
+
+
+### BREAKING CHANGES
+
+* override filters for whatIsAllowed reverse policy response evaluation
+
+
+
+
+
 ## [2.0.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@2.0.3...@restorecommerce/acs-client@2.0.4) (2024-08-29)
 
 

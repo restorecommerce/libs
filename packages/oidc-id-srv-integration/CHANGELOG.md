@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.55](https://github.com/restorecommerce/libs/compare/@restorecommerce/oidc-id-srv-integration@1.0.54...@restorecommerce/oidc-id-srv-integration@1.0.55) (2024-09-23)
+
+**Note:** Version bump only for package @restorecommerce/oidc-id-srv-integration
+
+
+
+
+
 ## [1.0.54](https://github.com/restorecommerce/libs/compare/@restorecommerce/oidc-id-srv-integration@1.0.53...@restorecommerce/oidc-id-srv-integration@1.0.54) (2024-08-26)
 
 **Note:** Version bump only for package @restorecommerce/oidc-id-srv-integration

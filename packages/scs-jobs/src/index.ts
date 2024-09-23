@@ -1,11 +1,11 @@
-import type { FilterOpts, JobType } from './types.js';
+import type { FilterOpts, JobType, Data } from './types.js';
 import { createClient as createRedisClient } from 'redis';
 import type { Events } from '@restorecommerce/kafka-client';
-import type { Logger } from 'winston';
+import type { ServiceConfig } from '@restorecommerce/service-config';
+import type { Logger } from '@restorecommerce/logger';
 import * as _ from 'lodash';
 import type { Processor } from 'bullmq';
 import { Worker } from 'bullmq';
-import type { Data } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/job.js';
 
 export const marshallProtobufAny = (msg: any): any => {
   return {
@@ -67,7 +67,14 @@ export const _filterQueuedJob = <T extends FilterOpts>(job: T, logger: Logger): 
 };
 
 
-export const runWorker = async (queue: string, concurrency: number, cfg: any, logger: Logger, events: Events, cb: Processor): Promise<Worker> => {
+export const runWorker = async (
+  queue: string,
+  concurrency: number,
+  cfg: ServiceConfig,
+  logger: Logger,
+  events: Events,
+  cb: Processor
+): Promise<Worker> => {
   // Get a redis connection
   const redisConfig = cfg.get('redis');
   // below config is used for bull queu options and it still uses db config
@@ -176,3 +183,12 @@ export const runWorker = async (queue: string, concurrency: number, cfg: any, lo
   await worker.waitUntilReady();
   return worker;
 };
+
+export type RunWorkerFunc = typeof runWorker;
+export type DefaultExportFunc = (
+  cfg: ServiceConfig,
+  logger: Logger,
+  events: Event,
+  runWorker: RunWorkerFunc,
+) => Promise<void>;
+export * from './types.js';

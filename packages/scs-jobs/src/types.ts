@@ -1,14 +1,16 @@
-import type { JobsOptions } from 'bullmq';
+import { type JobsOptions } from 'bullmq';
 
-import type { Data } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/job.js';
+import {
+  type Data,
+  JobOptions_Priority as Priority,
+  JobReadRequest_SortOrder as SortOrder,
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/job.js';
 
-export enum Priority {
-  NORMAL = 100,
-  LOW = 1000,
-  MEDIUM = 50,
-  HIGH = 25,
-  CRITICAL = 1,
-}
+export {
+  Data,
+  Priority,
+  SortOrder
+};
 
 export interface FilterOpts {
   id?: number | string;
@@ -42,9 +44,4 @@ export interface NewJob {
   when?: string;
   data: Data;
   id?: string; // mapped to jobId of bull
-}
-
-export enum SortOrder {
-  ASCENDING = 'ASCENDING',
-  DESCENDING = 'DESCENDING',
 }

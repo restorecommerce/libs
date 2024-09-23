@@ -108,12 +108,12 @@ const checkSubjectMatch = (
     ).map(
       aa => aa.value
     );
-    
+
     logger.debug('Role scoped instances for matching entity', { id: user?.id, ruleRoleScopeEntityName, matchingRoleScopedInstance });
     // validate HR scope root ID contains the role scope instances
     const hrScopeExist = user?.hierarchical_scopes?.some((hrScope) => matchingRoleScopedInstance.includes(hrScope.id));
     if (!hrScopeExist) {
-      logger.info('Hierarchial scopes for matching role does not exist', { 
+      logger.info('Hierarchial scopes for matching role does not exist', {
         role: ruleRoleValue,
         hrScopes: user?.hierarchical_scopes,
         instances: matchingRoleScopedInstance

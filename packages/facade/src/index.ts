@@ -233,7 +233,11 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
         if (url !== 'local') {
           return new RemoteGraphQLDataSource({
             url,
-            // TODO willSendRequest
+            willSendRequest({ request, context }): Promise<void> | void {
+              if (context && context['authorization']) {
+                request.http.headers.set('authorization', context['authorization']);
+              }
+            },
           });
         } else {
           const schema = this.apolloServices[name]?.schema;

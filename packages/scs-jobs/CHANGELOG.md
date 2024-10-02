@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.39](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.38...@restorecommerce/scs-jobs@0.1.39) (2024-10-02)
+
+
+### Bug Fixes
+
+* **scs-jobs:** typo about Events ([916a34b](https://github.com/restorecommerce/libs/commit/916a34b768c97b276741de96b07174cbaf1efbb2))
+
+
+
+
+
 ## [0.1.38](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.37...@restorecommerce/scs-jobs@0.1.38) (2024-09-23)
 
 

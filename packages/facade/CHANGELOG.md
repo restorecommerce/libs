@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.7](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.1.6...@restorecommerce/facade@2.1.7) (2024-10-02)
+
+
+### Bug Fixes
+
+* **facade:** passthrough authorization ([ad218e5](https://github.com/restorecommerce/libs/commit/ad218e506332fcd5ed029334a8ee4689c9c44428))
+
+
+
+
+
 ## [2.1.6](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.1.5...@restorecommerce/facade@2.1.6) (2024-09-23)
 
 **Note:** Version bump only for package @restorecommerce/facade

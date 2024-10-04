@@ -48,13 +48,11 @@ export const _filterJobData = (data: Data, encode: boolean, logger: Logger): Pic
 };
 
 
-export const _filterQueuedJob = <T extends FilterOpts>(job: T, logger: Logger): Pick<T, 'id' | 'type' | 'data' | 'opts' | 'name'> => {
-  if (job && !job.type) {
-    (job as any).type = (job as any).name;
-  }
-  const picked: any = _.pick(job, [
-    'id', 'type', 'data', 'opts', 'name'
-  ]);
+export const _filterQueuedJob = <T extends FilterOpts>(job: T, logger: Logger): T => {
+  const picked: T = {
+    ...job,
+    type: job.name,
+  };
 
   if (picked?.data) {
     picked.data = _filterJobData(picked.data, false, logger);
@@ -63,7 +61,7 @@ export const _filterQueuedJob = <T extends FilterOpts>(job: T, logger: Logger): 
     }
   }
 
-  return picked as any;
+  return picked;
 };
 
 
@@ -91,7 +89,6 @@ export const runWorker = async (
   }
 
   const jobEvents = await events.topic('io.restorecommerce.jobs');
-
   const redisURL = new URL(redisConfig.url);
 
   logger.info(`Registering worker for queue ${queue}`);
@@ -165,6 +162,7 @@ export const runWorker = async (
     concurrency,
     autorun: false
   });
+  worker.setMaxListeners(100); // default 10 is too low!
   worker.on('error', err => logger.error(`worker#${queue} error`, err));
   worker.on('closed', () => logger.verbose(`worker#${queue} closed`));
   worker.on('progress', (j, p) => logger.debug(`worker#${queue} job#${j.id} progress`, p));

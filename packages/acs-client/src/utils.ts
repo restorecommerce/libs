@@ -35,8 +35,11 @@ export const handleError = (err: string | Error | any): any => {
   return error;
 };
 
-const reduceUserScope = (hrScope: HierarchicalScope, reducedUserScope: string[],
-  hierarchicalRoleScoping: string) => {
+const reduceUserScope = (
+  hrScope: HierarchicalScope,
+  reducedUserScope: string[],
+  hierarchicalRoleScoping: string
+) => {
   reducedUserScope.push(hrScope.id);
   if (hrScope?.children?.length > 0 && hierarchicalRoleScoping === 'true') {
     for (let childNode of hrScope.children) {
@@ -45,8 +48,12 @@ const reduceUserScope = (hrScope: HierarchicalScope, reducedUserScope: string[],
   }
 };
 
-const checkTargetScopeExists = (hrScopes: HierarchicalScope[], targetScope: string,
-  reducedUserScope: string[], hierarchicalRoleScopingCheck: string): boolean => {
+const checkTargetScopeExists = (
+  hrScopes: HierarchicalScope[],
+  targetScope: string,
+  reducedUserScope: string[],
+  hierarchicalRoleScopingCheck: string
+): boolean => {
   return hrScopes.some((hrScope) => {
     if (hrScope?.id === targetScope) {
       // found the target scope object, iterate and put the orgs in reducedUserScope array

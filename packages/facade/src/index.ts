@@ -234,8 +234,10 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
           return new RemoteGraphQLDataSource({
             url,
             willSendRequest({ request, context }): Promise<void> | void {
-              if (context && context['authorization']) {
-                request.http.headers.set('authorization', context['authorization']);
+              if (context?.authorization) {
+                request.http.headers.set('authorization', context.authorization);
+              } else if (context?.request?.header?.authorization) {
+                request.http.headers.set('authorization', context.request.header.authorization);
               }
             },
           });

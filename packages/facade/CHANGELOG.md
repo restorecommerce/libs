@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.8](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.1.7...@restorecommerce/facade@2.1.8) (2024-10-09)
+
+
+### Bug Fixes
+
+* **facade:** multiple authorization header locations ([c70576b](https://github.com/restorecommerce/libs/commit/c70576b7cf6dd56587321fe9cead7a7dcaff40a9))
+
+
+
+
+
 ## [2.1.7](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.1.6...@restorecommerce/facade@2.1.7) (2024-10-02)
 
 

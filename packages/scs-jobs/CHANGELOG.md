@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.40](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.39...@restorecommerce/scs-jobs@0.1.40) (2024-10-09)
+
+
+### Bug Fixes
+
+* **scs-jobs:** extend maxListeners to 100, defaults to 10 and is already exceeded by our defaults ([efc5444](https://github.com/restorecommerce/libs/commit/efc5444bc1d2cde62b93a56cd2239e1a55ad2406))
+
+
+
+
+
 ## [0.1.39](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.38...@restorecommerce/scs-jobs@0.1.39) (2024-10-02)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@3.0.0...@restorecommerce/acs-client@3.0.1) (2024-10-09)
+
+
+### Bug Fixes
+
+* **scs-jobs:** extend maxListeners to 100, defaults to 10 and is already exceeded by our defaults ([efc5444](https://github.com/restorecommerce/libs/commit/efc5444bc1d2cde62b93a56cd2239e1a55ad2406))
+
+
+
+
+
 # [3.0.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@2.0.4...@restorecommerce/acs-client@3.0.0) (2024-09-23)
 
 

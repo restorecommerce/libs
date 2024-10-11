@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.41](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.40...@restorecommerce/scs-jobs@0.1.41) (2024-10-11)
+
+
+### Bug Fixes
+
+* **scs-job:** revert to lodash.Pick for _filterQueuedJob ([bde6d4a](https://github.com/restorecommerce/libs/commit/bde6d4aa3161a32f9a70cfce17775e2275917c3b))
+
+
+
+
+
 ## [0.1.40](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.39...@restorecommerce/scs-jobs@0.1.40) (2024-10-09)
 
 

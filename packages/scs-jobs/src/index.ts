@@ -32,7 +32,7 @@ export const _filterJobData = (data: Data, encode: boolean, logger: Logger): Pic
 
   if (encode) {
     if (picked?.payload?.value && typeof picked.payload.value === 'string') {
-      (picked as any).payload = marshallProtobufAny(unmarshallProtobufAny(picked.payload, logger));
+      picked.payload = marshallProtobufAny(unmarshallProtobufAny(picked.payload, logger));
     }
   }
 
@@ -44,15 +44,17 @@ export const _filterJobData = (data: Data, encode: boolean, logger: Logger): Pic
     picked.meta.modified = new Date(picked.meta.modified);
   }
 
-  return picked as any;
+  return picked;
 };
 
 
-export const _filterQueuedJob = <T extends FilterOpts>(job: T, logger: Logger): T => {
-  const picked: T = {
-    ...job,
-    type: job.name,
-  };
+export const _filterQueuedJob = <T extends FilterOpts>(job: T, logger: Logger): Pick<T, 'id' | 'type' | 'data' | 'opts' | 'name'> => {
+  if (job && !job.type) {
+    (job as any).type = (job as any).name;
+  }
+  const picked: any = _.pick(job, [
+    'id', 'type', 'data', 'opts', 'name'
+  ]);
 
   if (picked?.data) {
     picked.data = _filterJobData(picked.data, false, logger);
@@ -63,7 +65,6 @@ export const _filterQueuedJob = <T extends FilterOpts>(job: T, logger: Logger): 
 
   return picked;
 };
-
 
 export const runWorker = async (
   queue: string,
@@ -93,13 +94,13 @@ export const runWorker = async (
 
   logger.info(`Registering worker for queue ${queue}`);
   const worker = new Worker(queue, async job => {
-    const filteredJob = _filterQueuedJob<JobType>(job as any, logger);
+    const filteredJob = _filterQueuedJob(job, logger);
     // For recurring job add time so if service goes down we can fire jobs
     // for the missed schedules comparing the last run time
     let lastRunTime;
     if (filteredJob?.opts?.repeat &&
-      ((filteredJob.opts.repeat as any)?.every ||
-        (filteredJob.opts.repeat as any)?.pattern)) {
+      (filteredJob.opts.repeat?.every ||
+        filteredJob.opts.repeat?.pattern)) {
       if (filteredJob?.data) {
         // adding time to payload data for recurring jobs
         const dateTime = new Date();

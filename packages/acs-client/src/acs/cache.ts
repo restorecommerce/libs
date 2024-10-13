@@ -65,7 +65,7 @@ export const getOrFill = async <T, M>(keyData: T, filler: (data: T) => Promise<M
   if (prefix) {
     redisKey = `${prefix}:` + redisKey;
   }
-  let redisKeyResponse = await redisInstance.get(redisKey);
+  const redisKeyResponse = await redisInstance.get(redisKey);
   if (redisKeyResponse && useCache) {
     const response = JSON.parse(redisKeyResponse) as PolicySetRQResponse & DecisionResponse;
     const evaluation_cacheable = response?.evaluation_cacheable || response?.policy_sets?.some(
@@ -134,7 +134,7 @@ export const flushCache = async (prefix?: string) => {
   }
 
   if (prefix != undefined) {
-    let flushPattern = `acs:${prefix}:*`;
+    const flushPattern = `acs:${prefix}:*`;
     logger.debug(`Flushing cache with pattern ${flushPattern}`);
     let scanIterator;
     try {

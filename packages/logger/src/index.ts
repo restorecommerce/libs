@@ -2,14 +2,14 @@ import 'source-map-support/register';
 import { createLogger as createWinsonLogger, LoggerOptions as WinstonLoggerOptions, log, Logger } from 'winston';
 import { RestoreLoggerConsoleTransportOptions, createConsoleTransport } from './console';
 import { RestoreLoggerFileTransportOptions, createFileTransport } from './file';
-import { RestoreLoggerElasticsearchTransportOptions, createElasticSearchTransport } from './elasticsearch';
+import { RestoreLoggerElasticsearchTransportOptions, createElasticSearchTransport, CreateESTransport } from './elasticsearch';
 import { globalLoggerCtxKey, precompile } from './utils';
 
 export interface RestoreLoggerOptions extends WinstonLoggerOptions {
   console?: RestoreLoggerConsoleTransportOptions;
   file?: RestoreLoggerFileTransportOptions;
   elasticsearch?: RestoreLoggerElasticsearchTransportOptions;
-  esTransformer?: Function,
+  esTransformer?: CreateESTransport,
   loggerName?: string;
   sourcePointer?: boolean;
   fieldOptions?: RestoreFieldsOptions;

@@ -32,7 +32,7 @@ function createTracerFormat(opts: RestoreLoggerConsoleTransportOptions, precompi
       const transformedFields = logFieldsHandler(message, precompiled);
       message = JSON.stringify(transformedFields, getCircularReplacer());
     }
-    let ret: string[] = [];
+    const ret: string[] = [];
     ret.push(`${level}: ${time}`);
     if (opts.sourcePointer) {
       const sourceSym: any = Object.getOwnPropertySymbols(info).find((s) => {
@@ -47,14 +47,12 @@ function createTracerFormat(opts: RestoreLoggerConsoleTransportOptions, precompi
       ret.push(` [rid:${rid}]`);
     }
 
-    // @ts-ignore
     if (globalThis[globalLoggerCtxKey as unknown as any]) {
-      // @ts-ignore
       const store = global[globalLoggerCtxKey].getStore() as any;
       if (store && store.size > 0) {
         let i = store.size;
         ret.push(` [`);
-        for (let [key, value] of store.entries()) {
+        for (const [key, value] of store.entries()) {
           ret.push(`${key}:${value}`);
           i--;
           if (i > 0) {
@@ -76,7 +74,7 @@ function createTracerFormat(opts: RestoreLoggerConsoleTransportOptions, precompi
 }
 
 export function createConsoleTransport(opts: RestoreLoggerConsoleTransportOptions = {}, precompiled?: PrecompiledFieldOptions ) {
-  let formats: any[] = [
+  const formats: any[] = [
     format.simple(),
     format.timestamp(),
     createTracerFormat(opts, precompiled),

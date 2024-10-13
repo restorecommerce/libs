@@ -4,7 +4,7 @@ import * as rTracer from 'cls-rtracer';
 import { globalLoggerCtxKey, getRealTrace, getCircularReplacer, logFieldsHandler, PrecompiledFieldOptions } from './utils';
 import { RestoreFieldsOptions } from './index';
 
-export const indexTemplate = require('../elasticsearch-index-template.json');
+import indexTemplate from '../elasticsearch-index-template.json' assert { type: "json" };
 
 function createTransformer(opts: RestoreLoggerElasticsearchTransportOptions, precompiled?: PrecompiledFieldOptions) {
   /**
@@ -21,12 +21,10 @@ function createTransformer(opts: RestoreLoggerElasticsearchTransportOptions, pre
     const source = opts.source; // needed, as it will be read internally
     let transformed: any = {};
 
-    // @ts-ignore:
     if (global[globalLoggerCtxKey]) {
-      // @ts-ignore:
       const store = global[globalLoggerCtxKey].getStore();
       if (store && store.size > 0) {
-        for (let [key, value] of store.entries()) {
+        for (const [key, value] of store.entries()) {
           transformed[key] = value;
         }
       }
@@ -78,14 +76,17 @@ function createTransformer(opts: RestoreLoggerElasticsearchTransportOptions, pre
 //   return o;
 // }
 
+
+export type CreateESTransport = (opts: RestoreLoggerElasticsearchTransportOptions, precompiled?: PrecompiledFieldOptions) => ElasticsearchTransport;
+
 export interface RestoreLoggerElasticsearchTransportOptions extends ElasticsearchTransportOptions {
   sourcePointer?: any;
   stringifyMeta?: boolean;
-  esTransformer?: Function;
+  esTransformer?: CreateESTransport;
   fieldOptions?: RestoreFieldsOptions;
 }
 
-export function createElasticSearchTransport(opts: RestoreLoggerElasticsearchTransportOptions, precompiled?: PrecompiledFieldOptions) {
+export const createElasticSearchTransport = (opts: RestoreLoggerElasticsearchTransportOptions, precompiled?: PrecompiledFieldOptions) => {
   const transformer = createTransformer(opts, precompiled);
   return new ElasticsearchTransport({
     indexTemplate,

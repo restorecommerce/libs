@@ -1,9 +1,12 @@
 {
-  "extends": "./tsconfig-base.json",
+  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "baseUrl": "."
+    "outDir": "test"
   },
+  "types": [
+    "@types/jest"
+  ],
   "include": [
-    "./tests/**/*.ts"
+    "test/**/*.ts"
   ]
 }

@@ -42,7 +42,6 @@ import {
   Filter_ValueType
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/filter';
 
-/* eslint-disable prefer-arrow-functions/prefer-arrow-functions */
 export type DatabaseProvider = 'arangoDB' | 'postgres';
 export type ACSClientContextFactory<T extends ResourceList> = (self: any, request: T, ...args: any) => Promise<ACSClientContext>;
 export type ResourceFactory<T extends ResourceList> = (self: any, request: T, ...args: any) => Promise<ACSResource[]>;
@@ -165,7 +164,7 @@ export const DefaultMetaDataInjector = async <T extends ResourceList>(
   return request;
 };
 
-export function access_controlled_service<T extends { new(...args: any): {} }>(baseService: T): any {
+export function access_controlled_service<T extends { new(...args: any):  }>(baseService: T): any {
   return class extends baseService implements AccessControlledService {
     public readonly __userService: Client<UserServiceDefinition>;
     public readonly __acsDatabaseProvider: DatabaseProvider;

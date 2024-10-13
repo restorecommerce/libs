@@ -28,7 +28,7 @@ const parse = (stack: string): any[] => {
       let functionName: string | null = null;
       let typeName: string | null = null;
       let methodName: string | null = null;
-      let isNative = (lineMatch[5] === 'native');
+      const isNative = (lineMatch[5] === 'native');
 
       if (lineMatch[1]) {
         functionName = lineMatch[1];
@@ -217,7 +217,7 @@ export const updateObject = (obj: any, path: string, value: any, operation: stri
     _.unset(obj, path);
   } else if (value && operation === 'bufferFields') {
     if (enableLogging && value?.value) {
-      let unmarshalled = JSON.parse(value.value.toString());
+      const unmarshalled = JSON.parse(value.value.toString());
       _.set(obj, path, unmarshalled);
     } else {
       _.unset(obj, path);
@@ -234,9 +234,9 @@ export const setNestedPath = (object: any, fieldPath: string, operation: string,
     setRecursive = true;
   }
   if (prefix && suffix) {
-    let array = _.get(object, prefix);
+    const array = _.get(object, prefix);
     array.forEach((obj: any) => {
-      let fieldExists = _.get(obj, suffix);
+      const fieldExists = _.get(obj, suffix);
       // maskFields or omitFields or handle bufferFields depending on operation
       if (fieldExists) {
         updateObject(obj, suffix, fieldExists, operation, enableLogging);
@@ -261,7 +261,7 @@ const baseGet = (object: any, path: string[]): any => {
 const setIfExists = (obj: any, fieldPath: string, fieldList: string[], operation: string, array?: boolean, enableLogging?: boolean): void => {
   // fieldList contains the split Path to individual fields for fieldPath
   // and the baseGet breaks when the first field do not exist
-  let fieldExists = baseGet(obj, fieldList);
+  const fieldExists = baseGet(obj, fieldList);
   // only if the configured field exist check recursively for all entries in object
   if (fieldExists && array) {
     // use setNestedPath
@@ -276,7 +276,7 @@ export const logFieldsHandler = (object: any, precompiled?: PrecompiledFieldOpti
   if (!precompiled) {
     return object;
   }
-  // if nonoe of bufferFields or maskFields or omitFields are set then do not proceed further
+  // if none of bufferFields or maskFields or omitFields are set then do not proceed further
   if (_.isEmpty(precompiled?.maskFields) && _.isEmpty(precompiled?.omitFields) && _.isEmpty(precompiled?.bufferFields)) {
     return object;
   }
@@ -284,13 +284,13 @@ export const logFieldsHandler = (object: any, precompiled?: PrecompiledFieldOpti
   try {
     objectFieldsMod = JSON.parse(JSON.stringify(object));
   } catch (error) {
-    console.log('Error parsing logger object', object);
+    console.log('Error parsing object part of log message', object);
   }
   // since multiple comma separated  objects can be passed as fields for logging
   if (!_.isArray(objectFieldsMod)) {
     objectFieldsMod = [objectFieldsMod];
   }
-  for (let obj of objectFieldsMod) {
+  for (const obj of objectFieldsMod) {
     // iterate to check each mask field
     if (!_.isEmpty(precompiled?.maskFields)) {
       precompiled?.maskFields?.forEach((maskCfg) => {

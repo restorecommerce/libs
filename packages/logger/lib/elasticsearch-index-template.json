@@ -1,0 +1,85 @@
+{
+    "priority": 200,
+    "template": {
+        "settings": {
+            "index": {
+                "mapping": {
+                    "total_fields": {
+                        "limit": "3000"
+                    }
+                },
+                "refresh_interval": "5s",
+                "number_of_shards": "1",
+                "number_of_replicas": "0",
+                "query": {
+                    "default_field": [
+                        "message"
+                    ]
+                }
+            }
+        },
+        "mappings": {
+            "_source": {
+                "enabled": true
+            },
+            "date_detection": false,
+            "properties": {
+                "@timestamp": {
+                    "type": "date"
+                },
+                "@version": {
+                    "type": "keyword"
+                },
+                "severity": {
+                    "type": "text",
+                    "index": true,
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                },
+                "source": {
+                    "index": true,
+                    "type": "keyword"
+                },
+                "message": {
+                    "type": "text",
+                    "index": true
+                },
+                "fields": {
+                    "type": "text",
+                    "index": true
+                },
+                "subject": {
+                    "type": "keyword",
+                    "index": true
+                },
+                "rid": {
+                    "type": "keyword",
+                    "index": true
+                },
+                "proc_time": {
+                    "type": "text",
+                    "index": true
+                },
+                "source_host": {
+                    "type": "text",
+                    "index": true,
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword",
+                            "ignore_above": 256
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "index_patterns": [
+        "logs-app-default*"
+    ],
+    "data_stream": {},
+    "composed_of": []
+}

@@ -6,8 +6,8 @@ Define a key in the AsyncLocalStorage that the logger should pick up
 */
 const loggerCtx = new AsyncLocalStorage<Map<string, string>>();
 const store = new Map<string, string>();
-global[globalLoggerCtxKey] = loggerCtx;
-global[globalLoggerCtxKey].enterWith(store);
+(global as any)[globalLoggerCtxKey] = loggerCtx;
+(global as any)[globalLoggerCtxKey].enterWith(store);
 store.set('requestId', '12345678');
 
 const opts: RestoreLoggerOptions = {

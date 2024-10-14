@@ -1,12 +1,7 @@
 {
   "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "outDir": "test"
-  },
-  "types": [
-    "@types/jest"
-  ],
   "include": [
-    "test/**/*.ts"
+    "./src/**/*.ts",
+    "./tests/**/*.ts"
   ]
 }

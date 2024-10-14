@@ -47,8 +47,8 @@ function createTracerFormat(opts: RestoreLoggerConsoleTransportOptions, precompi
       ret.push(` [rid:${rid}]`);
     }
 
-    if (globalThis[globalLoggerCtxKey as unknown as any]) {
-      const store = global[globalLoggerCtxKey].getStore() as any;
+    if ((globalThis as any)[globalLoggerCtxKey as unknown as any]) {
+      const store = (global as any)[globalLoggerCtxKey].getStore() as any;
       if (store && store.size > 0) {
         let i = store.size;
         ret.push(` [`);

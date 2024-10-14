@@ -20,3 +20,4 @@ test/*.js
 test/*.d.ts
 !.eslintrc.js
 !setupTopics.js
+*.tsbuildinfo

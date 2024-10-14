@@ -4,7 +4,7 @@ import * as rTracer from 'cls-rtracer';
 import { globalLoggerCtxKey, getRealTrace, getCircularReplacer, logFieldsHandler, PrecompiledFieldOptions } from './utils';
 import { RestoreFieldsOptions } from './index';
 
-import indexTemplate from '../elasticsearch-index-template.json' assert { type: "json" };
+import indexTemplate from '../elasticsearch-index-template.json';
 
 function createTransformer(opts: RestoreLoggerElasticsearchTransportOptions, precompiled?: PrecompiledFieldOptions) {
   /**
@@ -21,8 +21,8 @@ function createTransformer(opts: RestoreLoggerElasticsearchTransportOptions, pre
     const source = opts.source; // needed, as it will be read internally
     let transformed: any = {};
 
-    if (global[globalLoggerCtxKey]) {
-      const store = global[globalLoggerCtxKey].getStore();
+    if ((global as any)[globalLoggerCtxKey]) {
+      const store = (global as any)[globalLoggerCtxKey].getStore();
       if (store && store.size > 0) {
         for (const [key, value] of store.entries()) {
           transformed[key] = value;

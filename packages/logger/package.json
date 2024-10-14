@@ -24,6 +24,7 @@
     "winston-elasticsearch": "^0.19.0"
   },
   "devDependencies": {
+    "@restorecommerce/dev": "^0.0.12",
     "@types/jest": "^29.5.13",
     "@types/lodash": "^4.17.10",
     "@types/node": "^22.7.5",

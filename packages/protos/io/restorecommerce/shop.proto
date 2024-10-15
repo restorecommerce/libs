@@ -44,6 +44,36 @@ message ShopResponse {
   optional io.restorecommerce.status.Status status = 2;
 }
 
+message ShopSettings {
+  message InvoiceNumber {
+    optional uint32 start = 1;
+    optional uint32 increment = 2;
+    optional string pattern = 3;
+  }
+  message Source {
+    oneof source {
+      string id = 1;
+      string url = 2;
+      string plain_text = 3;
+    }
+  }
+  message Template {
+    optional uint32 index = 2;
+    optional string subject = 3;
+    optional Source body = 4;
+    optional Source layout = 5; 
+  }
+  message TemplateGroup {
+    optional io.restorecommerce.template.TemplateUseCase use_case = 1;
+    repeated Template templates = 2;
+  }
+
+  optional InvoiceNumber invoice_number = 1;
+  repeated Template templates = 2;
+
+  repeated io.restorecommerce.attribute.Attribute miscellaneous = 8;
+}
+
 message Shop {
   optional string id = 1;
   optional io.restorecommerce.meta.Meta meta = 2;
@@ -60,5 +90,5 @@ message Shop {
       field_name: "organization",
     }
   ];
-  repeated io.restorecommerce.attribute.Attribute settings = 8;
+  
 }

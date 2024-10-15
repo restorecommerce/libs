@@ -25,6 +25,15 @@ service TemplateService {
   rpc Upsert (TemplateList) returns (TemplateListResponse);
 }
 
+enum TemplateUseCase {
+  MISCELLANEOUS = 0;
+  INVOICE_PDF = 1;
+  INVOICE_EMAIL = 2;
+  INVITATION_EMAIL = 3;
+  REGISTRATION_EMAIL = 4;
+  CHANGE_PASSWORD_EMAIL = 5;
+}
+
 message Deleted {
   optional string id = 1;
 }
@@ -51,8 +60,11 @@ message Template {
   optional io.restorecommerce.meta.Meta meta = 2;
   optional string name = 3;
   optional string description = 4;
-  optional io.restorecommerce.reference.Reference reference = 5;
-  repeated io.restorecommerce.file.File files = 6;
-  repeated io.restorecommerce.image.Image images = 7;
-  repeated io.restorecommerce.attribute.Attribute attributes = 8;
+  optional TemplateUseCase use_case = 5;
+  optional uint32 index = 6; // order number
+  optional string subject = 7; // e.g. header, body, footer
+  optional io.restorecommerce.file.File body = 8;
+  optional io.restorecommerce.file.File layout = 9;
+  repeated io.restorecommerce.image.Image images = 10;
+  repeated io.restorecommerce.attribute.Attribute attributes = 11;
 }

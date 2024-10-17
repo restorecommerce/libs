@@ -104,8 +104,7 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
         search
       )) || [];
 
-      let readResponseWithStatus = [];
-      objectEntities.map((object) => readResponseWithStatus.push({
+      const readResponseWithStatus = objectEntities.map((object) => ({
         payload: object,
         status: {
           code: 200,
@@ -115,7 +114,7 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
 
       return {
         items: readResponseWithStatus,
-        total_count: objectEntities.length,
+        total_count: readResponseWithStatus.length,
         operation_status: {
           code: 200,
           message: 'success'

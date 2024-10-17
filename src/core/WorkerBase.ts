@@ -17,15 +17,15 @@ import {
   Topic,
   registerProtoMeta
 } from '@restorecommerce/kafka-client';
-import { Arango } from '@restorecommerce/chassis-srv/lib/database/provider/arango/base.js';
+import { Arango } from '@restorecommerce/chassis-srv/lib/database/provider/arango/base';
 import { createLogger } from '@restorecommerce/logger';
-import { BindConfig } from '@restorecommerce/chassis-srv/lib/microservice/transport/provider/grpc/index.js';
+import { BindConfig } from '@restorecommerce/chassis-srv/lib/microservice/transport/provider/grpc/index';
 import {
   ProtoMetadata,
   protoMetadata as CommandInterfaceMeta,
   CommandInterfaceServiceDefinition,
-} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/commandinterface.js';
-import { HealthDefinition } from '@restorecommerce/rc-grpc-clients/dist/generated-server/grpc/health/v1/health.js';
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/commandinterface';
+import { HealthDefinition } from '@restorecommerce/rc-grpc-clients/dist/generated-server/grpc/health/v1/health';
 import { ServerReflectionService } from 'nice-grpc-server-reflection';
 import { ServiceBase } from './ServiceBase';
 import { createServiceConfig } from '@restorecommerce/service-config';

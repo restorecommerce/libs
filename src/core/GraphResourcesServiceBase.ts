@@ -1,8 +1,6 @@
 import * as _ from 'lodash';
 import { GraphDatabaseProvider, TraversalResponse as DBTraversalResponse } from '@restorecommerce/chassis-srv';
-import { createLogger } from '@restorecommerce/logger';
-import { Logger } from 'winston';
-import { Stream } from 'stream';
+import { Logger, createLogger } from '@restorecommerce/logger';
 import {
   DeepPartial, ServerStreamingMethodResult,
   GraphServiceImplementation,

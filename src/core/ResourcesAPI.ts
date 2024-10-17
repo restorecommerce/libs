@@ -8,7 +8,7 @@ import { DatabaseProvider, GraphDatabaseProvider } from '@restorecommerce/chassi
 import { DeepPartial } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/attribute';
 import { Search } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base';
 import { Subject } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/auth';
-import { fieldHandler } from './utils.js';
+import { fieldHandler } from './utils';
 
 let redisClient: any;
 

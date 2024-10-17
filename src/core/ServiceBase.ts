@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import { toObject } from '../index.js';
+import { toObject } from '../index';
 import { ResourcesAPIBase } from './ResourcesAPI';
 import { Topic } from '@restorecommerce/kafka-client';
 import { Logger } from '@restorecommerce/logger';

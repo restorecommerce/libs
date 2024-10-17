@@ -374,7 +374,7 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
       let upsertDocs = _.cloneDeep(request.items);
       let upsertResponse = await this.resourceapi.upsert(
         upsertDocs,
-        this.events,
+        this.isEventsEnabled && this.events,
         this.name,
         request.subject
       );

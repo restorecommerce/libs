@@ -45,7 +45,7 @@ const urns = cfg.get('authorization:urns');
 
 export const createActionTarget = (action: any): Attribute[] => {
   if (_.isArray(action)) {
-    let actionList = [];
+    const actionList = [];
     for (let eachAction of action) {
       eachAction = eachAction.valueOf().toLowerCase();
       actionList.push({
@@ -110,9 +110,9 @@ export const createResourceTarget = (resource: ACSResource[], action: AuthZActio
   const flattened: Attribute[] = [];
   resource.forEach((resourceObj) => {
     if (action != AuthZAction.EXECUTE) {
-      let resourcenameNameSpace = resourceObj.resource;
-      let resourceInstance = resourceObj.id;
-      let resourceProperty = resourceObj.property;
+      const resourcenameNameSpace = resourceObj.resource;
+      const resourceInstance = resourceObj.id;
+      const resourceProperty = resourceObj.property;
       let resourceNameSpace, resourceName;
 
       if (resourcenameNameSpace && resourcenameNameSpace.indexOf('.') > -1) {
@@ -336,7 +336,7 @@ export class ACSAuthZ implements IAuthZ {
     // for isAllowed we use the subject, action and resource fields .i.e. reqeust Target
     // since the context resources contains the values which would change for each
     // resource being created and should not be used in key when generating hash
-    let cacheKey = {
+    const cacheKey = {
       target: authZRequest.target
     };
     let response: DecisionResponse;
@@ -439,7 +439,7 @@ export class ACSAuthZ implements IAuthZ {
   }
 
   prepareRequest(request: Request<AuthZTarget | AuthZWhatIsAllowedTarget, AuthZContext>): any {
-    let { subjects, resources, actions } = request.target;
+    const { subjects, resources, actions } = request.target;
     const authZRequest: any = {
       target: {
         actions: createActionTarget(actions),
@@ -500,11 +500,11 @@ export const initAuthZ = async (config?: any): Promise<void | ACSAuthZ> => {
       if (kafkaCfg && kafkaCfg.evictACSCache) {
         const events = new Events(kafkaCfg, logger);
         await events.start();
-        for (let topicLabel in kafkaCfg.evictACSCache) {
-          let topicCfg = kafkaCfg.evictACSCache[topicLabel];
-          let topic = await events.topic(topicCfg.topic);
+        for (const topicLabel in kafkaCfg.evictACSCache) {
+          const topicCfg = kafkaCfg.evictACSCache[topicLabel];
+          const topic = await events.topic(topicCfg.topic);
           if (topicCfg.events) {
-            for (let eachEvent of topicCfg.events) {
+            for (const eachEvent of topicCfg.events) {
               await topic.on(eachEvent, eventListener);
             }
           }

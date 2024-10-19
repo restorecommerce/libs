@@ -15,10 +15,10 @@ export class LAFFAdapter implements Adapter {
     this.containers = container;
     this.self = self;
 
-    let boxClones: Box[] = [];
+    const boxClones: Box[] = [];
 
     for (const item of boxItems) {
-      let box = item.getBox();
+      const box = item.getBox();
       boxClones.push(box);
       for (let i = 1; i < item.getCount(); i++) {
         boxClones.push(box.clone());
@@ -29,13 +29,13 @@ export class LAFFAdapter implements Adapter {
   }
 
   public attempt(index: number): PackResult {
-    let result = this.self.packProducts([...this.boxes], this.containers[index]);
+    const result = this.self.packProducts([...this.boxes], this.containers[index]);
 
     return this.previous = result;
   }
 
   public accepted(result: PackResult): Container {
-    let laffResult = result as LAFFResult;
+    const laffResult = result as LAFFResult;
 
     this.boxes = laffResult.getRemainingBoxes();
 
@@ -44,8 +44,8 @@ export class LAFFAdapter implements Adapter {
     }
 
     // calculate again
-    let container = laffResult.getContainer();
-    let boxes: Box[] = [];
+    const container = laffResult.getContainer();
+    const boxes: Box[] = [];
     for (const level of container.getLevels()) {
       for (const placement of level) {
         boxes.push(placement.getBox());

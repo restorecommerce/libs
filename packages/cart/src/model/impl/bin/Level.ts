@@ -6,7 +6,7 @@ export class Level extends Array<Placement>{
     let height = 0;
 
     for(const placement of this) {
-      let box = placement.getBox();
+      const box = placement.getBox();
       if(box.getHeight() > height) {
         height = box.getHeight();
       }

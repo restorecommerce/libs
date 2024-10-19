@@ -127,7 +127,7 @@ export class Dimension {
     return this.name;
   }
 
-  public equals(obj: Object): boolean {
+  public equals(obj: object): boolean {
     if (this == obj)
       return true;
     if (obj == null)

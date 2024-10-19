@@ -45,7 +45,7 @@ export interface Config {
   redisInstance?: RedisClientType<any, any>;
   pathPrefix: string;
   clients?: any[];
-  jwks?: {};
+  jwks?: object;
   authenticate: authenticateFunc;
   findAccount: findAccountFunc;
   afterPasswordGrantHook: afterPasswordGrantHookFunc;

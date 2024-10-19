@@ -90,8 +90,8 @@ export class Space extends Dimension {
   }
 
   public intersectsYSpace(space: Space): boolean {
-    let startY = space.getY();
-    let endY = startY + space.getDepth() - 1;
+    const startY = space.getY();
+    const endY = startY + space.getDepth() - 1;
 
     return this.intersectsY(startY, endY);
   }
@@ -101,8 +101,8 @@ export class Space extends Dimension {
   }
 
   public intersectsXSpace(space: Space): boolean {
-    let startX = space.getX();
-    let endX = startX + space.getWidth() - 1;
+    const startX = space.getX();
+    const endX = startX + space.getWidth() - 1;
 
     return this.intersectsX(startX, endX);
   }
@@ -112,8 +112,8 @@ export class Space extends Dimension {
   }
 
   public intersectsZSpace(space: Space): boolean {
-    let startZ = space.getZ();
-    let endZ = startZ + space.getHeight() - 1;
+    const startZ = space.getZ();
+    const endZ = startZ + space.getHeight() - 1;
 
     return this.intersectsZ(startZ, endZ);
   }
@@ -127,25 +127,25 @@ export class Space extends Dimension {
   }
 
   public intersectsYPlacement(placement: Placement): boolean {
-    let startY = placement.getSpace().getY();
-    let endY = startY + placement.getBox().getDepth() - 1;
+    const startY = placement.getSpace().getY();
+    const endY = startY + placement.getBox().getDepth() - 1;
     return this.intersectsY(startY, endY);
   }
 
   public intersectsXPlacement(placement: Placement): boolean {
-    let startX = placement.getSpace().getX();
-    let endX = startX + placement.getBox().getWidth() - 1;
+    const startX = placement.getSpace().getX();
+    const endX = startX + placement.getBox().getWidth() - 1;
     return this.intersectsX(startX, endX);
   }
 
   public intersectsZPlacement(placement: Placement): boolean {
-    let startZ = placement.getSpace().getZ();
-    let endZ = startZ + placement.getBox().getHeight() - 1;
+    const startZ = placement.getSpace().getZ();
+    const endZ = startZ + placement.getBox().getHeight() - 1;
     return this.intersectsZ(startZ, endZ);
   }
 
   public subtractX(placement: Placement) {
-    let endX = placement.getSpace().getX() + placement.getBox().getWidth();
+    const endX = placement.getSpace().getX() + placement.getBox().getWidth();
 
     if (endX > this.x) {
       this.width -= endX - this.x;
@@ -157,7 +157,7 @@ export class Space extends Dimension {
   }
 
   public subtractY(placement: Placement) {
-    let endY = placement.getSpace().getY() + placement.getBox().getDepth();
+    const endY = placement.getSpace().getY() + placement.getBox().getDepth();
 
     if (endY > this.y) {
       this.depth -= endY - this.y;
@@ -169,7 +169,7 @@ export class Space extends Dimension {
   }
 
   public subtractZ(placement: Placement) {
-    let endZ = placement.getSpace().getZ() + placement.getBox().getHeight();
+    const endZ = placement.getSpace().getZ() + placement.getBox().getHeight();
 
     if (endZ > this.z) {
       this.height -= endZ - this.z;

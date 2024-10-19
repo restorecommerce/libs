@@ -64,14 +64,14 @@ export class Placement {
   }
 
   public intersectsY(placement: Placement): boolean {
-    let startY = this.space.getY();
-    let endY = startY + this.box.getDepth() - 1;
+    const startY = this.space.getY();
+    const endY = startY + this.box.getDepth() - 1;
 
     if (startY <= placement.getSpace().getY() && placement.getSpace().getY() <= endY) {
       return true;
     }
 
-    let placementEndY = placement.getSpace().getY() + placement.getBox().getDepth() - 1;
+    const placementEndY = placement.getSpace().getY() + placement.getBox().getDepth() - 1;
 
     if (startY <= placementEndY &&
       placementEndY <= endY) {
@@ -84,14 +84,14 @@ export class Placement {
 
   public intersectsX(placement: Placement): boolean {
 
-    let startX = this.space.getX();
-    let endX = startX + this.box.getWidth() - 1;
+    const startX = this.space.getX();
+    const endX = startX + this.box.getWidth() - 1;
 
     if (startX <= placement.getSpace().getX() && placement.getSpace().getX() <= endX) {
       return true;
     }
 
-    let placementEndX = placement.getSpace().getX() + placement.getBox().getWidth() - 1;
+    const placementEndX = placement.getSpace().getX() + placement.getBox().getWidth() - 1;
     if (startX <= placementEndX && placementEndX <= endX) {
       return true;
     }
@@ -101,14 +101,14 @@ export class Placement {
 
   public intersectsZ(placement: Placement): boolean {
 
-    let startZ = this.space.getZ();
-    let endZ = startZ + this.box.getHeight() - 1;
+    const startZ = this.space.getZ();
+    const endZ = startZ + this.box.getHeight() - 1;
 
     if (startZ <= placement.getSpace().getZ() && placement.getSpace().getZ() <= endZ) {
       return true;
     }
 
-    let placementEndZ = placement.getSpace().getZ() + placement.getBox().getHeight() - 1;
+    const placementEndZ = placement.getSpace().getZ() + placement.getBox().getHeight() - 1;
     if (startZ <= placementEndZ &&
       placementEndZ <= endZ) {
       return true;

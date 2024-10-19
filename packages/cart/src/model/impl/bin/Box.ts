@@ -15,7 +15,7 @@ export class Box extends Dimension {
    * @return this instance
    */
   public rotate3D(): Box {
-    let height = this.height;
+    const height = this.height;
 
     this.height = this.width;
     this.width = this.depth;
@@ -202,7 +202,7 @@ export class Box extends Dimension {
    */
 
   rotate2D(): Box {
-    let depth = this.depth;
+    const depth = this.depth;
 
     this.depth = this.width;
     this.width = depth;
@@ -225,7 +225,7 @@ export class Box extends Dimension {
     // width -> depth -> width;
     // depth -> height;
 
-    let depth = this.depth;
+    const depth = this.depth;
 
     this.depth = this.height;
     this.height = depth;

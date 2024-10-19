@@ -55,17 +55,17 @@ export class LargestAreaFitFirstPackager extends Packager {
     while (containerProducts.length != 0) {
       // choose the box with the largest surface area, that fits
       // if the same then the one with minimum height
-      let currentIndex = this.getBestBox(holder, freeSpace, containerProducts);
+      const currentIndex = this.getBestBox(holder, freeSpace, containerProducts);
 
       if (currentIndex == -1) {
         break;
       }
 
-      let currentBox = containerProducts[currentIndex];
+      const currentBox = containerProducts[currentIndex];
 
       // current box should have the optimal orientation already
       // create a space which holds the full level
-      let levelSpace = new Space(
+      const levelSpace = new Space(
         null,
         '',
         targetContainer.getWidth(),
@@ -96,7 +96,7 @@ export class LargestAreaFitFirstPackager extends Packager {
     let fullHeight = false;
 
     for (let i = 0; i < containerProducts.length; i++) {
-      let box = containerProducts[i];
+      const box = containerProducts[i];
 
       let fits: boolean;
       if (this.rotate3D) {
@@ -187,9 +187,9 @@ export class LargestAreaFitFirstPackager extends Packager {
       return true;
     }
 
-    let spaces = this.getFreespaces(freeSpace, usedSpace);
+    const spaces = this.getFreespaces(freeSpace, usedSpace);
 
-    let primaryPlacement = this.getBestBoxAndSpace(containerProducts, spaces, holder.getFreeWeight());
+    const primaryPlacement = this.getBestBoxAndSpace(containerProducts, spaces, holder.getFreeWeight());
     if (primaryPlacement == null) {
       // no additional boxes along the level floor (x,y)
       // just make sure the used space fits in the free space
@@ -206,17 +206,17 @@ export class LargestAreaFitFirstPackager extends Packager {
       this.removeIdentical(containerProducts, primaryPlacement.getBox());
 
       // unused dual / remaining space
-      let currentLevel = holder.currentLevel();
-      let count = currentLevel.length;
+      const currentLevel = holder.currentLevel();
+      const count = currentLevel.length;
 
       if (!this.fit2D(containerProducts, holder, primaryPlacement.getBox(), primaryPlacement.getSpace())) {
         return false; // time is up
       }
 
       // stack in the 'sibling' space - the space left over between the used box and the selected free space
-      let remainder = primaryPlacement.getSpace().getRemainder();
+      const remainder = primaryPlacement.getSpace().getRemainder();
       if (remainder.nonEmpty()) {
-        let remainderBox = this.getBestBoxForSpace(containerProducts, remainder, holder.getFreeWeight());
+        const remainderBox = this.getBestBoxForSpace(containerProducts, remainder, holder.getFreeWeight());
         if (remainderBox != null) {
           this.removeIdentical(containerProducts, remainderBox);
 
@@ -297,12 +297,12 @@ export class LargestAreaFitFirstPackager extends Packager {
           //  - width cuts: width equal to remainder width
           //
 
-          let siblingIndex = this.getSiblingIndex(spaces, primaryPlacement);
-          let sibling = spaces[siblingIndex];
+          const siblingIndex = this.getSiblingIndex(spaces, primaryPlacement);
+          const sibling = spaces[siblingIndex];
 
           // cut out the area which is already in use, leaving two edges
-          let depthRemainder = sibling; //
-          let widthRemainder = new Space(sibling, '', 0, 0, 0, 0, 0, 0); // TODO reuse remainder space object for improved performance
+          const depthRemainder = sibling; //
+          const widthRemainder = new Space(sibling, '', 0, 0, 0, 0, 0, 0); // TODO reuse remainder space object for improved performance
 
           let widthConstraint: number;
           if (siblingIndex % 2 == 0) { // A and C
@@ -311,7 +311,7 @@ export class LargestAreaFitFirstPackager extends Packager {
             widthConstraint = remainder.getWidth();
           }
           for (let i = count; i < currentLevel.length; i++) {
-            let placement = currentLevel[i];
+            const placement = currentLevel[i];
 
             if (widthRemainder.intersectsYPlacement(placement) && widthRemainder.intersectsXPlacement(placement)) {
               // there is overlap, subtract area
@@ -330,7 +330,7 @@ export class LargestAreaFitFirstPackager extends Packager {
             depthConstraint = 0;
           }
           for (let i = count; i < currentLevel.length; i++) {
-            let placement = currentLevel[i];
+            const placement = currentLevel[i];
 
             if (depthRemainder.intersectsYPlacement(placement) && depthRemainder.intersectsXPlacement(placement)) {
               // there is overlap, subtract area
@@ -361,14 +361,14 @@ export class LargestAreaFitFirstPackager extends Packager {
             nextBox = depthRemainderBox;
 
             // subtract primary space size
-            let primary = primaryPlacement.getSpace();
+            const primary = primaryPlacement.getSpace();
             primary.setWidth(primary.getWidth() - (depthRemainder.getWidth() - remainder.getWidth()));
           } else if (widthRemainderBox != null) {
             nextSpace = widthRemainder;
             nextBox = widthRemainderBox;
 
             // subtract primary space size
-            let primary = primaryPlacement.getSpace();
+            const primary = primaryPlacement.getSpace();
             primary.setDepth(primary.getDepth() - (widthRemainder.getDepth() - remainder.getDepth()));
           }
 
@@ -418,11 +418,11 @@ export class LargestAreaFitFirstPackager extends Packager {
           freeSpace.getZ() + usedSpace.getHeight()
         );
       }
-      let currentIndex = this.getBestBox(holder, above, containerProducts);
+      const currentIndex = this.getBestBox(holder, above, containerProducts);
 
       if (currentIndex != -1) {
         // should be within weight already
-        let currentBox = containerProducts[currentIndex];
+        const currentBox = containerProducts[currentIndex];
 
         containerProducts.splice(currentIndex, 1);
 
@@ -436,7 +436,7 @@ export class LargestAreaFitFirstPackager extends Packager {
   }
 
   getSiblingIndex(spaces: Space[], nextPlacement: Placement): number {
-    let nextPlacementSpace = nextPlacement.getSpace();
+    const nextPlacementSpace = nextPlacement.getSpace();
     if (nextPlacementSpace == spaces[0]) {
       return 1;
     } else if (nextPlacementSpace == spaces[1]) {
@@ -497,21 +497,21 @@ export class LargestAreaFitFirstPackager extends Packager {
     //
     // So there is always a 'big' and a 'small' remaining / leftover area.
 
-    let freeSpaces: Space[] = [];
+    const freeSpaces: Space[] = [];
     if (freespace.getWidth() >= used.getWidth() && freespace.getDepth() >= used.getDepth()) {
 
       // if B is empty, then it is sufficient to work with A and the other way around
 
       // B
       if (freespace.getWidth() > used.getWidth()) {
-        let right = new Space(
+        const right = new Space(
           null,
           '',
           freespace.getWidth() - used.getWidth(), freespace.getDepth(), freespace.getHeight(),
           freespace.getX() + used.getWidth(), freespace.getY(), freespace.getZ()
         );
 
-        let rightRemainder = new Space(
+        const rightRemainder = new Space(
           null,
           '',
           used.getWidth(), freespace.getDepth() - used.getDepth(), freespace.getHeight(),
@@ -524,13 +524,13 @@ export class LargestAreaFitFirstPackager extends Packager {
 
       // A
       if (freespace.getDepth() > used.getDepth()) {
-        let top = new Space(
+        const top = new Space(
           null,
           '',
           freespace.getWidth(), freespace.getDepth() - used.getDepth(), freespace.getHeight(),
           freespace.getX(), freespace.getY() + used.getDepth(), freespace.getZ()
         );
-        let topRemainder = new Space(
+        const topRemainder = new Space(
           null,
           '',
           freespace.getWidth() - used.getWidth(), used.getDepth(), freespace.getHeight(),
@@ -547,13 +547,13 @@ export class LargestAreaFitFirstPackager extends Packager {
 
       // D
       if (freespace.getWidth() > used.getDepth()) {
-        let right = new Space(
+        const right = new Space(
           null,
           '',
           freespace.getWidth() - used.getDepth(), freespace.getDepth(), freespace.getHeight(),
           freespace.getX() + used.getDepth(), freespace.getY(), freespace.getZ()
         );
-        let rightRemainder = new Space(
+        const rightRemainder = new Space(
           null,
           '',
           used.getDepth(), freespace.getDepth() - used.getWidth(), freespace.getHeight(),
@@ -566,13 +566,13 @@ export class LargestAreaFitFirstPackager extends Packager {
 
       // C
       if (freespace.getDepth() > used.getWidth()) {
-        let top = new Space(
+        const top = new Space(
           null,
           '',
           freespace.getWidth(), freespace.getDepth() - used.getWidth(), freespace.getHeight(),
           freespace.getX(), freespace.getY() + used.getWidth(), freespace.getZ()
         );
-        let topRemainder = new Space(
+        const topRemainder = new Space(
           null,
           '',
           freespace.getWidth() - used.getDepth(), used.getWidth(), freespace.getHeight(),
@@ -619,7 +619,7 @@ export class LargestAreaFitFirstPackager extends Packager {
    */
 
   isBetter2D(a: Box, b: Box): number {
-    let compare = a.getVolume() - b.getVolume();
+    const compare = a.getVolume() - b.getVolume();
     if (compare != 0) {
       return compare;
     }
@@ -637,7 +637,7 @@ export class LargestAreaFitFirstPackager extends Packager {
    */
 
   isBetter3D(a: Box, b: Box, space: Space): number {
-    let compare = a.getVolume() - b.getVolume();
+    const compare = a.getVolume() - b.getVolume();
     if (compare != 0) {
       return compare;
     }
@@ -663,7 +663,7 @@ export class LargestAreaFitFirstPackager extends Packager {
         continue;
       }
 
-      let box = this.getBestBoxForSpace(containerProducts, space, freeWeight);
+      const box = this.getBestBoxForSpace(containerProducts, space, freeWeight);
       if (box == null) {
         continue;
       }

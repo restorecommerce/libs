@@ -1,0 +1,14 @@
+{
+    "extends": "../../node_modules/@restorecommerce/dev/tsconfig.json",
+    "compilerOptions": {
+      "outDir": "./lib",
+      "types": ["node", "jest"],
+      "resolveJsonModule": true
+    },
+    "exclude": [
+      "node_modules",
+      "lib",
+      "doc"
+    ]
+  }
+  

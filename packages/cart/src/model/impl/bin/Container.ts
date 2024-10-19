@@ -35,21 +35,21 @@ export class Container extends Box {
    * @return list of containers in all 6 rotations.
    */
   rotations(): Container[] {
-    let result: Container[] = [];
+    const result: Container[] = [];
     let box = this.clone();
-    let square0 = box.isSquare2D();
+    const square0 = box.isSquare2D();
 
     result.push(box);
 
     if (!box.isSquare3D()) {
 
       box = box.clone().rotate3D();
-      let square1 = box.isSquare2D();
+      const square1 = box.isSquare2D();
 
       result.push(box);
 
       box = box.clone().rotate3D();
-      let square2 = box.isSquare2D();
+      const square2 = box.isSquare2D();
 
       result.push(box);
 
@@ -114,7 +114,7 @@ export class Container extends Box {
   }
 
   addLevel(): Level {
-    let level = new Level();
+    const level = new Level();
     this.add(level);
     return level;
   }
@@ -130,7 +130,7 @@ export class Container extends Box {
     if (this.levels.length == 0) {
       return this;
     }
-    let remainder = this.height - this.getStackHeight();
+    const remainder = this.height - this.getStackHeight();
     if (remainder < 0) {
       throw new Error('Remaining free space is negative at ' + remainder + ' for ' + this);
     }
@@ -138,7 +138,7 @@ export class Container extends Box {
   }
 
   getFreeWeight(): number {
-    let remainder = this.weight - this.getStackWeight();
+    const remainder = this.weight - this.getStackWeight();
     if (remainder < 0) {
       throw new Error('Remaining weight is negative at ' + remainder);
     }
@@ -216,7 +216,7 @@ export class Container extends Box {
   }
 
   removeLevel(index: number) {
-    let level = this.levels.splice(index, 1)[0];
+    const level = this.levels.splice(index, 1)[0];
     if (index != this.levels.length) {
       this.stackHeight -= level.getHeight();
       this.stackWeight -= level.getWeight();
@@ -243,7 +243,7 @@ export class Container extends Box {
     if (count == limit) {
       // see if we can keep the last level
       // if so there must be no free space in it
-      let level = this.levels[i];
+      const level = this.levels[i];
 
       let v = (this.volume / this.height) * level.getHeight();
       for (const p of level) {

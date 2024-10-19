@@ -118,7 +118,7 @@ export function createIdentityServiceAdapterClass(tokenService: TokenServiceClie
       }
     }
 
-    async revokeByGrantId(grantId: any) { // eslint-disable-line class-methods-use-this
+    async revokeByGrantId(grantId: any) {  
       const revokeReq = {
         grant_id: grantId,
         subject: { token: grantId }

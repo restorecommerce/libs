@@ -1,7 +1,7 @@
 const tripleStache = /\{\{\{\s*(.*?)\s*\}\}\}/g;
 const doubleStache = /\{\{\s*(.*?)\s*\}\}/g;
 
-let localizationHandlebarsExtension = (hbs: any, opts: any) => {
+const localizationHandlebarsExtension = (hbs: any, opts: any) => {
   hbs.registerHelper('t', (key: string, hash = {} as any) => {
     const locale = opts.locale;
     let result = opts.texts[key] || key;

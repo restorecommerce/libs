@@ -2,7 +2,7 @@ import { Writer, Reader } from 'protobufjs';
 
 type Builtin =
   | Date
-  | Function
+  | object
   | Uint8Array
   | string
   | number
@@ -15,7 +15,7 @@ export type DeepPartial<T> = T extends Builtin
     ? Array<DeepPartial<U>>
     : T extends ReadonlyArray<infer U>
       ? ReadonlyArray<DeepPartial<U>>
-      : T extends {}
+      : T extends object
         ? { [K in keyof T]?: DeepPartial<T[K]> }
         : Partial<T>;
 

@@ -15,7 +15,7 @@
     "commerce"
   ],
   "dependencies": {
-    "nodemailer": "^6.9.14",
+    "nodemailer": "^6.9.15",
     "nodemailer-html-to-text": "^3.2.0",
     "nodemailer-mandrill-transport": "^1.2.0",
     "nodemailer-stub-transport": "^1.1.0",
@@ -25,8 +25,8 @@
   "devDependencies": {
     "@restorecommerce/dev": "^0.0.12",
     "@types/mocha": "^10.0.4",
-    "@types/node": "^22.7.7",
-    "@types/nodemailer": "^6.4.15",
+    "@types/node": "^22.7.9",
+    "@types/nodemailer": "^6.4.16",
     "@types/nodemailer-html-to-text": "^3.1.3",
     "@types/nodemailer-stub-transport": "^1.1.8",
     "assert": "^2.1.0",

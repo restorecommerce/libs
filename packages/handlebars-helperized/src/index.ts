@@ -6,7 +6,7 @@ import { localizationHandlebarsExtension } from './helpers/l10n-helpers.js';
 import { numbroHandlebarsExtension } from './helpers/numbro-helpers.js';
 import { momentHandlebarsExtension } from './helpers/moment-helpers.js';
 import { customHandlebarsExtensions } from './helpers/custom-helpers.js';
-// @ts-ignore
+// @ts-expect-error no types
 import handlebarsLayouts from 'handlebars-layouts';
 
 const defaultOpts = {
@@ -30,7 +30,7 @@ const init = async (options: object | undefined, customHelpersList: any): Promis
     // require(filePath)(hbs, opts);
 
     // check for double default
-    let fileImport = await import(filePath);
+    const fileImport = await import(filePath);
     if (fileImport?.default?.default) {
       await new Promise((r) => (async () => fileImport.default.default(hbs, opts))().catch(err => {
         console.log(`Error importing file ${filePath}`, { code: err.code, message: err.message, stack: err.stack });
@@ -83,7 +83,7 @@ class Renderer {
   @param {Object} context: required data for the placeholders
   @return {String} html
   */
-  render(context: Object) {
+  render(context: object) {
     let html = this.template(context);
 
     if (this.style) {

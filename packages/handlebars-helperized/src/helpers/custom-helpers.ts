@@ -1,5 +1,5 @@
 
-let customHandlebarsExtensions = (hbs: any, opts: any) => {
+const customHandlebarsExtensions = (hbs: any, opts: any) => {
   // increment a given numerical string by one
   hbs.registerHelper('increment', (value: any, hash: any) => {
     const toIncrement = parseInt(value, 10);

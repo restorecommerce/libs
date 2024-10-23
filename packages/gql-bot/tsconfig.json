@@ -1,29 +1,6 @@
 {
-  "compilerOptions": {
-    "target": "es6",
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "declaration": true,
-    // "strict": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "noUnusedLocals": false,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "sourceMap": true,
-    "outDir": "lib",
-    "lib": [
-      "es2020.promise",
-      "dom"
-    ]
-  },
+  "extends": "./tsconfig-base.json",
   "include": [
     "./src/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "lib",
-    "doc"
   ]
 }

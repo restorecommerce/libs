@@ -164,7 +164,7 @@ export const DefaultMetaDataInjector = async <T extends ResourceList>(
   return request;
 };
 
-export function access_controlled_service<T extends { new(...args: any):  }>(baseService: T): any {
+export function access_controlled_service<T extends { new(...args: any) }>(baseService: T): any {
   return class extends baseService implements AccessControlledService {
     public readonly __userService: Client<UserServiceDefinition>;
     public readonly __acsDatabaseProvider: DatabaseProvider;

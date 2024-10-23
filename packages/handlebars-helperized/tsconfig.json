@@ -1,17 +1,6 @@
 {
   "extends": "./tsconfig-base.json",
-  "compilerOptions": {
-    "outDir": "./lib",
-    "types": [
-      "./src/index.d.ts"
-    ]
-  },
   "include": [
     "./src/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "lib",
-    "doc"
   ]
 }

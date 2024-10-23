@@ -9,7 +9,7 @@ import { createHttpLink, HttpLink } from 'apollo-link-http';
 import * as https from 'https';
 import { processResponse } from './utils';
 
-const _checkVariableMutation = (mutation: string): Boolean => {
+const _checkVariableMutation = (mutation: string): boolean => {
   const mutationName = mutation.slice(mutation.indexOf(' '),
     mutation.indexOf('($'));
   if (mutationName.indexOf('$') > 0) {
@@ -24,7 +24,7 @@ const _replaceInlineVars = (mutation: string, args: any): string => {
     return mutation.replace(/\${(\w+)}/g, (_, v) => args[v]);
 };
 
-const _createQueryVariables = (inputVarName: string, queryVarKey: string, varValue: any): Object => {
+const _createQueryVariables = (inputVarName: string, queryVarKey: string, varValue: any): object => {
   if (queryVarKey) {
     return {
       [inputVarName]: {
@@ -189,7 +189,7 @@ export class Client {
       };
     }
 
-    let apolloLink = createHttpLink(apolloLinkOpts);
+    const apolloLink = createHttpLink(apolloLinkOpts);
 
     const apolloCache = new InMemoryCache();
     const apolloClient = new ApolloClient({

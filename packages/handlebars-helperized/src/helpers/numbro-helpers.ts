@@ -1,12 +1,12 @@
-import numbro from 'numbro';
-// @ts-ignore
+import * as numbro from 'numbro';
+// @ts-expect-error no types
 import allLanguages from 'numbro/dist/languages.min.js';
 
 Object.values(allLanguages).forEach((data) => {
   numbro.registerLanguage(data);
 });
 
-let numbroHandlebarsExtension = (hbs: any, opts: any) => {
+const numbroHandlebarsExtension = (hbs: any, opts: any) => {
   const locale = opts.locale.replace('_', '-');
 
   // For numeric values without decimals

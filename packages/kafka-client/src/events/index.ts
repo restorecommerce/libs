@@ -9,7 +9,7 @@ import { Topic } from './provider/kafka';
  * A key, value map containing event providers.
  * Event providers are registered with the register function.
  */
-const eventProviders = {};
+const eventProviders: any = {};
 
 /**
  * Register a event provider.
@@ -18,7 +18,7 @@ const eventProviders = {};
  * @param  {constructor} provider Event provider constructor function
  */
 export const registerEventProvider = (name: string, provider: any): void => {
-  eventProviders[name] = provider;
+  eventProviders.name = provider;
 };
 
 registerEventProvider(kafka.Name, kafka.Kafka);
@@ -44,7 +44,7 @@ export class Events {
 
     const loggerCfg = this.config.logger;
     if (loggerCfg) {
-      loggerCfg.esTransformer = (msg) => {
+      loggerCfg.esTransformer = (msg: any) => {
         msg.fields = JSON.stringify(msg.fields);
         return msg;
       };
@@ -67,7 +67,7 @@ export class Events {
       this.logger.error('config does not have event provider name', this.config);
       throw new Error('config does not have event provider name');
     }
-    const Provider = eventProviders[providerName];
+    const Provider = eventProviders.providerName;
     if (_.isNil(Provider)) {
       throw new Error(`events provider ${providerName} is not registered`);
     }

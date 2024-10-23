@@ -1,6 +1,5 @@
 import winston from 'winston';
-
-const debug = require('debug')('@restorecommerce/koa-req-res-logger');
+import debug from 'debug';
 
 const getGraphQLData = (options: any, body: any) => {
   const line = {};
@@ -26,7 +25,7 @@ const reqResLogger = (options: any) => {
   const logger = opts.logger || winston;
 
   const koaReqResLogger = async (ctx: any, next: any) => {
-    debug('yield middleware: %s', koaReqResLogger.name);
+    debug('yield middleware: %s ' + koaReqResLogger.name);
 
     const start = Date.now();
     const reqLog = {

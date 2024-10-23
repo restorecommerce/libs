@@ -24,8 +24,8 @@ export class GraphQLProcessor {
   }
 
   async process(task: any, verbose = false, ignoreErrors = false, ignoreSelfSigned = false): Promise<any> {
-    let yamlStream = new YamlStreamReadTransformer();
-    let jobPath = task.path;
+    const yamlStream = new YamlStreamReadTransformer();
+    const jobPath = task.path;
     let data = false;
     const logColor = stringToChalk(task.name);
     switch (task.operation) {
@@ -47,7 +47,7 @@ export class GraphQLProcessor {
             let counter = 0;
             let batchCounter = 0;
             let docArr: any[] = [];
-            let resultArr: any[] = [];
+            const resultArr: any[] = [];
 
             // Here we read from the readable stream each yaml document parsed
             // as an object, and if we have batching enabled we first batch this

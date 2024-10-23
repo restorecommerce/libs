@@ -20,7 +20,7 @@
     "sourceMap": true,
     "strict": true,
     "strictNullChecks": false,
-    "target": "ES2022"
+    "target": "ES2023"
   },
   "ts-node": {
     "experimentalResolver": true,

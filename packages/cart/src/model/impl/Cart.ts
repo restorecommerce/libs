@@ -197,7 +197,7 @@ export class Cart implements ICart {
     taxes.vat_standard.netPrice = new Decimal(0);
     taxes.vat_reduced.netPrice = new Decimal(0);
 
-    for (let item of items) {
+    for (const item of items) {
       taxes[item.taxType].netPrice = Decimal.add(taxes[item.taxType].netPrice, Decimal.mul(item.price, typeof item.quantity === 'undefined' ? 1 : item.quantity));
     }
 
@@ -224,7 +224,7 @@ export class Cart implements ICart {
             netPrice: new Decimal('0.00')
           };
 
-          for (let taxType in taxes) {
+          for (const taxType in taxes) {
             vatFree.netPrice = Decimal.add(vatFree.netPrice, taxes[taxType].netPrice);
           }
 
@@ -238,8 +238,8 @@ export class Cart implements ICart {
 
   getTotalNet(): Decimal {
     let sum = new Decimal(0);
-    for (let item of this._items) {
-      let itemNet = Decimal.mul(item.price.toString(), item.quantity.toString());
+    for (const item of this._items) {
+      const itemNet = Decimal.mul(item.price.toString(), item.quantity.toString());
       sum = Decimal.add(sum, itemNet);
     }
 
@@ -254,7 +254,7 @@ export class Cart implements ICart {
     const taxes = this.getTaxes(true);
 
     let sum = new Decimal(0);
-    for (let taxType in taxes) {
+    for (const taxType in taxes) {
       const itemGrand = Decimal.mul(taxes[taxType].netPrice.toString(), taxes[taxType].rate.toString());
       sum = Decimal.add(sum, itemGrand);
     }

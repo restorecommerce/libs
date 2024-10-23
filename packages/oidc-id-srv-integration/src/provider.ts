@@ -84,8 +84,7 @@ class OIDCProvider {
 
   public validateIdToken = async (clientId: string, idToken: string) => {
     const client = await this.provider.Client.find(clientId);
-    // @ts-ignore TS2339 validate sould be marked as static
-    return await this.provider.IdToken.validate(idToken, client);
+    return await this.provider.IdToken.validate(idToken, client as any);
   };
 
   public getValidAccessToken = async (ctx: Koa.Context) => {

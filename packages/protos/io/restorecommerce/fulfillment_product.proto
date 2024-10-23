@@ -24,7 +24,7 @@ service FulfillmentProductService {
   rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (FulfillmentProductListResponse) {
     option (io.restorecommerce.options.is_query) = true;
   };
-  rpc Find (PackingSolutionQueryList) returns (PackingSolutionListResponse) {
+  rpc Find (FulfillmentSolutionQueryList) returns (FulfillmentSolutionListResponse) {
     option (io.restorecommerce.options.is_query) = true;
   };
   rpc Create (FulfillmentProductList) returns (FulfillmentProductListResponse);
@@ -34,11 +34,12 @@ service FulfillmentProductService {
 }
 
 message Preferences {
-  repeated io.restorecommerce.attribute.Attribute couriers = 1; // ID, name or type
-  repeated io.restorecommerce.attribute.Attribute options = 2;
+  optional bool partial_filfillment_allowed = 1;
+  repeated string couriers = 2; // ID of courier
+  repeated io.restorecommerce.attribute.Attribute options = 3; // Courier specific options such as C02 neutral delivery etc.
 }
 
-message PackingSolutionQuery {
+message FulfillmentSolutionQuery {
   optional string customer_id = 1 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.customer.Customer",
@@ -64,8 +65,8 @@ message PackingSolutionQuery {
   optional io.restorecommerce.reference.Reference reference = 7;
 }
 
-message PackingSolutionQueryList {
-  repeated PackingSolutionQuery items = 1;
+message FulfillmentSolutionQueryList {
+  repeated FulfillmentSolutionQuery items = 1;
   optional uint32 total_count = 2;
   optional io.restorecommerce.auth.Subject subject = 3;
 }
@@ -126,7 +127,7 @@ message FulfillmentProductListResponse {
   optional io.restorecommerce.status.OperationStatus operation_status = 3;
 }
 
-message PackingSolution {
+message FulfillmentSolution {
   repeated io.restorecommerce.amount.Amount amounts = 1;
   optional double compactness = 2;
   optional double homogeneity = 3;
@@ -134,14 +135,14 @@ message PackingSolution {
   repeated io.restorecommerce.fulfillment.Parcel parcels = 5;
 }
 
-message PackingSolutionResponse {
+message FulfillmentSolutionResponse {
   optional io.restorecommerce.reference.Reference reference = 1;
-  repeated PackingSolution solutions = 2;
+  repeated FulfillmentSolution solutions = 2;
   optional io.restorecommerce.status.Status status = 3;
 }
 
-message PackingSolutionListResponse {
-  repeated PackingSolutionResponse items = 1;
+message FulfillmentSolutionListResponse {
+  repeated FulfillmentSolutionResponse items = 1;
   optional uint32 total_count = 2;
   optional io.restorecommerce.status.OperationStatus operation_status = 3;
 }

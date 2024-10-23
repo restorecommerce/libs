@@ -16,6 +16,7 @@ export class LocalSerializer implements ISerializer {
     try {
       return JSON.parse(str);
     } catch (e) {
+      console.log('Failed to parse', e);
     }
 
     return undefined;
@@ -42,8 +43,8 @@ export class LocalSerializer implements ISerializer {
     } else {
       if ('_items' in data) {
         // Make sure all numerical values are not strings
-        for (let item of data._items) {
-          for (let key of numericItemKeys) {
+        for (const item of data._items) {
+          for (const key of numericItemKeys) {
             if (key in item && typeof(item[key]) != 'number') {
               item[key] = parseFloat(item[key].toString());
             }

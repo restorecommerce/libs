@@ -6,7 +6,7 @@ coverage/
 .vscode
 .project
 .settings
-lib/*/**
+lib/*
 *.js.map
 *.js
 *.d.ts

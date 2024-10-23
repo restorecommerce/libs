@@ -1,8 +1,14 @@
 {
-  "extends": "../../tsconfig-base.json",
-  "compilerOptions": {
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "sourceMap": true
+    "extends": "../../node_modules/@restorecommerce/dev/tsconfig.json",
+    "compilerOptions": {
+      "outDir": "./lib",
+      "types": ["node", "jest"],
+      "resolveJsonModule": true
+    },
+    "exclude": [
+      "node_modules",
+      "lib",
+      "doc"
+    ]
   }
-}
+  

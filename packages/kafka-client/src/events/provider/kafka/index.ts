@@ -113,7 +113,7 @@ export class Topic {
    * @param  {string}  eventName [description]
    * @return {Boolean}           True when listeners exist, false if not.
    */
-  hasListeners(eventName: string): Boolean {
+  hasListeners(eventName: string): boolean {
     if (_.isNil(eventName)) {
       throw new Error('missing argument eventName');
     }
@@ -209,12 +209,12 @@ export class Topic {
       // need to unsubcribe all eventNames and then resubcribe at once
       const eventNamesList = _.clone(eventNames);
       // unsubscribe all events on consumer
-      for (let eventName of eventNamesList) {
+      for (const eventName of eventNamesList) {
         await this.$unsubscribe(eventName);
         this.provider.logger.info(`Unsubscribed event ${eventName}`);
       }
       // subscribe all events on consumer
-      for (let eventName of eventNamesList) {
+      for (const eventName of eventNamesList) {
         await this.$subscribe(eventName, offset);
         this.provider.logger.info(`Subscribed event ${eventName}`);
       }
@@ -273,7 +273,7 @@ export class Topic {
         this.filterWaitQueue(offset);
         this.currentOffset = offset;
         this.commit();
-      } catch (error) {
+      } catch (error: any) {
         // do not commit offset
         logger.error(`topic ${context.topic} error`, { code: error.code, message: error.message, stack: error.stack });
         throw error;
@@ -475,7 +475,8 @@ export class Topic {
    * @param opts
    */
   async on(eventName: string, listener: any, opts: SubscriptionOptions = {}): Promise<void> {
-    let { startingOffset, queue, forceOffset } = opts;
+    let { startingOffset } = opts;
+    const { queue, forceOffset } = opts;
     if (!(this.subscribed.indexOf(eventName) > -1)) {
       if (_.isNil(startingOffset) || (this.config.latestOffset && !forceOffset)) {
         // override the startingOffset with the latestOffset from Kafka
@@ -493,7 +494,7 @@ export class Topic {
    * @param  {string} eventName Event name
    * @param  {Object} message   Message
    */
-  async emit(eventName: string, message: Object): Promise<void> {
+  async emit(eventName: string, message: object): Promise<void> {
     await this.provider.$send(this.name, eventName, message);
   }
 }
@@ -631,7 +632,7 @@ export class Kafka {
    * @param  {string} messageObject
    * @return {Object} buffer
    */
-  private static encodeObject(msg: Object, messageObject: string): Uint8Array {
+  private static encodeObject(msg: object, messageObject: string): Uint8Array {
     return encodeMessage(msg, messageObject);
   }
 
@@ -677,7 +678,7 @@ export class Kafka {
           partition: 0
         });
       }
-      for (let msg of messages) {
+      for (const msg of messages) {
         if (this.config && this.config[eventName].omittedFields) {
           const keys = this.config[eventName].omittedFields;
           this.omitFields(keys, msg, this.config[eventName].enableLogging);
@@ -689,7 +690,7 @@ export class Kafka {
           topic: topicName,
           messages: values
         }).then((data) => {
-          for (let msg of messages) {
+          for (const msg of messages) {
             this.logger.debug(`Sent event ${eventName} to topic ${topicName}`, msg);
           }
           resolve(data);
@@ -711,13 +712,13 @@ export class Kafka {
     } else {
       msgs = msg;
     }
-    for (let key of keys) {
-      for (let msg of msgs) {
+    for (const key of keys) {
+      for (const msg of msgs) {
         if (typeof key === 'string') {
           if (enableLogging && msg[key] && msg[key].value) {
             msg[key] = msg[key].value.toString();
           } else if (enableLogging && msg[key] && _.isArray(msg[key])) {
-            for (let eachMsg of msg[key]) {
+            for (const eachMsg of msg[key]) {
               msg[key] = eachMsg.value.toString();
             }
           } else {
@@ -755,7 +756,7 @@ export class Kafka {
   async stop(): Promise<any> {
     this.logger.warn('Stopping Kafka. Ignore any following connection errors');
 
-    const errors = [];
+    const errors: any[] = [];
     if (this.producerConnected) {
       await this.producer.disconnect().catch(err => {
         this.logger.warn('Error occurred stopping Kafka producer:', err);

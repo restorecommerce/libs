@@ -45,7 +45,7 @@ export class Topic {
    * @param  {string} messageObject
    * @return {Object} buffer
    */
-  async encodeObject(msg: Object, messageObject: string): Promise<any> {
+  async encodeObject(msg: object, messageObject: string): Promise<any> {
     return msg;
   }
 

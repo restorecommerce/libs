@@ -1,20 +1,6 @@
 {
-  "compilerOptions": {
-    "target": "es6",
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "outDir": "lib",
-    "skipLibCheck": true,
-    "sourceMap": true
-  },
+  "extends": "./tsconfig-base.json",
   "include": [
-     "./src/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "lib"
+    "./src/**/*.ts"
   ]
 }

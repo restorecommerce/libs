@@ -1,6 +1,6 @@
 import moment from 'moment-timezone';
 
-let  momentHandlebarsExtension = (hbs: any, opts: any) => {
+const  momentHandlebarsExtension = (hbs: any, opts: any) => {
   // Output point in time relative to current point in time
   // for example: '1h ago'
   hbs.registerHelper('ago', (value: any, options: any) => {
@@ -56,7 +56,7 @@ let  momentHandlebarsExtension = (hbs: any, opts: any) => {
   hbs.registerHelper('duf', (value: any, options: any) => {
     const format = options.hash.format || '';
     const dur: any = moment.duration(value);
-    // eslint-disable-next-line
+     
     return moment(dur._data).format(format);
   });
 };

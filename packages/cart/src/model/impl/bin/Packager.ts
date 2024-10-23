@@ -45,13 +45,13 @@ export abstract class Packager {
 
     for (const container of containers) {
       // volume
-      let boxVolume = container.getVolume();
+      const boxVolume = container.getVolume();
       if (boxVolume > maxVolume) {
         maxVolume = boxVolume;
       }
 
       // weight
-      let boxWeight = container.getWeight();
+      const boxWeight = container.getWeight();
       if (boxWeight > maxWeight) {
         maxWeight = boxWeight;
       }
@@ -73,11 +73,11 @@ export abstract class Packager {
       return null;
     }
 
-    let pack = this.adapter(boxes, containers);
+    const pack = this.adapter(boxes, containers);
 
     if (!this.binarySearch || containers.length <= 2) {
       for (let i = 0; i < containers.length; i++) {
-        let result = pack.attempt(i);
+        const result = pack.attempt(i);
         if (result == null) {
           return null; // timeout
         }
@@ -89,24 +89,24 @@ export abstract class Packager {
     } else {
       // perform a binary search among the available containers
       // the list is ranked from most desirable to least.
-      let results: PackResult[] = [];
-      let checked: boolean[] = [];
+      const results: PackResult[] = [];
+      const checked: boolean[] = [];
 
-      let containerIndexes: number[] = [];
+      const containerIndexes: number[] = [];
       for (let i = 0; i < containers.length; i++) {
         containerIndexes.push(i);
       }
 
-      let iterator = new BinarySearchIterator(0, 0);
+      const iterator = new BinarySearchIterator(0, 0);
 
       do {
         iterator.reset(containerIndexes.length - 1, 0);
 
         do {
-          let next = iterator.next();
-          let mid = containerIndexes[next];
+          const next = iterator.next();
+          const mid = containerIndexes[next];
 
-          let result = pack.attempt(mid);
+          const result = pack.attempt(mid);
           if (result == null) {
             return null; // timeout
           }
@@ -122,7 +122,7 @@ export abstract class Packager {
 
         // halt when have a result, and checked all containers at the lower indexes
         for (let i = 0; i < containerIndexes.length; i++) {
-          let integer = containerIndexes[i];
+          const integer = containerIndexes[i];
           if (results[integer] != null) {
             // remove end items; we already have a better match
             while (containerIndexes.length > i) {
@@ -156,21 +156,21 @@ export abstract class Packager {
    * @return index of container if match, -1 if not
    */
   public packList(boxes: BoxItem[], limit: number): Container[] {
-    let containers = this.filterByVolumeAndWeight(Packager.toBoxes(boxes, true), [...this.containers], limit);
+    const containers = this.filterByVolumeAndWeight(Packager.toBoxes(boxes, true), [...this.containers], limit);
     if (containers.length == 0) {
       return null;
     }
 
-    let pack = this.adapter(boxes, containers);
+    const pack = this.adapter(boxes, containers);
 
-    let containerPackResults: Container[] = [];
+    const containerPackResults: Container[] = [];
 
     // binary search: not as simple as in the single-container use-case; discarding containers would need some kind
     // of criteria which could be trivially calculated, perhaps on volume.
     do {
       let best = null;
       for (let i = 0; i < containers.length; i++) {
-        let result = pack.attempt(i);
+        const result = pack.attempt(i);
         if (result == null) {
           return null; // timeout
         }
@@ -191,7 +191,7 @@ export abstract class Packager {
         return null;
       }
 
-      let end = !pack.hasMore(best);
+      const end = !pack.hasMore(best);
 
       containerPackResults.push(pack.accepted(best));
 
@@ -221,7 +221,7 @@ export abstract class Packager {
 
     for (const box of boxes) {
       // volume
-      let boxVolume = box.getVolume();
+      const boxVolume = box.getVolume();
       volume += boxVolume;
 
       if (boxVolume < minVolume) {
@@ -229,7 +229,7 @@ export abstract class Packager {
       }
 
       // weight
-      let boxWeight = box.getWeight();
+      const boxWeight = box.getWeight();
       weight += boxWeight;
 
       if (boxWeight < minWeight) {
@@ -242,13 +242,13 @@ export abstract class Packager {
 
     for (const container of containers) {
       // volume
-      let boxVolume = container.getVolume();
+      const boxVolume = container.getVolume();
       if (boxVolume > maxVolume) {
         maxVolume = boxVolume;
       }
 
       // weight
-      let boxWeight = container.getWeight();
+      const boxWeight = container.getWeight();
       if (boxWeight > maxWeight) {
         maxWeight = boxWeight;
       }
@@ -259,7 +259,7 @@ export abstract class Packager {
       return [];
     }
 
-    let list: Container[] = [];
+    const list: Container[] = [];
     for (const container of containers) {
       if (container.getVolume() < minVolume || container.getWeight() < minWeight) {
         // this box cannot even fit a single box
@@ -289,10 +289,10 @@ export abstract class Packager {
 
 
   private static toBoxes(boxItems: BoxItem[], clone: boolean): Box[] {
-    let boxClones: Box[] = [];
+    const boxClones: Box[] = [];
 
     for (const item of boxItems) {
-      let box = item.getBox();
+      const box = item.getBox();
       boxClones.push(box);
       for (let i = 1; i < item.getCount(); i++) {
         boxClones.push(clone ? box : box.clone());

@@ -199,7 +199,7 @@ export const accessRequest = async (
         ctx,
         useCache
       );
-    } catch (err) {
+    } catch (err: any) {
       logger.error(
         'Error calling whatIsAllowed operation',
         {
@@ -274,7 +274,7 @@ export const accessRequest = async (
     // authorization
     try {
       decisionResponse = await isAllowedRequest(subClone as Subject, resource, action, ctx, useCache);
-    } catch (err) {
+    } catch (err: any) {
       logger.error('Error calling isAllowed operation', { code: err.code, message: err.message, stack: err.stack });
       return { decision: Response_Decision.DENY, operation_status: generateOperationStatus(err.code, err.message) };
     }
@@ -334,7 +334,7 @@ export const isAllowed = async (request: Request, authZ: ACSAuthZ): Promise<Deci
       obligations: mapResourceURNObligationProperties(isAllowedResponse.obligations),
       operation_status: isAllowedResponse.operation_status
     };
-  } catch (err) {
+  } catch (err: any) {
     logger.error('Error invoking acs-srv isAllowed method', { code: err.code, message: err.message, stack: err.stack });
     return { decision: Response_Decision.DENY, operation_status: generateOperationStatus(err.code, err.message) };
   }
@@ -357,7 +357,7 @@ export const whatIsAllowed = async (request: Request, authZ: ACSAuthZ): Promise<
       ...whatIsAllowedResponse
     } as any; // TODO Decision?
     response.obligations = mapResourceURNObligationProperties(whatIsAllowedResponse.obligations);
-  } catch (err) {
+  } catch (err: any) {
     logger.error('Error invoking acs-srv whatIsAllowed method', { code: err.code, message: err.message, stack: err.stack });
     return {
       decision: Response_Decision.DENY,

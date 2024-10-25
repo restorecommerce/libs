@@ -1,5 +1,5 @@
 import lodash from 'lodash';
-import deepdash from 'deepdash';
+import deepdash from 'deepdash-es';
 export const _ = deepdash(lodash);
 import {
   PolicySetRQ, PolicySetRQResponse, AttributeTarget, HierarchicalScope,
@@ -168,8 +168,8 @@ const buildQueryFromTarget = (
   effect: Effect,
   userTotalScope: string[],
   urns: any,
-  scopingUpdated,
-  reqResources,
+  scopingUpdated: any,
+  reqResources: any,
   condition?: string,
   reqSubject?: DeepPartial<Subject>,
   database?: string
@@ -245,7 +245,7 @@ const buildQueryFromTarget = (
       else {
         return;
       }
-    } catch (err) {
+    } catch (err: any) {
       logger.error('Error caught evaluating condition:', { condition });
       logger.error('Error', { code: err.code, message: err.message, stack: err.stack });
       return;
@@ -403,7 +403,7 @@ export const buildFilterPermissions = async (
 
         let scopingUpdated = false;
         for (const rule of policy?.rules || []) {
-          const reducedUserScope = [];
+          const reducedUserScope: string[] = [];
           if (rule?.target?.subjects) {
             const userSubjectMatched = checkSubjectMatch(subject, rule.target.subjects, reducedUserScope);
             if (!userSubjectMatched) {
@@ -478,7 +478,7 @@ export const buildFilterPermissions = async (
       if (policy?.scope?.custom_query && policy?.scope?.custom_arguments?.instance?.length > 0) {
         let customQueryExist = false;
         if (query['custom_queries']?.length > 0) {
-          customQueryExist = query['custom_queries'].some((obj) => obj === policy.scope.custom_query);
+          customQueryExist = query['custom_queries'].some((obj: any) => obj === policy.scope.custom_query);
         }
         // policy.scope.custom_query -> filterByOwnerShip does not exist or is a different AQL query
         if (!customQueryExist) {
@@ -489,12 +489,12 @@ export const buildFilterPermissions = async (
           query['custom_arguments'] = [];
         }
 
-        const customArgEntityExist = query['custom_arguments']?.find((obj) => obj?.entity === policy?.scope?.custom_arguments?.entity);
+        const customArgEntityExist = query['custom_arguments']?.find((obj: any) => obj?.entity === policy?.scope?.custom_arguments?.entity);
         if (!customArgEntityExist) {
           query['custom_arguments']?.push(policy?.scope?.custom_arguments);
         } else {
           // same entity already exists, update instances on this object
-          query['custom_arguments']?.forEach((obj) => {
+          query['custom_arguments']?.forEach((obj: any) => {
             if (obj?.entity === policy?.scope?.custom_arguments?.entity) {
               obj?.instance?.push(...policy?.scope?.custom_arguments?.instance || []);
             }
@@ -516,7 +516,7 @@ export const buildFilterPermissions = async (
         query.filters.operator = policy.filters.operator;
       }
     }
-    if (policy.field) {
+    if (policy.fields) {
       if (!query['fields']) {
         query['fields'] = policy.fields;
       } else {

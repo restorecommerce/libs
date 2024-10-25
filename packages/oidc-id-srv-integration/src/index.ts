@@ -5,9 +5,9 @@ import {
   findAccountFunc,
   authenticateFunc,
   afterPasswordGrantHookFunc,
-} from './interfaces';
+} from './interfaces.js';
 
-import { OIDCProvider } from './provider';
+import { OIDCProvider } from './provider.js';
 
 export {
   Config,

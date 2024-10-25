@@ -225,7 +225,7 @@ export class UnAuthZ implements IAuthZ {
         obligations: mapResourceURNObligationProperties(isAllowed.obligations),
         operation_status: isAllowed.operation_status
       };
-    } catch (err) {
+    } catch (err: any) {
       logger.error('Error invoking access-control-srv isAllowed operation', { code: err.code, message: err.message, stack: err.stack });
       if (!err.code) {
         err.code = 500;
@@ -275,7 +275,7 @@ export class UnAuthZ implements IAuthZ {
         ...whatIsAllowed,
         obligations: mapResourceURNObligationProperties(whatIsAllowed.obligations)
       } as any; // TODO Decision?
-    } catch (err) {
+    } catch (err: any) {
       logger.error('Error invoking access-control-srv whatIsAllowed operation', { code: err.code, message: err.message, stack: err.stack });
       if (!err.code) {
         err.code = 500;
@@ -350,7 +350,7 @@ export class ACSAuthZ implements IAuthZ {
         obligations: mapResourceURNObligationProperties(isAllowed?.obligations),
         operation_status: isAllowed?.operation_status
       };
-    } catch (err) {
+    } catch (err: any) {
       logger.error('Error invoking access-control-srv isAllowed operation', { code: err.code, message: err.message, stack: err.stack });
       if (!err.code) {
         err.code = 500;
@@ -405,7 +405,7 @@ export class ACSAuthZ implements IAuthZ {
         ...whatIsAllowed,
         obligations: mapResourceURNObligationProperties(whatIsAllowed.obligations)
       } as any; // TODO Decision?
-    } catch (err) {
+    } catch (err: any) {
       logger.error('Error invoking access-control-srv whatIsAllowed operation', { code: err.code, message: err.message, stack: err.stack });
       if (!err.code) {
         err.code = 500;

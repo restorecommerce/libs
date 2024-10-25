@@ -3,7 +3,7 @@ import { defaults } from 'lodash-es';
 // the basic building block is the handlebars rendering engine
 import hbs from 'handlebars';
 import { localizationHandlebarsExtension } from './helpers/l10n-helpers.js';
-import { numbroHandlebarsExtension } from './helpers/numbro-helpers.js';
+import { numberHandlebarsExtension } from './helpers/number-helpers.js';
 import { momentHandlebarsExtension } from './helpers/moment-helpers.js';
 import { customHandlebarsExtensions } from './helpers/custom-helpers.js';
 // @ts-expect-error no types
@@ -20,7 +20,7 @@ const init = async (options: object | undefined, customHelpersList: any): Promis
   const opts = defaults(options, defaultOpts);
   // more functionality directly added via custom plugins from ./lib
   localizationHandlebarsExtension(hbs, opts); // localization
-  numbroHandlebarsExtension(hbs, opts); // numbers & currencies
+  numberHandlebarsExtension(hbs, opts); // numbers & currencies
   momentHandlebarsExtension(hbs, opts); // dates, times & durations
   customHandlebarsExtensions(hbs, opts); // everything else
 

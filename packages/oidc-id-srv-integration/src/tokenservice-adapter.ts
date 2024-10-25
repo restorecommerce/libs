@@ -1,8 +1,8 @@
 import { AdapterConstructor, Adapter, AdapterPayload } from 'oidc-provider';
 import { RedisClientType } from 'redis';
-import { cfg } from './config';
+import { cfg } from './config.js';
 import * as _ from 'lodash';
-import { TokenServiceClient } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/token';
+import { TokenServiceClient } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/token.js';
 
 const unmarshallProtobufAny = (msg: any): any => JSON.parse(msg.value.toString());
 const marshallProtobufAny = (msg: any): any => {
@@ -118,7 +118,7 @@ export function createIdentityServiceAdapterClass(tokenService: TokenServiceClie
       }
     }
 
-    async revokeByGrantId(grantId: any) {  
+    async revokeByGrantId(grantId: any) {
       const revokeReq = {
         grant_id: grantId,
         subject: { token: grantId }

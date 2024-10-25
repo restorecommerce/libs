@@ -4,7 +4,7 @@ import * as fs from 'fs';
 import gql from 'graphql-tag';
 import { ApolloClient } from 'apollo-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
-import fetch from 'node-fetch'; // required for apollo-link-http
+// import fetch from 'node-fetch'; // required for apollo-link-http
 import { createHttpLink, HttpLink } from 'apollo-link-http';
 import * as https from 'https';
 import { processResponse } from './utils';
@@ -158,9 +158,9 @@ export class Client {
       // (i.e. if the quote is preceded by a backslash)
       // make sure to also match line/expression start
       // and keep the symbol preceding the quote
-      mutation = mutation.replace(/(^|[^\\])\"/g, '$1');
+      mutation = mutation.replace(/(^|[^\\])"/g, '$1');
       // afterwards, replace escaped quotes with regular ones
-      mutation = mutation.replace(/\\\"/g, '\"');
+      mutation = mutation.replace(/\\"/g, '"');
     }
 
     let variables;
@@ -170,7 +170,7 @@ export class Client {
       variables = _createQueryVariables(inputVarName, queryVarKey, resource_list);
     } else {
       // To remove double quotes from the keys in JSON data
-      resource_list = resource_list.replace(/\"([^(\")"]+)\":/g, '$1:');
+      resource_list = resource_list.replace(/"([^(")"]+)":/g, '$1:');
       mutation = _replaceInlineVars(mutation, { resource_list, apiKey });
     }
 

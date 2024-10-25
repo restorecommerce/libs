@@ -1,4 +1,4 @@
-import { cfg } from './config';
+import { cfg } from './config.js';
 import { createClient, RedisClientType } from 'redis';
 
 export const getRedisInstance = (dbIndex?: number): RedisClientType<any, any> => {

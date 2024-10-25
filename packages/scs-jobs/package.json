@@ -22,9 +22,9 @@
     "@restorecommerce/kafka-client": "^1.2.14",
     "@restorecommerce/logger": "^1.3.1",
     "@restorecommerce/rc-grpc-clients": "^5.1.36",
+    "bullmq": "^5.21.2",
     "eslint": "9.13.0",
     "eslint-plugin-prefer-arrow-functions": "^3.2.4",
-    "bullmq": "^5.7.15",
     "lodash": "^4.17.21",
     "redis": "^4.6.8"
   },

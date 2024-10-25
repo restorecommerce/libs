@@ -63,7 +63,7 @@ describe('The README examples', () => {
   });
 
   it('should pass the formatting example', async () => {
-    const tpl = '<p>You paid {{nfc price cs="$"}} on {{df date}}</p>';
+    const tpl = '<p>You paid {{nfc price cc="USD"}} on {{df date}}</p>';
     const renderer = new Renderer(tpl);
     await renderer.waitLoad();
     const ts = '03-19-2019 13:37:00';
@@ -76,7 +76,7 @@ describe('The README examples', () => {
   });
 
   it('should pass the formatting example directly from the template', async () => {
-    const tpl = '<p>You paid {{nfc price cs="$"}} on {{dff date format=\'YYYY-DD-MM HH:mm:ss\'}}</p>';
+    const tpl = '<p>You paid {{nfc price cc="USD"}} on {{dff date format=\'YYYY-DD-MM HH:mm:ss\'}}</p>';
     const renderer = new Renderer(tpl);
     await renderer.waitLoad();
     const ts = '2019-03-19 13:37:00';
@@ -86,18 +86,18 @@ describe('The README examples', () => {
   });
 
   it('should format with a custom timezone', async () => {
-    const tpl = '<p>You paid {{nfc price cs="€" csPos="postfix"}} on {{dff date format=\'YYYY-DD-MM HH:mm:ss\' timezone="Europe/Moscow"}}</p>';
+    const tpl = '<p>You paid {{nfc price cc="EUR"}} on {{dff date format=\'YYYY-DD-MM HH:mm:ss\' timezone="Europe/Moscow"}}</p>';
     const renderer = new Renderer(tpl);
     await renderer.waitLoad();
     const ts = '2019-03-19T10:46:43.246Z';
-    const result = renderer.render({ price: 1.99, date: ts });
+    const result = renderer.render({ price: 1.88, date: ts });
     // Moscow is 3 hours in advance of GMT
-    const expectedResult = '<p>You paid 1.99€ on 2019-19-03 13:46:43</p>';
+    const expectedResult = '<p>You paid €1.88 on 2019-19-03 13:46:43</p>';
     result.should.equal(expectedResult);
   });
 
   it('should pass the formatting example with german locale', async () => {
-    const tpl = '<p>You paid {{nfc price cs="€" csPos="postfix"}} on {{df date}}</p>';
+    const tpl = '<p>You paid {{nfc price cc="EUR"}} on {{df date}}</p>';
     const renderer = new Renderer(tpl, null, null, {locale: 'de_DE'});
     await renderer.waitLoad();
     const ts = '03-19-2019 13:37:00';
@@ -105,7 +105,7 @@ describe('The README examples', () => {
     const tz = moment.tz.guess();
     const yesterday = moment.parseZone(ts, format, tz);
     const result = renderer.render({price: 1.99, date: yesterday});
-    const expectedResult = '<p>You paid 1,99€ on 19.03.2019</p>';
+    const expectedResult = '<p>You paid 1,99 € on 19.03.2019</p>';
     result.should.equal(expectedResult);
   });
 });

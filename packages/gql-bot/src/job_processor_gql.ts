@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import * as _ from 'lodash';
 import * as fs from 'fs';
 import { Client } from './index';
@@ -32,13 +33,11 @@ export class GraphQLProcessor {
       case 'sync': {  //  synchronous operation
         return new Promise<any>((resolve, reject) => {
           try {
-            yamlStream.on('error', (err) => {
-              !ignoreErrors && reject(err);
-            });
+            yamlStream.on('error', (err) => !ignoreErrors && reject(err));
 
             const fileStream = fs.createReadStream(task.fullPath);
             fileStream.pipe(yamlStream);
-            let batchsize;
+            let batchsize: number;
             if (task.batchSize) {
               batchsize = task.batchSize;
               console.log(`[${logColor(task.name)}] Batch size:`, batchsize);

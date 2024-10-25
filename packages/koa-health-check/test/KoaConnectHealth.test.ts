@@ -1,4 +1,7 @@
-import { should } from 'chai';
+const chai = import('chai');
+
+const should = chai.should;
+
 import { HealthChecker, LivenessCheck, ShutdownCheck, StartupCheck } from '@cloudnative/health';
 import { HealthEndpoint, LivenessEndpoint, ReadinessEndpoint } from '../lib'
 import { mockContext } from './test-helper';

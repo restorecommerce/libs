@@ -27,7 +27,6 @@ interface MessageWithContext {
  * A Kafka topic.
  */
 export class Topic {
-
   name: string;
   emitter: EventEmitter;
   provider: Kafka;
@@ -38,7 +37,7 @@ export class Topic {
   config: any;
   // message sync throttling attributes
   asyncQueue: async.AsyncQueue<any>;
-  drainEvent: (context: MessageWithContext, done: (err) => void) => void;
+  drainEvent: (context: MessageWithContext, done: (err: any) => void) => void;
   // default process one message at at time
   asyncLimit = 1;
   manualOffsetCommit: boolean;
@@ -360,7 +359,7 @@ export class Topic {
    * under flow control
    */
   private drain(): void {
-    this.drainEvent = (context: MessageWithContext, done: (err) => void) => {
+    this.drainEvent = (context: MessageWithContext, done: (err: any) => void) => {
       this.$receive(context.message.key.toString(), context.message.value, context);
     };
     this.startToReceiveMessages();
@@ -435,7 +434,7 @@ export class Topic {
       // Commit the current offset
       await this.commitCurrentOffsets();
       this.provider.logger.verbose('Offset committed manually');
-    } catch (error) {
+    } catch (error: any) {
       this.provider.logger.error('Failed to commit offset manually', { code: error.code, message: error.message, stack: error.stack });
       throw error;
     }
@@ -505,7 +504,7 @@ export interface KafkaProviderConfig {
   groupId: string;
 }
 
-const toWinstonLogLevel = level => {
+const toWinstonLogLevel = (level: number) => {
   switch (level) {
     case logLevel.ERROR:
     case logLevel.NOTHING:
@@ -615,7 +614,7 @@ export class Kafka {
             );
           });
         }
-        catch (err) {
+        catch (err: any) {
           operation.retry(err);
           const attemptNo = (operation.attempts as () => number)();
           this.producer?.disconnect();
@@ -645,7 +644,7 @@ export class Kafka {
   decodeObject(config: any, eventName: string, msg: any): any {
     try {
       return decodeMessage(msg, config[eventName].messageObject);
-    } catch (err) {
+    } catch (err: any) {
       this.logger.error(`error on decoding message with event ${eventName}`, { errorCode: err.code, errorMessage: err.message, errorStack: err.stack });
     }
   }
@@ -660,7 +659,8 @@ export class Kafka {
    */
   async $send(topicName: string, eventName: string, message: any): Promise<any> {
     let messages = message;
-    const messageObject = this.config[eventName].messageObject;
+    const config: any = this.config;
+    const messageObject = config[eventName].messageObject;
     if (!_.isArray(message)) {
       messages = [message];
     }
@@ -679,9 +679,9 @@ export class Kafka {
         });
       }
       for (const msg of messages) {
-        if (this.config && this.config[eventName].omittedFields) {
-          const keys = this.config[eventName].omittedFields;
-          this.omitFields(keys, msg, this.config[eventName].enableLogging);
+        if (config && config[eventName].omittedFields) {
+          const keys = config[eventName].omittedFields;
+          this.omitFields(keys, msg, config[eventName].enableLogging);
         }
       }
       this.logger.debug(`Sending event ${eventName} to topic ${topicName}`, { messages });
@@ -699,7 +699,7 @@ export class Kafka {
           reject(err);
         });
       });
-    } catch (err) {
+    } catch (err: any) {
       this.logger.error(`error on sending event ${eventName} to topic ${topicName}`, { code: err.code, message: err.message, stack: err.stack });
       throw err;
     }

@@ -2,7 +2,7 @@ import * as assert from 'assert';
 import bodyParser from 'koa-bodyparser';
 import * as Router from 'koa-router';
 import Provider, { InteractionResults, AccountClaims } from 'oidc-provider';
-import { Config } from './interfaces';
+import { Config } from './interfaces.js';
 
 const debug = (obj: any) => JSON.stringify(obj);
 const body = bodyParser(); // todo
@@ -124,7 +124,7 @@ export const setupRouts = (provider: Provider, router: Router, config: Config) =
     assert.equal(name, 'consent');
 
     try {
-      const result = {
+      const result: InteractionResults = {
         consent: {
           rejectedScopes: [], // < uncomment and add rejections here
           rejectedClaims: [], // < uncomment and add rejections here

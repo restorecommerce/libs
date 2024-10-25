@@ -5,15 +5,15 @@ import * as Router from 'koa-router';
 import * as path from 'path';
 
 import Provider, { errors, interactionPolicy, KoaContextWithOIDC } from 'oidc-provider';
-import { Config, Account, InvalidPasswordGrant, JwtMeta, TokenResponseBody } from './interfaces';
-import { setupRouts } from './routs';
-import { epochTime, nanoid } from './utls';
-import { createIdentityServiceAdapterClass } from './tokenservice-adapter';
-import logger from './logger';
-import { cfg } from './config';
-import { getRedisInstance } from './redis';
+import { Config, Account, InvalidPasswordGrant, JwtMeta, TokenResponseBody } from './interfaces.js';
+import { setupRouts } from './routs.js';
+import { epochTime, nanoid } from './utls.js';
+import { createIdentityServiceAdapterClass } from './tokenservice-adapter.js';
+import logger from './logger.js';
+import { cfg } from './config.js';
+import { getRedisInstance } from './redis.js';
 import { createClient, createChannel } from '@restorecommerce/grpc-client';
-import { TokenServiceDefinition } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/token';
+import { TokenServiceDefinition } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/token.js';
 
 // TODO add authEP handler
 // const authEPHandler = new EndpointHandler('authentication_log');

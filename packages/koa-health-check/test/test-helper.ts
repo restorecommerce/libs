@@ -1,5 +1,5 @@
 import * as koa from 'koa';
-const Stream = require('stream');
+import Stream from 'stream';
 
 const Koa = require('koa');
 

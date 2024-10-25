@@ -1,11 +1,11 @@
 import ColorHash from 'color-hash';
-const chalk = require('chalk');
+import chalk from 'chalk';
 
 const colorHash = new ColorHash({
   lightness: [0.45, 0.6, 0.75]
 });
 
-export const stringToChalk = (str) => {
+export const stringToChalk = (str: string) => {
   return chalk.hex(colorHash.hex(str));
 };
 

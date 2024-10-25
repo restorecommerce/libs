@@ -111,7 +111,7 @@ export const runWorker = async (
             let jobBufferObj;
             try {
               jobBufferObj = JSON.parse(filteredJob.data.payload.value.toString());
-            } catch (error) {
+            } catch (error: any) {
               logger.error('Error parsing job payload', {
                 code: error.code,
                 message: error.message, stack: error.stack

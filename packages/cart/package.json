@@ -21,8 +21,8 @@
   },
   "devDependencies": {
     "@restorecommerce/dev": "^0.0.12",
-    "@types/jest": "^29.5.13",
-    "@types/node": "^22.7.4",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.7.9",
     "@types/should": "^13.0.0",
     "@types/store": "^2.0.5",
     "eslint": "^9.12.0",

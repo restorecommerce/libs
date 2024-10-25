@@ -144,7 +144,7 @@ export const flushCache = async (prefix?: string) => {
       }
       logger.debug(`Successfully flushed cache pattern ${flushPattern}`);
       return;
-    } catch (err) {
+    } catch (err: any) {
       logger.error('Error flushing ACS cache',  { code: err.code, message: err.message, stack: err.stack });
       return;
     }

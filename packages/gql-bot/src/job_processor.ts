@@ -32,7 +32,7 @@ export class ReadArrayStream extends Readable {
 export class Job extends EventEmitter {
   opts: any;
   done = false;
-  error = undefined;
+  error: any = undefined;
 
   constructor(opts?: any) {
     super();
@@ -78,7 +78,7 @@ export class JobProcessor {
 
     const concurrency = this.jobInfo.options.concurrency;
     this.taskStream = ps.map({concurrent: concurrency}, (task: any) => {
-      return this.jobInfo.options.processor.process(task, verbose, ignoreErrors, ignoreSelfSigned).then((body) => {
+      return this.jobInfo.options.processor.process(task, verbose, ignoreErrors, ignoreSelfSigned).then((body: any) => {
         const logColor = stringToChalk(task.name);
 
         if (verbose) {
@@ -99,9 +99,9 @@ export class JobProcessor {
       objectMode: true
     }, tasks);
 
-    inputTaskStream.pipe(through2.obj(async (task, enc, cb) => {
+    inputTaskStream.pipe(through2.obj(async (task: any, enc: any, cb: any) => {
       const operation = task.operation;
-      await this[operation].apply(this, [task, job]);
+      await this[operation as keyof JobProcessor].apply(this, [task, job]);
       cb();
     }));
 
@@ -123,7 +123,7 @@ export class JobProcessor {
 
   async sync(task: any, job: Job): Promise<any> {
     const pathOptions = {
-      fileFilter: (entry) => {
+      fileFilter: (entry: any) => {
         return true;
       },
       depth: 1,

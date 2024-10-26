@@ -3,7 +3,7 @@ import { cfg } from './config';
 
 const loggerCfg = cfg.get('logger');
 
-loggerCfg.esTransformer = (msg) => {
+loggerCfg.esTransformer = (msg: any) => {
   msg.fields = JSON.stringify(msg.fields);
   return msg;
 };

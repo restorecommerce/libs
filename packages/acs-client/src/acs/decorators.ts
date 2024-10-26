@@ -164,7 +164,7 @@ export const DefaultMetaDataInjector = async <T extends ResourceList>(
   return request;
 };
 
-export function access_controlled_service<T extends { new(...args: any) }>(baseService: T): any {
+export function access_controlled_service<T extends { new(...args: any): any }>(baseService: T): T {
   return class extends baseService implements AccessControlledService {
     public readonly __userService: Client<UserServiceDefinition>;
     public readonly __acsDatabaseProvider: DatabaseProvider;
@@ -266,6 +266,7 @@ export function access_controlled_function<T extends ResourceList>(kwargs: {
           p => [p, new RegExp(p)]
         );
 
+        // @ts-expect-error TS2339
         return property?.length ? _.omitDeep(appResponse, property) : appResponse;
       }
       catch (err: any) {

@@ -18,7 +18,7 @@ const eventProviders: any = {};
  * @param  {constructor} provider Event provider constructor function
  */
 export const registerEventProvider = (name: string, provider: any): void => {
-  eventProviders.name = provider;
+  eventProviders[name] = provider;
 };
 
 registerEventProvider(kafka.Name, kafka.Kafka);

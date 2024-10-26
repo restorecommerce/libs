@@ -247,7 +247,7 @@ export class UnAuthZ implements IAuthZ {
 
   }
 
-  async whatIsAllowed(request: Request<NoAuthWhatIsAllowedTarget, AuthZContext>,
+  async whatIsAllowed(request: Request<AuthZWhatIsAllowedTarget | NoAuthWhatIsAllowedTarget, AuthZContext>,
     ctx: ACSClientContext, useCache: boolean): Promise<PolicySetRQResponse> {
     const authZRequest = {
       target: {
@@ -316,7 +316,7 @@ export class ACSAuthZ implements IAuthZ {
    * @param useCache
    * @returns {DecisionResponse}
    */
-  async isAllowed(request: Request<AuthZTarget, AuthZContext>, ctx: ACSClientContext, useCache): Promise<DecisionResponse> {
+  async isAllowed(request: Request<AuthZTarget, AuthZContext>, ctx: ACSClientContext, useCache: boolean): Promise<DecisionResponse> {
     const authZRequest = this.prepareRequest(request);
     authZRequest.context = {
       subject: {},

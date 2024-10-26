@@ -1,6 +1,7 @@
 import lodash from 'lodash';
-import deepdash from 'deepdash-es';
-export const _ = deepdash(lodash);
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+require('deepdash')(lodash);
+export const _ = lodash;
 import {
   PolicySetRQ, PolicySetRQResponse, AttributeTarget, HierarchicalScope,
   ResourceFilterMap, CustomQueryArgs, DecisionResponse, ACSResource, AuthZAction,
@@ -8,6 +9,7 @@ import {
 } from './acs/interfaces';
 import { QueryArguments, UserQueryArguments } from './acs/resolver';
 import { errors, cfg } from './config';
+// @ts-expect-error TS7016
 import nodeEval from 'node-eval';
 import logger from './logger';
 import { get } from './acs/cache';
@@ -673,7 +675,7 @@ export const createResourceFilterMap = async (
     const resourceType = formatResourceType(resourceName, resourceNameSpace);
     const urns = cfg.get('authorization:urns');
     const resourceValueURN = urns?.model + `:${resourceType}`;
-    const resourcePolicies = { policy_sets: [{ policies: [] }] };
+    const resourcePolicies = { policy_sets: [{ policies: [] } as PolicySetRQ] };
     const resourceAttributes = [{ id: urns?.entity, value: resourceValueURN }];
     if (policySetResponse && policySetResponse.policy_sets && policySetResponse.policy_sets.length > 0) {
       policySetResponse.policy_sets.forEach((policySet) => {

@@ -67,7 +67,7 @@ export class Events {
       this.logger.error('config does not have event provider name', this.config);
       throw new Error('config does not have event provider name');
     }
-    const Provider = eventProviders.providerName;
+    const Provider = eventProviders[providerName];
     if (_.isNil(Provider)) {
       throw new Error(`events provider ${providerName} is not registered`);
     }

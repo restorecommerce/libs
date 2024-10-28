@@ -93,6 +93,7 @@ describe('Kafka provider test', () => {
         const countArr = [];
         // subscribe to topic for example-event with listener as call back.
         await topic.on(eventName, (message, context, config, eventName) => {
+          console.log('received message:', message)
           expect(message).not.toBe(undefined);
           countArr.push(message.count);
         }, { queue: true });

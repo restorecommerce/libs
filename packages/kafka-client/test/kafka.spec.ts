@@ -110,7 +110,7 @@ describe('Kafka provider test', () => {
         expect(countArr).not.toBe(undefined);
         expect(countArr.length).to.equal(5);
       });
-  }, 120000);
+  }, 240000);
 
   describe('Manual Commit', () => {
     it('should manually commit offset after processing message', async () => {

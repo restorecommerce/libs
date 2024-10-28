@@ -64,7 +64,7 @@ jobs:
 
       - name: Generate Report
         if: ${{ inputs.coveralls }}
-        run: npm run lcov-report
+        run: npm run lcov-report || true
         working-directory: ./packages/${{ inputs.package }}
 
       - name: Coveralls

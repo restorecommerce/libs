@@ -2,11 +2,10 @@
 
 /* eslint-env node, mocha */
 
-// eslint-disable-next-line
-import 'should';
 import fs from 'fs';
 import moment from 'moment-timezone';
 import { Renderer } from '../lib/index.js';
+import { expect, it, describe } from 'vitest';
 
 // Renderer = Renderer.default;
 
@@ -33,7 +32,7 @@ describe('the handlebars extensions', () => {
       const result = renderer.render(context);
       const expectedResult = `<h1 class="vclAlignCentered">Hello Admin</h1>\n\n` +
         `<p class="vclAlignCentered">\n  Payment Received: http://example.com/42\n</p>\n`;
-      result.should.equal(expectedResult);
+      expect(result).to.equal(expectedResult);
     });
   });
 
@@ -44,7 +43,7 @@ describe('the handlebars extensions', () => {
       await renderer.waitLoad();
       const result = renderer.render({});
       const expectedResult = 'number: 42\nprice: €42.00\nbytes: 42 byte\n';
-      result.should.equal(expectedResult);
+      expect(result).to.equal(expectedResult);
     });
   });
 
@@ -62,7 +61,7 @@ describe('the handlebars extensions', () => {
       const result = renderer.render(context);
       const ago = yesterday.fromNow();
       const expectedResult = 'ago: ' + ago + `\ndf: 03/19/2019\ndtf: March 19, 2019 1:37 PM\n`;
-      result.should.equal(expectedResult);
+      expect(result).to.equal(expectedResult);
     });
   });
 
@@ -135,7 +134,7 @@ describe('the handlebars extensions', () => {
       const result = renderer.render(context);
       // eslint-disable-next-line
       const expectedResult = `<h3>\n  Professor Oak\n</h3>\n\n<table id="invoicemeta" class="vclNoBorder vclFloatRight" style="min-width: 18em;">\n  <tr>\n    <td><b>invoice number</b></td>\n    <td class="vclAlignRight">42</td>\n  </tr>\n  <tr>\n    <td>order number</td>\n    <td class="vclAlignRight">24</td>\n  </tr>\n  <tr>\n    <td>order date</td>\n    <td class="vclAlignRight">03/19/2019</td>\n  </tr>\n</table>\n\n<div class="vclClear"></div>\n<br>\n<br>\n\n<table id="address" class="vclTable">\n  <tbody>\n      <tr>\n        <td class="vclSpan-10p">billing address street</td>\n        <td>\n          \n           \n        </td>\n      </tr>\n      <tr>\n        <td> </td>\n        <td>the silph road</td>\n      </tr>\n      <tr>\n        <td> </td>\n        <td> </td>\n      </tr>\n      <tr>\n        <td> </td>\n        <td></td>\n      </tr>\n  </tbody>\n</table>\n\n<br>\n\n<table id="items" class="vclTable vclSumTable">\n  <thead>\n    <tr>\n      <th>position</th>\n      <th>name</th>\n      <th>quantity</th>\n      <th class="vclAlignRight">single price</th>\n      <th class="vclAlignRight">item total price</th>\n    </tr>\n  </thead>\n  <tbody>\n      <tr>\n        <td>42</td>\n        <td>raspberry\n          <br> squ1rtle\n        </td>\n        <td>9001</td>\n        <td class="vclAlignRight">$26,918.97</td>\n        <td class="vclAlignRight">\n            $26,912.99\n        </td>\n      </tr>\n    <tr class="vclNoBorder">\n      <td colspan="5">&nbsp;</td>\n    </tr>\n\n\n\n    <tr class="vclSumTableTotal">\n      <td colspan="3">total price</td>\n      <td colspan="2" class="vclAlignRight">$888.88</td>\n    </tr>\n  </tbody>\n</table>\n\n<br>\n\n\n<p class="vclAlignCentered">\n  brought to you by {{appName}}\n  <br>\n  <br>\n  <img src="cid:logo"/>\n  <br>\n  <br>\n  sending to {{street}}\n</p>\n\n<p class="vclAlignCentered">\n  cash: cash\n</p>\n`;
-      result.should.equal(expectedResult);
+      expect(result).to.equal(expectedResult);
     });
   });
 });

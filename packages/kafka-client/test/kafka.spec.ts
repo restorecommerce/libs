@@ -1,7 +1,7 @@
 import { Events, registerProtoMeta, Topic } from '../src';
 import { createLogger } from '@restorecommerce/logger';
-import * as should from 'should';
 import { protoMetadata } from '@restorecommerce/rc-grpc-clients/dist/generated/test/test';
+import { expect, it, describe, beforeAll, afterAll } from 'vitest';
 
 registerProtoMeta(protoMetadata);
 
@@ -44,18 +44,16 @@ describe('Kafka provider test', () => {
   const topicName = 'com.example.test';
   const eventName = 'exampleEvent';
   let initialOffset: number;
-  before(async () => {
+  beforeAll(async () => {
     // start the client
     await client.start();
     initialOffset = await (await client.topic(topicName)).$offset(-1);
   });
-  after(async function() {
+  afterAll(async function() {
     // stop the client
-    this.timeout(10000);
     await client.stop();
-  });
+  }, 10000);
   describe('topic.wait', function testWait(): void {
-    this.timeout(60000);
     it('should wait until the event message is processed',
       async () => {
         // create the proto buffer message
@@ -67,15 +65,13 @@ describe('Kafka provider test', () => {
 
         // subscribe to topic for example-event with listener as call back.
         await topic.on(eventName, async (message, context) => {
-          exitPromise = new Promise<void>(async (resolve) => {
-            should.exist(message);
-            testMessage.value.should.equal(message.value);
-            testMessage.count.should.equal(message.count);
+          exitPromise = new Promise<void>((resolve) => {
+            expect(message).not.toBe(undefined);
+            expect(testMessage.value).to.equal(message.value);
+            expect(testMessage.count).to.equal(message.count);
             logger.info('Received message :', message);
 
-            await topic.removeAllListeners(eventName);
-
-            resolve();
+            return topic.removeAllListeners(eventName).then(resolve);
           });
         });
         // get the current offset
@@ -94,10 +90,10 @@ describe('Kafka provider test', () => {
         const topic: Topic = await client.topic(topicName);
         // order of count should be preserved
         const expectedCountArr = [1, 2, 3, 4, 5];
-        let countArr = [];
+        const countArr = [];
         // subscribe to topic for example-event with listener as call back.
         await topic.on(eventName, (message, context, config, eventName) => {
-          should.exist(message);
+          expect(message).not.toBe(undefined);
           countArr.push(message.count);
         }, { queue: true });
 
@@ -111,10 +107,10 @@ describe('Kafka provider test', () => {
         await topic.emit(eventName, { value: 'value5', count: 5 });
         // suspends the calling function until the offset is committed.
         await topic.$wait(offset + 4);
-        should.exist(countArr);
-        countArr.length.should.equal(5);
+        expect(countArr).not.toBe(undefined);
+        expect(countArr.length).to.equal(5);
       });
-  });
+  }, 60000);
 
   describe('Manual Commit', () => {
     it('should manually commit offset after processing message', async () => {
@@ -125,7 +121,7 @@ describe('Kafka provider test', () => {
       // Subscribe to topic for example-event with listener as callback.
       await topic.on(eventName, async (message, context) => {
         // Ensure that message is processed
-        should.exist(message);
+        expect(message).not.toBe(undefined);
         // Simulate processing time
         await new Promise(resolve => setTimeout(resolve, 1000));
 
@@ -134,7 +130,7 @@ describe('Kafka provider test', () => {
       });
 
       // Get the current offset
-      offset = await topic.$offset(-1);
+      await topic.$offset(-1);
 
       // Emit the message to Kafka
       await topic.emit(eventName, { value: 'value', count: 1 });
@@ -146,7 +142,7 @@ describe('Kafka provider test', () => {
       const finalOffset = await topic.$offset(-1);
 
       // Verify that offset has been manually committed and updated accordingly
-      should(finalOffset).be.above(initialOffset);
+      expect(finalOffset).be.above(initialOffset);
     });
   });
 });

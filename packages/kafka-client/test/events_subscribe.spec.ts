@@ -1,4 +1,4 @@
-import * as should from 'should';
+import { expect, it, describe, beforeAll, afterAll } from 'vitest';
 import * as _ from 'lodash';
 import { Events, registerProtoMeta, Topic } from '../src';
 import { createLogger } from '@restorecommerce/logger';
@@ -53,9 +53,8 @@ describe('events', () => {
           const events: Events = new Events();
           await events.topic(topicName);
         } catch (err) {
-          should.exist(err);
-          err.should.be.Error();
-          err.message.should.equal('missing argument config');
+          expect(err).not.toBe(undefined);
+          expect(err.message).to.equal('missing argument config');
         }
       });
     });
@@ -69,34 +68,31 @@ describe('events', () => {
       const eventName = 'testEvent';
       const testMessage = {value: 'testValue', count: 1};
 
-      before(async function () {
-        this.timeout(10000);
+      beforeAll(async function () {
         events = new Events(kafkaConfig.events[providerName], logger);
         await events.start();
 
         await new Promise(resolve => setTimeout(resolve, 5000));
-      });
+      }, 10000);
 
-      after(async function () {
-        this.timeout(10000);
+      afterAll(async function () {
         await events.stop();
-      });
+      }, 10000);
 
       describe('creating a topic', () => {
         it('should return a topic', async () => {
           topic = await (events.topic(topicName));
-          should.exist(topic);
-          should.exist(topic.on);
-          should.exist(topic.emit);
-          should.exist(topic.listenerCount);
-          should.exist(topic.hasListeners);
-          should.exist(topic.removeListener);
-          should.exist(topic.removeAllListeners);
+          expect(topic).not.toBe(undefined);
+          expect(topic.on).not.toBe(undefined);
+          expect(topic.emit).not.toBe(undefined);
+          expect(topic.listenerCount).not.toBe(undefined);
+          expect(topic.hasListeners).not.toBe(undefined);
+          expect(topic.removeListener).not.toBe(undefined);
+          expect(topic.removeAllListeners).not.toBe(undefined);
         });
       });
 
       describe('subscribing', function startKafka(): void {
-        this.timeout(5000);
         it('should allow listening to events', async () => {
           topic = await (events.topic(topicName));
 
@@ -104,14 +100,13 @@ describe('events', () => {
             // void listener
           };
           const count: number = await topic.listenerCount(eventName);
-          should.exist(count);
+          expect(count).not.toBe(undefined);
           await topic.on(eventName, listener);
 
           const countAfter = await topic.listenerCount(eventName);
-          countAfter.should.equal(count + 1);
+          expect(countAfter).to.equal(count + 1);
         });
         it('should allow emitting and receiving a message', async function () {
-          this.timeout(20000);
           topic = await (events.topic(topicName));
 
           let returnedMessage;
@@ -124,10 +119,10 @@ describe('events', () => {
             await new Promise((r) => setTimeout(r, 10));
           }
 
-          returnedMessage.value.should.equal(testMessage.value);
-          returnedMessage.count.should.equal(testMessage.count);
-        });
-      });
+          expect(returnedMessage.value).to.equal(testMessage.value);
+          expect(returnedMessage.count).to.equal(testMessage.count);
+        }, 20000);
+      }, 5000);
     });
   });
 });

@@ -1,7 +1,6 @@
-// eslint-disable-next-line
-import 'should';
 import fs from 'fs';
 import { Renderer } from '../lib/index.js';
+import { expect, it, describe } from 'vitest';
 
 // Renderer = Renderer.default;
 
@@ -28,7 +27,7 @@ describe('the handlebars template engine', () => {
     await renderer.waitLoad();
     let result = renderer.render(data);
     result = result.replace(/\s/g, '');
-    result.should.equal('<div>JohnDoe</div>');
+    expect(result).to.equal('<div>JohnDoe</div>');
   });
 
   it('should be able to render templates with layouts', async () => {
@@ -36,7 +35,7 @@ describe('the handlebars template engine', () => {
     await renderer.waitLoad();
     let result = renderer.render(data);
     result = result.replace(/\s/g, '');
-    result.should.equal('<div>HeaderDefaultContentMainOverwrittenContent</div>');
+    expect(result).to.equal('<div>HeaderDefaultContentMainOverwrittenContent</div>');
   });
 
   it('should be able to render templates with a style', async () => {
@@ -44,7 +43,7 @@ describe('the handlebars template engine', () => {
     await renderer.waitLoad();
     let result = renderer.render(data);
     result = result.replace(/\r?\n|\r/g, '');
-    result.should.equal('<div style="color: red; text-align: center;">John Doe</div>');
+    expect(result).to.equal('<div style="color: red; text-align: center;">John Doe</div>');
   });
 
   it('should be able to render templates with a provided custom helper', async () => {
@@ -59,6 +58,6 @@ describe('the handlebars template engine', () => {
     });
     const result = renderer.render({ name: 'John' });
     const expectedResult = '<h1>Hello JOHN</h1>';
-    result.should.equal(expectedResult);
+    expect(result).to.equal(expectedResult);
   });
 });

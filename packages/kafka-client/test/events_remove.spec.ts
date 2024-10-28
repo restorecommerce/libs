@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 import { Events, registerProtoMeta, Topic } from '../src';
 import { createLogger } from '@restorecommerce/logger';
-import 'should';
+import { expect, it, describe, beforeAll, afterAll } from 'vitest';
 import { protoMetadata } from '@restorecommerce/rc-grpc-clients/dist/generated/test/test';
 
 registerProtoMeta(protoMetadata);
@@ -47,18 +47,16 @@ describe('events', () => {
       let topic: Topic;
       const eventName = 'testEvent';
 
-      before(async function () {
-        this.timeout(10000);
+      beforeAll(async function () {
         const kafkaConfigEvents = kafkaConfig.events[providerName];
         events = new Events(kafkaConfig.events[providerName], logger);
         await events.start();
         // Subscribe to topic
         topic = await (events.topic(topicName));
-      });
-      after(async function () {
-        this.timeout(10000);
+      }, 10000);
+      afterAll(async function () {
         await events.stop();
-      });
+      }, 10000);
       describe('removing listener', () => {
         it('should allow removing the subscribed listener from topic',
           async () => {
@@ -70,15 +68,14 @@ describe('events', () => {
             await topic.removeListener(eventName, listener);
             const count: number = await topic.listenerCount(eventName);
             logger.info('Count of listeners after removing :', count);
-            count.should.equal(1);
+            expect(count).to.equal(1);
           });
         it('should allow removing all the subscribed listeners from topic', async function() {
-          this.timeout(20000);
           await topic.removeAllListeners(eventName);
           const count: number = await topic.listenerCount(eventName);
           logger.info('Count of listeners after removing :', count);
-          count.should.equal(0);
-        });
+          expect(count).to.equal(0);
+        }, 20000);
       });
     });
   });

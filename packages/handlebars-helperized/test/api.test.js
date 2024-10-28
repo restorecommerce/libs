@@ -2,10 +2,9 @@
 
 /* eslint-env node, mocha */
 
-// eslint-disable-next-line
-import 'should';
 import moment from 'moment-timezone';
 import { Renderer } from '../lib/index.js';
+import { expect, it, describe } from 'vitest';
 
 // Renderer = Renderer.default;
 
@@ -19,7 +18,7 @@ describe('The README examples', () => {
     await renderer.waitLoad();
     const result = renderer.render({ name: 'John' });
     const expectedResult = '<h1>Hello John</h1>';
-    result.should.equal(expectedResult);
+    expect(result).to.equal(expectedResult);
   });
 
   it('should pass the layout example', async () => {
@@ -39,7 +38,7 @@ describe('The README examples', () => {
     await renderer.waitLoad();
     const result = renderer.render({ name: 'John' }).replace(/\s/g, '');
     const expectedResult = '<p>Hello,<i>John</i></p>';
-    result.should.equal(expectedResult);
+    expect(result).to.equal(expectedResult);
   });
 
   it('should pass the localization example', async () => {
@@ -49,7 +48,7 @@ describe('The README examples', () => {
     await renderer.waitLoad();
     const result = renderer.render({ name: 'John' });
     const expectedResult = '<h1>Hallo John</h1>';
-    result.should.equal(expectedResult);
+    expect(result).to.equal(expectedResult);
   });
 
   it('should pass the localization example with context', async () => {
@@ -59,7 +58,7 @@ describe('The README examples', () => {
     await renderer.waitLoad();
     const result = renderer.render({ name: 'John' });
     const expectedResult = '<h1>Hallo John</h1>';
-    result.should.equal(expectedResult);
+    expect(result).to.equal(expectedResult);
   });
 
   it('should pass the formatting example', async () => {
@@ -72,7 +71,7 @@ describe('The README examples', () => {
     const yesterday = moment.parseZone(ts, format, tz);
     const result = renderer.render({ price: 1.99, date: yesterday });
     const expectedResult = '<p>You paid $1.99 on 03/19/2019</p>';
-    result.should.equal(expectedResult);
+    expect(result).to.equal(expectedResult);
   });
 
   it('should pass the formatting example directly from the template', async () => {
@@ -82,7 +81,7 @@ describe('The README examples', () => {
     const ts = '2019-03-19 13:37:00';
     const result = renderer.render({ price: 1.99, date: ts });
     const expectedResult = '<p>You paid $1.99 on 2019-19-03 13:37:00</p>';
-    result.should.equal(expectedResult);
+    expect(result).to.equal(expectedResult);
   });
 
   it('should format with a custom timezone', async () => {
@@ -93,7 +92,7 @@ describe('The README examples', () => {
     const result = renderer.render({ price: 1.88, date: ts });
     // Moscow is 3 hours in advance of GMT
     const expectedResult = '<p>You paid €1.88 on 2019-19-03 13:46:43</p>';
-    result.should.equal(expectedResult);
+    expect(result).to.equal(expectedResult);
   });
 
   it('should pass the formatting example with german locale', async () => {
@@ -106,6 +105,6 @@ describe('The README examples', () => {
     const yesterday = moment.parseZone(ts, format, tz);
     const result = renderer.render({price: 1.99, date: yesterday});
     const expectedResult = '<p>You paid 1,99 € on 19.03.2019</p>';
-    result.should.equal(expectedResult);
+    expect(result).to.equal(expectedResult);
   });
 });

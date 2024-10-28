@@ -47,9 +47,7 @@
     "test": "vitest",
     "build:tsc": "tsc -d",
     "build:clean": "rimraf lib",
-    "build": "npm-run-all lint build:clean build:tsc",
-    "lcov-report": "nyc report --reporter=lcov",
-    "coveralls": "nyc --reporter text --reporter lcov npm test"
+    "build": "npm-run-all lint build:clean build:tsc"
   },
   "engines": {
     "node": ">= 16.0.0"

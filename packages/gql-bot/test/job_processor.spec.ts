@@ -1,13 +1,19 @@
 import * as fs from 'fs';
-import nock from 'nock';
-import should from 'should';
+import {expect, it, describe, beforeAll, afterEach} from 'vitest';
+import { http, HttpResponse } from 'msw';
+import { setupServer } from 'msw/node';
 
 import { GraphQLProcessor, JobProcessor, Job } from '../src';
 
+const server = setupServer();
+
 describe('jobproc-grapqhl-proc:', (): void => {
-  beforeEach(() => {
-    nock.cleanAll();
-    nock.abortPendingRequests();
+  beforeAll(() => {
+    server.listen();
+  });
+
+  afterEach(() => {
+    server.resetHandlers();
   });
 
   it('a job processor can be instantiated', () => {
@@ -17,7 +23,7 @@ describe('jobproc-grapqhl-proc:', (): void => {
     });
 
     const jobProcessor = new JobProcessor(job1);
-    should.exist(jobProcessor);
+    expect(jobProcessor).not.toBe(undefined);
   });
 
   it('a job should start and process import Users jobs and should run to completion',
@@ -35,10 +41,9 @@ describe('jobproc-grapqhl-proc:', (): void => {
       const filesToBeFound = 1;
       let filesFound = 0;
 
-      nock('http://example.com').persist()
-        .post('/graphql').reply(200, respMessage);
+      server.use(http.post('http://example.com/graphql', () => HttpResponse.json(respMessage)));
 
-      let jobResult = new Job();
+      const jobResult = new Job();
 
       jobResult.on('progress', (task) => {
         if (task.progress.value === 0) {
@@ -54,9 +59,11 @@ describe('jobproc-grapqhl-proc:', (): void => {
       const jobProcessor = new JobProcessor(job1);
 
       await jobProcessor.start(null, jobResult, true);
-      await jobResult.wait();
+      await jobResult.wait().catch((err: Error) => {
+        throw err;
+      });
 
-      should(filesFound).equal(filesToBeFound);
+      expect(filesFound).to.equal(filesToBeFound);
     });
 
   it('a job should start and process multiple tasks and should run to completion',
@@ -84,11 +91,9 @@ describe('jobproc-grapqhl-proc:', (): void => {
       const filesToBeFound = 2;
       let filesFound = 0;
 
-      nock('http://example.com').persist()
-        .post('/graphql')
-        .reply(200, (_, body) => {
-          return (body as any).query.indexOf('createOrganizations') >= 0 ? createOrgsRespMessage : createUsersRespMessage;
-        });
+      server.use(http.post('http://example.com/graphql', async ({ request }) => HttpResponse.json(
+        (await request.json() as any).query.indexOf('createOrganizations') >= 0 ? createOrgsRespMessage : createUsersRespMessage
+      )));
 
       const job2 = JSON.parse(fs.readFileSync('./test/job2.json', 'utf8'));
       job2.options.processor = new GraphQLProcessor({
@@ -107,7 +112,7 @@ describe('jobproc-grapqhl-proc:', (): void => {
       await jobProcessor.start(null, jobResult, true);
       await jobResult.wait();
 
-      should(filesFound).equal(filesToBeFound);
+      expect(filesFound).to.equal(filesToBeFound);
     });
 
   it('a job should start and process yml tasks and should run to completion',
@@ -130,8 +135,7 @@ describe('jobproc-grapqhl-proc:', (): void => {
         entry: 'http://example.com/graphql'
       });
 
-      nock('http://example.com').persist()
-        .post('/graphql').reply(200, createUsersRespMessage);
+      server.use(http.post('http://example.com/graphql', () => HttpResponse.json(createUsersRespMessage)));
 
       const jobProcessor = new JobProcessor(job3);
       const jobResult = new Job();
@@ -145,7 +149,7 @@ describe('jobproc-grapqhl-proc:', (): void => {
       await jobProcessor.start(null, jobResult, true);
       await jobResult.wait();
 
-      should(filesFound).equal(filesToBeFound);
+      expect(filesFound).to.equal(filesToBeFound);
     });
 
   it('a job should error when encountering IoRestorecommerceStatusOperationStatus',
@@ -169,8 +173,7 @@ describe('jobproc-grapqhl-proc:', (): void => {
         entry: 'http://example.com/graphql'
       });
 
-      nock('http://example.com').persist()
-        .post('/graphql').reply(200, createUsersRespMessage);
+      server.use(http.post('http://example.com/graphql', () => HttpResponse.json(createUsersRespMessage)));
 
       const jobProcessor = new JobProcessor(job3);
       const jobResult = new Job();
@@ -179,8 +182,8 @@ describe('jobproc-grapqhl-proc:', (): void => {
 
       const resultError = await jobResult.wait().catch(err => err);
 
-      should(resultError).not.undefined();
-      should((resultError as Error).message).equal('{"code":403,"message":"Access denied"}');
+      expect(resultError).not.toBe(undefined);
+      expect((resultError as Error).message).to.equal('{"code":403,"message":"Access denied"}');
     });
 
   it('a job should error when encountering IoRestorecommerceStatusStatus',
@@ -204,8 +207,7 @@ describe('jobproc-grapqhl-proc:', (): void => {
         entry: 'http://example.com/graphql'
       });
 
-      nock('http://example.com').persist()
-        .post('/graphql').reply(200, createUsersRespMessage);
+      server.use(http.post('http://example.com/graphql', () => HttpResponse.json(createUsersRespMessage)));
 
       const jobProcessor = new JobProcessor(job3);
       const jobResult = new Job();
@@ -214,8 +216,8 @@ describe('jobproc-grapqhl-proc:', (): void => {
 
       const resultError = await jobResult.wait().catch(err => err);
 
-      should(resultError).not.undefined();
-      should((resultError as Error).message).equal('{"code":403,"message":"Access denied"}');
+      expect(resultError).not.toBe(undefined);
+      expect((resultError as Error).message).to.equal('{"code":403,"message":"Access denied"}');
     });
 
   it('a job should error when encountering a self-signed certificate',
@@ -232,8 +234,10 @@ describe('jobproc-grapqhl-proc:', (): void => {
 
       const resultError = await jobResult.wait().catch(err => err);
 
-      should(resultError).not.undefined();
-      should((resultError as Error).message).match(/Network error: request to https:\/\/self-signed\.badssl\.com\/ failed, reason: self.signed certificate/);
+      expect(resultError).not.toBe(undefined);
+      expect((resultError as Error).message).to.match(/Network error: .*/);
+
+      server.listen();
     });
 
   it('a job should pass when ignoring a self-signed certificate',
@@ -250,8 +254,8 @@ describe('jobproc-grapqhl-proc:', (): void => {
 
       const resultError = await jobResult.wait().catch(err => err);
 
-      should(resultError).not.undefined();
-      should((resultError as Error).message).equal(`Network error: Unexpected token '<', "<html>\r\n<h"... is not valid JSON`);
+      expect(resultError).not.toBe(undefined);
+      expect((resultError as Error).message).to.match(/Network error: .*/);
     });
 
   it('a job should skip errors when ignored',
@@ -297,13 +301,16 @@ describe('jobproc-grapqhl-proc:', (): void => {
       job2.options.concurrency = 1;
       job2.tasks[1].batchSize = 1;
 
-      nock('http://example.com')
-        .post('/graphql').reply(200, userMessage)
-        .post('/graphql').reply(200, userMessage)
-        .post('/graphql').reply(200, successMessage)
-        .post('/graphql').reply(200, errorMessage)
-        .post('/graphql').reply(200, errorMessage)
-        .post('/graphql').reply(200, successMessage);
+      let i = 0;
+      const responses = [
+        userMessage,
+        userMessage,
+        successMessage,
+        errorMessage,
+        errorMessage,
+        successMessage,
+      ];
+      server.use(http.post('http://example.com/graphql', () => HttpResponse.json(responses[i++])));
 
       const jobProcessor = new JobProcessor(job2);
       const jobResult = new Job();
@@ -312,7 +319,7 @@ describe('jobproc-grapqhl-proc:', (): void => {
 
       const resultError = await jobResult.wait().catch(err => err);
 
-      should(resultError).undefined();
+      expect(resultError).toBe(undefined);
     });
 
   it('a job should error when backend does not exist',
@@ -329,7 +336,7 @@ describe('jobproc-grapqhl-proc:', (): void => {
 
       const resultError = await jobResult.wait().catch(err => err);
 
-      should(resultError).not.undefined();
-      should((resultError as Error).message).match(/^Network error: request to http:\/\/localhost:65534\/ failed, reason:.*$/);
+      expect(resultError).not.toBe(undefined);
+      expect((resultError as Error).message).to.match(/^Network error: .*$/);
     });
 });

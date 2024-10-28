@@ -46,10 +46,7 @@
   "scripts": {
     "pretest": "npm run build",
     "test": "npm run lint && vitest",
-    "test-debug": "mocha -R spec ./test/index.js --inspect-brk",
     "lint": "eslint src",
-    "mocha": "cross-env NODE_ENV=test; mocha --exit --timeout 10000",
-    "lcov-report": "nyc report --reporter=lcov",
     "build:tsc": "tsc -d",
     "build:clean": "rimraf lib/",
     "build": "npm-run-all lint build:clean build:tsc"

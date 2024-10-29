@@ -89,6 +89,7 @@
     "fileUploadOptions": {
       "maxFileSize": 10000,
       "maxFiles": 20
-    }
+    },
+    "endpoint": "os"
   }
 }

@@ -4,6 +4,7 @@ import { type ServiceConfig } from '../../gql/protos/index.js';
 
 export interface OstorageServiceConfig extends ServiceConfig {
   root: boolean;
+  endpoint: string;
 }
 
 export interface OstorageConfig {

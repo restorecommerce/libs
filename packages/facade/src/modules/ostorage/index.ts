@@ -22,8 +22,10 @@ export const ostorageModule = createFacadeModuleFactory<OstorageConfig, Ostorage
   const router = new Router();
 
   router.use(bodyParser());
-  router.get(/^\/storage\/([^/]+)\/(.+)/, async (ctx: any, next: any) => {
 
+  const endpoint = config.config.endpoint || 'storage';
+  const route = new RegExp(`^\/${endpoint}\/([^/]+)\/(.+)`, 'i');
+  router.get(route, async (ctx: any, next: any) => {
     const authToken = ctx.request.header['authorization'];
     let token;
     if (authToken && authToken.startsWith('Bearer ')) {

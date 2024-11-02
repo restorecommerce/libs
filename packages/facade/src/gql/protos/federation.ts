@@ -5,7 +5,7 @@ import {
   type ServiceClient,
   type SubSpaceServiceConfig
 } from './types.js';
-import { buildSubgraphSchema } from '@apollo/federation';
+import { buildSubgraphSchema } from '@apollo/subgraph';
 import { gql } from 'graphql-tag';
 import { type GraphQLSchema, printSchema } from 'graphql/index.js';
 import { GraphQLObjectType } from 'graphql';

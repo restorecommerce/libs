@@ -1,4 +1,4 @@
-import { buildSubgraphSchema } from '@apollo/federation';
+import { buildSubgraphSchema } from '@apollo/subgraph';
 import { gql } from 'graphql-tag';
 import { printSchema } from 'graphql';
 import { resolvers } from './resolvers.js';

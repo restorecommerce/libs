@@ -11,7 +11,7 @@ import { createServiceConfig } from '@restorecommerce/service-config';
 import { createLogger } from '@restorecommerce/logger';
 import { generateResolver, generateSchema, registerResolverFunction, registerResolverSchema } from '../src/gql/protos/index.js';
 import { GraphQLString, printSchema } from 'graphql';
-import { buildSubgraphSchema } from '@apollo/federation';
+import { buildSubgraphSchema } from '@apollo/subgraph';
 import { gql } from 'graphql-tag';
 import path from 'node:path';
 import * as url from 'node:url';

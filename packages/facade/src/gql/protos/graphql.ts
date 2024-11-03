@@ -4,13 +4,11 @@ import {
   GraphQLNonNull,
   GraphQLObjectType,
   type GraphQLOutputType,
-} from 'graphql';
-import {
   GraphQLEnumType,
   GraphQLInputObjectType,
   type GraphQLInputType,
   GraphQLScalarType,
-} from 'graphql/type/definition.js';
+} from 'graphql';
 import { type ProtoMetadata, type ServiceConfig } from './types.js';
 import { type Readable } from 'node:stream';
 import { type ServiceDescriptorProto } from 'ts-proto-descriptors';
@@ -24,7 +22,7 @@ export const preProcessGQLInput = async (
   if (data === null || data === undefined) {
     return data;
   }
-  
+
   if (model instanceof GraphQLEnumType) {
     return data;
   }

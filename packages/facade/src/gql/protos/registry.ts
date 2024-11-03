@@ -15,8 +15,10 @@ import {
   type GraphQLObjectTypeConfig,
   type GraphQLOutputType,
   GraphQLString,
+  GraphQLEnumType,
+  GraphQLInputObjectType,
+  GraphQLScalarType
 } from 'graphql';
-import { GraphQLEnumType, GraphQLInputObjectType, GraphQLScalarType } from 'graphql/type/definition.js';
 // import GraphQLUpload from 'graphql-upload/GraphQLUpload.js';
 import GraphQLUpload from 'graphql-upload/GraphQLUpload.mjs';
 import { capitalizeProtoName } from './utils.js';

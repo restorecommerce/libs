@@ -289,10 +289,10 @@ type ResolverBaseOrSub =
   | Map<string, ResolverFn<any, any, ServiceClient<any, any, any>, any>>;
 const namespaceResolverRegistry = new Map<string, Map<boolean, Map<string, ResolverBaseOrSub>>>();
 
-const subscriptionResolvers: Record<string, {
+const subscriptionResolvers: Record<string, Record<string, {
   resolve?: ResolverFn<any, any, ServiceClient<any, any, any>, any>;
   subscribe: ResolverFn<any, any, any, any>;
-}> = {};
+}>> = {};
 
 export const registerResolverFunction = <T extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, T>>
 (namespace: string, name: string, func: ResolverFn<any, any, ServiceClient<CTX, keyof CTX, T>, any>,
@@ -341,6 +341,7 @@ export const registerResolverFunction = <T extends Record<string, any>, CTX exte
 export const generateResolver = (...namespaces: string[]) => {
   const queryResolvers: any = {};
   const mutationResolvers: any = {};
+  const subResolvers: any = {};
 
   namespaces.forEach(ns => {
     if (!namespaceResolverRegistry.has(ns)) {
@@ -374,6 +375,12 @@ export const generateResolver = (...namespaces: string[]) => {
 
       mutationResolvers[ns] = () => res;
     }
+
+    if (ns in subscriptionResolvers) {
+      for (let [k, v] of Object.entries(subscriptionResolvers[ns])) {
+        subResolvers[k] = v;
+      }
+    }
   });
 
   const resolvers: any = {};
@@ -386,8 +393,8 @@ export const generateResolver = (...namespaces: string[]) => {
     resolvers.Mutation = mutationResolvers;
   }
 
-  if (Object.keys(subscriptionResolvers).length > 0) {
-    resolvers.Subscription = subscriptionResolvers;
+  if (Object.keys(subResolvers).length > 0) {
+    resolvers.Subscription = subResolvers;
   }
 
   return resolvers;
@@ -428,7 +435,11 @@ export const generateSubServiceResolvers = <
           const typing = getTyping('.' + baseMessageName);
 
           if (typing) {
-            subscriptionResolvers[fieldName] = {
+            if (!(namespace in subscriptionResolvers)) {
+              subscriptionResolvers[namespace] = {};
+            }
+
+            subscriptionResolvers[namespace][fieldName] = {
               // resolve: (parent, args, context, info) => {
               //   const obj = parent[fieldName];
               //   let missing = false;

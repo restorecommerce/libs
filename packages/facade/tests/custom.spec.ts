@@ -10,14 +10,9 @@ import { agent, type SuperAgentTest } from 'supertest';
 import { createServiceConfig } from '@restorecommerce/service-config';
 import { createLogger } from '@restorecommerce/logger';
 import { generateResolver, generateSchema, registerResolverFunction, registerResolverSchema } from '../src/gql/protos/index.js';
-import { GraphQLString, printSchema } from 'graphql';
+import { GraphQLString, printSchema, parse } from 'graphql';
 import { buildSubgraphSchema } from '@apollo/subgraph';
-import { gql } from 'graphql-tag';
-import path from 'node:path';
-import * as url from 'node:url';
 import { it, describe, beforeAll, afterAll, expect } from 'vitest';
-
-const CONFIG_PATH = path.dirname(url.fileURLToPath(import.meta.url));
 
 const customFunction = 'customFunction';
 const customResponse = 'Hello World';
@@ -34,7 +29,7 @@ export interface CustomContext extends FacadeContext {
 export type CustomModule = FacadeModule<CustomContext>;
 
 const createTestFacade = () => {
-  const serviceConfig = createServiceConfig(CONFIG_PATH);
+  const serviceConfig = createServiceConfig(process.cwd());
 
   const cfg = {
     env: serviceConfig.get('NODE_ENV'),
@@ -52,10 +47,10 @@ const createTestFacade = () => {
   const customStuff = createFacadeModuleFactory<CustomConfig, CustomModule>(namespace, (facade, config) => {
     facade.addApolloService({
       name: namespace,
-      schema: buildSubgraphSchema({
-        typeDefs: gql(printSchema(generateSchema([{prefix: 'Custom', namespace}]))),
+      schema: buildSubgraphSchema([{
+        typeDefs: parse(printSchema(generateSchema([{prefix: 'Custom', namespace}]))),
         resolvers: generateResolver(namespace)
-      })
+      }])
     });
 
     facade.koa.use(async (ctx, next) => {
@@ -73,19 +68,22 @@ const createTestFacade = () => {
     .useMiddleware(reqResLogger({logger}));
 };
 
-describe('extend', () => {
-  let facade: Facade<any>;
-  let request: SuperAgentTest;
+let facade: Facade<any>;
+let request: SuperAgentTest;
 
+let startPromise: Promise<unknown>;
+
+describe('extend', () => {
   beforeAll(async () => {
     facade = createTestFacade();
-    await facade.start();
+    startPromise = facade.start();
+    await startPromise;
     request = agent(facade.server) as any;
-    // await new Promise(resolve => setTimeout(resolve, 20000))
   });
 
   afterAll(async () => {
-    await facade && await facade.stop();
+    await startPromise;
+    await facade.stop();
   });
 
   it('should start the facade', () => {

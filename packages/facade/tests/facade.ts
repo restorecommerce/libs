@@ -2,17 +2,12 @@ import { createFacade, reqResLogger, type FacadeContext, identityModule } from '
 import { createServiceConfig } from '@restorecommerce/service-config';
 import { createLogger } from '@restorecommerce/logger';
 
-import { ResourceSrvGrpcClient } from '../src/modules/master_data/grpc/index.js';
-import path from 'node:path';
-import * as url from 'node:url';
 import * as fs from 'node:fs';
 
 const jwks = JSON.parse(fs.readFileSync('./tests/jwks.json').toString());
 
-const CONFIG_PATH = path.dirname(url.fileURLToPath(import.meta.url));
-
 const createTestFacade = () => {
-  const serviceConfig = createServiceConfig(CONFIG_PATH);
+  const serviceConfig = createServiceConfig(process.cwd());
 
   const cfg = {
     env: serviceConfig.get('NODE_ENV'),
@@ -24,10 +19,6 @@ const createTestFacade = () => {
   };
 
   const logger = createLogger(cfg.logger);
-  const resourcesClient = new ResourceSrvGrpcClient(cfg.resources.client.address, {
-    ...cfg.resources.client,
-    logger
-  });
 
   return createFacade({
     // ...cfg.facade,
@@ -39,7 +30,6 @@ const createTestFacade = () => {
       identitySrvClientConfig: cfg.identity.client,
       config: cfg.identity,
       oidc: {
-        // remoteTokenService: new TokenServiceStub(),
         client_id: 'TEST_CLIENT_ID',
         client_secret: 'TEST_CLIENT_SECRET',
         cookies: {

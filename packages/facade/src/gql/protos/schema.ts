@@ -6,11 +6,13 @@ import {
   GraphQLObjectType,
   GraphQLString,
   type ThunkObjMap,
-  GraphQLEnumType
+  GraphQLEnumType,
+  type GraphQLFieldConfig,
+  type GraphQLFieldConfigArgumentMap,
+  type GraphQLFieldConfigMap
 } from 'graphql';
 import flat from 'array.prototype.flat';
 import { getWhitelistBlacklistConfig, Mutate } from './graphql.js';
-import { type GraphQLFieldConfig, type GraphQLFieldConfigArgumentMap, type GraphQLFieldConfigMap } from 'graphql/type/definition.js';
 import { capitalize, capitalizeProtoName, useSubscriptions, getServiceName } from './utils.js';
 import { getTyping } from './registry.js';
 
@@ -93,7 +95,7 @@ type SchemaBaseOrSub =
   | Map<string, ThunkObjMap<GraphQLFieldConfig<any, any>>>;
 const namespaceResolverSchemaRegistry = new Map<string, Map<boolean, Map<string, SchemaBaseOrSub>>>();
 
-const subscriptionFields: GraphQLFieldConfigMap<any, GraphQLFieldConfig<any, any>> = {};
+const subscriptionFields: Record<string, GraphQLFieldConfigMap<any, GraphQLFieldConfig<any, any>>> = {};
 
 export const registerResolverSchema = (namespace: string, name: string, schema: SchemaBaseOrSub, mutation = false, subspace: string | undefined = undefined, config: ServiceConfig) => {
   if (!namespaceResolverSchemaRegistry.has(namespace)) {
@@ -137,6 +139,7 @@ export const registerResolverSchema = (namespace: string, name: string, schema: 
 export const generateSchema = (setup: { prefix: string; namespace: string }[]) => {
   const queryFields: GraphQLFieldConfigMap<any, any> = {};
   const mutationFields: GraphQLFieldConfigMap<any, any> = {};
+  const subFields: GraphQLFieldConfigMap<any, any> = {};
 
   setup.forEach(s => {
     if (!namespaceResolverSchemaRegistry.has(s.namespace)) {
@@ -192,6 +195,12 @@ export const generateSchema = (setup: { prefix: string; namespace: string }[]) =
         }))
       };
     }
+
+    if (s.namespace in subscriptionFields) {
+      for (let [k, v] of Object.entries(subscriptionFields[s.namespace])) {
+        subFields[k] = v;
+      }
+    }
   });
 
   const config: any = {};
@@ -210,10 +219,10 @@ export const generateSchema = (setup: { prefix: string; namespace: string }[]) =
     });
   }
 
-  if (Object.keys(subscriptionFields).length > 0) {
+  if (Object.keys(subFields).length > 0) {
     config.subscription = new GraphQLObjectType({
       name: 'Subscription',
-      fields: subscriptionFields
+      fields: subFields
     });
   }
 
@@ -244,7 +253,11 @@ export const generateSubServiceSchemas = (subServices: ProtoMetadata[], config: 
           const typing = getTyping('.' + meta.fileDescriptor.package + '.' + messageName);
 
           if (typing) {
-            subscriptionFields[fieldName] = {
+            if (!(namespace in subscriptionFields)) {
+              subscriptionFields[namespace] = {};
+            }
+
+            subscriptionFields[namespace][fieldName] = {
               // TODO Implement user lookup
               // type: typing?.output!,
               type: subscriptionOutput,

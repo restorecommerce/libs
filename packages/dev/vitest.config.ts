@@ -11,4 +11,9 @@ export default defineConfig({
       reporter: ['text', 'lcovonly'],
     },
   },
+  resolve: {
+    alias: {
+      graphql: 'graphql/index.js'
+    }
+  }
 });

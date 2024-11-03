@@ -7,9 +7,7 @@ import {
 } from './types.js';
 import { buildSubgraphSchema } from '@apollo/subgraph';
 import { parse } from 'graphql';
-import { type GraphQLSchema, printSchema } from 'graphql/index.js';
-import { GraphQLObjectType } from 'graphql';
-import { GraphQLList, GraphQLScalarType } from 'graphql/type/definition.js';
+import { type GraphQLSchema, printSchema, GraphQLObjectType, GraphQLList, GraphQLScalarType } from 'graphql';
 import { generateSubServiceResolvers } from './resolvers.js';
 
 export const buildFederatedSubscriptionSchema = <T, M extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, M>>(subServices: ProtoMetadata[], config: SubSpaceServiceConfig, namespace: string, schema: GraphQLSchema): FederatedSchemaWithResolvers => {

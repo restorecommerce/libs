@@ -113,6 +113,7 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
   }
 
   useModule<TNewModule extends FacadeModule>(module: TNewModule) {
+    this.logger.info(`Adding module: ${module.moduleName}`);
     if (this.modules.some(m => module.moduleName === m.moduleName)) {
       throw new Error(`module ${module.moduleName} already loaded`);
     }
@@ -126,7 +127,8 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
   }
 
   addApolloService({ name, schema, url }: { name: string; schema: any; url: string }) {
-    if (schema instanceof GraphQLSchema) {
+    this.logger.info(`Adding Apollo service: ${name}`);
+    if ('astNode' in schema) {
       this.apolloServices[name] = { schema, url };
     } else if ('federatedSchema' in schema && 'resolvers' in schema) {
       this.apolloServices[name] = { schema: schema.federatedSchema, url };

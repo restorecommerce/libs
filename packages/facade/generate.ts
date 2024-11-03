@@ -38,11 +38,10 @@ import { schema as identitySchema } from './src/modules/identity/gql/schema.js';
 import { namespace as identityNamespace } from './src/modules/identity/interfaces.js';
 
 import { createServiceConfig } from '@restorecommerce/service-config';
-import { join } from 'node:path';
 import { setUseSubscriptions } from './src/gql/protos/utils.js';
 
 // TODO Configurable
-const cfg = createServiceConfig(join(process.cwd(), 'tests'));
+const cfg = createServiceConfig(process.cwd());
 
 setUseSubscriptions(!!cfg.get('facade:kafka'));
 

@@ -16,14 +16,11 @@ import {
   paymentModule,
   schedulingModule
 } from './src/index.js';
-import { join, dirname } from 'node:path';
-import * as url from 'node:url';
 
-const CONFIG_PATH = dirname(url.fileURLToPath(import.meta.url));
 import jwks from './tests/jwks.json' with { type: 'json' };
 
 const createTestFacade = () => {
-  const serviceConfig = createServiceConfig(join(CONFIG_PATH, 'tests'));
+  const serviceConfig = createServiceConfig(process.cwd());
 
   const logger = createLogger(serviceConfig.get('logger'));
 

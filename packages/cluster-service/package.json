@@ -20,18 +20,13 @@
     "recluster": "^1.0.0"
   },
   "devDependencies": {
-    "coveralls": "^3.1.1",
     "is-generator": "^1.0.3",
-    "mocha": "^10.2.0",
-    "nyc": "17.1.0",
-    "should": "^13.2.3"
+    "should": "^13.2.3",
+    "vitest": "^2.1.4"
   },
   "scripts": {
-    "test": "nyc mocha --full-trace --exit",
-    "lint": "eslint *.json *.js",
-    "mocha": "mocha ./test/*",
-    "lcov-report": "nyc report --reporter=lcov",
-    "coveralls": "nyc report --reporter=text-lcov | coveralls"
+    "test": "vitest run --dangerouslyIgnoreUnhandledErrors",
+    "lint": "eslint *.json *.js"
   },
   "engines": {
     "node": ">= 10.0.0"

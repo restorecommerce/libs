@@ -1,7 +1,6 @@
-import { } from 'mocha';
 import * as should from 'should';
-import { accessRequest, isAllowed, whatIsAllowed } from '../lib/acs/resolver';
-import { flushCache, initializeCache } from '../lib/acs/cache';
+import { accessRequest, isAllowed, whatIsAllowed } from '../src/acs/resolver';
+import { flushCache, initializeCache } from '../src/acs/cache';
 import {
   AuthZAction,
   DecisionResponse,
@@ -10,17 +9,18 @@ import {
   ACSClientContext,
   CtxResource,
   RuleRQ,
-} from '../lib/acs/interfaces';
-import { initAuthZ, ACSAuthZ } from '../lib/acs/authz';
-import logger from '../lib/logger';
+} from '../src/acs/interfaces';
+import { initAuthZ, ACSAuthZ } from '../src/acs/authz';
+import logger from '../src/logger';
 import * as _ from 'lodash';
-import { cfg } from '../lib';
+import { cfg } from '../src';
 import {
   Request,
   Response_Decision
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/access_control';
 import { GrpcMockServer } from '@alenon/grpc-mock-server';
 import { Effect } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/rule';
+import { it, describe, beforeAll, afterAll, beforeEach, afterEach } from 'vitest';
 
 let authZ: ACSAuthZ;
 
@@ -320,16 +320,15 @@ const stop = async (): Promise<void> => {
 };
 
 describe('Testing acs-client', () => {
-  before(async function startServer(): Promise<void> {
-    this.timeout(60000);
+  beforeAll(async () => {
     const cacheEnabled = process.env.CACHE_ENABLED;
     if (cacheEnabled && cacheEnabled.toLowerCase() === 'true') {
       await initializeCache();
     }
     await start();
-  });
+  }, 60000);
 
-  after(async (): Promise<void> => {
+  afterAll(async () => {
     await stop();
     const cacheEnabled = process.env.CACHE_ENABLED;
     if (cacheEnabled && cacheEnabled.toLowerCase() === 'true') {

@@ -45,7 +45,7 @@
   },
   "scripts": {
     "pretest": "npm run build",
-    "test": "npm run lint && vitest",
+    "test": "npm run lint && vitest run",
     "lint": "eslint src",
     "build:tsc": "tsc -d",
     "build:clean": "rimraf lib/",

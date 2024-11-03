@@ -5,6 +5,7 @@ const Koa = require('koa');
 let reqResLogger = require('../lib/index');
 const assert = require('assert');
 const bodyParser = require('koa-bodyparser');
+import { it, describe, beforeAll, beforeEach } from 'vitest';
 
 reqResLogger = reqResLogger.default;
 
@@ -56,7 +57,7 @@ function setupServer(bodyParsing = false, bodyBeforeLogging = true) {
 
 describe('GraphQL Request and Response logging', () => {
 
-  before(() => {
+  beforeAll(() => {
     setupServer();
   })
 
@@ -79,7 +80,7 @@ describe('simple Request and Response logging', () => {
   });
 
   describe('having body parser before logger', () => {
-    before(() => {
+    beforeAll(() => {
       setupServer(true, true);
     })
 
@@ -100,7 +101,7 @@ describe('simple Request and Response logging', () => {
   })
 
   describe('having body parser after logger', () => {
-    before(() => {
+    beforeAll(() => {
       setupServer(true, false);
     })
 

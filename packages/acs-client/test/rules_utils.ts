@@ -1,6 +1,6 @@
 import { Effect } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/rule';
 import { ReverseQuery } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/access_control';
-import { RuleRQ } from '../lib';
+import { RuleRQ } from '../src';
 import { Attribute } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/attribute';
 
 export const permitLocationRule = {

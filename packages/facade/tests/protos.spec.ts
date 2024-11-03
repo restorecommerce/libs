@@ -6,7 +6,8 @@ import {
 } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/user.js';
 import { GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLScalarType } from 'graphql';
 import { getTyping, registerPackagesRecursive } from '../src/gql/protos/index.js';
-import { preProcessGQLInput, postProcessGQLOutput } from '../src/gql/protos/graphql.js'
+import { preProcessGQLInput, postProcessGQLOutput } from '../src/gql/protos/graphql.js';
+import { it, describe, expect } from 'vitest';
 
 describe('proto-meta', () => {
   it('should register typings', () => {
@@ -61,7 +62,7 @@ describe('proto-meta', () => {
         ],
         acls: null,
       }
-      
+
     };
 
     const preProcessed = await preProcessGQLInput(input, model.input);
@@ -70,5 +71,5 @@ describe('proto-meta', () => {
     expect(preProcessed.meta.created).toBeInstanceOf(Date);
     expect(preProcessed.data.value).toBeInstanceOf(Buffer);
     expect(postProcessed.data.value.birthday).toBeDefined();
-  })
+  });
 });

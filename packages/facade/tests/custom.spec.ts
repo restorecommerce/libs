@@ -15,9 +15,7 @@ import { buildSubgraphSchema } from '@apollo/subgraph';
 import { gql } from 'graphql-tag';
 import path from 'node:path';
 import * as url from 'node:url';
-import { jest } from '@jest/globals';
-
-jest.useFakeTimers();
+import { it, describe, beforeAll, afterAll, expect } from 'vitest';
 
 const CONFIG_PATH = path.dirname(url.fileURLToPath(import.meta.url));
 
@@ -95,26 +93,28 @@ describe('extend', () => {
     expect(facade.listening).toBe(true);
   });
 
-  it('should call custom function', (done) => {
-    request
-      .post('/graphql')
-      .send({
-        query: `{ custom { customFunction } }`,
-      })
-      .set('Accept', 'application/json')
-      .expect('Content-Type', /json/)
-      .expect(200)
-      .end((err, res) => {
-        if (err) {
-          done(err);
-        }
+  it('should call custom function', () => {
+    return new Promise<void>((resolve, reject) => {
+      request
+        .post('/graphql')
+        .send({
+          query: `{ custom { customFunction } }`,
+        })
+        .set('Accept', 'application/json')
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .end((err, res) => {
+          if (err) {
+            reject(err);
+          }
 
-        expect(res.body).toBeInstanceOf(Object);
-        expect(res.body.data).toBeInstanceOf(Object);
-        expect(res.body.data.custom).toBeInstanceOf(Object);
-        expect(res.body.data.custom[customFunction]).toEqual(customResponse);
+          expect(res.body).toBeInstanceOf(Object);
+          expect(res.body.data).toBeInstanceOf(Object);
+          expect(res.body.data.custom).toBeInstanceOf(Object);
+          expect(res.body.data.custom[customFunction]).toEqual(customResponse);
 
-        done();
-      });
+          resolve();
+        });
+    });
   });
 });

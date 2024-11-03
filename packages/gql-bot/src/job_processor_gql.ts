@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import * as _ from 'lodash';
 import * as fs from 'fs';
-import { Client } from './index';
+import { Client } from './client.js';
 import { YamlStreamReadTransformer } from 'yaml-document-stream';
-import { stringToChalk } from './utils';
+import { stringToChalk } from './utils.js';
 
 /**
  * GraphQL-specific job processor.

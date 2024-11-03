@@ -1,7 +1,6 @@
 import * as koa from 'koa';
 import Stream from 'stream';
-
-const Koa = require('koa');
+import Koa from 'koa';
 
 export function mockContext(req?: koa.Request, res?, app?): koa.Context {
   const socket = new Stream.Duplex();

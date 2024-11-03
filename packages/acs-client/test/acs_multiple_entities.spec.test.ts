@@ -1,11 +1,10 @@
-import { } from 'mocha';
 import * as should from 'should';
 import {
   accessRequest,
   isAllowed,
   whatIsAllowed
-} from '../lib/acs/resolver';
-import { flushCache, initializeCache } from '../lib/acs/cache';
+} from '../src/acs/resolver';
+import { flushCache, initializeCache } from '../src/acs/cache';
 import {
   AuthZAction,
   DecisionResponse,
@@ -14,8 +13,8 @@ import {
   ACSClientContext,
   CtxResource,
 } from '../lib/acs/interfaces';
-import { initAuthZ, ACSAuthZ } from '../lib/acs/authz';
-import logger from '../lib/logger';
+import { initAuthZ, ACSAuthZ } from '../src/acs/authz';
+import logger from '../src/logger';
 import * as _ from 'lodash';
 import {
   MultiplePolicySetRQFactory,
@@ -36,6 +35,7 @@ import {
   Response_Decision
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/access_control';
 import { GrpcMockServer } from '@alenon/grpc-mock-server';
+import { it, describe, beforeAll, afterAll, beforeEach, afterEach } from 'vitest';
 
 let authZ: ACSAuthZ;
 
@@ -167,16 +167,15 @@ const subject = {
 };
 
 describe('testing acs-client with multiple entities', () => {
-  before(async function startServer(): Promise<void> {
-    this.timeout(60000);
+  beforeAll(async () => {
     const cacheEnabled = process.env.CACHE_ENABLED;
     await start();
     if (cacheEnabled?.toLowerCase() === 'true') {
       await initializeCache();
     }
-  });
+  }, 60000);
 
-  after(async (): Promise<void> => {
+  afterAll(async () => {
     await stop();
     const cacheEnabled = process.env.CACHE_ENABLED;
     if (cacheEnabled?.toLowerCase() === 'true') {

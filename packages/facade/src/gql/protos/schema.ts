@@ -6,7 +6,7 @@ import {
   GraphQLObjectType,
   GraphQLString,
   type ThunkObjMap,
-  GraphQLInputObjectType, GraphQLEnumType
+  GraphQLEnumType
 } from 'graphql';
 import flat from 'array.prototype.flat';
 import { getWhitelistBlacklistConfig, Mutate } from './graphql.js';

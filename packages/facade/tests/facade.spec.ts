@@ -1,8 +1,6 @@
 import { type AddressInfo } from 'node:net';
 import { facade } from './facade.js';
-import { jest } from '@jest/globals';
-
-jest.useFakeTimers();
+import { describe, it, beforeAll, afterAll, expect } from 'vitest';
 
 let url;
 

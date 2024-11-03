@@ -10,7 +10,7 @@ class Mailer {
   */
   transport: any;
 
-  constructor(opts: any, htmlToTextOptions: any) {
+  constructor(opts: any, htmlToTextOptions?: any) {
     const defaultOpts = {
       logger: winston,
       pool: true

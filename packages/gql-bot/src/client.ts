@@ -1,13 +1,12 @@
 import * as _ from 'lodash';
 import * as url from 'url';
 import * as fs from 'fs';
-import gql from 'graphql-tag';
-import { ApolloClient } from 'apollo-client';
-import { InMemoryCache } from 'apollo-cache-inmemory';
-// import fetch from 'node-fetch'; // required for apollo-link-http
-import { createHttpLink, HttpLink } from 'apollo-link-http';
+import { ApolloClient } from '@apollo/client/core';
+import { InMemoryCache } from '@apollo/client/cache';
+import { HttpOptions, createHttpLink } from '@apollo/client/link/http';
 import * as https from 'https';
-import { processResponse } from './utils';
+import { processResponse } from './utils.js';
+import {parse} from 'graphql';
 
 const _checkVariableMutation = (mutation: string): boolean => {
   const mutationName = mutation.slice(mutation.indexOf(' '),
@@ -174,7 +173,7 @@ export class Client {
       mutation = _replaceInlineVars(mutation, { resource_list, apiKey });
     }
 
-    const apolloLinkOpts: HttpLink.Options = {
+    const apolloLinkOpts: HttpOptions = {
       uri: normalUrl,
       fetch: fetch as any
     };
@@ -198,7 +197,7 @@ export class Client {
     });
 
     const response = await apolloClient.mutate({
-      mutation: gql`${mutation}` as any,
+      mutation: parse(`${mutation}`),
       variables
     });
 

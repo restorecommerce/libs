@@ -26,21 +26,15 @@
     "typescript": "^5.2.2"
   },
   "devDependencies": {
-    "@istanbuljs/nyc-config-typescript": "^1.0.2",
     "@restorecommerce/dev": "^0.0.12",
-    "@types/chai": "^5.0.0",
     "@types/koa": "^2.13.11",
-    "@types/mocha": "^10.0.4",
     "@types/node": "^22.7.9",
     "@types/sinon": "^17.0.1",
-    "chai": "^5.1.2",
-    "coveralls": "^3.1.1",
     "eslint": "^9.13.0",
     "eslint-plugin-prefer-arrow-functions": "^3.2.4",
-    "mocha": "^10.2.0",
-    "nyc": "^17.1.0",
     "source-map-support": "^0.5.21",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.1",
+    "vitest": "^2.1.4"
   },
   "scripts": {
     "lint": "eslint src",
@@ -49,8 +43,7 @@
     "build": "npm-run-all lint build:clean build:tsc",
     "build:clean": "rimraf lib",
     "build:tsc": "tsc -d",
-    "test": "nyc mocha",
-    "coveralls": "nyc report --reporter=text-lcov | coveralls"
+    "test": "vitest run"
   },
   "engines": {
     "node": ">= 8.0.0"

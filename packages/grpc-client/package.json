@@ -32,24 +32,22 @@
   },
   "devDependencies": {
     "@restorecommerce/dev": "^0.0.12",
-    "@types/jest": "^29.5.8",
     "@types/lodash": "^4.17.5",
     "@types/node": "22.8.4",
     "@types/retry": "^0.12.5",
     "@types/uuid": "^10.0.0",
-    "jest": "^29.7.0",
     "npm-run-all": "^4.1.5",
     "rimraf": "6.0.1",
-    "ts-jest": "^29.1.5",
     "ts-proto": "2.2.5",
     "ts-proto-descriptors": "2.0.0",
-    "typescript": "^5.5.2"
+    "typescript": "^5.5.2",
+    "vitest": "^2.1.4"
   },
   "scripts": {
     "build": "npm-run-all build:clean build:compile",
     "build:clean": "rimraf -rf ./dist",
     "build:compile": "tsc -p tsconfig.lib.json",
-    "test": "jest",
+    "test": "vitest run",
     "prepublishOnly": "npm run build",
     "generate:test": "protoc --experimental_allow_proto3_optional --ts_proto_opt=outputClientImpl=false,env=node,useOptionals=true,outputJsonMethods=true,outputSchema=true,useExactTypes=false,outputServices=nice-grpc,outputServices=generic-definitions --proto_path=./tests/protos --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=./tests/generated ./tests/protos/echo/*.proto"
   },

@@ -34,7 +34,6 @@
   "scripts": {
     "test": "true",
     "lint": "eslint src",
-    "mocha": "cross-env NODE_ENV=test mocha --full-trace --exit --timeout 30000",
     "test-debug": "true",
     "lcov-report": "nyc report --reporter=lcov",
     "coveralls": "nyc report --reporter=text-lcov | coveralls",

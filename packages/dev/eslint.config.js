@@ -4,6 +4,7 @@ import fileExtensionInImportTS from 'eslint-plugin-file-extension-in-import-ts';
 import tsParser from '@typescript-eslint/parser';
 import { plugin as tesLintPlugin } from 'typescript-eslint';
 import { fixupPluginRules } from "@eslint/compat";
+import stylistic from '@stylistic/eslint-plugin';
 
 export default [
   {
@@ -29,7 +30,8 @@ export default [
       '@typescript-eslint': tesLintPlugin,
       'prefer-arrow-functions': fixupPluginRules(preferArrowFunctions),
       'unicorn': unicorn,
-      'file-extension-in-import-ts': fileExtensionInImportTS
+      'file-extension-in-import-ts': fileExtensionInImportTS,
+      '@stylistic': stylistic
     },
     rules: {
       '@typescript-eslint/adjacent-overload-signatures': 'error',
@@ -44,8 +46,8 @@ export default [
           'format': ['PascalCase']
         }
       ],
-      '@typescript-eslint/indent': ['error', 2],
-      '@typescript-eslint/member-delimiter-style': [
+      '@stylistic/indent': ['error', 2],
+      '@stylistic/member-delimiter-style': [
         'error',
         {
           'multiline': {
@@ -61,11 +63,11 @@ export default [
       '@typescript-eslint/no-inferrable-types': 'error',
       '@typescript-eslint/no-use-before-define': [2, {'functions': true, 'classes': true}],
       '@typescript-eslint/prefer-namespace-keyword': 'error',
-      '@typescript-eslint/semi': [
+      '@stylistic/semi': [
         'error',
         'always'
       ],
-      '@typescript-eslint/type-annotation-spacing': 'error',
+      '@stylistic/type-annotation-spacing': 'error',
       'arrow-parens': [
         'off',
         'as-needed'

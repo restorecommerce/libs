@@ -5,7 +5,7 @@ import * as through2 from 'through2';
 import readdirp from 'readdirp';
 import * as path from 'path';
 import { EventEmitter } from 'events';
-import { stringToChalk, processResponse } from './utils';
+import { stringToChalk, processResponse } from './utils.js';
 
 export class ReadArrayStream extends Readable {
   array: any[];

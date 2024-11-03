@@ -20,8 +20,8 @@ import { WebSocketServer } from 'ws';
 import { useServer } from 'graphql-ws/lib/use/ws';
 import { type Disposable } from 'graphql-ws';
 import _ from 'lodash';
-import { makeExecutableSchema } from 'graphql-tools';
-import { gql } from 'graphql-tag';
+import { makeExecutableSchema } from '@graphql-tools/schema';
+import { parse } from 'graphql';
 import { type GraphQLResolverMap, mergeSubscribeIntoSchema } from './gql/protos/index.js';
 import compose from 'koa-compose';
 import { type KafkaProviderConfig } from '@restorecommerce/kafka-client';
@@ -266,7 +266,7 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
       }));
 
       let schema = makeExecutableSchema({
-        typeDefs: gql(typeDefs + `
+        typeDefs: parse(typeDefs + `
         type Query { sample: String }
         `),
         resolvers: {

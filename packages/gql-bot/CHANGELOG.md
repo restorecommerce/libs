@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.9](https://github.com/restorecommerce/libs/compare/@restorecommerce/gql-bot@1.0.8...@restorecommerce/gql-bot@1.0.9) (2024-11-04)
+
+
+### Bug Fixes
+
+* **various:** Upgrade deps ([a1b22fd](https://github.com/restorecommerce/libs/commit/a1b22fdf01278fb552d1aa98a32edc6a80718f05))
+* **various:** Upgrade eslint to use typescript-eslint ([62e3439](https://github.com/restorecommerce/libs/commit/62e34393bf633012bc8def8586959dd9e5c6b2a4))
+* **various:** Upgrade eslint to use typescript-eslint ([b580f00](https://github.com/restorecommerce/libs/commit/b580f00d5bd1d67c8fc1caabcb75ca3b6d12a83e))
+
+
+
+
+
 ## [1.0.8](https://github.com/restorecommerce/libs/compare/@restorecommerce/gql-bot@1.0.7...@restorecommerce/gql-bot@1.0.8) (2024-06-07)
 
 **Note:** Version bump only for package @restorecommerce/gql-bot

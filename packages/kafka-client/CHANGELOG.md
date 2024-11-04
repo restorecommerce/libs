@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.15](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.2.14...@restorecommerce/kafka-client@1.2.15) (2024-11-04)
+
+
+### Bug Fixes
+
+* event provider fetching ([90f7509](https://github.com/restorecommerce/kafka-client/commit/90f7509c0e5395af7acc94c994768d3baefe273c))
+* **various:** Upgrade deps ([a1b22fd](https://github.com/restorecommerce/kafka-client/commit/a1b22fdf01278fb552d1aa98a32edc6a80718f05))
+* **various:** Upgrade eslint to use typescript-eslint ([62e3439](https://github.com/restorecommerce/kafka-client/commit/62e34393bf633012bc8def8586959dd9e5c6b2a4))
+* **various:** Upgrade eslint to use typescript-eslint ([b580f00](https://github.com/restorecommerce/kafka-client/commit/b580f00d5bd1d67c8fc1caabcb75ca3b6d12a83e))
+
+
+
+
+
 ## [1.2.14](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.2.13...@restorecommerce/kafka-client@1.2.14) (2024-09-23)
 
 **Note:** Version bump only for package @restorecommerce/kafka-client

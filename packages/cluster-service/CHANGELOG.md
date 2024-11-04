@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/cluster-service@1.0.3...@restorecommerce/cluster-service@1.0.4) (2024-11-04)
+
+
+### Bug Fixes
+
+* **various:** Upgrade eslint to use typescript-eslint ([b580f00](https://github.com/restorecommerce/libs/commit/b580f00d5bd1d67c8fc1caabcb75ca3b6d12a83e))
+
+
+
+
+
 ## [1.0.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/cluster-service@1.0.2...@restorecommerce/cluster-service@1.0.3) (2024-03-05)
 
 **Note:** Version bump only for package @restorecommerce/cluster-service

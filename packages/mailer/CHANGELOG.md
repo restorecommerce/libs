@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.12](https://github.com/restorecommerce/libs/compare/@restorecommerce/mailer@1.0.11...@restorecommerce/mailer@1.0.12) (2024-11-04)
+
+
+### Bug Fixes
+
+* **various:** Upgrade eslint to use typescript-eslint ([b580f00](https://github.com/restorecommerce/libs/commit/b580f00d5bd1d67c8fc1caabcb75ca3b6d12a83e))
+* **various:** Upgrade eslint to use typescript-eslint ([8a9ce59](https://github.com/restorecommerce/libs/commit/8a9ce59edc0f8619bc13745462f9c59e4bb6c6ab))
+
+
+
+
+
 ## [1.0.11](https://github.com/restorecommerce/libs/compare/@restorecommerce/mailer@1.0.10...@restorecommerce/mailer@1.0.11) (2024-06-26)
 
 

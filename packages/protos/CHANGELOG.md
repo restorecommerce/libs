@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.8.12](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.8.11...@restorecommerce/protos@6.8.12) (2024-11-04)
+
+
+### Bug Fixes
+
+* **protos:** rename Packing --> Fulfillment ([9f87591](https://github.com/restorecommerce/libs/commit/9f87591bd8549028ab57cf3aaf5bc1c26bd12f9b))
+
+
+
+
+
 ## [6.8.11](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.8.10...@restorecommerce/protos@6.8.11) (2024-09-23)
 
 

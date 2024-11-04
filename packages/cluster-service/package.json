@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/cluster-service",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Launch clustered services using node clustering and monitor them",
   "main": "index",
   "author": "n-fuse GmbH",

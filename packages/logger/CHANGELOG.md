@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@1.3.1...@restorecommerce/logger@1.3.2) (2024-11-04)
+
+
+### Bug Fixes
+
+* **acs-client, logger:** Upgrade eslint to use typescript-eslint ([acf3ccd](https://github.com/restorecommerce/libs/commit/acf3ccd7b73d9dff339872c04a2abdadf4e96b34))
+* **logger:** use common tsconfig, fix style errors ([4917199](https://github.com/restorecommerce/libs/commit/49171991d356c01adf0ebf8f9b31985b3a488056))
+* **various:** Upgrade eslint to use typescript-eslint ([b580f00](https://github.com/restorecommerce/libs/commit/b580f00d5bd1d67c8fc1caabcb75ca3b6d12a83e))
+
+
+
+
+
 ## [1.3.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@1.3.0...@restorecommerce/logger@1.3.1) (2024-06-26)
 
 

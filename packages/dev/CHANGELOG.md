@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.0.13](https://github.com/restorecommerce/libs/compare/@restorecommerce/dev@0.0.12...@restorecommerce/dev@0.0.13) (2024-11-04)
+
+
+### Bug Fixes
+
+* **various:** Upgrade eslint to use typescript-eslint ([62e3439](https://github.com/restorecommerce/libs/commit/62e34393bf633012bc8def8586959dd9e5c6b2a4))
+* **various:** Upgrade eslint to use typescript-eslint ([b580f00](https://github.com/restorecommerce/libs/commit/b580f00d5bd1d67c8fc1caabcb75ca3b6d12a83e))
+* **various:** Upgrade eslint to use typescript-eslint ([8a9ce59](https://github.com/restorecommerce/libs/commit/8a9ce59edc0f8619bc13745462f9c59e4bb6c6ab))
+
+
+
+
+
 ## [0.0.12](https://github.com/restorecommerce/libs/compare/@restorecommerce/dev@0.0.11...@restorecommerce/dev@0.0.12) (2024-06-07)
 
 

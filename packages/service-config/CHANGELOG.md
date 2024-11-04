@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.16](https://github.com/restorecommerce/libs/compare/@restorecommerce/service-config@1.0.15...@restorecommerce/service-config@1.0.16) (2024-11-04)
+
+
+### Bug Fixes
+
+* **various:** Upgrade deps ([a1b22fd](https://github.com/restorecommerce/libs/commit/a1b22fdf01278fb552d1aa98a32edc6a80718f05))
+
+
+
+
+
 ## [1.0.15](https://github.com/restorecommerce/libs/compare/@restorecommerce/service-config@1.0.14...@restorecommerce/service-config@1.0.15) (2024-06-26)
 
 **Note:** Version bump only for package @restorecommerce/service-config

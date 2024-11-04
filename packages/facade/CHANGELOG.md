@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.2.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.1.8...@restorecommerce/facade@2.2.0) (2024-11-04)
+
+
+### Bug Fixes
+
+* **various:** Upgrade deps ([a1b22fd](https://github.com/restorecommerce/libs/commit/a1b22fdf01278fb552d1aa98a32edc6a80718f05))
+* **various:** Upgrade eslint to use typescript-eslint ([8a9ce59](https://github.com/restorecommerce/libs/commit/8a9ce59edc0f8619bc13745462f9c59e4bb6c6ab))
+
+
+### Features
+
+* configurable ostorage endpoint ([875e5c0](https://github.com/restorecommerce/libs/commit/875e5c0b02d2539b5a42a6a2992500377af79198))
+* **facade:** Upgrade deps ([247d780](https://github.com/restorecommerce/libs/commit/247d780aa84bf94e54cc200c7adf65cc43b004e2))
+
+
+
+
+
 ## [2.1.8](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.1.7...@restorecommerce/facade@2.1.8) (2024-10-09)
 
 

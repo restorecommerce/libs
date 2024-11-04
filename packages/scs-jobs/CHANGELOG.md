@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.42](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.41...@restorecommerce/scs-jobs@0.1.42) (2024-11-04)
+
+
+### Bug Fixes
+
+* **various:** Upgrade deps ([a1b22fd](https://github.com/restorecommerce/libs/commit/a1b22fdf01278fb552d1aa98a32edc6a80718f05))
+* **various:** Upgrade eslint to use typescript-eslint ([62e3439](https://github.com/restorecommerce/libs/commit/62e34393bf633012bc8def8586959dd9e5c6b2a4))
+* **various:** Upgrade eslint to use typescript-eslint ([8a9ce59](https://github.com/restorecommerce/libs/commit/8a9ce59edc0f8619bc13745462f9c59e4bb6c6ab))
+
+
+
+
+
 ## [0.1.41](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.40...@restorecommerce/scs-jobs@0.1.41) (2024-10-11)
 
 

@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@3.0.1...@restorecommerce/acs-client@3.0.2) (2024-11-04)
+
+
+### Bug Fixes
+
+* **acs-client, logger:** Upgrade eslint to use typescript-eslint ([acf3ccd](https://github.com/restorecommerce/libs/commit/acf3ccd7b73d9dff339872c04a2abdadf4e96b34))
+* **various:** Upgrade eslint to use typescript-eslint ([62e3439](https://github.com/restorecommerce/libs/commit/62e34393bf633012bc8def8586959dd9e5c6b2a4))
+* **various:** Upgrade eslint to use typescript-eslint ([b580f00](https://github.com/restorecommerce/libs/commit/b580f00d5bd1d67c8fc1caabcb75ca3b6d12a83e))
+* **various:** Upgrade eslint to use typescript-eslint ([8a9ce59](https://github.com/restorecommerce/libs/commit/8a9ce59edc0f8619bc13745462f9c59e4bb6c6ab))
+
+
+
+
+
 ## [3.0.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@3.0.0...@restorecommerce/acs-client@3.0.1) (2024-10-09)
 
 

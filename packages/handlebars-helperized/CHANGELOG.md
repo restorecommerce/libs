@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.4.2](https://github.com/restorecommerce/handlebars-helperized/compare/@restorecommerce/handlebars-helperized@1.4.1...@restorecommerce/handlebars-helperized@1.4.2) (2024-11-04)
+
+
+### Bug Fixes
+
+* **various:** Upgrade deps ([a1b22fd](https://github.com/restorecommerce/handlebars-helperized/commit/a1b22fdf01278fb552d1aa98a32edc6a80718f05))
+* **various:** Upgrade eslint to use typescript-eslint ([62e3439](https://github.com/restorecommerce/handlebars-helperized/commit/62e34393bf633012bc8def8586959dd9e5c6b2a4))
+* **various:** Upgrade eslint to use typescript-eslint ([b580f00](https://github.com/restorecommerce/handlebars-helperized/commit/b580f00d5bd1d67c8fc1caabcb75ca3b6d12a83e))
+* **various:** Upgrade eslint to use typescript-eslint ([8a9ce59](https://github.com/restorecommerce/handlebars-helperized/commit/8a9ce59edc0f8619bc13745462f9c59e4bb6c6ab))
+
+
+
+
+
 ## [1.4.1](https://github.com/restorecommerce/handlebars-helperized/compare/@restorecommerce/handlebars-helperized@1.4.0...@restorecommerce/handlebars-helperized@1.4.1) (2024-06-07)
 
 **Note:** Version bump only for package @restorecommerce/handlebars-helperized

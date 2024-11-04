@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/grpc-client@2.2.4...@restorecommerce/grpc-client@2.2.5) (2024-11-04)
+
+
+### Bug Fixes
+
+* **various:** Upgrade eslint to use typescript-eslint ([b580f00](https://github.com/restorecommerce/libs/commit/b580f00d5bd1d67c8fc1caabcb75ca3b6d12a83e))
+
+
+
+
+
 ## [2.2.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/grpc-client@2.2.3...@restorecommerce/grpc-client@2.2.4) (2024-06-26)
 
 **Note:** Version bump only for package @restorecommerce/grpc-client

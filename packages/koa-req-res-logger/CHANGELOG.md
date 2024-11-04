@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.10](https://github.com/restorecommerce/koa-req-res-logger/compare/@restorecommerce/koa-req-res-logger@1.1.9...@restorecommerce/koa-req-res-logger@1.1.10) (2024-11-04)
+
+
+### Bug Fixes
+
+* **various:** Upgrade eslint to use typescript-eslint ([b580f00](https://github.com/restorecommerce/koa-req-res-logger/commit/b580f00d5bd1d67c8fc1caabcb75ca3b6d12a83e))
+
+
+
+
+
 ## [1.1.9](https://github.com/restorecommerce/koa-req-res-logger/compare/@restorecommerce/koa-req-res-logger@1.1.8...@restorecommerce/koa-req-res-logger@1.1.9) (2024-06-26)
 
 

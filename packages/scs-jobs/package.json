@@ -36,7 +36,7 @@
     "lint": "eslint src",
     "test-debug": "true",
     "lcov-report": "nyc report --reporter=lcov",
-    "coveralls": "nyc report --reporter=text-lcov | coveralls",
+    "coveralls": "nyc --reporter text --reporter lcov npm test",
     "build:tsc": "tsc -d",
     "build:clean": "rimraf lib",
     "build": "npm-run-all lint build:clean build:tsc"

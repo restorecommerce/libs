@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.9.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.8.12...@restorecommerce/protos@6.9.0) (2024-11-05)
+
+
+### Features
+
+* **protos:** add totp to users ([ce20a36](https://github.com/restorecommerce/libs/commit/ce20a36775b0a82aaa14e5762c97fe3c19d09ab3))
+
+
+
+
+
 ## [6.8.12](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.8.11...@restorecommerce/protos@6.8.12) (2024-11-04)
 
 

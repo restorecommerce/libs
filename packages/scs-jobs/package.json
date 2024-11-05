@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/scs-jobs",
-  "version": "0.1.42",
+  "version": "0.1.43",
   "description": "Restorecommerce scs jobs",
   "main": "lib/index.js",
   "author": "n-fuse GmbH",
@@ -19,9 +19,9 @@
   "dependencies": {
     "@restorecommerce/dev": "^0.0.13",
     "@restorecommerce/grpc-client": "^2.2.5",
-    "@restorecommerce/kafka-client": "^1.2.15",
+    "@restorecommerce/kafka-client": "^1.2.16",
     "@restorecommerce/logger": "^1.3.2",
-    "@restorecommerce/rc-grpc-clients": "^5.1.37",
+    "@restorecommerce/rc-grpc-clients": "^5.1.38",
     "bullmq": "^5.21.2",
     "eslint": "9.13.0",
     "eslint-plugin-prefer-arrow-functions": "^3.2.4",

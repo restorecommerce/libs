@@ -34,8 +34,8 @@ service FulfillmentProductService {
 }
 
 message Preferences {
-  optional bool partial_filfillment_allowed = 1;
-  repeated string couriers = 2; // ID of courier
+  optional bool partial_fulfillment_allowed = 1;
+  repeated string courier_ids = 2; // leave empty for open search
   repeated io.restorecommerce.attribute.Attribute options = 3; // Courier specific options such as C02 neutral delivery etc.
 }
 
@@ -128,11 +128,9 @@ message FulfillmentProductListResponse {
 }
 
 message FulfillmentSolution {
-  repeated io.restorecommerce.amount.Amount amounts = 1;
-  optional double compactness = 2;
-  optional double homogeneity = 3;
-  optional double score = 4;
-  repeated io.restorecommerce.fulfillment.Parcel parcels = 5;
+  repeated string courier_ids = 1;
+  repeated io.restorecommerce.fulfillment.Parcel parcels = 2;
+  repeated io.restorecommerce.amount.Amount amounts = 3;
 }
 
 message FulfillmentSolutionResponse {

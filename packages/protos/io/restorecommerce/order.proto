@@ -40,6 +40,9 @@ service OrderService {
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
 
   // Requires Fulfillment Service
+  // Evaluates plausibility of the Fulfillment that would result from given order.
+  rpc EvaluateFulfillment (OrderList) returns (io.restorecommerce.status.StatusListResponse);
+  // Requires Fulfillment Service
   rpc QueryFulfillmentSolution (FulfillmentRequestList) returns (io.restorecommerce.fulfillment_product.FulfillmentSolutionListResponse);
   // Requires Fulfillment Service
   rpc CreateFulfillment (FulfillmentRequestList) returns (io.restorecommerce.fulfillment.FulfillmentListResponse);

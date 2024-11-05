@@ -31,7 +31,6 @@ export const ostorageModule = createFacadeModuleFactory<OstorageConfig, Ostorage
     if (authToken && authToken.startsWith('Bearer ')) {
       token = authToken.split(' ')[1];
       ctx.subject = { token };
-      ctx.subject = { token };
     }
     const bucket = ctx.params[0];
     const key = ctx.params[1];

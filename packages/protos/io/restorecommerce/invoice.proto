@@ -162,6 +162,7 @@ message Invoice {
   optional google.protobuf.Timestamp to_date = 17; // value performance to date
   optional bool sent = 18;
   optional bool withdrawn = 19;
+  optional string customer_order_number = 20;
 }
 
 message Section {

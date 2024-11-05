@@ -40,7 +40,7 @@ service UserService {
   rpc ConfirmPasswordChange (ConfirmPasswordChangeRequest) returns (io.restorecommerce.status.OperationStatusObj);
   rpc ConfirmEmailChange (ConfirmEmailChangeRequest) returns (io.restorecommerce.status.OperationStatusObj);
   rpc Unregister (UnregisterRequest) returns (io.restorecommerce.status.OperationStatusObj);
-  rpc Login (LoginRequest) returns (UserResponse);
+  rpc Login (LoginRequest) returns (LoginResponse);
   rpc FindByRole (FindByRoleRequest) returns (UserListResponse) {
     option (io.restorecommerce.options.is_query) = true;
   };
@@ -51,6 +51,9 @@ service UserService {
     option (io.restorecommerce.options.is_query) = true;
   };
   rpc SendActivationEmail (SendActivationEmailRequest) returns (io.restorecommerce.status.OperationStatusObj);
+  rpc SetupTOTP (SetupTOTPRequest) returns (SetupTOTPResponse);
+  rpc CompleteTOTPSetup (CompleteTOTPSetupRequest) returns (io.restorecommerce.status.OperationStatusObj);
+  rpc ExchangeTOTP (ExchangeTOTPRequest) returns (UserResponse);
   rpc GetUnauthenticatedSubjectTokenForTenant(TenantRequest) returns (TenantResponse);
 }
 
@@ -62,6 +65,33 @@ message LoginRequest {
   optional string identifier = 1; // User name or email
   optional string password = 2; // Raw password
   optional string token = 3;
+}
+
+message LoginResponse {
+  optional User payload = 1;
+  optional io.restorecommerce.status.Status status = 2;
+  optional string totp_session_token = 3;
+}
+
+message SetupTOTPRequest {
+  optional string identifier = 1;
+  optional io.restorecommerce.auth.Subject subject = 2;
+}
+
+message SetupTOTPResponse {
+  optional string totp_secret = 1;
+  optional io.restorecommerce.status.OperationStatus operation_status = 2;
+}
+
+message CompleteTOTPSetupRequest {
+  optional string code = 1;
+  optional io.restorecommerce.auth.Subject subject = 2;
+}
+
+message ExchangeTOTPRequest {
+  optional string code = 1;
+  optional io.restorecommerce.auth.Subject subject = 2;
+  optional string totp_session_token = 3;
 }
 
 message TenantRequest {
@@ -116,7 +146,7 @@ message RegisterRequest {
   optional UserType user_type = 12;
   optional string captcha_code = 13;
   optional google.protobuf.Any data = 14; // data
- }
+}
 
 message ActivateRequest {
   optional string identifier = 1; // user name or email
@@ -316,6 +346,9 @@ message User {
   optional google.protobuf.Timestamp last_access = 24; // When the user has last been used
   repeated io.restorecommerce.attribute.Attribute properties = 25; // additional properties
   optional google.protobuf.Any data = 26; // additional data
+  optional string totp_secret = 27; /// TOTP Secret
+  optional string totp_secret_processing = 28; /// TOTP Secret before being confirmed
+  repeated string totp_session_tokens = 29; /// TOTP Login session tokens
 }
 
 /**

@@ -60,12 +60,15 @@ import {
   CredentialServiceDefinition
 } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/credential.js';
 import {
+  type SettingServiceClient,
+  SettingServiceDefinition
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/setting.js';
+import {
   CommandServiceDefinition
 } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/command.js';
 import { type GrpcClientConfig } from '@restorecommerce/grpc-client';
 
 export class ResourceSrvGrpcClient extends RestoreCommerceGrpcClient {
-
   readonly address: AddressServiceClient;
   readonly country: CountryServiceClient;
   readonly timezone: TimezoneServiceClient;
@@ -81,6 +84,7 @@ export class ResourceSrvGrpcClient extends RestoreCommerceGrpcClient {
   readonly tax_type: TaxTypeServiceClient;
   readonly unit_code: UnitCodeServiceClient;
   readonly template: TemplateServiceClient;
+  readonly setting: SettingServiceClient;
   readonly command: any = undefined;
 
   constructor(address: string, cfg: GrpcClientConfig) {
@@ -101,6 +105,7 @@ export class ResourceSrvGrpcClient extends RestoreCommerceGrpcClient {
     this.unit_code = this.createClient(cfg, UnitCodeServiceDefinition, this.channel);
     this.template = this.createClient(cfg, TemplateServiceDefinition, this.channel);
     this.credential = this.createClient(cfg, CredentialServiceDefinition, this.channel);
+    this.setting = this.createClient(cfg, SettingServiceDefinition, this.channel);
     this.command = this.createClient(cfg, CommandServiceDefinition, this.channel);
   }
 

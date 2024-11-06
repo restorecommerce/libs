@@ -7,7 +7,6 @@ import "io/restorecommerce/attribute.proto";
 import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
-import "io/restorecommerce/attribute.proto";
 import "io/restorecommerce/options.proto";
 
 service SettingService {

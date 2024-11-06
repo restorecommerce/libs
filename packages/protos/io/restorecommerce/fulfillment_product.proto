@@ -37,7 +37,7 @@ message Preferences {
   optional bool partial_fulfillment_allowed = 1;
   repeated string courier_ids = 2; // Narrows search to certain couriers, leave empty for open search
   repeated string fulfillment_product_ids = 3; // Narrows search to certain tariffs, leave empty for open search
-  repeated io.restorecommerce.attribute.Attribute options = 3; // Courier specific options such as CO2 neutral delivery etc.
+  repeated io.restorecommerce.attribute.Attribute options = 4; // Courier specific options such as CO2 neutral delivery etc.
 }
 
 message FulfillmentSolutionQuery {

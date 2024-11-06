@@ -96,9 +96,10 @@ message InvoiceResponse {
 
 message InvoiceId {
   optional string id = 1;
-  repeated string channel_ids = 2;
-  optional google.protobuf.Any options = 3;
-  optional io.restorecommerce.auth.Subject subject = 4;
+  repeated string document_ids = 2; // empty takes latest
+  repeated string notification_channel_ids = 3;
+  optional google.protobuf.Any options = 4;
+  optional io.restorecommerce.auth.Subject subject = 5;
 }
 
 message InvoiceIdList {

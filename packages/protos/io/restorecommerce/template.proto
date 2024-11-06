@@ -9,7 +9,6 @@ import "io/restorecommerce/file.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
-import "io/restorecommerce/reference.proto";
 import "io/restorecommerce/options.proto";
 
 /*
@@ -55,16 +54,23 @@ message TemplateResponse {
   optional io.restorecommerce.status.Status status = 2;
 }
 
+message Localization {
+  repeated string local_codes = 1; // e.g. en, en_US, en_UK, ...
+  optional io.restorecommerce.file.File l10n = 2; // JSON expected
+}
+
 message Template {
   optional string id = 1;
   optional io.restorecommerce.meta.Meta meta = 2;
   optional string name = 3;
   optional string description = 4;
   optional TemplateUseCase use_case = 5;
-  optional uint32 index = 6; // order number
+  optional uint32 indice = 6; // sort number
   optional string subject = 7; // e.g. header, body, footer
-  optional io.restorecommerce.file.File body = 8;
+  optional io.restorecommerce.file.File body = 8; // e.g. text/html
   optional io.restorecommerce.file.File layout = 9;
-  repeated io.restorecommerce.image.Image images = 10;
-  repeated io.restorecommerce.attribute.Attribute attributes = 11;
+  repeated io.restorecommerce.file.File styles = 10; // e.g. application/css
+  repeated io.restorecommerce.image.Image images = 11;
+  repeated Localization localization = 12;
+  repeated io.restorecommerce.attribute.Attribute attributes = 14;
 }

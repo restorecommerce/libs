@@ -50,9 +50,10 @@ message FulfillmentCourier {
   optional string description = 5;
   optional string logo = 6;
   optional string website = 7;
-  optional string stub_type = 8;
+  optional string stub_type = 8; // obsolete, use api
   optional string credential_id = 9;
   optional google.protobuf.Any configuration = 10;
+  optional string api = 11;
 }
 
 message FulfillmentCourierList {
@@ -70,9 +71,5 @@ message FulfillmentCourierListResponse {
   repeated FulfillmentCourierResponse items = 1;
   optional uint32 total_count = 2;
   optional io.restorecommerce.status.OperationStatus operation_status = 3;
-}
-
-message Deleted {
-  optional string id = 1;
 }
 

@@ -20,7 +20,3 @@ message FileList {
   repeated File items = 1;
   optional uint32 total_count = 2;
 }
-
-message Deleted {
-  optional string id = 1;
-}

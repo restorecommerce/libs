@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package io.restorecommerce.setting;
+
+import "io/restorecommerce/meta.proto";
+import "io/restorecommerce/attribute.proto";
+import "io/restorecommerce/resource_base.proto";
+import "io/restorecommerce/auth.proto";
+import "io/restorecommerce/status.proto";
+import "io/restorecommerce/attribute.proto";
+import "io/restorecommerce/options.proto";
+
+service SettingService {
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (SettingListResponse) {
+    option (io.restorecommerce.options.is_query) = true;
+  };
+  rpc Create (SettingList) returns (SettingListResponse);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
+  rpc Update (SettingList) returns (SettingListResponse);
+  rpc Upsert (SettingList) returns (SettingListResponse);
+}
+
+message Setting {
+  optional string id = 1;
+  optional io.restorecommerce.meta.Meta meta = 2;
+  optional string name = 3;
+  optional string description = 4;
+  repeated io.restorecommerce.attribute.Attribute settings = 5;
+}
+
+message SettingList {
+  repeated Setting items = 1;
+  optional uint32 total_count = 2;
+  optional io.restorecommerce.auth.Subject subject = 3;
+}
+
+message SettingListResponse {
+  repeated SettingResponse items = 1;
+  optional uint32 total_count = 2;
+  optional io.restorecommerce.status.OperationStatus operation_status = 3;
+}
+
+message SettingResponse {
+  optional Setting payload = 1;
+  optional io.restorecommerce.status.Status status = 3;
+}

@@ -92,6 +92,15 @@ message Commercial {
       field_name: "organization",
     }
   ];
+  repeated string template_ids = 2 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.template.Template",
+      target_service: "master_data",
+      target_sub_service: "template",
+      target_method: "Read",
+      field_name: "templates",
+    }
+  ]; // list of active templates
 }
 
 message PublicSector {
@@ -104,4 +113,13 @@ message PublicSector {
       field_name: "organization",
     }
   ];
+  repeated string template_ids = 2 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.template.Template",
+      target_service: "master_data",
+      target_sub_service: "template",
+      target_method: "Read",
+      field_name: "templates",
+    }
+  ]; // list of active templates
 }

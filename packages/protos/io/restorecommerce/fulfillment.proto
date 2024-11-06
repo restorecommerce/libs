@@ -239,10 +239,6 @@ message FulfillmentIdList {
   optional io.restorecommerce.auth.Subject subject = 3;
 }
 
-message Deleted {
-  optional string id = 1;
-}
-
 message FulfillmentInvoiceSection {
   optional string fulfillment_id = 1;
   repeated string selected_parcels = 2; // selects all on empty

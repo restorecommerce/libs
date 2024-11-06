@@ -65,8 +65,8 @@ message Template {
   optional string name = 3;
   optional string description = 4;
   optional TemplateUseCase use_case = 5;
-  optional uint32 indice = 6; // sort number
-  optional string subject = 7; // e.g. header, body, footer
+  optional uint32 ordinal = 6; // sort number
+  optional string section = 7; // e.g. header, body, footer
   optional io.restorecommerce.file.File body = 8; // e.g. text/html
   optional io.restorecommerce.file.File layout = 9;
   repeated io.restorecommerce.file.File styles = 10; // e.g. application/css

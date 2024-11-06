@@ -6,7 +6,7 @@ import "io/restorecommerce/image.proto";
 
 message File {
   optional string id = 1;
-  optional int64 index = 2;
+  optional uint32 ordinal = 2;
   optional string caption = 3;
   optional string filename = 4;
   optional string content_type = 5;

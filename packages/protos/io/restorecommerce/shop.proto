@@ -70,16 +70,13 @@ message Shop {
       field_name: "templates",
     }
   ]; // list of active templates
-  oneof setting_type {
-    string setting_id = 9 [
-      (io.restorecommerce.options.resolver) = {
-        target_type: ".io.restorecommerce.setting.Setting",
-        target_service: "master_data",
-        target_sub_service: "setting",
-        target_method: "Read",
-        field_name: "setting",
-      }
-    ];
-    io.restorecommerce.setting.Setting setting = 10; 
-  };
+  string setting_id = 9 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.setting.Setting",
+      target_service: "master_data",
+      target_sub_service: "setting",
+      target_method: "Read",
+      field_name: "setting",
+    }
+  ];
 }

@@ -7,6 +7,7 @@ import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/attribute.proto";
 import "io/restorecommerce/status.proto";
+import "io/restorecommerce/setting.proto";
 import "io/restorecommerce/options.proto";
 
 // Used by resolvers
@@ -58,7 +59,15 @@ message Customer {
     Commercial commercial = 4;
     PublicSector public_sector = 5;
   };
-  repeated io.restorecommerce.attribute.Attribute settings = 6;
+  string setting_id = 6 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.setting.Setting",
+      target_service: "master_data",
+      target_sub_service: "setting",
+      target_method: "Read",
+      field_name: "setting",
+    }
+  ];
 }
 
 message Private {

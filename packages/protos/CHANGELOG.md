@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.9.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.9.0...@restorecommerce/protos@6.9.1) (2024-11-06)
+
+
+### Bug Fixes
+
+* **proto:** fulfillment_product, set correct field number ([70b6fb5](https://github.com/restorecommerce/libs/commit/70b6fb585439e54b28756d2eefe0a5bd0edd5131))
+* **protos:** add customer_order_nr to invoicing ([19a14f9](https://github.com/restorecommerce/libs/commit/19a14f983ada1f5fd5146fc4814a7a437ac97237))
+* **protos:** add setting resource, enrich templates ([63fe572](https://github.com/restorecommerce/libs/commit/63fe572c3a52581591aed5ff96faee23fb73e459))
+* **protos:** selectable document_ids for send ([bcb2910](https://github.com/restorecommerce/libs/commit/bcb2910fe67bcd2142a86a4a41647bc4b8a28585))
+* **protos:** shop settings intermediate ([1ddefcc](https://github.com/restorecommerce/libs/commit/1ddefcc5e7594cefbc9b97694715f76e85718704))
+
+
+
+
+
 # [6.9.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.8.12...@restorecommerce/protos@6.9.0) (2024-11-05)
 
 

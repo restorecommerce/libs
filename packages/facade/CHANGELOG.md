@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.2.1...@restorecommerce/facade@2.2.2) (2024-11-06)
+
+
+### Bug Fixes
+
+* **facade:** add setting resource to facade ([d54d81a](https://github.com/restorecommerce/libs/commit/d54d81af64a04fe9a719861b38c20003ffa2b155))
+* **protos:** add customer_order_nr to invoicing ([19a14f9](https://github.com/restorecommerce/libs/commit/19a14f983ada1f5fd5146fc4814a7a437ac97237))
+
+
+
+
+
 ## [2.2.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.2.0...@restorecommerce/facade@2.2.1) (2024-11-05)
 
 **Note:** Version bump only for package @restorecommerce/facade

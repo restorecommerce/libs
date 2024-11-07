@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/handlebars-helperized",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "Opinionated handlebars based templating engine for rendering e-mail like content",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",

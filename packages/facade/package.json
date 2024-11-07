@@ -110,6 +110,7 @@
     "build:codegen:compile": "tsc -p tsconfig.codegen.json",
     "dev": "npm-run-all build:clean dev:compile",
     "dev:compile": "tsc -w -p tsconfig.json",
+    "preinstall": "node --version | grep 20.11.",
     "postinstall": "rm -rf ../../node_modules/@josephg/resolvable/index.ts",
     "test": "NODE_OPTIONS=--experimental-vm-modules vitest run",
     "test:watch": "vitest watch",

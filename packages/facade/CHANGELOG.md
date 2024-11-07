@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.2.2...@restorecommerce/facade@2.2.4) (2024-11-07)
+
+
+### Bug Fixes
+
+* **facade:** force deployment 2.2.3 ([627b918](https://github.com/restorecommerce/libs/commit/627b918bdbad13b10471346391eaf16cea3da005))
+* **node:** downgrade node install env ([6d1abb3](https://github.com/restorecommerce/libs/commit/6d1abb34c1016d84e356314cdb37dc92202c99bb))
+* **package.json:** enforce specific Node version on install ([4a8ec2d](https://github.com/restorecommerce/libs/commit/4a8ec2d1552a12ca4263791226c578454aa049f1))
+
+
+
+
+
 ## [2.2.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.2.1...@restorecommerce/facade@2.2.2) (2024-11-06)
 
 

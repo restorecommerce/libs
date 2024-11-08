@@ -96,22 +96,22 @@ export class ResourcesAPIBase {
   public readonly bufferFields: string[];
   public readonly requiredFields: any;
   public readonly timeStampFields: string[];
-  public readonly resourceName: string;
   /**
    * @constructor
    * @param  {object} db Chassis arangodb provider.
    * @param {string} collectionName Name of database collection.
    * @param {any} fieldHandlerConf The collection's field generators configuration.
-   */
+  */
   constructor(
     public readonly db: DatabaseProvider,
     public readonly collectionName: string,
     fieldHandlerConf?: any,
     public readonly edgeCfg?: any,
     public readonly graphName?: string,
-    public readonly logger?: Logger
+    public readonly logger?: Logger,
+    public readonly resourceName?: string,
   ) {
-    this.resourceName = collectionName.substring(0, collectionName.length - 1);
+    this.resourceName ??= collectionName.substring(0, collectionName.length - 1);
 
     if (!fieldHandlerConf) {
       return;

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.9.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.9.1...@restorecommerce/protos@6.9.2) (2024-11-08)
+
+
+### Bug Fixes
+
+* **protos:** functions besides CRUD are not allowed in standard resources ([da2c384](https://github.com/restorecommerce/libs/commit/da2c3844798c8f3f2cf1ed53bbb6f867b7e3f194))
+
+
+
+
+
 ## [6.9.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.9.0...@restorecommerce/protos@6.9.1) (2024-11-06)
 
 

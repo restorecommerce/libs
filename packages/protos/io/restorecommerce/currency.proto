@@ -20,7 +20,6 @@ service CurrencyService {
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
   rpc Update (CurrencyList) returns (CurrencyListResponse);
   rpc Upsert (CurrencyList) returns (CurrencyListResponse);
-  rpc QueryExchangeRate (ExchangeRateQueryList) returns (ExchangeRateListResponse);
 }
 
 message Deleted {
@@ -49,13 +48,13 @@ message Currency {
   optional io.restorecommerce.meta.Meta meta = 2;
   optional string name = 3;
   optional string symbol = 4;
-  optional string country_id = 5;
+  repeated string country_ids = 5;
   /*
   * For custom exchange rates beyond market.
-  * Regular rates are retrived from API by calling QueryExchangeRate.
+  * Regular rates should be retrived from any API.
   */
   repeated ExchangeRate custom_exchange_rates = 6;
-  optional int64 precision = 7; // -2 --> 1e^-2 --> 0.01
+  optional int64 precision = 7;
 }
 
 message ExchangeRate {
@@ -63,29 +62,4 @@ message ExchangeRate {
   optional double rate = 3;
   optional double expenses = 4; //fees
   optional double amount = 5; // leave empty == 1.0
-}
-
-message ExchangeRateQuery {
-  optional string from_currency_id = 1;
-  optional string to_currency_id = 2;
-  optional google.protobuf.Timestamp datetime = 3; // now in general case
-  optional double amount = 4; // leave empty == 1.0
-}
-
-message ExchangeRateQueryList {
-  repeated ExchangeRate items = 1;
-  optional uint32 total_count = 2;
-  optional io.restorecommerce.auth.Subject subject = 3;
-}
-
-message ExchangeRateResponse {
-  optional string from_currency_id = 1;
-  optional ExchangeRate payload = 3;
-  optional google.protobuf.Timestamp timestamp = 2;
-  optional io.restorecommerce.status.Status status = 4;
-}
-
-message ExchangeRateListResponse {
-  repeated ExchangeRateResponse items = 1;
-  optional io.restorecommerce.status.OperationStatus operation_status = 3;
 }

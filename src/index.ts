@@ -32,7 +32,7 @@ const insertFilterFieldOpValue = (filter, object, key) => {
   } else if (filter.type === 'ARRAY' || filter.type === 4) {
     try {
       value = JSON.parse(filter.value);
-    } catch (err) {
+    } catch (err: any) {
       // to handle JSON string parse error
       if (err.message.indexOf('Unexpected token') > -1) {
         value = JSON.parse(JSON.stringify(filter.value));

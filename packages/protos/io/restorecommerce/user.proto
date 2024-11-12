@@ -349,6 +349,7 @@ message User {
   optional string totp_secret = 27; /// TOTP Secret
   optional string totp_secret_processing = 28; /// TOTP Secret before being confirmed
   repeated string totp_session_tokens = 29; /// TOTP Login session tokens
+  repeated string password_hash_history = 30; // List of historical password hashes
 }
 
 /**

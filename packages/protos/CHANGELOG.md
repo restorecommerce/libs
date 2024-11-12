@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.10.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.9.2...@restorecommerce/protos@6.10.0) (2024-11-12)
+
+
+### Features
+
+* **protos:** add password hash history to user ([f7443ab](https://github.com/restorecommerce/libs/commit/f7443abdda1b8616d22df53edb5197234d390cb6))
+
+
+
+
+
 ## [6.9.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.9.1...@restorecommerce/protos@6.9.2) (2024-11-08)
 
 

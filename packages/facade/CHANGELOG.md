@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.7](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.2.6...@restorecommerce/facade@2.2.7) (2024-11-13)
+
+
+### Bug Fixes
+
+* **facade:** add currency to meta types ([e113ed2](https://github.com/restorecommerce/libs/commit/e113ed271750a5fc57b36910da7b493b1c681c6a))
+* **proto:** add valid time frame for products ([d9561d8](https://github.com/restorecommerce/libs/commit/d9561d8cd3b50d3117d1f28ccf3f27ef3044b984))
+
+
+
+
+
 ## [2.2.6](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.2.5...@restorecommerce/facade@2.2.6) (2024-11-12)
 
 **Note:** Version bump only for package @restorecommerce/facade

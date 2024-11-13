@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.10.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.10.0...@restorecommerce/protos@6.10.1) (2024-11-13)
+
+
+### Bug Fixes
+
+* **proto:** add required imports ([b001756](https://github.com/restorecommerce/libs/commit/b001756afd7eeff05edf4579e180fc9f40d5f36b))
+* **proto:** add valid time frame for products ([d9561d8](https://github.com/restorecommerce/libs/commit/d9561d8cd3b50d3117d1f28ccf3f27ef3044b984))
+* **protos:** fix typo ([fc450a0](https://github.com/restorecommerce/libs/commit/fc450a07fe222c5b6d9b56f6b4b1c86ca1a2dbfe))
+* **protos:** taxes add round_mode, some taxes may have special rules for rounding ([3f89136](https://github.com/restorecommerce/libs/commit/3f891361f5725bad95be88381b7eb4e5aa4a565e))
+
+
+
+
+
 # [6.10.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.9.2...@restorecommerce/protos@6.10.0) (2024-11-12)
 
 

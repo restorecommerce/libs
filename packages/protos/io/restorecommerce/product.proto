@@ -189,7 +189,7 @@ message PhysicalVariant {
   optional boolean active = 12;
   optional google.protobuf.Timestamp valid_from = 13;
   optional google.protobuf.Timestamp valid_to = 14;
-  optional Package package = 15; //size for shipping
+  optional Package package = 15; // size for shipping
 }
 
 message ServiceVariant {

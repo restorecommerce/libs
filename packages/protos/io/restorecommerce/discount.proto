@@ -30,7 +30,7 @@ enum DicountType {
 message Discount {
   message Item {
     optional string product_id = 1;
-    repeated string varaint_ids = 2; // empty to address all variants
+    repeated string variant_ids = 2; // empty to address all variants
   }
 
   optional string id = 1;

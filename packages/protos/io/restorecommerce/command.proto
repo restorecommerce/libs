@@ -10,7 +10,7 @@ import "io/restorecommerce/options.proto";
 
 // command resource
 message Command {
-  optional  string id = 1;
+  optional string id = 1;
   optional io.restorecommerce.meta.Meta meta = 2;
   optional string name = 3;  // command name
   repeated CommandParameter parameters = 4; // all possible parameters

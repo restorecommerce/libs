@@ -70,13 +70,13 @@ message Product {
     IndividualProduct product = 3;
     Bundle bundle = 4;
   }
-  optional string shop_id = 5 [
+  repeated string shop_ids = 5 [
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.shop.Shop",
       target_service: "master_data",
       target_sub_service: "shop",
       target_method: "Read",
-      field_name: "shop",
+      field_name: "shops",
     }
   ];
   optional bool active = 6;
@@ -137,15 +137,18 @@ message IndividualProduct {
 }
 
 message PhysicalProduct {
-  repeated PhysicalVariant variants = 1;
+  repeated PhysicalVariant variants = 1; // complete product definition - for sale
+  repeated PhysicalVariant templates = 2; // incomplete templates - not for sale
 }
 
 message ServiceProduct {
   repeated ServiceVariant variants = 1;
+  repeated ServiceVariant templates = 2;
 }
 
 message VirtualProduct {
   repeated VirtualVariant variants = 1;
+  repeated VirtualVariant templates = 2;
 }
 
 message ProductList {
@@ -183,7 +186,10 @@ message PhysicalVariant {
   optional string parent_variant_id = 9;
   repeated io.restorecommerce.property.Property properties = 10;
   repeated string tax_ids = 11;
-  optional Package package = 12;
+  optional boolean active = 12;
+  optional google.protobuf.Timestamp valid_from = 13;
+  optional google.protobuf.Timestamp valid_to = 14;
+  optional Package package = 15; //size for shipping
 }
 
 message ServiceVariant {
@@ -198,6 +204,9 @@ message ServiceVariant {
   optional string parent_variant_id = 9;
   repeated io.restorecommerce.property.Property properties = 10;
   repeated string tax_ids = 11;
+  optional boolean active = 12;
+  optional google.protobuf.Timestamp valid_from = 13;
+  optional google.protobuf.Timestamp valid_to = 14; 
 }
 
 message VirtualVariant {
@@ -212,6 +221,9 @@ message VirtualVariant {
   optional string parent_variant_id = 9;
   repeated io.restorecommerce.property.Property properties = 10;
   repeated string tax_ids = 11;
+  optional boolean active = 12;
+  optional google.protobuf.Timestamp valid_from = 13;
+  optional google.protobuf.Timestamp valid_to = 14; 
 }
 
 message Bundle {

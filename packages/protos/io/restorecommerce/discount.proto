@@ -1,0 +1,68 @@
+syntax = "proto3";
+
+package io.restorecommerce.dicount;
+
+import "io/restorecommerce/resource_base.proto";
+import "io/restorecommerce/meta.proto";
+import "io/restorecommerce/auth.proto";
+import "io/restorecommerce/status.proto";
+import "io/restorecommerce/options.proto";
+
+/*
+Microservice definition.
+*/
+service DiscountService {
+  rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (DiscountListResponse) {
+    option (io.restorecommerce.options.is_query) = true;
+  };
+  rpc Create (DiscountList) returns (DiscountListResponse);
+  rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
+  rpc Update (DiscountList) returns (DiscountListResponse);
+  rpc Upsert (DiscountList) returns (DiscountListResponse);
+}
+
+enum DicountType {
+  PERCENTAGE = 0; // amount = price - price * value/100
+  ABSOLUTE = 1;   // amount = price - value
+  OVERRIDE = 2;   // amount = value
+}
+
+message Discount {
+  message Item {
+    optional string product_id = 1;
+    repeated string varaint_ids = 2; // empty to address all variants
+  }
+
+  optional string id = 1;
+  optional io.restorecommerce.meta.Meta meta = 2;
+  optional string name = 3;
+  optional string description = 4;
+  optional google.protobuf.Timestamp start = 5;
+  optional google.protobuf.Timestamp end = 6;
+  optional DicountType discount_type = 7;
+  optional double value = 8;
+  repeated string price_group_ids = 9;
+  repeated string product_category_ids = 10;
+  repeated Item individual_items = 11;
+  
+  repeated string granted_Discount_ids = 12;
+  repeated string granted_organization_ids = 13; // ????
+  repeated string granted_user_role_ids = 14; // ????
+}
+
+message DiscountList {
+  repeated Discount items = 1;
+  optional uint32 total_count = 2;
+  optional io.restorecommerce.auth.Subject subject = 3;
+}
+
+message DiscountListResponse {
+  repeated DiscountResponse items = 1;
+  optional uint32 total_count = 2;
+  optional io.restorecommerce.status.OperationStatus operation_status = 3;
+}
+
+message DiscountResponse {
+  optional Discount payload = 1;
+  optional io.restorecommerce.status.Status status = 2;
+}

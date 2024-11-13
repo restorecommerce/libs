@@ -31,7 +31,8 @@ export type ExtractModuleContext<TModule> =
       TModule extends FacadeModule<infer TContext> ? TContext :
         never;
 
-export type FacadeModulesContext<T extends FacadeModuleBase[]> = (T[0] extends FacadeModuleBase ? ExtractModuleContext<T[0]> : FacadeBaseContext) &
+export type FacadeModulesContext<T extends FacadeModuleBase[]> = 
+(T[0] extends FacadeModuleBase ? ExtractModuleContext<T[0]> : FacadeBaseContext) &
 (T[1] extends FacadeModuleBase ? ExtractModuleContext<T[1]> : FacadeBaseContext) &
 (T[2] extends FacadeModuleBase ? ExtractModuleContext<T[2]> : FacadeBaseContext) &
 (T[3] extends FacadeModuleBase ? ExtractModuleContext<T[3]> : FacadeBaseContext) &

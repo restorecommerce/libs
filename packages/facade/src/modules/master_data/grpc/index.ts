@@ -60,6 +60,10 @@ import {
   CredentialServiceDefinition
 } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/credential.js';
 import {
+  type CurrencyServiceClient,
+  CurrencyServiceDefinition
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/currency.js';
+import {
   type SettingServiceClient,
   SettingServiceDefinition
 } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/setting.js';
@@ -75,6 +79,7 @@ export class ResourceSrvGrpcClient extends RestoreCommerceGrpcClient {
   readonly contact_point_type: ContactPointTypeServiceClient;
   readonly customer: CustomerServiceClient;
   readonly credential: CredentialServiceClient;
+  readonly currency: CurrencyServiceClient;
   readonly contact_point: ContactPointServiceClient;
   readonly locale: LocaleServiceClient;
   readonly location: LocationServiceClient;
@@ -105,6 +110,7 @@ export class ResourceSrvGrpcClient extends RestoreCommerceGrpcClient {
     this.unit_code = this.createClient(cfg, UnitCodeServiceDefinition, this.channel);
     this.template = this.createClient(cfg, TemplateServiceDefinition, this.channel);
     this.credential = this.createClient(cfg, CredentialServiceDefinition, this.channel);
+    this.currency = this.createClient(cfg, CurrencyServiceDefinition, this.channel);
     this.setting = this.createClient(cfg, SettingServiceDefinition, this.channel);
     this.command = this.createClient(cfg, CommandServiceDefinition, this.channel);
   }

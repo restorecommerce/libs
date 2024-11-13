@@ -22,10 +22,6 @@ service CurrencyService {
   rpc Upsert (CurrencyList) returns (CurrencyListResponse);
 }
 
-message Deleted {
-  optional string id = 1;
-}
-
 message CurrencyList {
   repeated Currency items = 1;
   optional uint32 total_count = 2;
@@ -54,7 +50,7 @@ message Currency {
   * Regular rates should be retrived from any API.
   */
   repeated ExchangeRate custom_exchange_rates = 6;
-  optional int64 precision = 7;
+  optional int32 precision = 7;
 }
 
 message ExchangeRate {

@@ -132,7 +132,7 @@ export class ResourcesAPIBase {
     }
 
     if (fieldHandlerConf.requiredFields) {
-      this.requiredFields = fieldHandlerConf.requiredFields;
+      this.requiredFields = fieldHandlerConf.requiredFields[this.resourceName] ?? fieldHandlerConf.requiredFields;
     }
 
     // values for Redis hash set
@@ -213,9 +213,12 @@ export class ResourcesAPIBase {
     try {
       let result = [];
       // check if all the required fields are present
-      if (this.requiredFields && this.requiredFields[this.resourceName]) {
-        const requiredFieldsResult = this.checkRequiredFields(this.requiredFields[this.resourceName],
-          documents, result);
+      if (this.requiredFields) {
+        const requiredFieldsResult = this.checkRequiredFields(
+          this.requiredFields,
+          documents,
+          result
+        );
         documents = requiredFieldsResult.documents;
         result = requiredFieldsResult.result;
       }

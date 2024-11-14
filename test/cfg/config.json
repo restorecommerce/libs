@@ -80,13 +80,13 @@
   },
   "client": {
     "test": {
-      "address": "localhost:50051"
+      "address": "localhost:50151"
     },
     "testBufferedService": {
-      "address": "localhost:50052"
+      "address": "localhost:50152"
     },
     "graphsTestService": {
-      "address": "localhost:50051"
+      "address": "localhost:50151"
     }
   },
   "events": {
@@ -180,7 +180,7 @@
       {
         "name": "pipeline",
         "provider": "grpc",
-        "addr": "localhost:50051"
+        "addr": "localhost:50151"
       }
     ]
   },
@@ -250,7 +250,7 @@
       {
         "name": "pipeline",
         "provider": "grpc",
-        "addr": "localhost:50052"
+        "addr": "localhost:50152"
       }
     ]
   },
@@ -263,7 +263,7 @@
     "timeStampFields": [
       {
         "fields": ["created", "meta.created", "meta.modified"],
-        "entities": ["resources"]
+        "entities": ["resource"]
       }
     ],
     "requiredFields": {

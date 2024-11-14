@@ -234,7 +234,7 @@ describe('ServiceBase', () => {
     }
     resourceFieldConfig['timeStampFields'] = [];
     for (let timeStampFiledConfig of timeStampFieldsConfigs) {
-      if (timeStampFiledConfig.entities.includes(`${resourceName}s`)) {
+      if (timeStampFiledConfig.entities.includes(resourceName)) {
         resourceFieldConfig['timeStampFields'].push(...timeStampFiledConfig.fields);
       }
     }

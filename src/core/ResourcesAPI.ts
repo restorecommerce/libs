@@ -211,7 +211,6 @@ export class ResourcesAPIBase {
     const collection = this.collectionName;
     let result = [];
     try {
-      let result = [];
       // check if all the required fields are present
       if (this.requiredFields) {
         const requiredFieldsResult = this.checkRequiredFields(
@@ -239,7 +238,7 @@ export class ResourcesAPIBase {
         await this.db.addVertexCollection(collection);
         let createVertexResp = await this.db.createVertex(collection, documents);
         for (let document of documents) {
-          if (this.edgeCfg && _.isArray(this.edgeCfg) && this.edgeCfg.length > 0) {
+          if (this.edgeCfg && Array.isArray(this.edgeCfg) && this.edgeCfg.length > 0) {
             for (let eachEdgeCfg of this.edgeCfg) {
               const fromIDkey = eachEdgeCfg.from;
               const from_id = document[fromIDkey];
@@ -254,7 +253,7 @@ export class ResourcesAPIBase {
                 toVerticeName = collection;
               }
               if (from_id && to_id) {
-                if (_.isArray(to_id)) {
+                if (Array.isArray(to_id)) {
                   for (let toID of to_id) {
                     await this.db.createEdge(eachEdgeCfg.edgeName, null,
                       `${fromVerticeName}/${from_id}`, `${toVerticeName}/${toID}`);
@@ -267,7 +266,7 @@ export class ResourcesAPIBase {
             }
           }
         }
-        if (_.isArray(createVertexResp)) {
+        if (Array.isArray(createVertexResp)) {
           createVertexResp.forEach((eachVertexResp) => result.push(eachVertexResp));
         } else {
           result.push(createVertexResp);
@@ -314,26 +313,18 @@ export class ResourcesAPIBase {
    * @param requiredFields
    * @param documents
    */
-  checkRequiredFields(requiredFields: string[], documents: any, result: any[]): any {
-    documents.forEach((document) => {
-      requiredFields.forEach((eachField) => {
-        const isArray = _.isArray(eachField);
-        if (!document[eachField]) {
+  checkRequiredFields(requiredFields: string[], documents: any[], result: any[]): any {
+    documents = documents.filter((document) => {
+      return requiredFields.every((eachField) => {
+        if (document[eachField] === undefined || (Array.isArray(document[eachField]) && document[eachField].length === 0)) {
           result.push({
             error: true,
             errorNum: 400,
             errorMessage: `Field ${eachField} is necessary for ${this.resourceName} for documentID ${document.id}`
           });
-          documents = documents.filter(doc => doc.id != document.id);
+          return false;
         }
-        if ((isArray && document[eachField].length == 0)) {
-          result.push({
-            error: true,
-            errorNum: 400,
-            errorMessage: `Field ${eachField} is necessary for ${this.resourceName} for documentID ${document.id}`
-          });
-          documents = documents.filter(doc => doc.id != document.id);
-        }
+        return true;
       });
     });
     return { documents, result };
@@ -347,7 +338,7 @@ export class ResourcesAPIBase {
   async delete(ids: string[]): Promise<any> {
     let deleteResponse = [];
     try {
-      if (!_.isArray(ids)) {
+      if (!Array.isArray(ids)) {
         ids = [ids];
       }
       if (this.isGraphDB(this.db)) {
@@ -510,10 +501,10 @@ export class ResourcesAPIBase {
             const toIDkey = eachEdgeCfg.to;
             let modified_to_idValues = doc[toIDkey];
             let db_to_idValues = dbDoc[toIDkey];
-            if (_.isArray(modified_to_idValues)) {
+            if (Array.isArray(modified_to_idValues)) {
               modified_to_idValues = _.sortBy(modified_to_idValues);
             }
-            if (_.isArray(db_to_idValues)) {
+            if (Array.isArray(db_to_idValues)) {
               db_to_idValues = _.sortBy(db_to_idValues);
             }
             // delete and recreate only if there is a difference in references
@@ -531,16 +522,16 @@ export class ResourcesAPIBase {
 
               const edgeCollectionName = eachEdgeCfg.edgeName;
               let outgoingEdges: any = await db.getOutEdges(edgeCollectionName, `${collectionName}/${dbDoc.id}`);
-              if (_.isArray(outgoingEdges.edges)) {
+              if (Array.isArray(outgoingEdges.edges)) {
                 await Promise.all(outgoingEdges.edges.map((outgoingEdge) => db.removeEdge(edgeCollectionName, outgoingEdge._id)));
               }
               let incomingEdges: any = await db.getInEdges(edgeCollectionName, `${collectionName}/${dbDoc.id}`);
-              if (_.isArray(incomingEdges.edges)) {
+              if (Array.isArray(incomingEdges.edges)) {
                 await Promise.all(incomingEdges.edges.map((incomingEdge) => db.removeEdge(edgeCollectionName, incomingEdge._id)));
               }
               // Create new edges
               if (from_id && modified_to_idValues) {
-                if (_.isArray(modified_to_idValues)) {
+                if (Array.isArray(modified_to_idValues)) {
                   await Promise.all(modified_to_idValues.map((toID) => db.createEdge(eachEdgeCfg.edgeName, null,
                     `${fromVerticeName}/${from_id}`, `${toVerticeName}/${toID}`)));
                 } else {

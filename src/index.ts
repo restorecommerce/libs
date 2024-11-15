@@ -65,13 +65,13 @@ const insertFilterFieldOpValue = (filter, object, key) => {
       temp.push({ [filter.field]: { $not: { $eq: value } } });
     }
   } else {
-    let op, opValue;
+    let opValue;
     if (typeof filter.operation === 'string' || filter.operation instanceof String) {
       opValue = filter.operation;
     } else if (Number.isInteger(filter.operation)) {
       opValue = filterOperationMap.get(filter.operation);
     }
-    op = `$${opValue}`;
+    const op = `$${opValue}`;
     if (_.isArray(temp)) {
       temp.push({ [filter.field]: { [op]: value } });
     } else {
@@ -138,7 +138,7 @@ export const convertToObject = (input: any, obj?: any, currentOperator?: string)
     obj = {};
   }
   if (_.isArray(filters)) {
-    for (let filterObj of filters) {
+    for (const filterObj of filters) {
       let operatorValue;
       if (typeof filterObj.operator === 'string' || filterObj.operator instanceof String) {
         operatorValue = filterObj.operator;
@@ -160,8 +160,8 @@ export const convertToObject = (input: any, obj?: any, currentOperator?: string)
     // object contains field, operation and value, update it on obj using convertFilterToObject()
     obj = convertFilterToObject(obj, currentOperator, filters);
   } else if (filters.filters && _.isArray(filters.filters)) {
-    for (let filterObj of filters.filters) {
-      let operator = filters.operator ? filters.operator : 'and';
+    for (const filterObj of filters.filters) {
+      const operator = filters.operator ? filters.operator : 'and';
       convertToObject(filterObj, obj, operator);
     }
   }
@@ -183,9 +183,9 @@ export const toObject = (input) => {
     if (filtersArr.length > 1) {
       finalObj = [];
     }
-    for (let filterArr of filtersArr) {
-      let convertedObject = [];
-      let filterObj = filterArr?.filters;
+    for (const filterArr of filtersArr) {
+      const convertedObject = [];
+      const filterObj = filterArr?.filters;
       let operatorValue;
       if (typeof filterArr?.operator === 'string' || filterArr?.operator instanceof String) {
         operatorValue = filterArr?.operator;
@@ -197,7 +197,7 @@ export const toObject = (input) => {
         operatorValue = 'and';
       }
       if (_.isArray(filterObj)) {
-        for (let filter of filterObj) {
+        for (const filter of filterObj) {
           let obj = {};
           obj = convertToObject(filter, obj);
           if (!_.isEmpty(obj)) {

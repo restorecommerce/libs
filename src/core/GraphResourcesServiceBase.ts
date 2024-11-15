@@ -23,7 +23,7 @@ export class GraphResourcesServiceBase implements GraphServiceImplementation {
   constructor(private db: GraphDatabaseProvider, private bufferFiledCfg?: any, logger?: Logger, dateTimeFieldcfg?: any) {
     if (bufferFiledCfg) {
       this.bufferedCollections = [];
-      for (let key in bufferFiledCfg) {
+      for (const key in bufferFiledCfg) {
         // mapping of collection name to the property to be marshalled
         this.bufferedCollections.push(key);
       }
@@ -68,7 +68,7 @@ export class GraphResourcesServiceBase implements GraphServiceImplementation {
         return;
       }
       const filters = request?.filters;
-      let path = request?.path ? request.path : false;
+      const path = request?.path ? request.path : false;
       let traversalCursor: DBTraversalResponse;
 
       let sort;
@@ -106,13 +106,13 @@ export class GraphResourcesServiceBase implements GraphServiceImplementation {
         return;
       }
 
-      let rootCursor = traversalCursor.rootCursor;
-      let associationCursor = traversalCursor.associationCursor;
+      const rootCursor = traversalCursor.rootCursor;
+      const associationCursor = traversalCursor.associationCursor;
       // root entity data batches
       if (rootCursor && rootCursor.batches) {
         for await (const batch of rootCursor.batches) {
           // root entity data, encoding before pushing batch
-          for (let elem of batch) {
+          for (const elem of batch) {
             if (elem._key) {
               delete elem._key;
             }
@@ -126,9 +126,9 @@ export class GraphResourcesServiceBase implements GraphServiceImplementation {
       // association entity data batches
       if (associationCursor && associationCursor.batches) {
         for await (const batch of associationCursor.batches) {
-          let associationData = [];
-          let traversedPaths = [];
-          for (let data of batch) {
+          const associationData = [];
+          const traversedPaths = [];
+          for (const data of batch) {
             if (data.v._key) {
               delete data.v._key;
             }
@@ -136,9 +136,9 @@ export class GraphResourcesServiceBase implements GraphServiceImplementation {
               delete data.v._rev;
             }
             // convert `data.v` ie. vertex data for time fields conversion from ms to ISO string directly
-            let entityName = data.v._id.split('/')[0];
+            const entityName = data.v._id.split('/')[0];
             if (this.dateTimeFieldcfg) {
-              for (let cfgEntityNames in this.dateTimeFieldcfg) {
+              for (const cfgEntityNames in this.dateTimeFieldcfg) {
                 if(cfgEntityNames === entityName) {
                   const dateTimeFields: string[] = this.dateTimeFieldcfg[entityName];
                   dateTimeFields.forEach(e => {
@@ -199,11 +199,11 @@ export class GraphResourcesServiceBase implements GraphServiceImplementation {
   }
 
   private updateJSON = (path, obj) => {
-    let fields = path.split('.');
+    const fields = path.split('.');
     let result = obj;
     let j = 0;
     for (let i = 0, n = fields.length; i < n && result !== undefined; i++) {
-      let field = fields[i];
+      const field = fields[i];
       if (i === n - 1) {
         // reset value finally after iterating to the position (only if value already exists)
         if (result[field]) {

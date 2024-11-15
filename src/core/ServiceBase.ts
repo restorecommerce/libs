@@ -53,7 +53,7 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
    * Return resources based on provided filter and options.
    */
   async read(request: ReadRequest, context): Promise<DeepPartial<T>> {
-    let docs: any = {};
+    const docs: any = {};
     try {
       let objectEntities = [];
       let sort;
@@ -135,7 +135,7 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
   }
 
   private generateStatusResponse(responseItems: any[], inputItems: any[], deleteIds?: boolean) {
-    let statusArray = [];
+    const statusArray = [];
     if (!_.isArray(responseItems)) {
       responseItems = [responseItems];
     }
@@ -175,8 +175,8 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
   }
 
   private generateResponseWithStatus(responseItems: any[], inputItems: any[], deleteIds?: boolean) {
-    let statusArray = [];
-    let responseItemsWithStatus = [];
+    const statusArray = [];
+    const responseItemsWithStatus = [];
     if (!Array.isArray(responseItems)) {
       responseItems = responseItems ? [responseItems] : [];
     }
@@ -267,7 +267,7 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
    * Removes resources specified by id or all resources.
    */
   async delete(request: DeleteRequest, context): Promise<DeepPartial<DeleteResponse>> {
-    let deleteResponse = { status: [], operation_status: {} };
+    const deleteResponse = { status: [], operation_status: {} };
     try {
       const events = this.events;
       let docs: any;
@@ -307,7 +307,7 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
         request.ids = [];
         docs.map((doc) => request.ids.push(doc.id));
       }
-      let statusArray = this.generateStatusResponse(docs, request.ids, true);
+      const statusArray = this.generateStatusResponse(docs, request.ids, true);
       const operation_status = {
         code: 200,
         message: 'success'
@@ -332,8 +332,8 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
   async update(request: M, context): Promise<DeepPartial<T>> {
     let docs: any = {};
     try {
-      let updateDocs = _.cloneDeep(request.items);
-      let updateResponse = await this.resourceapi.update(updateDocs, request.subject);
+      const updateDocs = _.cloneDeep(request.items);
+      const updateResponse = await this.resourceapi.update(updateDocs, request.subject);
       if (this.isEventsEnabled) {
         const dispatch = [];
         const events = this.events;
@@ -344,7 +344,7 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
         });
         await Promise.all(dispatch);
       }
-      let responseWithStatus = this.generateResponseWithStatus(updateResponse, updateDocs);
+      const responseWithStatus = this.generateResponseWithStatus(updateResponse, updateDocs);
       const operation_status = {
         code: 200,
         message: 'success'
@@ -371,14 +371,14 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
   async upsert(request: M, context): Promise<DeepPartial<T>> {
     let docs: any = {};
     try {
-      let upsertDocs = _.cloneDeep(request.items);
-      let upsertResponse = await this.resourceapi.upsert(
+      const upsertDocs = _.cloneDeep(request.items);
+      const upsertResponse = await this.resourceapi.upsert(
         upsertDocs,
         this.isEventsEnabled && this.events,
         this.name,
         request.subject
       );
-      let responseWithStatus = this.generateResponseWithStatus(upsertResponse, upsertDocs);
+      const responseWithStatus = this.generateResponseWithStatus(upsertResponse, upsertDocs);
       const operation_status = {
         code: 200,
         message: 'success'

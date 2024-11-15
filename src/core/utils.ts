@@ -1,33 +1,25 @@
 import * as _ from 'lodash';
 
+ // Throws in case of error and it is handled and logged in ServiceBase functions
 const marshallObj = (val) => {
-  try {
-    return {
-      type_url: '',
-      value: Buffer.from(JSON.stringify(val))
-    };
-  } catch(error) {
-    // throw error and it is handled and logged in ServiceBase functions
-    throw error;
-  }
+  return {
+    type_url: '',
+    value: Buffer.from(JSON.stringify(val))
+  };
 };
 
+ // Throws in case of error, this is caught and logged in ResourceAPI
 const updateObject = (obj: any, path: string, value: any, fieldHandlerType: string) => {
-  try {
-    if (value && fieldHandlerType === 'encode') {
-      const marshalled = marshallObj(value);
-      _.set(obj, path, marshalled);
-    } else if (value?.value && fieldHandlerType === 'decode') {
-      let unmarshalled = JSON.parse(value.value.toString());
-      _.set(obj, path, unmarshalled);
-    } else if(value && fieldHandlerType == 'convertDateObjToMilisec' && value instanceof Date) {
-      _.set(obj, path, value.getTime());
-    } else if(value && fieldHandlerType == 'convertMilisecToDateObj' && typeof(value) == 'number') {
-      _.set(obj, path, new Date(value));
-    }
-  } catch(error) {
-    // rethrow the error, this is caught and logged in ResourceAPI
-    throw error;
+  if (value && fieldHandlerType === 'encode') {
+    const marshalled = marshallObj(value);
+    _.set(obj, path, marshalled);
+  } else if (value?.value && fieldHandlerType === 'decode') {
+    const unmarshalled = JSON.parse(value.value.toString());
+    _.set(obj, path, unmarshalled);
+  } else if(value && fieldHandlerType == 'convertDateObjToMilisec' && value instanceof Date) {
+    _.set(obj, path, value.getTime());
+  } else if(value && fieldHandlerType == 'convertMilisecToDateObj' && typeof(value) == 'number') {
+    _.set(obj, path, new Date(value));
   }
 };
 
@@ -40,9 +32,9 @@ const setNestedPath = (object: any, fieldPath: string, fieldHandlerType: string)
     setRecursive = true;
   }
   if (prefix && suffix) {
-    let array = _.get(object, prefix);
+    const array = _.get(object, prefix);
     array?.forEach((obj: any) => {
-      let fieldExists = _.get(obj, suffix);
+      const fieldExists = _.get(obj, suffix);
       if (fieldExists) {
         updateObject(obj, suffix, fieldExists, fieldHandlerType);
       }
@@ -72,7 +64,7 @@ export const fieldHandler = (obj: any, fieldPath: string, fieldHandlerType: stri
   dotFieldPath = dotFieldPath.split('.');
   const array = fieldPath.includes('[');
 
-  let fieldExists = baseGet(obj, dotFieldPath);
+  const fieldExists = baseGet(obj, dotFieldPath);
   // only if the configured field exist check recursively for all entries in object
   if (array) {
     // use setNestedPath

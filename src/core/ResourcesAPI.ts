@@ -38,11 +38,12 @@ const setDefaults = async (obj: { meta?: DocumentMetadata;[key: string]: any }, 
     const values = await redisClient.hGetAll(collectionName);
 
     if (values) {
-      for (let field in values) {
+      for (const field in values) {
         const strategy = values[field];
+        let key: string;
         switch (strategy) {
           case Strategies.INCREMENT:
-            const key = collectionName + ':' + field;
+            key = collectionName + ':' + field;
             o[field] = await redisClient.get(key);
             await redisClient.incr(key);
             break;
@@ -136,13 +137,13 @@ export class ResourcesAPIBase {
     }
 
     // values for Redis hash set
-    for (let field in strategyCfg) {
+    for (const field in strategyCfg) {
       const strategy = strategyCfg[field].strategy;
       redisClient.hSet(collectionName, field, strategy);
+      let startingValue: any;
       switch (strategy) {
         case Strategies.INCREMENT:
           // check if value already exists in redis
-          let startingValue: any;
           startingValue = redisClient.get(`${collectionName}:${field}`).then((val) => val);
           if (!startingValue) {
             if (strategyCfg[field].startingValue) {
@@ -172,7 +173,7 @@ export class ResourcesAPIBase {
    * @returns {an Object that contains an items field}
    */
   async read(
-    filter: Object = {},
+    filter: object = {},
     limit = 1000,
     offset = 0,
     sort: any = {},
@@ -236,10 +237,10 @@ export class ResourcesAPIBase {
       if (this.isGraphDB(this.db)) {
         await this.db.createGraphDB(this.graphName);
         await this.db.addVertexCollection(collection);
-        let createVertexResp = await this.db.createVertex(collection, documents);
-        for (let document of documents) {
+        const createVertexResp = await this.db.createVertex(collection, documents);
+        for (const document of documents) {
           if (this.edgeCfg && Array.isArray(this.edgeCfg) && this.edgeCfg.length > 0) {
-            for (let eachEdgeCfg of this.edgeCfg) {
+            for (const eachEdgeCfg of this.edgeCfg) {
               const fromIDkey = eachEdgeCfg.from;
               const from_id = document[fromIDkey];
               const toIDkey = eachEdgeCfg.to;
@@ -254,7 +255,7 @@ export class ResourcesAPIBase {
               }
               if (from_id && to_id) {
                 if (Array.isArray(to_id)) {
-                  for (let toID of to_id) {
+                  for (const toID of to_id) {
                     await this.db.createEdge(eachEdgeCfg.edgeName, null,
                       `${fromVerticeName}/${from_id}`, `${toVerticeName}/${toID}`);
                   }
@@ -400,8 +401,8 @@ export class ResourcesAPIBase {
     let createDocsResult = [];
     let updateDocsResult = [];
     try {
-      let createDocuments = [];
-      let updateDocuments = [];
+      const createDocuments = [];
+      const updateDocuments = [];
       if (this.bufferFields && documents) {
         documents = this.encodeOrDecode(documents, this.bufferFields, 'decode');
       }
@@ -482,7 +483,7 @@ export class ResourcesAPIBase {
         documents = this.encodeOrDecode(documents, this.bufferFields, 'decode');
       }
       let docsWithUpMetadata = await Promise.all(documents.map(async (doc) => {
-        let foundDocs = await this.db.find(
+        const foundDocs = await this.db.find(
           collectionName,
           { id: doc.id },
           { limit: 1 }
@@ -521,11 +522,11 @@ export class ResourcesAPIBase {
               }
 
               const edgeCollectionName = eachEdgeCfg.edgeName;
-              let outgoingEdges: any = await db.getOutEdges(edgeCollectionName, `${collectionName}/${dbDoc.id}`);
+              const outgoingEdges: any = await db.getOutEdges(edgeCollectionName, `${collectionName}/${dbDoc.id}`);
               if (Array.isArray(outgoingEdges.edges)) {
                 await Promise.all(outgoingEdges.edges.map((outgoingEdge) => db.removeEdge(edgeCollectionName, outgoingEdge._id)));
               }
-              let incomingEdges: any = await db.getInEdges(edgeCollectionName, `${collectionName}/${dbDoc.id}`);
+              const incomingEdges: any = await db.getInEdges(edgeCollectionName, `${collectionName}/${dbDoc.id}`);
               if (Array.isArray(incomingEdges.edges)) {
                 await Promise.all(incomingEdges.edges.map((incomingEdge) => db.removeEdge(edgeCollectionName, incomingEdge._id)));
               }
@@ -569,7 +570,7 @@ export class ResourcesAPIBase {
 
   private encodeOrDecode(documents: any, fieldPaths: string[], fieldHanlder: string): any {
     for (let doc of documents) {
-      for (let fieldPath of fieldPaths) {
+      for (const fieldPath of fieldPaths) {
         doc = fieldHandler(doc, fieldPath, fieldHanlder);
       }
     }

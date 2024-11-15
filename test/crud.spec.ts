@@ -449,7 +449,7 @@ describe('ServiceBase', () => {
       it('should return resources matching date filter', async () => {
         const todayDatePlusOneMin = new Date();
         todayDatePlusOneMin.setSeconds(todayDatePlusOneMin.getSeconds() + 60);
-        // timeObject.setSeconds(timeObject.getSeconds() + 60);   
+        // timeObject.setSeconds(timeObject.getSeconds() + 60);
         const filters = [{
           filters: [{
             field: 'created',
@@ -716,7 +716,7 @@ describe('ServiceBase', () => {
         should.exist(result.status);
         result.status.length.should.equal(3);
         result.status.should.matchEach((status) => {
-          return status.code = 200 && status.message === 'success';
+          return status.code === 200 && status.message === 'success';
         });
         should.exist(result.operation_status);
         result.operation_status.code.should.equal(200);

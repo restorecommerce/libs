@@ -44,7 +44,15 @@ message Currency {
   optional io.restorecommerce.meta.Meta meta = 2;
   optional string name = 3;
   optional string symbol = 4;
-  repeated string country_ids = 5;
+  repeated string country_ids = 5 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.country.Country",
+      target_service: "master_data",
+      target_sub_service: "country",
+      target_method: "Read",
+      field_name: "countries",
+    }
+  ];
   /*
   * For custom exchange rates beyond market.
   * Regular rates should be retrived from any API.

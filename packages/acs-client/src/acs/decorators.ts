@@ -109,16 +109,14 @@ export const DefaultMetaDataInjector = async <T extends ResourceList>(
     ).filter(
       id => id
     )
-  )
-  ];
-  const meta_map = ids.length && await self.read({
+  )];
+  const meta_map = ids.length ? await self.read({
     filters: [{
       filters: [{
         field: 'id',
         operation: Filter_Operation.in,
         value: JSON.stringify(ids),
         type: Filter_ValueType.ARRAY,
-        filters: [],
       }]
     }],
     limit: ids.length,
@@ -129,7 +127,7 @@ export const DefaultMetaDataInjector = async <T extends ResourceList>(
     ).map(
       item => [item.payload.id, item.payload.meta]
     ))
-  );
+  ) : undefined;
 
   request.items?.forEach((item) => {
     if (!item.id?.length) {
@@ -138,7 +136,7 @@ export const DefaultMetaDataInjector = async <T extends ResourceList>(
 
     if (!item.meta?.owners?.length) {
       item.meta = {
-        ...meta_map.get(item.id),
+        ...(meta_map?.get(item.id) ?? {}),
         ...item.meta,
         owners: [
           request.subject?.scope ? {

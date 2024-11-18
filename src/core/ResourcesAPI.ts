@@ -235,7 +235,7 @@ export class ResourcesAPIBase {
         documents = this.encodeOrDecode(documents, this.timeStampFields, 'convertDateObjToMilisec');
       }
       if (this.isGraphDB(this.db)) {
-        await this.db.createGraphDB(this.graphName);
+        await this.db.createGraphDB(this.graphName, [], {});
         await this.db.addVertexCollection(collection);
         const createVertexResp = await this.db.createVertex(collection, documents);
         for (const document of documents) {

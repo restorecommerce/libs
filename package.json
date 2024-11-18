@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/resource-base-interface",
-  "version": "1.6.3",
+  "version": "1.6.5",
   "description": "Restorecommerce Resource Base Interface",
   "main": "lib/index.js",
   "author": "n-fuse GmbH",
@@ -17,7 +17,7 @@
     "interface"
   ],
   "dependencies": {
-    "@restorecommerce/chassis-srv": "1.6.4",
+    "@restorecommerce/chassis-srv": "1.6.5",
     "@restorecommerce/grpc-client": "^2.2.5",
     "@restorecommerce/kafka-client": "1.2.20",
     "@restorecommerce/rc-grpc-clients": "5.1.42",

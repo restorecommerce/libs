@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.8](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@3.0.7...@restorecommerce/acs-client@3.0.8) (2024-11-19)
+
+
+### Bug Fixes
+
+* **acs-client:** invalid behaviour on empty meta_map ([00bd01a](https://github.com/restorecommerce/libs/commit/00bd01a1d2c8b8a631a1bcbb7b15079af2052939))
+
+
+
+
+
 ## [3.0.7](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@3.0.6...@restorecommerce/acs-client@3.0.7) (2024-11-13)
 
 **Note:** Version bump only for package @restorecommerce/acs-client

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.10.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.10.1...@restorecommerce/protos@6.10.2) (2024-11-19)
+
+
+### Bug Fixes
+
+* **proto:** add auto-resolver options to currency ([bb20527](https://github.com/restorecommerce/libs/commit/bb20527e30726f2be86f2c93ab9e166cb40c341d))
+
+
+
+
+
 ## [6.10.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.10.0...@restorecommerce/protos@6.10.1) (2024-11-13)
 
 

@@ -41,9 +41,13 @@ service OrderService {
 
   // Requires Fulfillment Service
   // Evaluates plausibility of the Fulfillment that would result from given order.
-  rpc EvaluateFulfillment (OrderList) returns (io.restorecommerce.status.StatusListResponse);
+  rpc EvaluateFulfillment (OrderList) returns (io.restorecommerce.status.StatusListResponse) {
+    option (io.restorecommerce.options.is_query) = true;
+  };
   // Requires Fulfillment Service
-  rpc QueryFulfillmentSolution (FulfillmentRequestList) returns (io.restorecommerce.fulfillment_product.FulfillmentSolutionListResponse);
+  rpc QueryFulfillmentSolution (FulfillmentRequestList) returns (io.restorecommerce.fulfillment_product.FulfillmentSolutionListResponse) {
+    option (io.restorecommerce.options.is_query) = true;
+  };
   // Requires Fulfillment Service
   rpc CreateFulfillment (FulfillmentRequestList) returns (io.restorecommerce.fulfillment.FulfillmentListResponse);
   // Requires Fulfillment Service

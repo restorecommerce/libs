@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.10.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.10.2...@restorecommerce/protos@6.10.3) (2024-11-20)
+
+
+### Bug Fixes
+
+* **protos:** mark ordering EvaluateFulfillment and QueryFulfillmentSolution as Query ([4ab2e7e](https://github.com/restorecommerce/libs/commit/4ab2e7ed2eb3ecb520a669772a835b05482bcce0))
+
+
+
+
+
 ## [6.10.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.10.1...@restorecommerce/protos@6.10.2) (2024-11-19)
 
 

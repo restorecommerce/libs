@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.9](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.2.8...@restorecommerce/facade@2.2.9) (2024-11-20)
+
+
+### Bug Fixes
+
+* **facade:** remove deprecated dependency ([97ff4f2](https://github.com/restorecommerce/libs/commit/97ff4f20a832ac8ace8d5d0caecab0fb8a89f4bb))
+
+
+
+
+
 ## [2.2.8](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.2.7...@restorecommerce/facade@2.2.8) (2024-11-19)
 
 **Note:** Version bump only for package @restorecommerce/facade

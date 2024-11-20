@@ -7,7 +7,7 @@ import {
   type LoginFnResponse
 } from './interfaces.js';
 import { nanoid, epochTime } from './utils.js';
-import * as useragent from 'useragent';
+import { UAParser } from 'ua-parser-js';
 import * as uuid from 'uuid';
 import * as requestIp from 'request-ip';
 import {
@@ -129,10 +129,10 @@ export const registerPasswordGrantType = (config: OIDCPasswordGrantTypeConfig) =
         }
         const req = ctx.request;
         let os, agentName;
-        const agent = useragent.parse(req.headers['user-agent']);
+        const agent = new UAParser(req.headers['user-agent']);
         if (agent) {
-          os = agent.os.toString();
-          agentName = agent.toAgent();
+          os = agent.getOS().toString();
+          agentName = agent.getUA();
         }
 
         ctx.body = await performPasswordGrant(ctx, client.clientId, body.identifier, passwordValue, key);

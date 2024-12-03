@@ -33,8 +33,10 @@ export const ostorageModule = createFacadeModuleFactory<OstorageConfig, Ostorage
       token = authToken.split(' ')[1];
       ctx.subject = { token };
     }
-    const bucket = ctx.params[0];
-    const key = ctx.params[1];
+
+    const match = ctx.req.url.match(route);
+    const bucket = match[1];
+    const key = match[2];
     await handleGetFile(bucket, key, ctx, ostorage.client);
     return ctx.response;
   });

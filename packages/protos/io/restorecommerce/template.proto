@@ -27,10 +27,14 @@ service TemplateService {
 enum TemplateUseCase {
   MISCELLANEOUS = 0;
   INVOICE_PDF = 1;
-  INVOICE_EMAIL = 2;
-  INVITATION_EMAIL = 3;
-  REGISTRATION_EMAIL = 4;
-  CHANGE_PASSWORD_EMAIL = 5;
+  INVOICE_EMAIL_BODY = 2;
+  INVOICE_EMAIL_SUBJECT = 3;
+  INVITATION_EMAIL_BODY = 4;
+  INVITATION_EMAIL_SUBJECT = 5;
+  REGISTRATION_EMAIL_BODY = 5;
+  REGISTRATION_EMAIL_SUBJECT = 6;
+  CHANGE_PASSWORD_EMAIL_BODY = 7;
+  CHANGE_PASSWORD_EMAIL_SUBJECT = 8;
 }
 
 message Deleted {
@@ -55,8 +59,8 @@ message TemplateResponse {
 }
 
 message Localization {
-  repeated string local_codes = 1; // e.g. en, en_US, en_UK, ...
-  optional io.restorecommerce.file.File l10n = 2; // JSON expected
+  repeated string locales = 1; // locales suported by this file e.g. en, en_US, en_UK, ...
+  optional io.restorecommerce.file.File l10n = 2; // JSON or CSV
 }
 
 message Template {
@@ -67,10 +71,10 @@ message Template {
   optional TemplateUseCase use_case = 5;
   optional uint32 ordinal = 6; // sort number
   optional string section = 7; // e.g. header, body, footer
-  optional io.restorecommerce.file.File body = 8; // e.g. text/html
-  optional io.restorecommerce.file.File layout = 9;
+  repeated io.restorecommerce.file.File bodies = 8; // e.g. text/html
+  repeated io.restorecommerce.file.File layouts = 9;
   repeated io.restorecommerce.file.File styles = 10; // e.g. application/css
   repeated io.restorecommerce.image.Image images = 11;
-  repeated Localization localization = 12;
+  repeated Localization localizations = 12;
   repeated io.restorecommerce.attribute.Attribute attributes = 14;
 }

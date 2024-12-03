@@ -3,8 +3,9 @@ import { namespace, OstorageConfig, OstorageModule } from './interfaces.js';
 import { OstorageSrvGrpcClient } from './grpc/index.js';
 import { createFacadeModuleFactory } from '../../utils.js';
 import { handleGetFile } from './objectDownloadReqHandler.js';
-import Router from 'koa-router';
+import Router, { RouterContext } from 'koa-router';
 import bodyParser from 'koa-bodyparser';
+import { Subject } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/auth.js';
 
 export const ostorageModule = createFacadeModuleFactory<OstorageConfig, OstorageModule>(namespace, (facade, config) => {
   const ostorage = {
@@ -23,9 +24,9 @@ export const ostorageModule = createFacadeModuleFactory<OstorageConfig, Ostorage
 
   router.use(bodyParser());
 
-  const endpoint = config.config.endpoint || 'storage';
+  const endpoint = config.config.endpoint ?? 'storage';
   const route = new RegExp(`^\/${endpoint}\/([^/]+)\/(.+)`, 'i');
-  router.get(route, async (ctx: any, next: any) => {
+  router.get(endpoint, route, async (ctx: RouterContext<any, {subject?: Subject}>, next: any) => {
     const authToken = ctx.request.header['authorization'];
     let token;
     if (authToken && authToken.startsWith('Bearer ')) {

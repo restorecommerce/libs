@@ -21,16 +21,14 @@ export const ostorageModule = createFacadeModuleFactory<OstorageConfig, Ostorage
   });
 
   const router = new Router();
-
-  router.use(bodyParser());
-
   const endpoint = config.config.endpoint ?? 'storage';
   const route = new RegExp(`^\/${endpoint}\/([^/]+)\/(.+)`, 'i');
+
+  router.use(bodyParser());
   router.get(endpoint, route, async (ctx: RouterContext<any, {subject?: Subject}>, next: any) => {
     const authToken = ctx.request.header['authorization'];
-    let token;
-    if (authToken && authToken.startsWith('Bearer ')) {
-      token = authToken.split(' ')[1];
+    if (authToken?.startsWith('Bearer ')) {
+      const token = authToken.split(' ')[1];
       ctx.subject = { token };
     }
 
@@ -43,7 +41,6 @@ export const ostorageModule = createFacadeModuleFactory<OstorageConfig, Ostorage
 
   facade.koa.use(router.routes());
   facade.koa.use(router.allowedMethods());
-
   facade.koa.use(async (ctx, next) => {
     ctx.ostorage = ostorage;
     await next();

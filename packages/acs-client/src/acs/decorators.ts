@@ -71,7 +71,7 @@ export const DefaultResourceFactory = <T extends ResourceList>(
     self: any,
     request: T,
     context: any,
-  ) => resourceNames.map(
+  ) => (resourceNames ?? [self.name])?.map(
     resourceName => ({
       resource: resourceName,
       id: request.items?.map((item: any) => item.id)

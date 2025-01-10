@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.10.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.10.3...@restorecommerce/protos@6.10.4) (2025-01-10)
+
+
+### Bug Fixes
+
+* **protos:** add backup and reset for totp ([5a680c9](https://github.com/restorecommerce/libs/commit/5a680c930140e4f06f57038848f512844f3e2603))
+* **proto:** template more use-cases ([e17251f](https://github.com/restorecommerce/libs/commit/e17251fcbe21d04842e0638721683ee90c2ecfff))
+
+
+
+
+
 ## [6.10.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.10.2...@restorecommerce/protos@6.10.3) (2024-11-20)
 
 

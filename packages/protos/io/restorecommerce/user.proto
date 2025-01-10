@@ -54,6 +54,8 @@ service UserService {
   rpc SetupTOTP (SetupTOTPRequest) returns (SetupTOTPResponse);
   rpc CompleteTOTPSetup (CompleteTOTPSetupRequest) returns (io.restorecommerce.status.OperationStatusObj);
   rpc ExchangeTOTP (ExchangeTOTPRequest) returns (UserResponse);
+  rpc CreateBackupTOTPCodes (CreateBackupTOTPCodesRequest) returns (CreateBackupTOTPCodesResponse);
+  rpc ResetTOTP (ResetTOTPRequest) returns (io.restorecommerce.status.OperationStatusObj);
   rpc GetUnauthenticatedSubjectTokenForTenant(TenantRequest) returns (TenantResponse);
 }
 
@@ -92,6 +94,21 @@ message ExchangeTOTPRequest {
   optional string code = 1;
   optional io.restorecommerce.auth.Subject subject = 2;
   optional string totp_session_token = 3;
+}
+
+message CreateBackupTOTPCodesRequest {
+  optional string identifier = 1;
+  optional io.restorecommerce.auth.Subject subject = 2;
+}
+
+message CreateBackupTOTPCodesResponse {
+  repeated string backup_codes = 1;
+  optional io.restorecommerce.status.OperationStatus operation_status = 2;
+}
+
+message ResetTOTPRequest {
+  optional string identifier = 1;
+  optional io.restorecommerce.auth.Subject subject = 2;
 }
 
 message TenantRequest {
@@ -350,6 +367,7 @@ message User {
   optional string totp_secret_processing = 28; /// TOTP Secret before being confirmed
   repeated string totp_session_tokens = 29; /// TOTP Login session tokens
   repeated string password_hash_history = 30; // List of historical password hashes
+  repeated string totp_recovery_codes = 31; // List of TOTP recovery codes
 }
 
 /**

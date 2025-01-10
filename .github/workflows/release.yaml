@@ -22,9 +22,6 @@ jobs:
         with:
           node-version-file: '.nvmrc'
 
-      - name: Upgrade npm
-        run: npm i -g npm
-
       - name: Install Dependencies
         run: npm ci
 

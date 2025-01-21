@@ -56,6 +56,7 @@ service UserService {
   rpc ExchangeTOTP (ExchangeTOTPRequest) returns (UserResponse);
   rpc CreateBackupTOTPCodes (CreateBackupTOTPCodesRequest) returns (CreateBackupTOTPCodesResponse);
   rpc ResetTOTP (ResetTOTPRequest) returns (io.restorecommerce.status.OperationStatusObj);
+  rpc MfaStatus (MfaStatusRequest) returns (MfaStatusResponse);
   rpc GetUnauthenticatedSubjectTokenForTenant(TenantRequest) returns (TenantResponse);
 }
 
@@ -109,6 +110,17 @@ message CreateBackupTOTPCodesResponse {
 message ResetTOTPRequest {
   optional string identifier = 1;
   optional io.restorecommerce.auth.Subject subject = 2;
+}
+
+message MfaStatusRequest {
+  optional string identifier = 1;
+  optional io.restorecommerce.auth.Subject subject = 2;
+}
+
+message MfaStatusResponse {
+  optional bool has_totp = 1;
+  optional bool has_backup_codes = 2;
+  optional io.restorecommerce.status.OperationStatus operation_status = 3;
 }
 
 message TenantRequest {

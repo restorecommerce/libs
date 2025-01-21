@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.10.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.10.4...@restorecommerce/protos@6.10.5) (2025-01-21)
+
+
+### Bug Fixes
+
+* add mfa status endpoint for users ([5583877](https://github.com/restorecommerce/libs/commit/5583877eac9150b0768ca00f8978bf2a13c1b074))
+
+
+
+
+
 ## [6.10.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.10.3...@restorecommerce/protos@6.10.4) (2025-01-10)
 
 

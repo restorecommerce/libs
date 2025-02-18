@@ -1,11 +1,16 @@
 import * as uuid from 'uuid';
+import {
+  Metadata,
+  type CallContext,
+  type CallOptions,
+} from 'nice-grpc';
+import { ServiceConfig } from '@restorecommerce/service-config';
 import { Logger } from '@restorecommerce/logger';
-import { Provider as ServiceConfig } from 'nconf';
 import {
   Client,
   createClient,
   createChannel,
-  GrpcClientConfig
+  GrpcClientConfig,
 } from '@restorecommerce/grpc-client';
 import {
   UserServiceDefinition
@@ -64,20 +69,20 @@ export const DefaultACSClientContextFactory = async <T extends ResourceList>(
   resources: [],
 });
 
-export const DefaultResourceFactory = <T extends ResourceList>(
+export function DefaultResourceFactory<T extends ResourceList>(
   ...resourceNames: string[]
-): ResourceFactory<T> => {
+): ResourceFactory<T> {
   return async (
     self: any,
     request: T,
     context: any,
-  ) => (resourceNames ?? [self.name])?.map(
+  ) => (resourceNames?.length ? resourceNames : [self.name])?.map(
     resourceName => ({
       resource: resourceName,
       id: request.items?.map((item: any) => item.id)
     })
   );
-};
+}
 
 export const DefaultSubjectResolver = async <T extends ResourceList>(
   self: any,
@@ -113,7 +118,7 @@ export const DefaultMetaDataInjector = async <T extends ResourceList>(
   const meta_map = ids.length ? await self.read({
     filters: [{
       filters: [{
-        field: 'id',
+        field: '_key', // _key is faster
         operation: Filter_Operation.in,
         value: JSON.stringify(ids),
         type: Filter_ValueType.ARRAY,
@@ -133,34 +138,42 @@ export const DefaultMetaDataInjector = async <T extends ResourceList>(
     if (!item.id?.length) {
       item.id = uuid.v4().replace(/-/g, '');
     }
-
-    if (!item.meta?.owners?.length) {
-      item.meta = {
-        ...(meta_map?.get(item.id) ?? {}),
-        ...item.meta,
-        owners: [
-          request.subject?.scope ? {
-            id: urns.ownerIndicatoryEntity,
-            value: urns.organization, // to be passed here to change
-            attributes: [{
-              id: urns.ownerInstance,
-              value: request.subject.scope
-            }],
-          } : undefined,
-          request.subject?.id ? {
-            id: urns.ownerIndicatoryEntity,
-            value: urns.user,
-            attributes: [{
-              id: urns.ownerInstance,
-              value: request.subject.id
-            }],
-          } : undefined,
-        ].filter(i => !!i)
-      };
-    }
+    item.meta ??= meta_map?.get(item.id) ?? {};
+    item.meta.owners ??= [
+      request.subject?.scope ? {
+        id: urns.ownerIndicatoryEntity,
+        value: urns.organization,
+        attributes: [{
+          id: urns.ownerInstance,
+          value: request.subject.scope
+        }],
+      } : undefined,
+      request.subject?.id ? {
+        id: urns.ownerIndicatoryEntity,
+        value: urns.user,
+        attributes: [{
+          id: urns.ownerInstance,
+          value: request.subject.id
+        }],
+      } : undefined,
+    ].filter(i => i);
   });
   return request;
 };
+
+export enum ByPass {
+  SUBJECT = 'SUBJECT',
+  META = 'META',
+  ACS = 'ACS',
+};
+
+export function setByPass(...args: ByPass[]): CallOptions {
+  return {
+    metadata: new Metadata(
+      args.map(arg => ['bypass', arg.toString()])
+    )
+  }
+}
 
 export function access_controlled_service<T extends { new(...args: any): any }>(baseService: T): T {
   return class extends baseService implements AccessControlledService {
@@ -202,14 +215,20 @@ export function access_controlled_function<T extends ResourceList>(kwargs: {
     const method = descriptor.value!;
     descriptor.value = async function () {
       const that = this as AccessControlledService;
+      const request = arguments[0];
+      const context = arguments[1];
+      const args = [...arguments].slice(2);
+
+      if (context?.byPassACS) {
+        return await method.apply(this, arguments);
+      }
+
       try {
         if (!that.__userService) {
           throw new Error('An @access_controlled_function must be member of an @access_controlled_service class');
         }
-        const request = arguments[0];
-        const args = [...arguments].slice(1);
 
-        const context = typeof (kwargs.context) === 'function'
+        const acsContext = typeof (kwargs.context) === 'function'
           ? await kwargs.context(this, request, ...args)
           : kwargs.context;
 
@@ -221,7 +240,7 @@ export function access_controlled_function<T extends ResourceList>(kwargs: {
           ? await kwargs.database(this, request, ...args)
           : kwargs.database;
 
-        const subject = context?.subject;
+        const subject = acsContext?.subject;
         if (subject) {
           subject.id = null;
         }
@@ -236,7 +255,7 @@ export function access_controlled_function<T extends ResourceList>(kwargs: {
           subject,
           resource ?? [],
           kwargs.action,
-          context,
+          acsContext,
           {
             operation: kwargs.operation, database: database ?? that.__acsDatabaseProvider ?? 'arangoDB',
             useCache: kwargs.useCache ?? false

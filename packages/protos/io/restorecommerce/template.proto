@@ -25,7 +25,7 @@ service TemplateService {
 }
 
 enum TemplateUseCase {
-  MISCELLANEOUS = 0;
+  MISCELLANEOUS = 0; // may use attributes for use case identication
   INVOICE_PDF = 1;
   INVOICE_EMAIL_BODY = 2;
   INVOICE_EMAIL_SUBJECT = 3;
@@ -35,6 +35,15 @@ enum TemplateUseCase {
   REGISTRATION_EMAIL_SUBJECT = 7;
   CHANGE_PASSWORD_EMAIL_BODY = 8;
   CHANGE_PASSWORD_EMAIL_SUBJECT = 9;
+  ORDER_CONFIRMATION_EMAIL = 10;
+  ORDER_COMPLETION_EMAIL = 11;
+  ORDER_CANCELATION_PENDING_EMAIL = 12;
+  ORDER_CANCELATION_CONFIRMED_EMAIL = 13;
+  FULFILLMENT_CONFIRMATION_EMAIL = 14;
+  FULFILLMENT_COMPLETION_EMAIL = 15;
+  FULFILLMENT_CANCELATION_PENDING_EMAIL = 16;
+  FULFILLMENT_CANCELATION_CONFIRMED_EMAIL = 17;
+  FULFILLMENT_FAILED_EMAIL = 18;
 }
 
 message Deleted {
@@ -68,7 +77,7 @@ message Template {
   optional io.restorecommerce.meta.Meta meta = 2;
   optional string name = 3;
   optional string description = 4;
-  optional TemplateUseCase use_case = 5;
+  optional string use_case = 5; // URN or ENUM to identify what this template is used for
   optional uint32 ordinal = 6; // sort number
   optional string section = 7; // e.g. header, body, footer
   repeated io.restorecommerce.file.File bodies = 8; // e.g. text/html

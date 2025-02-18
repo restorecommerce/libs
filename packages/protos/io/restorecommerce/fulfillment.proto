@@ -91,13 +91,19 @@ service FulfillmentService {
 
 enum FulfillmentState {
   PENDING = 0;
-  INVALID = 1;
   SUBMITTED = 2;
-  IN_TRANSIT = 3;
-  COMPLETED = 4;
-  WITHDRAWN = 5;
-  CANCELLED = 6;
-  FAILED = 7;
+  SUBMIT_NOTIFIED = 3;
+  IN_TRANSIT = 4;
+  TRANSIT_NOTIFIED = 5;
+  COMPLETED = 6;
+  COMPLETION_NOTIFIED = 7;
+  CANCELLED = 8;
+  CANCELATION_NOTIFIED = 9;
+  WITHDRAWN = 10;
+  WITHDRAW_NOTIFIED = 11;
+  FAILED = 12;
+  FAIL_NOTIFIED = 13;
+  INVALID = 14;
 }
 
 message Item {

@@ -22,6 +22,11 @@ service CurrencyService {
   rpc Upsert (CurrencyList) returns (CurrencyListResponse);
 }
 
+enum SymbolAlignment {
+  surfix = 0;
+  prefix = 1;
+}
+
 message CurrencyList {
   repeated Currency items = 1;
   optional uint32 total_count = 2;

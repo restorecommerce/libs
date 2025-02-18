@@ -1,5 +1,11 @@
 import * as path from 'path';
-import { Provider as ServiceConfig } from 'nconf';
+import { ICallbackFunction, Provider } from 'nconf';
+
+export class ServiceConfig extends Provider {
+  public override get<T>(key: string, callback?: ICallbackFunction) {
+    super.get(key, callback) as T;
+  }
+}
 
 export interface ServiceConfigLogger {
   verbose(...args: any[]): any;
@@ -27,13 +33,17 @@ export interface ServiceConfigOptions {
 }
 
 // read the layered configurations and merge into one
-export function createServiceConfig(baseDir: string, opts:ServiceConfigOptions = {}): ServiceConfig {
+export function createServiceConfig(
+  baseDir: string,
+  opts?:ServiceConfigOptions,
+  defaults?: any,
+): ServiceConfig {
   const nconfInstance = new ServiceConfig();
-  const logger = opts.logger;
+  const logger = opts?.logger;
 
   // static data from runtime
-  const STAGE_VAR = opts.stageVar ?? 'NODE_ENV';
-  const defaults: any = {};
+  const STAGE_VAR = opts?.stageVar ?? 'NODE_ENV';
+  defaults ??= {};
   defaults[STAGE_VAR] = 'development';
   nconfInstance.argv({
     separator: '__',
@@ -60,5 +70,3 @@ export function createServiceConfig(baseDir: string, opts:ServiceConfigOptions =
 
   return nconfInstance;
 };
-
-export { ServiceConfig };

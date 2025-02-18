@@ -5,6 +5,8 @@ import {
   DefaultCallOptions,
   createChannel,
   ClientError,
+  Metadata,
+  type CallContext,
 } from 'nice-grpc';
 import { CompatServiceDefinition, NormalizedServiceDefinition } from 'nice-grpc/lib/service-definitions';
 import {
@@ -56,4 +58,4 @@ export function createClient<Service extends CompatServiceDefinition>(
   return factory.create(definition, channel, defaultCallOptions);
 }
 
-export { Client, Channel, createChannel };
+export { Client, Channel, createChannel, CallContext, Metadata };

@@ -40,19 +40,18 @@ service OrderService {
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
 
   // Requires Fulfillment Service
-  // Evaluates plausibility of the Fulfillment that would result from given order.
-  rpc EvaluateFulfillment (OrderList) returns (io.restorecommerce.status.StatusListResponse) {
+  rpc QueryFulfillmentSolution (FulfillmentRequestList) returns (io.restorecommerce.fulfillment_product.FulfillmentSolutionListResponse) {
     option (io.restorecommerce.options.is_query) = true;
   };
   // Requires Fulfillment Service
-  rpc QueryFulfillmentSolution (FulfillmentRequestList) returns (io.restorecommerce.fulfillment_product.FulfillmentSolutionListResponse) {
+  // Evaluates plausibility of the Fulfillment that would result from given order.
+  rpc EvaluateFulfillment (OrderList) returns (io.restorecommerce.status.StatusListResponse) {
     option (io.restorecommerce.options.is_query) = true;
   };
   // Requires Fulfillment Service
   rpc CreateFulfillment (FulfillmentRequestList) returns (io.restorecommerce.fulfillment.FulfillmentListResponse);
   // Requires Fulfillment Service
   rpc TriggerFulfillment (FulfillmentRequestList) returns (io.restorecommerce.status.StatusListResponse);
-
   // Requires Invoice Service
   rpc CreateInvoice (OrderingInvoiceRequestList) returns (io.restorecommerce.invoice.InvoiceListResponse);
   // Requires Invoice Service
@@ -62,9 +61,14 @@ service OrderService {
 enum OrderState {
   PENDING = 0;
   SUBMITTED = 1;
-  COMPLETED = 2;
-  WITHDRAWN = 3;
-  CANCELLED = 4;
+  SUBMIT_NOTIFIED = 2;
+  COMPLETED = 3;
+  COMPLETION_NOTIFIED = 4;
+  CANCELLED = 5;
+  CANCELATION_NOTIFIED = 6;
+  WITHDRAWN = 7;
+  WITHDRAW_NOTIFIED = 8;
+  INVALID = 9;
 }
 
 enum FulfillmentInvoiceMode {

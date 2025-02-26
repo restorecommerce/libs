@@ -3,6 +3,7 @@ syntax = "proto3";
 package io.restorecommerce.order;
 
 import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
 
 import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/meta.proto";
@@ -39,6 +40,9 @@ service OrderService {
   rpc Cancel (OrderIdList) returns (OrderListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
 
+  // Requires Notification Service - (re)sends current order state as email notification.
+  rpc Notify (OrderIdList) returns (io.restorecommerce.status.StatusListResponse);
+
   // Requires Fulfillment Service
   rpc QueryFulfillmentSolution (FulfillmentRequestList) returns (io.restorecommerce.fulfillment_product.FulfillmentSolutionListResponse) {
     option (io.restorecommerce.options.is_query) = true;
@@ -50,25 +54,23 @@ service OrderService {
   };
   // Requires Fulfillment Service
   rpc CreateFulfillment (FulfillmentRequestList) returns (io.restorecommerce.fulfillment.FulfillmentListResponse);
-  // Requires Fulfillment Service
-  rpc TriggerFulfillment (FulfillmentRequestList) returns (io.restorecommerce.status.StatusListResponse);
   // Requires Invoice Service
   rpc CreateInvoice (OrderingInvoiceRequestList) returns (io.restorecommerce.invoice.InvoiceListResponse);
-  // Requires Invoice Service
-  rpc TriggerInvoice (OrderingInvoiceRequestList) returns (io.restorecommerce.status.StatusListResponse);
 }
 
 enum OrderState {
   PENDING = 0;
-  SUBMITTED = 1;
-  SUBMIT_NOTIFIED = 2;
-  COMPLETED = 3;
-  COMPLETION_NOTIFIED = 4;
-  CANCELLED = 5;
-  CANCELATION_NOTIFIED = 6;
-  WITHDRAWN = 7;
-  WITHDRAW_NOTIFIED = 8;
-  INVALID = 9;
+  PENDING_NOTIFIED = 1;
+  SUBMITTED = 2;
+  SUBMIT_NOTIFIED = 3;
+  COMPLETED = 4;
+  COMPLETION_NOTIFIED = 5;
+  CANCELLED = 6;
+  CANCELATION_NOTIFIED = 7;
+  WITHDRAWN = 8;
+  WITHDRAW_NOTIFIED = 9;
+  INVALID = 10;
+  INVALID_NOTIFIED = 11;
 }
 
 enum FulfillmentInvoiceMode {
@@ -147,6 +149,10 @@ message Order {
   optional string customer_vat_id = 15;
   optional io.restorecommerce.fulfillment_product.Preferences packaging_preferences = 16;
   optional string payment_method_id = 17;
+  optional google.protobuf.Timestamp submitted = 18;
+  optional google.protobuf.Timestamp canceled = 19;
+  optional google.protobuf.Timestamp withdrawn = 20;
+  optional google.protobuf.Timestamp completed = 21; 
 }
 
 message OrderIdList {

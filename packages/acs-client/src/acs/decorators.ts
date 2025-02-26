@@ -1,7 +1,5 @@
-import * as uuid from 'uuid';
 import {
   Metadata,
-  type CallContext,
   type CallOptions,
 } from 'nice-grpc';
 import { ServiceConfig } from '@restorecommerce/service-config';
@@ -20,7 +18,6 @@ import {
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/access_control';
 import {
   ResourceList,
-  ResourceListResponse
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base';
 import {
   initAuthZ,
@@ -42,10 +39,7 @@ import {
 } from './resolver';
 import { cfg } from '../config';
 import { _ } from '../utils';
-import {
-  Filter_Operation,
-  Filter_ValueType
-} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/filter';
+import { randomUUID } from 'crypto';
 
 export type DatabaseProvider = 'arangoDB' | 'postgres';
 export type ACSClientContextFactory<T extends ResourceList> = (self: any, request: T, ...args: any) => Promise<ACSClientContext>;
@@ -108,55 +102,29 @@ export const DefaultMetaDataInjector = async <T extends ResourceList>(
   ...args: any
 ): Promise<T> => {
   const urns = cfg.get('authorization:urns');
-  const ids = [...new Set(
-    request.items?.map(
-      (item) => item.id
-    ).filter(
-      id => id
-    )
-  )];
-  const meta_map = ids.length ? await self.read({
-    filters: [{
-      filters: [{
-        field: '_key', // _key is faster
-        operation: Filter_Operation.in,
-        value: JSON.stringify(ids),
-        type: Filter_ValueType.ARRAY,
-      }]
-    }],
-    limit: ids.length,
-    subject: request.subject
-  }).then(
-    (response: ResourceListResponse) => new Map(response.items?.filter(
-      item => item.payload
-    ).map(
-      item => [item.payload.id, item.payload.meta]
-    ))
-  ) : undefined;
-
   request.items?.forEach((item) => {
     if (!item.id?.length) {
-      item.id = uuid.v4().replace(/-/g, '');
+      item.id = randomUUID().replace(/-/g, '') //uuid.v4().replace(/-/g, '');
+      item.meta ??= {};
+      item.meta.owners ??= [
+        request.subject?.scope ? {
+          id: urns.ownerIndicatoryEntity,
+          value: urns.organization,
+          attributes: [{
+            id: urns.ownerInstance,
+            value: request.subject.scope
+          }],
+        } : undefined,
+        request.subject?.id ? {
+          id: urns.ownerIndicatoryEntity,
+          value: urns.user,
+          attributes: [{
+            id: urns.ownerInstance,
+            value: request.subject.id
+          }],
+        } : undefined,
+      ].filter(i => i);
     }
-    item.meta ??= meta_map?.get(item.id) ?? {};
-    item.meta.owners ??= [
-      request.subject?.scope ? {
-        id: urns.ownerIndicatoryEntity,
-        value: urns.organization,
-        attributes: [{
-          id: urns.ownerInstance,
-          value: request.subject.scope
-        }],
-      } : undefined,
-      request.subject?.id ? {
-        id: urns.ownerIndicatoryEntity,
-        value: urns.user,
-        attributes: [{
-          id: urns.ownerInstance,
-          value: request.subject.id
-        }],
-      } : undefined,
-    ].filter(i => i);
   });
   return request;
 };

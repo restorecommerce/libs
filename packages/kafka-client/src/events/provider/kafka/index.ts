@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 import { EventEmitter } from 'events';
 import * as async from 'async';
 import { Logger } from 'winston';
-import { Admin, Consumer, Kafka as KafkaJS, KafkaConfig, KafkaMessage, logLevel, Message, Producer } from 'kafkajs';
+import { Admin, Consumer, Kafka as KafkaJS, KafkaConfig, KafkaMessage, logLevel, Message, Producer, RecordMetadata } from 'kafkajs';
 import { decodeMessage, encodeMessage } from '../../../protos';
 
 const makeProtoResolver = (protoFilePath: string, protoRoot: string): any => {
@@ -450,13 +450,21 @@ export class Topic {
   private $receive(eventName: string, message: any, context: any): void {
     // Decode message here and get the auto completion here
     if (this.hasListeners(eventName)) {
-      let decodedMsg = this.provider.decodeObject(this.config,
-        eventName, message);
+      let decodedMsg = this.provider.decodeObject(
+        this.config,
+        eventName,
+        message
+      );
       if (decodedMsg) {
         decodedMsg = _.pick(decodedMsg, _.keys(decodedMsg)); // hack around messy protobuf.js object
         this.provider.logger.debug(`kafka received event with topic ${context.topic} and event name ${eventName}`, { decodedMsg });
-        this.emitter.emit(eventName, decodedMsg, context,
-          this.config, eventName);
+        this.emitter.emit(
+          eventName,
+          decodedMsg,
+          context,
+          this.config,
+          eventName
+        );
       }
     }
   }
@@ -644,8 +652,11 @@ export class Kafka {
   decodeObject(config: any, eventName: string, msg: any): any {
     try {
       return decodeMessage(msg, config[eventName].messageObject);
-    } catch (err: any) {
-      this.logger.error(`error on decoding message with event ${eventName}`, { errorCode: err.code, errorMessage: err.message, errorStack: err.stack });
+    } catch (error: any) {
+      this.logger.error(
+        `error on decoding message with event ${eventName}`,
+        { error }
+      );
     }
   }
 
@@ -657,67 +668,54 @@ export class Kafka {
    * @param  {string} eventName
    * @param  {Object|Object[]} message
    */
-  async $send(topicName: string, eventName: string, message: any): Promise<any> {
-    let messages = message;
-    const config: any = this.config;
-    const messageObject = config[eventName].messageObject;
-    if (!_.isArray(message)) {
-      messages = [message];
-    }
+  async $send(topicName: string, eventName: string, message: any): Promise<RecordMetadata[]> {
     try {
-      const values: Message[] = [];
-      for (let i = 0; i < messages.length; i += 1) {
-        //  get the binary representation of the message using serializeBinary()
-        //  and build a Buffer from it.
-        const msg = messages[i];
-        const bufferObj = Kafka.encodeObject(msg, messageObject);
-
-        values.push({
-          key: eventName,
-          value: Buffer.from(bufferObj),
-          partition: 0
-        });
+      const messages = Array.isArray(message) ? message : [message];
+      const config: any = this.config;
+      const messageObject = config[eventName]?.messageObject;
+      if (!messageObject) {
+        throw new Error(`messageObject for event ${eventName} not configured!`);
       }
+      const values: Message[] = messages?.map(
+        msg => {
+          const bufferObj = Kafka.encodeObject(msg, messageObject);
+          return {
+            key: eventName,
+            value: Buffer.from(bufferObj),
+            partition: 0
+          };
+        }
+      )
       for (const msg of messages) {
-        if (config && config[eventName].omittedFields) {
+        if (config[eventName]?.omittedFields) {
           const keys = config[eventName].omittedFields;
           this.omitFields(keys, msg, config[eventName].enableLogging);
         }
       }
       this.logger.debug(`Sending event ${eventName} to topic ${topicName}`, { messages });
-      return new Promise((resolve, reject) => {
-        this.producer.send({
-          topic: topicName,
-          messages: values
-        }).then((data) => {
-          for (const msg of messages) {
-            this.logger.debug(`Sent event ${eventName} to topic ${topicName}`, msg);
-          }
-          resolve(data);
-        }).catch((err) => {
-          this.logger.error(`error sending event ${eventName} to topic ${topicName}`, { code: err.code, message: err.message, stack: err.stack });
-          reject(err);
-        });
+      return await this.producer.send({
+        topic: topicName,
+        messages: values
+      }).then((data) => {
+        for (const msg of messages) {
+          this.logger.debug(`Sent event ${eventName} to topic ${topicName}`, msg);
+        }
+        return data;
       });
-    } catch (err: any) {
-      this.logger.error(`error on sending event ${eventName} to topic ${topicName}`, { code: err.code, message: err.message, stack: err.stack });
-      throw err;
+    } catch (error: any) {
+      this.logger.error(`Error on sending event ${eventName} to topic ${topicName}`, { error });
+      throw error;
     }
   }
 
   private omitFields(keys: string | string[], msg: any, enableLogging?: boolean): void {
-    let msgs;
-    if (!_.isArray(msg)) {
-      msgs = [msg];
-    } else {
-      msgs = msg;
-    }
+    const msgs = Array.isArray(msg) ? msg : [msg];
     for (const key of keys) {
       for (const msg of msgs) {
         if (typeof key === 'string') {
           if (enableLogging && msg[key] && msg[key].value) {
             msg[key] = msg[key].value.toString();
-          } else if (enableLogging && msg[key] && _.isArray(msg[key])) {
+          } else if (enableLogging && msg[key] && Array.isArray(msg[key])) {
             for (const eachMsg of msg[key]) {
               msg[key] = eachMsg.value.toString();
             }

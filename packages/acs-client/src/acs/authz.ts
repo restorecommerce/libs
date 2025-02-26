@@ -115,27 +115,27 @@ export const createResourceTarget = (resource: ACSResource[], action: AuthZActio
       const resourceProperty = resourceObj.property;
       let resourceNameSpace, resourceName;
 
-      if (resourcenameNameSpace && resourcenameNameSpace.indexOf('.') > -1) {
-        resourceNameSpace = resourcenameNameSpace.slice(0, resourcenameNameSpace.lastIndexOf('.'));
+      const index = resourcenameNameSpace?.indexOf('.');
+      if (index > -1) {
+        resourceNameSpace = resourcenameNameSpace.slice(0, index);
         // resource name from `.` till end, when no end index is specified for
         // slice api it returns till end of string
-        resourceName = resourcenameNameSpace.slice(resourcenameNameSpace.lastIndexOf('.') + 1);
+        resourceName = resourcenameNameSpace.slice(index + 1);
       } else {
         resourceName = resourcenameNameSpace;
       }
 
       // entity - urn:restorecommerce:acs:names:model:entity
       const resourceType = formatResourceType(resourceName, resourceNameSpace);
-      if (resourceType) {
-        flattened.push({
-          id: urns.entity,
-          value: urns.model + `:${resourceType}`,
-          attributes: []
-        });
-      }
+      const entity = urns[resourceName] ?? `${urns.model}:${resourceType}`;
+      flattened.push({
+        id: urns.entity,
+        value: entity,
+        attributes: []
+      });
 
       // resource-id - urn:oasis:names:tc:xacml:1.0:resource:resource-id
-      if (resourceInstance && typeof resourceInstance === 'string') {
+      if (typeof resourceInstance === 'string') {
         flattened.push({
           id: urns.resourceID,
           value: resourceInstance,
@@ -152,11 +152,11 @@ export const createResourceTarget = (resource: ACSResource[], action: AuthZActio
       }
 
       // property - urn:restorecommerce:acs:names:model:property
-      if (resourceProperty && _.isArray(resourceProperty) && resourceProperty.length > 0) {
+      if (_.isArray(resourceProperty) && resourceProperty.length > 0) {
         resourceProperty.forEach((property) => {
           flattened.push({
             id: urns.property,
-            value: urns.model + `:${resourceType}#${property}`,
+            value: `${entity}#${property}`,
             attributes: []
           });
         });

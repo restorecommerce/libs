@@ -21,14 +21,19 @@ describe('the handlebars extensions', () => {
     it('should translate placeholders', async () => {
       const tpl = load('payment-notification');
       const opts = {
+        locale: 'en',
         texts: {
-          'emails.common.adminGreeting': 'Hello Admin',
-          'emails.paymentNotification.message': 'Payment Received: {{orderIRI}}'
+          'emails.common.adminGreeting': {
+            en: 'Hello Admin',
+          },
+          'emails.paymentNotification.message': {
+            en: 'Payment Received: {{orderIRI}}'
+          }
         }
       };
       const renderer = new Renderer(tpl, null, null, opts);
       await renderer.waitLoad();
-      const context = {orderIRI: 'http://example.com/42'};
+      const context = { payment: { orderIRI: 'http://example.com/42'} };
       const result = renderer.render(context);
       const expectedResult = `<h1 class="vclAlignCentered">Hello Admin</h1>\n\n` +
         `<p class="vclAlignCentered">\n  Payment Received: http://example.com/42\n</p>\n`;
@@ -133,7 +138,109 @@ describe('the handlebars extensions', () => {
       };
       const result = renderer.render(context);
       // eslint-disable-next-line
-      const expectedResult = `<h3>\n  Professor Oak\n</h3>\n\n<table id="invoicemeta" class="vclNoBorder vclFloatRight" style="min-width: 18em;">\n  <tr>\n    <td><b>invoice number</b></td>\n    <td class="vclAlignRight">42</td>\n  </tr>\n  <tr>\n    <td>order number</td>\n    <td class="vclAlignRight">24</td>\n  </tr>\n  <tr>\n    <td>order date</td>\n    <td class="vclAlignRight">03/19/2019</td>\n  </tr>\n</table>\n\n<div class="vclClear"></div>\n<br>\n<br>\n\n<table id="address" class="vclTable">\n  <tbody>\n      <tr>\n        <td class="vclSpan-10p">billing address street</td>\n        <td>\n          \n           \n        </td>\n      </tr>\n      <tr>\n        <td> </td>\n        <td>the silph road</td>\n      </tr>\n      <tr>\n        <td> </td>\n        <td> </td>\n      </tr>\n      <tr>\n        <td> </td>\n        <td></td>\n      </tr>\n  </tbody>\n</table>\n\n<br>\n\n<table id="items" class="vclTable vclSumTable">\n  <thead>\n    <tr>\n      <th>position</th>\n      <th>name</th>\n      <th>quantity</th>\n      <th class="vclAlignRight">single price</th>\n      <th class="vclAlignRight">item total price</th>\n    </tr>\n  </thead>\n  <tbody>\n      <tr>\n        <td>42</td>\n        <td>raspberry\n          <br> squ1rtle\n        </td>\n        <td>9001</td>\n        <td class="vclAlignRight">$26,918.97</td>\n        <td class="vclAlignRight">\n            $26,912.99\n        </td>\n      </tr>\n    <tr class="vclNoBorder">\n      <td colspan="5">&nbsp;</td>\n    </tr>\n\n\n\n    <tr class="vclSumTableTotal">\n      <td colspan="3">total price</td>\n      <td colspan="2" class="vclAlignRight">$888.88</td>\n    </tr>\n  </tbody>\n</table>\n\n<br>\n\n\n<p class="vclAlignCentered">\n  brought to you by {{appName}}\n  <br>\n  <br>\n  <img src="cid:logo"/>\n  <br>\n  <br>\n  sending to {{street}}\n</p>\n\n<p class="vclAlignCentered">\n  cash: cash\n</p>\n`;
+      const expectedResult = [
+        `<h3>`,
+        `  Professor Oak`,
+        `</h3>`,
+        ``,
+        `<table id="invoicemeta" class="vclNoBorder vclFloatRight" style="min-width: 18em;">`,
+        `  <tr>`,
+        `    <td><b>invoice number</b></td>`,
+        `    <td class="vclAlignRight">42</td>`,
+        `  </tr>`,
+        `  <tr>`,
+        `    <td>order number</td>`,
+        `    <td class="vclAlignRight">24</td>`,
+        `  </tr>`,
+        `  <tr>`,
+        `    <td>order date</td>`,
+        `    <td class="vclAlignRight">03/19/2019</td>`,
+        `  </tr>`,
+        `</table>`,
+        ``,
+        `<div class="vclClear"></div>`,
+        `<br>`,
+        `<br>`,
+        ``,
+        `<table id="address" class="vclTable">`,
+        `  <tbody>`,
+        `      <tr>`,
+        `        <td class="vclSpan-10p">billing address street</td>`,
+        `        <td>`,
+        `          `,
+        `           `,
+        `        </td>`,
+        `      </tr>`,
+        `      <tr>`,
+        `        <td> </td>`,
+        `        <td>the silph road</td>`,
+        `      </tr>`,
+        `      <tr>`,
+        `        <td> </td>`,
+        `        <td> </td>`,
+        `      </tr>`,
+        `      <tr>`,
+        `        <td> </td>`,
+        `        <td></td>`,
+        `      </tr>`,
+        `  </tbody>`,
+        `</table>`,
+        ``,
+        `<br>`,
+        ``,
+        `<table id="items" class="vclTable vclSumTable">`,
+        `  <thead>`,
+        `    <tr>`,
+        `      <th>position</th>`,
+        `      <th>name</th>`,
+        `      <th>quantity</th>`,
+        `      <th class="vclAlignRight">single price</th>`,
+        `      <th class="vclAlignRight">item total price</th>`,
+        `    </tr>`,
+        `  </thead>`,
+        `  <tbody>`,
+        `      <tr>`,
+        `        <td>42</td>`,
+        `        <td>raspberry`,
+        `          <br> squ1rtle`,
+        `        </td>`,
+        `        <td>9001</td>`,
+        `        <td class="vclAlignRight">$26,918.97</td>`,
+        `        <td class="vclAlignRight">`,
+        `            $26,912.99`,
+        `        </td>`,
+        `      </tr>`,
+        `    <tr class="vclNoBorder">`,
+        `      <td colspan="5">&nbsp;</td>`,
+        `    </tr>`,
+        ``,
+        ``,
+        ``,
+        `    <tr class="vclSumTableTotal">`,
+        `      <td colspan="3">total price</td>`,
+        `      <td colspan="2" class="vclAlignRight">$888.88</td>`,
+        `    </tr>`,
+        `  </tbody>`,
+        `</table>`,
+        ``,
+        `<br>`,
+        ``,
+        ``,
+        `<p class="vclAlignCentered">`,
+        `  brought to you by ${context.app.name}`,
+        `  <br>`,
+        `  <br>`,
+        `  <img src="cid:logo"/>`,
+        `  <br>`,
+        `  <br>`,
+        `  sending to ${context.organization.address.street}`,
+        `</p>`,
+        ``,
+        `<p class="vclAlignCentered">`,
+        `  cash: cash`,
+        `</p>`,
+        ``,
+      ].join('\n');
       expect(result).to.equal(expectedResult);
     });
   });

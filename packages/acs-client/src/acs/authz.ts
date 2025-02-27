@@ -126,11 +126,11 @@ export const createResourceTarget = (resource: ACSResource[], action: AuthZActio
       }
 
       // entity - urn:restorecommerce:acs:names:model:entity
-      const resourceType = formatResourceType(resourceName, resourceNameSpace);
-      const entity = urns[resourceName] ?? `${urns.model}:${resourceType}`;
+      const entityName = urns[resourceName]
+        ?? `${urns.model}:${formatResourceType(resourceName, resourceNameSpace)}`;
       flattened.push({
         id: urns.entity,
-        value: entity,
+        value: entityName,
         attributes: []
       });
 
@@ -156,7 +156,7 @@ export const createResourceTarget = (resource: ACSResource[], action: AuthZActio
         resourceProperty.forEach((property) => {
           flattened.push({
             id: urns.property,
-            value: `${entity}#${property}`,
+            value: `${entityName}#${property}`,
             attributes: []
           });
         });

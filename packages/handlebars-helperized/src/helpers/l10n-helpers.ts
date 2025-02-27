@@ -8,12 +8,10 @@ const localizationHandlebarsExtension = (hbs: any, opts: any) => {
     result = (typeof result === 'object') ? result[locale] : result;
     if (!result) return `Missing translation for ${key}`;
     return result.replace(doubleStache, (i: any, match: any) => {
-      console.log(hash.hash[match], hash.data.root[match]);
-      return hash.hash[match] ?? hash.data.root[match] ?? `{{${match}}}`;
+      return hash.hash[match] ?? `{{${match}}}`;
     }).replace(tripleStache, (i: any, match: any) => {
       // TODO: escaping
-      console.log(hash.hash[match], hash.data.root[match]);
-      return hash.hash[match] ?? hash.data.root[match] ?? `{{{${match}}}}`;
+      return hash.hash[match] ?? `{{{${match}}}}`;
     });
   });
 };

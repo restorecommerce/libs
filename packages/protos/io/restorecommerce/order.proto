@@ -12,6 +12,7 @@ import "io/restorecommerce/status.proto";
 import "io/restorecommerce/options.proto";
 import "io/restorecommerce/address.proto";
 import "io/restorecommerce/amount.proto";
+import "io/restorecommerce/attribute.proto";
 import "io/restorecommerce/price.proto";
 import "io/restorecommerce/country.proto";
 import "io/restorecommerce/fulfillment.proto";
@@ -60,22 +61,24 @@ service OrderService {
 
 enum OrderState {
   PENDING = 0;
-  PENDING_NOTIFIED = 1;
-  SUBMITTED = 2;
-  SUBMIT_NOTIFIED = 3;
-  COMPLETED = 4;
-  COMPLETION_NOTIFIED = 5;
-  CANCELLED = 6;
-  CANCELATION_NOTIFIED = 7;
-  WITHDRAWN = 8;
-  WITHDRAW_NOTIFIED = 9;
-  INVALID = 10;
-  INVALID_NOTIFIED = 11;
+  SUBMITTED = 1;
+  COMPLETED = 2;
+  CANCELLED = 3;
+  WITHDRAWN = 4;
+  INVALID = 5;
 }
 
 enum FulfillmentInvoiceMode {
   INCLUDE = 0;
   EXCLUDE = 1;
+}
+
+message Event {
+  optional string id = 1;
+  optional google.protobuf.Timestamp timestamp = 2;
+  optional OrderState state = 3;
+  optional string message = 4;
+  repeated io.restorecommerce.attribute.Attribute attibutes = 5;
 }
 
 message Item {
@@ -149,10 +152,7 @@ message Order {
   optional string customer_vat_id = 15;
   optional io.restorecommerce.fulfillment_product.Preferences packaging_preferences = 16;
   optional string payment_method_id = 17;
-  optional google.protobuf.Timestamp submitted = 18;
-  optional google.protobuf.Timestamp canceled = 19;
-  optional google.protobuf.Timestamp withdrawn = 20;
-  optional google.protobuf.Timestamp completed = 21; 
+  repeated Event history = 18;
 }
 
 message OrderIdList {

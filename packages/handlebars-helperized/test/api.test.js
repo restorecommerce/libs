@@ -107,4 +107,13 @@ describe('The README examples', () => {
     const expectedResult = '<p>You paid 1,99 € on 19.03.2019</p>';
     expect(result).to.equal(expectedResult);
   });
+
+  it('should not crash service on rendering when no template is provided', async () => {
+    let tpl;
+    const renderer = new Renderer(tpl);
+    await renderer.waitLoad();
+    const result = renderer.render({ name: 'John' });
+    let expectedResult;
+    expect(result).to.equal(expectedResult);
+  });
 });

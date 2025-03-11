@@ -68,7 +68,9 @@ class Renderer {
       if (layout) {
         this.hbs.registerPartial('layout', layout);
       }
-      this.template = this.hbs.compile(template);
+      if (template) {
+        this.template = this.hbs.compile(template);
+      }
     });
   }
 
@@ -84,7 +86,10 @@ class Renderer {
   @return {String} html
   */
   render(context: object) {
-    let html = this.template(context);
+    let html;
+    if (this.template) {
+      html = this.template(context);
+    }
 
     if (this.style) {
       html = juice.inlineContent(html, this.style, {

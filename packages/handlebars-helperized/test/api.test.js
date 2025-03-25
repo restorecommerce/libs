@@ -108,12 +108,9 @@ describe('The README examples', () => {
     expect(result).to.equal(expectedResult);
   });
 
-  it('should not crash service on rendering when no template is provided', async () => {
-    let tpl;
-    const renderer = new Renderer(tpl);
-    await renderer.waitLoad();
-    const result = renderer.render({ name: 'John' });
-    let expectedResult;
-    expect(result).to.equal(expectedResult);
+  it('should throw error when no template is provided', async () => {
+    const renderer = new Renderer(null);
+    expect(renderer.waitLoad()).rejects.toThrowError('Template not provided!');
+    expect(() => renderer.render({ name: 'John' })).toThrowError('Template not provided!');
   });
 });

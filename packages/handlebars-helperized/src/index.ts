@@ -55,21 +55,27 @@ class Renderer {
   @param {Array} customHelpersList contains a list of custom helpers (optional)
   */
 
-  loadingHbs: Promise<(typeof hbs)>;
-  hbs: (typeof hbs);
-  style: string | undefined;
-  template: any;
+  protected loadingHbs: Promise<any>;
+  protected template: HandlebarsTemplateDelegate<any>;
 
-  constructor(template: string, layout?: string | undefined, style?: string | undefined, opts?: object | undefined, customHelpersList?: any) {
-    this.style = style;
-    this.loadingHbs = init(opts, customHelpersList);
-    this.loadingHbs.then((hbs) => {
-      this.hbs = hbs;
+  constructor(
+    template: string,
+    layout?: string,
+    protected style?: string,
+    opts?: object,
+    customHelpersList?: any
+  ) {
+    this.loadingHbs = init(
+      opts, customHelpersList
+    ).then((hbs) => {
       if (layout) {
-        this.hbs.registerPartial('layout', layout);
+        hbs.registerPartial('layout', layout);
       }
       if (template) {
-        this.template = this.hbs.compile(template);
+        this.template = hbs.compile(template);
+      }
+      else {
+        throw new Error('Template not provided!');
       }
     });
   }
@@ -77,21 +83,21 @@ class Renderer {
   /**
    * Wait for the renderer to initialize
    */
-  waitLoad(): Promise<void> {
-    return this.loadingHbs.then();
+  async waitLoad(): Promise<void> {
+    return await this.loadingHbs;
   }
 
   /**
   @param {Object} context: required data for the placeholders
   @return {String} html
   */
-  render(context: object) {
-    let html;
-    if (this.template) {
-      html = this.template(context);
+  render(context: object): string {
+    if (!this.template) {
+      throw new Error('Template not provided!');
     }
+    let html = this.template(context);
 
-    if (this.style) {
+    if (html && this.style) {
       html = juice.inlineContent(html, this.style, {
         inlinePseudoElements: true,
         preserveImportant: true,

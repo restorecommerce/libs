@@ -75,10 +75,11 @@ enum FulfillmentInvoiceMode {
 
 message Event {
   optional string id = 1;
-  optional google.protobuf.Timestamp timestamp = 2;
-  optional OrderState state = 3;
-  optional string message = 4;
-  repeated io.restorecommerce.attribute.Attribute attibutes = 5;
+  optional uint32 code = 2;
+  optional string message = 3;
+  optional google.protobuf.Timestamp timestamp = 4;
+  optional OrderState state = 5;
+  repeated io.restorecommerce.attribute.Attribute attibutes = 6;
 }
 
 message Item {
@@ -190,9 +191,9 @@ message Deleted {
 
 message FulfillmentRequest {
   optional string order_id = 1;
-  optional string export_type = 2; // @TODO: not used!
-  optional string export_description = 3; // @TODO: not used!
-  optional string invoice_number = 4; // @TODO: not used!
+  optional string export_type = 2;
+  optional string export_description = 3;
+  optional string invoice_number = 4;
   optional io.restorecommerce.address.ShippingAddress sender_address = 5;
   repeated string selected_items = 6; // select all on empty
   optional google.protobuf.Any data = 7;

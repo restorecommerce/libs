@@ -329,8 +329,8 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
     await this._gqlServer.start();
 
     // set maxFile size and maximum files via Facade config of `createFacade`
-    const maxFileSize = this.fileUploadOptionsConfig?.maxFileSize ? this.fileUploadOptionsConfig.maxFileSize : 10000000;
-    const maxFiles = this.fileUploadOptionsConfig?.maxFiles ? this.fileUploadOptionsConfig.maxFiles : 20;
+    const maxFileSize = this.fileUploadOptionsConfig?.maxFileSize ?? 10000000;
+    const maxFiles = this.fileUploadOptionsConfig?.maxFiles ?? 20;
     this.koa.use(
       graphqlUploadKoa({
         maxFileSize,

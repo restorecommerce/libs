@@ -1,6 +1,5 @@
 import { createServiceConfig } from '@restorecommerce/service-config';
 import { createLogger } from '@restorecommerce/logger';
-import { isNumber } from 'node:util';
 import intoStream from 'into-stream';
 import { Transform } from 'node:stream';
 import pkg from 'lodash';
@@ -135,7 +134,7 @@ export const handleGetFile = async (bucket: string, key: string, ctx: any, clien
   } catch (error) {
     logger.error(`Error downloading file ${key}`, { code: (error as any).code, message: (error as any).message, stack: (error as any).stack });
     ctx.response.body = (error as any).message;
-    ctx.response.status = isNumber((error as any).code) ? (error as any).code : 500;
+    ctx.response.status = Number.isInteger((error as any).code) ? (error as any).code : 500;
     return ctx.response;
   }
 };

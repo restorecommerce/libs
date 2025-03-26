@@ -1,5 +1,7 @@
 import * as _ from 'lodash';
+import { Filter, FilterOperation, FilterValueType, OperatorType, ReadRequest } from './core/interfaces';
 
+/*
 const filterOperationMap = new Map([
   [0, 'eq'],
   [1, 'lt'],
@@ -11,72 +13,60 @@ const filterOperationMap = new Map([
   [7, 'in'],
   [8, 'neq']
 ]);
+*/
 
 const filterOperatorMap = new Map([
   [0, 'and'],
   [1, 'or']
 ]);
 
-const insertFilterFieldOpValue = (filter, object, key) => {
-  let value;
-  if (!filter.type || filter.type === 'STRING' || filter.type === 0) {
-    value = filter.value;
-  } else if ((filter.type === 'NUMBER' || filter.type === 1) && !isNaN(filter.value)) {
-    value = Number(filter.value);
-  } else if (filter.type === 'BOOLEAN' || filter.type === 2) {
-    if (filter.value === 'true') {
-      value = true;
-    } else if (filter.value === 'false') {
-      value = false;
-    }
-  } else if (filter.type === 'ARRAY' || filter.type === 4) {
-    try {
-      value = JSON.parse(filter.value);
-    } catch (err: any) {
-      // to handle JSON string parse error
-      if (err.message.indexOf('Unexpected token') > -1) {
-        value = JSON.parse(JSON.stringify(filter.value));
-      } else {
-        throw err;
+const insertFilterFieldOpValue = (filter: Filter, object: any, key: string) => {
+  let value: any = undefined;
+  filter.type ??= FilterValueType.STRING; // defaults to string if undefined
+  switch (filter.type) {
+    case FilterValueType.NUMBER:
+      value = Number(filter.value);
+      break;
+    case FilterValueType.BOOLEAN:
+      if (filter.value === 'true') {
+        value = true;
+      } else if (filter.value === 'false') {
+        value = false;
       }
-    }
-  } else if (filter.type === 'DATE' || filter.type === 3) {
-    value = (new Date(filter.value)).getTime();
+      break;
+    case FilterValueType.ARRAY:
+      try {
+        value = JSON.parse(filter.value);
+      } catch (err: any) {
+        // to handle JSON string parse error
+        if (err.message.includes('Unexpected token')) {
+          value = JSON.parse(JSON.stringify(filter.value));
+        } else {
+          throw err;
+        }
+      }
+    case FilterValueType.DATE:
+      value = (new Date(filter.value)).getTime();
+      break;
+    case FilterValueType.STRING:
+      // fall through default
+    default:
+      value = filter.value;
+      break;
   }
 
-  let temp;
-  if (key) {
-    temp = object[key];
-  } else {
-    // should be root level filter, if key does not exist
-    object = [];
-    temp = object;
+  object = key ? object[key] : [];
+  if (!Array.isArray(object)) {
+    throw new Error('Filter object has to be of type Array');
   }
-  if (filter.operation === 'eq' || filter.operation === 0) {
-    if (_.isArray(temp)) {
-      temp.push({ [filter.field]: value });
-    } else {
-      temp.push({ [filter.field]: value });
-    }
-  } else if (filter.operation === 'neq' || filter.operation === 8) {
-    if (_.isArray(temp)) {
-      temp.push({ [filter.field]: { $not: { $eq: value } } });
-    } else {
-      temp.push({ [filter.field]: { $not: { $eq: value } } });
-    }
-  } else {
-    let opValue;
-    if (typeof filter.operation === 'string' || filter.operation instanceof String) {
-      opValue = filter.operation;
-    } else if (Number.isInteger(filter.operation)) {
-      opValue = filterOperationMap.get(filter.operation);
-    }
-    const op = `$${opValue}`;
-    if (_.isArray(temp)) {
-      temp.push({ [filter.field]: { [op]: value } });
-    } else {
-      temp.push({ [filter.field]: { [op]: value } });
-    }
+  filter.operation ??= FilterOperation.eq; // defaults to eq if undefined;
+  switch (filter.operation) {
+    case FilterOperation.eq:
+      object.push({ [filter.field]: value });
+      break;
+    default:
+      object.push({ [filter.field]: { [`$${filter.operation}`]: value } });
+      break;
   }
   return object;
 };
@@ -90,7 +80,7 @@ const insertFilterFieldOpValue = (filter, object, key) => {
  * @param filter object containing field, operation, value and type
  * @returns object
  */
-const convertFilterToObject = (object, operatorKey, filter) => {
+const convertFilterToObject = (object: any, operatorKey: string, filter: Filter) => {
   if (object !== null) {
     if (Array.isArray(object)) {
       for (const arrayItem of object) {
@@ -134,9 +124,7 @@ export const convertToObject = (input: any, obj?: any, currentOperator?: string)
   if (filters && _.isArray(filters.filters) && !filters.operator) {
     filters.operator = 'and';
   }
-  if (!obj) {
-    obj = {};
-  }
+  obj ??= {};
   if (_.isArray(filters)) {
     for (const filterObj of filters) {
       let operatorValue;
@@ -171,61 +159,21 @@ export const convertToObject = (input: any, obj?: any, currentOperator?: string)
 /**
  * converts input filters to json object understandable by chassis-srv for AQL conversion
  * @param input input filters object
- * @returns json object understandable by chassiss-rv for AQL conversion
+ * @returns json object understandable by chassis-srv for AQL conversion
  */
-export const toObject = (input) => {
-  let filtersArr = input.filters;
-  if (!filtersArr) {
-    filtersArr = input;
-  }
-  let finalObj = {};
-  if (_.isArray(filtersArr)) {
-    if (filtersArr.length > 1) {
-      finalObj = [];
+export const toObject = (input: ReadRequest) => {
+  const filters = input.filters ?? [];
+  const result: Record<string, any>[] = filters.flatMap(
+    filter => {
+      const subFilters = filter?.filters;
+      const operatorValue = filter?.operator ?? OperatorType.and; // defaults to `and`
+      return subFilters?.map(
+        subFilter => ({ [`$${operatorValue}`]: convertToObject(subFilter) })
+      );
     }
-    for (const filterArr of filtersArr) {
-      const convertedObject = [];
-      const filterObj = filterArr?.filters;
-      let operatorValue;
-      if (typeof filterArr?.operator === 'string' || filterArr?.operator instanceof String) {
-        operatorValue = filterArr?.operator;
-      } else if (Number.isInteger(filterArr?.operator)) {
-        operatorValue = filterOperatorMap.get(filterArr?.operator);
-      }
-      // default operator is `and`
-      if (!operatorValue) {
-        operatorValue = 'and';
-      }
-      if (_.isArray(filterObj)) {
-        for (const filter of filterObj) {
-          let obj = {};
-          obj = convertToObject(filter, obj);
-          if (!_.isEmpty(obj)) {
-            convertedObject.push(obj);
-          }
-        }
-      }
-      if (_.isArray(finalObj) && (!_.isEmpty(convertedObject))) {
-        finalObj.push({ [`$${operatorValue}`]: convertedObject });
-      } else if (!_.isEmpty(convertedObject)) {
-        finalObj[`$${operatorValue}`] = convertedObject;
-      }
-    }
-  }
-  return finalObj;
+  );
+  return result?.length === 1 ? result[0] : result
 };
 
-export { ResourcesAPIBase } from './core/ResourcesAPI';
-export { ServiceBase } from './core/ServiceBase';
-export { WorkerBase } from './core/WorkerBase';
-export { GraphResourcesServiceBase } from './core/GraphResourcesServiceBase';
-export {
-  Filter,
-  FilterOp,
-  FilterOperation,
-  FilterValueType,
-  GraphFilters,
-  GraphFilter,
-  OperatorType,
-  TraversalOptions,
-} from './core/interfaces';
+export * from './core';
+export * from './experimental';

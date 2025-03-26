@@ -1,6 +1,7 @@
 *~
 *.bk
 *.d.ts
+*.d.ts.map
 *.js
 *.js.map
 *.log

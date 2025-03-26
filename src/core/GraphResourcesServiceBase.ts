@@ -1,4 +1,3 @@
-import * as _ from 'lodash';
 import { GraphDatabaseProvider, TraversalResponse as DBTraversalResponse } from '@restorecommerce/chassis-srv';
 import { Logger, createLogger } from '@restorecommerce/logger';
 import {
@@ -7,6 +6,7 @@ import {
   TraversalRequest,
   TraversalResponse
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/graph';
+import { SortOrder } from './interfaces';
 
 /**
  * Graph Resource API base provides functions for graph Operations such as
@@ -71,26 +71,21 @@ export class GraphResourcesServiceBase implements GraphServiceImplementation {
       const path = request?.path ? request.path : false;
       let traversalCursor: DBTraversalResponse;
 
-      let sort;
-      if (collection && !_.isEmpty(collection.sorts)) {
-        sort = {};
-        _.forEach(collection.sorts, (s: any) => {
+      if (collection?.sorts?.length) {
+        (collection as any).sorts = collection.sorts.reduce((a, s) => {
           switch (s.order) {
-            case 'ASCENDING':
-            case 1:
-              sort[s.field] = 'ASC';
+            case SortOrder.ASCENDING:
+              a[s.field] = 'ASC';
               break;
-            case 2:
-            case 'DESCENDING':
-              sort[s.field] = 'DESC';
+            case SortOrder.DESCENDING:
+              a[s.field] = 'DESC';
               break;
-            case 'UNSORTED':
-            case 0:
+            case SortOrder.UNSORTED:
             default:
               break;
           }
-        });
-        (collection as any).sorts = sort;
+          return a;
+        }, {});
       }
 
       try {
@@ -156,12 +151,13 @@ export class GraphResourcesServiceBase implements GraphServiceImplementation {
               traversedPaths.push(data.p);
             }
           }
-          if (!_.isEmpty(associationData)) {
+
+          if (associationData.length) {
             // associated entity data, encoding before pushing data
             yield ({ data: { value: Buffer.from(JSON.stringify(associationData)) } });
           }
           // paths
-          if (!_.isEmpty(traversedPaths)) {
+          if (traversedPaths.length) {
             // traversed paths, encoding before pushing paths
             yield ({ paths: { value: Buffer.from(JSON.stringify(traversedPaths)) } });
           }
@@ -210,7 +206,7 @@ export class GraphResourcesServiceBase implements GraphServiceImplementation {
           result[field] = new Date(result[field]).toISOString();
         }
       } else {
-        if (_.isArray(result[field])) {
+        if (Array.isArray(result[field])) {
           // till i < n concat new fields
           let newField;
           for (let k = i + 1; k < n; k++) {

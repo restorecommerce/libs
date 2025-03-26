@@ -79,7 +79,7 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
       let filter = {};
       // convert the filter from proto structure (field, operation, value and operand) to {field: value } mapping
       if (!_.isEmpty(request.filters)) {
-        filter = toObject(request.filters);
+        filter = toObject(request);
       }
       const field = {};
       _.forEach(request.fields, (f) => {

@@ -1,85 +1,36 @@
-export enum FilterOperation {
-  eq = 0,
-  lt = 1,
-  lte = 2,
-  gt = 3,
-  gte = 4,
-  isEmpty = 5,
-  iLike = 6,
-  in = 7,
-  neq = 8
-}
+import {
+  Resource
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base.js';
 
-export enum FilterValueType {
-  STRING = 0,
-  NUMBER = 1,
-  BOOLEAN = 2,
-  DATE = 3,
-  ARRAY = 4,
-}
+export {
+  Resource,
+  ResourceList,
+  ReadRequest,
+  Filter,
+  FilterOp,
+  Filter_ValueType as FilterValueType,
+  Filter_Operation as FilterOperation,
+  FilterOp_Operator as OperatorType,
+  Sort_SortOrder as SortOrder,
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base.js';
 
-export enum OperatorType {
-  and = 0,
-  or = 1,
-}
+export {
+  Meta as DocumentMetadata
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/meta.js';
 
-export interface Filter {
-  field: string;
-  operation: FilterOperation;
-  value: string;
-  type?: FilterValueType; // defaults to string data type if not provided
-  filters?: FilterOp[];
-}
+export {
+  Options_Direction as Direction,
+  Options as TraversalOptions,
+  Filter as GraphFilter,
+  Filters as GraphFilters,
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/graph.js';
 
-export interface FilterOp {
-  filter?: Filter[];
-  operator?: OperatorType;
-}
-
-export interface BaseDocument {
-  id?: string;
-  meta?: DocumentMetadata;
+export interface BaseDocument extends Resource {
   [key: string]: any;
-}
-
-export interface DocumentMetadata {
-  created?: any;
-  modified?: any;
-  modified_by?: string;
-  owners?: { id?: string; value?: string }[];
-  created_by?: string;
 }
 
 export interface DateTimeConfig {
   fields: string[];
   entities: string[];
-}
-
-export enum Direction {
-  OUTBOUND = 'OUTBOUND',
-  INBOUND = 'INBOUND'
-}
-
-export interface TraversalOptions {
-  include_vertex?: string[];
-  exclude_vertex?: string[];
-  include_edge?: string[];
-  exclude_edge?: string[];
-  direction?: Direction;
-}
-
-export interface GraphFilter {
-  field: string;
-  operation: FilterOperation;
-  value: string;
-  type?: FilterValueType; // defaults to string data type if not provided
-  filters?: GraphFilters[];
-}
-
-export interface GraphFilters {
-  entity?: string;
-  edge?: string;
-  filter?: GraphFilter[];
-  operator?: OperatorType;
 }
 

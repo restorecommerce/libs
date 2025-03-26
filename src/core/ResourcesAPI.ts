@@ -43,7 +43,7 @@ const setDefaults = async (obj: { meta?: DocumentMetadata;[key: string]: any }, 
         let key: string;
         switch (strategy) {
           case Strategies.INCREMENT:
-            key = collectionName + ':' + field;
+            const key = `${collectionName}:${field}`;
             o[field] = await redisClient.get(key);
             await redisClient.incr(key);
             break;
@@ -61,7 +61,7 @@ const setDefaults = async (obj: { meta?: DocumentMetadata;[key: string]: any }, 
     }
   }
 
-  if (_.isNil(o.meta.created) || o.meta.created === 0) {
+  if (!o.meta?.created?.getTime()) {
     o.meta.created = new Date();
   }
   o.meta.created_by = subject?.id;
@@ -220,7 +220,6 @@ export class ResourcesAPIBase {
           result
         );
         documents = requiredFieldsResult.documents;
-        result = requiredFieldsResult.result;
       }
 
       documents = await Promise.all(documents.map(async (doc) => {
@@ -384,9 +383,9 @@ export class ResourcesAPIBase {
       }));
       return ids;
     } else {
-      const entities = await this.db.find(this.collectionName, {}, { fields: { id: 1 } });
+      const ids = await this.db.find(this.collectionName, {}, { fields: { id: 1 } });
       await this.db.truncate(this.collectionName);
-      return entities;
+      return ids;
     }
   }
 

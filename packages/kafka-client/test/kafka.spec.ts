@@ -61,28 +61,21 @@ describe('Kafka provider test', () => {
         // create topic object
         const topic: Topic = await client.topic(topicName);
 
-        let exitPromise: Promise<void>;
-
-        // subscribe to topic for example-event with listener as call back.
-        await topic.on(eventName, async (message, context) => {
-          exitPromise = new Promise<void>((resolve) => {
+        await new Promise<void>((resolve) => {
+          // subscribe to topic for example-event with listener as call back.
+          topic.on(eventName, (message, context) => {
             expect(message).not.toBe(undefined);
             expect(testMessage.value).to.equal(message.value);
             expect(testMessage.count).to.equal(message.count);
             logger.info('Received message :', message);
-
-            return topic.removeAllListeners(eventName).then(resolve);
-          });
+            topic.removeAllListeners(eventName).then(resolve);
+          }).then(
+            // emit the message to Kafka (message is encoded and sent to Kafka)
+            () => topic.emit(eventName, testMessage)
+          );
         });
-        // get the current offset
-        const offset = await topic.$offset(-1);
-        // emit the message to Kafka (message is encoded and sent to Kafka)
-        await topic.emit(eventName, testMessage);
-        // suspends the calling function until the offset is committed.
-        await topic.$wait(offset);
-
-        await exitPromise;
-      });
+      }
+    );
 
     it('should process messages one after the other in same order',
       async () => {
@@ -90,9 +83,9 @@ describe('Kafka provider test', () => {
         const topic: Topic = await client.topic(topicName);
         // order of count should be preserved
         const expectedCountArr = [1, 2, 3, 4, 5];
-        const countArr = [];
+        const countArr = new Array<number>;
         // subscribe to topic for example-event with listener as call back.
-        await topic.on(eventName, (message, context, config, eventName) => {
+        await topic.on(eventName, (message: any, context, config, eventName) => {
           console.log('received message:', message)
           expect(message).not.toBe(undefined);
           countArr.push(message.count);
@@ -109,7 +102,8 @@ describe('Kafka provider test', () => {
         // suspends the calling function until the offset is committed.
         await topic.$wait(offset + 4);
         expect(countArr).not.toBe(undefined);
-        expect(countArr.length).to.equal(5);
+        expect(countArr.length).toBe(5);
+        expect(countArr[4]).toBe(5);
       });
   }, 240000);
 

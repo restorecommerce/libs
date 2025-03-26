@@ -3,32 +3,55 @@ syntax = "proto3";
 package io.restorecommerce.rendering;
 
 import "google/protobuf/any.proto";
+import "io/restorecommerce/status.proto";
+import "io/restorecommerce/auth.proto";
 
-message Payload {
-  // json with <key, template> pairs
-  // e.g. { 'subject': ..., 'message':....}
-  optional google.protobuf.Any templates = 1;
-  optional google.protobuf.Any data = 2;  // data to fill template with
-  optional string style_url = 3; // stylesheet URL
+/*
+Microservice definition.
+*/
+service RenderingService {
+  rpc Render (RenderRequestList) returns (RenderResponseList);
+}
 
+message RenderRequest {
   enum Strategy { // style-applying 'strategy'
     INLINE = 0;
     COPY = 1;
   }
-  optional Strategy strategy = 4;  // inlining, copying CSS into <style>, etc...
-  // rendering options JSON object
-  optional google.protobuf.Any options = 5;
-  // content type for rendering such as 'application/html' or 'application/text'
-  optional string content_type = 6;
+
+  message Template {
+    optional string id = 1;  // snippit name
+    optional bytes body = 2;
+    optional string charset = 3;
+  }
+
+  repeated Template templates = 1;
+  optional google.protobuf.Any data = 2;  // data to fill template with
+  optional string style_url = 3; // stylesheet URL
+  optional Strategy strategy = 4; // inlining, copying CSS into <style>, etc...
+  optional google.protobuf.Any options = 5; // rendering options JSON object
+  optional string content_type = 6; // content type for rendering such as 'application/html' or 'application/text'
 }
 
-message RenderRequest {
+message RenderRequestList {
   optional string id = 1; // identifies the render request payload
-  // List of templates with associated data and rendering options
-  repeated Payload payloads = 2;
+  repeated RenderRequest items = 2; // List of templates with associated data and rendering options
+  optional io.restorecommerce.auth.Subject subject = 3; 
+}
+
+message RenderResult {
+  optional string id = 1; // snippit name
+  optional bytes body = 2;
+  optional string charset = 3;
 }
 
 message RenderResponse {
-  optional string id = 1;
-  repeated google.protobuf.Any responses = 2;  // error or HTML contents
+ optional RenderResult payload = 1;
+ optional io.restorecommerce.status.Status status = 2;
+}
+
+message RenderResponseList {
+ optional string id = 1;
+ repeated RenderResponse items = 2;
+ optional io.restorecommerce.status.OperationStatus operation_status = 3;
 }

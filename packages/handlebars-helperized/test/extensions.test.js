@@ -32,9 +32,9 @@ describe('the handlebars extensions', () => {
         }
       };
       const renderer = new Renderer(tpl, null, null, opts);
-      await renderer.waitLoad();
+      
       const context = { payment: { orderIRI: 'http://example.com/42'} };
-      const result = renderer.render(context);
+      const result = await renderer.render(context);
       const expectedResult = `<h1 class="vclAlignCentered">Hello Admin</h1>\n\n` +
         `<p class="vclAlignCentered">\n  Payment Received: http://example.com/42\n</p>\n`;
       expect(result).to.equal(expectedResult);
@@ -45,8 +45,8 @@ describe('the handlebars extensions', () => {
     it('should resolve placeholders', async () => {
       const tpl = load('numbers');
       const renderer = new Renderer(tpl, null, null, {});
-      await renderer.waitLoad();
-      const result = renderer.render({});
+      
+      const result = await renderer.render({});
       const expectedResult = 'number: 42\nprice: €42.00\nbytes: 42 byte\n';
       expect(result).to.equal(expectedResult);
     });
@@ -57,13 +57,13 @@ describe('the handlebars extensions', () => {
     it('should format timestamps', async () => {
       const tpl = load('times');
       const renderer = new Renderer(tpl, null, null, {});
-      await renderer.waitLoad();
+      
       const ts = '03-19-2019 13:37:00';
       const format = 'MM-DD-YYYY HH:mm:ss';
       const tz = moment.tz.guess();
       const yesterday = moment.tz(ts, format, tz);
       const context = {yesterday};
-      const result = renderer.render(context);
+      const result = await renderer.render(context);
       const ago = yesterday.fromNow();
       const expectedResult = 'ago: ' + ago + `\ndf: 03/19/2019\ndtf: March 19, 2019 1:37 PM\n`;
       expect(result).to.equal(expectedResult);
@@ -97,7 +97,7 @@ describe('the handlebars extensions', () => {
       };
       const tpl = load('invoice');
       const renderer = new Renderer(tpl, null, null, opts);
-      await renderer.waitLoad();
+      
       const ts = '03-19-2019 13:37:00';
       const format = 'MM-DD-YYYY HH:mm:ss';
       const tz = moment.tz.guess();
@@ -136,7 +136,7 @@ describe('the handlebars extensions', () => {
         total: 888.88,
         cc: 'USD',
       };
-      const result = renderer.render(context);
+      const result = await renderer.render(context);
       // eslint-disable-next-line
       const expectedResult = [
         `<h3>`,

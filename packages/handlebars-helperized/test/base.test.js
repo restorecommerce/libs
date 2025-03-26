@@ -24,24 +24,24 @@ const style = fs.readFileSync('./test/templates/basic.css', 'utf-8');
 describe('the handlebars template engine', () => {
   it('should be able to render basic templates', async () => {
     const renderer = new Renderer(basicTpl);
-    await renderer.waitLoad();
-    let result = renderer.render(data);
+    
+    let result = await renderer.render(data);
     result = result.replace(/\s/g, '');
     expect(result).to.equal('<div>JohnDoe</div>');
   });
 
   it('should be able to render templates with layouts', async () => {
     const renderer = new Renderer(layoutUseTpl, layoutTpl);
-    await renderer.waitLoad();
-    let result = renderer.render(data);
+    
+    let result = await renderer.render(data);
     result = result.replace(/\s/g, '');
     expect(result).to.equal('<div>HeaderDefaultContentMainOverwrittenContent</div>');
   });
 
   it('should be able to render templates with a style', async () => {
     const renderer = new Renderer(basicTpl, layoutUseTpl, style);
-    await renderer.waitLoad();
-    let result = renderer.render(data);
+    
+    let result = await renderer.render(data);
     result = result.replace(/\r?\n|\r/g, '');
     expect(result).to.equal('<div style="color: red; text-align: center;">John Doe</div>');
   });
@@ -50,13 +50,13 @@ describe('the handlebars template engine', () => {
     const filePathList = ['../test/handlebars/helper-loud.js'];
     const tpl = '<h1>Hello {{loud name}}</h1>';
     const renderer = new Renderer(tpl, '', '', {}, filePathList );
-    await renderer.waitLoad();
+    
     await new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve();
       }, 2000)
     });
-    const result = renderer.render({ name: 'John' });
+    const result = await renderer.render({ name: 'John' });
     const expectedResult = '<h1>Hello JOHN</h1>';
     expect(result).to.equal(expectedResult);
   });

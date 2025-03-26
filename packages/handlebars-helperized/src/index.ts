@@ -91,10 +91,8 @@ class Renderer {
   @param {Object} context: required data for the placeholders
   @return {String} html
   */
-  render(context: object): string {
-    if (!this.template) {
-      throw new Error('Template not provided!');
-    }
+  async render(context: object): Promise<string> {
+    await this.waitLoad();
     let html = this.template(context);
 
     if (html && this.style) {

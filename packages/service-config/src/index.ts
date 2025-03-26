@@ -3,7 +3,7 @@ import { ICallbackFunction, Provider } from 'nconf';
 
 export class ServiceConfig extends Provider {
   public override get<T>(key: string, callback?: ICallbackFunction) {
-    super.get(key, callback) as T;
+    return super.get(key, callback) as T;
   }
 }
 
@@ -57,7 +57,7 @@ export function createServiceConfig(
   nconfInstance.defaults(defaults);
 
   // apply the existing config file
-  const parts = nconfInstance.get(STAGE_VAR).split(':');
+  const parts = nconfInstance.get<string>(STAGE_VAR).split(':');
   for (let i = parts.length - 1; i >= 0; i--) { // eslint-disable-line no-plusplus
     const filename = parts.slice(0, i + 1).join('_');
     const configFile = path.resolve(baseDir, 'cfg', `config_${filename}.json`);

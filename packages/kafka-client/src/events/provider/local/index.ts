@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import { Logger } from 'winston';
+import { Logger } from '@restorecommerce/logger';
 
 /**
  * Topic handles listening and sending events to a specific topic.

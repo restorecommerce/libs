@@ -2,10 +2,11 @@ import * as retry from 'retry';
 import * as _ from 'lodash';
 import { EventEmitter } from 'events';
 import * as async from 'async';
-import { Logger } from 'winston';
+import { Logger } from '@restorecommerce/logger';
 import { Admin, Consumer, Kafka as KafkaJS, KafkaConfig, KafkaMessage, logLevel, Message, Producer, RecordMetadata } from 'kafkajs';
 import { decodeMessage, encodeMessage } from '../../../protos';
 
+/*
 const makeProtoResolver = (protoFilePath: string, protoRoot: string): any => {
   return (origin: string, target: string): string => {
     // ignore the same file
@@ -16,6 +17,7 @@ const makeProtoResolver = (protoFilePath: string, protoRoot: string): any => {
     return protoRoot + target;
   };
 };
+*/
 
 interface MessageWithContext {
   message: KafkaMessage;
@@ -577,7 +579,7 @@ export class Kafka {
             logCreator: () => {
               return ({ level, log }) => {
                 const { message, ...extra } = log;
-                this.logger.log(toWinstonLogLevel(level), '[kafka-client] ' + message, extra);
+                this.logger.log(toWinstonLogLevel(level), `[kafka-client] ${message} - attempt No: ${operation.attempts()}`, extra);
               };
             },
           });
@@ -624,9 +626,9 @@ export class Kafka {
         }
         catch (err: any) {
           operation.retry(err);
-          const attemptNo = (operation.attempts as () => number)();
+          const attemptNo = operation.attempts();
           this.producer?.disconnect();
-          this.logger.info(`Retry initialize the Producer, attempt no: ${attemptNo}`);
+          this.logger.info(`Retry initialize the Producer, attempt No: ${attemptNo}`);
         }
       });
     });

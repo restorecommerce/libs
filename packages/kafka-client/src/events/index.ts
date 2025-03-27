@@ -1,6 +1,5 @@
 import * as _ from 'lodash';
-import { Logger } from 'winston';
-import { createLogger } from '@restorecommerce/logger';
+import { createLogger, Logger } from '@restorecommerce/logger';
 import * as kafka from './provider/kafka';
 import * as local from './provider/local';
 import { Topic } from './provider/kafka';

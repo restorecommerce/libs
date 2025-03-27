@@ -37,7 +37,6 @@ const loggerConfig: any = {
 /*
  * Note: To run this test, a running kafka instance is required.
  */
-
 describe('Kafka provider test', () => {
   const logger = createLogger(loggerConfig.logger);
   const client: Events = new Events(kafkaConfig.events.kafka, logger);
@@ -61,18 +60,17 @@ describe('Kafka provider test', () => {
         // create topic object
         const topic: Topic = await client.topic(topicName);
 
-        await new Promise<void>((resolve) => {
+        await new Promise<void>(async (resolve) => {
           // subscribe to topic for example-event with listener as call back.
-          topic.on(eventName, (message, context) => {
+          await topic.on(eventName, (message, context) => {
             expect(message).not.toBe(undefined);
-            expect(testMessage.value).to.equal(message.value);
-            expect(testMessage.count).to.equal(message.count);
+            expect(testMessage.value).toBe(message.value);
+            expect(testMessage.count).toBe(message.count);
             logger.info('Received message :', message);
             topic.removeAllListeners(eventName).then(resolve);
-          }).then(
-            // emit the message to Kafka (message is encoded and sent to Kafka)
-            () => topic.emit(eventName, testMessage)
-          );
+          });
+          // emit the message to Kafka (message is encoded and sent to Kafka)
+          await topic.emit(eventName, testMessage)
         });
       }
     );

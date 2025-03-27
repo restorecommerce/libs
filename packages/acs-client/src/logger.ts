@@ -8,4 +8,4 @@ loggerCfg.esTransformer = (msg: any) => {
   return msg;
 };
 
-export default createLogger(loggerCfg) as any;
+export default createLogger(loggerCfg);

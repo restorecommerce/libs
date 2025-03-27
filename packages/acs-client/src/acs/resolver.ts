@@ -311,7 +311,7 @@ export const accessRequest = async (
       `Access not allowed for request with subject:${ subjectID },`,
       `resource:${ resourceName }, action:${ action }${targetScopeMessage}`,
       `the response was ${Response_Decision[decisionResponse.decision]}`,
-    ]).join(' ');
+    ].join(' '));
     logger.verbose(`${details}, Overriding the ACS result as ACS enforce config is disabled`);
     decisionResponse.decision = Response_Decision.PERMIT;
   }

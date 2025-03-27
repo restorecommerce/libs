@@ -104,7 +104,7 @@ export const DefaultMetaDataInjector = async <T extends ResourceList>(
   const urns = cfg.get('authorization:urns');
   request.items?.forEach((item) => {
     if (!item.id?.length) {
-      item.id = randomUUID().replace(/-/g, '') //uuid.v4().replace(/-/g, '');
+      item.id = randomUUID().replace(/-/g, '');
       item.meta ??= {};
       item.meta.owners ??= [
         request.subject?.scope ? {

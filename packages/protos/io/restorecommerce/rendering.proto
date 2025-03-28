@@ -22,7 +22,8 @@ message RenderRequest {
   message Template {
     optional string id = 1;  // snippit name
     optional bytes body = 2;
-    optional string charset = 3;
+    optional bytes layout = 3;
+    optional string charset = 4; // defaults to utf-8
   }
 
   repeated Template templates = 1;
@@ -42,7 +43,7 @@ message RenderRequestList {
 message RenderResult {
   optional string id = 1; // snippit name
   optional bytes body = 2;
-  optional string charset = 3;
+  optional string charset = 3; // defaults to utf-8
 }
 
 message RenderResponse {

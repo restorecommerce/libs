@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/service-config",
-  "version": "1.0.16",
+  "version": "1.1.0",
   "description": "An opinionated wrapper of nconf optimized for microservices",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",

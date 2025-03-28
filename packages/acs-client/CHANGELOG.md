@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.12](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@3.0.11...@restorecommerce/acs-client@3.0.12) (2025-03-28)
+
+
+### Bug Fixes
+
+* **acs-client:** allow custom resourceType naming as URN but auto-generate on default ([8d03f06](https://github.com/restorecommerce/libs/commit/8d03f063468a6dc8010e49f2777f48267fa201fd))
+* **acs-client:** rm unrequired deps ([eee5ef0](https://github.com/restorecommerce/libs/commit/eee5ef0fb3ec18e09f1a3b3d6a201c750a56a6d9))
+* **helperized:** handlebars-helperized localization should use hash.hash not hash.data.root ([e6f4d4a](https://github.com/restorecommerce/libs/commit/e6f4d4af6d4b4ddc0555d7ac0d07820dfc354c30))
+* **proto:** add timestamps for order state changes ([07abde8](https://github.com/restorecommerce/libs/commit/07abde805f102f229adf0d5d17cc85d89e44b8a9))
+* **proto:** generic string for template.use_case ([7163625](https://github.com/restorecommerce/libs/commit/71636251c1f40a447b2dde72a26b0abcbca56709))
+
+
+
+
+
 ## [3.0.11](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@3.0.10...@restorecommerce/acs-client@3.0.11) (2025-01-21)
 
 **Note:** Version bump only for package @restorecommerce/acs-client

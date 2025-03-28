@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.6](https://github.com/restorecommerce/libs/compare/@restorecommerce/grpc-client@2.2.5...@restorecommerce/grpc-client@2.2.6) (2025-03-28)
+
+
+### Bug Fixes
+
+* **proto:** generic string for template.use_case ([7163625](https://github.com/restorecommerce/libs/commit/71636251c1f40a447b2dde72a26b0abcbca56709))
+
+
+
+
+
 ## [2.2.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/grpc-client@2.2.4...@restorecommerce/grpc-client@2.2.5) (2024-11-04)
 
 

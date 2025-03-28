@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.25](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.2.24...@restorecommerce/kafka-client@1.2.25) (2025-03-28)
+
+
+### Bug Fixes
+
+* **build:** set default config type to any ([28c669a](https://github.com/restorecommerce/kafka-client/commit/28c669a3d1e4e63d154a740cef643f763dc2bafe))
+* **kafka:** throw readable error on missing configs ([a53e6ce](https://github.com/restorecommerce/kafka-client/commit/a53e6ceac26521962cb39dd3f62fdb733f18c265))
+
+
+
+
+
 ## [1.2.24](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.2.23...@restorecommerce/kafka-client@1.2.24) (2025-01-21)
 
 **Note:** Version bump only for package @restorecommerce/kafka-client

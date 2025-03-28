@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.11.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.10.5...@restorecommerce/protos@6.11.0) (2025-03-28)
+
+
+### Bug Fixes
+
+* **proto:** add order history ([6bce016](https://github.com/restorecommerce/libs/commit/6bce0168697c92fbd8f152cb4d94103bf7525851))
+* **proto:** add timestamps for order state changes ([07abde8](https://github.com/restorecommerce/libs/commit/07abde805f102f229adf0d5d17cc85d89e44b8a9))
+* **proto:** generic string for template.use_case ([7163625](https://github.com/restorecommerce/libs/commit/71636251c1f40a447b2dde72a26b0abcbca56709))
+* **protos:** add history to orders ([e1991c8](https://github.com/restorecommerce/libs/commit/e1991c8024d7248863676bff12b6f4eedbf5f666))
+
+
+### Features
+
+* **protos:** adjust rendering to comply with RC message pattern ([abf6d2c](https://github.com/restorecommerce/libs/commit/abf6d2c8ad1a5331a5793b5d25c74590b45c1210))
+
+
+
+
+
 ## [6.10.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.10.4...@restorecommerce/protos@6.10.5) (2025-01-21)
 
 

@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.5.0](https://github.com/restorecommerce/handlebars-helperized/compare/@restorecommerce/handlebars-helperized@1.4.3...@restorecommerce/handlebars-helperized@1.5.0) (2025-03-28)
+
+
+### Bug Fixes
+
+* **handlebars:** throw error if template is not provided ([6094196](https://github.com/restorecommerce/handlebars-helperized/commit/60941966c14002100d06e25caaca7fb46f9a7fd1))
+* **helperized:** handle helperized when template is not provided ([6ce3ede](https://github.com/restorecommerce/handlebars-helperized/commit/6ce3edeb163a68a8c0b061b28b607e533ee10099))
+* **helperized:** handlebars-helperized localization should use hash.hash not hash.data.root ([e6f4d4a](https://github.com/restorecommerce/handlebars-helperized/commit/e6f4d4af6d4b4ddc0555d7ac0d07820dfc354c30))
+* **helperized:** remove console output. lookup into hash.hash only ([3cc81c3](https://github.com/restorecommerce/handlebars-helperized/commit/3cc81c3f0f3ba44efe9c0e6cef696054e9f49dbe))
+
+
+### Features
+
+* **protos:** adjust rendering to comply with RC message pattern ([abf6d2c](https://github.com/restorecommerce/handlebars-helperized/commit/abf6d2c8ad1a5331a5793b5d25c74590b45c1210))
+
+
+
+
+
 ## [1.4.3](https://github.com/restorecommerce/handlebars-helperized/compare/@restorecommerce/handlebars-helperized@1.4.2...@restorecommerce/handlebars-helperized@1.4.3) (2024-11-07)
 
 **Note:** Version bump only for package @restorecommerce/handlebars-helperized

@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/service-config@1.0.16...@restorecommerce/service-config@1.1.0) (2025-03-28)
+
+
+### Bug Fixes
+
+* **build:** set default config type to any ([28c669a](https://github.com/restorecommerce/libs/commit/28c669a3d1e4e63d154a740cef643f763dc2bafe))
+* **proto:** generic string for template.use_case ([7163625](https://github.com/restorecommerce/libs/commit/71636251c1f40a447b2dde72a26b0abcbca56709))
+
+
+### Features
+
+* **protos:** adjust rendering to comply with RC message pattern ([abf6d2c](https://github.com/restorecommerce/libs/commit/abf6d2c8ad1a5331a5793b5d25c74590b45c1210))
+
+
+
+
+
 ## [1.0.16](https://github.com/restorecommerce/libs/compare/@restorecommerce/service-config@1.0.15...@restorecommerce/service-config@1.0.16) (2024-11-04)
 
 

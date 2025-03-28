@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.12](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.2.11...@restorecommerce/facade@2.2.12) (2025-03-28)
+
+
+### Bug Fixes
+
+* **protos:** add history to orders ([e1991c8](https://github.com/restorecommerce/libs/commit/e1991c8024d7248863676bff12b6f4eedbf5f666))
+
+
+
+
+
 ## [2.2.11](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.2.10...@restorecommerce/facade@2.2.11) (2025-01-21)
 
 **Note:** Version bump only for package @restorecommerce/facade

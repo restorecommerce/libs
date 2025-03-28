@@ -44,7 +44,7 @@ export let unauthZ: UnAuthZ;
 const urns = cfg.get('authorization:urns');
 
 export const createActionTarget = (action: any): Attribute[] => {
-  if (_.isArray(action)) {
+  if (Array.isArray(action)) {
     const actionList = [];
     for (let eachAction of action) {
       eachAction = eachAction.valueOf().toLowerCase();
@@ -141,7 +141,7 @@ export const createResourceTarget = (resource: ACSResource[], action: AuthZActio
           value: resourceInstance,
           attributes: []
         });
-      } else if (resourceInstance && _.isArray(resourceInstance) && resourceInstance.length > 0) {
+      } else if (resourceInstance && Array.isArray(resourceInstance) && resourceInstance.length > 0) {
         resourceInstance.forEach((instance) => {
           flattened.push({
             id: urns.resourceID,
@@ -152,7 +152,7 @@ export const createResourceTarget = (resource: ACSResource[], action: AuthZActio
       }
 
       // property - urn:restorecommerce:acs:names:model:property
-      if (_.isArray(resourceProperty) && resourceProperty.length > 0) {
+      if (Array.isArray(resourceProperty) && resourceProperty.length > 0) {
         resourceProperty.forEach((property) => {
           flattened.push({
             id: urns.property,
@@ -185,7 +185,7 @@ export class UnAuthZ implements IAuthZ {
 
   private encode(object: any): any {
     if (object) {
-      if (_.isArray(object)) {
+      if (Array.isArray(object)) {
         return _.map(object, this.encode.bind(this));
       } else {
         return {
@@ -428,7 +428,7 @@ export class ACSAuthZ implements IAuthZ {
 
   private encode(object: any): any {
     if (object) {
-      if (_.isArray(object)) {
+      if (Array.isArray(object)) {
         return _.map(object, this.encode.bind(this));
       } else {
         return {

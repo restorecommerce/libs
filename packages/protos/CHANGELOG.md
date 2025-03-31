@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.11.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.11.0...@restorecommerce/protos@6.11.1) (2025-03-31)
+
+
+### Bug Fixes
+
+* **proto:** add layout to rendering template array ([bcf636f](https://github.com/restorecommerce/libs/commit/bcf636f3ea19662a9f30b110137976eda60a0abb))
+* **protos:** rename template use-cases ([0a578ac](https://github.com/restorecommerce/libs/commit/0a578ac076b5f5ba2fcb784d8b9db3ba76168943))
+* **protos:** render response with repeated bodies ([a2f4df9](https://github.com/restorecommerce/libs/commit/a2f4df979155721ba50af264648c41e99e5a2224))
+* **protos:** resolve enum error ([22b33a1](https://github.com/restorecommerce/libs/commit/22b33a18e5504ef5a0f00a653dadcbc69ad81277))
+
+
+
+
+
 # [6.11.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.10.5...@restorecommerce/protos@6.11.0) (2025-03-28)
 
 

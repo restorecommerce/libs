@@ -26,12 +26,13 @@ message RenderRequest {
     optional string charset = 4; // defaults to utf-8
   }
 
-  repeated Template templates = 1;
-  optional google.protobuf.Any data = 2;  // data to fill template with
-  optional string style_url = 3; // stylesheet URL
-  optional Strategy strategy = 4; // inlining, copying CSS into <style>, etc...
-  optional google.protobuf.Any options = 5; // rendering options JSON object
-  optional string content_type = 6; // content type for rendering such as 'application/html' or 'application/text'
+  optional string id = 1;
+  repeated Template templates = 2;
+  optional google.protobuf.Any data = 3;  // data to fill template with
+  optional string style_url = 4; // stylesheet URL
+  optional Strategy strategy = 5; // inlining, copying CSS into <style>, etc...
+  optional google.protobuf.Any options = 6; // rendering options JSON object
+  optional string content_type = 7; // content type for rendering such as 'application/html' or 'application/text'
 }
 
 message RenderRequestList {
@@ -41,9 +42,15 @@ message RenderRequestList {
 }
 
 message RenderResult {
+  message Bodies {
+    optional string id = 1; // snippit name
+    optional bytes body = 2;
+    optional string charset = 3; // defaults to utf-8
+  }
+  
   optional string id = 1; // snippit name
-  optional bytes body = 2;
-  optional string charset = 3; // defaults to utf-8
+  repeated Bodies bodies = 2;
+  optional string content_type = 7; // content type for rendering such as 'application/html' or 'application/text'
 }
 
 message RenderResponse {

@@ -1,34 +1,50 @@
 import * as _ from 'lodash';
 
- // Throws in case of error and it is handled and logged in ServiceBase functions
-const marshallObj = (val) => {
+export type FieldHandlerType = 'encode' | 'decode' | 'convertDateObjToMilisec' | 'convertMilisecToDateObj';
+
+const marshallObj = (val: any) => {
   return {
     type_url: '',
     value: Buffer.from(JSON.stringify(val))
   };
 };
 
- // Throws in case of error, this is caught and logged in ResourceAPI
-const updateObject = (obj: any, path: string, value: any, fieldHandlerType: string) => {
-  if (value && fieldHandlerType === 'encode') {
-    const marshalled = marshallObj(value);
-    _.set(obj, path, marshalled);
-  } else if (value?.value && fieldHandlerType === 'decode') {
-    const unmarshalled = JSON.parse(value.value.toString());
-    _.set(obj, path, unmarshalled);
-  } else if(value && fieldHandlerType == 'convertDateObjToMilisec' && value instanceof Date) {
-    _.set(obj, path, value.getTime());
-  } else if(value && fieldHandlerType == 'convertMilisecToDateObj' && typeof(value) == 'number') {
-    _.set(obj, path, new Date(value));
+const updateObject = (
+  obj: any,
+  path: string,
+  value: any,
+  fieldHandlerType: FieldHandlerType
+) => {
+  if (value !== undefined) {
+    switch (fieldHandlerType) {
+      case 'encode':
+        _.set(obj, path, marshallObj(value));
+        break;
+      case 'decode':
+        _.set(obj, path, JSON.parse(value.value.toString()));
+        break;
+      case 'convertDateObjToMilisec':
+        if (value instanceof Date) {
+          _.set(obj, path, value.getTime());
+        }
+        break;
+      case 'convertMilisecToDateObj':
+        if (typeof(value) === 'number') {
+          _.set(obj, path, new Date(value));
+        }
+        break;
+      default:
+        break;
+    }
   }
 };
 
-const setNestedPath = (object: any, fieldPath: string, fieldHandlerType: string) => {
+const setNestedPath = (object: any, fieldPath: string, fieldHandlerType: FieldHandlerType) => {
   const prefix = fieldPath?.substring(0, fieldPath.indexOf('.['));
   const suffix = fieldPath?.substring(fieldPath.indexOf('].') + 2);
   let setRecursive = false;
   // recursive check if the sub suffix again contains an array index
-  if (suffix.indexOf('.[') > 0) {
+  if (suffix.includes('.[')) {
     setRecursive = true;
   }
   if (prefix && suffix) {
@@ -55,7 +71,7 @@ const baseGet = (object: any, path: string[]): any => {
   return (index && index == length) ? object : undefined;
 };
 
-export const fieldHandler = (obj: any, fieldPath: string, fieldHandlerType: string): any => {
+export const fieldHandler = (obj: any, fieldPath: string, fieldHandlerType: FieldHandlerType): any => {
   // fieldList contains the split Path to individual fields for fieldPath
   // and the baseGet breaks when the first field do not exist
   // ex: if fieldPath is `a.[0].b.c` then dotFieldPath is `a.0.b.c`

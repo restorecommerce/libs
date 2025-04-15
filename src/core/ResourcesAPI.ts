@@ -1,102 +1,46 @@
 import * as _ from 'lodash';
-import { errors } from '@restorecommerce/chassis-srv';
+import { type RedisClientType } from 'redis';
+import { randomUUID } from 'crypto';
 import { Logger } from '@restorecommerce/logger';
-import * as uuid from 'uuid';
 import { Topic } from '@restorecommerce/kafka-client';
-import { BaseDocument, DocumentMetadata } from './interfaces';
-import { DatabaseProvider, GraphDatabaseProvider } from '@restorecommerce/chassis-srv';
-import { DeepPartial } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/attribute';
-import { Search } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base';
+import {
+  BaseDocument
+} from './interfaces';
+import {
+  DatabaseProvider,
+  GraphDatabaseProvider
+} from '@restorecommerce/chassis-srv';
+import {
+  Status,
+  OperationStatus,
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/status';
+import {
+  DeepPartial,
+  Search
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base';
 import { Subject } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/auth';
-import { fieldHandler } from './utils';
+import { fieldHandler, FieldHandlerType } from './utils';
 
-let redisClient: any;
+// let redisClient: any;
 
-const Strategies = {
-  INCREMENT: 'increment',
-  UUID: 'uuid',
-  RANDOM: 'random',
-  TIMESTAMP: 'timestamp'
-};
+enum Strategies {
+  INCREMENT = 'increment',
+  UUID = 'uuid',
+  RANDOM = 'random',
+  TIMESTAMP = 'timestamp'
+}
 
-const uuidGen = (): string => {
-  return uuid.v4().replace(/-/g, '');
-};
-
-const isEmptyObject = (obj: any): any => {
-  return !Object.keys(obj).length;
-};
-
-const setDefaults = async (obj: { meta?: DocumentMetadata;[key: string]: any }, collectionName: string, subject: Subject): Promise<any> => {
-  const o = obj;
-
-  if (_.isEmpty(o.meta)) {
-    throw new errors.InvalidArgument('Object does not contain ownership information');
-  }
-
-  if (redisClient) {
-    const values = await redisClient.hGetAll(collectionName);
-
-    if (values) {
-      for (const field in values) {
-        const strategy = values[field];
-        let key: string;
-        switch (strategy) {
-          case Strategies.INCREMENT:
-            const key = `${collectionName}:${field}`;
-            o[field] = await redisClient.get(key);
-            await redisClient.incr(key);
-            break;
-          case Strategies.UUID:
-            o[field] = uuidGen();
-            break;
-          case Strategies.RANDOM:
-            o[field] = uuidGen();
-            break;
-          case Strategies.TIMESTAMP:
-            o[field] = await redisClient.time()[0];
-            break;
-        }
-      }
-    }
-  }
-
-  if (!o.meta?.created?.getTime()) {
-    o.meta.created = new Date();
-  }
-  o.meta.created_by = subject?.id;
-  o.meta.modified_by = subject?.id;
-  o.meta.modified = new Date();
-  if (_.isNil(o.id) || o.id === 0 || isEmptyObject(o.id)) {
-    o.id = uuidGen();
-  }
-  return o;
-};
-
-const updateMetadata = (docMeta: DocumentMetadata, newDoc: BaseDocument, subject: Subject): BaseDocument => {
-  if (_.isEmpty(newDoc.meta)) {
-    throw new errors.InvalidArgument(`Update request holds no valid metadata for document ${newDoc.id}`);
-  }
-
-  if (!_.isEmpty(newDoc.meta?.owners)) {
-    // if ownership is meant to be updated
-    docMeta.owners = newDoc.meta.owners;
-  }
-
-  docMeta.modified_by = subject?.id;
-  docMeta.modified = new Date();
-
-  newDoc.meta = docMeta;
-  return newDoc;
-};
+const uuidGen = (): string => randomUUID().replace(/-/g, '');
 
 /**
  * Resource API base provides functions for CRUD operations.
  */
 export class ResourcesAPIBase {
-  public readonly bufferFields: string[];
-  public readonly requiredFields: any;
-  public readonly timeStampFields: string[];
+  protected readonly bufferFields: string[];
+  protected readonly requiredFields: any;
+  protected readonly timeStampFields: string[];
+  protected readonly redisClient: RedisClientType;
+
   /**
    * @constructor
    * @param  {object} db Chassis arangodb provider.
@@ -104,13 +48,13 @@ export class ResourcesAPIBase {
    * @param {any} fieldHandlerConf The collection's field generators configuration.
   */
   constructor(
-    public readonly db: DatabaseProvider,
-    public readonly collectionName: string,
+    protected readonly db: DatabaseProvider,
+    protected readonly collectionName: string,
     fieldHandlerConf?: any,
-    public readonly edgeCfg?: any,
-    public readonly graphName?: string,
-    public readonly logger?: Logger,
-    public readonly resourceName?: string,
+    protected readonly edgeCfg?: any,
+    protected readonly graphName?: string,
+    protected readonly logger?: Logger,
+    protected readonly resourceName?: string,
   ) {
     this.resourceName ??= collectionName.substring(0, collectionName.length - 1);
 
@@ -118,33 +62,21 @@ export class ResourcesAPIBase {
       return;
     }
 
-    const strategyCfg = fieldHandlerConf.strategies;
-    if (!redisClient) {
-      redisClient = fieldHandlerConf.redisClient;
-    }
-
-    if (fieldHandlerConf.bufferFields) {
-      this.bufferFields = fieldHandlerConf.bufferFields;
-    }
-
-    // config fix to be removed after ts-proto is used
-    if (fieldHandlerConf.timeStampFields) {
-      this.timeStampFields = fieldHandlerConf.timeStampFields;
-    }
-
-    if (fieldHandlerConf.requiredFields) {
-      this.requiredFields = fieldHandlerConf.requiredFields[this.resourceName] ?? fieldHandlerConf.requiredFields;
-    }
+    const strategyCfg = fieldHandlerConf?.strategies ?? [];
+    this.redisClient = fieldHandlerConf?.redisClient;
+    this.bufferFields = fieldHandlerConf?.bufferFields;
+    this.timeStampFields = fieldHandlerConf?.timeStampFields;
+    this.requiredFields = fieldHandlerConf?.requiredFields?.[this.resourceName] ?? fieldHandlerConf?.requiredFields;
 
     // values for Redis hash set
     for (const field in strategyCfg) {
       const strategy = strategyCfg[field].strategy;
-      redisClient.hSet(collectionName, field, strategy);
-      let startingValue: any;
+      this.redisClient.hSet(collectionName, field, strategy);
       switch (strategy) {
-        case Strategies.INCREMENT:
+        case Strategies.INCREMENT: {
           // check if value already exists in redis
-          startingValue = redisClient.get(`${collectionName}:${field}`).then((val) => val);
+          let startingValue: any;
+          startingValue = this.redisClient.get(`${collectionName}:${field}`).then((val) => val);
           if (!startingValue) {
             if (strategyCfg[field].startingValue) {
               startingValue = Number.isNaN(strategyCfg[field].startingValue) ?
@@ -153,13 +85,83 @@ export class ResourcesAPIBase {
             else {
               startingValue = '0';
             }
-            redisClient.set(`${collectionName}:${field}`, startingValue).then((val) => val);
+            this.redisClient.set(`${collectionName}:${field}`, startingValue).then((val) => val);
           }
           break;
+        }
         default:
           break;
       }
     }
+  }
+
+  protected catchOperationError(msg: string, err: any): OperationStatus {
+    this.logger?.error(msg, err);
+    return {
+      code: Number.isInteger(err.code) ? err.code : 500,
+      message: err.message ?? 'Unknown Error!',
+    };
+  }
+
+  protected catchStatusError(msg: string, err: any): Status {
+    this.logger?.error(msg, err);
+    return {
+      code: Number.isInteger(err.code) ? err.code : 500,
+      message: err.message ?? 'Unknown Error!',
+    };
+  }
+
+  protected setMeta<T extends BaseDocument>(
+    o: T & any,
+    subject: Subject,
+    create = false,
+  ): T {
+    o.meta ??= {};
+    if (create) {
+      o.meta.created ??= new Date();
+      o.meta.created_by ??= subject?.id;
+    }
+    o.meta.modified_by ??= subject?.id;
+    o.meta.modified ??= new Date();
+
+    if (!o.id?.length || o.id?.toString() === '0') {
+      o.id = uuidGen();
+    }
+    return o;
+  }
+
+  protected async setDefaults<T extends BaseDocument>(
+    o: T & any,
+    collectionName: string,
+    subject: Subject,
+    create = false,
+  ): Promise<T> {
+    if (create && this.redisClient) {
+      const values = await this.redisClient.hGetAll(collectionName);
+
+      if (values) {
+        for (const field in values) {
+          const strategy = values[field];
+          switch (strategy) {
+            case Strategies.INCREMENT: {
+              const key = `${collectionName}:${field}`;
+              o[field] = await this.redisClient.get(key);
+              await this.redisClient.incr(key);
+              break;
+            }
+            case Strategies.TIMESTAMP:
+                o[field] = (await this.redisClient.time()).getTime();
+                break;
+            default:
+            case Strategies.UUID:
+            case Strategies.RANDOM:
+              o[field] = uuidGen();
+              break;
+          }
+        }
+      }
+    }
+    return this.setMeta(o, subject, create);
   }
 
 
@@ -169,7 +171,7 @@ export class ResourcesAPIBase {
    * @param {number} limit
    * @param {number} offset
    * @param {object} sort key value, key=field value: 1=ASCENDING, -1=DESCENDING, 0=UNSORTED
-   * @param {object} field key value, key=field value: 0=exclude, 1=include
+   * @param {object} fields key value, key=field value: 0=exclude, 1=include
    * @returns {an Object that contains an items field}
    */
   async read(
@@ -177,7 +179,7 @@ export class ResourcesAPIBase {
     limit = 1000,
     offset = 0,
     sort: any = {},
-    field: any = {},
+    fields: any = {},
     customQueries: string[] = [],
     customArgs: any = {},
     search: DeepPartial<Search>
@@ -186,20 +188,14 @@ export class ResourcesAPIBase {
       limit: Math.min(limit, 1000),
       offset,
       sort,
-      fields: field,
+      fields,
       customQueries,
-      customArguments: customArgs.value ? JSON.parse(customArgs.value.toString()) : {},
+      customArguments: customArgs?.value ? JSON.parse(customArgs.value.toString()) : {},
       search
     };
     let entities: BaseDocument[] = await this.db.find(this.collectionName, filter, options);
-    if (this.bufferFields && entities?.length > 0) {
-      // encode the msg obj back to buffer obj and send it back
-      entities = this.encodeOrDecode(entities, this.bufferFields, 'encode');
-    }
-    if (this.timeStampFields && entities?.length > 0) {
-      // convert number to Date Object
-      entities = this.encodeOrDecode(entities, this.timeStampFields, 'convertMilisecToDateObj');
-    }
+    entities = this.encodeOrDecode(entities, this.bufferFields, 'encode');
+    entities = this.encodeOrDecode(entities, this.timeStampFields, 'convertMilisecToDateObj');
     return entities;
   }
 
@@ -208,100 +204,87 @@ export class ResourcesAPIBase {
   *
   * @param {array.object} documents
   */
-  async create(documents: BaseDocument[], subject: Subject): Promise<any> {
+  async create(
+    documents: BaseDocument[],
+    subject: Subject,
+    events?: Topic,
+  ): Promise<any> {
     const collection = this.collectionName;
-    let result = [];
-    try {
-      // check if all the required fields are present
-      if (this.requiredFields) {
-        const requiredFieldsResult = this.checkRequiredFields(
-          this.requiredFields,
-          documents,
-          result
-        );
-        documents = requiredFieldsResult.documents;
-      }
+    const result = new Array<BaseDocument>();
+    // check if all the required fields are present
+    if (this.requiredFields) {
+      documents = this.checkRequiredFields(
+        this.requiredFields,
+        documents,
+        result
+      );
+    }
 
-      documents = await Promise.all(documents.map(async (doc) => {
-        return await setDefaults(doc, collection, subject);
-      }));
+    documents = await Promise.all(documents.map(
+      async (doc) => await this.setDefaults(doc, collection, subject, true)
+    ));
+    documents = this.encodeOrDecode(documents, this.bufferFields, 'decode');
+    documents = this.encodeOrDecode(documents, this.timeStampFields, 'convertDateObjToMilisec');
 
-      if (this.bufferFields && documents?.length > 0) {
-        documents = this.encodeOrDecode(documents, this.bufferFields, 'decode');
-      }
-      if (this.timeStampFields && documents?.length > 0) {
-        // convert Date Object to Number
-        documents = this.encodeOrDecode(documents, this.timeStampFields, 'convertDateObjToMilisec');
-      }
-      if (this.isGraphDB(this.db)) {
-        await this.db.createGraphDB(this.graphName, [], {});
-        await this.db.addVertexCollection(collection);
-        const createVertexResp = await this.db.createVertex(collection, documents);
-        for (const document of documents) {
-          if (this.edgeCfg && Array.isArray(this.edgeCfg) && this.edgeCfg.length > 0) {
-            for (const eachEdgeCfg of this.edgeCfg) {
-              const fromIDkey = eachEdgeCfg.from;
-              const from_id = document[fromIDkey];
-              const toIDkey = eachEdgeCfg.to;
-              const to_id = document[toIDkey];
-              // edges are created outbound, if it is inbound - check for direction
-              const direction = eachEdgeCfg.direction;
-              let fromVerticeName = collection;
-              let toVerticeName = eachEdgeCfg.toVerticeName;
-              if (direction === 'inbound') {
-                fromVerticeName = eachEdgeCfg.fromVerticeName;
-                toVerticeName = collection;
-              }
-              if (from_id && to_id) {
-                if (Array.isArray(to_id)) {
-                  for (const toID of to_id) {
-                    await this.db.createEdge(eachEdgeCfg.edgeName, null,
-                      `${fromVerticeName}/${from_id}`, `${toVerticeName}/${toID}`);
-                  }
-                } else {
-                  await this.db.createEdge(eachEdgeCfg.edgeName, null,
-                    `${fromVerticeName}/${from_id}`, `${toVerticeName}/${to_id}`);
-                }
+    if (this.isGraphDB(this.db)) {
+      const db = this.db;
+      await db.createGraphDB(this.graphName);
+      await db.addVertexCollection(collection);
+      const createVertexResp = await this.db.createVertex(collection, documents);
+      await Promise.all(documents.map(async document => {
+        try {
+          for (const eachEdgeCfg of this.edgeCfg) {
+            const fromIDkey = eachEdgeCfg.from;
+            const from_id = document[fromIDkey];
+            const toIDkey = eachEdgeCfg.to;
+            const to_id = document[toIDkey];
+            // edges are created outbound, if it is inbound - check for direction
+            const inbound = eachEdgeCfg.direction === 'inbound';
+            const fromVerticeName = inbound ? eachEdgeCfg.fromVerticeName : collection;
+            const toVerticeName = inbound ? collection : eachEdgeCfg.toVerticeName;
+            
+            const ids = Array.isArray(to_id) ? to_id : [to_id];
+            if (from_id && to_id) {
+              for (const id of ids) {
+                await db.createEdge(
+                  eachEdgeCfg.edgeName,
+                  null,
+                  `${fromVerticeName}/${from_id}`,
+                  `${toVerticeName}/${id}`,
+                );
               }
             }
           }
         }
-        if (Array.isArray(createVertexResp)) {
-          createVertexResp.forEach((eachVertexResp) => result.push(eachVertexResp));
-        } else {
-          result.push(createVertexResp);
+        catch (error: any) {
+          result.push({
+            error: true,
+            errorNum: error?.code,
+            errorMessage: error?.details ?? error?.message
+          });
         }
-        if (this.timeStampFields && result?.length > 0) {
-          // convert number to Date Object
-          result = this.encodeOrDecode(result, this.timeStampFields, 'convertMilisecToDateObj');
-        }
-
-        return result;
+      }));
+      if (Array.isArray(createVertexResp)) {
+        result.push(...createVertexResp);
+      } else {
+        result.push(createVertexResp);
       }
-      else {
-        let checkReqFieldResult = [];
-        if (!_.isEmpty(result)) {
-          checkReqFieldResult = result;
-        }
-        result = await this.db.insert(collection, documents);
-        if (!_.isEmpty(checkReqFieldResult)) {
-          checkReqFieldResult.forEach((reqFieldResult) => result.push(reqFieldResult));
-        }
-        if (this.timeStampFields && result?.length > 0) {
-          // convert number to Date Object
-          result = this.encodeOrDecode(result, this.timeStampFields, 'convertMilisecToDateObj');
-        }
-        return result;
-      }
-    } catch (error) {
-      this.logger?.error('Error creating documents', { code: error?.code, message: error?.message, stack: error?.stack });
-      result.push({
-        error: true,
-        errorNum: error?.code,
-        errorMessage: error?.details ? error?.details : error?.message
-      });
-      return result;
+      this.encodeOrDecode(result, this.timeStampFields, 'convertMilisecToDateObj');
     }
+    else {
+      const inserts = await this.db.insert(collection, documents);
+      result.push(...inserts);
+      this.encodeOrDecode(result, this.timeStampFields, 'convertMilisecToDateObj');
+    }
+
+    if (events) {
+      await Promise.all(result?.map(async (item: any) => {
+        if (!item?.error) {
+          await events.emit(`${this.resourceName}Created`, item);
+        }
+      }));
+    }
+    return result;
   }
 
   private isGraphDB(db: DatabaseProvider): db is GraphDatabaseProvider {
@@ -313,21 +296,22 @@ export class ResourcesAPIBase {
    * @param requiredFields
    * @param documents
    */
-  checkRequiredFields(requiredFields: string[], documents: any[], result: any[]): any {
-    documents = documents.filter((document) => {
-      return requiredFields.every((eachField) => {
-        if (document[eachField] === undefined || (Array.isArray(document[eachField]) && document[eachField].length === 0)) {
-          result.push({
+  checkRequiredFields(requiredFields: string[], documents: BaseDocument[], errors: BaseDocument[]) {
+    const valid = documents.filter((document) => {
+      return requiredFields.every((field) => {
+        if (document[field] === undefined || (Array.isArray(document[field]) && document[field].length === 0)) {
+          errors.push({
+            id: document.id,
             error: true,
             errorNum: 400,
-            errorMessage: `Field ${eachField} is necessary for ${this.resourceName} for documentID ${document.id}`
+            errorMessage: `Field ${field} is necessary for ${this.resourceName} in document ${document.id}`
           });
           return false;
         }
         return true;
       });
     });
-    return { documents, result };
+    return valid;
   }
 
   /**
@@ -335,57 +319,62 @@ export class ResourcesAPIBase {
    *
    * @param [array.string] ids List of document IDs.
    */
-  async delete(ids: string[]): Promise<any> {
-    let deleteResponse = [];
-    try {
-      if (!Array.isArray(ids)) {
-        ids = [ids];
+  async delete(
+    ids: string[],
+    events?: Topic,
+  ): Promise<any[]> {
+    let response: any[];
+    if (!Array.isArray(ids)) {
+      ids = [ids];
+    }
+    if (this.isGraphDB(this.db)) {
+      // Modify the Ids to include documentHandle
+      if (ids.length > 0) {
+        ids = ids?.map((id) => `${this.collectionName}/${id}`);
+        response = await this.db.removeVertex(this.collectionName, ids);
       }
-      if (this.isGraphDB(this.db)) {
-        // Modify the Ids to include documentHandle
-        if (ids.length > 0) {
-          ids = _.map(ids, (id) => {
-            return `${this.collectionName}/${id}`;
-          });
-          deleteResponse = await this.db.removeVertex(this.collectionName, ids);
-          return deleteResponse;
+    }
+    else {
+      response = await this.db.delete(this.collectionName, ids);
+    }
+
+    if (events) {
+      await Promise.all(response?.map(async (id) => {
+        if (typeof id === 'string') {
+          id = { id };
         }
-      }
-      deleteResponse = await this.db.delete(this.collectionName, ids);
-      return deleteResponse;
+        if (!id.error) {
+          await events?.emit(`${this.resourceName}Deleted`, id);
+        }
+      }));
     }
-    catch (error) {
-      this.logger?.error('Error deleting documents', { code: error?.code, message: error?.message, stack: error?.stack });
-      deleteResponse.push({
-        error: true,
-        errorNum: error?.code,
-        errorMessage: error?.details ? error?.details : error?.message
-      });
-      return deleteResponse;
-    }
+    return response;
   }
 
   /**
    * Delete all documents in the collection.
    */
-  async deleteCollection(): Promise<Array<any>> {
+  async deleteCollection(events?: Topic): Promise<void> {
+    await this.db.truncate(this.collectionName);
     if (this.isGraphDB(this.db)) {
-      // graph edges are only deleted automatically when a specific vertex is deleted
-      // (`truncate` does not work in this case)
-      const ids = await this.db.find(this.collectionName, {}, {
-        fields: {
-          id: 1
-        }
-      });
-
-      await this.delete(_.map(ids, (doc) => {
-        return doc.id;
-      }));
-      return ids;
-    } else {
-      const ids = await this.db.find(this.collectionName, {}, { fields: { id: 1 } });
-      await this.db.truncate(this.collectionName);
-      return ids;
+      const db = this.db;
+      const edges: any[] = await db.getGraphDB().get().then(
+        (info: any) => info.edgeDefinitions
+      );
+      console.log(edges)
+      await Promise.all(
+        edges?.filter(
+          edge => Object.values(edge).flatMap(
+            edge => edge
+          ).includes(this.collectionName)
+        ).map(
+          edge => db.truncate(edge.collection)
+        ) ?? []
+      );
+    } 
+    
+    if (events) {
+      await events?.emit(`${this.resourceName}DeletedAll`, { collection: this.collectionName });
     }
   }
 
@@ -394,78 +383,56 @@ export class ResourcesAPIBase {
    *
    * @param [array.object] documents
    */
-  async upsert(documents: BaseDocument[],
-    events: Topic, resourceName: string, subject: Subject): Promise<BaseDocument[]> {
-    let result = [];
-    let createDocsResult = [];
-    let updateDocsResult = [];
-    try {
-      const createDocuments = [];
-      const updateDocuments = [];
-      if (this.bufferFields && documents) {
-        documents = this.encodeOrDecode(documents, this.bufferFields, 'decode');
-      }
-      const dispatch = await Promise.all(documents.map(async (doc) => {
-        let foundDocs;
-        if (doc && doc.id) {
-          foundDocs = await this.db.find(this.collectionName, { id: doc.id }, {
-            fields: {
-              meta: 1
-            }
-          });
-        }
-        let eventName: string;
-        if (_.isEmpty(foundDocs)) {
-          // insert
-          setDefaults(doc, this.collectionName, subject);
-          createDocuments.push(doc);
-          eventName = 'Created';
-        } else {
-          // convert dateTimeStamp fields
-          if (this.timeStampFields) {
-            foundDocs = this.encodeOrDecode(foundDocs, this.timeStampFields, 'convertMilisecToDateObj');
+  async upsert<T extends BaseDocument>(
+    documents: T[],
+    subject: Subject,
+    events?: Topic,
+  ): Promise<T[]> {
+    const createDocuments = new Array<T>();
+    const updateDocuments = new Array<T>();
+    documents = this.encodeOrDecode(documents, this.bufferFields, 'decode');
+
+    const orgs = new Set(
+      await this.db.find(
+        this.collectionName,
+        {
+          _key: {
+            $in: [...new Set(documents?.map(doc => doc.id).filter(id => id))],
+          },
+        },
+        {
+          fields: {
+            id: 1
           }
-          // update
-          const dbDoc = foundDocs[0];
-          updateMetadata(dbDoc.meta, doc, subject);
-          updateDocuments.push(doc);
-          eventName = 'Modified';
         }
-        if (events) {
-          return events.emit(`${resourceName}${eventName}`, doc);
-        }
-      }));
+      ).then(
+        resp => resp.map(doc => doc.id)
+      )
+    );
 
-      if (createDocuments?.length > 0) {
-        createDocsResult = await this.create(createDocuments, subject);
+    documents?.forEach((doc) => {
+      if (orgs.has(doc?.id)) {
+        // update
+        updateDocuments.push(doc);
       }
-
-      if (updateDocuments?.length > 0) {
-        updateDocsResult = await this.update(updateDocuments, subject);
+      else {
+        // insert
+        createDocuments.push(doc);
       }
+    });
 
-      result = _.union(createDocuments, updateDocuments);
-
-      if (this.timeStampFields && result?.length > 0) {
-        // convert number to Date Object
-        result = this.encodeOrDecode(result, this.timeStampFields, 'convertMilisecToDateObj');
-      }
-      await Promise.all(dispatch);
-
-      if (this.bufferFields && result?.length > 0) {
-        result = this.encodeOrDecode(result, this.bufferFields, 'encode');
-      }
-
-      return result;
-    } catch (error) {
-      this.logger?.error('Error upserting documents', { code: error?.code, message: error?.message, stack: error?.stack });
-      result.push({
-        error: true,
-        errorNum: error?.code,
-        errorMessage: error?.details ? error?.details : error?.message
-      });
-      return result;
+    if (updateDocuments?.length > 0) {
+      await this.update(updateDocuments, subject, events);
     }
+
+    if (createDocuments?.length > 0) {
+      await this.create(createDocuments, subject, events);
+    }
+
+    const result = [...updateDocuments, ...createDocuments];
+    this.encodeOrDecode(result, this.timeStampFields, 'convertMilisecToDateObj');
+    this.encodeOrDecode(result, this.bufferFields, 'encode');
+    return result;
   }
 
   /**
@@ -474,103 +441,124 @@ export class ResourcesAPIBase {
    * @param [array.object] documents
    * A list of documents or partial documents. Each document must contain an id field.
    */
-  async update(documents: BaseDocument[], subject: Subject): Promise<BaseDocument[]> {
-    let updateResponse = [];
-    try {
-      const collectionName = this.collectionName;
-      if (this.bufferFields && documents) {
-        documents = this.encodeOrDecode(documents, this.bufferFields, 'decode');
-      }
-      let docsWithUpMetadata = await Promise.all(documents.map(async (doc) => {
-        const foundDocs = await this.db.find(
-          collectionName,
-          { id: doc.id },
-          { limit: 1 }
-        );
-        let dbDoc;
-        if (foundDocs && foundDocs.length === 1) {
-          dbDoc = foundDocs[0];
-          doc = updateMetadata(dbDoc.meta, doc, subject);
-        } else {
-          dbDoc = doc; // doc not existing assigning to generate error message in response
-        }
-
+  async update<T extends BaseDocument>(
+    documents: T[],
+    subject: Subject,
+    events?: Topic,
+  ): Promise<T[]> {
+    documents = this.encodeOrDecode(documents, this.bufferFields, 'decode');
+    documents = documents.map(
+      (doc) => this.setMeta(doc, subject)
+    );
+    documents = await Promise.all(documents.map(async (doc) => {
+      try {
         if (this.isGraphDB(this.db)) {
           const db = this.db;
-          await Promise.all(this.edgeCfg.map(async (eachEdgeCfg) => {
-            const toIDkey = eachEdgeCfg.to;
-            let modified_to_idValues = doc[toIDkey];
-            let db_to_idValues = dbDoc[toIDkey];
-            if (Array.isArray(modified_to_idValues)) {
-              modified_to_idValues = _.sortBy(modified_to_idValues);
-            }
-            if (Array.isArray(db_to_idValues)) {
-              db_to_idValues = _.sortBy(db_to_idValues);
-            }
+          await Promise.all(this.edgeCfg.map(async (edgeCfg: any) => {
+            const to_id = doc[edgeCfg.to!];
+            const from_id = doc[edgeCfg.from!];
+            const edgeCollectionName = edgeCfg.edgeName!;
+            
             // delete and recreate only if there is a difference in references
-            if (!_.isEqual(modified_to_idValues, db_to_idValues)) {
-              // delete and recreate the edge (since there is no way to update the edge as we dont add id to the edge as for doc)
-              const fromIDkey = eachEdgeCfg.from;
-              const from_id = doc[fromIDkey];
-              let fromVerticeName = collectionName;
-              let toVerticeName = eachEdgeCfg.toVerticeName;
-              const direction = eachEdgeCfg.direction;
-              if (direction === 'inbound') {
-                fromVerticeName = eachEdgeCfg.fromVerticeName;
-                toVerticeName = collectionName;
+            if (edgeCfg.direction === 'inbound' && from_id) {
+              const from_ids: string[] = Array.isArray(from_id) ? from_id : [from_id];
+              // if (!from_ids?.length) return;
+              if (typeof to_id !== 'string') throw Error('Inbound value `to` has to be a single string!');
+
+              const fromVerticeName = edgeCfg.fromVerticeName!;
+              const toVerticeName = edgeCfg.toVerticeName! ?? this.collectionName;
+              const incoming: any = await db.getInEdges(edgeCollectionName, `${fromVerticeName}/${to_id}`);
+
+              // Remove edges that are no longer defined
+              if (Array.isArray(incoming.edges)) {
+                await Promise.all(incoming.edges?.filter(
+                  (edge: any) => !from_ids.includes(edge._from)
+                ).map(
+                  (edge: any) => db.removeEdge(edgeCollectionName, edge._id)
+                ));
               }
 
-              const edgeCollectionName = eachEdgeCfg.edgeName;
-              const outgoingEdges: any = await db.getOutEdges(edgeCollectionName, `${collectionName}/${dbDoc.id}`);
-              if (Array.isArray(outgoingEdges.edges)) {
-                await Promise.all(outgoingEdges.edges.map((outgoingEdge) => db.removeEdge(edgeCollectionName, outgoingEdge._id)));
-              }
-              const incomingEdges: any = await db.getInEdges(edgeCollectionName, `${collectionName}/${dbDoc.id}`);
-              if (Array.isArray(incomingEdges.edges)) {
-                await Promise.all(incomingEdges.edges.map((incomingEdge) => db.removeEdge(edgeCollectionName, incomingEdge._id)));
-              }
               // Create new edges
-              if (from_id && modified_to_idValues) {
-                if (Array.isArray(modified_to_idValues)) {
-                  await Promise.all(modified_to_idValues.map((toID) => db.createEdge(eachEdgeCfg.edgeName, null,
-                    `${fromVerticeName}/${from_id}`, `${toVerticeName}/${toID}`)));
-                } else {
-                  await db.createEdge(edgeCollectionName, null,
-                    `${fromVerticeName}/${from_id}`, `${toVerticeName}/${modified_to_idValues}`);
-                }
+              await Promise.all(from_ids.filter(
+                id => !incoming.edges?.includes(id)
+              ).map(
+                id => db.createEdge(
+                  edgeCfg.edgeName,
+                  null,
+                  `${fromVerticeName}/${from_id}`,
+                  `${toVerticeName}/${id}`,
+                )
+              ));
+            }
+            else if (to_id) {
+              const to_ids: string[] = Array.isArray(to_id) ? to_id : [to_id];
+              // if (!to_ids?.length) return;
+              if (typeof from_id !== 'string') throw Error('Outbound value `from` has to be a single string!');
+
+              const fromVerticeName = edgeCfg.fromVerticeName! ?? this.collectionName;
+              const toVerticeName = edgeCfg.toVerticeName!;
+              const outgoing: any = await db.getOutEdges(edgeCollectionName, `${fromVerticeName}/${from_id}`);
+
+              // Remove edges that are no longer defined
+              if (Array.isArray(outgoing.edges)) {
+                await Promise.all(outgoing.edges?.filter(
+                  (edge: any) => !to_ids.includes(edge._to) 
+                ).map(
+                  (edge: any) => db.removeEdge(edgeCollectionName, edge._id)
+                ));
               }
+
+              // Create new edges
+              await Promise.all(to_ids.filter(
+                id => !outgoing.edges?.includes(id)
+              ).map(
+                id => db.createEdge(
+                  edgeCfg.edgeName,
+                  null,
+                  `${fromVerticeName}/${from_id}`,
+                  `${toVerticeName}/${id}`,
+                )
+              ));
             }
           }));
         }
         return doc;
-      }));
+      }
+      catch (error: any) {
+        this.logger?.error(`Error updating document ${doc.id}`, error);
+        return {
+          ...doc,
+          error: true,
+          errorNum: error?.code,
+          errorMessage: `On graph update: ${error?.details ?? error?.message}`
+        };
+      }
+    }));
 
-      if (this.timeStampFields && docsWithUpMetadata?.length > 0) {
-        docsWithUpMetadata = this.encodeOrDecode(docsWithUpMetadata, this.timeStampFields, 'convertDateObjToMilisec');
-      }
-      updateResponse = await this.db.update(collectionName, docsWithUpMetadata);
-      if (this.timeStampFields && updateResponse?.length > 0) {
-        updateResponse = this.encodeOrDecode(updateResponse, this.timeStampFields, 'convertMilisecToDateObj');
-      }
-      if (this.bufferFields && updateResponse?.length > 0) {
-        updateResponse = this.encodeOrDecode(updateResponse, this.bufferFields, 'encode');
-      }
-      return updateResponse;
-    } catch (error) {
-      this.logger?.error('Error updating documents', { code: error?.code, message: error?.message, stack: error?.stack });
-      updateResponse.push({
-        error: true,
-        errorNum: error?.code,
-        errorMessage: error?.message
-      });
-      return updateResponse;
+    const errors = documents.filter(doc => doc.error);
+    const updates = documents.filter(doc => !doc.error);
+    this.encodeOrDecode(updates, this.timeStampFields, 'convertDateObjToMilisec');
+    const results = await this.db.update(this.collectionName, updates);
+    results.push(...errors);
+    this.encodeOrDecode(results, this.timeStampFields, 'convertMilisecToDateObj');
+    if (events) {
+      await Promise.all(results?.map(async (item: any) => {
+        if (!item.error) {
+          await events.emit(`${this.resourceName}Modified`, item);
+        }
+      }));
     }
+    this.encodeOrDecode(results, this.bufferFields, 'encode');
+    return results;
   }
 
-  private encodeOrDecode(documents: any, fieldPaths: string[], fieldHanlder: string): any {
-    for (let doc of documents) {
-      for (const fieldPath of fieldPaths) {
-        doc = fieldHandler(doc, fieldPath, fieldHanlder);
+  private encodeOrDecode<T>(documents: T, fieldPaths: string[], mode: FieldHandlerType): T {
+    const arr = Array.isArray(documents) ? documents : [documents];
+    if (fieldPaths?.length && arr?.length) {
+      for (const doc of arr) {
+        for (const fieldPath of fieldPaths) {
+          fieldHandler(doc, fieldPath, mode);
+        }
       }
     }
     return documents;

@@ -99,13 +99,16 @@
           "localhost:29092"
         ]
       },
-      "ResourceCreated": {
+      "resourceCreated": {
         "messageObject": "io.restorecommerce.resourcebase.Resource"
       },
-      "ResourceModified": {
+      "resourceModified": {
         "messageObject": "io.restorecommerce.resourcebase.Resource"
       },
-      "ResourceDeleted": {
+      "resourceDeleted": {
+        "messageObject": "io.restorecommerce.resourcebase.Resource"
+      },
+      "resourceDeletedAll": {
         "messageObject": "io.restorecommerce.resourcebase.Resource"
       },
       "testBufferedDataCreated": {

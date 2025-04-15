@@ -1,5 +1,12 @@
-import { GraphDatabaseProvider, TraversalResponse as DBTraversalResponse } from '@restorecommerce/chassis-srv';
-import { Logger, createLogger } from '@restorecommerce/logger';
+import { type CallContext } from 'nice-grpc-common';
+import {
+  GraphDatabaseProvider,
+  TraversalResponse as DBTraversalResponse
+} from '@restorecommerce/chassis-srv';
+import { Logger } from '@restorecommerce/logger';
+import {
+  OperationStatus
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/status';
 import {
   DeepPartial, ServerStreamingMethodResult,
   GraphServiceImplementation,
@@ -14,13 +21,16 @@ import { SortOrder } from './interfaces';
  */
 export class GraphResourcesServiceBase implements GraphServiceImplementation {
   bufferedCollections: any;
-  dateTimeFieldcfg: any;
-  logger: Logger;
   /**
    * @constructor
    * @param  {object} db Chassis arangodb provider.
    */
-  constructor(private db: GraphDatabaseProvider, private bufferFiledCfg?: any, logger?: Logger, dateTimeFieldcfg?: any) {
+  constructor(
+    private readonly db: GraphDatabaseProvider,
+    private readonly bufferFiledCfg?: any,
+    private readonly logger?: Logger,
+    private readonly dateTimeFieldcfg?: any
+  ) {
     if (bufferFiledCfg) {
       this.bufferedCollections = [];
       for (const key in bufferFiledCfg) {
@@ -28,20 +38,15 @@ export class GraphResourcesServiceBase implements GraphServiceImplementation {
         this.bufferedCollections.push(key);
       }
     }
-    if (logger) {
-      this.logger = logger;
-    } else {
-      const defaultLoggerCfg = {
-        console: {
-          handleExceptions: false,
-          level: 'debug',
-          colorize: true,
-          prettyPrint: true
-        }
-      };
-      this.logger = createLogger(defaultLoggerCfg);
-    }
     this.dateTimeFieldcfg = dateTimeFieldcfg;
+  }
+
+  protected catchOperationError(msg: string, err: any): OperationStatus {
+    this.logger?.error(msg, err);
+    return {
+      code: Number.isInteger(err.code) ? err.code : 500,
+      message: err.message ?? 'Unknown Error!',
+    };
   }
 
   /**
@@ -54,14 +59,17 @@ export class GraphResourcesServiceBase implements GraphServiceImplementation {
   * opts contains the options such as opts.direction, opts.filter, opts.visitor,
   * opts.init, opts.expander, opts.sort
   */
-  async* traversal(request: TraversalRequest, context): ServerStreamingMethodResult<DeepPartial<TraversalResponse>> {
+  async* traversal(
+    request: TraversalRequest,
+    context: CallContext
+  ): ServerStreamingMethodResult<DeepPartial<TraversalResponse>> {
     try {
       const vertices = request?.vertices;
       const collection = request?.collection;
       const options = request?.opts;
       if (!vertices && !collection) {
         const message = 'missing start vertex or collection_name for graph traversal';
-        this.logger.error(message);
+        this.logger?.error(message);
         yield {
           operation_status: { code: 400, message }
         };
@@ -85,18 +93,19 @@ export class GraphResourcesServiceBase implements GraphServiceImplementation {
               break;
           }
           return a;
-        }, {});
+        }, {} as Record<string, string>);
       }
 
       try {
-        this.logger.debug('Calling traversal', { vertices, collection });
-        traversalCursor = await this.db.traversal(vertices, collection,
-          options, filters);
-        this.logger.debug('Received traversal ArrayCursor from DB');
-      } catch (err) {
-        this.logger.error('Error executing DB Traversal', { code: err.code, message: err.message, stack: err.stack });
+        this.logger?.debug('Calling traversal', { vertices, collection });
+        traversalCursor = await this.db.traversal(
+          vertices, collection,
+          options, filters
+        );
+        this.logger?.debug('Received traversal ArrayCursor from DB');
+      } catch (err: any) {
         yield {
-          operation_status: { code: err.code ? err.code : 500, message: err.message }
+          operation_status: this.catchOperationError('Error executing DB Traversal', err)
         };
         return;
       }
@@ -137,7 +146,7 @@ export class GraphResourcesServiceBase implements GraphServiceImplementation {
                 if(cfgEntityNames === entityName) {
                   const dateTimeFields: string[] = this.dateTimeFieldcfg[entityName];
                   dateTimeFields.forEach(e => {
-                    if (e.indexOf('.')) {
+                    if (e.includes('.')) {
                       this.updateJSON(e, data.v);
                     } else {
                       data.v[e] = new Date(data.v[e]).toISOString();
@@ -165,12 +174,11 @@ export class GraphResourcesServiceBase implements GraphServiceImplementation {
       }
 
       yield ({ operation_status: { code: 200, message: 'success' } });
-      this.logger.debug('Traversal request ended');
+      this.logger?.debug('Traversal request ended');
       return;
-    } catch (err) {
-      this.logger.error('Error caught executing traversal', { code: err.code, message: err.message, stack: err.stack });
+    } catch (err: any) {
       yield {
-        operation_status: { code: err.code ? err.code : 500, message: err.message }
+        operation_status: this.catchOperationError('Error caught executing traversal', err)
       };
       return;
     }
@@ -194,7 +202,7 @@ export class GraphResourcesServiceBase implements GraphServiceImplementation {
     return document;
   }
 
-  private updateJSON = (path, obj) => {
+  private updateJSON = (path: string, obj: any) => {
     const fields = path.split('.');
     let result = obj;
     let j = 0;

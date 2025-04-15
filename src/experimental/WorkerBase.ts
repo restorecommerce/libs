@@ -37,7 +37,7 @@ export type EventHandler = (msg: any, context?: any, config?: any, eventName?: s
 export interface ServiceBindConfig<T extends CompatServiceDefinition> extends BindConfig<T> {
   name: string;
   meta: ProtoMetadata;
-};
+}
 
 export abstract class WorkerBase {
   private _cfg: ServiceConfig;

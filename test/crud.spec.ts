@@ -1,7 +1,5 @@
-'use strict';
-
-import * as mocha from 'mocha';
-import { ResourcesAPIBase, ServiceBase, toObject, convertToObject } from '../src/index';
+import 'mocha';
+import { ResourcesAPIBase, ServiceBase, toObject } from '../src/index';
 import * as chassis from '@restorecommerce/chassis-srv';
 import { Channel, createChannel, createClient } from '@restorecommerce/grpc-client';
 import { Events, registerProtoMeta, Topic } from '@restorecommerce/kafka-client';
@@ -11,6 +9,7 @@ import * as _ from 'lodash';
 import {
   Filter_Operation,
   Filter_ValueType,
+  ReadRequest,
   protoMetadata as resourceProto,
   Sort_SortOrder,
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base';
@@ -19,6 +18,7 @@ import {
   CRUDDefinition,
   CRUDClient
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/test/test';
+import { FilterOp_Operator } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/filter';
 
 registerProtoMeta(
   resourceProto,
@@ -33,49 +33,48 @@ registerProtoMeta(
 /* global describe it before after beforeEach */
 describe('converting to filter to object', () => {
   it('should convert proto filter to valid DB filter object', () => {
-    const protoFilter =
-    {
+    const protoFilter = ReadRequest.fromPartial({
       filters: [{
         filters: [
           {
             field: 'device_id',
-            operation: 'eq',
+            operation: Filter_Operation.eq,
             value: '12345'
           },
           {
             field: 'overall_status',
-            operation: 'in',
+            operation: Filter_Operation.in,
             value: '["BAD", "GOOD"]',
-            type: 'ARRAY'
+            type: Filter_ValueType.ARRAY,
           },
           {
             field: 'device_active',
-            operation: 'eq',
+            operation: Filter_Operation.eq,
             value: 'true',
-            type: 'BOOLEAN'
+            type: Filter_ValueType.BOOLEAN,
           },
           {
             filters: [{
               filters: [{
                 field: 'firstname',
-                operation: 'eq',
+                operation: Filter_Operation.eq,
                 value: 'test_first'
               }, {
                 field: 'lastname',
-                operation: 'eq',
+                operation: Filter_Operation.eq,
                 value: 'test_last'
               }, {
                 field: 'middleName',
-                operation: 'eq',
+                operation: Filter_Operation.eq,
                 value: 'test_middle'
               }],
-              operator: 'and'
+              operator: FilterOp_Operator.and,
             }],
           }
         ], // Default And case
-        operator: 'or'
+        operator: FilterOp_Operator.or,
       }]
-    };
+    });
     /* eslint-disable */
     const expectedDBObject = { "$or": [{ "device_id": "12345" }, { "overall_status": { "$in": ["BAD", "GOOD"] } }, { "device_active": true }, { "$and": [{ "firstname": "test_first" }, { "lastname": "test_last" }, { "middleName": "test_middle" }] }] };
     const dbFilter = toObject(protoFilter);
@@ -84,8 +83,7 @@ describe('converting to filter to object', () => {
   });
 
   it('should convert nested proto filter to valid DB filter object', () => {
-    const protoFilter =
-    {
+    const protoFilter = ReadRequest.fromPartial({
       filters: [
         {
           filters: [
@@ -95,21 +93,21 @@ describe('converting to filter to object', () => {
                   filters: [
                     {
                       field: 'user_type',
-                      operation: 'neq',
+                      operation: Filter_Operation.neq,
                       value: 'TECHNICAL_USER'
                     },
                     {
                       field: 'first_name',
-                      operation: 'iLike',
+                      operation: Filter_Operation.iLike,
                       value: '%test%'
                     },
                     {
                       field: 'last_name',
-                      operation: 'iLike',
+                      operation: Filter_Operation.iLike,
                       value: '%test%'
                     }
                   ],
-                  operator: 'and'
+                  operator: FilterOp_Operator.and,
                 }
               ]
             },
@@ -119,24 +117,24 @@ describe('converting to filter to object', () => {
                   filters: [
                     {
                       field: 'state',
-                      operation: 'eq',
+                      operation: Filter_Operation.eq,
                       value: 'BW'
                     },
                     {
                       field: 'city',
-                      operation: 'eq',
+                      operation: Filter_Operation.eq,
                       value: 'Stuttgart'
                     },
                   ],
-                  operator: 'and'
+                  operator: FilterOp_Operator.and,
                 }
               ]
             }
           ],
-          operator: 'or' // Final Or operator
+          operator: FilterOp_Operator.or, // Final Or operator
         }
       ]
-    };
+    });
     /* eslint-disable */
     const expectedDBObject = { "$or": [{ "$and": [{ "user_type": { "$not": { "$eq": "TECHNICAL_USER" } } }, { "first_name": { "$iLike": "%test%" } }, { "last_name": { "$iLike": "%test%" } }] }, { "$and": [{ "state": "BW" }, { "city": "Stuttgart" }] }] }
     const dbFilter = toObject(protoFilter);
@@ -145,31 +143,30 @@ describe('converting to filter to object', () => {
   });
 
   it('should convert filters array to valid DB filter object', () => {
-    const protoFilter =
-    {
+    const protoFilter = ReadRequest.fromPartial({
       filters: [
         {
           filters: [
             {
               field: 'id',
-              operation: 'in',
-              value: 'test1'
+              operation: Filter_Operation.in,
+              value: 'test1',
             }
           ],
-          operator: 'and'
+          operator: FilterOp_Operator.and,
         },
         {
           filters: [
             {
               field: 'id',
-              operation: 'eq',
-              value: 'test2'
+              operation: Filter_Operation.eq,
+              value: 'test2',
             }
           ],
-          operator: 'or'
+          operator: FilterOp_Operator.or,
         }
       ]
-    };
+    });
     /* eslint-disable */
     const expectedDBObject = [{ "$and": [{ "id": { "$in": "test1" } }] }, { "$or": [{ "id": "test2" }] }]
     const dbFilter = toObject(protoFilter);
@@ -204,6 +201,7 @@ describe('ServiceBase', () => {
   let testService: CRUDClient;
   let testData: any;
   let cfg;
+
   const today = new Date();
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
@@ -219,7 +217,7 @@ describe('ServiceBase', () => {
     const resourceName = 'resource';
     const testEvents: Topic = await events.topic('test');
     db = await chassis.database.get(cfg.get('database:testdb'), server.logger) as chassis.GraphDatabaseProvider;
-    db.registerCustomQuery('testFilter', 'filter node.value < @customArguments.testParam', 'filter');
+    db.registerCustomQuery!('testFilter', 'filter node.value < @customArguments.testParam', 'filter');
 
     const bufferHandlerConfig: any = cfg.get('fieldHandlers:bufferFields');
     const entitiesNames = Object.keys(bufferHandlerConfig);
@@ -302,20 +300,20 @@ describe('ServiceBase', () => {
         should.exist(result);
         should.exist(result.items);
         should.exist(result.total_count);
-        result.total_count.should.be.equal(3);
-        result.items.should.be.Array();
-        result.items.should.length(3);
+        result.total_count!.should.be.equal(3);
+        result.items!.should.be.Array();
+        result.items!.should.length(3);
         for (let data of testData) {
           delete data?.meta?.modified;
         }
         _.forEach(result.items, (item) => {
           // delete modified field as it will be changed when creating
-          delete item.payload.meta.modified;
+          delete item!.payload!.meta!.modified;
           testData.should.matchAny(item.payload);
         });
         should.exist(result.operation_status);
-        result.operation_status.code.should.equal(200);
-        result.operation_status.message.should.equal('success');
+        result.operation_status!.code!.should.equal(200);
+        result.operation_status!.message!.should.equal('success');
       });
       it('should return two elements with offset 1', async () => {
         const compareData = _.drop((await testService.read({})).items, 1);
@@ -325,12 +323,12 @@ describe('ServiceBase', () => {
         should.exist(result);
         should.exist(result.items);
         should.exist(result.total_count);
-        result.total_count.should.be.equal(compareData.length);
-        result.items.should.be.Array();
-        result.items.should.length(2);
+        result.total_count!.should.be.equal(compareData.length);
+        result.items!.should.be.Array();
+        result.items!.should.length(2);
         _.sortBy(result.items, 'id').should.deepEqual(_.sortBy(compareData, 'id'));
-        result.operation_status.code.should.equal(200);
-        result.operation_status.message.should.equal('success');
+        result.operation_status!.code!.should.equal(200);
+        result.operation_status!.message!.should.equal('success');
       });
       it('should return two elements with limit 2', async () => {
         const compareData = _.dropRight((await testService.read({})).items, 1);
@@ -340,26 +338,26 @@ describe('ServiceBase', () => {
         should.exist(result);
         should.exist(result.items);
         should.exist(result.total_count);
-        result.total_count.should.be.equal(compareData.length);
-        result.items.should.be.Array();
-        result.items.should.length(2);
+        result.total_count!.should.be.equal(compareData.length);
+        result.items!.should.be.Array();
+        result.items!.should.length(2);
         _.sortBy(result.items, 'id').should.deepEqual(_.sortBy(compareData, 'id'));
-        result.operation_status.code.should.equal(200);
-        result.operation_status.message.should.equal('success');
+        result.operation_status!.code!.should.equal(200);
+        result.operation_status!.message!.should.equal('success');
       });
       it('should return elements sorted', async () => {
         const result = await testService.read({
           sorts: [{
-            field: 'id',
+            field: 'value',
             order: Sort_SortOrder.DESCENDING,
           }],
         });
         should.exist(result);
         should.exist(result.items);
         should.exist(result.total_count);
-        result.total_count.should.be.equal(3);
-        result.items.should.be.Array();
-        result.items.should.length(3);
+        result.total_count!.should.be.equal(3);
+        result.items!.should.be.Array();
+        result.items!.should.length(3);
         const testDataDescending = testData.sort((a, b) => {
           if (a.value > b.value) {
             return -1;
@@ -371,12 +369,12 @@ describe('ServiceBase', () => {
           return 0;
         });
         // match the descending order
-        for (let i = 0; i < result.items.length; i++) {
-          delete result.items[i].payload.meta.modified;
-          result.items[i].payload.should.deepEqual(testDataDescending[i]);
+        for (let i = 0; i < result.items!.length; i++) {
+          delete result.items![i].payload!.meta!.modified;
+          result.items![i].payload!.should.deepEqual(testDataDescending[i]);
         }
-        result.operation_status.code.should.equal(200);
-        result.operation_status.message.should.equal('success');
+        result.operation_status!.code!.should.equal(200);
+        result.operation_status!.message!.should.equal('success');
       });
       it('should return only resources with value higher than 10', async () => {
         const filters = [{
@@ -393,13 +391,13 @@ describe('ServiceBase', () => {
         should.exist(result);
         should.exist(result.items);
         should.exist(result.total_count);
-        result.total_count.should.be.equal(1);
-        result.items.should.be.Array();
-        result.items.should.length(1);
-        delete result.items[0].payload.meta.modified;
-        result.items[0].payload.should.deepEqual(testData[2]); // testData[2] is object with value > 10
-        result.operation_status.code.should.equal(200);
-        result.operation_status.message.should.equal('success');
+        result.total_count!.should.be.equal(1);
+        result.items!.should.be.Array();
+        result.items!.should.length(1);
+        delete result.items![0].payload!.meta!.modified;
+        result.items![0].payload!.should.deepEqual(testData[2]); // testData[2] is object with value > 10
+        result.operation_status!.code!.should.equal(200);
+        result.operation_status!.message!.should.equal('success');
       });
       it('should return only resources with string filter value equal to id', async () => {
         const filters = [{
@@ -415,13 +413,13 @@ describe('ServiceBase', () => {
         should.exist(result);
         should.exist(result.items);
         should.exist(result.total_count);
-        result.total_count.should.be.equal(1);
-        result.items.should.be.Array();
-        result.items.should.length(1);
-        delete result.items[0].payload.meta.modified;
-        result.items[0].payload.should.deepEqual(testData[0]); // testData[9] is object with value 'test_xy'
-        result.operation_status.code.should.equal(200);
-        result.operation_status.message.should.equal('success');
+        result.total_count!.should.be.equal(1);
+        result.items!.should.be.Array();
+        result.items!.should.length(1);
+        delete result.items![0].payload!.meta!.modified;
+        result.items![0].payload!.should.deepEqual(testData[0]); // testData[9] is object with value 'test_xy'
+        result.operation_status!.code!.should.equal(200);
+        result.operation_status!.message!.should.equal('success');
       });
       it('should return only resources matching boolean filter', async () => {
         const filters = [{
@@ -438,13 +436,13 @@ describe('ServiceBase', () => {
         should.exist(result);
         should.exist(result.items);
         should.exist(result.total_count);
-        result.total_count.should.be.equal(1);
-        result.items.should.be.Array();
-        result.items.should.length(1);
-        delete result.items[0].payload.meta.modified;
-        result.items[0].payload.should.deepEqual(testData[0]);
-        result.operation_status.code.should.equal(200);
-        result.operation_status.message.should.equal('success');
+        result.total_count!.should.be.equal(1);
+        result.items!.should.be.Array();
+        result.items!.should.length(1);
+        delete result.items![0].payload!.meta!.modified;
+        result.items![0].payload!.should.deepEqual(testData[0]);
+        result.operation_status!.code!.should.equal(200);
+        result.operation_status!.message!.should.equal('success');
       });
       it('should return resources matching date filter', async () => {
         const todayDatePlusOneMin = new Date();
@@ -464,18 +462,15 @@ describe('ServiceBase', () => {
         should.exist(result);
         should.exist(result.items);
         should.exist(result.total_count);
-        result.total_count.should.be.equal(1);
-        result.items.should.be.Array();
-        result.items.should.length(1);
-        let resultPayload = [];
-        for (let item of result.items) {
-          resultPayload.push(item.payload);
-        }
-        _.sortBy(resultPayload[0].id, 'id').should.deepEqual(_.sortBy(_.filter(testData, (data) => {
+        result.total_count!.should.be.equal(1);
+        result.items!.should.be.Array();
+        result.items!.should.length(1);
+        const resultPayload = result.items!.map(item => item.payload);
+        _.sortBy(resultPayload[0]!.id, 'id').should.deepEqual(_.sortBy(_.filter(testData, (data) => {
           return data.created <= today.getTime();
         })[0].id, 'id'));
-        result.operation_status.code.should.equal(200);
-        result.operation_status.message.should.equal('success');
+        result.operation_status!.code!.should.equal(200);
+        result.operation_status!.message!.should.equal('success');
       });
       it('should return resources matching array filter', async () => {
         const filters = [{
@@ -492,22 +487,20 @@ describe('ServiceBase', () => {
         should.exist(result);
         should.exist(result.items);
         should.exist(result.total_count);
-        result.total_count.should.be.equal(2);
-        result.items.should.be.Array();
-        result.items.should.length(2);
-        let resultPayload = [];
-        // delete modified properties as the modified date would have changed
-        for (let item of result.items) {
-          delete item.payload.meta.modified;
-          resultPayload.push(item.payload);
-        }
+        result.total_count!.should.be.equal(2);
+        result.items!.should.be.Array();
+        result.items!.should.length(2);
+        const resultPayload = result.items!.map(item => {
+          delete item.payload!.meta?.modified;
+          return item.payload;
+        });
         _.sortBy(resultPayload, 'id').should.deepEqual(_.sortBy(_.filter(testData, (data) => {
           // data.created = new Date(data.created);
-          delete data.meta.modified;
+          delete data.meta!.modified;
           return (data.status === "BAD" || data.status === "UNKNOWN");
         }), 'id'));
-        result.operation_status.code.should.equal(200);
-        result.operation_status.message.should.equal('success');
+        result.operation_status!.code!.should.equal(200);
+        result.operation_status!.message!.should.equal('success');
       });
       it('should return only resources with not equal filter', async () => {
         const filters = [{
@@ -523,21 +516,20 @@ describe('ServiceBase', () => {
         should.exist(result);
         should.exist(result.items);
         should.exist(result.total_count);
-        result.total_count.should.be.equal(2);
-        result.items.should.be.Array();
-        result.items.should.length(2);
-        let resultPayload = [];
+        result.total_count!.should.be.equal(2);
+        result.items!.should.be.Array();
+        result.items!.should.length(2);
         // delete modified property
-        for (let item of result.items) {
-          delete item.payload.meta.modified;
-          resultPayload.push(item.payload);
-        }
+        const resultPayload = result.items!.map(item => {
+          delete item.payload!.meta?.modified;
+          return item.payload;
+        });
         _.sortBy(resultPayload, 'id').should.deepEqual(_.sortBy(_.filter(testData, (data) => {
-          delete data.meta.modified;
+          delete data.meta!.modified;
           return data.id != 'test_xy';
         }), 'id'));
-        result.operation_status.code.should.equal(200);
-        result.operation_status.message.should.equal('success');
+        result.operation_status!.code!.should.equal(200);
+        result.operation_status!.message!.should.equal('success');
       }).timeout(4000);
       it('should return elements only with field value', async () => {
         const result = await testService.read({
@@ -549,21 +541,18 @@ describe('ServiceBase', () => {
         should.exist(result);
         should.exist(result.items);
         should.exist(result.total_count);
-        result.total_count.should.be.equal(3);
-        result.items.should.be.Array();
-        result.items.should.length(3);
+        result.total_count!.should.be.equal(3);
+        result.items!.should.be.Array();
+        result.items!.should.length(3);
         const testDataReduced = [
           { value: testData[0].value },
           { value: testData[1].value },
           { value: testData[2].value },
         ];
-        let resultPayload = [];
-        for (let item of result.items) {
-          resultPayload.push(item.payload);
-        }
+        const resultPayload = result.items!.map(item => item.payload);
         _.sortBy(resultPayload, 'value').should.deepEqual(_.sortBy(testDataReduced, 'value'));
-        result.operation_status.code.should.equal(200);
-        result.operation_status.message.should.equal('success');
+        result.operation_status!.code!.should.equal(200);
+        result.operation_status!.message!.should.equal('success');
       });
       it('should apply a custom filter', async () => {
         const result = await testService.read({
@@ -579,22 +568,22 @@ describe('ServiceBase', () => {
         should.exist(result);
         should.exist(result.items);
         should.exist(result.total_count);
-
-        result.total_count.should.be.equal(2);
-        result.items.should.be.Array();
-        result.items.should.length(2);
-
+        
+        result.total_count!.should.be.equal(2);
+        result.items!.should.be.Array();
+        result.items!.should.length(2);
+        
         const testDataReduced = [
           { value: testData[0].value },
           { value: testData[1].value },
         ];
-        let resultPayload = [];
-        for (let item of result.items) {
-          resultPayload.push(item.payload);
-        }
+        const resultPayload = result.items!.map(item => {
+          delete item.payload!.meta?.modified;
+          return item.payload;
+        });
         _.sortBy(resultPayload, 'value').should.deepEqual(_.sortBy(testDataReduced, 'value'));
-        result.operation_status.code.should.equal(200);
-        result.operation_status.message.should.equal('success');
+        result.operation_status!.code!.should.equal(200);
+        result.operation_status!.message!.should.equal('success');
       });
       it('fulltext search - should return only matching documents as per search string (default case insensitive)', async () => {
         await new Promise((resolve, reject) => {
@@ -605,11 +594,11 @@ describe('ServiceBase', () => {
             search: 'EaRc' // will match search text from above `text` data and return 2 documents
           }
         });
-        result.items.length.should.equal(2);
-        result.items[0].payload.id.should.equal('test_xy');
-        result.items[0].payload.text.should.equal('first simple sentence for searching');
-        result.items[1].payload.id.should.equal('test_zy');
-        result.items[1].payload.text.should.equal('third search data string');
+        result.items!.length.should.equal(2);
+        result.items![0].payload!.id!.should.equal('test_xy');
+        result.items![0].payload!.text!.should.equal('first simple sentence for searching');
+        result.items![1].payload!.id!.should.equal('test_zy');
+        result.items![1].payload!.text!.should.equal('third search data string');
       }).timeout(5000);
 
       it('fulltext search - should return only matching documents as per search string (default case insensitive)', async () => {
@@ -621,11 +610,11 @@ describe('ServiceBase', () => {
             search: 'data' // will match search text from above `text` data and return 2 documents
           }
         });
-        result.items.length.should.equal(2);
-        result.items[0].payload.id.should.equal('test_xyz');
-        result.items[0].payload.text.should.equal('second test data');
-        result.items[1].payload.id.should.equal('test_zy');
-        result.items[1].payload.text.should.equal('third search data string');
+        result.items!.length.should.equal(2);
+        result.items![0].payload!.id!.should.equal('test_xyz');
+        result.items![0].payload!.text!.should.equal('second test data');
+        result.items![1].payload!.id!.should.equal('test_zy');
+        result.items![1].payload!.text!.should.equal('third search data string');
       }).timeout(5000);
 
       it('fulltext search - should not return any matching documents as per search string with case sensitive search', async () => {
@@ -679,24 +668,25 @@ describe('ServiceBase', () => {
         const result = await testService.create({ items: newTestData, subject: { id: 'Admin' } });
         should.exist(result);
         should.exist(result.items);
-        result.items.should.be.length(3);
-        result.items.should.matchEach((e) => {
+        result.items!.should.be.length(3);
+        result.items!.should.matchEach((e) => {
           if (e.payload) { // since there is one element with payload undefined for duplicate element with error status
-            return e.payload.value === -10 && e.payload.text.length > 0;
+            return e.payload!.value === -10 && e.payload!.text.length > 0;
           }
         });
         // validate overall status
         should.exist(result.operation_status);
-        result.operation_status.code.should.equal(200);
-        result.operation_status.message.should.equal('success');
+        result.operation_status!.code!.should.equal(207);
         // validate error status for duplicate element
-        result.items[2].status.message.should.equal(`unique constraint violated - in index primary of type primary over '_key'; conflicting key: test_newdata2`);
-        result.items[2].status.code.should.equal(409);
+        result.items![2].status!.message!.should.equal(
+          `unique constraint violated - in index primary of type primary over '_key'; conflicting key: test_newdata2`
+        );
+        result.items![2].status!.code!.should.equal(409);
         const allTestData = await testService.read({});
         should.exist(allTestData);
         should.exist(allTestData.operation_status);
         // total 5 items should exist (3 from beginning, 2 from this test case)
-        allTestData.items.length.should.equal(5);
+        allTestData.items!.length.should.equal(5);
 
         const compareData = _.concat(testData, _.map(result.items, (item) => item.payload));
         // delete modified property from meta data
@@ -705,7 +695,7 @@ describe('ServiceBase', () => {
         }
         _.forEach(allTestData.items, (e) => {
           delete e.payload?.meta?.modified;
-          compareData.should.matchAny(e.payload);
+          compareData.should.matchAny(e.payload!);
         });
       });
     });
@@ -713,48 +703,41 @@ describe('ServiceBase', () => {
       it('should delete collection when requested', async () => {
         const result = await testService.delete({ collection: true });
         should.exist(result);
-        should.exist(result.status);
-        result.status.length.should.equal(3);
-        result.status.should.matchEach((status) => {
-          return status.code === 200 && status.message === 'success';
-        });
         should.exist(result.operation_status);
-        result.operation_status.code.should.equal(200);
-        result.operation_status.message.should.equal('success');
+        result.operation_status!.code!.should.equal(200);
+        result.operation_status!.message!.should.equal('success');
 
         const allTestData = await testService.read({});
         should.exist(allTestData);
         should.exist(allTestData.operation_status);
         should.not.exist(allTestData.items);
-        allTestData.operation_status.code.should.equal(200);
-        allTestData.operation_status.message.should.equal('success');
+        allTestData.operation_status!.code!.should.equal(200);
+        allTestData.operation_status!.message!.should.equal('success');
       });
       it('should delete specified documents and return error if document does not exist', async () => {
         const result = await testService.delete({ ids: [testData[1].id, 'invalidID'] });
         should.exist(result);
         should.exist(result.status);
         // success for 1st id and failure message for second invalid id
-        result.status[0].code.should.equal(200);
-        result.status[0].message.should.equal('success');
-        result.status[1].code.should.equal(404);
-        result.status[1].message.should.equal('document not found');
+        result.status![0].code!.should.equal(200);
+        result.status![0].message!.should.equal('success');
+        result.status![1].code!.should.equal(404);
+        result.status![1].message!.should.equal('document not found');
         should.exist(result.operation_status);
-        result.operation_status.code.should.equal(200);
-        result.operation_status.message.should.equal('success');
+        result.operation_status!.code!.should.equal(207);
 
         const allTestData = await testService.read({});
         should.exist(allTestData);
         should.exist(allTestData.operation_status);
         should.exist(allTestData);
         should.exist(allTestData.items);
-        allTestData.items.should.length(2);
-        allTestData.operation_status.code.should.equal(200);
-        allTestData.operation_status.message.should.equal('success');
-        let resultPayload = [];
-        for (let item of allTestData.items) {
-          delete item?.payload?.meta?.modified;
-          resultPayload.push(item.payload);
-        }
+        allTestData.items!.should.length(2);
+        allTestData.operation_status!.code!.should.equal(200);
+        allTestData.operation_status!.message!.should.equal('success');
+        const resultPayload = allTestData.items!.map(item => {
+          delete item.payload!.meta?.modified;
+          return item.payload;
+        });
         // delete modified property for testData[0] and testData[2]
         delete testData[0]?.meta?.modified;
         delete testData[2]?.meta?.modified;
@@ -773,19 +756,19 @@ describe('ServiceBase', () => {
         should.exist(result);
         should.exist(result.operation_status);
         should.exist(result.items);
-        result.items.should.matchEach((e) => {
-          return e.payload.value === 100 && e.payload.text.length === 10;
+        result.items!.should.matchEach((e) => {
+          return e.payload!.value === 100 && e.payload!.text.length === 10;
         });
-        result.operation_status.code.should.equal(200);
-        result.operation_status.message.should.equal('success');
+        result.operation_status!.code!.should.equal(200);
+        result.operation_status!.message!.should.equal('success');
 
         const allTestData = await testService.read({});
         should.exist(allTestData);
         should.exist(allTestData.items);
         should.exist(allTestData.operation_status);
-        allTestData.items.length.should.equal(3);
-        result.items.should.matchEach((e) => {
-          return e.payload.value === 100 && e.payload.text.length === 10;
+        allTestData.items!.length.should.equal(3);
+        result.items!.should.matchEach((e) => {
+          return e.payload!.value === 100 && e.payload!.text.length === 10;
         });
       });
       it('should return an error when trying to update invalid document', async () => {
@@ -795,51 +778,53 @@ describe('ServiceBase', () => {
           text: 'new value'
         }];
         const result = await testService.update({ items: patch, subject: { id: 'Admin' } });
-        result.items.should.length(1);
+        result.items!.should.length(1);
         should.exist(result.operation_status);
         // validate status of item
-        result.items[0].status.code.should.equal(404);
-        result.items[0].status.message.should.equal('document not found');
+        result.items![0].status!.code!.should.equal(404);
+        result.items![0].status!.message!.should.equal('document not found');
         // overall status
-        result.operation_status.code.should.equal(200);
-        result.operation_status.message.should.equal('success');
+        result.operation_status!.code!.should.equal(207);
       });
     });
     describe('upsert', () => {
       it('should create or update specified documents', async () => {
-        const now = Date.now();
+        const now = new Date();
+        const newID = crypto.randomUUID();
         const replace = [{
-          id: testData[2].id,
+          id: 'test_xy',
           value: 0,
-          text: '',
-          meta
+          text: 'updated',
         }, {
-          id: testData[0].id,
+          id: 'test_xyz',
           value: 0,
-          text: 'patched',
-          meta
+          text: 'updated',
         }, {
-          id: 'test_newput',
+          id: newID,
           value: 0,
-          text: '',
-          meta
+          text: 'created',
         }];
         const result = await testService.upsert({ items: replace, subject: { id: 'Admin' } });
         should.exist(result);
-        result.items.length.should.equal(3);
-        result.items[0].payload.id.should.equal('test_newput');
+        result.items!.length.should.equal(3);
+        result.items![0].payload!.id!.should.equal('test_xy');
+        should.not.exist(result.items![0].payload!.meta!.created); // due to lazy response, an updated document won't respond its created timestamp.
+        should.exist(result.items![0].payload!.meta!.modified); // since it was updated it should have a modified timestamp.
+        result.items![0].payload!.meta!.modified!.getTime().should.be.greaterThan(now.getTime());
+
+        should.exist(result.items![2].payload!.meta!.created);
+        result.items![2].payload!.id!.should.equal(newID);
+        result.items![2].payload!.meta!.created!.getTime().should.be.greaterThan(now.getTime());
         should.exist(result.operation_status);
         should.exist(result.items);
-        result.items.should.matchEach((e) => {
-          return e.payload.value === 0;
+        result.items!.should.matchEach((e) => {
+          return e.payload!.value === 0;
         });
         // overall status
-        result.operation_status.code.should.equal(200);
-        result.operation_status.message.should.equal('success');
-        const allTestData = await testService.read({});
-        should.exist(allTestData);
-        should.exist(allTestData.operation_status);
-        should.exist(allTestData.items);
+        result.operation_status!.code!.should.equal(200);
+        result.operation_status!.message!.should.equal('success');
+
+        
       });
     });
     // Test to check required field
@@ -848,8 +833,7 @@ describe('ServiceBase', () => {
         let result = await testService.delete({ collection: true });
         should.exist(result);
         should.exist(result.operation_status);
-        result.operation_status.code.should.equal(200);
-        result.operation_status.message.should.equal('success');
+        result.operation_status!.code!.should.equal(200);
         const objectMissingField = [
           { id: 'test_xy', value: 1, meta },
           { id: 'test_xyz', value: 3, meta },
@@ -858,10 +842,10 @@ describe('ServiceBase', () => {
         should.exist(result2);
         should.exist(result2.operation_status);
         should.exist(result2.items);
-        result2.items.should.length(3);
-        for (let item of result2.items) {
-          item.status.code.should.equal(400);
-          item.status.message.should.startWith('Field text is necessary for resource for documentID');
+        result2.items!.should.length(3);
+        for (let item of result2.items!) {
+          item.status!.code!.should.equal(400);
+          item.status!.message!.should.startWith('Field text is necessary for resource in document');
         }
       });
     });

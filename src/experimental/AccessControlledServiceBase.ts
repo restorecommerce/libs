@@ -1,10 +1,6 @@
 import {
   type CallContext,
 } from 'nice-grpc-common';
-import { 
-  ResourcesAPIBase,
-  ServiceBase,
-} from '@restorecommerce/resource-base-interface';
 import { type ServiceConfig } from '@restorecommerce/service-config';
 import { type Logger } from '@restorecommerce/logger';
 import { type DatabaseProvider } from '@restorecommerce/chassis-srv';
@@ -31,19 +27,19 @@ import {
   type ResourceListResponse,
   ResourceResponse,
   ServiceImplementation,
-} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base.js';
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base';
 import {
   type Subject,
-} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/auth.js';
-import { 
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/auth';
+import {
   type OperationStatus,
-} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/status.js';
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/status';
+import {
+  ResourcesAPIBase,
+  ServiceBase,
+} from '../core/index';
 
-export async function ACSContextFactory<O extends ResourceListResponse, I extends ResourceList>(
-  self: AccessControlledServiceBase<O, I>,
-  request: I & DeleteRequest,
-  context: any,
-): Promise<ACSClientContext> {
+export const ACSContextFactory = async <O extends ResourceListResponse, I extends ResourceList>(self: AccessControlledServiceBase<O, I>, request: I & DeleteRequest, context: any): Promise<ACSClientContext> => {
   const ids = request.ids ?? request.items?.map((item: any) => item.id);
   const resources = await self.get(ids, request.subject, context);
   return {
@@ -54,22 +50,18 @@ export async function ACSContextFactory<O extends ResourceListResponse, I extend
       ...request.items ?? [],
     ],
   };
-}
+};
 
-export function DefaultResourceFactory<T extends ResourceList>(
-  ...resourceNames: string[]
-): ResourceFactory<T> {
-  return async (
-    self: any,
-    request: T,
-    context: CallContext,
-  ) => (resourceNames?.length ? resourceNames : [self.name])?.map(
-    resourceName => ({
-      resource: resourceName,
-      id: request.items?.map((item: any) => item.id)
-    })
-  );
-}
+export const DefaultResourceFactory = <T extends ResourceList>(...resourceNames: string[]): ResourceFactory<T> => async (
+  self: any,
+  request: T,
+  context: CallContext,
+) => (resourceNames?.length ? resourceNames : [self.name])?.map(
+  resourceName => ({
+    resource: resourceName,
+    id: request.items?.map((item: any) => item.id)
+  })
+);
 
 @access_controlled_service
 export class AccessControlledServiceBase<O extends ResourceListResponse, I extends ResourceList>
@@ -106,19 +98,19 @@ export class AccessControlledServiceBase<O extends ResourceListResponse, I exten
       (item: any) => (item: any) => typeof(item) === 'string'
         ? item
         : item.entities?.includes(collectionName)
-        ? item.fields
-        : item.entities
-        ? []
-        : item.fields
+          ? item.fields
+          : item.entities
+            ? []
+            : item.fields
     );
     fieldHandlers.timeStampFields = fieldHandlers.timeStampFields?.flatMap(
       (item: any) => typeof(item) === 'string'
         ? item
         : item.entities?.includes(collectionName)
-        ? item.fields
-        : item.entities
-        ? []
-        : item.fields
+          ? item.fields
+          : item.entities
+            ? []
+            : item.fields
     );
     const graph = cfg.get('graph');
     super(

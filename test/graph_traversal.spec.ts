@@ -1,6 +1,4 @@
-'use strict';
-
-import * as mocha from 'mocha';
+import 'mocha';
 import { GraphResourcesServiceBase } from '../src/index';
 import { ResourcesAPIBase } from '../src/index';
 import { ServiceBase } from '../src/index';
@@ -38,13 +36,13 @@ let server = new chassis.Server(cfg.get('server'));
 /* global describe it before after beforeEach */
 
 const fetchAndEquals = async (result: AsyncIterable<TraversalResponse>, expectedVertices: any[], pathCount = 0) => {
-  let traversalResponse = { data: [], paths: [] };
+  let traversalResponse = { data: new Array<any>(), paths: new Array<any>() };
   for await (const partResp of result) {
     if ((partResp && partResp.data && partResp.data.value)) {
       traversalResponse.data.push(...JSON.parse(partResp.data.value.toString()));
     }
     if ((partResp && partResp.paths && !_.isEmpty(partResp.paths.value))) {
-      traversalResponse.paths.push(...JSON.parse(partResp.paths.value.toString()));
+      traversalResponse.paths.push(...JSON.parse(partResp.paths!.value!.toString()));
     }
   }
 
@@ -104,16 +102,16 @@ const testProvider = (providerCfg) => {
       const dbPort: string = cfg.get('database:testdb:port');
       const dbName: string = cfg.get('database:testdb:database');
       const db = new Database('http://' + dbHost + ':' + dbPort);
-      await db.dropDatabase(dbName);
+      // await db.dropDatabase(dbName);
       await channel.close();
       await server.stop();
     });
 
     describe('Graphs Collection API', () => {
       //  STATE <-- lives PERSON has --> CAR belongsto --> PLACE resides --> STATE
-      let result_1, result_2, result_3, result_4;
-      let service_1, service_2, service_3, service_4;
-      let meta;
+      let result_1: any, result_2: any, result_3: any, result_4: any;
+      let service_1: any, service_2: any, service_3: any, service_4: any;
+      let meta: any;
       it('should create a vertex collection and insert data into it', async () => {
         let meta = {
           owner: [{ owner_entity: 'urn:restorecommerce:acs:model:User', owner_id: 'Admin' }]
@@ -143,26 +141,26 @@ const testProvider = (providerCfg) => {
         const stateCollection = 'states';
 
         const resourceAPI4: ResourcesAPIBase = new ResourcesAPIBase(db,
-          stateCollection, null, graphCfg.vertices[stateCollection], graphName);
-        service_4 = new ServiceBase(stateCollection, null,
+          stateCollection, undefined, graphCfg.vertices[stateCollection], graphName);
+        service_4 = new ServiceBase(stateCollection, undefined,
           server.logger, resourceAPI4, false);
         result_4 = await service_4.create({ items: statesVertices });
 
         const resourceAPI3: ResourcesAPIBase = new ResourcesAPIBase(db,
-          placeCollection, null, graphCfg.vertices[placeCollection], graphName);
-        service_3 = new ServiceBase(placeCollection, null,
+          placeCollection, undefined, graphCfg.vertices[placeCollection], graphName);
+        service_3 = new ServiceBase(placeCollection, undefined,
           server.logger, resourceAPI3, false);
         result_3 = await service_3.create({ items: placesVertices });
 
         const resourceAPI2: ResourcesAPIBase = new ResourcesAPIBase(db,
-          carCollection, null, graphCfg.vertices[carCollection], graphName);
-        service_2 = new ServiceBase(carCollection, null,
+          carCollection, undefined, graphCfg.vertices[carCollection], graphName);
+        service_2 = new ServiceBase(carCollection, undefined,
           server.logger, resourceAPI2, false);
         result_2 = await service_2.create({ items: carsVertices });
 
         const resourceAPI1: ResourcesAPIBase = new ResourcesAPIBase(db,
-          personCollection, null, graphCfg.vertices[personCollection], graphName);
-        service_1 = new ServiceBase(personCollection, null,
+          personCollection, undefined, graphCfg.vertices[personCollection], graphName);
+        service_1 = new ServiceBase(personCollection, undefined,
           server.logger, resourceAPI1, false);
         result_1 = await service_1.create({ items: personsVertices });
       });
@@ -171,21 +169,21 @@ const testProvider = (providerCfg) => {
         // missing collection name in vertices
         let result = testService.traversal({ vertices: { start_vertex_ids: ['a'] } });
         for await (const partResp of result) {
-          partResp.operation_status.code.should.equal(500);
-          partResp.operation_status.message.should.equal('missing collection name for vertex id a');
+          partResp.operation_status!.code!.should.equal(500);
+          partResp.operation_status!.message!.should.equal('missing collection name for vertex id a');
         }
 
         result = testService.traversal({ vertices: { collection_name: 'person' } });
         for await (const partResp of result) {
-          partResp.operation_status.code.should.equal(500);
-          partResp.operation_status.message.should.equal('missing vertex id for collection_name person');
+          partResp.operation_status!.code!.should.equal(500);
+          partResp.operation_status!.message!.should.equal('missing vertex id for collection_name person');
         }
 
         // empty collection name for collections
         result = testService.traversal({ collection: { collection_name: '' } });
         for await (const partResp of result) {
-          partResp.operation_status.code.should.equal(500);
-          partResp.operation_status.message.should.equal('One of the Vertices or Collection should be defined');
+          partResp.operation_status!.code!.should.equal(500);
+          partResp.operation_status!.message!.should.equal('One of the Vertices or Collection should be defined');
         }
       });
 
@@ -650,7 +648,7 @@ const testProvider = (providerCfg) => {
         // traverse graph
         let result = testService.traversal(traversalRequest);
 
-        let traversalResponse = { data: [], paths: [] };
+        let traversalResponse = { data: new Array<any>(), paths: new Array<any>() };
         for await (const partResp of result) {
           if ((partResp && partResp.data && partResp.data.value)) {
             traversalResponse.data.push(...JSON.parse(partResp.data.value.toString()));
@@ -672,7 +670,7 @@ const testProvider = (providerCfg) => {
       // separately and verify the cars are interchanged
       it('should validate update person vertices with updated car id', async () => {
         // update meta as well
-        let meta = {
+        const meta = {
           owner: [{ owner_entity: 'urn:restorecommerce:acs:model:User', owner_id: 'NewAdmin' }]
         };
         const updatedPersonsVertices = [
@@ -692,7 +690,8 @@ const testProvider = (providerCfg) => {
         });
         const expectedVertices = [
           { name: 'Alice', id: 'a', car_id: 'd', state_id: 'i' },
-          { car: 'vw', id: 'd', place_id: 'f' }];
+          { car: 'vw', id: 'd', place_id: 'f' }
+        ];
 
         // traverse graph
         await fetchAndEquals(testService.traversal(traversalRequest), expectedVertices, 1);
@@ -719,7 +718,7 @@ const testProvider = (providerCfg) => {
       // Read new Person and only person should exist
       it('should validate upsert person vertices with updated car id and inserting new person vertice', async () => {
         // update meta as well
-        let meta = {
+        const meta = {
           owner: [{ owner_entity: 'urn:restorecommerce:acs:model:User', owner_id: 'Admin' }]
         };
         const upsertedPersonsVertices = [
@@ -780,8 +779,12 @@ const providers = [
   {
     name: 'arango',
     init: async (): Promise<any> => {
-      return database.get(cfg.get('database:testdb'), server.logger, 'testGraph',
-        cfg.get('graph:edgeDefinitions'));
+      return database.get(
+        cfg.get('database:testdb'),
+        server.logger,
+        'testGraph',
+        cfg.get('graph:edgeDefinitions')
+      );
     }
   }
 ];

@@ -1,14 +1,17 @@
 {
   "extends": "./node_modules/@restorecommerce/dev/tsconfig.json",
   "include": [
-    "./src/**/*.ts"
+    "./src/core/*.ts",
+    "./src/*.ts",
   ],
   "exclude": [
+    "./src/experimental/*.ts",
     "node_modules",
     "lib",
     "doc"
   ],
   "compilerOptions": {
+    "outDir": "lib",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true
   },

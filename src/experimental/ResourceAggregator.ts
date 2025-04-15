@@ -7,20 +7,20 @@ import {
   ResourceListResponse,
   Filter_ValueType,
   Filter_Operation,
-} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base.js';
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base';
 import {
   type CallContext,
 } from 'nice-grpc-common';
-import { Subject } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/auth.js';
+import { Subject } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/auth';
 import {
   ResourceMap,
   OnMissingCallback,
   DEFAULT_STRICT_CALLBACK,
-} from './ResourceMap.js';
+} from './ResourceMap';
 import {
   ClientRegister,
   CRUDServiceDefinition
-} from './ClientRegister.js';
+} from './ClientRegister';
 
 export type Aggregation<T extends ResourceListResponse & ResourceList = any, C = any> = T & C;
 export type ResolverParams<T = any, M = ResolverMap<T>> = [string, Map<string, T>, M?, T?];
@@ -32,12 +32,12 @@ export type ResolverMap<T = any> = {
 export type ResolvedNode<T, M> = T extends ResolverParams
   ? (
     T[2] extends object
-    ? Resolved<T[3] & T[2], T[2]>
-    : T[3]
+      ? Resolved<T[3] & T[2], T[2]>
+      : T[3]
   )
   : M extends object
-  ? Resolved<T & M, M>
-  : T;
+    ? Resolved<T & M, M>
+    : T;
 export type Resolved<T extends ResolverMap, M extends ResolverMap> = {
   [K in keyof T]?: T[K] extends object
     ? ResolvedNode<T[K], M[K]>
@@ -198,4 +198,4 @@ export function resolve<T, M extends ResolverMap>(
       ).filter(e => e)
     );
   }
-};
+}

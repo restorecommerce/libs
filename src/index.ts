@@ -45,12 +45,12 @@ const insertFilterFieldOpValue = (filter: Filter, object: any, key: string) => {
           throw err;
         }
       }
+      break;
     case FilterValueType.DATE:
       value = (new Date(filter.value)).getTime();
       break;
-    case FilterValueType.STRING:
-      // fall through default
     default:
+    case FilterValueType.STRING:
       value = filter.value;
       break;
   }
@@ -63,6 +63,9 @@ const insertFilterFieldOpValue = (filter: Filter, object: any, key: string) => {
   switch (filter.operation) {
     case FilterOperation.eq:
       object.push({ [filter.field]: value });
+      break;
+    case FilterOperation.neq:
+      object.push({ [filter.field]: { $not: { $eq: value } } });
       break;
     default:
       object.push({ [filter.field]: { [`$${filter.operation}`]: value } });
@@ -121,11 +124,11 @@ export const convertToObject = (input: any, obj?: any, currentOperator?: string)
     filters = input;
   }
   // by default use 'and' operator if no operator is specified
-  if (filters && _.isArray(filters.filters) && !filters.operator) {
+  if (Array.isArray(filters?.filters) && !filters.operator) {
     filters.operator = 'and';
   }
   obj ??= {};
-  if (_.isArray(filters)) {
+  if (Array.isArray(filters)) {
     for (const filterObj of filters) {
       let operatorValue;
       if (typeof filterObj.operator === 'string' || filterObj.operator instanceof String) {
@@ -144,10 +147,10 @@ export const convertToObject = (input: any, obj?: any, currentOperator?: string)
       }
       convertToObject(filterObj, obj, newOperator);
     }
-  } else if (filters.field && (filters.operation || filters.operation === 0) && filters.value != undefined) {
+  } else if (filters.field && (filters.operation || filters.operation === 0) && filters.value !== undefined) {
     // object contains field, operation and value, update it on obj using convertFilterToObject()
     obj = convertFilterToObject(obj, currentOperator, filters);
-  } else if (filters.filters && _.isArray(filters.filters)) {
+  } else if (Array.isArray(filters?.filters)) {
     for (const filterObj of filters.filters) {
       const operator = filters.operator ? filters.operator : 'and';
       convertToObject(filterObj, obj, operator);
@@ -163,17 +166,18 @@ export const convertToObject = (input: any, obj?: any, currentOperator?: string)
  */
 export const toObject = (input: ReadRequest) => {
   const filters = input.filters ?? [];
-  const result: Record<string, any>[] = filters.flatMap(
+  const result: Record<string, any>[] = filters.map(
     filter => {
-      const subFilters = filter?.filters;
+      const obj = filter.filters.map((sf) => convertToObject(sf, {}));
       const operatorValue = filter?.operator ?? OperatorType.and; // defaults to `and`
-      return subFilters?.map(
-        subFilter => ({ [`$${operatorValue}`]: convertToObject(subFilter) })
-      );
+      return {
+        [`$${operatorValue}`]: obj
+      };
     }
   );
-  return result?.length === 1 ? result[0] : result
+  
+  return result.length === 1 ? result[0] : result;
 };
 
 export * from './core';
-export * from './experimental';
+// export * from './experimental';

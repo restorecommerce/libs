@@ -25,9 +25,7 @@ export {
   Filters as GraphFilters,
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/graph.js';
 
-export interface BaseDocument extends Resource {
-  [key: string]: any;
-}
+export type BaseDocument = Resource & Record<string, any>;
 
 export interface DateTimeConfig {
   fields: string[];

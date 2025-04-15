@@ -1,9 +1,9 @@
 import {
   Resource,
-} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base.js';
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base';
 import {
   Status,
-} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/status.js';
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/status';
 
 
 export type OnMissingCallback = (id?: string, entity?: string) => any;

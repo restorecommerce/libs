@@ -228,7 +228,6 @@ export class ResourcesAPIBase {
 
     if (this.isGraphDB(this.db)) {
       const db = this.db;
-      await db.createGraphDB(this.graphName);
       await db.addVertexCollection(collection);
       const createVertexResp = await this.db.createVertex(collection, documents);
       await Promise.all(documents.map(async document => {
@@ -361,7 +360,6 @@ export class ResourcesAPIBase {
       const edges: any[] = await db.getGraphDB().get().then(
         (info: any) => info.edgeDefinitions
       );
-      console.log(edges)
       await Promise.all(
         edges?.filter(
           edge => Object.values(edge).flatMap(

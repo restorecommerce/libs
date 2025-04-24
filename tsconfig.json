@@ -2,10 +2,10 @@
   "extends": "./node_modules/@restorecommerce/dev/tsconfig.json",
   "include": [
     "./src/core/*.ts",
+    "./src/experimental/*.ts",
     "./src/*.ts",
   ],
   "exclude": [
-    "./src/experimental/*.ts",
     "node_modules",
     "lib",
     "doc"

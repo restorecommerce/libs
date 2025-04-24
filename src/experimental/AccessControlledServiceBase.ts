@@ -95,7 +95,7 @@ export class AccessControlledServiceBase<O extends ResourceListResponse, I exten
     collectionName ??= resourceName + 's';
     const fieldHandlers = cfg.get('fieldHandlers');
     fieldHandlers.bufferedFields = fieldHandlers.bufferedFields?.flatMap(
-      (item: any) => (item: any) => typeof(item) === 'string'
+      (item: any) => typeof(item) === 'string'
         ? item
         : item.entities?.includes(collectionName)
           ? item.fields

@@ -180,7 +180,7 @@ export abstract class WorkerBase {
       this.server,
       this.cfg,
       this.logger,
-      this.events,
+      this.events as any,
       redisClient,
     );
     this.services.set(serviceName, this.commandInterface);
@@ -304,7 +304,7 @@ export abstract class WorkerBase {
     const kafkaCfg = this.cfg.get('events:kafka');
     this.events = new Events(kafkaCfg, this.logger);
     await this.events.start();
-    this.offsetStore = new OffsetStore(this.events, this.cfg, this.logger);
+    this.offsetStore = new OffsetStore(this.events as any, this.cfg, this.logger);
 
     await Promise.all(Object.entries(kafkaCfg.topics).map(async ([key, value]: any[]) => {
       const topicName = value.topic;

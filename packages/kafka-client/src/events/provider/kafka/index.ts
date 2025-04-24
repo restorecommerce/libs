@@ -184,16 +184,14 @@ export class Topic {
    * @return {Promise} Thunk will be resolved when a message is received
    * with the corresponding offset.
    */
-  async $wait(offset: number): Promise<any> {
-    return new Promise((() => {
-      return (cb) => {
-        if (this.currentOffset >= offset) {
-          cb(null);
-          return;
-        }
-        this.waitQueue.push({ offset, cb });
-      };
-    })());
+  async $wait(offset: number): Promise<void> {
+    return new Promise((cb) => {
+      if (this.currentOffset >= offset) {
+        cb();
+        return;
+      }
+      this.waitQueue.push({ offset, cb });
+    });
   }
 
   /**

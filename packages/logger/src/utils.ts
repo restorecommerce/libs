@@ -152,11 +152,17 @@ export const getCircularReplacer = () => {
   };
 };
 
-interface PrecompiledData {
-  fieldPath: string;
+class PrecompiledData {
   fieldList: string[];
   array: boolean;
-  enableLogging?: boolean;
+
+  public constructor(
+    public fieldPath: string,
+    public enableLogging = false
+  ) {
+    this.fieldList = fieldPath.split(/\.?\[|\]\.?/);
+    this.array = fieldPath.includes('[0]');
+  }
 }
 
 export interface PrecompiledFieldOptions {
@@ -165,48 +171,17 @@ export interface PrecompiledFieldOptions {
   bufferFields: PrecompiledData[];
 }
 
-const precompiled: PrecompiledFieldOptions = {
-  maskFields: [],
-  omitFields: [],
-  bufferFields: []
-};
 
 // This gets called when logger is initialized
 export const precompile = (fieldOptions?: RestoreFieldsOptions) => {
-  fieldOptions?.maskFields?.forEach(fieldPath => {
-    let fieldList: any = fieldPath.split('.[').join('.');
-    fieldList = fieldList.split('].').join('.');
-    fieldList = fieldList.split('.');
-    precompiled.maskFields.push({
-      fieldPath,
-      array: fieldPath.indexOf('.[') > 0,
-      fieldList
-    });
-  });
-
-  fieldOptions?.omitFields?.forEach(fieldPath => {
-    let fieldList: any = fieldPath.split('.[').join('.');
-    fieldList = fieldList.split('].').join('.');
-    fieldList = fieldList.split('.');
-    precompiled.omitFields.push({
-      fieldPath,
-      array: fieldPath.indexOf('.[') > 0,
-      fieldList
-    });
-  });
-
-  fieldOptions?.bufferFields?.forEach(bufferObj => {
-    let fieldList: any = bufferObj.fieldPath.split('.[').join('.');
-    fieldList = fieldList.split('].').join('.');
-    fieldList = fieldList.split('.');
-    precompiled.bufferFields.push({
-      fieldPath: bufferObj.fieldPath,
-      array: bufferObj.fieldPath.indexOf('.[') > 0,
-      enableLogging: bufferObj.enableLogging,
-      fieldList
-    });
-  });
-  return precompiled;
+  return {
+    maskFields: fieldOptions?.maskFields?.map(fieldPath => new PrecompiledData(fieldPath)),
+    omitFields: fieldOptions?.omitFields?.map(fieldPath => new PrecompiledData(fieldPath)),
+    bufferFields: fieldOptions?.bufferFields?.flatMap(buffer => new PrecompiledData(
+      buffer.fieldPath,
+      buffer.enableLogging
+    )),
+  };
 }
 
 export const updateObject = (obj: any, path: string, value: any, operation: string, enableLogging?: boolean) => {

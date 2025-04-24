@@ -1,11 +1,13 @@
 import * as path from 'path';
 import { ICallbackFunction, Provider } from 'nconf';
 
-export class ServiceConfig extends Provider {
+class ServiceConfigProvider extends Provider {
   public override get<T = any>(key: string, callback?: ICallbackFunction) {
     return super.get(key, callback) as T;
   }
-}
+};
+
+export type ServiceConfig = Provider & ServiceConfigProvider;
 
 export interface ServiceConfigLogger {
   verbose(...args: any[]): any;
@@ -19,7 +21,7 @@ function logConfigFile(configFile: string, logger?: ServiceConfigLogger) {
   } else {
     message = `Supervisor uses configuration file: ${configFile}`;
   }
-  if (logger && logger.verbose) {
+  if (logger?.verbose) {
     logger.verbose(message);
   } else {
     // eslint-disable-next-line no-console
@@ -35,12 +37,11 @@ export interface ServiceConfigOptions {
 // read the layered configurations and merge into one
 export function createServiceConfig(
   baseDir: string,
-  opts?:ServiceConfigOptions,
+  opts?: ServiceConfigOptions,
   defaults?: any,
 ): ServiceConfig {
-  const nconfInstance = new ServiceConfig();
+  const nconfInstance = new ServiceConfigProvider();
   const logger = opts?.logger;
-
   // static data from runtime
   const STAGE_VAR = opts?.stageVar ?? 'NODE_ENV';
   defaults ??= {};

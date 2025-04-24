@@ -18,6 +18,7 @@ import {
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/access_control';
 import {
   ResourceList,
+  ResourceListResponse,
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base';
 import {
   initAuthZ,
@@ -40,6 +41,7 @@ import {
 import { cfg } from '../config';
 import { _ } from '../utils';
 import { randomUUID } from 'crypto';
+import { Filter_Operation, Filter_ValueType } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/filter';
 
 export type DatabaseProvider = 'arangoDB' | 'postgres';
 export type ACSClientContextFactory<T extends ResourceList> = (self: any, request: T, ...args: any) => Promise<ACSClientContext>;
@@ -51,6 +53,7 @@ export type SubjectResolver<T extends ResourceList> = (self: any, request: T, ..
 export interface AccessControlledService {
   readonly __userService: Client<UserServiceDefinition>;
   readonly __acsDatabaseProvider: DatabaseProvider;
+  readonly logger?: Logger;
 }
 
 export const DefaultACSClientContextFactory = async <T extends ResourceList>(
@@ -102,29 +105,55 @@ export const DefaultMetaDataInjector = async <T extends ResourceList>(
   ...args: any
 ): Promise<T> => {
   const urns = cfg.get('authorization:urns');
+  const ids = [...new Set(
+    request.items?.map(
+      (item) => item.id
+    ).filter(
+      id => id
+    ) ?? []
+  ).values()];
+  const meta_map = ids.length ? await self.read({
+    filters: [{
+      filters: [{
+        field: '_key',
+        operation: Filter_Operation.in,
+        value: JSON.stringify(ids),
+        type: Filter_ValueType.ARRAY,
+      }]
+    }],
+    limit: ids.length,
+    subject: request.subject
+  }).then(
+    (response: ResourceListResponse) => new Map(response.items?.filter(
+      item => item.payload
+    ).map(
+      item => [item.payload.id, item.payload.meta]
+    ))
+  ) : undefined;
+
   request.items?.forEach((item) => {
-    if (!item.id?.length) {
-      item.id = randomUUID().replace(/-/g, '');
-      item.meta ??= {};
-      item.meta.owners ??= [
-        request.subject?.scope ? {
-          id: urns.ownerIndicatoryEntity,
-          value: urns.organization,
-          attributes: [{
-            id: urns.ownerInstance,
-            value: request.subject.scope
-          }],
-        } : undefined,
-        request.subject?.id ? {
-          id: urns.ownerIndicatoryEntity,
-          value: urns.user,
-          attributes: [{
-            id: urns.ownerInstance,
-            value: request.subject.id
-          }],
-        } : undefined,
-      ].filter(i => i);
-    }
+    item.meta ??= meta_map?.get(item.id) ?? {};
+    item.meta.modified ??= new Date();
+    item.meta.modified_by ??= request.subject?.id;
+    item.meta.owners ??= [
+      request.subject?.scope ? {
+        id: urns.ownerIndicatoryEntity,
+        value: urns.organization,
+        attributes: [{
+          id: urns.ownerInstance,
+          value: request.subject.scope
+        }],
+      } : undefined,
+      request.subject?.id ? {
+        id: urns.ownerIndicatoryEntity,
+        value: urns.user,
+        attributes: [{
+          id: urns.ownerInstance,
+          value: request.subject.id
+        }],
+      } : undefined,
+    ].filter(i => i);
+    item.id ??= randomUUID().replace(/-/g, '');
   });
   return request;
 };
@@ -255,9 +284,10 @@ export function access_controlled_function<T extends ResourceList>(kwargs: {
         return property?.length ? _.omitDeep(appResponse, property) : appResponse;
       }
       catch (err: any) {
+        that.logger?.error('Operation Status Error:', err);
         return {
           operation_status: {
-            code: err.code ?? 500,
+            code: Number.isInteger(err.code) ? err.code : 500,
             message: err.details ?? err.message ?? err,
           }
         };

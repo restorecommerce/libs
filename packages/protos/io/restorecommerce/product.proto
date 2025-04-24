@@ -33,9 +33,35 @@ service ProductService {
   rpc Update (ProductList) returns (ProductListResponse);
   rpc Upsert (ProductList) returns (ProductListResponse);
 
+  /*
+   * Response with resolved product-variants in a flatten message
+   */
   rpc GetVariant (IndividualProductVariantListRequest) returns (IndividualProductVariantListResponse) {
     option (io.restorecommerce.options.is_query) = true;
   };
+
+  /* 
+   * Response with resolved product-variants
+   * Claims a requested quantity from stock level permanently.
+   * Response with an error status if requested quantity is not in stock.
+   */
+  rpc ClaimVariant (IndividualProductVariantListRequest) returns (IndividualProductVariantListResponse);
+  
+  /* 
+   * Response with resolved product-variants
+   * Releases a requested quantity back to stock level.
+   */
+  rpc ReleaseVariant (IndividualProductVariantListRequest) returns (IndividualProductVariantListResponse);
+
+  /* 
+   * Claim all products assigned to a session permanently
+   */
+  rpc ResolveSession (Session) returns (IndividualProductVariantListResponse);
+
+  /*
+   * Drop session and instantly release all claimed products
+   */
+  rpc DropSession (Session) returns (IndividualProductVariantListResponse);
 }
 
 enum AssociationType {
@@ -262,9 +288,24 @@ message BundleProduct {
   optional double price_ratio = 4; //Price ratio in relation to the bundle price
 }
 
+message Session {
+  optional string id = 1; // get a new id if empty
+  optional google.protobuf.Timestamp from = 2; // required field to start a session
+  optional google.protobuf.Timestamp to = 3; // leave empty for auto max session
+}
+
 message IndividualProductVariantRequest {
+  message Localization {
+    optional string country_id = 1;
+    optional string locale_id = 2;
+    optional string currency_id = 3;
+  }
+
   optional string product_id = 1;
   optional string variant_id = 2;
+  optional uint32 quantity = 3;
+  optional Session session = 4;
+  optional Localization localization = 5; // for taxing, currency, etc.?
 }
 
 message IndividualProductVariantListRequest {
@@ -341,7 +382,7 @@ message IndividualProductVariant {
   optional bool active = 23;
   optional google.protobuf.Timestamp valid_from = 24;
   optional google.protobuf.Timestamp valid_to = 25;
-  repeated io.restorecommerce.attribute.Attribute attibutes = 26;
+  repeated io.restorecommerce.attribute.Attribute attributes = 26;
   optional Package package = 27; // size for shipping
 }
 
@@ -351,7 +392,8 @@ message IndividualProductVariantResponse {
 }
 
 message IndividualProductVariantListResponse {
-  repeated ProductResponse items = 1;
+  repeated IndividualProductVariantResponse items = 1;
   optional uint32 total_count = 2;
   optional io.restorecommerce.status.OperationStatus operation_status = 3;
+  optional Session session = 4;
 }

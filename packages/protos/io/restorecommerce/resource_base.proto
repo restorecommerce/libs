@@ -141,4 +141,5 @@ message Resource {
 
 message Deleted {
   optional string id = 1;
+  optional string collection = 2;
 }

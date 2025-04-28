@@ -249,6 +249,9 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
       if (request.collection) {
         await this.resourceapi.deleteCollection(this.isEventsEnabled && this.events);
         this.logger?.info(`${this.name} deleted`);
+        docs = [{
+          id: request.collection,
+        }]
       } else {
         docs = await this.resourceapi.delete(request.ids, this.isEventsEnabled && this.events);
       }
@@ -261,7 +264,7 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
           delete doc._rev;
         }
       });
-      const status = docs ? this.generateStatusResponse(docs) : undefined;
+      const status = docs?.length ? this.generateStatusResponse(docs) : undefined;
 
       return {
         status,

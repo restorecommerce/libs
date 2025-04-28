@@ -339,11 +339,8 @@ export class ResourcesAPIBase {
 
     if (events) {
       await Promise.all(response?.map(async (id) => {
-        if (typeof id === 'string') {
-          id = { id };
-        }
-        if (!id.error) {
-          await events?.emit(`${this.resourceName}Deleted`, id);
+        if (id && !id?.error) {
+          await events?.emit(`${this.resourceName}Deleted`, typeof id === 'string' ? { id }: id);
         }
       }));
     }

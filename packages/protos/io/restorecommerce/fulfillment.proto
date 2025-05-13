@@ -9,12 +9,12 @@ import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/address.proto";
-import "io/restorecommerce/country.proto";
 import "io/restorecommerce/product.proto";
 import "io/restorecommerce/options.proto";
 import "io/restorecommerce/price.proto";
 import "io/restorecommerce/amount.proto";
 import "io/restorecommerce/invoice.proto";
+import "io/restorecommerce/file.proto";
 import "google/protobuf/timestamp.proto";
 
 // Used by resolvers
@@ -91,26 +91,41 @@ service FulfillmentService {
 
 enum FulfillmentState {
   PENDING = 0;
-  SUBMITTED = 2;
-  SUBMIT_NOTIFIED = 3;
-  IN_TRANSIT = 4;
-  TRANSIT_NOTIFIED = 5;
-  COMPLETED = 6;
-  COMPLETION_NOTIFIED = 7;
-  CANCELLED = 8;
-  CANCELATION_NOTIFIED = 9;
-  WITHDRAWN = 10;
-  WITHDRAW_NOTIFIED = 11;
-  FAILED = 12;
-  FAIL_NOTIFIED = 13;
-  INVALID = 14;
+  SUBMITTED = 1;
+  IN_TRANSIT = 2;
+  COMPLETE = 3;
+  CANCELLED = 4;
+  WITHDRAWN = 5;
+  RETOURE = 6;
+  RETOURE_COMPLETE = 7;
+  FAILED = 8;
+  INVALID = 9;
+}
+
+enum ExportType {
+  OTHER = 0;
+  PRESENT = 1;
+  COMMERCIAL_SAMPLE = 2;
+  DOCUMENT = 3;
+  RETURN_OF_GOODS = 4;
+  COMMERCIAL_GOODS = 5;
+}
+
+enum ShippingCondition {
+  DDU = 0;
+  DPA = 1;
+  DAP = 2;
+  DDP = 3;
+  DDX = 4;
+  DXV = 5;
 }
 
 message Item {
   optional string product_id = 1;
   optional string variant_id = 2;
   optional int32 quantity = 3;
-  optional io.restorecommerce.product.Package package = 4;
+  optional string harmonizedSystemCode = 4;
+  optional io.restorecommerce.amount.Amount amount = 5;
 }
 
 message Parcel {
@@ -128,19 +143,35 @@ message Parcel {
   repeated Item items = 4;
   optional io.restorecommerce.price.Price price = 5;
   optional io.restorecommerce.amount.Amount amount = 6;
-  optional io.restorecommerce.product.Package package = 8;
+  optional io.restorecommerce.product.Package package = 7;
 }
 
 message Label {
-  oneof type {
-    string url = 1;
-    string pdf = 2;
-    string png = 3;
-  }
-  optional string parcel_id = 4;
-  optional string shipment_number = 5; //filled on Order
-  optional FulfillmentState state = 6; //update by Track
-  optional io.restorecommerce.status.Status status = 7; //API status
+  optional string id = 1;
+  optional string parcel_id = 2;
+  optional io.restorecommerce.file.File file = 3; 
+  optional string shipment_number = 4; //filled on Order
+  optional FulfillmentState state = 5; //update by Track
+  optional io.restorecommerce.status.Status status = 6; //API status
+}
+
+message Charge {
+  optional string description = 1;
+  optional io.restorecommerce.amount.Amount charge = 2; 
+}
+
+message CustomsDeclaration {
+  optional string export_type = 1; // should be ExportType (but unconstrained)
+  optional string export_description = 2;
+  optional string invoice_number = 3;
+  optional string consignee_ref = 4;
+  optional string shipper_ref = 5;
+  optional string MRN = 6;
+  optional string permit_number = 7; // for e.g. rare goods
+  optional string attestation = 8; // for e.g. medical goods
+  optional string shipping_condition = 9; // should be ShippingCondition (unconstrained)
+  repeated Charge charges = 10; 
+  optional bool notify = 11;
 }
 
 message Packaging {
@@ -148,9 +179,7 @@ message Packaging {
   optional io.restorecommerce.address.ShippingAddress sender = 2;
   optional io.restorecommerce.address.ShippingAddress recipient = 3;
   optional string notify = 4;
-  optional string export_type = 5;
-  optional string export_description = 6;
-  optional string invoice_number = 7;
+  optional CustomsDeclaration customs_declaration = 5;
 }
 
 message Event {

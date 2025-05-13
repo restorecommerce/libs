@@ -46,7 +46,9 @@ message Country {
   optional string id = 1;
   optional io.restorecommerce.meta.Meta meta = 2;
   optional string name = 3;
-  optional string country_code = 4;
+  optional string country_code = 4; // primaly used in target application (fallback)
   optional string geographical_name = 5;
   repeated string economic_areas = 6;
+  optional string country_code_alpha_2 = 7; // ISO 3166-1 alpha-2
+  optional string country_code_alpha_3 = 8; // ISO 3166-1 alpha-3
 }

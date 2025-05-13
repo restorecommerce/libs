@@ -6,6 +6,7 @@ import "google/protobuf/any.proto";
 import "io/restorecommerce/resource_base.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/auth.proto";
+import "io/restorecommerce/attribute.proto";
 import "io/restorecommerce/status.proto";
 import "io/restorecommerce/options.proto";
 
@@ -24,6 +25,10 @@ service FulfillmentCourierService {
   rpc Update (FulfillmentCourierList) returns (FulfillmentCourierListResponse);
   rpc Upsert (FulfillmentCourierList) returns (FulfillmentCourierListResponse);
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
+}
+
+enum SupportedAPI {
+  DHLRest = 0;
 }
 
 message FulfillmentCourier {
@@ -50,10 +55,10 @@ message FulfillmentCourier {
   optional string description = 5;
   optional string logo = 6;
   optional string website = 7;
-  optional string stub_type = 8; // obsolete, use api
-  optional string credential_id = 9;
-  optional google.protobuf.Any configuration = 10;
-  optional string api = 11;
+  optional string credential_id = 8;
+  optional google.protobuf.Any configuration = 9;
+  optional string api = 10; // should be SupportedAPI (but unconstrained)
+  repeated io.restorecommerce.attribute.Attribute attributes = 11; 
 }
 
 message FulfillmentCourierList {

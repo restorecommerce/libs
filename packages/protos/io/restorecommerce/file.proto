@@ -4,19 +4,28 @@ package io.restorecommerce.file;
 
 import "io/restorecommerce/image.proto";
 
+message Blob {
+  bytes data = 1;
+  string encoding = 2;
+}
+
 message File {
   optional string id = 1;
   optional uint32 ordinal = 2;
   optional string caption = 3;
   optional string filename = 4;
   optional string content_type = 5;
-  optional string url = 6;
-  optional int64 bytes = 7;
-  repeated string tags = 8;
-  optional io.restorecommerce.image.Image thumbnail = 9;
+  oneof type {
+    string url = 6;
+    Blob blob = 7;
+  }
+  optional int64 bytes = 8;
+  repeated string tags = 9;
+  optional io.restorecommerce.image.Image thumbnail = 10;
 }
 
 message FileList {
   repeated File items = 1;
   optional uint32 total_count = 2;
 }
+

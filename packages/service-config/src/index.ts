@@ -1,13 +1,11 @@
 import * as path from 'path';
 import { ICallbackFunction, Provider } from 'nconf';
 
-class ServiceConfigProvider extends Provider {
+export class ServiceConfig extends Provider implements Provider {
   public override get<T = any>(key: string, callback?: ICallbackFunction) {
     return super.get(key, callback) as T;
   }
 };
-
-export type ServiceConfig = Provider & ServiceConfigProvider;
 
 export interface ServiceConfigLogger {
   verbose(...args: any[]): any;
@@ -40,7 +38,7 @@ export function createServiceConfig(
   opts?: ServiceConfigOptions,
   defaults?: any,
 ): ServiceConfig {
-  const nconfInstance = new ServiceConfigProvider();
+  const nconfInstance = new ServiceConfig();
   const logger = opts?.logger;
   // static data from runtime
   const STAGE_VAR = opts?.stageVar ?? 'NODE_ENV';

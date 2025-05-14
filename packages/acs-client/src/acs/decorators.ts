@@ -41,7 +41,10 @@ import {
 import { cfg } from '../config';
 import { _ } from '../utils';
 import { randomUUID } from 'crypto';
-import { Filter_Operation, Filter_ValueType } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/filter';
+import {
+  Filter_Operation,
+  Filter_ValueType
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/filter';
 
 export type DatabaseProvider = 'arangoDB' | 'postgres';
 export type ACSClientContextFactory<T extends ResourceList> = (self: any, request: T, ...args: any) => Promise<ACSClientContext>;

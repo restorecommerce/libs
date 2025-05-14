@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.11.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.11.1...@restorecommerce/protos@6.11.2) (2025-05-14)
+
+
+### Bug Fixes
+
+* **protos:** add collection (name) to message Deleted for kafka DeletedAll event ([807ca4c](https://github.com/restorecommerce/libs/commit/807ca4cce3624720c6a2436afdee407ec181029c))
+* **protos:** add costums declaration to fulfillment ([0797faa](https://github.com/restorecommerce/libs/commit/0797faa53388cbc81340203d58c92340f7443514))
+* **protos:** fix typos in proto, load meta in acs decorater, refactor logger filePath detector ([8f02eee](https://github.com/restorecommerce/libs/commit/8f02eee6460b9c48f2f8416b08017f6ba11caf4e))
+
+
+
+
+
 ## [6.11.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.11.0...@restorecommerce/protos@6.11.1) (2025-03-31)
 
 

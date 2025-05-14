@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/service-config@1.1.0...@restorecommerce/service-config@1.1.1) (2025-05-14)
+
+
+### Bug Fixes
+
+* **acs-client:** correct abstraction of ServiceConfig ([2660594](https://github.com/restorecommerce/libs/commit/2660594ae91ca07586abc3d1a091603c3562d29c))
+* **protos:** fix typos in proto, load meta in acs decorater, refactor logger filePath detector ([8f02eee](https://github.com/restorecommerce/libs/commit/8f02eee6460b9c48f2f8416b08017f6ba11caf4e))
+
+
+
+
+
 # [1.1.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/service-config@1.0.16...@restorecommerce/service-config@1.1.0) (2025-03-28)
 
 

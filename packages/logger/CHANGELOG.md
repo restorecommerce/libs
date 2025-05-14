@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@1.3.2...@restorecommerce/logger@1.3.3) (2025-05-14)
+
+
+### Bug Fixes
+
+* **protos:** fix typos in proto, load meta in acs decorater, refactor logger filePath detector ([8f02eee](https://github.com/restorecommerce/libs/commit/8f02eee6460b9c48f2f8416b08017f6ba11caf4e))
+
+
+
+
+
 ## [1.3.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@1.3.1...@restorecommerce/logger@1.3.2) (2024-11-04)
 
 

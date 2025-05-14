@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.14](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@3.0.13...@restorecommerce/acs-client@3.0.14) (2025-05-14)
+
+
+### Bug Fixes
+
+* **acs-client:** correct abstraction of ServiceConfig ([2660594](https://github.com/restorecommerce/libs/commit/2660594ae91ca07586abc3d1a091603c3562d29c))
+* **protos:** fix typos in proto, load meta in acs decorater, refactor logger filePath detector ([8f02eee](https://github.com/restorecommerce/libs/commit/8f02eee6460b9c48f2f8416b08017f6ba11caf4e))
+
+
+
+
+
 ## [3.0.13](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@3.0.12...@restorecommerce/acs-client@3.0.13) (2025-03-31)
 
 **Note:** Version bump only for package @restorecommerce/acs-client

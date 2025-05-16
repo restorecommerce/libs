@@ -9,6 +9,7 @@ import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
 import "io/restorecommerce/meta.proto";
 import "io/restorecommerce/address.proto";
+import "io/restorecommerce/country.proto";
 import "io/restorecommerce/product.proto";
 import "io/restorecommerce/options.proto";
 import "io/restorecommerce/price.proto";
@@ -124,8 +125,13 @@ message Item {
   optional string product_id = 1;
   optional string variant_id = 2;
   optional int32 quantity = 3;
-  optional string harmonizedSystemCode = 4;
-  optional io.restorecommerce.amount.Amount amount = 5;
+  optional string name = 4;
+  optional string description = 5;
+  optional string taric_code = 6;
+  optional string hs_code = 7;
+  optional string origin_country_id = 8;
+  optional io.restorecommerce.amount.Amount value = 9;
+  optional io.restorecommerce.product.Package package = 10;
 }
 
 message Parcel {

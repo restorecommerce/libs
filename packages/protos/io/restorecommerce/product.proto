@@ -140,7 +140,6 @@ message IndividualProduct {
       field_name: "origin_country",
     }
   ];
-  optional string taric_code = 5;
   oneof classification {
     string prototype_id = 6 [
       (io.restorecommerce.options.resolver) = {
@@ -221,10 +220,13 @@ message PhysicalVariant {
   repeated io.restorecommerce.property.Property properties = 10;
   repeated string tax_ids = 11;
   optional bool active = 12;
-  optional google.protobuf.Timestamp valid_from = 13;
+  optional google.protobuf.Timestamp valid_from = 13; // valid for sale
   optional google.protobuf.Timestamp valid_to = 14;
   repeated io.restorecommerce.attribute.Attribute attibutes = 15;
   optional Package package = 16; // size for shipping
+  optional string taric_code = 17;
+  optional string hs_code = 18;
+  optional string export_description = 19;
 }
 
 message ServiceVariant {
@@ -240,7 +242,7 @@ message ServiceVariant {
   repeated io.restorecommerce.property.Property properties = 10;
   repeated string tax_ids = 11;
   optional bool active = 12;
-  optional google.protobuf.Timestamp valid_from = 13;
+  optional google.protobuf.Timestamp valid_from = 13;  // valid for sale
   optional google.protobuf.Timestamp valid_to = 14;
   repeated io.restorecommerce.attribute.Attribute attibutes = 15;
 }
@@ -384,6 +386,7 @@ message IndividualProductVariant {
   optional google.protobuf.Timestamp valid_to = 25;
   repeated io.restorecommerce.attribute.Attribute attributes = 26;
   optional Package package = 27; // size for shipping
+  optional string hs_code = 28;
 }
 
 message IndividualProductVariantResponse {

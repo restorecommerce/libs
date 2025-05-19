@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.11.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.11.2...@restorecommerce/protos@6.11.3) (2025-05-19)
+
+
+### Bug Fixes
+
+* **protos:** add persistent export information ([680ff84](https://github.com/restorecommerce/libs/commit/680ff8499f927812dd906304137b6d7be493e058))
+
+
+
+
+
 ## [6.11.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.11.1...@restorecommerce/protos@6.11.2) (2025-05-14)
 
 

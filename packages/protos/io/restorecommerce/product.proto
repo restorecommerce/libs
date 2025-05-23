@@ -84,7 +84,7 @@ message Association {
   optional AssociationType type = 3;
   repeated string tags = 4;
   optional google.protobuf.Any data = 5;
-  repeated io.restorecommerce.attribute.Attribute attibutes = 6;
+  repeated io.restorecommerce.attribute.Attribute attributes = 6;
 }
 
 // Product resource entity
@@ -116,7 +116,7 @@ message Product {
   repeated string tags = 7;
   repeated Association associations = 8;
   optional google.protobuf.Any data = 9;
-  repeated io.restorecommerce.attribute.Attribute attibutes = 10;
+  repeated io.restorecommerce.attribute.Attribute attributes = 10;
 }
 
 message IndividualProduct {
@@ -222,7 +222,7 @@ message PhysicalVariant {
   optional bool active = 12;
   optional google.protobuf.Timestamp valid_from = 13; // valid for sale
   optional google.protobuf.Timestamp valid_to = 14;
-  repeated io.restorecommerce.attribute.Attribute attibutes = 15;
+  repeated io.restorecommerce.attribute.Attribute attributes = 15;
   optional Package package = 16; // size for shipping
   optional string taric_code = 17;
   optional string hs_code = 18;
@@ -244,7 +244,7 @@ message ServiceVariant {
   optional bool active = 12;
   optional google.protobuf.Timestamp valid_from = 13;  // valid for sale
   optional google.protobuf.Timestamp valid_to = 14;
-  repeated io.restorecommerce.attribute.Attribute attibutes = 15;
+  repeated io.restorecommerce.attribute.Attribute attributes = 15;
 }
 
 message VirtualVariant {
@@ -262,7 +262,7 @@ message VirtualVariant {
   optional bool active = 12;
   optional google.protobuf.Timestamp valid_from = 13;
   optional google.protobuf.Timestamp valid_to = 14;
-  repeated io.restorecommerce.attribute.Attribute attibutes = 15;
+  repeated io.restorecommerce.attribute.Attribute attributes = 15;
 }
 
 message Bundle {
@@ -272,7 +272,7 @@ message Bundle {
   repeated BundleProduct products = 4;
   optional io.restorecommerce.price.Price price = 5;
   optional Package pre_packaged = 6;
-  repeated io.restorecommerce.attribute.Attribute attibutes = 7;
+  repeated io.restorecommerce.attribute.Attribute attributes = 7;
   optional google.protobuf.Timestamp valid_from = 8;
   optional google.protobuf.Timestamp valid_to = 9;
 }

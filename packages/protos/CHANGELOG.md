@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.11.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.11.4...@restorecommerce/protos@6.11.5) (2025-05-23)
+
+
+### Bug Fixes
+
+* **protos:** fix typos ([1432953](https://github.com/restorecommerce/libs/commit/1432953e3fd80488f90b8b71c7c5dfe9cb3e24ee))
+
+
+
+
+
 ## [6.11.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.11.3...@restorecommerce/protos@6.11.4) (2025-05-23)
 
 

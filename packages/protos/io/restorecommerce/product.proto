@@ -273,6 +273,8 @@ message Bundle {
   optional io.restorecommerce.price.Price price = 5;
   optional Package pre_packaged = 6;
   repeated io.restorecommerce.attribute.Attribute attibutes = 7;
+  optional google.protobuf.Timestamp valid_from = 8;
+  optional google.protobuf.Timestamp valid_to = 9;
 }
 
 message BundleProduct {

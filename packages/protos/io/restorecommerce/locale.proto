@@ -48,4 +48,13 @@ message Locale {
   optional string value = 3; // official symbole
   optional string description = 4;
   optional string name = 5; // display name
+  optional string parent_id = 6 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.locale.Locale",
+      target_service: "master_data",
+      target_sub_service: "locale",
+      target_method: "Read",
+      field_name: "parent",
+    }
+  ]; // parent_id for allowed fallback e.g.: 'en-de' may allow fallback to 'en' 
 }

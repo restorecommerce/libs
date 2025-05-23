@@ -8,6 +8,9 @@ import "io/restorecommerce/auth.proto";
 import "io/restorecommerce/status.proto";
 import "io/restorecommerce/options.proto";
 
+// Used by resolvers
+import "io/restorecommerce/locale.proto";
+
 /*
 * Microservice definition.
 */
@@ -43,6 +46,11 @@ message CountryResponse {
 }
 
 message Country {
+  message LocaleName {
+    optional string locale = 1;
+    optional string name = 2;
+  }
+
   optional string id = 1;
   optional io.restorecommerce.meta.Meta meta = 2;
   optional string name = 3;
@@ -51,4 +59,23 @@ message Country {
   repeated string economic_areas = 6;
   optional string country_code_alpha_2 = 7; // ISO 3166-1 alpha-2
   optional string country_code_alpha_3 = 8; // ISO 3166-1 alpha-3
+  repeated string locale_ids = 9 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.locale.Locale",
+      target_service: "master_data",
+      target_sub_service: "locale",
+      target_method: "Read",
+      field_name: "locales",
+    }
+  ]; // list of common locale in this country, sorted by priority first
+  repeated LocaleName localized_names = 10; // list of localized names
+  repeated string timezone_ids = 11 [
+    (io.restorecommerce.options.resolver) = {
+      target_type: ".io.restorecommerce.timezone.Timezone",
+      target_service: "master_data",
+      target_sub_service: "timezone",
+      target_method: "Read",
+      field_name: "timezones",
+    }
+  ]; // list of avalable timezones in this country
 }

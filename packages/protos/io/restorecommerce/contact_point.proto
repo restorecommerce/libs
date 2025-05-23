@@ -63,7 +63,7 @@ message ContactPoint {
     (io.restorecommerce.options.resolver) = {
       target_type: ".io.restorecommerce.contact_point_type.ContactPointType",
       target_service: "master_data",
-      target_sub_service: "contact_point_types",
+      target_sub_service: "contact_point_type",
       target_method: "Read",
       field_name: "contactPointTypes",
     }

@@ -7,12 +7,16 @@ message Image {
   optional string caption = 2;
   optional string filename = 3;
   optional string content_type = 4;
-  optional string url = 5;
-  optional double width = 6;
-  optional double height = 7;
-  optional double length = 8;
-  repeated string tags = 9;
-  optional int64 index = 10;
+  oneof type {
+    string url = 5;
+    string base64 = 6;
+    bytes blob = 7;
+  }
+  optional double width = 8;
+  optional double height = 9;
+  optional double length = 10;
+  repeated string tags = 11;
+  optional int64 index = 12;
 }
 
 message ImageList {

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.11.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.11.3...@restorecommerce/protos@6.11.4) (2025-05-23)
+
+
+### Bug Fixes
+
+* **protos:** bundle product should have valid time frame too ([8670be0](https://github.com/restorecommerce/libs/commit/8670be0354b8bb0bfe239c14db81a6eb494b60a8))
+* **protos:** link data nodes: country, localization, timezones ([fc5f226](https://github.com/restorecommerce/libs/commit/fc5f22616dedc403c170f1fd531542e19b64a78f))
+
+
+
+
+
 ## [6.11.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.11.2...@restorecommerce/protos@6.11.3) (2025-05-19)
 
 

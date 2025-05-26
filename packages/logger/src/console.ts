@@ -23,14 +23,9 @@ function createTracerFormat(opts: RestoreLoggerConsoleTransportOptions, precompi
     const splat = info[splatSym];
 
     delete info.timestamp;
-    let object = {};
-    if (splat) {
-      const transformedFields = logFieldsHandler(splat, precompiled);
-      object = JSON.stringify(transformedFields, getCircularReplacer());
-    }
+    const object = splat ? JSON.stringify(logFieldsHandler(splat, precompiled), getCircularReplacer()) : {};
     if (message && Object.entries(message).length !== 0 && message.constructor === Object) {
-      const transformedFields = logFieldsHandler(message, precompiled);
-      message = JSON.stringify(transformedFields, getCircularReplacer());
+      message = JSON.stringify(logFieldsHandler(message, precompiled), getCircularReplacer());
     }
     const ret: string[] = [];
     ret.push(`${level}: ${time}`);

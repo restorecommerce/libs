@@ -160,8 +160,8 @@ class PrecompiledData {
     public fieldPath: string,
     public enableLogging = false
   ) {
-    this.fieldList = fieldPath.split(/\.?\[|\]\.?/);
-    this.array = fieldPath.includes('[0]');
+    this.fieldList = fieldPath.split(/\.?\[|\]\.|\./);
+    this.array = !!fieldPath.match(/\[.?\]/);
   }
 }
 
@@ -177,73 +177,84 @@ export const precompile = (fieldOptions?: RestoreFieldsOptions) => {
   return {
     maskFields: fieldOptions?.maskFields?.map(fieldPath => new PrecompiledData(fieldPath)),
     omitFields: fieldOptions?.omitFields?.map(fieldPath => new PrecompiledData(fieldPath)),
-    bufferFields: fieldOptions?.bufferFields?.flatMap(buffer => new PrecompiledData(
+    bufferFields: fieldOptions?.bufferFields?.map(buffer => new PrecompiledData(
       buffer.fieldPath,
       buffer.enableLogging
     )),
   };
 }
 
-export const updateObject = (obj: any, path: string, value: any, operation: string, enableLogging?: boolean) => {
-  if (operation === 'maskFields') {
-    const maskLength = value.length;
-    _.set(obj, path, '*'.repeat(maskLength));
-  } else if (operation === 'omitFields') {
-    _.unset(obj, path);
-  } else if (value && operation === 'bufferFields') {
-    if (enableLogging && value?.value) {
-      const unmarshalled = JSON.parse(value.value.toString());
-      _.set(obj, path, unmarshalled);
-    } else {
-      _.unset(obj, path);
+export type FieldOperation = 'maskFields' | 'omitFields' | 'bufferFields';
+export const updateObject = (
+  obj: any,
+  path: string[],
+  operation: FieldOperation,
+  enableLogging = false,
+) => {
+  const target = _.get(obj, path);
+  if (target) {
+    switch (operation) {
+      case 'maskFields':
+        _.set(obj, path, '******');
+        break;
+      case 'omitFields':
+        _.unset(obj, path);
+        break;
+      case 'bufferFields':
+        if (enableLogging) {
+          let unmarshalled: any;
+          try {
+            unmarshalled = JSON.parse(target.value?.toString() ?? target.toString());
+          }
+          catch {
+            unmarshalled = Buffer.from(target.value ?? target).toString('base64');
+          }
+          _.set(obj, path, unmarshalled);
+        } else {
+          _.unset(obj, path);
+        }
+        break;
+      default:
+        break;
     }
   }
 };
 
-export const setNestedPath = (object: any, fieldPath: string, operation: string, enableLogging?: boolean) => {
-  const prefix = fieldPath?.substring(0, fieldPath.indexOf('.['));
-  const suffix = fieldPath?.substring(fieldPath.indexOf('].') + 2);
-  let setRecursive = false;
-  // recursive check if the sub suffix again contains an array index
-  if (suffix.indexOf('.[') > 0) {
-    setRecursive = true;
-  }
-  if (prefix && suffix) {
+export const setNestedPath = (
+  object: any,
+  fieldList: string[],
+  operation: FieldOperation,
+  enableLogging?: boolean
+) => {
+  const prefix = fieldList.slice(0, fieldList.indexOf('0'));
+  const suffix = fieldList.slice(fieldList.indexOf('0') + 1);
+  const hasSubArray = suffix.includes('0');
+  if (prefix?.length) {
     const array = _.get(object, prefix);
-    array.forEach((obj: any) => {
-      const fieldExists = _.get(obj, suffix);
+    array?.forEach?.((obj: any) => {
       // maskFields or omitFields or handle bufferFields depending on operation
-      if (fieldExists) {
-        updateObject(obj, suffix, fieldExists, operation, enableLogging);
+      if (hasSubArray) {
+        setNestedPath(obj, suffix, operation, enableLogging);
       }
-      // recursive call
-      if (fieldExists && setRecursive) {
-        setNestedPath(obj, suffix, operation);
+      else {
+        updateObject(obj, suffix, operation, enableLogging);
       }
     });
   }
 };
 
-const baseGet = (object: any, path: string[]): any => {
-  let index = 0
-  const length = path.length
-  while (object != null && index < length) {
-    object = object[path[index++]]
-  }
-  return (index && index == length) ? object : undefined;
-};
-
-const setIfExists = (obj: any, fieldPath: string, fieldList: string[], operation: string, array?: boolean, enableLogging?: boolean): void => {
+const setIfExists = (
+  obj: any,
+  fieldList: string[],
+  operation: FieldOperation,
+  array = false,
+  enableLogging = false,
+): void => {
   // fieldList contains the split Path to individual fields for fieldPath
-  // and the baseGet breaks when the first field do not exist
-  const fieldExists = baseGet(obj, fieldList);
-  // only if the configured field exist check recursively for all entries in object
-  if (fieldExists && array) {
-    // use setNestedPath
-    setNestedPath(obj, fieldPath, operation);
-  } else if (fieldExists) {
-    // use normal set and return
-    updateObject(obj, fieldPath, fieldExists, operation, enableLogging);
+  if (array) {
+    setNestedPath(obj, fieldList, operation, enableLogging);
+  } else {
+    updateObject(obj, fieldList, operation, enableLogging);
   }
 };
 
@@ -252,40 +263,38 @@ export const logFieldsHandler = (object: any, precompiled?: PrecompiledFieldOpti
     return object;
   }
   // if none of bufferFields or maskFields or omitFields are set then do not proceed further
-  if (_.isEmpty(precompiled?.maskFields) && _.isEmpty(precompiled?.omitFields) && _.isEmpty(precompiled?.bufferFields)) {
+  if (
+    _.isEmpty(precompiled?.maskFields)
+    && _.isEmpty(precompiled?.omitFields)
+    && _.isEmpty(precompiled?.bufferFields)
+  ) {
     return object;
   }
   let objectFieldsMod;
   try {
-    objectFieldsMod = JSON.parse(JSON.stringify(object));
+    objectFieldsMod = JSON.parse(JSON.stringify(object, getCircularReplacer()));
   } catch (error) {
-    console.log('Error parsing object part of log message', object);
+    console.error('Error parsing object part of log message', object);
   }
   // since multiple comma separated  objects can be passed as fields for logging
-  if (!_.isArray(objectFieldsMod)) {
+  if (!Array.isArray(objectFieldsMod)) {
     objectFieldsMod = [objectFieldsMod];
   }
   for (const obj of objectFieldsMod) {
     // iterate to check each mask field
-    if (!_.isEmpty(precompiled?.maskFields)) {
-      precompiled?.maskFields?.forEach((maskCfg) => {
-        setIfExists(obj, maskCfg.fieldPath, maskCfg.fieldList, 'maskFields', maskCfg.array);
-      });
-    }
+    precompiled?.maskFields?.forEach((maskCfg) => {
+      setIfExists(obj, maskCfg.fieldList, 'maskFields', maskCfg.array);
+    });
 
     // iterate to check each omit field
-    if (!_.isEmpty(precompiled?.omitFields)) {
-      precompiled?.omitFields?.forEach((omitCfg) => {
-        setIfExists(obj, omitCfg.fieldPath, omitCfg.fieldList, 'omitFields', omitCfg.array);
-      });
-    }
+    precompiled?.omitFields?.forEach((omitCfg) => {
+      setIfExists(obj, omitCfg.fieldList, 'omitFields', omitCfg.array);
+    });
 
     // iterate to check each buffer field
-    if (!_.isEmpty(precompiled?.bufferFields)) {
-      precompiled?.bufferFields?.forEach((bufferFieldObj) => {
-        setIfExists(obj, bufferFieldObj.fieldPath, bufferFieldObj.fieldList, 'bufferFields', bufferFieldObj.array, bufferFieldObj.enableLogging);
-      });
-    }
+    precompiled?.bufferFields?.forEach((bufferFieldObj) => {
+      setIfExists(obj, bufferFieldObj.fieldList, 'bufferFields', bufferFieldObj.array, bufferFieldObj.enableLogging);
+    });
   }
   return objectFieldsMod;
 };

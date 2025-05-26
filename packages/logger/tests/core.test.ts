@@ -30,9 +30,15 @@ const opts: RestoreLoggerOptions = {
     source: "logger-test"
   },
   fieldOptions: {
-    maskFields: ['password'],
+    maskFields: [
+      'users.[0].credentials.[0].password',
+    ],
+    omitFields: [
+      'users.[0].credentials.[0].data',
+    ],
     bufferFields: [{
-      fieldPath: 'test.data'
+      fieldPath: 'test.data',
+      enableLogging: true,
     }]
   }
 };
@@ -64,10 +70,16 @@ describe('a logger', () => {
     it('log with level, a message and objects', () => {
       logger.log('debug', 'Message with multiple objects',
         { test: 'test' },
-        { test2: 'test2' });
+        { test2: 'test2' }
+      );
     });
     it('an error with stack trace', () => {
-      logger.error('Generic Error!');
+      try {
+        throw new Error('Generic Error!');
+      }
+      catch (error) {
+        logger.error(error?.message, error?.stack);
+      }
     });
     it('a circular object', () => {
       const obj: any = { name: "Bob" };
@@ -76,8 +88,53 @@ describe('a logger', () => {
     });
     it('should mask configured password field', () => {
       logger.log('debug', 'Message with password field in object masked',
-        { login_name: 'test', password: 'Test1234' },
-        { login_name: 'test2', password: 'Test1234' });
+        {
+          users: [
+            {
+              credentials: [
+                {
+                  login_name: 'test1',
+                  password: 'Test1234'
+                },
+              ]
+            },
+            {
+              credentials: [
+                {
+                  login_name: 'test2',
+                  password: 'Test12345678'
+                },
+              ]
+            },
+          ]
+        }
+      );
+    });
+    it('should omit configured data field', () => {
+      logger.log('debug', 'Message with data field in object omitted',
+        {
+          users: [
+            {
+              credentials: [
+                {
+                  login_name: 'test1',
+                  password: 'Test1234',
+                  data: [1,2,3,4,5],
+                },
+              ]
+            },
+            {
+              credentials: [
+                {
+                  login_name: 'test2',
+                  password: 'Test12345678',
+                  data: [1,2,3,4,5],
+                },
+              ]
+            },
+          ]
+        }
+      );
     });
     it('should skip logging buffer fields', () => {
       logger.log('debug', 'Message with buffer fields skipped in object',
@@ -90,7 +147,8 @@ describe('a logger', () => {
           login_name: 'test2', test: {
             data: { value: Buffer.from('Test1234') }
           }
-        });
+        }
+      );
     });
     esTransport.bulkWriter.stop();
   });

@@ -31,10 +31,11 @@ const opts: RestoreLoggerOptions = {
   },
   fieldOptions: {
     maskFields: [
-      'users.[0].credentials.[0].password',
+      'response.users.[0].credentials.[0].token',
+      'response.users.[0].credentials.[0].password',
     ],
     omitFields: [
-      'users.[0].credentials.[0].data',
+      'response.users.[0].credentials.[0].data',
     ],
     bufferFields: [{
       fieldPath: 'test.data',
@@ -89,50 +90,54 @@ describe('a logger', () => {
     it('should mask configured password field', () => {
       logger.log('debug', 'Message with password field in object masked',
         {
-          users: [
-            {
-              credentials: [
-                {
-                  login_name: 'test1',
-                  password: 'Test1234'
-                },
-              ]
-            },
-            {
-              credentials: [
-                {
-                  login_name: 'test2',
-                  password: 'Test12345678'
-                },
-              ]
-            },
-          ]
+          response: {
+            users: [
+              {
+                credentials: [
+                  {
+                    login_name: 'test1',
+                    password: 'Test1234'
+                  },
+                ]
+              },
+              {
+                credentials: [
+                  {
+                    login_name: 'test2',
+                    password: 'Test12345678'
+                  },
+                ]
+              },
+            ]
+          }
         }
       );
     });
     it('should omit configured data field', () => {
       logger.log('debug', 'Message with data field in object omitted',
         {
-          users: [
-            {
-              credentials: [
-                {
-                  login_name: 'test1',
-                  password: 'Test1234',
-                  data: [1,2,3,4,5],
-                },
-              ]
-            },
-            {
-              credentials: [
-                {
-                  login_name: 'test2',
-                  password: 'Test12345678',
-                  data: [1,2,3,4,5],
-                },
-              ]
-            },
-          ]
+          response: {
+            users: [
+              {
+                credentials: [
+                  {
+                    login_name: 'test1',
+                    password: 'Test1234',
+                    data: { value: Buffer.from('Test1234') }
+                  },
+                ]
+              },
+              {
+                credentials: [
+                  {
+                    login_name: 'test2',
+                    password: 'Test12345678',
+                    data: { value: Buffer.from('Test1234') }
+                  },
+                ]
+              },
+            ]
+          }
         }
       );
     });

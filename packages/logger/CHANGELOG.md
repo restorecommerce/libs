@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@1.3.3...@restorecommerce/logger@1.3.4) (2025-05-27)
+
+
+### Bug Fixes
+
+* **logger:** add deep test for omitFields ([6c7692d](https://github.com/restorecommerce/libs/commit/6c7692de198b14b9ce78135930fd8d251d1691bd))
+* **logger:** correct regex for array detection, tolerant buffer handler ([c92a443](https://github.com/restorecommerce/libs/commit/c92a4439aa0a082bbe4b0ca2d5d53e3bd128cad4))
+
+
+
+
+
 ## [1.3.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@1.3.2...@restorecommerce/logger@1.3.3) (2025-05-14)
 
 

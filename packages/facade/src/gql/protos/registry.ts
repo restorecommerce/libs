@@ -120,7 +120,7 @@ export const getTyping = (type: string): TypingData | undefined => {
 
 // Iterate through the object and collect list of all enum types with their keys / paths
 export const recursiveEnumCheck = (typeName: string, enumMap: Map<string, string>, prevFieldName: string, traversedFields: string[]): Map<string, string> => {
-  if (scalarTypes.indexOf(typeName) <= -1) {
+  if (!scalarTypes.includes(typeName)) {
     if (typeName && typeName.startsWith('[') && typeName.endsWith('!]')) {
       typeName = typeName.substring(1, typeName.length - 2);
     }

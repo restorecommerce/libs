@@ -64,6 +64,7 @@ message Currency {
   */
   repeated ExchangeRate custom_exchange_rates = 6;
   optional int32 precision = 7;
+  optional string code = 8;
 }
 
 message ExchangeRate {

@@ -14,7 +14,7 @@ import {
 } from './interfaces';
 import { createChannel, createClient } from '@restorecommerce/grpc-client';
 import { cfg, updateConfig } from '../config';
-import logger from '../logger';
+import logger, { setLogger } from '../logger';
 import { flushCache, getOrFill } from './cache';
 import { Events, registerProtoMeta } from '@restorecommerce/kafka-client';
 import {
@@ -31,6 +31,7 @@ import { Subject, DeepPartial } from '@restorecommerce/rc-grpc-clients/dist/gene
 import { protoMetadata as ruleMeta } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/rule';
 import { protoMetadata as policyMeta } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/policy';
 import { protoMetadata as policySetMeta } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/policy_set';
+import { Logger } from '@restorecommerce/logger';
 
 registerProtoMeta(
   ruleMeta,
@@ -476,10 +477,13 @@ const eventListener = async (
   }
 };
 
-export const initAuthZ = async (config?: any): Promise<void | ACSAuthZ> => {
+export const initAuthZ = async (config?: any, logger?: Logger): Promise<void | ACSAuthZ> => {
   if (!authZ) {
     if (config) {
       updateConfig(config);
+    }
+    if (logger) {
+      setLogger(logger);
     }
     // gRPC interface for access-control-srv
     if (cfg.get('authorization:enabled')) {

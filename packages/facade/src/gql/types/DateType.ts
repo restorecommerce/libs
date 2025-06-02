@@ -14,8 +14,7 @@ export const DateType = new GraphQLScalarType({
     if (value === 0) {
       return null;
     }
-    let dateObj = new Date(value);
-    return dateObj;
+    return new Date(value);
   },
   parseLiteral: (ast): any => {
     if (ast.kind === Kind.STRING) {

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.19](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.2.18...@restorecommerce/facade@2.2.19) (2025-06-02)
+
+
+### Bug Fixes
+
+* **proto:** add currency code ([069d9cb](https://github.com/restorecommerce/libs/commit/069d9cb4c7c738d648d6f4aaf769db448ed7f904))
+
+
+
+
+
 ## [2.2.18](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.2.17...@restorecommerce/facade@2.2.18) (2025-05-27)
 
 **Note:** Version bump only for package @restorecommerce/facade

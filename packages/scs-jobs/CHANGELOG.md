@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.59](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.58...@restorecommerce/scs-jobs@0.1.59) (2025-06-02)
+
+**Note:** Version bump only for package @restorecommerce/scs-jobs
+
+
+
+
+
 ## [0.1.58](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.57...@restorecommerce/scs-jobs@0.1.58) (2025-05-27)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs

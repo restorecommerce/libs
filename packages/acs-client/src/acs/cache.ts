@@ -29,7 +29,7 @@ export const initializeCache = async () => {
     if (redisConfig) {
       redisConfig.database = cfg.get('authorization:cache:db-index');
       redisInstance = createClient(redisConfig);
-      redisInstance.on('error', (err) => logger.error('Redis Client Error in ACS cache',  { code: err.code, message: err.message, stack: err.stack }));
+      redisInstance.on('error', (err) => logger?.error('Redis Client Error in ACS cache',  { code: err.code, message: err.message, stack: err.stack }));
       await redisInstance.connect();
       ttl = cfg.get('authorization:cache:ttl');
     }
@@ -37,7 +37,7 @@ export const initializeCache = async () => {
       // init redis subject instance
       redisSubConfig.database = redisSubConfig['db-indexes']['db-subject'];
       redisSubjectInstance = createClient(redisSubConfig);
-      redisSubjectInstance.on('error', (err) => logger.error('Redis Client Error in ACS cache',  { code: err.code, message: err.message, stack: err.stack }));
+      redisSubjectInstance.on('error', (err) => logger?.error('Redis Client Error in ACS cache',  { code: err.code, message: err.message, stack: err.stack }));
       await redisSubjectInstance.connect();
     }
   }
@@ -77,7 +77,7 @@ export const getOrFill = async <T, M>(keyData: T, filler: (data: T) => Promise<M
     );
 
     if (evaluation_cacheable) {
-      logger.debug('Found key in cache: ' + redisKey);
+      logger?.debug('Found key in cache: ' + redisKey);
       return response as M;
     }
   }
@@ -87,7 +87,7 @@ export const getOrFill = async <T, M>(keyData: T, filler: (data: T) => Promise<M
     return await filler(keyData);
   }
 
-  logger.debug('Filling cache key: ' + redisKey);
+  logger?.debug('Filling cache key: ' + redisKey);
   const acsResponse = await filler(keyData);
   if (acsResponse) {
     if (ttl) {
@@ -108,16 +108,16 @@ export const getOrFill = async <T, M>(keyData: T, filler: (data: T) => Promise<M
  */
 export const get = async (key: string): Promise<any> => {
   if (!redisSubjectInstance) {
-    logger.warn('No Redis Subject Instance!');
+    logger?.warn('No Redis Subject Instance!');
     return;
   }
   const redisResponse = await redisSubjectInstance.get(key);
   if (!redisResponse) {
-    logger.info('Key does not exist', { key });
+    logger?.info('Key does not exist', { key });
     return;
   }
   if (redisResponse) {
-    logger.debug('Found key in cache: ' + key);
+    logger?.debug('Found key in cache: ' + key);
     return JSON.parse(redisResponse);
   }
 };
@@ -129,30 +129,30 @@ export const get = async (key: string): Promise<any> => {
  */
 export const flushCache = async (prefix?: string) => {
   if (!redisInstance || !cacheEnabled) {
-    logger.info('Redis client not initialized in acs-client');
+    logger?.info('Redis client not initialized in acs-client');
     return;
   }
 
   if (prefix != undefined) {
     const flushPattern = `acs:${prefix}:*`;
-    logger.debug(`Flushing cache with pattern ${flushPattern}`);
+    logger?.debug(`Flushing cache with pattern ${flushPattern}`);
     let scanIterator;
     try {
       scanIterator = redisInstance.scanIterator({ MATCH: flushPattern, COUNT: 100 });
       for await (const key of scanIterator) {
         await redisInstance.del(key);
       }
-      logger.debug(`Successfully flushed cache pattern ${flushPattern}`);
+      logger?.debug(`Successfully flushed cache pattern ${flushPattern}`);
       return;
     } catch (err: any) {
-      logger.error('Error flushing ACS cache',  { code: err.code, message: err.message, stack: err.stack });
+      logger?.error('Error flushing ACS cache',  { code: err.code, message: err.message, stack: err.stack });
       return;
     }
   }
-  logger.debug('Flushing ACS cache');
+  logger?.debug('Flushing ACS cache');
   const reply = await redisInstance.flushDb();
   if (reply) {
-    logger.debug('Flushed ACS cache');
+    logger?.debug('Flushed ACS cache');
   }
 };
 
@@ -165,9 +165,9 @@ export const setCacheStatus = (enabled: boolean) => {
   cacheEnabled = enabled;
 
   if (enabled) {
-    logger.debug('ACS Cache Enabled');
+    logger?.debug('ACS Cache Enabled');
     initializeCache();
   } else {
-    logger.debug('ACS Cache Disabled');
+    logger?.debug('ACS Cache Disabled');
   }
 };

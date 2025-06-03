@@ -156,7 +156,7 @@ export const DefaultMetaDataInjector = async <T extends ResourceList>(
         }],
       } : undefined,
     ].filter(i => i);
-    item.id ??= randomUUID().replace(/-/g, '');
+    item.id ??= randomUUID().replaceAll('-', '');
   });
   return request;
 };
@@ -193,7 +193,7 @@ export function access_controlled_service<T extends { new(...args: any): any }>(
         UserServiceDefinition,
         createChannel(cfg.get('client:user:address'))
       );
-      initAuthZ(cfg);
+      initAuthZ(cfg, logger);
       initializeCache();
     }
   };

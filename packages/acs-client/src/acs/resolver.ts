@@ -165,8 +165,8 @@ export const accessRequest = async (
       `the response was ${ Response_Decision.INDETERMINATE }`,
     ].join(' ');
     const details = 'Entity missing';
-    logger.verbose(msg);
-    logger.verbose('Details:', { details });
+    logger?.verbose(msg);
+    logger?.verbose('Details:', { details });
     return {
       decision: Response_Decision.DENY,
       operation_status: generateOperationStatus(
@@ -200,7 +200,7 @@ export const accessRequest = async (
         useCache
       );
     } catch (err: any) {
-      logger.error(
+      logger?.error(
         'Error calling whatIsAllowed operation',
         {
           code: err.code,
@@ -222,8 +222,8 @@ export const accessRequest = async (
         'the response was INDETERMINATE'
       ].join(' ');
       const details = 'no matching policy/rule could be found';
-      logger.verbose(msg);
-      logger.verbose('Details:', { details });
+      logger?.verbose(msg);
+      logger?.verbose('Details:', { details });
       return {
         decision: Response_Decision.DENY,
         operation_status: generateOperationStatus(
@@ -234,7 +234,7 @@ export const accessRequest = async (
     }
 
     if (!authzEnforced && (!policySetResponse || _.isEmpty(policySetResponse.policy_sets))) {
-      logger.verbose([
+      logger?.verbose([
         `The Access response was INDETERMIATE for a request with subject:${ subjectID },`,
         `resource:${ resourceName }, action:${ action }${targetScopeMessage}`,
         `as no matching policy/rule could be found, but since ACS enforcement`,
@@ -275,7 +275,7 @@ export const accessRequest = async (
     try {
       decisionResponse = await isAllowedRequest(subClone as Subject, resource, action, ctx, useCache);
     } catch (err: any) {
-      logger.error('Error calling isAllowed operation', { code: err.code, message: err.message, stack: err.stack });
+      logger?.error('Error calling isAllowed operation', { code: err.code, message: err.message, stack: err.stack });
       return { decision: Response_Decision.DENY, operation_status: generateOperationStatus(err.code, err.message) };
     }
 
@@ -291,8 +291,8 @@ export const accessRequest = async (
         `resource:${ resourceName }, action:${ action }${targetScopeMessage}`,
         `the response was ${Response_Decision[decisionResponse.decision]}`,
       ].join(' ');
-      logger.verbose(msg);
-      logger.verbose('Details:', { details });
+      logger?.verbose(msg);
+      logger?.verbose('Details:', { details });
       return {
         decision: Response_Decision.DENY,
         operation_status: generateOperationStatus(Number(errors.ACTION_NOT_ALLOWED.code), msg)
@@ -307,12 +307,12 @@ export const accessRequest = async (
     } else if (decisionResponse.decision === Response_Decision.DENY) {
       details = `Subject:${ subjectID } does not have access to requested target scope ${ targetScope }`;
     }
-    logger.verbose([
+    logger?.verbose([
       `Access not allowed for request with subject:${ subjectID },`,
       `resource:${ resourceName }, action:${ action }${targetScopeMessage}`,
       `the response was ${Response_Decision[decisionResponse.decision]}`,
     ].join(' '));
-    logger.verbose(`${details}, Overriding the ACS result as ACS enforce config is disabled`);
+    logger?.verbose(`${details}, Overriding the ACS result as ACS enforce config is disabled`);
     decisionResponse.decision = Response_Decision.PERMIT;
   }
   return decisionResponse;
@@ -335,7 +335,7 @@ export const isAllowed = async (request: Request, authZ: ACSAuthZ): Promise<Deci
       operation_status: isAllowedResponse.operation_status
     };
   } catch (err: any) {
-    logger.error('Error invoking acs-srv isAllowed method', { code: err.code, message: err.message, stack: err.stack });
+    logger?.error('Error invoking acs-srv isAllowed method', { code: err.code, message: err.message, stack: err.stack });
     return { decision: Response_Decision.DENY, operation_status: generateOperationStatus(err.code, err.message) };
   }
 
@@ -358,7 +358,7 @@ export const whatIsAllowed = async (request: Request, authZ: ACSAuthZ): Promise<
     } as any; // TODO Decision?
     response.obligations = mapResourceURNObligationProperties(whatIsAllowedResponse.obligations);
   } catch (err: any) {
-    logger.error('Error invoking acs-srv whatIsAllowed method', { code: err.code, message: err.message, stack: err.stack });
+    logger?.error('Error invoking acs-srv whatIsAllowed method', { code: err.code, message: err.message, stack: err.stack });
     return {
       decision: Response_Decision.DENY,
       policy_sets: [],

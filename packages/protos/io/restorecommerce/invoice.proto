@@ -183,8 +183,9 @@ message Position {
   optional io.restorecommerce.price.Price unit_price = 5;
   optional uint32 quantity = 6;
   optional io.restorecommerce.amount.Amount amount = 7;
-  optional double contract_start_date = 8; // if there is any contract associated with product
-  repeated io.restorecommerce.attribute.Attribute attributes = 9;
+  optional google.protobuf.Timestamp from_date = 8; // value performance from date
+  optional google.protobuf.Timestamp to_date = 9; // value performance to date
+  repeated io.restorecommerce.attribute.Attribute attributes = 10;
 }
 
 message ProductItem {

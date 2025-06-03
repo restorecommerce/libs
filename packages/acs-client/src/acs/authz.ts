@@ -14,7 +14,7 @@ import {
 } from './interfaces';
 import { createChannel, createClient } from '@restorecommerce/grpc-client';
 import { cfg, updateConfig } from '../config';
-import logger, { setLogger } from '../logger';
+import logger, { setLogger, getLogger } from '../logger';
 import { flushCache, getOrFill } from './cache';
 import { Events, registerProtoMeta } from '@restorecommerce/kafka-client';
 import {
@@ -227,7 +227,7 @@ export class UnAuthZ implements IAuthZ {
         operation_status: isAllowed.operation_status
       };
     } catch (err: any) {
-      logger.error('Error invoking access-control-srv isAllowed operation', { code: err.code, message: err.message, stack: err.stack });
+      logger?.error('Error invoking access-control-srv isAllowed operation', { code: err.code, message: err.message, stack: err.stack });
       if (!err.code) {
         err.code = 500;
       }
@@ -241,7 +241,7 @@ export class UnAuthZ implements IAuthZ {
     }
 
     if (_.isEmpty(response)) {
-      logger.error('Unexpected empty response from ACS');
+      logger?.error('Unexpected empty response from ACS');
     }
 
     return response;
@@ -277,7 +277,7 @@ export class UnAuthZ implements IAuthZ {
         obligations: mapResourceURNObligationProperties(whatIsAllowed.obligations)
       } as any; // TODO Decision?
     } catch (err: any) {
-      logger.error('Error invoking access-control-srv whatIsAllowed operation', { code: err.code, message: err.message, stack: err.stack });
+      logger?.error('Error invoking access-control-srv whatIsAllowed operation', { code: err.code, message: err.message, stack: err.stack });
       if (!err.code) {
         err.code = 500;
       }
@@ -291,7 +291,7 @@ export class UnAuthZ implements IAuthZ {
     }
 
     if (_.isEmpty(response)) {
-      logger.error('Unexpected empty response from ACS');
+      logger?.error('Unexpected empty response from ACS');
     }
 
     return response;
@@ -352,7 +352,7 @@ export class ACSAuthZ implements IAuthZ {
         operation_status: isAllowed?.operation_status
       };
     } catch (err: any) {
-      logger.error('Error invoking access-control-srv isAllowed operation', { code: err.code, message: err.message, stack: err.stack });
+      logger?.error('Error invoking access-control-srv isAllowed operation', { code: err.code, message: err.message, stack: err.stack });
       if (!err.code) {
         err.code = 500;
       }
@@ -366,7 +366,7 @@ export class ACSAuthZ implements IAuthZ {
     }
 
     if (_.isEmpty(response)) {
-      logger.error('Unexpected empty response from ACS');
+      logger?.error('Unexpected empty response from ACS');
     }
     return response;
   }
@@ -407,7 +407,7 @@ export class ACSAuthZ implements IAuthZ {
         obligations: mapResourceURNObligationProperties(whatIsAllowed.obligations)
       } as any; // TODO Decision?
     } catch (err: any) {
-      logger.error('Error invoking access-control-srv whatIsAllowed operation', { code: err.code, message: err.message, stack: err.stack });
+      logger?.error('Error invoking access-control-srv whatIsAllowed operation', { code: err.code, message: err.message, stack: err.stack });
       if (!err.code) {
         err.code = 500;
       }
@@ -421,7 +421,7 @@ export class ACSAuthZ implements IAuthZ {
     }
 
     if (_.isEmpty(response)) {
-      logger.error('Unexpected empty response from ACS');
+      logger?.error('Unexpected empty response from ACS');
     }
 
     return response;
@@ -472,7 +472,7 @@ const eventListener = async (
 ): Promise<any> => {
   if (acsEvents.indexOf(eventName) > -1) {
     // no prefix provided, flush complete cache
-    logger.info(`Received event ${eventName} and hence evicting ACS cache`);
+    logger?.info(`Received event ${eventName} and hence evicting ACS cache`);
     await flushCache();
   }
 };
@@ -484,6 +484,9 @@ export const initAuthZ = async (config?: any, logger?: Logger): Promise<void | A
     }
     if (logger) {
       setLogger(logger);
+    }
+    else {
+      logger = getLogger();
     }
     // gRPC interface for access-control-srv
     if (cfg.get('authorization:enabled')) {

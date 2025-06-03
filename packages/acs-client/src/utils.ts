@@ -59,7 +59,7 @@ const checkTargetScopeExists = (
   return hrScopes.some((hrScope) => {
     if (hrScope?.id === targetScope) {
       // found the target scope object, iterate and put the orgs in reducedUserScope array
-      logger.debug(`Target entity match found in the user's hierarchical scope`);
+      logger?.debug(`Target entity match found in the user's hierarchical scope`);
       reduceUserScope(hrScope, reducedUserScope, hierarchicalRoleScopingCheck);
       return true;
     } else if (hrScope?.children?.length > 0 && hierarchicalRoleScopingCheck === 'true') {
@@ -97,10 +97,10 @@ const checkSubjectMatch = (
       ruleRoleScopeEntityName = attribute.value;
     } else if (attribute.id === urns.role) { // urns.role -> urn:restorecommerce:acs:names:role
       ruleRoleValue = attribute.value;
-      logger.debug(`Found Rule's Subject role ${ruleRoleValue}`);
+      logger?.debug(`Found Rule's Subject role ${ruleRoleValue}`);
     } else if (attribute?.id === urns.hierarchicalRoleScoping) {
       hierarchicalRoleScopingCheck = attribute.value;
-      logger.debug('HR Scoping URN set on rule', { hierarchicalRoleScopingCheck });
+      logger?.debug('HR Scoping URN set on rule', { hierarchicalRoleScopingCheck });
     }
   }
 
@@ -118,18 +118,18 @@ const checkSubjectMatch = (
       aa => aa.value
     );
 
-    logger.debug('Role scoped instances for matching entity', { id: user?.id, ruleRoleScopeEntityName, matchingRoleScopedInstance });
+    logger?.debug('Role scoped instances for matching entity', { id: user?.id, ruleRoleScopeEntityName, matchingRoleScopedInstance });
     // validate HR scope root ID contains the role scope instances
     const hrScopeExist = user?.hierarchical_scopes?.some((hrScope) => matchingRoleScopedInstance.includes(hrScope.id));
     if (!hrScopeExist) {
-      logger.info('Hierarchial scopes for matching role does not exist', {
+      logger?.info('Hierarchial scopes for matching role does not exist', {
         role: ruleRoleValue,
         hrScopes: user?.hierarchical_scopes,
         instances: matchingRoleScopedInstance
       });
       return false;
     } else if (hrScopeExist && user?.scope) {
-      logger.debug('Target scope set and HR scopes exist, validate target scope from HR scopes', { targetScope: user?.scope });
+      logger?.debug('Target scope set and HR scopes exist, validate target scope from HR scopes', { targetScope: user?.scope });
       return checkTargetScopeExists(
         user?.hierarchical_scopes?.filter((hrScope) => matchingRoleScopedInstance?.includes(hrScope?.id) && hrScope?.role === ruleRoleValue),
         user?.scope,
@@ -138,7 +138,7 @@ const checkSubjectMatch = (
       );
     } else if (hrScopeExist && !user.scope) {
       // HR scope match exist but user has not provided scope so still a match is considered
-      logger.debug('Target scope not provided using full HR tree for matched role', { role: ruleRoleValue });
+      logger?.debug('Target scope not provided using full HR tree for matched role', { role: ruleRoleValue });
       // if no scope is provided then use the complete HR tree for user scopes
       user?.hierarchical_scopes?.filter(
         (hrScope) => matchingRoleScopedInstance?.includes(hrScope?.id)
@@ -248,8 +248,8 @@ const buildQueryFromTarget = (
         return;
       }
     } catch (err: any) {
-      logger.error('Error caught evaluating condition:', { condition });
-      logger.error('Error', { code: err.code, message: err.message, stack: err.stack });
+      logger?.error('Error caught evaluating condition:', { condition });
+      logger?.error('Error', { code: err.code, message: err.message, stack: err.stack });
       return;
     }
   }
@@ -278,7 +278,7 @@ const buildQueryFromTarget = (
       // default filter Paramkey for PostgresDB
       filterParamKey = 'orgKey';
     }
-    logger.debug('Filter paramter key for Postgres DB', { filterParamKey });
+    logger?.debug('Filter paramter key for Postgres DB', { filterParamKey });
     for (const eachScope of userTotalScope) {
       query['filters'].push({ field: filterParamKey, operation: 'eq', value: eachScope });
     }
@@ -385,7 +385,7 @@ export const buildFilterPermissions = async (
         if (policy?.target?.subjects) {
           const userSubjectMatched = checkSubjectMatch(subject, policy.target.subjects);
           if (!userSubjectMatched) {
-            logger.debug(`Skipping policy as policy subject and user subject don't match`);
+            logger?.debug(`Skipping policy as policy subject and user subject don't match`);
             continue;
           }
         }
@@ -409,7 +409,7 @@ export const buildFilterPermissions = async (
           if (rule?.target?.subjects) {
             const userSubjectMatched = checkSubjectMatch(subject, rule.target.subjects, reducedUserScope);
             if (!userSubjectMatched) {
-              logger.debug(`Skipping rule as user subject and rule subject don't match`);
+              logger?.debug(`Skipping rule as user subject and rule subject don't match`);
               continue;
             }
           }
@@ -737,12 +737,12 @@ export const createResourceFilterMap = async (
         `the response was ${Response_Decision.DENY}`
       ].join(' ');
       const details = `Subject:${subjectID} does not have access to target scope ${targetScope}}`;
-      logger.verbose(msg);
-      logger.verbose('Details:', { details });
+      logger?.verbose(msg);
+      logger?.verbose('Details:', { details });
       return { decision: Response_Decision.DENY, operation_status: generateOperationStatus(Number(errors.ACTION_NOT_ALLOWED.code), msg) };
     }
     else {
-      logger.verbose([
+      logger?.verbose([
         `The Access response was ${Response_Decision.DENY} for a request from subject:${subjectID}`,
         `resource:${resourceName}, action:${action}, target_scope:${targetScope}`,
         `but since ACS enforcement config is disabled overriding the ACS result`,

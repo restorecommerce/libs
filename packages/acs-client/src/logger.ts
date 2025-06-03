@@ -21,4 +21,4 @@ export function setLogger(logger: Logger) {
   __logger__ = logger;
 }
 
-export default getLogger();
+export default __logger__;

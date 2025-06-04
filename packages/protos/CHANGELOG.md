@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.11.7](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.11.6...@restorecommerce/protos@6.11.7) (2025-06-04)
+
+
+### Bug Fixes
+
+* **proto:** invoice position with valid time frame as timestamp ([e913f69](https://github.com/restorecommerce/libs/commit/e913f69e32d7aff550eae3cf7d5120092d883aa5))
+
+
+
+
+
 ## [6.11.6](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.11.5...@restorecommerce/protos@6.11.6) (2025-06-02)
 
 

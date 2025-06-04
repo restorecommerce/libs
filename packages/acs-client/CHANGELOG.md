@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.20](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@3.0.19...@restorecommerce/acs-client@3.0.20) (2025-06-04)
+
+
+### Bug Fixes
+
+* **proto:** invoice position with valid time frame as timestamp ([e913f69](https://github.com/restorecommerce/libs/commit/e913f69e32d7aff550eae3cf7d5120092d883aa5))
+
+
+
+
+
 ## [3.0.19](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@3.0.18...@restorecommerce/acs-client@3.0.19) (2025-06-02)
 
 

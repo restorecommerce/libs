@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.21](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.2.20...@restorecommerce/facade@2.2.21) (2025-06-12)
+
+
+### Bug Fixes
+
+* **facade:** resolver read filter ([7af4027](https://github.com/restorecommerce/libs/commit/7af4027603fab78b332e81b4bb609a425164a8a1))
+
+
+
+
+
 ## [2.2.20](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.2.19...@restorecommerce/facade@2.2.20) (2025-06-04)
 
 **Note:** Version bump only for package @restorecommerce/facade

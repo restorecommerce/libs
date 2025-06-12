@@ -565,15 +565,15 @@ export const generateSubServiceResolvers = <
                     // TODO Support custom input messages
                     const req = ReadRequest.fromPartial({
                       filters: [{
-                        filters: {
+                        filters: [{
                           field: 'id',
                           operation: Filter_Operation.in,
                           value: JSON.stringify(ids),
                           type: Filter_ValueType.ARRAY
-                        },
-                        limit: ids.length
-                      }]
-                    } as any);
+                        }],
+                      }],
+                      limit: ids.length
+                    } as ReadRequest);
 
                     req.subject = getTyping(authSubjectType)!.processor.fromPartial({});
 

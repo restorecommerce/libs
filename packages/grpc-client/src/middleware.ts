@@ -6,11 +6,10 @@ import {
   Metadata,
 } from 'nice-grpc';
 import {isAbortError} from 'abort-controller-x';
-import { v1 as uuidv1 } from 'uuid';
 import { createLogger } from '@restorecommerce/logger';
-import * as _ from 'lodash';
 import { DeadlineOptions } from 'nice-grpc-client-middleware-deadline';
 import { AsyncLocalStorage } from 'node:async_hooks';
+import { randomUUID } from 'node:crypto';
 
 const tracingHeader = 'x-request-id';
 
@@ -24,7 +23,7 @@ export async function* tracingMiddleware<Request, Response>(
   call: ClientMiddlewareCall<Request, Response, WithRequestID>,
   options: CallOptions,
 ) {
-  const nextID = options.metadata?.get(tracingHeader) || uuidv1();
+  const nextID = options.metadata?.get(tracingHeader) ?? randomUUID();
   options.metadata?.set(tracingHeader, nextID);
   return yield* call.next(call.request, {
     ...options,

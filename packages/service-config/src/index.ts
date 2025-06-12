@@ -1,7 +1,7 @@
 import * as path from 'path';
 import { ICallbackFunction, Provider } from 'nconf';
 
-export class ServiceConfig extends Provider implements Provider {
+export class ServiceConfig extends Provider {
   public override get<T = any>(key: string, callback?: ICallbackFunction) {
     return super.get(key, callback) as T;
   }

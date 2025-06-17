@@ -136,10 +136,20 @@ export class AccessControlledServiceBase<O extends ResourceListResponse, I exten
 
   protected catchStatusError<T extends ResourceResponse>(e?: any, item?: T): T {
     item ??= {} as T;
+    const {
+      code,
+      title,
+      message,
+      details,
+    } = e ?? {};
     item.status = {
       id: item?.payload?.id,
-      code: Number.isInteger(e?.code) ? e.code : 500,
-      message: e?.message ?? e?.details ?? (e ? JSON.stringify(e) : 'Unknown Error!')
+      code: Number.isInteger(code) ? code : 500,
+      message: message ? [
+        title,
+        message,
+        details,
+      ].filter(s => s).join('; ') : 'Unknwon Error!'
     };
     this.logger?.warn(e?.stack ?? item.status.message, item);
     return item;
@@ -147,9 +157,19 @@ export class AccessControlledServiceBase<O extends ResourceListResponse, I exten
 
   protected catchOperationError<T extends ResourceListResponse>(e?: any, response?: T): T {
     response ??= {} as T;
+    const {
+      code,
+      title,
+      message,
+      details,
+    } = e ?? {};
     response.operation_status = {
-      code: Number.isInteger(e?.code) ? e.code : 500,
-      message: e?.message ?? e?.details ?? (e ? JSON.stringify(e) : 'Unknown Error!'),
+      code: Number.isInteger(code) ? code : 500,
+      message: message ? [
+        title,
+        message,
+        details,
+      ].filter(s => s).join('; ') : 'Unknwon Error!'
     };
     this.logger?.error(e?.stack ?? response.operation_status.message, response);
     return response;

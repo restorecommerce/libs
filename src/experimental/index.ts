@@ -1,3 +1,4 @@
+export * from './AccessControlledServiceBase';
 export * from './ClientRegister';
 export * from './ResourceAggregator';
 export * from './ResourceAwaitQueue';

@@ -16,6 +16,8 @@ import {
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base';
 import { Status } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/status';
 
+export type ElementOf<T = any> = T extends Array<infer E> ? E : T;
+
 // Mapping of arangodb error codes to standard HTTP error codes
 const ArangoHttpErrCodeMap: Record<number, number> = {
   1210: 409, // ERROR_ARANGO_UNIQUE_CONSTRAINT_VIOLATED
@@ -104,7 +106,7 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
       const customQueries = request.custom_queries;
       const customArgs = request.custom_arguments;
       const search = request?.search;
-      const objectEntities = (await this.resourceapi.read(
+      const objectEntities = (await this.resourceapi.read<ElementOf<T['items']>['payload']>(
         filter,
         limit,
         offset,
@@ -132,7 +134,7 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
         }
       } as DeepPartial<T>;
     } catch (error: any) {
-      this.logger?.error('Error caught while processing read request', error);
+      this.logger?.error('Error caught while processing read request', { error });
       return {
         operation_status: {
           code: error.code,
@@ -229,7 +231,7 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
       return docs;
     }
     catch (error: any) {
-      this.logger?.error('Error caught while processing create request', error);
+      this.logger?.error('Error caught while processing create request', { error });
       return {
         operation_status: {
           code: error.code,
@@ -273,10 +275,10 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
         : this.OperationStatusCodes.SUCCESS
       };
     } catch (error: any) {
-      this.logger?.error('Error caught while processing delete request:', error);
+      this.logger?.error('Error caught while processing delete request:', { error });
       return {
         operation_status: {
-          code: error.code,
+          code: Number.isInteger(error.code) ? error.code : 500,
           message: error.details ?? error.message
         }
       } as DeepPartial<DeleteResponse>;
@@ -299,7 +301,7 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
       this.logger?.info(this.name + ' update response', docs);
       return docs as DeepPartial<T>;
     } catch (error: any) {
-      this.logger?.error('Error caught while processing update request', error);
+      this.logger?.error('Error caught while processing update request', { error });
       return {
         operation_status: {
           code: Number.isInteger(error.code) ? error.code : 500,
@@ -325,7 +327,7 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
       this.logger?.info(`${this.name} upsert response`, { items: upsertResponse });
       return docs as DeepPartial<T>;
     } catch (error: any) {
-      this.logger?.error('Error caught while processing upsert request', error);
+      this.logger?.error('Error caught while processing upsert request', { ...error });
       return {
         operation_status: {
           code: Number.isInteger(error.code) ? error.code : 500,

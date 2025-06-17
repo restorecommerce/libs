@@ -168,14 +168,15 @@ export function resolve<T, M extends ResolverMap>(
     return entity.map(value => resolve(value, resolverMap[0]));
   }
   else {
+    const copy = { ...(entity as any) };
     return Object.assign(
-      entity,
+      copy,
       ...Object.entries(resolverMap ?? {}).map(
         ([k, r]) => {
-          const id = typeof r?.[0] === 'string' && (entity as any)[r[0]];
+          const id = typeof r?.[0] === 'string' && copy[r[0]];
           if (!id) {
             return {
-              [k]: resolve(entity[k], r)
+              [k]: resolve(copy[k], r)
             };
           }
           else if (Array.isArray(id)) {
@@ -198,4 +199,4 @@ export function resolve<T, M extends ResolverMap>(
       ).filter(e => e)
     );
   }
-}
+};

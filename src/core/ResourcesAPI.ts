@@ -1,4 +1,3 @@
-import * as _ from 'lodash';
 import { type RedisClientType } from 'redis';
 import { randomUUID } from 'crypto';
 import { Logger } from '@restorecommerce/logger';
@@ -164,7 +163,6 @@ export class ResourcesAPIBase {
     return this.setMeta(o, subject, create);
   }
 
-
   /**
    * Finds documents based on provided filters and options
    * @param {object} filter key value filter using mongodb/nedb filter format.
@@ -174,7 +172,7 @@ export class ResourcesAPIBase {
    * @param {object} fields key value, key=field value: 0=exclude, 1=include
    * @returns {an Object that contains an items field}
    */
-  async read(
+  async read<T extends BaseDocument>(
     filter: object = {},
     limit = 1000,
     offset = 0,
@@ -183,7 +181,7 @@ export class ResourcesAPIBase {
     customQueries: string[] = [],
     customArgs: any = {},
     search: DeepPartial<Search>
-  ): Promise<BaseDocument[]> {
+  ): Promise<T[]> {
     const options = {
       limit: Math.min(limit, 1000),
       offset,
@@ -193,7 +191,7 @@ export class ResourcesAPIBase {
       customArguments: customArgs?.value ? JSON.parse(customArgs.value.toString()) : {},
       search
     };
-    let entities: BaseDocument[] = await this.db.find(this.collectionName, filter, options);
+    let entities: T[] = await this.db.find(this.collectionName, filter, options);
     entities = this.encodeOrDecode(entities, this.bufferFields, 'encode');
     entities = this.encodeOrDecode(entities, this.timeStampFields, 'convertMilisecToDateObj');
     return entities;
@@ -520,7 +518,7 @@ export class ResourcesAPIBase {
         return doc;
       }
       catch (error: any) {
-        this.logger?.error(`Error updating document ${doc.id}`, error);
+        this.logger?.error(`Error updating document ${doc.id}`, { ...error });
         return {
           ...doc,
           error: true,

@@ -1,3 +1,7 @@
+### 1.7.0 (April 25th, 2025)
+
+- refine meta default behaviour
+- add experimental resource aggregators
 
 ### 1.6.2 (June 27th, 2024)
 

@@ -31,7 +31,7 @@ jobs:
           git config --global user.name "Restorecommerce Bot"
 
       - name: Build
-        run: npm run build -- --verbose
+        run: npm run build --verbose
 
       - name: NPM Token
         env:

@@ -176,7 +176,7 @@ export function resolve<T, M extends ResolverMap>(
           const id = typeof r?.[0] === 'string' && copy[r[0]];
           if (!id) {
             return {
-              [k]: resolve(copy[k], r)
+              [k]: r?.[2] ? resolve(copy[k], r[2]) : resolve(copy[k], r)
             };
           }
           else if (Array.isArray(id)) {
@@ -199,4 +199,4 @@ export function resolve<T, M extends ResolverMap>(
       ).filter(e => e)
     );
   }
-};
+}

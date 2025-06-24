@@ -32,11 +32,10 @@ import {
   type Subject,
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/auth';
 import {
-  type OperationStatus,
-} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/status';
-import {
+  OperationStatusCodes,
   ResourcesAPIBase,
   ServiceBase,
+  ServiceBaseOperationStatusCodes,
 } from '../core/index';
 
 export const ACSContextFactory = async <O extends ResourceListResponse, I extends ResourceList>(self: AccessControlledServiceBase<O, I>, request: I & DeleteRequest, context: any): Promise<ACSClientContext> => {
@@ -63,25 +62,27 @@ export const DefaultResourceFactory = <T extends ResourceList>(...resourceNames:
   })
 );
 
+export const AccessControlledServiceBaseOperationStatusCodes = {
+  ...ServiceBaseOperationStatusCodes,
+  LIMIT_EXHAUSTED: {
+    code: 500,
+    message: 'Query limit 1000 exhausted!',
+  },
+};
+export type AccessControlledServiceBaseOperationStatusCodes = OperationStatusCodes<typeof AccessControlledServiceBaseOperationStatusCodes>;
+
 @access_controlled_service
 export class AccessControlledServiceBase<O extends ResourceListResponse, I extends ResourceList>
   extends ServiceBase<O, I>
   implements ServiceImplementation
 {
-  protected readonly operation_status_codes: Record<string, OperationStatus> = {
-    SUCCESS: {
-      code: 200,
-      message: 'SUCCESS',
-    },
-    PARTIAL: {
-      code: 400,
-      message: 'Patrial executed with errors!',
-    },
-    LIMIT_EXHAUSTED: {
-      code: 500,
-      message: 'Query limit 1000 exhausted!',
-    },
-  };
+  protected override get operationStatusCodes(): AccessControlledServiceBaseOperationStatusCodes {
+    return super.operationStatusCodes;
+  }
+
+  protected override set operationStatusCodes(value: OperationStatusCodes<any>) {
+    super.operationStatusCodes = value;
+  }
 
   constructor(
     resourceName: string,
@@ -126,11 +127,11 @@ export class AccessControlledServiceBase<O extends ResourceListResponse, I exten
         logger,
         resourceName
       ),
-      enableEvents
+      enableEvents,
     );
-    this.operation_status_codes = {
-      ...this.operation_status_codes,
-      ...cfg.get('operationStatusCodes'),
+    super.operationStatusCodes = {
+      ...AccessControlledServiceBaseOperationStatusCodes,
+      ...cfg?.get('operationStatusCodes')
     };
   }
 
@@ -230,13 +231,13 @@ export class AccessControlledServiceBase<O extends ResourceListResponse, I exten
   ): Promise<DeepPartial<O>> {
     ids = [...new Set(ids)].filter(id => id);
     if (ids.length > 1000) {
-      throw this.operation_status_codes.LIMIT_EXHAUSTED;
+      throw this.operationStatusCodes.LIMIT_EXHAUSTED;
     }
 
     if (ids.length === 0) {
       const response = {
         total_count: 0,
-        operation_status: this.operation_status_codes.SUCCESS,
+        operation_status: this.operationStatusCodes.SUCCESS,
       };
       return response as DeepPartial<O>;
     }

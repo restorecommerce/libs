@@ -14,7 +14,7 @@ import {
   ServiceImplementation,
   Sort_SortOrder
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base';
-import { Status } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/status';
+import { OperationStatus, Status } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/status';
 
 export type ElementOf<T = any> = T extends Array<infer E> ? E : T;
 
@@ -31,29 +31,59 @@ const ArangoHttpErrCodeMap: Record<number, number> = {
   1228: 404, // ERROR_ARANGO_DATABASE_NOT_FOUND
 };
 
+export type StatusCodes<T> = {
+  [K in keyof T]?: Status
+};
+
+export type OperationStatusCodes<T> = {
+  [K in keyof T]?: OperationStatus
+};
+
+export const ServiceBaseStatusCodes = {
+  SUCCESS: {
+    code: 200,
+    message: 'success',
+  },
+};
+export type ServiceBaseStatusCodes = StatusCodes<typeof ServiceBaseStatusCodes>;
+
+export const ServiceBaseOperationStatusCodes = {
+  SUCCESS: {
+    code: 200,
+    message: 'success',
+  },
+  MULTI_STATUS: {
+    code: 207,
+    message: 'Multi status - response may include errors!',
+  },
+};
+export type ServiceBaseOperationStatusCodes = OperationStatusCodes<typeof ServiceBaseOperationStatusCodes>;
+
 /**
  * A microservice chassis ready class which provides endpoints for
  * CRUD resource operations.
  */
 export class ServiceBase<T extends ResourceListResponse, M extends ResourceList> implements ServiceImplementation {
+  private status_codes: StatusCodes<any>;
+  private operation_status_codes: OperationStatusCodes<any>;
   
-  protected readonly StatusCodes = {
-    OK: {
-      code: 200,
-      message: 'success',
-    },
-  };
+  protected get statusCodes(): ServiceBaseStatusCodes {
+    this.status_codes ??= { ...ServiceBaseStatusCodes };
+    return this.status_codes;
+  }
 
-  protected readonly OperationStatusCodes = {
-    SUCCESS: {
-      code: 200,
-      message: 'success',
-    },
-    MULTI_STATUS: {
-      code: 207,
-      message: 'Multi status - response may include errors!',
-    },
-  };
+  protected set statusCodes(value: StatusCodes<any>) {
+    Object.assign(this.statusCodes, value);
+  }
+
+  protected get operationStatusCodes(): ServiceBaseOperationStatusCodes {
+    this.operation_status_codes ??= { ...ServiceBaseOperationStatusCodes };
+    return this.operation_status_codes;
+  }
+
+  protected set operationStatusCodes(value: OperationStatusCodes<any>) {
+    Object.assign(this.operationStatusCodes, value);
+  }
 
   /**
    * @constructor
@@ -68,7 +98,7 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
     public readonly events?: Topic,
     public readonly logger?: Logger,
     public readonly resourceapi?: ResourcesAPIBase,
-    public isEventsEnabled?: boolean
+    public isEventsEnabled?: boolean,
   ) {}
 
   /**
@@ -120,18 +150,15 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
       const readResponseWithStatus = objectEntities.map((object) => ({
         payload: object,
         status: {
-          code: 200,
-          message: 'success'
-        }
+          ...this.statusCodes.SUCCESS,
+          id: object.id,
+        },
       }));
 
       return {
         items: readResponseWithStatus,
         total_count: readResponseWithStatus.length,
-        operation_status: {
-          code: 200,
-          message: 'success'
-        }
+        operation_status: this.operationStatusCodes.SUCCESS
       } as DeepPartial<T>;
     } catch (error: any) {
       this.logger?.error('Error caught while processing read request', { error });
@@ -160,7 +187,7 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
         };
       } else {
         return {
-          ...this.StatusCodes.OK,
+          ...this.statusCodes.SUCCESS,
           id: item.id,
         };
       }
@@ -188,7 +215,7 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
         return {
           payload: item,
           status: {
-            ...this.StatusCodes.OK,
+            ...this.statusCodes.SUCCESS,
             id: item.id,
           }
         };
@@ -202,14 +229,14 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
       return {
         items,
         total_count: items.length ?? 0,
-        operation_status: this.OperationStatusCodes.MULTI_STATUS,
+        operation_status: this.operationStatusCodes.MULTI_STATUS,
       } as DeepPartial<T>;
     }
     else {
       return {
         items,
         total_count: items.length ?? 0,
-        operation_status: this.OperationStatusCodes.SUCCESS,
+        operation_status: this.operationStatusCodes.SUCCESS,
       } as DeepPartial<T>;
     }
   }
@@ -271,8 +298,8 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
       return {
         status,
         operation_status: status?.some(status => status.code !== 200)
-        ? this.OperationStatusCodes.MULTI_STATUS
-        : this.OperationStatusCodes.SUCCESS
+        ? this.operationStatusCodes.MULTI_STATUS
+        : this.operationStatusCodes.SUCCESS
       };
     } catch (error: any) {
       this.logger?.error('Error caught while processing delete request:', { error });

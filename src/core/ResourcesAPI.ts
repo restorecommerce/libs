@@ -173,7 +173,7 @@ export class ResourcesAPIBase {
    * @returns {an Object that contains an items field}
    */
   async read<T extends BaseDocument>(
-    filter: object = {},
+    filter: any = {},
     limit = 1000,
     offset = 0,
     sort: any = {},
@@ -517,13 +517,13 @@ export class ResourcesAPIBase {
         }
         return doc;
       }
-      catch (error: any) {
-        this.logger?.error(`Error updating document ${doc.id}`, { ...error });
+      catch ({ code, message, details, stack, name, cause }: any) {
+        this.logger?.error(`Error updating document ${doc.id}`, { code, message, details, stack, name, cause });
         return {
           ...doc,
           error: true,
-          errorNum: error?.code,
-          errorMessage: `On graph update: ${error?.details ?? error?.message}`
+          errorNum: Number.isInteger(code) ? code : 500,
+          errorMessage: `On graph update: ${details ?? message}`
         };
       }
     }));

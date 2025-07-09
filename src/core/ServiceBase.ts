@@ -160,12 +160,13 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
         total_count: readResponseWithStatus.length,
         operation_status: this.operationStatusCodes.SUCCESS
       } as DeepPartial<T>;
-    } catch (error: any) {
-      this.logger?.error('Error caught while processing read request', { error });
+    }
+    catch ({ code, message, details, stack, name, cause }: any) {
+      this.logger?.error('Error caught while processing read request:', { code, message, details, stack, name, cause });
       return {
         operation_status: {
-          code: error.code,
-          message: error.details ?? error.message
+          code: Number.isInteger(code) ? code : 500,
+          message: details ?? message
         }
       } as DeepPartial<T>;
     }
@@ -257,12 +258,12 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
       this.logger?.info(this.name + ' create response', docs);
       return docs;
     }
-    catch (error: any) {
-      this.logger?.error('Error caught while processing create request', { error });
+    catch ({ code, message, details, stack, name, cause }: any) {
+      this.logger?.error('Error caught while processing create request:', { code, message, details, stack, name, cause });
       return {
         operation_status: {
-          code: error.code,
-          message: error.details ?? error.message
+          code: Number.isInteger(code) ? code : 500,
+          message: details ?? message
         }
       } as DeepPartial<T>;
     }
@@ -301,12 +302,13 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
         ? this.operationStatusCodes.MULTI_STATUS
         : this.operationStatusCodes.SUCCESS
       };
-    } catch (error: any) {
-      this.logger?.error('Error caught while processing delete request:', { error });
+    } 
+    catch ({ code, message, details, stack, name, cause }: any) {
+      this.logger?.error('Error caught while processing delete request:', { code, message, details, stack, name, cause });
       return {
         operation_status: {
-          code: Number.isInteger(error.code) ? error.code : 500,
-          message: error.details ?? error.message
+          code: Number.isInteger(code) ? code : 500,
+          message: details ?? message
         }
       } as DeepPartial<DeleteResponse>;
     }
@@ -327,12 +329,13 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
       const docs = this.generateResourceResponseList(items);
       this.logger?.info(this.name + ' update response', docs);
       return docs as DeepPartial<T>;
-    } catch (error: any) {
-      this.logger?.error('Error caught while processing update request', { error });
+    }
+    catch ({ code, message, details, stack, name, cause }: any) {
+      this.logger?.error('Error caught while processing update request:', { code, message, details, stack, name, cause });
       return {
         operation_status: {
-          code: Number.isInteger(error.code) ? error.code : 500,
-          message: error.details ?? error.message
+          code: Number.isInteger(code) ? code : 500,
+          message: details ?? message
         }
       } as DeepPartial<T>;
     }
@@ -353,12 +356,13 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
       const docs = this.generateResourceResponseList(items);
       this.logger?.info(`${this.name} upsert response`, { items: upsertResponse });
       return docs as DeepPartial<T>;
-    } catch (error: any) {
-      this.logger?.error('Error caught while processing upsert request', { ...error });
+    }
+    catch ({ code, message, details, stack, name, cause }: any) {
+      this.logger?.error('Error caught while processing upsert request:', { code, message, details, stack, name, cause });
       return {
         operation_status: {
-          code: Number.isInteger(error.code) ? error.code : 500,
-          message: error.details ?? error.message
+          code: Number.isInteger(code) ? code : 500,
+          message: details ?? message
         }
       } as DeepPartial<T>;
     }

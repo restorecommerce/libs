@@ -21,7 +21,7 @@ const updateObject = (
         _.set(obj, path, marshallObj(value));
         break;
       case 'decode':
-        _.set(obj, path, JSON.parse(value.value.toString()));
+        _.set(obj, path, JSON.parse(value.value?.toString()));
         break;
       case 'convertDateObjToMilisec':
         if (value instanceof Date) {
@@ -42,11 +42,7 @@ const updateObject = (
 const setNestedPath = (object: any, fieldPath: string, fieldHandlerType: FieldHandlerType) => {
   const prefix = fieldPath?.substring(0, fieldPath.indexOf('.['));
   const suffix = fieldPath?.substring(fieldPath.indexOf('].') + 2);
-  let setRecursive = false;
-  // recursive check if the sub suffix again contains an array index
-  if (suffix.includes('.[')) {
-    setRecursive = true;
-  }
+  const setRecursive = suffix.includes('.[');
   if (prefix && suffix) {
     const array = _.get(object, prefix);
     array?.forEach((obj: any) => {

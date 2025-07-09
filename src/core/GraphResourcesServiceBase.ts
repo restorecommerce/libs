@@ -103,9 +103,9 @@ export class GraphResourcesServiceBase implements GraphServiceImplementation {
           options, filters
         );
         this.logger?.debug('Received traversal ArrayCursor from DB');
-      } catch (err: any) {
+      } catch ({ message, details, stack }: any) {
         yield {
-          operation_status: this.catchOperationError('Error executing DB Traversal', err)
+          operation_status: this.catchOperationError('Error executing DB Traversal', { message, details, stack })
         };
         return;
       }
@@ -176,9 +176,9 @@ export class GraphResourcesServiceBase implements GraphServiceImplementation {
       yield ({ operation_status: { code: 200, message: 'success' } });
       this.logger?.debug('Traversal request ended');
       return;
-    } catch (err: any) {
+    } catch ({ message, details, stack }: any) {
       yield {
-        operation_status: this.catchOperationError('Error caught executing traversal', err)
+        operation_status: this.catchOperationError('Error caught executing traversal', { message, details, stack })
       };
       return;
     }

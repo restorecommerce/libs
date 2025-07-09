@@ -808,7 +808,6 @@ describe('ServiceBase', () => {
         should.exist(result);
         result.items!.length.should.equal(3);
         result.items![0].payload!.id!.should.equal('test_xy');
-        should.not.exist(result.items![0].payload!.meta!.created); // due to lazy response, an updated document won't respond its created timestamp.
         should.exist(result.items![0].payload!.meta!.modified); // since it was updated it should have a modified timestamp.
         result.items![0].payload!.meta!.modified!.getTime().should.be.greaterThan(now.getTime());
 

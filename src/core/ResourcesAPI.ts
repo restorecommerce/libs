@@ -266,14 +266,13 @@ export class ResourcesAPIBase {
       } else {
         result.push(createVertexResp);
       }
-      this.encodeOrDecode(result, this.timeStampFields, 'convertMilisecToDateObj');
     }
     else {
       const inserts = await this.db.insert(collection, documents);
       result.push(...inserts);
-      this.encodeOrDecode(result, this.timeStampFields, 'convertMilisecToDateObj');
     }
-
+    
+    this.encodeOrDecode(result, this.timeStampFields, 'convertMilisecToDateObj');
     if (events) {
       await Promise.all(result?.map(async (item: any) => {
         if (!item?.error) {
@@ -281,6 +280,7 @@ export class ResourcesAPIBase {
         }
       }));
     }
+    this.encodeOrDecode(result, this.bufferFields, 'encode');
     return result;
   }
 
@@ -383,8 +383,6 @@ export class ResourcesAPIBase {
   ): Promise<T[]> {
     const createDocuments = new Array<T>();
     const updateDocuments = new Array<T>();
-    documents = this.encodeOrDecode(documents, this.bufferFields, 'decode');
-
     const orgs = new Set(
       await this.db.find(
         this.collectionName,
@@ -414,18 +412,19 @@ export class ResourcesAPIBase {
       }
     });
 
+    const results = new Array<T>();
     if (updateDocuments?.length > 0) {
-      await this.update(updateDocuments, subject, events);
+      await this.update(updateDocuments, subject, events).then(
+        updates => results.push(...updates)
+      );
     }
 
     if (createDocuments?.length > 0) {
-      await this.create(createDocuments, subject, events);
+      await this.create(createDocuments, subject, events).then(
+        creates => results.push(...creates)
+      );
     }
-
-    const result = [...updateDocuments, ...createDocuments];
-    this.encodeOrDecode(result, this.timeStampFields, 'convertMilisecToDateObj');
-    this.encodeOrDecode(result, this.bufferFields, 'encode');
-    return result;
+    return results;
   }
 
   /**
@@ -439,10 +438,11 @@ export class ResourcesAPIBase {
     subject: Subject,
     events?: Topic,
   ): Promise<T[]> {
-    documents = this.encodeOrDecode(documents, this.bufferFields, 'decode');
     documents = documents.map(
       (doc) => this.setMeta(doc, subject)
     );
+    documents = this.encodeOrDecode(documents, this.bufferFields, 'decode');
+    documents = this.encodeOrDecode(documents, this.timeStampFields, 'convertDateObjToMilisec');
     documents = await Promise.all(documents.map(async (doc) => {
       try {
         if (this.isGraphDB(this.db)) {
@@ -530,7 +530,6 @@ export class ResourcesAPIBase {
 
     const errors = documents.filter(doc => doc.error);
     const updates = documents.filter(doc => !doc.error);
-    this.encodeOrDecode(updates, this.timeStampFields, 'convertDateObjToMilisec');
     const results = await this.db.update(this.collectionName, updates);
     results.push(...errors);
     this.encodeOrDecode(results, this.timeStampFields, 'convertMilisecToDateObj');

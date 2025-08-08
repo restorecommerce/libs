@@ -80,6 +80,11 @@ service FulfillmentService {
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
 
   /**
+  * Evaluate and (re-)Render fulfillments as PDF to ostorage. (creates if not exist, updates if id is given)
+  */
+  rpc Render (FulfillmentList) returns (FulfillmentListResponse);
+
+  /**
   Requires Invoice Service
   */
   rpc CreateInvoice (FulfillmentInvoiceRequestList) returns (io.restorecommerce.invoice.InvoiceListResponse);
@@ -249,6 +254,7 @@ message Fulfillment {
   repeated Tracking trackings = 9; //set by service
   repeated io.restorecommerce.amount.Amount total_amounts = 10; //set by service
   optional FulfillmentState fulfillment_state = 11; //set by service
+  repeated io.restorecommerce.file.File documents = 12; // url to rendered PDFs
 }
 
 message FulfillmentList {

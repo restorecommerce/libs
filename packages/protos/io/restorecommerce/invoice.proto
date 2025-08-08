@@ -153,8 +153,8 @@ message Invoice {
   ]; // shop_number --- ref. to sender orga
   optional google.protobuf.Timestamp timestamp = 8;
   optional PaymentState payment_state = 9;
-  optional io.restorecommerce.address.BillingAddress sender = 10;
-  optional io.restorecommerce.address.BillingAddress recipient = 11;
+  optional io.restorecommerce.address.ShippingAddress sender = 10;
+  optional io.restorecommerce.address.ShippingAddress recipient = 11;
   repeated Section sections = 12;
   repeated io.restorecommerce.amount.Amount total_amounts = 13;
   repeated string payment_hints = 14;
@@ -164,6 +164,7 @@ message Invoice {
   optional bool sent = 18;
   optional bool withdrawn = 19;
   optional string customer_order_number = 20;
+  optional io.restorecommerce.address.BillingAddress billing_address = 21;
 }
 
 message Section {

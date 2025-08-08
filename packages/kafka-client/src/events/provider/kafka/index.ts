@@ -80,7 +80,8 @@ export class Topic {
               this.provider.logger.info(`Topic ${this.name} created successfully`);
               resolve();
             }).catch(err => {
-              this.provider.logger.error(`Cannot create topic ${this.name}:`, { code: err.code, message: err.message, stack: err.stack });
+              const { code, message, details, stack } = err;
+              this.provider.logger.error(`Cannot create topic ${this.name}:`, { code, message, details, stack });
               operation.retry(err);
               const attemptNo = (operation.attempts as () => number)();
               this.provider.logger.info(`Retry creating the Topic, attempt no: ${attemptNo}`);
@@ -703,7 +704,8 @@ export class Kafka {
         return data;
       });
     } catch (error: any) {
-      this.logger.error(`Error on sending event ${eventName} to topic ${topicName}`, { error });
+      const { message, details, stack } = error;
+      this.logger.error(`Error on sending event ${eventName} to topic ${topicName}`, { message, details, stack });
       throw error;
     }
   }

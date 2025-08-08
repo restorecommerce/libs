@@ -12,14 +12,14 @@ export const convertyCamelToSnakeCase = (entity: string): string => {
 };
 
 export const getKeys = (obj: any): string[] => {
-  let set = new Set<string>();
+  const set = new Set<string>();
   if (obj) {
     const keys = Object.keys(obj);
-    for (let key of keys) {
+    for (const key of keys) {
       if (typeof obj[key] === 'string') {
         set.add(obj[key]);
       } else if (Array.isArray(obj[key])) {
-        for (let value of obj[key]) {
+        for (const value of obj[key]) {
           set.add(value);
         }
       }

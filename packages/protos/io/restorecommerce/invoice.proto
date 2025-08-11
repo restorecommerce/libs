@@ -164,7 +164,8 @@ message Invoice {
   optional bool sent = 18;
   optional bool withdrawn = 19;
   optional string customer_order_number = 20;
-  optional io.restorecommerce.address.BillingAddress billing_address = 21;
+  optional string customer_vat_id = 21;
+  optional io.restorecommerce.address.BillingAddress billing_address = 22;
 }
 
 message Section {

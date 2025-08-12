@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.11.8](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.11.7...@restorecommerce/protos@6.11.8) (2025-08-12)
+
+
+### Bug Fixes
+
+* **protos:** add customer-vat-id to invoice ([716b724](https://github.com/restorecommerce/libs/commit/716b724d54591c64cd16b7fcd540e3df6271a1bf))
+* **protos:** fulfillment add render func, invoice needs shipping address ([87ea330](https://github.com/restorecommerce/libs/commit/87ea330a27c3486058a9c515f89a40f227261941))
+
+
+
+
+
 ## [6.11.7](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.11.6...@restorecommerce/protos@6.11.7) (2025-06-04)
 
 

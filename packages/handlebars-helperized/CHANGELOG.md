@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.5.1](https://github.com/restorecommerce/handlebars-helperized/compare/@restorecommerce/handlebars-helperized@1.5.0...@restorecommerce/handlebars-helperized@1.5.1) (2025-08-12)
+
+
+### Bug Fixes
+
+* **helperized:** l10n now allows objects with { value, default } fallback ([31e9069](https://github.com/restorecommerce/handlebars-helperized/commit/31e9069e3869547fa74120241ed89ce769e3bd70))
+
+
+
+
+
 # [1.5.0](https://github.com/restorecommerce/handlebars-helperized/compare/@restorecommerce/handlebars-helperized@1.4.3...@restorecommerce/handlebars-helperized@1.5.0) (2025-03-28)
 
 

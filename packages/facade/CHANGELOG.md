@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.22](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.2.21...@restorecommerce/facade@2.2.22) (2025-08-12)
+
+
+### Bug Fixes
+
+* **protos:** fulfillment add render func, invoice needs shipping address ([87ea330](https://github.com/restorecommerce/libs/commit/87ea330a27c3486058a9c515f89a40f227261941))
+
+
+
+
+
 ## [2.2.21](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.2.20...@restorecommerce/facade@2.2.21) (2025-06-12)
 
 

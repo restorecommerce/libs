@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.35](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.2.34...@restorecommerce/kafka-client@1.2.35) (2025-08-12)
+
+
+### Bug Fixes
+
+* **protos:** fulfillment add render func, invoice needs shipping address ([87ea330](https://github.com/restorecommerce/kafka-client/commit/87ea330a27c3486058a9c515f89a40f227261941))
+
+
+
+
+
 ## [1.2.34](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.2.33...@restorecommerce/kafka-client@1.2.34) (2025-06-12)
 
 **Note:** Version bump only for package @restorecommerce/kafka-client

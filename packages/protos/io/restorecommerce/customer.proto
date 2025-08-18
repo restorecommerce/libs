@@ -67,6 +67,8 @@ message Customer {
       field_name: "setting",
     }
   ];
+  optional string name = 7; // display name!
+  optional string description = 8;
 }
 
 message Private {

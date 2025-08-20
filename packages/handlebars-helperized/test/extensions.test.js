@@ -57,15 +57,15 @@ describe('the handlebars extensions', () => {
     it('should format timestamps', async () => {
       const tpl = load('times');
       const renderer = new Renderer(tpl, null, null, {});
-      
-      const ts = '03-19-2019 13:37:00';
-      const format = 'MM-DD-YYYY HH:mm:ss';
-      const tz = moment.tz.guess();
-      const yesterday = moment.tz(ts, format, tz);
-      const context = {yesterday};
+      const yesterday = '03-17-2019 13:37:00';
+      const tomorrow = new Date('03-19-2019 13:37:00');
+      const context = { yesterday, tomorrow };
       const result = await renderer.render(context);
-      const ago = yesterday.fromNow();
-      const expectedResult = 'ago: ' + ago + `\ndf: 03/19/2019\ndtf: March 19, 2019 1:37 PM\n`;
+      const expectedResult = [
+        'ago: 2 days ago',
+        'df: 03/19/2019',
+        'dtf: March 19, 2019 at 1:37 PM',
+      ].join('\n');
       expect(result).to.equal(expectedResult);
     });
   });

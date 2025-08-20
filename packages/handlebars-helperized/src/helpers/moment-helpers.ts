@@ -1,47 +1,11 @@
+import hbs from 'handlebars';
 import moment from 'moment-timezone';
 
-const  momentHandlebarsExtension = (hbs: any, opts: any) => {
-  // Output point in time relative to current point in time
-  // for example: '1h ago'
-  hbs.registerHelper('ago', (value: any, options: any) => {
-    let v = value;
-    if (options.isSeconds) {
-      // the given property represents seconds since UNIX epoch, so we
-      // multiply by 1000 to get the date in milliseconds since UNIX epoch
-      v *= 1000;
-    }
-    const tz = options.hash.timezone || moment.tz.guess();
-    return moment(v).tz(tz).locale(opts.locale).fromNow();
-  });
-
-  // Date format short
-  hbs.registerHelper('df', (value: any, options: any) => {
-    const tz = options.hash.timezone || moment.tz.guess();
-    return moment(value).tz(tz).locale(opts.locale).format('L');
-  });
-
-  // Date format Long
-  hbs.registerHelper('dfl', (value: any, options: any) => {
-    const tz = options.hash.timezone || moment.tz.guess();
-    return moment(value).tz(tz).locale(opts.locale).format('LL');
-  });
-
-  // Time format
-  hbs.registerHelper('tf', (value: any, options: any) => {
-    const tz = options.hash.timezone || moment.tz.guess();
-    return moment(value).tz(tz).locale(opts.locale).format('LT');
-  });
-
-  // Date-Time format
-  hbs.registerHelper('dtf', (value: any, options: any) => {
-    const tz = options.hash.timezone || moment.tz.guess();
-    return moment(value).tz(tz).locale(opts.locale).format('LLL');
-  });
-
+const  momentHandlebarsExtension = (opts: any) => {
   // Date-Time format with given format
   hbs.registerHelper('dff', (value: any, options: any) => {
-    const format = options.hash.format || '';
-    const tz = options.hash.timezone || moment.tz.guess();
+    const format = options.hash.format ?? '';
+    const tz = options.hash.timezone ?? moment.tz.guess();
     return moment(value).tz(tz).format(format);
   });
 
@@ -54,7 +18,7 @@ const  momentHandlebarsExtension = (hbs: any, opts: any) => {
   // A format can be a template string with this syntax:
   // '[it\'s] D [days and] h [hours]'
   hbs.registerHelper('duf', (value: any, options: any) => {
-    const format = options.hash.format || '';
+    const format = options.hash.format ?? '';
     const dur: any = moment.duration(value);
      
     return moment(dur._data).format(format);

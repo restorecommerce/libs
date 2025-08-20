@@ -1,44 +1,53 @@
 import juice from 'juice';
-import { defaults } from 'lodash-es';
 // the basic building block is the handlebars rendering engine
 import hbs from 'handlebars';
 import { localizationHandlebarsExtension } from './helpers/l10n-helpers.js';
 import { numberHandlebarsExtension } from './helpers/number-helpers.js';
-import { momentHandlebarsExtension } from './helpers/moment-helpers.js';
+import { datetimeHandlebarsExtensions } from './helpers/datetime-helpers.js';
+import { momentHandlebarsExtension } from './helpers/moment-helpers.js'; // deprecated!
+import { listHandlebarsExtensions } from './helpers/list-helpers.js';
 import { customHandlebarsExtensions } from './helpers/custom-helpers.js';
 // @ts-expect-error no types
 import handlebarsLayouts from 'handlebars-layouts';
 
 const defaultOpts = {
-  locale: 'en_US',
+  locale: 'en-US',
   texts: {}
 };
 
 // Initializes and configures a custom handlebars instance
 const init = async (options: object | undefined, customHelpersList: any): Promise<(typeof hbs)> => {
   // default values if nothing given
-  const opts = defaults(options, defaultOpts);
+  const opts = {
+    ...defaultOpts,
+    ...options, 
+  };
   // more functionality directly added via custom plugins from ./lib
-  localizationHandlebarsExtension(hbs, opts); // localization
-  numberHandlebarsExtension(hbs, opts); // numbers & currencies
-  momentHandlebarsExtension(hbs, opts); // dates, times & durations
-  customHandlebarsExtensions(hbs, opts); // everything else
+  localizationHandlebarsExtension(opts); // localization
+  numberHandlebarsExtension(opts); // numbers & currencies
+  momentHandlebarsExtension(opts); // dates, times & durations  // deprecated!
+  datetimeHandlebarsExtensions(opts); // dates, times & durations
+  listHandlebarsExtensions(opts); // utillities for lists
+  customHandlebarsExtensions(opts); // everything else
 
   // add custom helpers from rendering-srv
-  for (const customHelper of (customHelpersList || [])) {
+  for (const customHelper of (customHelpersList ?? [])) {
     const filePath = customHelper;
     // require(filePath)(hbs, opts);
 
     // check for double default
-    const fileImport = await import(filePath);
-    if (fileImport?.default?.default) {
-      await new Promise((r) => (async () => fileImport.default.default(hbs, opts))().catch(err => {
-        console.log(`Error importing file ${filePath}`, { code: err.code, message: err.message, stack: err.stack });
-      }).then(r));
-    } else {
-      await new Promise((r) => (async () => fileImport.default(hbs, opts))().catch(err => {
-        console.log(`Error importing file ${filePath}`, { code: err.code, message: err.message, stack: err.stack });
-      }).then(r));
+    try {
+      const fileImport = await import(filePath);
+      if (fileImport?.default?.default) {
+        await fileImport.default.default(hbs, opts);
+      }
+      else {
+        await fileImport.default(hbs, opts);
+      }
+    }
+    catch (err: any) {
+      const { code, message, stack } = err;
+      console.log(`Error importing file ${filePath}`, { code, message, stack });
     }
   }
   // extend rendering with layout functionality

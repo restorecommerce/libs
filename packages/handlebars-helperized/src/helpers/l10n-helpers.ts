@@ -1,7 +1,8 @@
+import hbs from 'handlebars';
 const tripleStache = /\{\{\{\s*(.*?)\s*\}\}\}/g;
 const doubleStache = /\{\{\s*(.*?)\s*\}\}/g;
 
-const localizationHandlebarsExtension = (hbs: any, opts: any) => {
+const localizationHandlebarsExtension = (opts: any) => {
   hbs.registerHelper('t', (key: string, hash?: any) => {
     const locale = opts.locale;
     let result = opts.texts[key] ?? key;

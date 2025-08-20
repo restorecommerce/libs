@@ -1,8 +1,6 @@
 'use strict';
 
 /* eslint-env node, mocha */
-
-import moment from 'moment-timezone';
 import { Renderer } from '../lib/index.js';
 import { expect, it, describe } from 'vitest';
 
@@ -64,12 +62,7 @@ describe('The README examples', () => {
   it('should pass the formatting example', async () => {
     const tpl = '<p>You paid {{nfc price cc="USD"}} on {{df date}}</p>';
     const renderer = new Renderer(tpl);
-    
-    const ts = '03-19-2019 13:37:00';
-    const format = 'MM-DD-YYYY HH:mm:ss';
-    const tz = moment.tz.guess();
-    const yesterday = moment.parseZone(ts, format, tz);
-    const result = await renderer.render({ price: 1.99, date: yesterday });
+    const result = await renderer.render({ price: 1.99, date: '03-19-2019 13:37:00' });
     const expectedResult = '<p>You paid $1.99 on 03/19/2019</p>';
     expect(result).to.equal(expectedResult);
   });
@@ -98,12 +91,7 @@ describe('The README examples', () => {
   it('should pass the formatting example with german locale', async () => {
     const tpl = '<p>You paid {{nfc price cc="EUR"}} on {{df date}}</p>';
     const renderer = new Renderer(tpl, null, null, {locale: 'de_DE'});
-    
-    const ts = '03-19-2019 13:37:00';
-    const format = 'MM-DD-YYYY HH:mm:ss';
-    const tz = moment.tz.guess();
-    const yesterday = moment.parseZone(ts, format, tz);
-    const result = await renderer.render({price: 1.99, date: yesterday});
+    const result = await renderer.render({price: 1.99, date: '03-19-2019 13:37:00'});
     const expectedResult = '<p>You paid 1,99 € on 19.03.2019</p>';
     expect(result).to.equal(expectedResult);
   });

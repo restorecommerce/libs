@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0](https://github.com/restorecommerce/handlebars-helperized/compare/@restorecommerce/handlebars-helperized@1.5.1...@restorecommerce/handlebars-helperized@2.0.0) (2025-08-21)
+
+
+### Bug Fixes
+
+* **protos:** add name and descrp to customer ([3a496d1](https://github.com/restorecommerce/handlebars-helperized/commit/3a496d1dd49d82fd5c65881966272973c2dbc7d3))
+
+
+### Features
+
+* **handlebars-helperized:** datetime formater are now using buildin Intl functions ([fa49e28](https://github.com/restorecommerce/handlebars-helperized/commit/fa49e28e9d5abc250d4a50e4433070c4c6cff050))
+
+
+### BREAKING CHANGES
+
+* **handlebars-helperized:** The parameters and outcome for datetime helpers may have changed. Please check into
+Intl Format Options. Most helpers give fully access
+
+
+
+
+
 ## [1.5.1](https://github.com/restorecommerce/handlebars-helperized/compare/@restorecommerce/handlebars-helperized@1.5.0...@restorecommerce/handlebars-helperized@1.5.1) (2025-08-12)
 
 

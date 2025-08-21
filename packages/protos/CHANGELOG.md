@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.11.9](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.11.8...@restorecommerce/protos@6.11.9) (2025-08-21)
+
+
+### Bug Fixes
+
+* **protos:** add name and descrp to customer ([3a496d1](https://github.com/restorecommerce/libs/commit/3a496d1dd49d82fd5c65881966272973c2dbc7d3))
+
+
+
+
+
 ## [6.11.8](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.11.7...@restorecommerce/protos@6.11.8) (2025-08-12)
 
 

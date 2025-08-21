@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/handlebars-helperized",
-  "version": "1.5.1",
+  "version": "2.0.0",
   "description": "Opinionated handlebars based templating engine for rendering e-mail like content",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -27,8 +27,8 @@
   },
   "devDependencies": {
     "@restorecommerce/dev": "^0.0.13",
-    "@types/node": "^24.3.0",
     "@types/moment-timezone": "^0.5.13",
+    "@types/node": "^24.3.0",
     "@vitest/coverage-v8": "^2.1.4",
     "assert": "^2.1.0",
     "eslint": "9.13.0",

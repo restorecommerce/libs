@@ -155,7 +155,7 @@ export const DefaultMetaDataInjector = async <T extends ResourceList>(
           value: request.subject.id
         }],
       } : undefined,
-    ].filter(i => i);
+    ].filter(Boolean);
     item.id ??= randomUUID().replaceAll('-', '');
   });
   return request;

@@ -22,6 +22,7 @@
     "@restorecommerce/grpc-client": "^2.2.8",
     "@restorecommerce/kafka-client": "1.2.33",
     "@restorecommerce/rc-grpc-clients": "5.1.55",
+    "@restorecommerce/scs-jobs": "^0.1.63",
     "@restorecommerce/service-config": "^1.1.1",
     "lodash": "^4.17.21",
     "redis": "^4.7.0"
@@ -33,6 +34,7 @@
     "@types/nconf": "^0.10.7",
     "@types/redis": "^4.0.11",
     "arangojs": "^8.7.0",
+    "c8": "^10.1.2",
     "cross-env": "^7.0.3",
     "esbuild": "^0.24.0",
     "eslint": "^8.57.0",
@@ -42,8 +44,7 @@
     "rimraf": "^6.0.1",
     "should": "^13.2.3",
     "ts-node": "^10.9.2",
-    "typescript": "^5.6.3",
-    "c8": "^10.1.2"
+    "typescript": "^5.6.3"
   },
   "scripts": {
     "test": "npm run lint && c8 --reporter=text npm run mocha",

@@ -83,7 +83,7 @@ export class ResourceAggregator {
       [ids].flatMap(
         id => id
       ).filter(
-        id => id
+        Boolean
       )
     )];
     const request = ids?.length ? {

@@ -76,11 +76,11 @@ export class AccessControlledServiceBase<O extends ResourceListResponse, I exten
   extends ServiceBase<O, I>
   implements ServiceImplementation
 {
-  protected override get operationStatusCodes(): AccessControlledServiceBaseOperationStatusCodes {
+  public override get operationStatusCodes(): AccessControlledServiceBaseOperationStatusCodes {
     return super.operationStatusCodes;
   }
 
-  protected override set operationStatusCodes(value: OperationStatusCodes<any>) {
+  public override set operationStatusCodes(value: OperationStatusCodes<any>) {
     super.operationStatusCodes = value;
   }
 
@@ -129,7 +129,7 @@ export class AccessControlledServiceBase<O extends ResourceListResponse, I exten
       ),
       enableEvents,
     );
-    super.operationStatusCodes = {
+    this.operationStatusCodes = {
       ...AccessControlledServiceBaseOperationStatusCodes,
       ...cfg?.get('operationStatusCodes')
     };

@@ -67,21 +67,21 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
   private status_codes: StatusCodes<any>;
   private operation_status_codes: OperationStatusCodes<any>;
   
-  protected get statusCodes(): ServiceBaseStatusCodes {
+  public get statusCodes(): ServiceBaseStatusCodes {
     this.status_codes ??= { ...ServiceBaseStatusCodes };
     return this.status_codes;
   }
 
-  protected set statusCodes(value: StatusCodes<any>) {
+  public set statusCodes(value: StatusCodes<any>) {
     Object.assign(this.statusCodes, value);
   }
 
-  protected get operationStatusCodes(): ServiceBaseOperationStatusCodes {
+  public get operationStatusCodes(): ServiceBaseOperationStatusCodes {
     this.operation_status_codes ??= { ...ServiceBaseOperationStatusCodes };
     return this.operation_status_codes;
   }
 
-  protected set operationStatusCodes(value: OperationStatusCodes<any>) {
+  public set operationStatusCodes(value: OperationStatusCodes<any>) {
     Object.assign(this.operationStatusCodes, value);
   }
 

@@ -30,6 +30,7 @@ import {
   type ServiceConfig
 } from '@restorecommerce/service-config';
 import { initAuthZ } from '@restorecommerce/acs-client';
+import { runWorker } from '@restorecommerce/scs-jobs';
 import { ServiceBase } from '../index';
 
 export type ReflectionService = ServiceImplementation<any>;
@@ -329,6 +330,26 @@ export abstract class WorkerBase {
     }));
   }
 
+  protected async bindScheduledJobs() {
+    await Promise.all(this.cfg.get('scs-jobs')?.map(
+      async (job: { import: string }) => {
+        try {
+          if (job.import?.endsWith('.js') || job.import?.endsWith('.cjs')) {
+            const fileImport = await import(job.import);
+            if (fileImport?.default?.default) {
+              await fileImport.default.default(this.cfg, this.logger, this.events, runWorker);
+            } else {
+              await fileImport.default(this.cfg, this.logger, this.events, runWorker);
+            }
+          }
+        }
+        catch (err: any) {
+          this.logger?.error(`Error scheduling external job ${job.import}`, { err });
+        }
+      }
+    ));
+  }
+
   public async start(
     cfg?: ServiceConfig,
     logger?: Logger,
@@ -357,6 +378,7 @@ export abstract class WorkerBase {
     await this.bindCommandInterface(serviceConfigs);
     await this.bindHealthCheck();
     await this.bindRefelctions(serviceConfigs);
+    await this.bindScheduledJobs();
 
     // start server
     await initAuthZ(this.cfg);

@@ -331,8 +331,8 @@ export abstract class WorkerBase {
   }
 
   protected async bindScheduledJobs() {
-    await Promise.all(this.cfg.get('scs-jobs')?.map(
-      async (job: { import: string }) => {
+    await Promise.all(Object.values<{ import?: string }>(this.cfg.get('scs-jobs') ?? {})?.map(
+      async job => {
         try {
           if (job.import?.endsWith('.js') || job.import?.endsWith('.cjs')) {
             const fileImport = await import(job.import);

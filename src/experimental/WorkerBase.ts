@@ -23,6 +23,9 @@ import {
   protoMetadata as CommandInterfaceMeta,
   CommandInterfaceServiceDefinition,
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/commandinterface';
+import {
+  protoMetadata as JobMeta
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/job.js';
 import { HealthDefinition } from '@restorecommerce/rc-grpc-clients/dist/generated-server/grpc/health/v1/health';
 import { ServerReflectionService } from 'nice-grpc-server-reflection';
 import {
@@ -331,23 +334,29 @@ export abstract class WorkerBase {
   }
 
   protected async bindScheduledJobs() {
-    await Promise.all(Object.values<{ import?: string }>(this.cfg.get('scs-jobs') ?? {})?.map(
-      async job => {
-        try {
-          if (job.import?.endsWith('.js') || job.import?.endsWith('.cjs')) {
-            const fileImport = await import(job.import);
-            if (fileImport?.default?.default) {
-              await fileImport.default.default(this.cfg, this.logger, this.events, runWorker);
-            } else {
-              await fileImport.default(this.cfg, this.logger, this.events, runWorker);
+    const job_config = this.cfg.get('scs-jobs');
+    if (job_config) {
+      registerProtoMeta(
+        JobMeta
+      );
+      await Promise.all(Object.values<{ import?: string }>(job_config)?.map(
+        async job => {
+          try {
+            if (job.import?.endsWith('.js') || job.import?.endsWith('.cjs')) {
+              const fileImport = await import(job.import);
+              if (fileImport?.default?.default) {
+                await fileImport.default.default(this.cfg, this.logger, this.events, runWorker);
+              } else {
+                await fileImport.default(this.cfg, this.logger, this.events, runWorker);
+              }
             }
           }
+          catch (err: any) {
+            this.logger?.error(`Error scheduling external job ${job.import}`, { err });
+          }
         }
-        catch (err: any) {
-          this.logger?.error(`Error scheduling external job ${job.import}`, { err });
-        }
-      }
-    ));
+      ));
+    }
   }
 
   public async start(

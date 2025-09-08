@@ -1,5 +1,5 @@
 import { createLogger, Logger } from '@restorecommerce/logger';
-import { cfg } from './config';
+import { cfg } from './config.js';
 
 let __logger__: Logger;
 export function getLogger(): Logger {

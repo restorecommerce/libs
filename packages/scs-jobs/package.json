@@ -16,6 +16,7 @@
     "service",
     "jobs"
   ],
+  "type": "module",
   "dependencies": {
     "@restorecommerce/dev": "^0.0.13",
     "@restorecommerce/grpc-client": "^2.2.9",

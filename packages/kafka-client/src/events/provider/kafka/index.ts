@@ -3,27 +3,19 @@ import * as _ from 'lodash';
 import { EventEmitter } from 'events';
 import * as async from 'async';
 import { Logger } from '@restorecommerce/logger';
-import { Admin, Consumer, Kafka as KafkaJS, KafkaConfig, KafkaMessage, logLevel, Message, Producer, RecordMetadata } from 'kafkajs';
-import { decodeMessage, encodeMessage } from '../../../protos';
-
-/*
-const makeProtoResolver = (protoFilePath: string, protoRoot: string): any => {
-  return (origin: string, target: string): string => {
-    // ignore the same file
-    if (target == protoFilePath) {
-      return protoFilePath;
-    }
-    // Resolved target path for the import files
-    return protoRoot + target;
-  };
-};
-*/
-
-interface MessageWithContext {
-  message: KafkaMessage;
-  topic: string;
-  partition: number;
-}
+import {
+  Producer,
+  Consumer,
+  Admin,
+  ProduceResult,
+  type Message,
+  noopDeserializer,
+  noopSerializer,
+  ProducerOptions,
+  ConsumerOptions,
+  AdminOptions
+} from '@platformatic/kafka';
+import { decodeMessage, encodeMessage } from '../../../protos.js';
 
 /**
  * A Kafka topic.
@@ -34,15 +26,16 @@ export class Topic {
   provider: Kafka;
   subscribed: string[];
   waitQueue: any[];
-  currentOffset: number;
+  currentOffset: bigint;
   consumer: Consumer;
   config: any;
   // message sync throttling attributes
   asyncQueue: async.AsyncQueue<any>;
-  drainEvent: (context: MessageWithContext, done: (err: any) => void) => void;
-  // default process one message at at time
+  drainEvent: (context: Message, done: (err: any) => void) => void;
+  // default process one message at a time
   asyncLimit = 1;
   manualOffsetCommit: boolean;
+  subscribedToTopic: boolean;
 
   /**
    * Kafka topic.
@@ -61,25 +54,23 @@ export class Topic {
     this.provider = provider;
     this.subscribed = [];
     this.waitQueue = [];
-    this.currentOffset = 0;
+    this.currentOffset = BigInt(0);
     this.config = config;
     this.manualOffsetCommit = manualOffsetCommit;
   }
 
   async createIfNotExists(): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.provider.admin.listTopics().then((topics) => {
+      this.provider.admin.listTopics().then(topics => {
         if (topics.indexOf(this.name) < 0) {
           const operation = retry.operation();
           operation.attempt(async () => {
             this.provider.admin.createTopics({
-              topics: [{
-                topic: this.name
-              }],
+              topics: [this.name]
             }).then(() => {
               this.provider.logger.info(`Topic ${this.name} created successfully`);
               resolve();
-            }).catch(err => {
+            }).catch((err: any) => {
               const { code, message, details, stack } = err;
               this.provider.logger.error(`Cannot create topic ${this.name}:`, { code, message, details, stack });
               operation.retry(err);
@@ -156,23 +147,32 @@ export class Topic {
   /**
    * Return the offset number of this topic.
    *
-   * @param {number} time Use -1 for latest and 0 for earliest.
-   * @return {number} offset number
+   * @param {bigint} time Use -1 for latest and 0 for earliest.
+   * @return {bigint} offset number
    */
-  async $offset(time = -1): Promise<number> {
-    return new Promise<number>((resolve, reject) => {
-      if (time < 0) {
-        return this.provider.admin.fetchTopicOffsets(this.name).then(data => {
-          resolve(parseInt(data[0].offset, 10));
-        }).catch(err => {
+  async $offset(time: bigint = BigInt(-1)): Promise<bigint> {
+    await this.initConsumerIfNotExists();
+
+    return new Promise<bigint>((resolve, reject) => {
+      if (time < BigInt(0)) {
+        this.consumer.listOffsets({
+          topics: [this.name],
+        }).then((r) => {
+          resolve(r.get(this.name)[0]);
+          return r.get(this.name)[0];
+        }).catch((err: any) => {
           this.provider.logger.error('Error occurred retrieving topic offset:', { code: err.code, message: err.message, stack: err.stack });
           reject(err);
         });
       }
 
-      return this.provider.admin.fetchTopicOffsetsByTimestamp(this.name, time).then(data => {
-        resolve(parseInt(data[0].offset, 10));
-      }).catch(err => {
+      return this.consumer.listOffsets({
+        topics: [this.name],
+        timestamp: time,
+      }).then(r => {
+        resolve(r.get(this.name)[0]);
+        return r.get(this.name)[0];
+      }).catch((err: any) => {
         this.provider.logger.error('Error occurred retrieving topic offset:', { code: err.code, message: err.message, stack: err.stack });
         reject(err);
       });
@@ -181,11 +181,11 @@ export class Topic {
 
   /**
    * Suspend the calling function until the Kafka client received a message with the offset.
-   * @param {number} offset Kafka message offset.
+   * @param {bigint} offset Kafka message offset.
    * @return {Promise} Thunk will be resolved when a message is received
    * with the corresponding offset.
    */
-  async $wait(offset: number): Promise<void> {
+  async $wait(offset: bigint): Promise<void> {
     return new Promise((cb) => {
       if (this.currentOffset >= offset) {
         cb();
@@ -200,9 +200,9 @@ export class Topic {
    * subcribes again for same set of events
    *
    * @param {string[]} eventNames list of event names
-   * @param {number} offset The offset at which to restart from.
+   * @param {bigint} offset The offset at which to restart from.
    */
-  async $resetConsumer(eventNames: string[], offset: number): Promise<void> {
+  async $resetConsumer(eventNames: string[], offset: bigint): Promise<void> {
     this.provider.logger.info('Event Names for consumer reset', eventNames);
     if (eventNames && eventNames.length > 0) {
       // since the consumer is set to undefined only when there is no more subscription
@@ -227,9 +227,9 @@ export class Topic {
    * Force a committed offset reset.
    *
    * @param {string} eventName
-   * @param {number} offset The offset at which to restart from.
+   * @param {bigint} offset The offset at which to restart from.
    */
-  async $reset(eventName: string, offset: number): Promise<void> {
+  async $reset(eventName: string, offset: bigint): Promise<void> {
     if (this.subscribed.indexOf(eventName) > -1) {
       await this.$unsubscribe(eventName);
     }
@@ -245,16 +245,6 @@ export class Topic {
     }
     const index = this.subscribed.indexOf(eventName);
     this.subscribed.splice(index, 1);
-
-    if (this.subscribed.length == 0) {
-      this.provider.logger.info(`Closing consumer from topic ${this.name}`);
-      await this.consumer.stop().then(() => this.consumer.disconnect()).then(() => {
-        this.provider.logger.info(`Consumer disconnected from topic ${this.name}`);
-        this.consumer = undefined;
-      }).catch((err) => {
-        this.provider.logger.error(`Error occurred unsubscribing ${eventName} on topic ${this.name}`, { code: err.code, message: err.message, stack: err.stack });
-      });
-    }
   }
 
   /**
@@ -262,14 +252,14 @@ export class Topic {
    * invokes $receive(event, msg, context);
    * @return {function}
    */
-  private makeDataHandler(context: MessageWithContext): void {
-    const eventName = context.message.key.toString();
+  private makeDataHandler(context: Message): void {
+    const eventName = context.key.toString();
     if (_.includes(this.subscribed, eventName)) {
       const logger = this.provider.logger;
       try {
-        this.$receive(eventName, context.message.value, context);
+        this.$receive(eventName, context.value, context);
         // commit offset
-        const offset = parseInt(context.message.offset, 10);
+        const offset = context.offset;
         this.filterWaitQueue(offset);
         this.currentOffset = offset;
         this.commit();
@@ -281,7 +271,7 @@ export class Topic {
     }
   }
 
-  private filterWaitQueue(offset: number | { offset: number }): void {
+  private filterWaitQueue(offset: bigint | { offset: bigint }): void {
     if (typeof offset === 'object') {
       offset = offset.offset;
     }
@@ -294,31 +284,65 @@ export class Topic {
     });
   }
 
-  /**
-   * Subscribe to the kafka topic.
-   *
-   * @param eventName
-   * @param offsetValue
-   * @param queue
-   **/
-  private async $subscribe(eventName: string, offsetValue: number, queue?: boolean): Promise<void> {
+  private async initConsumerIfNotExists(queue?: boolean): Promise<void> {
     if (!this.consumer) {
-      this.consumer = this.provider.client.consumer({
-        groupId: this.provider.config.groupId + '_' + this.name
+      this.consumer = new Consumer({
+        groupId: this.provider.config.groupId + '_' + this.name,
+        ...this.provider.commonOptions
       });
 
-      await this.consumer.connect().then(() => {
+      this.consumer.on('client:broker:connect', (err: any) => {
+        this.provider.logger.info('Consumer is ready.', err);
+      });
+
+      this.consumer.on('client:broker:disconnect', (err: any) => {
+        this.provider.logger.warn('Consumer connection failed:', err);
+      });
+
+      this.consumer.on('client:broker:failed', (err: any) => {
+        this.provider.logger.warn('Consumer connection failed:', err);
+      });
+
+      this.consumer.on('client:broker:drain', (err: any) => {
+        this.provider.logger.info('Consumer broker ready for requests:', err);
+      });
+
+      this.consumer.on('client:metadata', (err: any) => {
+        this.provider.logger.info('Consumer broker metadata:', err);
+      });
+
+      this.consumer.on('client:close', (err: any) => {
+        this.provider.logger.warn('Consumer client closed:', err);
+      });
+
+      this.consumer.on('consumer:group:join', (err: any) => {
+        this.provider.logger.info('Consumer joining group:', err);
+      });
+
+      this.consumer.on('consumer:group:leave', (err: any) => {
+        this.provider.logger.info('Consumer leaving group:', err);
+      });
+
+      this.consumer.on('consumer:group:rejoin', (err: any) => {
+        this.provider.logger.warn('Consumer re-joining group:', err);
+      });
+
+      this.consumer.on('consumer:group:rebalance', (err: any) => {
+        this.provider.logger.warn('Consumer group rebalancing:', err);
+      });
+
+      this.consumer.on('consumer:heartbeat:cancel', (err: any) => {
+        this.provider.logger.warn('Consumer heartbeat cancelled:', err);
+      });
+
+      this.consumer.on('consumer:heartbeat:error', (err: any) => {
+        this.provider.logger.error('Consumer heartbeat error:', err);
+      });
+
+      await this.consumer.connectToBrokers().then(() => {
         this.provider.logger.info(`Consumer for topic '${this.name}' connected`);
-      }).catch(err => {
+      }).catch((err: any) => {
         this.provider.logger.error(`Consumer for topic '${this.name}' connection error`, { code: err.code, message: err.message, stack: err.stack });
-      });
-
-      await this.consumer.subscribe({
-        topic: this.name
-      }).then(() => {
-        this.provider.logger.info(`Consumer for topic '${this.name}' subscribed`);
-      }).catch(err => {
-        this.provider.logger.error(`Consumer for topic '${this.name}' subscriber error`, { code: err.code, message: err.message, stack: err.stack });
       });
 
       // On receiving the message on Kafka consumer put the message to async Queue.
@@ -326,31 +350,53 @@ export class Topic {
         // start drain process
         this.drain();
       }
+    }
+  }
 
-      await this.consumer.run({
-        eachMessage: async (payload) => {
+  /**
+   * Subscribe to the kafka topic.
+   *
+   * @param eventName
+   * @param offsetValue
+   * @param queue
+   **/
+  private async $subscribe(eventName: string, offsetValue: bigint, queue?: boolean): Promise<void> {
+    if (!this.subscribedToTopic) {
+      this.subscribedToTopic = true;
+
+      await this.initConsumerIfNotExists(queue);
+
+      this.consumer.consume({
+        sessionTimeout: 10000,
+        heartbeatInterval: 500,
+        topics: [this.name],
+        mode: 'manual',
+        offsets: [{
+          topic: this.name,
+          partition: 0,
+          offset: offsetValue
+        }],
+      }).then(stream => {
+        this.provider.logger.info(`Consumer for topic '${this.name}' subscribed`);
+
+        stream.on('data', (message) => {
           if (queue) {
-            this.onMessageForQueue(payload);
+            this.onMessageForQueue(message);
           } else {
-            this.makeDataHandler(payload);
+            this.makeDataHandler(message);
           }
-        }
-      }).catch(err => {
+        });
+      }).catch((err: any) => {
         this.provider.logger.error(`Consumer for topic '${this.name}' failed to run`, { code: err.code, message: err.message, stack: err.stack });
-      });
-
-      this.consumer.seek({
-        topic: this.name,
-        partition: 0,
-        offset: offsetValue.toString(10)
+        throw err;
       });
     }
 
     this.subscribed.push(eventName);
   }
 
-  private onMessageForQueue(context: MessageWithContext): void {
-    if (_.includes(this.subscribed, context.message.key.toString())) {
+  private onMessageForQueue(context: Message): void {
+    if (_.includes(this.subscribed, context.key.toString())) {
       this.asyncQueue.push(context);
     }
   }
@@ -360,22 +406,22 @@ export class Topic {
    * under flow control
    */
   private drain(): void {
-    this.drainEvent = (context: MessageWithContext, done: (err: any) => void) => {
-      this.$receive(context.message.key.toString(), context.message.value, context);
+    this.drainEvent = (context: Message, done: (err: any) => void) => {
+      this.$receive(context.key.toString(), context.value, context);
     };
     this.startToReceiveMessages();
   }
 
   private startToReceiveMessages(): void {
-    this.asyncQueue = async.queue(({ topic, partition, message }: MessageWithContext, done) => {
+    this.asyncQueue = async.queue((message: Message, done) => {
       if (this.drainEvent) {
         setImmediate(() => {
-          this.drainEvent({ topic, partition, message }, (err) => {
+          this.drainEvent(message, (err) => {
             if (err) {
               done(err);
             }
           });
-          this.filterWaitQueue(parseInt(message.offset, 10));
+          this.filterWaitQueue(message.offset);
           done();
         });
       } else {
@@ -414,13 +460,14 @@ export class Topic {
 
   async commitCurrentOffsets(): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.consumer.commitOffsets([
-        {
+      this.consumer.commit({
+        offsets: [{
+          leaderEpoch: 0, // ?
           topic: this.name,
-          offset: this.currentOffset.toString(10),
+          offset: this.currentOffset,
           partition: 0 // ?
-        }
-      ]).then(resolve).catch(err => {
+        }]
+      }).then(resolve).catch((err: any) => {
         this.provider.logger.error('Error committing offset', { code: err.code, message: err.message, stack: err.stack });
         reject(err);
       });
@@ -448,7 +495,7 @@ export class Topic {
    * @param {Object} message
    * @param {Object} context
    */
-  private $receive(eventName: string, message: any, context: any): void {
+  private $receive(eventName: string, message: any, context: Message): void {
     // Decode message here and get the auto completion here
     if (this.hasListeners(eventName)) {
       let decodedMsg = this.provider.decodeObject(
@@ -458,7 +505,7 @@ export class Topic {
       );
       if (decodedMsg) {
         decodedMsg = _.pick(decodedMsg, _.keys(decodedMsg)); // hack around messy protobuf.js object
-        this.provider.logger.debug(`kafka received event with topic ${context.topic} and event name ${eventName}`, { decodedMsg });
+        this.provider.logger.debug(`kafka received event with topic ${context.topic} and event name ${eventName} at offset ${context.offset.toString(10)}`, { decodedMsg });
         this.emitter.emit(
           eventName,
           decodedMsg,
@@ -489,7 +536,7 @@ export class Topic {
       if (_.isNil(startingOffset) || (this.config.latestOffset && !forceOffset)) {
         // override the startingOffset with the latestOffset from Kafka
         // if above config is set
-        startingOffset = await this.$offset(-1);
+        startingOffset = await this.$offset(BigInt(-1));
       }
       await this.$subscribe(eventName, startingOffset, queue);
     }
@@ -508,24 +555,12 @@ export class Topic {
 }
 
 export interface KafkaProviderConfig {
-  kafka: KafkaConfig;
+  kafka: ProducerOptions<Buffer, Buffer, Buffer, Buffer>
+    & ConsumerOptions<Buffer, Buffer, Buffer, Buffer>
+    & AdminOptions;
   timeout: number;
   groupId: string;
 }
-
-const toWinstonLogLevel = (level: number) => {
-  switch (level) {
-    case logLevel.ERROR:
-    case logLevel.NOTHING:
-      return 'error';
-    case logLevel.WARN:
-      return 'warn';
-    case logLevel.INFO:
-      return 'info';
-    case logLevel.DEBUG:
-      return 'debug';
-  }
-};
 
 /**
  * Events provider.
@@ -535,12 +570,12 @@ export class Kafka {
   config: KafkaProviderConfig;
   topics: { [key: string]: Topic };
   logger: Logger;
-  client: KafkaJS;
   producer: Producer;
   admin: Admin;
 
   producerConnected: boolean;
   adminConnected: boolean;
+  commonOptions: KafkaProviderConfig['kafka'];
 
   /**
    * Kafka is a provider for Events.
@@ -568,55 +603,78 @@ export class Kafka {
     return new Promise<void>((resolveRetry) => {
       operation.attempt(async () => {
         try {
-          this.client = new KafkaJS({
-            retry: {
-              initialRetryTime: 1000,
-              maxRetryTime: 10000,
-              retries: 100,
-            },
+          this.commonOptions = {
             ...this.config.kafka,
-            logCreator: () => {
-              return ({ level, log }) => {
-                const { message, ...extra } = log;
-                this.logger.log(toWinstonLogLevel(level), `[kafka-client] ${message} - attempt No: ${operation.attempts()}`, extra);
-              };
+            serializers: {
+              key: noopSerializer,
+              value: noopSerializer,
+              headerKey: noopSerializer,
+              headerValue: noopSerializer,
             },
-          });
+            deserializers: {
+              key: noopDeserializer,
+              value: noopDeserializer,
+              headerKey: noopDeserializer,
+              headerValue: noopDeserializer,
+            },
+            retries: 100,
+            retryDelay: 1000
+          };
 
-          this.producer = this.client.producer();
-          this.admin = this.client.admin();
+          // These are kept from migration of KafkaJS to Platformic lib
+          if ('brokers' in this.commonOptions) {
+            this.commonOptions['bootstrapBrokers'] = this.commonOptions['brokers'] as string[];
+          }
+
+          this.logger.info(`[kafka-client] Connecting - attempt No: ${operation.attempts()}`);
+
+          this.producer = new Producer(this.commonOptions);
+          this.admin = new Admin(this.commonOptions);
 
           // waiting for producer to be ready
           await new Promise((resolveProducer, rejectProducer) => {
-            this.producer.on('producer.connect', () => {
+            this.producer.on('client:broker:connect', () => {
               this.producerConnected = true;
               this.logger.info('The Producer is ready.');
-              resolveProducer(true);
             });
 
-            this.producer.on('producer.disconnect', (err) => {
+            this.producer.on('client:broker:disconnect', (err: any) => {
               this.producerConnected = false;
               this.logger.warn('The Producer has disconnected:', err);
               rejectProducer(err);
             });
 
-            this.producer.on('producer.network.request_timeout', (err) => {
-              this.logger.warn('The Producer timed out:', err);
+            this.producer.on('client:broker:failed', (err: any) => {
+              this.logger.warn('The Producer connection failed:', err);
               rejectProducer(err);
             });
 
-            this.producer.connect().catch(err => {
+            this.producer.connectToBrokers().then(() => {
+              resolveProducer(true);
+            }).catch((err: any) => {
+              rejectProducer(err);
               this.logger.warn('Producer connection error:', err);
             });
-          }).then(async () => {
-            this.admin.on('admin.connect', () => {
+          }).then(() => {
+            this.admin.on('client:broker:connect', () => {
+              this.logger.info('The Admin is ready.');
               this.adminConnected = true;
-              resolveRetry();
             });
-            this.admin.on('admin.disconnect', () => this.adminConnected = false);
 
-            await this.admin.connect().catch(
-              err => {
+            this.admin.on('client:broker:disconnect', (err: any) => {
+              this.logger.warn('The Admin connection failed:', err);
+              this.adminConnected = false
+            });
+
+            this.admin.on('client:broker:failed', (err: any) => {
+              this.logger.warn('The Admin connection failed:', err);
+              throw err;
+            });
+
+            this.admin.connectToBrokers().then(() => {
+              resolveRetry();
+            }).catch(
+              (err: any) => {
                 this.logger.warn('Admin connection error:', err);
                 throw err;
               }
@@ -626,7 +684,7 @@ export class Kafka {
         catch (err: any) {
           operation.retry(err);
           const attemptNo = operation.attempts();
-          this.producer?.disconnect();
+          this.producer?.close();
           this.logger.info(`Retry initialize the Producer, attempt No: ${attemptNo}`);
         }
       });
@@ -669,7 +727,7 @@ export class Kafka {
    * @param  {string} eventName
    * @param  {Object|Object[]} message
    */
-  async $send(topicName: string, eventName: string, message: any): Promise<RecordMetadata[]> {
+  async $send(topicName: string, eventName: string, message: any): Promise<ProduceResult> {
     try {
       const messages = Array.isArray(message) ? message : [message];
       const config: any = this.config;
@@ -681,10 +739,12 @@ export class Kafka {
         msg => {
           const bufferObj = Kafka.encodeObject(msg, messageObject);
           return {
-            key: eventName,
+            topic: topicName,
+            key: Buffer.from(eventName),
             value: Buffer.from(bufferObj),
-            partition: 0
-          };
+            partition: 0,
+            headers: {}
+          } as Message;
         }
       )
       for (const msg of messages) {
@@ -695,11 +755,11 @@ export class Kafka {
       }
       this.logger.debug(`Sending event ${eventName} to topic ${topicName}`, { messages });
       return await this.producer.send({
-        topic: topicName,
         messages: values
       }).then((data) => {
-        for (const msg of messages) {
-          this.logger.debug(`Sent event ${eventName} to topic ${topicName}`, msg);
+        for (let i = 0; i < messages.length; i++) {
+          const msg = messages[i];
+          this.logger.debug(`Sent event ${eventName} to topic ${topicName} at offset ${data.offsets[i].offset.toString(10)}`, msg);
         }
         return data;
       });
@@ -758,14 +818,14 @@ export class Kafka {
 
     const errors: any[] = [];
     if (this.producerConnected) {
-      await this.producer.disconnect().catch(err => {
+      await this.producer.close().catch((err: any) => {
         this.logger.warn('Error occurred stopping Kafka producer:', err);
         errors.push(err);
       });
     }
 
     if (this.adminConnected) {
-      await this.admin.disconnect().catch(err => {
+      await this.admin.close().catch((err: any) => {
         this.logger.warn('Error occurred stopping Kafka admin:', err);
         errors.push(err);
       });
@@ -796,7 +856,7 @@ export class Kafka {
 export const Name = 'kafka';
 
 export interface SubscriptionOptions {
-  startingOffset?: number;
+  startingOffset?: bigint;
   queue?: boolean;
   forceOffset?: boolean;
 }

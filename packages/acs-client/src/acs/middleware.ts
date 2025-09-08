@@ -1,4 +1,4 @@
-import { initAuthZ } from './authz';
+import { initAuthZ } from './authz.js';
 
 /**
  * Koa middleware using the BMSLSA implementation for `iam-authn`.

@@ -6,26 +6,26 @@ import {
   PolicySetRQ, PolicySetRQResponse, AttributeTarget, HierarchicalScope,
   ResourceFilterMap, CustomQueryArgs, DecisionResponse, ACSResource, AuthZAction,
   ResolvedSubject, Obligation
-} from './acs/interfaces';
-import { QueryArguments, UserQueryArguments } from './acs/resolver';
-import { errors, cfg } from './config';
+} from './acs/interfaces.js';
+import { QueryArguments, UserQueryArguments } from './acs/resolver.js';
+import { errors, cfg } from './config.js';
 // @ts-expect-error TS7016
 import nodeEval from 'node-eval';
-import logger from './logger';
-import { get } from './acs/cache';
-import { formatResourceType } from './acs/authz';
+import logger from './logger.js';
+import { get } from './acs/cache.js';
+import { formatResourceType } from './acs/authz.js';
 import {
   Subject,
   DeepPartial
-} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/auth';
-import { Attribute } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/attribute';
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/auth.js';
+import { Attribute } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/attribute.js';
 import {
   Filter_Operation, FilterOp_Operator, FieldFilter
-} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base';
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base.js';
 import {
   Response_Decision
-} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/access_control';
-import { Effect } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/rule';
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/access_control.js';
+import { Effect } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/rule.js';
 
 export const handleError = (err: string | Error | any): any => {
   let error;

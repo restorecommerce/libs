@@ -1,12 +1,11 @@
-import { cfg } from '../config';
-import logger from '../logger';
+import { cfg } from '../config.js';
+import logger from '../logger.js';
 import * as crypto from 'crypto';
 import { createClient, RedisClientType } from 'redis';
-import { _ } from '../utils';
 import {
   PolicySetRQResponse,
   DecisionResponse,
-} from './interfaces';
+} from './interfaces.js';
 
 let attempted = false;
 let redisInstance: RedisClientType<any, any>;

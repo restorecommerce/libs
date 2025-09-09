@@ -1,8 +1,8 @@
 import * as _ from 'lodash';
 import { createLogger, Logger } from '@restorecommerce/logger';
-import * as kafka from './provider/kafka';
-import * as local from './provider/local';
-import { Topic } from './provider/kafka';
+import * as kafka from './provider/kafka/index.js';
+import * as local from './provider/local/index.js';
+import { Topic } from './provider/kafka/index.js';
 
 /**
  * A key, value map containing event providers.

@@ -27,7 +27,7 @@ const loggerConfig: any = {
   logger: {
     console: {
       handleExceptions: false,
-      level: 'debug',
+      level: 'silly',
       colorize: true,
       prettyPrint: true
     }
@@ -42,11 +42,12 @@ describe('Kafka provider test', () => {
   const client: Events = new Events(kafkaConfig.events.kafka, logger);
   const topicName = 'com.example.test';
   const eventName = 'exampleEvent';
-  let initialOffset: number;
+  let initialOffset: bigint;
   beforeAll(async () => {
     // start the client
     await client.start();
-    initialOffset = await (await client.topic(topicName)).$offset(-1);
+    const topic = await client.topic(topicName);
+    initialOffset = await topic.$offset(BigInt(-1));
   });
   afterAll(async function() {
     // stop the client
@@ -90,7 +91,7 @@ describe('Kafka provider test', () => {
         }, { queue: true });
 
         // get the current offset
-        const offset = await topic.$offset(-1);
+        const offset = await topic.$offset(BigInt(-1));
         // emit the message to Kafka (message is encoded and sent to Kafka)
         await topic.emit(eventName, { value: 'value1', count: 1 });
         await topic.emit(eventName, { value: 'value2', count: 2 });
@@ -98,7 +99,7 @@ describe('Kafka provider test', () => {
         await topic.emit(eventName, { value: 'value4', count: 4 });
         await topic.emit(eventName, { value: 'value5', count: 5 });
         // suspends the calling function until the offset is committed.
-        await topic.$wait(offset + 4);
+        await topic.$wait(offset + BigInt(4));
         expect(countArr).not.toBe(undefined);
         expect(countArr.length).toBe(5);
         expect(countArr[4]).toBe(5);
@@ -123,7 +124,7 @@ describe('Kafka provider test', () => {
       });
 
       // Get the current offset
-      await topic.$offset(-1);
+      await topic.$offset(BigInt(-1));
 
       // Emit the message to Kafka
       await topic.emit(eventName, { value: 'value', count: 1 });
@@ -132,10 +133,10 @@ describe('Kafka provider test', () => {
       await new Promise(resolve => setTimeout(resolve, 2000));
 
       // Get the latest offset after processing
-      const finalOffset = await topic.$offset(-1);
+      const finalOffset = await topic.$offset(BigInt(-1));
 
       // Verify that offset has been manually committed and updated accordingly
-      expect(finalOffset).be.above(initialOffset);
+      expect(finalOffset > initialOffset).toBeTruthy();
     }, 120000);
   });
 });

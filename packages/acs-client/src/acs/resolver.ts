@@ -4,23 +4,23 @@ import {
   createResourceFilterMap,
   FilterMapResponse,
   mapResourceURNObligationProperties,
-} from '../utils';
+} from '../utils.js';
 import {
   Subject,
   DeepPartial,
-} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/auth';
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/auth.js';
 import {
   Request,
   Response_Decision,
-} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/access_control';
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/access_control.js';
 import {
   FilterOp,
-} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base';
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base.js';
 import {
   ACSAuthZ,
   authZ,
   unauthZ,
-} from './authz';
+} from './authz.js';
 import {
   UnauthenticatedContext,
   ACSClientContext,
@@ -31,9 +31,9 @@ import {
   ACSResource,
   AuthZAction,
   ACSClientOptions,
-} from './interfaces';
-import logger from '../logger';
-import { errors, cfg } from '../config';
+} from './interfaces.js';
+import logger from '../logger.js';
+import { errors, cfg } from '../config.js';
 
 
 const subjectIsUnauthenticated = (subject: any): subject is UnauthenticatedContext => {

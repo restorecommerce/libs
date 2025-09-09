@@ -11,26 +11,26 @@ import {
   PolicySetRQResponse,
   Request,
   ACSResource,
-} from './interfaces';
+} from './interfaces.js';
 import { createChannel, createClient } from '@restorecommerce/grpc-client';
-import { cfg, updateConfig } from '../config';
-import logger, { setLogger, getLogger } from '../logger';
-import { flushCache, getOrFill } from './cache';
+import { cfg, updateConfig } from '../config.js';
+import logger, { setLogger, getLogger } from '../logger.js';
+import { flushCache, getOrFill } from './cache.js';
 import { Events, registerProtoMeta } from '@restorecommerce/kafka-client';
 import {
   _,
   mapResourceURNObligationProperties
-} from '../utils';
+} from '../utils.js';
 import {
   AccessControlServiceClient,
   AccessControlServiceDefinition
-} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/access_control';
-import { Response_Decision } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/access_control';
-import { Attribute } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/attribute';
-import { Subject, DeepPartial } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/auth';
-import { protoMetadata as ruleMeta } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/rule';
-import { protoMetadata as policyMeta } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/policy';
-import { protoMetadata as policySetMeta } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/policy_set';
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/access_control.js';
+import { Response_Decision } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/access_control.js';
+import { Attribute } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/attribute.js';
+import { Subject, DeepPartial } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/auth.js';
+import { protoMetadata as ruleMeta } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/rule.js';
+import { protoMetadata as policyMeta } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/policy_set.js';
+import { protoMetadata as policySetMeta } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/policy_set.js';
 import { Logger } from '@restorecommerce/logger';
 
 registerProtoMeta(

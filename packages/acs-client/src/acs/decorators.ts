@@ -12,20 +12,20 @@ import {
 } from '@restorecommerce/grpc-client';
 import {
   UserServiceDefinition
-} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/user';
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/user.js';
 import {
   Response_Decision
-} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/access_control';
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/access_control.js';
 import {
   ResourceList,
   ResourceListResponse,
-} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base';
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base.js';
 import {
   initAuthZ,
-} from './authz';
+} from './authz.js';
 import {
   initializeCache,
-} from './cache';
+} from './cache.js';
 import {
   Operation,
   ACSResource,
@@ -34,17 +34,17 @@ import {
   DecisionResponse,
   PolicySetRQResponse,
   Obligation,
-} from './interfaces';
+} from './interfaces.js';
 import {
   accessRequest,
-} from './resolver';
-import { cfg } from '../config';
-import { _ } from '../utils';
+} from './resolver.js';
+import { cfg } from '../config.js';
+import { _ } from '../utils.js';
 import { randomUUID } from 'crypto';
 import {
   Filter_Operation,
   Filter_ValueType
-} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/filter';
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/filter.js';
 
 export type DatabaseProvider = 'arangoDB' | 'postgres';
 export type ACSClientContextFactory<T extends ResourceList> = (self: any, request: T, ...args: any) => Promise<ACSClientContext>;

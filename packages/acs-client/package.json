@@ -15,6 +15,7 @@
     "service",
     "client"
   ],
+  "type": "module",
   "main": "./lib/index.js",
   "dependencies": {
     "@restorecommerce/grpc-client": "^2.2.9",

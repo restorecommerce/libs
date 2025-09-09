@@ -38,7 +38,11 @@ import {
   ServiceBaseOperationStatusCodes,
 } from '../core/index';
 
-export const ACSContextFactory = async <O extends ResourceListResponse, I extends ResourceList>(self: AccessControlledServiceBase<O, I>, request: I & DeleteRequest, context: any): Promise<ACSClientContext> => {
+export const ACSContextFactory = async <O extends ResourceListResponse, I extends ResourceList>(
+  self: AccessControlledServiceBase<O, I>, 
+  request: I & DeleteRequest,
+  context: any
+): Promise<ACSClientContext> => {
   const ids = request.ids ?? request.items?.map((item: any) => item.id);
   const resources = await self.get(ids, request.subject, context);
   return {
@@ -51,10 +55,12 @@ export const ACSContextFactory = async <O extends ResourceListResponse, I extend
   };
 };
 
-export const DefaultResourceFactory = <T extends ResourceList>(...resourceNames: string[]): ResourceFactory<T> => async (
+export const DefaultResourceFactory = <T extends ResourceList>(
+  ...resourceNames: string[]
+): ResourceFactory<T> => async (
   self: any,
   request: T,
-  context: CallContext,
+  context?: CallContext,
 ) => (resourceNames?.length ? resourceNames : [self.name])?.map(
   resourceName => ({
     resource: resourceName,
@@ -297,7 +303,7 @@ export class AccessControlledServiceBase<O extends ResourceListResponse, I exten
   @resolves_subject()
   @injects_meta_data()
   @access_controlled_function({
-    action: AuthZAction.CREATE,
+    action: AuthZAction.MODIFY,
     operation: Operation.isAllowed,
     context: ACSContextFactory<O, I>,
     resource: DefaultResourceFactory(),

@@ -36,6 +36,8 @@ import {
   ResourcesAPIBase,
   ServiceBase,
   ServiceBaseOperationStatusCodes,
+  ServiceBaseStatusCodes,
+  StatusCodes,
 } from '../core/index';
 
 export const ACSContextFactory = async <O extends ResourceListResponse, I extends ResourceList>(
@@ -82,11 +84,19 @@ export class AccessControlledServiceBase<O extends ResourceListResponse, I exten
   extends ServiceBase<O, I>
   implements ServiceImplementation
 {
-  public override get operationStatusCodes(): AccessControlledServiceBaseOperationStatusCodes {
+  protected override get statusCodes(): ServiceBaseStatusCodes {
+    return super.statusCodes;
+  }
+
+  protected override set statusCodes(value: StatusCodes<any>) {
+    super.statusCodes = value;
+  }
+
+  protected override get operationStatusCodes(): AccessControlledServiceBaseOperationStatusCodes {
     return super.operationStatusCodes;
   }
 
-  public override set operationStatusCodes(value: OperationStatusCodes<any>) {
+  protected override set operationStatusCodes(value: OperationStatusCodes<any>) {
     super.operationStatusCodes = value;
   }
 

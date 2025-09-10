@@ -124,7 +124,10 @@ export abstract class WorkerBase {
     handleQueuedJob: (msg: any, context: any, config?: any, eventName?: string) => {
       return this.eventHandlers.get(msg?.type)(msg?.data?.payload, context, config, msg?.type).then(
         () => this.logger?.info(`Job ${msg?.type} done.`),
-        (err: any) => this.logger?.error(`Job ${msg?.type} failed: ${err}`)
+        ({ code, message, details, stack }: any) => this.logger?.error(
+          `Job ${msg?.type} failed:`,
+          { code, message, details, stack }
+        )
       );
     }
   };
@@ -295,7 +298,10 @@ export abstract class WorkerBase {
     return (msg: any, context: any, config: any, eventName: string): Promise<any> => {
       return (this.services.get(serviceName) as any)?.[functionName]?.(msg, context).then(
         () => this.logger?.debug(`Event ${eventName} handled.`),
-        (err: any) => this.logger?.error(`Error while handling event ${eventName}: ${err}`),
+        ({ code, message, details, stack }: any) => this.logger?.error(
+          `Error while handling event ${eventName}:`,
+          { code, message, details, stack }
+        ),
       ) ?? this.logger?.warn(
         `Event ${eventName} was not bound to handler: ${serviceName}.${functionName} does not exist!.`
       );
@@ -351,8 +357,11 @@ export abstract class WorkerBase {
               }
             }
           }
-          catch (err: any) {
-            this.logger?.error(`Error scheduling external job ${job.import}`, { err });
+          catch ({ code, message, details, stack }: any) {
+            this.logger?.error(
+              `Error scheduling external job ${job.import}`,
+              { code, message, details, stack }
+            );
           }
         }
       ));

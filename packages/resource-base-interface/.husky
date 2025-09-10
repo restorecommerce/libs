@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
+
+if [ "$BRACH" = "main" ]
+then
+    echo "committing directly to main is blocked"
+    exit 1
+fi
+
+./node_modules/.bin/commitlint -e $1

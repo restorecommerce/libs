@@ -1,0 +1,278 @@
+{
+  "database": {
+    "testdb": {
+      "provider": "arango",
+      "host": "127.0.0.1",
+      "port": 8529,
+      "database": "resource-base-test",
+      "autoCreate": true,
+      "arangoSearch": [
+        {
+          "collectionName": "resources",
+          "path": "test/views/resources_view.json"
+        }
+      ]
+    }
+  },
+  "graph": {
+    "graphName": "testGraph",
+    "vertices": {
+      "persons": [
+        {
+          "edgeName": "has",
+          "from": "id",
+          "to": "car_id",
+          "direction": "outbound",
+          "toVerticeName": "cars"
+        },
+        {
+          "edgeName": "lives",
+          "from": "id",
+          "to": "state_id",
+          "direction": "outbound",
+          "toVerticeName": "states"
+        }
+      ],
+      "cars": [
+        {
+          "edgeName": "belongs",
+          "from": "id",
+          "to": "place_id",
+          "direction": "outbound",
+          "toVerticeName": "places"
+        }
+      ],
+      "places": [
+        {
+          "edgeName": "resides",
+          "from": "id",
+          "to": "state_id",
+          "direction": "outbound",
+          "toVerticeName": "states"
+        }
+      ],
+      "states": [
+        {}
+      ]
+    },
+    "edgeDefinitions": [
+      {
+        "collection": "has",
+        "from": "persons",
+        "to": "cars"
+      },
+      {
+        "collection": "belongs",
+        "from": "cars",
+        "to": "places"
+      },
+      {
+        "collection": "resides",
+        "from": "places",
+        "to": "states"
+      },
+      {
+        "collection": "lives",
+        "from": "persons",
+        "to": "states"
+      }
+    ]
+  },
+  "client": {
+    "test": {
+      "address": "localhost:50151"
+    },
+    "testBufferedService": {
+      "address": "localhost:50152"
+    },
+    "graphsTestService": {
+      "address": "localhost:50151"
+    }
+  },
+  "events": {
+    "testevents": {
+      "provider": "kafka",
+      "groupId": "restore-resource-base-interface-test",
+      "kafka": {
+        "clientId": "restore-resource-base-interface-test",
+        "brokers": [
+          "localhost:29092"
+        ]
+      },
+      "resourceCreated": {
+        "messageObject": "io.restorecommerce.resourcebase.Resource"
+      },
+      "resourceModified": {
+        "messageObject": "io.restorecommerce.resourcebase.Resource"
+      },
+      "resourceDeleted": {
+        "messageObject": "io.restorecommerce.resourcebase.Resource"
+      },
+      "resourceDeletedAll": {
+        "messageObject": "io.restorecommerce.resourcebase.Resource"
+      },
+      "testBufferedDataCreated": {
+        "messageObject": "test.TestBufferedData"
+      }
+    },
+    "enableEvents": "true"
+  },
+  "server": {
+    "logger": {
+      "console": {
+        "handleExceptions": false,
+        "level": "error",
+        "colorize": true,
+        "prettyPrint": true
+      }
+    },
+    "services": {
+      "test": {
+        "read": {
+          "transport": [
+            "pipeline"
+          ]
+        },
+        "create": {
+          "transport": [
+            "pipeline"
+          ]
+        },
+        "delete": {
+          "transport": [
+            "pipeline"
+          ]
+        },
+        "update": {
+          "transport": [
+            "pipeline"
+          ]
+        },
+        "upsert": {
+          "transport": [
+            "pipeline"
+          ]
+        }
+      },
+      "testBufferedService": {
+        "read": {
+          "transport": [
+            "pipeline"
+          ]
+        },
+        "create": {
+          "transport": [
+            "pipeline"
+          ]
+        },
+        "delete": {
+          "transport": [
+            "pipeline"
+          ]
+        }
+      },
+      "graphsTestService": {
+        "traversal": {
+          "transport": [
+            "pipeline"
+          ]
+        }
+      }
+    },
+    "transports": [
+      {
+        "name": "pipeline",
+        "provider": "grpc",
+        "addr": "localhost:50151"
+      }
+    ]
+  },
+  "bufferedServer": {
+    "logger": {
+      "console": {
+        "handleExceptions": false,
+        "level": "silly",
+        "colorize": true,
+        "prettyPrint": true
+      }
+    },
+    "services": {
+      "test": {
+        "read": {
+          "transport": [
+            "pipeline"
+          ]
+        },
+        "create": {
+          "transport": [
+            "pipeline"
+          ]
+        },
+        "delete": {
+          "transport": [
+            "pipeline"
+          ]
+        },
+        "update": {
+          "transport": [
+            "pipeline"
+          ]
+        },
+        "upsert": {
+          "transport": [
+            "pipeline"
+          ]
+        }
+      },
+      "testBufferedService": {
+        "read": {
+          "transport": [
+            "pipeline"
+          ]
+        },
+        "create": {
+          "transport": [
+            "pipeline"
+          ]
+        },
+        "delete": {
+          "transport": [
+            "pipeline"
+          ]
+        }
+      },
+      "graphsTestService": {
+        "traversal": {
+          "transport": [
+            "pipeline"
+          ]
+        }
+      }
+    },
+    "transports": [
+      {
+        "name": "pipeline",
+        "provider": "grpc",
+        "addr": "localhost:50152"
+      }
+    ]
+  },
+  "fieldHandlers": {
+    "fieldGenerators": {},
+    "bufferFields": {
+      "testBufferedData": ["data"],
+      "resource": ["data"]
+    },
+    "timeStampFields": [
+      {
+        "fields": ["created", "meta.created", "meta.modified"],
+        "entities": ["resource"]
+      }
+    ],
+    "requiredFields": {
+      "resource": [
+        "text"
+      ]
+    }
+  }
+}

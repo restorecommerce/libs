@@ -1,0 +1,177 @@
+= Chassis Service
+
+https://www.npmjs.com/package/@restorecommerce/chassis-srv[image:http://img.shields.io/npm/v/@restorecommerce/chassis-srv.svg?style=flat-square[Version]]
+https://travis-ci.org/restorecommerce/chassis-srv?branch=master[image:http://img.shields.io/travis/restorecommerce/chassis-srv/master.svg?style=flat-square[Build Status]]
+https://david-dm.org/restorecommerce/chassis-srv[image:https://img.shields.io/david/restorecommerce/chassis-srv.svg?style=flat-square[Dependencies]]
+https://coveralls.io/github/restorecommerce/chassis-srv?branch=master[image:http://img.shields.io/coveralls/restorecommerce/chassis-srv/master.svg?style=flat-square[Coverage Status]]
+
+A base service part of the link:https://github.com/restorecommerce[Restorecommerce].
+
+[#features]
+== Features
+
+* Business logic exposable via gRPC
+* Retry and timeout logic
+* Even sourcing via Kafka messaging
+* Endpoint calls with custom middleware
+* Primitives for logging, database access, cache handling or exposing system commands
+* full text search for ArangoDB
+
+[#architecture]
+== Architecture
+
+The chassis service consists of the following components:
+
+* a configuration loader
+* a multi-transport configurable log infrastructure
+* a base Restorecommerce microservice structure provided by the link:../../../../src/microservice/server.ts[Server] class,
+which emits state-related events and can be bound to a number of https://grpc.io/docs/[gRPC] endpoints,
+given a https://developers.google.com/protocol-buffers/docs/overview[Protocol Buffer] interface and a transport config
+* custom middleware
+* a cache-loader based on configuration files
+* a provider-based mechanism to access different databases
+* a base implementation for a link:https://github.com/restorecommerce/chassis-srv/blob/master/docs/modules/ROOT/pages/command-interface.adoc[command-interface]
+* periodic storage for https://kafka.apache.org/[Apache Kafka] topic offsets
+
+[#configuration]
+== Configuration
+
+- Configs are loaded using the https://github.com/indexzero/nconf[nconf]-based module
+https://github.com/restorecommerce/service-config[service-config].
+- Such configuration files may contain endpoint specifications
+along with their associated transports or simple access configs for backing services such as a database or even a Kafka instance.
+- To remove the buffered data from being logged
+link:https://github.com/restorecommerce/chassis-srv/blob/master/test/cfg/config.json#L343[bufferedFields]
+configuration can be set.
+- To mask the confidential data (such as password) from being logged
+link `maskFields` an array of fields can be set in configuration similar to buffer fields.
+- To avoid a gRPC protobuf error when making a read query for resources which have
+oneOf fields defined in the protobuf file, the oneOf fields can be removed from
+the request items by providing the oneOfFields like in the service configuration
+below:
+[source,json]
+----
+{
+  "oneOfFields": {
+    "resourceName": {
+      "oneOfName": [
+        "fieldName1",
+        "fieldName2"
+      ]
+    }
+  }
+}
+----
+
+[#configuration_logging]
+=== Logging
+
+Logging functionality is provided through https://github.com/restorecommerce/logger[logger],
+which uses https://github.com/winstonjs/winston[winston].
+Logger output transport, severity levels and other options are configurable.
+
+Default logging levels are:
+- `silly`
+- `verbose`
+- `debug`
+- `info`
+- `warn`
+- `error`
+
+[#configuration_server]
+=== Server
+
+A link:https://github.com/restorecommerce/chassis-srv/blob/master/src/microservice/server.ts[Server] instance can provide multiple service endpoints
+and emits events related with the microservice's state.
+An endpoint is a wrapped gRPC method accessible from any gRPC clients.
+It is also possible to configure the Server with number of times a request should be
+link:https://github.com/restorecommerce/chassis-srv/blob/master/test/microservice_test.ts#L456[`retried and timeout configurations`].
+Service responses always include a result or an error. When a `Server` is instantiated,
+it is possible to bind one or more services to it, each of them exposing its own RPC endpoints
+with an associated transport configuration (port, protobuf interfaces, service name, etc).
+Note that other transport types beside `gRPC` are theoretically possible,
+although that would require an extension of the `Server` class with a custom transport config.
+
+[#configuration_middleware]
+=== Middleware
+
+Endpoint calls may be intercepted with any number of link:https://github.com/restorecommerce/chassis-srv/blob/master/test/middleware_test.ts[custom chained middlewares].
+The request traverses the middleware before reaching the service function.
+The middleware can call the next middleware until the last middleware calls the service function.
+
+[#configuration_cache]
+=== Cache
+
+Multiple cache providers can be registered and loaded within a microservice.
+Such providers are managed with https://github.com/BryanDonovan/node-cache-manager[node-cache-manager].
+
+[#configuration_database]
+=== Database
+
+The following database providers are implemented:
+
+* https://www.arangodb.com/documentation/[ArangoDB]
+* https://github.com/louischatriot/nedb[NeDB]
+
+Providers include generic database handling operations (find, insert, upsert delete, truncate, etc).
+Query parameter structure for all exposed operations is similar with the structure used in
+https://docs.mongodb.com/manual/tutorial/getting-started/[MongoDB] queries.
+The ArangoDB provider supports graph database creation and exposes a simple API to manage vertices and edges.
+It also provides a flexible traversal method. For more details, see link:https://github.com/restorecommerce/chassis-srv/blob/master/test/graphs_test.ts[graph tests]
+and the https://docs.arangodb.com/3.3/HTTP/Gharial/[ArangoDB graphs documentation].
+Database providers can be used as a database abstraction by any service that owns a set of resources.
+Furthermore, services can later expose their database operations via gRPC.
+Exposure of these operations is easily achieved using the https://github.com/restorecommerce/resource-base-interface[resource-base-interface].
+
+[#configuration_full_text_search]
+==== Full text search
+
+Full text search is supported currently for ArangoDB in `chassis-srv`.
+A view should be created for each entity with the list of fields to be indexed.
+The View definition such as entity to which the view links to and the set of fields to be indexed with supported list of analyzers can be configured in view definition.
+Currently `ngram` and `pipeline` type analyzers are supported, analyzer options can be changed via configuration file.
+
+To enable the full text search for entity the collection name and view configuration file should be specified in https://github.com/restorecommerce/chassis-srv/blob/master/test/cfg/config.json#L22[configuration].
+Enable search with `database.arango.arangoSearch` a list containing `collectionName` and `path` to View and Analyzer configuration file
+
+Refer https://github.com/restorecommerce/chassis-srv/blob/master/test/views/users_view.json#[user view] configuration for test View and Analyzer configuration. 
+
+The following Analyzer specific configuration properties are available :
+
+* `analyzers` [`string [ ]`]: supported analyzers list
+* `analyzerOptions.type` [`string`]: type of analyzer currently `ngram` and `pipeline` are supported
+* `analyzerOptions.properties.min` [`number`]: minimum n-gram size to match from search string
+* `analyzerOptions.properties.max` [`number`]: maximum n-gram size to match from search string
+* `analyzerOptions.properties.preserveOriginal` [`boolean`]: `true` to include the original value as well, `false` to produce the n-grams based on min and max only 
+* `analyzerOptions.properties.startMarker` [`string, optional`]: this value will be prepended to n-grams which include the beginning of the input. Can be used for matching prefixes. Choose a character or sequence as marker which does not occur in the input.
+* `analyzerOptions.properties.endMarker` [`string, optional`]: this value will be appended to n-grams which include the end of the input. Can be used for matching suffixes. Choose a character or sequence as marker which does not occur in the input.
+* `analyzerOptions.properties.streamType` [`string, optional`]: type of the input stream `binary` one byte is considered as one character (default) `utf8` one Unicode codepoint is treated as one character.
+
+The following View specific configuration properties are available:
+
+* `view.CollectionName` [`string`]: collection name to which view links to.
+* `view.viewName` [`string`]: View name
+* `view.similarityThreshold` [`number`]: to assess the similarity of longer strings that share subsequences value betwen `0.0` and `1.0`
+* `view.options`: View Options containing list of `fields` to be indexed with applicable `analyzers` for each field.
+
+Refer test for further details https://github.com/restorecommerce/chassis-srv/blob/master/test/database.spec.ts#L525[full text search tests].
+
+[#configuration_command_interface]
+=== Command Interface
+
+An interface for system commands (useful information retrieval, system control, etc) is also provided.
+For more details about all implemented operations please refer
+link:https://github.com/restorecommerce/chassis-srv/blob/master/docs/modules/ROOT/pages/command-interface.adoc[command-interface].
+This interface can be directly exposed as a gRPC endpoint and it can be extended by a microservice for custom functionality.
+
+[#configuration_offset_store]
+=== Offset Store
+
+This stores the offset values for each Kafka topic within each microservice at a fixed interval
+to a https://redis.io/[Redis] database.
+Such intervals are configurable through the `offsetStoreInterval` configuration value.
+The offset values are stored with key `{kafka:clientId}:{topicName}`.
+In case of a service failure, a microservice can then read the last offset it stored before crashing and thus
+consume all pending messages since that moment.
+This feature can be disabled if the `latestOffset` configuration value is set to `true` - in this case,
+the service subscribes to the latest topic offset value upon system restart.

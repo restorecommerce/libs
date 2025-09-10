@@ -1,0 +1,79 @@
+{
+    "view": {
+      "collectionName": "addresss",
+      "viewName": "addresss_view",
+      "similarityThreshold": 0.1,
+      "options": {
+        "type": "arangosearch",
+        "links": {
+          "addresss": {
+            "includeAllFields": true,
+            "fields": {
+              "city": {
+                "analyzers": [
+                  "trigram",
+                  "trigram_norm"
+                ]
+              },
+              "country": {
+                "analyzers": [
+                  "trigram",
+                  "trigram_norm"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "analyzers": [
+      "trigram",
+      "trigram_norm"
+    ],
+    "analyzerOptions": [
+      {
+        "trigram": {
+          "type": "ngram",
+          "properties": {
+            "min": 3,
+            "max": 3,
+            "preserveOriginal": true
+          },
+          "features": [
+            "frequency",
+            "position",
+            "norm"
+          ]
+        }
+      },
+      {
+        "trigram_norm": {
+          "type": "pipeline",
+          "properties": {
+            "pipeline": [
+              {
+                "type": "norm",
+                "properties": {
+                  "locale": "de.utf-8",
+                  "case": "lower"
+                }
+              },
+              {
+                "type": "ngram",
+                "properties": {
+                  "min": 3,
+                  "max": 3,
+                  "preserveOriginal": true
+                }
+              }
+            ]
+          },
+          "features": [
+            "frequency",
+            "position",
+            "norm"
+          ]
+        }
+      }
+    ]
+  }

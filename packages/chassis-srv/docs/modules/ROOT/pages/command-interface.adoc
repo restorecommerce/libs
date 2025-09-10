@@ -1,0 +1,153 @@
+= Command Interface
+
+The generic command interface allows querying information from and triggering actions on microservices.
+Commands are usually used for administrative or operational concerns and should not be used for actions
+triggered by ordinary users. There are common commands but also such that are only understood by individual services.
+The command interface supports the following communication patterns:
+
+* Fire-and-forget
+* Request-reply
+
+Technically, the command interface is described by the `Command` endpoint.
+This endpoint is available as https://grpc.io/docs/[gRPC] interface and event-driven communication through Kafka.
+Request and response message structures are defined using https://developers.google.com/protocol-buffers/[Protocol Buffers]
+in the https://github.com/restorecommerce/protos/blob/master/io/restorecommerce/commandinterface.proto[commandinterface.proto] file.
+Due to the high variability among all command possible parametes, the `payload` field is defined as a `google.protobuf.Any` message
+(see https://github.com/restorecommerce/protos/tree/master/google/protobuf[google] protos), as well as all gRPC response messages.
+The `CommandResponse` message is mainly used on Kafka events, as it contains a `services` field, which identifies all services bound to a specific microservice.
+
+The following common system commands are available (also see below):
+
+* health_check (microservice health check)
+* restore (re-process https://kafka.apache.org/[Apache Kafka] event messages to restore system data)
+* reset (reset system data and state)
+* version (return runtime version information)
+* set_api_key (sets api key on microservices)
+* config_update (update configuration on microservices)
+
+Unimplemented:
+
+* reconfigure (reload configurations for one or more microservices)
+
+Note that the provided implementation's commands can be extended or even overriden when it is partially or totally
+incompatible with a service's context. It is also straightforward to include new commands by extending the given
+link:../../../../src/command-interface/index.ts[CommandInterface] class.
+
+== gRPC Interface
+
+=== Command
+
+|===
+|Field |Type |Label |Description
+
+|name |string |required |name of the command
+|payload |`google.protobuf.Any` |optional |command-specific parameters
+|===
+
+== Common Commands
+
+=== HealthCheck
+
+This command allows to retrieve a healt status for a service (note that a restorecommerce microservice may have several
+service names bound to it).
+
+Possible `payload` fields in a request:
+
+|===
+|Field |Type |Label |Description
+
+|service |string |required |name of the service to be checked
+|===
+
+Possible fields in a response:
+
+|===
+|Field |Type |Label |Description
+
+|status |string |required |serving status; it can be `SERVING`, `NOT_SERVING` and `UNKNOWN`
+|===
+
+=== Restore
+
+This command allows to restore the state of an implementing service, as well as all data managed by that service.
+The default implementation checks the configuration files for all DB instances bound to the implementing service
+and maps a set of Kafka events to a set of CRUD operations.
+These Kafka events are emitted by the service every time a resource is created/ modified in the store.
+The same events are processed from a Kafka consumer offset in order to restore all data since a previous a point in time.
+
+*Note*: this event processing can only be done in the correct order with single partitioned-topics,
+as Kafka ensures offset order per-partition.
+
+Possible `payload` fields in a request:
+
+|===
+|Field |Type |Label |Description
+
+|data |[ ]RestoreData |required |list of topics for message re-processing
+|===
+
+`RestoreData`
+
+|===
+|Field |Type |Label |Description
+
+|entity |string |required |The resource's entity name
+|base_offset |number |optional |Base offset at which to start the restore process; default is `0`
+|ignore_offset |[ ]number |optional |Topic offset values to ignore while restoring
+|===
+
+=== Reset
+
+This allows to wipe all data owned by a microservice.
+The `chassis-srv` default implementation only supports the chassis ArangoDB database provider as a valid provider.
+When `reset` is called, each of the specified resource's DB is truncated. There are no specific parameters either
+for the request payload and for the response.
+
+=== Version
+
+This command returns the NPM package and Node.js version of the implementing service.
+
+Response fields:
+
+|===
+|Field |Type |Label |Description
+
+|version |string |required |NPM package version
+|nodejs |string |required |Node.js version
+|===
+
+=== SetApiKey
+
+This command `set_api_key` sets the `authentication:apiKey` on the microservices, the configuration to set the API Key is provided
+in the payload of the command. This API Key is used by the https://github.com/restorecommerce/acs-client[`acs-client`]
+to override access control checks for https://github.com/restorecommerce/acs-client[`access-control-srv`].
+
+=== ConfigUpdate
+
+This command `config_update` sets the provided configuration on the microservices. The configuration to be set is provided in the
+payload of the command.
+
+=== FlushCache
+
+This command `flush_cache` is used to flush / invalidate the cache.
+
+Possible `payload` fields in a request:
+
+|===
+|Field |Type |Label |Description
+
+|data |FlushCacheData |required | flush cache payload
+|===
+
+`FlushCacheData`
+
+|===
+|Field |Type |Label |Description
+
+|db_index |number |optional |Redis DB index to be flushed
+|pattern |string |optional |Pattern to match redis keys to be flushed
+|===
+
+== Usage
+
+See link:../../../../test/command_test.ts[tests].

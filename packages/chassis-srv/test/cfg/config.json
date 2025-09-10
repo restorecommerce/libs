@@ -1,0 +1,187 @@
+{
+  "logger": {
+    "console": {
+      "handleExceptions": false,
+      "level": "silly",
+      "colorize": true,
+      "prettyPrint": true
+    }
+  },
+  "database": {
+    "arango": {
+      "provider": "arango",
+      "host": "127.0.0.1",
+      "port": 8529,
+      "database": "chassis-test",
+      "autoCreate": true,
+      "collections": [
+        "test",
+        "user",
+        "address"
+      ],
+      "arangoSearch": [
+        {
+          "collectionName": "users",
+          "path": "test/views/users_view.json"
+        },
+        {
+          "collectionName": "addresss",
+          "path": "test/views/address_view.json"
+        }
+      ]
+    },
+    "nedb": {
+      "provider": "nedb",
+      "collections": {
+        "test": {}
+      }
+    }
+  },
+  "redis": {
+    "host": "localhost",
+    "port": 6379,
+    "offsetStoreInterval": 1000,
+    "db-indexes": {
+      "db-offsetStore": 0,
+      "db-subject": 4
+    }
+  },
+  "cache": {
+    "one": [
+      {
+        "provider": "memory"
+      }
+    ]
+  },
+  "graph": {
+    "graphName": "chassis-graph-test",
+    "edgeDefinitions": [
+      {
+        "collection": "has",
+        "from": "person",
+        "to": "car"
+      },
+      {
+        "collection": "belongs",
+        "from": "car",
+        "to": "place"
+      },
+      {
+        "collection": "resides",
+        "from": "place",
+        "to": "state"
+      },
+      {
+        "collection": "lives",
+        "from": "person",
+        "to": "state"
+      }
+    ]
+  },
+  "client": {
+    "commandinterface": {
+      "address": "localhost:50051"
+    },
+    "test": {
+      "address": "localhost:50051"
+    },
+    "stream": {
+      "address": "localhost:50051"
+    },
+    "reflection": {
+      "address": "localhost:50051"
+    }
+  },
+  "events": {
+    "kafka": {
+      "logger": {
+        "console": {
+          "handleExceptions": false,
+          "level": "debug",
+          "colorize": true,
+          "prettyPrint": true
+        }
+      },
+      "provider": "kafka",
+      "groupId": "restore-chassis-test-server",
+      "kafka": {
+        "clientId": "restore-chassis-test-server",
+        "brokers": [
+          "localhost:29092"
+        ]
+      },
+      "test-event": {
+        "messageObject": "test.TestEvent"
+      },
+      "testCreated": {
+        "messageObject": "test.TestEvent"
+      },
+      "restoreCommand": {
+        "messageObject": "io.restorecommerce.commandinterface.CommandRequest"
+      },
+      "restoreResponse": {
+        "messageObject": "io.restorecommerce.commandinterface.CommandResponse"
+      },
+      "healthCheckResponse": {
+        "messageObject": "io.restorecommerce.commandinterface.CommandResponse"
+      },
+      "resetResponse": {
+        "messageObject": "io.restorecommerce.commandinterface.CommandResponse"
+      },
+      "versionResponse": {
+        "messageObject": "io.restorecommerce.commandinterface.CommandResponse"
+      },
+      "configUpdateCommand": {
+        "messageObject": "io.restorecommerce.commandinterface.CommandRequest"
+      },
+      "configUpdateResponse": {
+        "messageObject": "io.restorecommerce.commandinterface.CommandResponse"
+      },
+      "setApiKeyCommand": {
+        "messageObject": "io.restorecommerce.commandinterface.CommandRequest"
+      },
+      "setApiKeyResponse": {
+        "messageObject": "io.restorecommerce.commandinterface.CommandResponse"
+      },
+      "flushCacheCommand": {
+        "messageObject": "io.restorecommerce.commandinterface.CommandRequest"
+      },
+      "flushCacheResponse": {
+        "messageObject": "io.restorecommerce.commandinterface.CommandResponse"
+      },
+      "topics": {
+        "command": {
+          "topic": "io.restorecommerce.command",
+          "events": [
+            "resetResponse",
+            "restoreResponse",
+            "versionResponse",
+            "configUpdateResponse",
+            "setApiKeyResponse",
+            "flushCacheResponse"
+          ]
+        },
+        "test.resource": {
+          "topic": "test"
+        }
+      }
+    }
+  },
+  "server": {
+    "logger": {
+      "console": {
+        "handleExceptions": false,
+        "level": "silly",
+        "colorize": true,
+        "prettyPrint": true
+      }
+    },
+    "transports": [
+      {
+        "name": "grpcTest",
+        "provider": "grpc",
+        "addr": "localhost:50051"
+      }
+    ]
+  }
+}

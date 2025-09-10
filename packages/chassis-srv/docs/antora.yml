@@ -1,0 +1,5 @@
+name: chassis-srv
+title: Chassis Service
+version: master
+nav:
+  - modules/ROOT/nav.adoc

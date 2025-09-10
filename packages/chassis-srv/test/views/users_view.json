@@ -1,0 +1,79 @@
+{
+    "view": {
+      "collectionName": "users",
+      "viewName": "users_view",
+      "similarityThreshold": 0.1,
+      "options": {
+        "type": "arangosearch",
+        "links": {
+          "users": {
+            "includeAllFields": true,
+            "fields": {
+              "first_name": {
+                "analyzers": [
+                  "trigram",
+                  "trigram_norm"
+                ]
+              },
+              "last_name": {
+                "analyzers": [
+                  "trigram",
+                  "trigram_norm"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "analyzers": [
+      "trigram",
+      "trigram_norm"
+    ],
+    "analyzerOptions": [
+      {
+        "trigram": {
+          "type": "ngram",
+          "properties": {
+            "min": 3,
+            "max": 3,
+            "preserveOriginal": true
+          },
+          "features": [
+            "frequency",
+            "position",
+            "norm"
+          ]
+        }
+      },
+      {
+        "trigram_norm": {
+          "type": "pipeline",
+          "properties": {
+            "pipeline": [
+              {
+                "type": "norm",
+                "properties": {
+                  "locale": "de.utf-8",
+                  "case": "lower"
+                }
+              },
+              {
+                "type": "ngram",
+                "properties": {
+                  "min": 3,
+                  "max": 3,
+                  "preserveOriginal": true
+                }
+              }
+            ]
+          },
+          "features": [
+            "frequency",
+            "position",
+            "norm"
+          ]
+        }
+      }
+    ]
+  }

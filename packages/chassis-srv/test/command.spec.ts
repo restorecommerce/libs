@@ -203,6 +203,8 @@ describe('CommandInterfaceService', () => {
 
       const result = await db.findByID('tests', docID);
       result.should.be.length(0);
+
+      await new Promise(resolve => setTimeout(resolve, 1000));
     });
 
   });

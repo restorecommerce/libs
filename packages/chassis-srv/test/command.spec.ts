@@ -183,14 +183,22 @@ describe('CommandInterfaceService', () => {
       });
     });
     it('should clean the database', async () => {
-      validate = (msg: any, eventName: string): void => {
-        eventName.should.equal('resetResponse');
-        should.exist(msg.services);
-        msg.services.should.containEql('commandinterface');
-        should.exist(msg.payload);
-        const payload = decodeMsg(msg.payload);
-        should.not.exist(payload.error);
-      };
+      const validatePromise = new Promise<void>((resolve, reject) => {
+        validate = async (msg: any, eventName: string): void => {
+          try {
+            eventName.should.equal('resetResponse');
+            should.exist(msg.services);
+            msg.services.should.containEql('commandinterface');
+            should.exist(msg.payload);
+            const payload = decodeMsg(msg.payload);
+            should.not.exist(payload.error);
+            resolve();
+          } catch (err) {
+            reject(err);
+          }
+        };
+      });
+
       const offset = await commandTopic.$offset(BigInt(-1));
       const resp = await grpcClient.command({
         name: 'reset'
@@ -205,7 +213,7 @@ describe('CommandInterfaceService', () => {
       const result = await db.findByID('tests', docID);
       result.should.be.length(0);
 
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await validatePromise;
     });
 
   });
@@ -221,25 +229,32 @@ describe('CommandInterfaceService', () => {
       await db.truncate('tests');
     });
     it('should re-read all data from specified offset', async function restore() {
-      validate = async (msg: any, eventName: string) => {
-        logger.debug(`[RESTORE] Received event: ${eventName}`);
-        eventName.should.equal('restoreResponse');
-        should.exist(msg.services);
-        msg.services.should.containEql('commandinterface');
-        should.exist(msg.payload);
-        const payload = decodeMsg(msg.payload);
-        should.not.exist(payload.error);
-        // restore conclusion is checked asynchronously, since it can take a variable
-        // and potentially large amount of time
-        const result = await db.find('tests', {}, {
-          sort: {
-            count: 1
+      const validatePromise = new Promise<void>((resolve, reject) => {
+        validate = async (msg: any, eventName: string): void => {
+          try {
+            logger.debug(`[RESTORE] Received event: ${eventName}`);
+            eventName.should.equal('restoreResponse');
+            should.exist(msg.services);
+            msg.services.should.containEql('commandinterface');
+            should.exist(msg.payload);
+            const payload = decodeMsg(msg.payload);
+            should.not.exist(payload.error);
+            // restore conclusion is checked asynchronously, since it can take a variable
+            // and potentially large amount of time
+            const result = await db.find('tests', {}, {
+              sort: {
+                count: 1
+              }
+            });
+            for (let i = 0; i < 100; i++) {
+              result[i].count.should.equal(i);
+            }
+            resolve();
+          } catch (err) {
+            reject(err);
           }
-        });
-        for (let i = 0; i < 100; i++) {
-          result[i].count.should.equal(i);
-        }
-      };
+        };
+      });
 
       // waiting for restore conclusion
       const offset: bigint = await commandTopic.$offset(BigInt(-1));
@@ -262,21 +277,29 @@ describe('CommandInterfaceService', () => {
       should.not.exist((resp as any).error);
 
       await commandTopic.$wait(offset);
+      await validatePromise;
     }, 30000);
   });
   describe('version', () => {
     it('should return the version of the package and nodejs', async () => {
-      validate = (msg: any, eventName: string): void => {
-        eventName.should.equal('versionResponse');
-        should.exist(msg.services);
-        msg.services.should.containEql('commandinterface');
-        should.exist(msg.payload);
-        const payload = decodeMsg(msg.payload);
-        should.exist(payload.version);
-        payload.version.should.equal(process.env.npm_package_version);
-        should.exist(payload.nodejs);
-        payload.nodejs.should.equal(process.version);
-      };
+      const validatePromise = new Promise<void>((resolve, reject) => {
+        validate = async (msg: any, eventName: string): void => {
+          try {
+            eventName.should.equal('versionResponse');
+            should.exist(msg.services);
+            msg.services.should.containEql('commandinterface');
+            should.exist(msg.payload);
+            const payload = decodeMsg(msg.payload);
+            should.exist(payload.version);
+            payload.version.should.equal(process.env.npm_package_version);
+            should.exist(payload.nodejs);
+            payload.nodejs.should.equal(process.version);
+            resolve();
+          } catch (err) {
+            reject(err);
+          }
+        };
+      });
       const offset = await commandTopic.$offset(BigInt(-1));
       const resp = await grpcClient.command({
         name: 'version',
@@ -287,19 +310,27 @@ describe('CommandInterfaceService', () => {
       data.version.should.equal(process.env.npm_package_version);
       should.exist(data.nodejs);
       data.nodejs.should.equal(process.version);
+      await validatePromise;
     });
   });
   describe('setApiKey', () => {
     it('should set the provided authentication api key on configuration', async () => {
-      validate = (msg: any, eventName: string): void => {
-        eventName.should.equal('setApiKeyResponse');
-        should.exist(msg.services);
-        msg.services.should.containEql('commandinterface');
-        should.exist(msg.payload);
-        const payload = decodeMsg(msg.payload);
-        should.exist(payload.status);
-        payload.status.should.equal('ApiKey set successfully');
-      };
+      const validatePromise = new Promise<void>((resolve, reject) => {
+        validate = async (msg: any, eventName: string): void => {
+          try {
+            eventName.should.equal('setApiKeyResponse');
+            should.exist(msg.services);
+            msg.services.should.containEql('commandinterface');
+            should.exist(msg.payload);
+            const payload = decodeMsg(msg.payload);
+            should.exist(payload.status);
+            payload.status.should.equal('ApiKey set successfully');
+            resolve();
+          } catch (err) {
+            reject(err);
+          }
+        };
+      });
       const offset = await commandTopic.$offset(BigInt(-1));
       const apiKeyPayload = encodeMsg({
         authentication: {
@@ -314,19 +345,27 @@ describe('CommandInterfaceService', () => {
       const data = decodeMsg(resp);
       should.exist(data.status);
       data.status.should.equal('ApiKey set successfully');
+      await validatePromise;
     });
   });
   describe('configUpdate', () => {
     it('should update the provide configuration', async () => {
-      validate = (msg: any, eventName: string): void => {
-        eventName.should.equal('configUpdateResponse');
-        should.exist(msg.services);
-        msg.services.should.containEql('commandinterface');
-        should.exist(msg.payload);
-        const payload = decodeMsg(msg.payload);
-        should.exist(payload.status);
-        payload.status.should.equal('Configuration updated successfully');
-      };
+      const validatePromise = new Promise<void>((resolve, reject) => {
+        validate = async (msg: any, eventName: string): void => {
+          try {
+            eventName.should.equal('configUpdateResponse');
+            should.exist(msg.services);
+            msg.services.should.containEql('commandinterface');
+            should.exist(msg.payload);
+            const payload = decodeMsg(msg.payload);
+            should.exist(payload.status);
+            payload.status.should.equal('Configuration updated successfully');
+            resolve();
+          } catch (err) {
+            reject(err);
+          }
+        };
+      });
       const offset = await commandTopic.$offset(BigInt(-1));
       const configPayload = encodeMsg({
         authentication: {
@@ -340,17 +379,25 @@ describe('CommandInterfaceService', () => {
       const data = decodeMsg(resp);
       should.exist(data.status);
       data.status.should.equal('Configuration updated successfully');
+      await validatePromise;
     });
   });
   describe('flushCache', () => {
     it('should flush with given db_index and pattern', async () => {
-      validate = (msg: any, eventName: string): void => {
-        eventName.should.equal('flushCacheResponse');
-        should.exist(msg.payload);
-        const payload = decodeMsg(msg.payload);
-        should.exist(payload.status);
-        payload.status.should.startWith('Successfully flushed cache');
-      };
+      const validatePromise = new Promise<void>((resolve, reject) => {
+        validate = async (msg: any, eventName: string): void => {
+          try {
+            eventName.should.equal('flushCacheResponse');
+            should.exist(msg.payload);
+            const payload = decodeMsg(msg.payload);
+            should.exist(payload.status);
+            payload.status.should.startWith('Successfully flushed cache');
+            resolve();
+          } catch (err) {
+            reject(err);
+          }
+        };
+      });
       // store 120 keys to redis db index 3
       const redis = createClient({ database: 3 });
       await redis.connect();
@@ -380,6 +427,7 @@ describe('CommandInterfaceService', () => {
       const data = decodeMsg(resp);
       should.exist(data.status);
       data.status.should.startWith('Successfully flushed cache');
+      await validatePromise;
     });
     it('flushdb should flush all keys in specific db_index when no pattern is specified', async () => {
       // store 3 keys to redis db index 3

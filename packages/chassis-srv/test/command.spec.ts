@@ -222,6 +222,7 @@ describe('CommandInterfaceService', () => {
     });
     it('should re-read all data from specified offset', async function restore() {
       validate = async (msg: any, eventName: string) => {
+        logger.debug(`[RESTORE] Received event: ${eventName}`);
         eventName.should.equal('restoreResponse');
         should.exist(msg.services);
         msg.services.should.containEql('commandinterface');

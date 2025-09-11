@@ -1,14 +1,14 @@
-import {} from 'mocha';
 import * as should from 'should';
 import * as _ from 'lodash';
 import { createLogger } from '@restorecommerce/logger';
 import { Database } from 'arangojs';
-import * as chassis from '../src';
+import * as chassis from '../src/index.js';
 const config = chassis.config;
 const database = chassis.database;
 import {
   Options_Direction as Direction,
-} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/graph';
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/graph.js';
+import { it, describe, beforeAll, afterAll } from 'vitest';
 
 /* global describe context it beforeEach */
 
@@ -30,7 +30,7 @@ const arrUnique = <T>(arr: T[]) => {
 };
 
 const testProvider = (providerCfg) => {
-  let db;
+  let db: any;
   //  STATE <-- lives PERSON has --> CAR belongsto --> PLACE resides --> STATE
   const personCollectionName = 'person';
   const hasEdgeCollectionName = 'has';
@@ -41,7 +41,7 @@ const testProvider = (providerCfg) => {
   const stateCollectionName = 'state';
   const livesEdgeCollectionName = 'lives';
 
-  before(async () => {
+  beforeAll(async () => {
     db = await providerCfg.init();
     // create person vertex collection
     await db.addVertexCollection(personCollectionName);
@@ -50,7 +50,7 @@ const testProvider = (providerCfg) => {
     await db.addEdgeDefinition(belongsEdgeCollectionName, carsCollectionName, placeCollectionName);
     should.exist(db);
   });
-  after(async () => {
+  afterAll(async () => {
     await config.load(process.cwd() + '/test');
     const cfg = await config.get();
 

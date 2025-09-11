@@ -1,11 +1,12 @@
 import * as should from 'should';
 import { Events, Topic, registerProtoMeta } from '@restorecommerce/kafka-client';
 import { createLogger } from '@restorecommerce/logger';
-import { OffsetStore } from '../src/offsets';
+import { OffsetStore } from '../src/offsets/index.js';
 import { createServiceConfig } from '@restorecommerce/service-config';
 import {
   protoMetadata
-} from '@restorecommerce/rc-grpc-clients/dist/generated/test/test';
+} from '@restorecommerce/rc-grpc-clients/dist/generated/test/test.js';
+import { it, describe, beforeAll, afterAll, beforeEach, afterEach } from 'vitest';
 
 registerProtoMeta(protoMetadata);
 
@@ -23,19 +24,16 @@ describe('offsetStore', () => {
   const logger = createLogger(cfg.get('logger'));
 
   beforeEach(async function start() {
-    this.timeout(10000);
     events = new Events(cfg.get('events:kafka'), logger);
     await events.start();
-  });
+  }, 10000);
   afterEach(async function stop() {
-    this.timeout(10000);
     await offsetStore.stop();
     await events.stop();
-  });
+  }, 10000);
 
   it('should emit an event and verify the stored offset value from redis',
     async function testStoredOffsetValue() {
-      this.timeout(15000);
       offsetStore = new OffsetStore(events, cfg, logger);
       topic = await (events.topic(topicName));
 
@@ -44,22 +42,21 @@ describe('offsetStore', () => {
         testMessage.count.should.equal(message.count);
       };
       // get the current offsetValue for 'test' topic before emitting message
-      const currentOffset = await topic.$offset(-1);
+      const currentOffset = await topic.$offset(BigInt(-1));
       // emit message to kafka
       await topic.on(eventName, listener);
       await topic.emit(eventName, testMessage);
-      const newOffset = await new Promise((resolve, reject) => {
+      const newOffset = await new Promise<bigint>((resolve, reject) => {
         setTimeout(async () => {
           const offsetValue = await offsetStore.getOffset(topicName);
           resolve(offsetValue);
         }, 8000);
       });
       should.exist(newOffset);
-      Number(newOffset).should.equal(currentOffset + 1);
-    });
+      BigInt(newOffset).should.equal(currentOffset + BigInt(1));
+    }, 15000);
   it('should consume a previously emitted message from Kafka',
     async function testConsumeListener() {
-      this.timeout(10000);
       // emit testMessage to kafka
       topic = await events.topic(topicName);
       await topic.emit(eventName, testMessage);
@@ -83,5 +80,5 @@ describe('offsetStore', () => {
           resolve();
         }, 2000);
       });
-    });
+    }, 10000);
 });

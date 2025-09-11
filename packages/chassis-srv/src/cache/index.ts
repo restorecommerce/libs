@@ -9,7 +9,7 @@ import { ObjectEncodingOptions } from 'fs';
  * A key, value map containing cache providers.
  * Cache providers are registered with the register function.
  */
-const providers = {};
+const providers: Record<string, any> = {};
 
 /**
  * Register a cache provider.
@@ -24,7 +24,7 @@ export const register = (name: string, provider: any): void => {
 
 // register defaults
 // add memory provider by default, since it is included with the cache-manager.
-register('memory', (config, logger) => {
+register('memory', (config: any, logger: any) => {
   const options = {
     max: config?.max || 500,
     dispose: config?.dispose,

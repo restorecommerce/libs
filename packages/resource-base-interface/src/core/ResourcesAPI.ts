@@ -4,7 +4,7 @@ import { Logger } from '@restorecommerce/logger';
 import { Topic } from '@restorecommerce/kafka-client';
 import {
   BaseDocument
-} from './interfaces';
+} from './interfaces.js';
 import {
   DatabaseProvider,
   GraphDatabaseProvider
@@ -12,13 +12,13 @@ import {
 import {
   Status,
   OperationStatus,
-} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/status';
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/status.js';
 import {
   DeepPartial,
   Search
-} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base';
-import { Subject } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/auth';
-import { fieldHandler, FieldHandlerType } from './utils';
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base.js';
+import { Subject } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/auth.js';
+import { fieldHandler, FieldHandlerType } from './utils.js';
 
 // let redisClient: any;
 
@@ -397,7 +397,7 @@ export class ResourcesAPIBase {
           }
         }
       ).then(
-        resp => resp.map(doc => doc.id)
+        (resp: any[]) => resp.map(doc => doc.id)
       )
     );
 

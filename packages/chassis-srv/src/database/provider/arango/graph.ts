@@ -1,11 +1,11 @@
 import * as _ from 'lodash';
 import { Database } from 'arangojs';
-import { Arango } from './base';
-import { sanitizeInputFields, sanitizeOutputFields } from './common';
-import { GraphDatabaseProvider } from '../..';
+import { Arango } from './base.js';
+import { sanitizeInputFields, sanitizeOutputFields } from './common.js';
+import { GraphDatabaseProvider } from '../../index.js';
 import { Graph } from 'arangojs/graph';
 import { ArangoCollection } from 'arangojs/collection';
-import { buildGraphFilter, buildGraphLimiter, buildGraphSorter, createGraphsAssociationFilter } from './utils';
+import { buildGraphFilter, buildGraphLimiter, buildGraphSorter, createGraphsAssociationFilter } from './utils.js';
 import {
   Vertices,
   Collection,
@@ -13,10 +13,11 @@ import {
   Filters as GraphFilters,
   Options_Direction as Direction,
   DeepPartial
-} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/graph';
-import { TraversalResponse } from './interface';
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/graph.js';
+import { TraversalResponse } from './interface.js';
 import { type Logger } from '@restorecommerce/logger';
 
+// @ts-expect-error TS2420
 export class ArangoGraph extends Arango implements GraphDatabaseProvider {
   constructor(
     db: Database,
@@ -43,7 +44,7 @@ export class ArangoGraph extends Arango implements GraphDatabaseProvider {
       const graph = this.db.graph(graphName);
       try {
         await graph.create(edgeDefinitions, options);
-      } catch (err) {
+      } catch (err: any) {
         if (err.message === 'graph already exists') {
           return this.graph;
         }
@@ -80,13 +81,13 @@ export class ArangoGraph extends Arango implements GraphDatabaseProvider {
     });
     const responseDocs = [];
     for (const eachDoc of docs) {
-      let result;
+      let result: any;
       try {
         result = await collection.save(eachDoc);
         if (!result.error) {
           responseDocs.push(eachDoc);
         }
-      } catch (e) {
+      } catch (e: any) {
         responseDocs.push({
           error: true,
           errorNum: e.code,
@@ -203,7 +204,7 @@ export class ArangoGraph extends Arango implements GraphDatabaseProvider {
     let collection;
     try {
       collection = await this.graph.addVertexCollection(collectionName);
-    } catch (err) {
+    } catch (err: any) {
       if (err.message.indexOf('collection already used in edge def') > -1 || err.message.indexOf('collection used in orphans') > -1) {
         return collection;
       }
@@ -473,7 +474,7 @@ export class ArangoGraph extends Arango implements GraphDatabaseProvider {
       associationCursor = await this.db.query(traversalQuery);
       const rootEntityQuery = `For obj IN ${traversalCollectionName} ${rootFilter} ${limitFilter} ${sortFilter} return obj`;
       rootCursor = await this.db.query(rootEntityQuery);
-    } catch (err) {
+    } catch (err: any) {
       throw { code: err.code, message: err.message };
     }
 
@@ -531,7 +532,7 @@ export class ArangoGraph extends Arango implements GraphDatabaseProvider {
           to: toVertice
         }
       );
-    } catch (err) {
+    } catch (err: any) {
       // if edge def already exists return
       if (err.message === `${edgeName} multi use of edge collection in edge def`) {
         return edgeDef;

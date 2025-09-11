@@ -1,7 +1,7 @@
-import { createServiceConfig } from '@restorecommerce/service-config';
+import {createServiceConfig, ServiceConfig} from '@restorecommerce/service-config';
 
 // singleton
-let config;
+let config: ServiceConfig;
 
 /**
  * Loads the configuration and stores it in the config singleton.

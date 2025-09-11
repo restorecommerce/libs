@@ -1,12 +1,13 @@
 import * as should from 'should';
 import { createLogger } from '@restorecommerce/logger';
 import { createClient } from '@restorecommerce/grpc-client';
-import { grpcServer } from '../src';
-import { TestClient, TestDefinition } from '@restorecommerce/rc-grpc-clients/dist/generated/test/test';
-import { TestDefinition as ServerTestDefinition } from '@restorecommerce/rc-grpc-clients/dist/generated-server/test/test';
-import { testService } from './microservice.spec';
-import { BindConfig } from '../src/microservice/transport/provider/grpc';
+import { grpcServer } from '../src/index.js';
+import { TestClient, TestDefinition } from '@restorecommerce/rc-grpc-clients/dist/generated/test/test.js';
+import { TestDefinition as ServerTestDefinition } from '@restorecommerce/rc-grpc-clients/dist/generated-server/test/test.js';
+import { testService } from './microservice.spec.js';
+import { BindConfig } from '../src/microservice/transport/provider/grpc/index.js';
 import { createChannel } from 'nice-grpc';
+import { it, describe, beforeAll, afterAll } from 'vitest';
 /* global describe it before after*/
 
 const providers = [{
@@ -117,8 +118,7 @@ providers.forEach((provider) => {
         describe('with running server', () => {
           const errMessage = 'forced error';
           let server: grpcServer;
-          before(async function startServer() {
-            this.timeout(5000);
+          beforeAll(async function startServer() {
             const logger = createLogger(provider.config.logger);
             server = new provider.Server(provider.config.server, logger);
             await server.bind({
@@ -129,8 +129,8 @@ providers.forEach((provider) => {
             await new Promise((resolve, reject) => {
               setTimeout(resolve, 2000);
             });
-          });
-          after(async () => {
+          }, 5000);
+          afterAll(async () => {
             await server.end();
           });
           it('should create an endpoint', () => {

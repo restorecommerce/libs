@@ -286,58 +286,7 @@ export class Topic {
 
   private async initConsumerIfNotExists(queue?: boolean): Promise<void> {
     if (!this.consumer) {
-      this.consumer = new Consumer({
-        groupId: this.provider.config.groupId + '_' + this.name,
-        ...this.provider.commonOptions
-      });
-
-      this.consumer.on('client:broker:connect', (err: any) => {
-        this.provider.logger.info('Consumer is ready.', err);
-      });
-
-      this.consumer.on('client:broker:disconnect', (err: any) => {
-        this.provider.logger.warn('Consumer connection failed:', err);
-      });
-
-      this.consumer.on('client:broker:failed', (err: any) => {
-        this.provider.logger.warn('Consumer connection failed:', err);
-      });
-
-      this.consumer.on('client:broker:drain', (err: any) => {
-        this.provider.logger.info('Consumer broker ready for requests:', err);
-      });
-
-      this.consumer.on('client:metadata', (err: any) => {
-        this.provider.logger.info('Consumer broker metadata:', err);
-      });
-
-      this.consumer.on('client:close', (err: any) => {
-        this.provider.logger.warn('Consumer client closed:', err);
-      });
-
-      this.consumer.on('consumer:group:join', (err: any) => {
-        this.provider.logger.info('Consumer joining group:', err);
-      });
-
-      this.consumer.on('consumer:group:leave', (err: any) => {
-        this.provider.logger.info('Consumer leaving group:', err);
-      });
-
-      this.consumer.on('consumer:group:rejoin', (err: any) => {
-        this.provider.logger.warn('Consumer re-joining group:', err);
-      });
-
-      this.consumer.on('consumer:group:rebalance', (err: any) => {
-        this.provider.logger.warn('Consumer group rebalancing:', err);
-      });
-
-      this.consumer.on('consumer:heartbeat:cancel', (err: any) => {
-        this.provider.logger.warn('Consumer heartbeat cancelled:', err);
-      });
-
-      this.consumer.on('consumer:heartbeat:error', (err: any) => {
-        this.provider.logger.error('Consumer heartbeat error:', err);
-      });
+      this.consumer = await this.provider.newConsumer(this.provider.config.groupId + '_' + this.name);
 
       await this.consumer.connectToBrokers().then(() => {
         this.provider.logger.info(`Consumer for topic '${this.name}' connected`);
@@ -847,6 +796,63 @@ export class Kafka {
       this.logger.error('Errors when stopping Kafka client:', errors);
       throw errors;
     }
+  }
+
+  async newConsumer(groupId: string): Promise<Consumer> {
+    const consumer = new Consumer({
+      groupId: groupId,
+      ...this.commonOptions
+    });
+
+    consumer.on('client:broker:connect', (err: any) => {
+      this.logger.info('Consumer is ready.', err);
+    });
+
+    consumer.on('client:broker:disconnect', (err: any) => {
+      this.logger.warn('Consumer connection failed:', err);
+    });
+
+    consumer.on('client:broker:failed', (err: any) => {
+      this.logger.warn('Consumer connection failed:', err);
+    });
+
+    consumer.on('client:broker:drain', (err: any) => {
+      this.logger.info('Consumer broker ready for requests:', err);
+    });
+
+    consumer.on('client:metadata', (err: any) => {
+      this.logger.info('Consumer broker metadata:', err);
+    });
+
+    consumer.on('client:close', (err: any) => {
+      this.logger.warn('Consumer client closed:', err);
+    });
+
+    consumer.on('consumer:group:join', (err: any) => {
+      this.logger.info('Consumer joining group:', err);
+    });
+
+    consumer.on('consumer:group:leave', (err: any) => {
+      this.logger.info('Consumer leaving group:', err);
+    });
+
+    consumer.on('consumer:group:rejoin', (err: any) => {
+      this.logger.warn('Consumer re-joining group:', err);
+    });
+
+    consumer.on('consumer:group:rebalance', (err: any) => {
+      this.logger.warn('Consumer group rebalancing:', err);
+    });
+
+    consumer.on('consumer:heartbeat:cancel', (err: any) => {
+      this.logger.warn('Consumer heartbeat cancelled:', err);
+    });
+
+    consumer.on('consumer:heartbeat:error', (err: any) => {
+      this.logger.error('Consumer heartbeat error:', err);
+    });
+
+    return consumer;
   }
 }
 

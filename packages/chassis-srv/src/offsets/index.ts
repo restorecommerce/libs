@@ -66,7 +66,7 @@ export class OffsetStore {
           this.config.get('redis:offsetStoreInterval') ?? 1000,
           topic,
           topicName
-        );
+        ) as any;
       });
     }
   }
@@ -79,9 +79,9 @@ export class OffsetStore {
    */
   async storeOffset(topic: Topic, topicName: string): Promise<void> {
     // get the latest offset here each time and store it.
-    const offsetValue = await topic.$offset(-1);
+    const offsetValue = await topic.$offset(BigInt(-1));
     const redisKey = `${this.prefix}:${topicName}`;
-    this.redisClient.set(redisKey, offsetValue);
+    this.redisClient.set(redisKey, offsetValue.toString(10));
   }
 
   /**
@@ -89,14 +89,17 @@ export class OffsetStore {
    * @param  {string} topic Topic name
    * @return {object}
    */
-  async getOffset(topicName: string): Promise<number> {
+  async getOffset(topicName: string): Promise<bigint> {
     const redisKey = `${this.prefix}:${topicName}`;
     const offsetValue = await this.redisClient.get(redisKey);
     this.logger?.info(
       'The offset value retreived from redis for topic is:',
       { topicName, offsetValue }
     );
-    return Number(offsetValue);
+    if (!offsetValue) {
+      return BigInt(0);
+    }
+    return BigInt(offsetValue);
   }
 
   /**

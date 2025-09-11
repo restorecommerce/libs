@@ -1,5 +1,5 @@
 {
-  "extends": "./node_modules/@restorecommerce/dev/tsconfig.json",
+  "extends": "../../node_modules/@restorecommerce/dev/tsconfig.json",
   "include": [
     "./src/core/*.ts",
     "./src/experimental/*.ts",

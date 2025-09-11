@@ -6,14 +6,14 @@ import {
 import { Logger } from '@restorecommerce/logger';
 import {
   OperationStatus
-} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/status';
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/status.js';
 import {
   DeepPartial, ServerStreamingMethodResult,
   GraphServiceImplementation,
   TraversalRequest,
   TraversalResponse
-} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/graph';
-import { SortOrder } from './interfaces';
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/graph.js';
+import { SortOrder } from './interfaces.js';
 
 /**
  * Graph Resource API base provides functions for graph Operations such as

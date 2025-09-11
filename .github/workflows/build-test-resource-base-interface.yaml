@@ -1,0 +1,31 @@
+name: build-test-resource-base-interface
+
+on:
+  workflow_dispatch: {}
+  push:
+    paths:
+      - 'packages/resource-base-interface/**'
+      - '.github/workflows/build-test-resource-base-interface.yaml'
+      - '.github/workflows/base-build-job.yaml'
+      - '.github/workflows/base-test-job.yaml'
+  pull_request:
+    paths:
+      - 'packages/resource-base-interface/**'
+      - '.github/workflows/build-test-resource-base-interface.yaml'
+      - '.github/workflows/base-build-job.yaml'
+      - '.github/workflows/base-test-job.yaml'
+
+jobs:
+  build:
+    uses: ./.github/workflows/base-build-job.yaml
+    with:
+      package: resource-base-interface
+
+  test:
+    needs: build
+    uses: ./.github/workflows/base-test-job.yaml
+    with:
+      package: resource-base-interface
+      coveralls: true
+      system: true
+      backing-only: true

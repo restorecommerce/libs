@@ -3,9 +3,9 @@ import * as _ from 'lodash';
 import {
   buildFilter, buildSorter, buildLimiter, buildReturn,
   sanitizeInputFields, query, sanitizeOutputFields
-} from './common';
-import { DatabaseProvider } from '../..';
-import { ViewAnalyzerOptions, ViewMap } from './interface';
+} from './common.js';
+import { DatabaseProvider } from '../../index.js';
+import { ViewAnalyzerOptions, ViewMap } from './interface.js';
 import { type Logger } from '@restorecommerce/logger';
 
 export interface CustomQuery {
@@ -102,7 +102,7 @@ export class Arango implements DatabaseProvider {
         let analyzerName;
         if (caseSensitive) {
           // for casesensitive search use "ngram" analayzer type
-          analyzerOptions.forEach((optionObj) => {
+          analyzerOptions.forEach((optionObj: any) => {
             const keyName = Object.keys(optionObj)[0];
             if (optionObj[keyName].type === 'ngram') {
               analyzerName = JSON.stringify(keyName);
@@ -110,7 +110,7 @@ export class Arango implements DatabaseProvider {
           });
         } else {
           // for case-insensitive search use "pipleline" type (ngram + norm)
-          analyzerOptions.forEach((optionObj) => {
+          analyzerOptions.forEach((optionObj: any) => {
             const keyName = Object.keys(optionObj)[0];
             if (optionObj[keyName].type === 'pipeline') {
               analyzerName = JSON.stringify(keyName);
@@ -476,7 +476,7 @@ export class Arango implements DatabaseProvider {
           if (response === true) {
             dropViewResponse.push({ id: view, code: 200, message: `View ${view} dropped successfully` });
           }
-        } catch (err) {
+        } catch (err: any) {
           this.logger?.error(`Error dropping View ${view}`, { code: err.code, message: err.message, stack: err.stack });
           dropViewResponse.push({ id: view, code: err.code, message: err.message });
         }
@@ -499,7 +499,7 @@ export class Arango implements DatabaseProvider {
           if (response.code === 200 && response.error === false) {
             deleteResponse.push({ id: analyzer, code: response.code, message: `Analyzer ${analyzer} deleted successfully` });
           }
-        } catch (err) {
+        } catch (err: any) {
           this.logger?.error(`Error deleting analyzer ${analyzer}`, { code: err.code, message: err.message, stack: err.stack });
           deleteResponse.push({ id: analyzer, code: err.code, message: err.message });
         }
@@ -556,6 +556,7 @@ export class Arango implements DatabaseProvider {
    * @param script
    * @param name
    */
+  // @ts-expect-error TS2416
   registerCustomQuery(name: string, script: string, type: 'filter' | 'query'): void {
     this.customQueries.set(name, {
       code: script,
@@ -598,7 +599,7 @@ export class Arango implements DatabaseProvider {
             await analyzer.create(analyzerCfg[0][analyzerName] as any);
             this.logger?.info(`Analyzer ${analyzerName} created successfully`);
           }
-        } catch (err) {
+        } catch (err: any) {
           this.logger?.error(`Error creating analyzer ${analyzerName}`, { code: err.code, message: err.message, stack: err.stack });
         }
       } else {
@@ -614,7 +615,7 @@ export class Arango implements DatabaseProvider {
         await collection.create();
         this.logger?.info(`Collection ${collectionName} created successfully`);
       }
-    } catch (err) {
+    } catch (err: any) {
       if (err.message && err.message.indexOf('duplicate name') == -1) {
         this.logger?.error(`Error creating collection ${collectionName}`, { code: err.code, message: err.message, stack: err.stack });
         throw err;
@@ -628,7 +629,7 @@ export class Arango implements DatabaseProvider {
       try {
         await this.db.createView(viewConfig?.view?.viewName, viewConfig?.view?.options);
         this.logger?.info(`View ${viewConfig?.view?.viewName} created successfully`);
-      } catch (err) {
+      } catch (err: any) {
         this.logger?.error(`Error creating View ${viewConfig?.view?.viewName}`, { code: err.code, message: err.message, stack: err.stack });
       }
     } else {

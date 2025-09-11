@@ -17,7 +17,7 @@ export const query = async (db: any, collectionName: string, query: string | any
     if (!collectionExists) {
       await collection.create();
     }
-  } catch(err) {
+  } catch(err: any) {
     if (err.message && err.message.indexOf('duplicate name') == -1) {
       throw err;
     }
@@ -374,13 +374,13 @@ export const buildSorter = (options: any, index?: number, bindVarsMap?: any): an
 export const buildReturn = (options: any): any => {
   let excludeIndex = 0;
   let includeIndex = 0;
-  const bindVarsMap = {};
+  const bindVarsMap: Record<string, any> = {};
   let q = '';
   if (_.isNil(options.fields) || _.isEmpty(options.fields)) {
     return { q, bindVarsMap };
   }
-  const keep = [];
-  const exclude = [];
+  const keep: any[] = [];
+  const exclude: any[] = [];
   _.forEach(options.fields, (value, key) => {
     switch (value) {
       case 0:

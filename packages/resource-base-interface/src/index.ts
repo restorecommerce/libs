@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import { Filter, FilterOperation, FilterValueType, OperatorType, ReadRequest } from './core/interfaces';
+import { Filter, FilterOperation, FilterValueType, OperatorType, ReadRequest } from './core/interfaces.js';
 
 /*
 const filterOperationMap = new Map([
@@ -179,4 +179,4 @@ export const toObject = (input: ReadRequest) => {
   return result.length === 1 ? result[0] : result;
 };
 
-export * from './core';
+export * from './core/index.js';

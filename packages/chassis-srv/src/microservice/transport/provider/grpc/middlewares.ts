@@ -1,7 +1,7 @@
 import { CallContext, ServerError, ServerMiddlewareCall } from 'nice-grpc';
 import { isAbortError } from 'abort-controller-x';
 import { type Logger } from '@restorecommerce/logger';
-import { metadataPassThrough } from '@restorecommerce/grpc-client/dist/middleware';
+import { metadataPassThrough } from '@restorecommerce/grpc-client/dist/middleware.js';
 import { AsyncLocalStorage } from 'async_hooks';
 import { randomUUID } from 'crypto';
 
@@ -36,7 +36,7 @@ export const loggingMiddleware = (logger: Logger) => {
       const response = yield* call.next(call.request, context);
       logger.verbose(`[rid: ${context.rid}] request to method ${path} response sent`, {request: call.request});
       return response;
-    } catch (error) {
+    } catch (error: any) {
       if (error instanceof ServerError) {
         logger.error(`${context.rid} request to method ${path} server error`, {
           message: error.details,
@@ -85,7 +85,7 @@ export async function* metaMiddleware<Request, Response>(
   call: ServerMiddlewareCall<Request, Response>,
   context: CallContext,
 ) {
-  const mapped = {};
+  const mapped: any = {};
   for (const [a, b] of context.metadata) {
     mapped[a] = b;
   }

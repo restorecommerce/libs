@@ -1,18 +1,18 @@
-import { CommandInterface } from '../command-interface';
+import { CommandInterface } from '../command-interface/index.js';
 import { ServiceConfig } from '@restorecommerce/service-config';
 import { createClient } from '@restorecommerce/grpc-client';
 import { Logger } from '@restorecommerce/logger';
 import {
   HealthClient,
   HealthDefinition,
-} from '@restorecommerce/rc-grpc-clients/dist/generated/grpc/health/v1/health';
+} from '@restorecommerce/rc-grpc-clients/dist/generated/grpc/health/v1/health.js';
 import {
   DeepPartial,
   HealthCheckRequest,
   HealthCheckResponse,
   HealthCheckResponse_ServingStatus,
   HealthServiceImplementation
-} from '@restorecommerce/rc-grpc-clients/dist/generated-server/grpc/health/v1/health';
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/grpc/health/v1/health.js';
 import { createChannel } from 'nice-grpc';
 
 export interface HealthOptions {
@@ -52,7 +52,7 @@ export class Health implements HealthServiceImplementation {
     }
   }
 
-  async check(request: HealthCheckRequest, context): Promise<DeepPartial<HealthCheckResponse>> {
+  async check(request: HealthCheckRequest, context: any): Promise<DeepPartial<HealthCheckResponse>> {
     const service = (request && request.service) || 'liveness';
 
     if (service === 'readiness') {

@@ -3,7 +3,7 @@ import { type Logger } from '@restorecommerce/logger';
 import type { Server as GRPCServer, ServiceImplementation } from 'nice-grpc';
 import type { CompatServiceDefinition } from 'nice-grpc/lib/service-definitions';
 import { createServer } from 'nice-grpc';
-import { loggingMiddleware, metaMiddleware, tracingMiddleware, WithRequestID } from './middlewares';
+import { loggingMiddleware, metaMiddleware, tracingMiddleware, WithRequestID } from './middlewares.js';
 
 /**
  * Name of the transport

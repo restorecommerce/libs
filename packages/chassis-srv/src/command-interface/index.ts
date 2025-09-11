@@ -1,21 +1,20 @@
 import * as _ from 'lodash';
-import { Server } from './../microservice/server';
-import * as database from './../database';
-import { Events, Topic, registerProtoMeta } from '@restorecommerce/kafka-client';
+import { Server } from './../microservice/server.js';
+import * as database from './../database/index.js';
+import { Events, Topic, registerProtoMeta, Kafka } from '@restorecommerce/kafka-client';
 import { EventEmitter } from 'events';
 import * as async from 'async';
 import { Logger } from 'winston';
 import { RedisClientType } from 'redis';
-import { Kafka as KafkaJS } from 'kafkajs';
 import {
   CommandRequest,
   CommandInterfaceServiceImplementation,
   protoMetadata
-} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/commandinterface';
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/commandinterface.js';
 import { CallContext } from 'nice-grpc';
 import {
   HealthCheckResponse_ServingStatus
-} from '@restorecommerce/rc-grpc-clients/dist/generated-server/grpc/health/v1/health';
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/grpc/health/v1/health.js';
 
 // For some reason this is required
 import {randomBytes } from 'crypto';
@@ -47,7 +46,7 @@ interface FlushCacheData {
  * a certain method, such method should be extended or overriden.
  */
 export class CommandInterface implements CommandInterfaceServiceImplementation {
-  logger: Logger;
+  public logger: Logger;
   config: any;
   health: any;
   service: any;
@@ -136,7 +135,7 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
   /**
    * Generic command operation, which demultiplexes a command by its name and parameters.
    */
-  async command(request: CommandRequest, context: CallContext): Promise<{ typeUrl?: string; value?: Buffer }> {
+  public async command(request: CommandRequest, context: CallContext): Promise<{ typeUrl?: string; value?: Buffer }> {
     if (_.isNil(request) || _.isNil(request.name)) {
       return this.encodeMsg({
         error: {
@@ -221,7 +220,7 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
       return elem.replace('.resource', '');
     });
 
-    const restoreSetup = {};
+    const restoreSetup: Record<string, any> = {};
     const restoreEventSetup: any = {};
 
     restoreData.forEach((data) => {
@@ -281,9 +280,9 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
         const kafkaEvents = this.kafkaEvents;
         const config = this.config;
         const service = this.service;
-        const encodeMsg = this.encodeMsg;
+        const encodeMsg = this.encodeMsg.bind(this);
         const commandTopic = this.commandTopic;
-        const startToReceiveRestoreMessages = this.startToReceiveRestoreMessages;
+        const startToReceiveRestoreMessages = this.startToReceiveRestoreMessages.bind(this);
         // Start the restore process
         this.logger.warn('restoring data');
 
@@ -303,7 +302,7 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
 
           // const eventNames = _.keys(restoreTopic.events);
           const baseOffset: number = topicSetup.baseOffset;
-          const targetOffset: number = (await restoreTopic.$offset(-1)) - 1;
+          const targetOffset: bigint = (await restoreTopic.$offset(BigInt(-1))) - BigInt(1);
           const ignoreOffsets: number[] = topicSetup.ignoreOffset;
           const eventNames = _.keys(topicEvents);
 
@@ -311,11 +310,13 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
 
           const restoreGroupId = kafkaEventsCfg.groupId + '-restore-' + randomBytes(32).toString('hex');
 
-          const consumer = (this.kafkaEvents.provider.client as KafkaJS).consumer({
-            groupId: restoreGroupId
-          });
+          const consumer = await (this.kafkaEvents.provider as Kafka).newConsumer(restoreGroupId);
 
-          const drainEvent = (message, done) => {
+          let messageStream: {
+            close(): Promise<void>;
+          };
+
+          const drainEvent = (message: any, done: any) => {
             const msg = message.value;
             const eventName = message.key.toString();
             const context = _.pick(message, ['offset', 'partition', 'topic']);
@@ -325,7 +326,7 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
             decodedMsg = _.pick(decodedMsg, _.keys(decodedMsg)); // preventing protobuf.js special fields
             eventListener(decodedMsg, context, config.get(), eventName).then(() => {
               done();
-            }).catch((err) => {
+            }).catch((err: any) => {
               logger.error(`Exception caught invoking restore listener for event ${eventName}`, { code: err.code, message: err.message, stack: err.stack });
               done(err);
             });
@@ -345,12 +346,16 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
                 }
               }
 
-              consumer.stop().then(() => consumer.disconnect()).then(() => {
-                this.kafkaEvents.provider.admin.deleteGroups([restoreGroupId]).then(() => {
+              messageStream.close().then(() => {
+                return consumer.close(true);
+              }).then(() => {
+                this.kafkaEvents.provider.admin.deleteGroups({
+                  groups: [restoreGroupId]
+                }).then(() => {
                   logger.debug('restore kafka group deleted');
                   const msg = {
                     topic: topicName,
-                    offset: message.offset
+                    offset: Number(message.offset)
                   };
                   commandTopic.emit('restoreResponse', {
                     services: _.keys(service),
@@ -361,7 +366,7 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
                     logger.error('Error emitting command response', { code: err.code, message: err.message, stack: err.stack });
                   });
                   logger.info('restore process done');
-                }).catch(err => {
+                }).catch((err: any) => {
                   logger.error('Error deleting restore kafka group', { code: err.code, message: err.message, stack: err.stack });
                 });
               }).catch(err => {
@@ -372,34 +377,42 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
 
           const asyncQueue = startToReceiveRestoreMessages(restoreTopic, drainEvent);
 
-          await consumer.connect().catch(err => {
+          await consumer.connectToBrokers().then(() => {
+            logger.info(`Consumer for topic '${topicName}' connected`);
+          }).catch((err: any) => {
             logger.error('error connecting consumer', { code: err.code, message: err.message, stack: err.stack });
-            throw err;
           });
 
-          await consumer.subscribe({
-            topic: topicName,
-          });
+          consumer.consume({
+            sessionTimeout: 10000,
+            heartbeatInterval: 500,
+            topics: [topicName],
+            mode: 'manual',
+            offsets: [{
+              topic: topicName,
+              partition: 0,
+              offset: BigInt(baseOffset)
+            }],
+          }).then(stream => {
+            logger.info(`Consumer for topic '${topicName}' subscribed`);
 
-          await consumer.run({
-            eachMessage: async (payload) => {
-              if (payload.message.key.toString() in topicEvents && !_.includes(ignoreOffsets, parseInt(payload.message.offset))) {
-                asyncQueue.push(payload.message);
-                logger.debug(`received message ${payload.message.offset}/${targetOffset}`);
+            messageStream = stream;
+
+            stream.on('data', (message) => {
+              if (message.key.toString() in topicEvents && !_.includes(ignoreOffsets, Number(message.offset))) {
+                asyncQueue.push(message);
+                logger.debug(`received message ${message.offset}/${targetOffset}`);
               }
-            }
-          });
-
-          await consumer.seek({
-            topic: topicName,
-            partition: 0,
-            offset: baseOffset.toString(10)
+            });
+          }).catch((err: any) => {
+            logger.error(`Consumer for topic '${topicName}' failed to run`, { code: err.code, message: err.message, stack: err.stack });
+            throw err;
           });
         }
 
         this.logger.debug('waiting until all messages are processed');
       }
-    } catch (err) {
+    } catch (err: any) {
       this.logger.error('Error occurred while restoring the system', { code: err.code, message: err.message, stack: err.stack });
       await this.commandTopic.emit('restoreResponse', {
         services: _.keys(this.service),
@@ -415,7 +428,7 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
   private startToReceiveRestoreMessages(restoreTopic: Topic,
     drainEvent: (msg: any, err: any) => any): any {
     const asyncQueue = async.queue((msg, done) => {
-      setImmediate(() => drainEvent(msg, err => {
+      setImmediate(() => drainEvent(msg, (err: any) => {
         if (err) {
           done(err);
         } else {
@@ -465,14 +478,14 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
             break;
         }
       }
-    } catch (err) {
+    } catch (err: any) {
       this.logger.error('Unexpected error while resetting the system', { code: err.code, message: err.message, stack: err.stack });
       errorMsg = err.message;
     }
 
     const eventObject = {
       services: _.keys(this.service),
-      payload: null
+      payload: null as any
     };
 
     if (errorMsg) {
@@ -573,7 +586,7 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
         services: _.keys(this.service),
         payload: this.encodeMsg(response)
       });
-    } catch (error) {
+    } catch (error: any) {
       this.logger.error('Error executing configUpdate Command', { code: error.code, message: error.message, stack: error.stack });
       response = error.message;
     }
@@ -606,7 +619,7 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
         services: _.keys(this.service),
         payload: this.encodeMsg(response)
       });
-    } catch (err) {
+    } catch (err: any) {
       this.logger.error('Error executing setApiKey Command', { code: err.code, message: err.message, stack: err.stack });
       response = err.message;
     }
@@ -650,7 +663,7 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
           response = {
             status: 'Successfully flushed cache pattern'
           };
-        } catch (err) {
+        } catch (err: any) {
           this.logger.error('Error creating stream / pipeline in Redis', { code: err.code, message: err.message, stack: err.stack });
           response = err.message;
         }
@@ -672,7 +685,7 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
           this.logger.debug('Successfully flushed complete cache');
         }
       }
-    } catch (err) {
+    } catch (err: any) {
       this.logger.error('Error flushing Redis Cache', { code: err.code, message: err.message, stack: err.stack });
       response = err.message;
     }
@@ -691,7 +704,7 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
    * @param resource
    */
   makeResourcesRestoreSetup(db: any, resource: string): any {
-    const decodeBufferField = this.decodeBufferField;
+    const decodeBufferField = this.decodeBufferField.bind(this);
     return {
       [`${resource}Created`]: async function restoreCreated(message: any,
         ctx: any, config: any, eventName: string): Promise<any> {

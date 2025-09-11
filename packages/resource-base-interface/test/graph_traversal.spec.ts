@@ -1,7 +1,6 @@
-import 'mocha';
-import { GraphResourcesServiceBase } from '../src/index';
-import { ResourcesAPIBase } from '../src/index';
-import { ServiceBase } from '../src/index';
+import { GraphResourcesServiceBase } from '../src/index.js';
+import { ResourcesAPIBase } from '../src/index.js';
+import { ServiceBase } from '../src/index.js';
 import * as chassis from '@restorecommerce/chassis-srv';
 import { createClient, createChannel, Channel } from '@restorecommerce/grpc-client';
 import { registerProtoMeta } from '@restorecommerce/kafka-client';
@@ -19,10 +18,11 @@ import {
   Options_Direction as Direction,
   protoMetadata,
   TraversalResponse
-} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/graph';
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/graph.js';
 import {
   Sort_SortOrder
-} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base';
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base.js';
+import { it, describe, beforeAll, afterAll } from 'vitest';
 
 registerProtoMeta(protoMetadata);
 
@@ -67,7 +67,7 @@ const testProvider = (providerCfg) => {
     let testResourceBaseService: GraphServiceClient;
     let graphCfg;
     let resourcesList;
-    before(async () => {
+    beforeAll(async () => {
       db = await providerCfg.init();
       // graph Service
       const graphAPIService = new GraphResourcesServiceBase(db,
@@ -96,7 +96,7 @@ const testProvider = (providerCfg) => {
         logger: server.logger
       }, GraphServiceDefinition, channel);
     });
-    after(async () => {
+    afterAll(async () => {
       // drop DB
       const dbHost: string = cfg.get('database:testdb:host');
       const dbPort: string = cfg.get('database:testdb:port');

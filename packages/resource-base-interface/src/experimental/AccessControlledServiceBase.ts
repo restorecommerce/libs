@@ -27,10 +27,10 @@ import {
   type ResourceListResponse,
   ResourceResponse,
   ServiceImplementation,
-} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base';
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base.js';
 import {
   type Subject,
-} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/auth';
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/auth.js';
 import {
   OperationStatusCodes,
   ResourcesAPIBase,
@@ -38,7 +38,7 @@ import {
   ServiceBaseOperationStatusCodes,
   ServiceBaseStatusCodes,
   StatusCodes,
-} from '../core/index';
+} from '../core/index.js';
 
 export const ACSContextFactory = async <O extends ResourceListResponse, I extends ResourceList>(
   self: AccessControlledServiceBase<O, I>, 

@@ -1,6 +1,7 @@
 import * as should from 'should';
 import * as _ from 'lodash';
-import { errors } from '../src';
+import { errors } from '../src/index.js';
+import { it, describe } from 'vitest';
 
 /* global describe it */
 

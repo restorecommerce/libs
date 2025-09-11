@@ -1,6 +1,6 @@
 import { type CallContext } from 'nice-grpc-common';
-import { BaseDocument, toObject } from '../index';
-import { ResourcesAPIBase } from './ResourcesAPI';
+import { BaseDocument, toObject } from '../index.js';
+import { ResourcesAPIBase } from './ResourcesAPI.js';
 import { Topic } from '@restorecommerce/kafka-client';
 import { Logger } from '@restorecommerce/logger';
 import {
@@ -13,8 +13,8 @@ import {
   ResourceResponse,
   ServiceImplementation,
   Sort_SortOrder
-} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base';
-import { OperationStatus, Status } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/status';
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base.js';
+import { OperationStatus, Status } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/status.js';
 
 export type ElementOf<T = any> = T extends Array<infer E> ? E : T;
 

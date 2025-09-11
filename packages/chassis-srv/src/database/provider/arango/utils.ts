@@ -4,7 +4,7 @@ import {
   Filters as GraphFilters,
   Options_Direction,
   Options_Direction as Direction,
-} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/graph';
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/graph.js';
 
 const filterOperationMap = new Map([
   [0, 'eq'],
@@ -30,7 +30,7 @@ const filterOperatorMap = new Map([
  * @param {obj} obj converted filter object
  * @param {operatorList} operatorList list of operators from original filter object
  */
-const convertFilterToObject = (filter, obj, operatorList) => {
+const convertFilterToObject = (filter: any, obj: any, operatorList: any) => {
   let temp = _.clone(obj);
   let value;
   if (!filter.type || filter.type === 'STRING' || filter.type === 0) {
@@ -46,7 +46,7 @@ const convertFilterToObject = (filter, obj, operatorList) => {
   } else if (filter.type === 'ARRAY' || filter.type === 4) {
     try {
       value = JSON.parse(filter.value);
-    } catch (err) {
+    } catch (err: any) {
       // to handle JSON string parse error
       if (err.message.indexOf('Unexpected token') > -1) {
         value = JSON.parse(JSON.stringify(filter.value));
@@ -103,7 +103,7 @@ const convertFilterToObject = (filter, obj, operatorList) => {
  * @param {operatorList} operatorList operator list
  * @param {operatorNew} operatorNew new operator
  */
-const insertNewOpAndUpdateObj = (obj, operatorList, operatorNew) => {
+const insertNewOpAndUpdateObj = (obj: any, operatorList: any, operatorNew: any) => {
   let pos = _.clone(obj);
   for (let i = 0; i < operatorList.length; i++) {
     if (_.isArray(pos)) {
@@ -405,16 +405,16 @@ export const buildGraphFilter = (filter: any, root?: boolean): any => {
  * @param direction - direction OUTBOUND / INBOUND
  * @param entitiesList - result of entities in the graph of edge definition config
  */
-export const recursiveFindEntities = (collection, edgeDefConfig, direction, entitiesList) => {
+export const recursiveFindEntities = (collection: any, edgeDefConfig: any, direction: any, entitiesList: any) => {
   if (entitiesList.includes(collection)) {
     return;
   }
   entitiesList.push(collection);
   let items = [];
   if (direction === Direction.OUTBOUND) {
-    items = edgeDefConfig.filter(col => col.from === collection);
+    items = edgeDefConfig.filter((col: any) => col.from === collection);
   } else if (direction === Direction.INBOUND) {
-    items = edgeDefConfig.filter(col => col.to === collection);
+    items = edgeDefConfig.filter((col: any) => col.to === collection);
   }
   for (const item of items) {
     if (direction === Direction.OUTBOUND) {
@@ -497,7 +497,7 @@ export const createGraphsAssociationFilter = (filters: GraphFilters[],
         traversalFilterObj.entity = eachFilter.entity;
       } else if (eachFilter.edge) {
         // depending on direction
-        const entityConnectedToEdge = edgeDefConfig.filter(e => e.collection === eachFilter.edge);
+        const entityConnectedToEdge = edgeDefConfig.filter((e: any) => e.collection === eachFilter.edge);
         if (entityConnectedToEdge?.length === 1) {
           if (direction === Options_Direction.OUTBOUND) {
             filteredEntities.push(entityConnectedToEdge[0].to);

@@ -15,18 +15,18 @@ import {
   Topic,
   registerProtoMeta
 } from '@restorecommerce/kafka-client';
-import { Arango } from '@restorecommerce/chassis-srv/lib/database/provider/arango/base';
+import { Arango } from '@restorecommerce/chassis-srv/lib/database/provider/arango/base.js';
 import { createLogger, type Logger } from '@restorecommerce/logger';
-import { BindConfig } from '@restorecommerce/chassis-srv/lib/microservice/transport/provider/grpc/index';
+import { BindConfig } from '@restorecommerce/chassis-srv/lib/microservice/transport/provider/grpc/index.js';
 import {
   ProtoMetadata,
   protoMetadata as CommandInterfaceMeta,
   CommandInterfaceServiceDefinition,
-} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/commandinterface';
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/commandinterface.js';
 import {
   protoMetadata as JobMeta
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/job.js';
-import { HealthDefinition } from '@restorecommerce/rc-grpc-clients/dist/generated-server/grpc/health/v1/health';
+import { HealthDefinition } from '@restorecommerce/rc-grpc-clients/dist/generated-server/grpc/health/v1/health.js';
 import { ServerReflectionService } from 'nice-grpc-server-reflection';
 import {
   createServiceConfig,
@@ -34,7 +34,7 @@ import {
 } from '@restorecommerce/service-config';
 import { initAuthZ } from '@restorecommerce/acs-client';
 import { runWorker } from '@restorecommerce/scs-jobs';
-import { ServiceBase } from '../index';
+import { ServiceBase } from '../index.js';
 
 export type ReflectionService = ServiceImplementation<any>;
 export type EventHandler = (msg: any, context?: any, config?: any, eventName?: string) => Promise<any>;
@@ -319,7 +319,7 @@ export abstract class WorkerBase {
     await Promise.all(Object.entries(kafkaCfg.topics).map(async ([key, value]: any[]) => {
       const topicName = value.topic;
       const topic = await this.events.topic(topicName);
-      const offsetValue: number = await this.offsetStore.getOffset(topicName);
+      const offsetValue = await this.offsetStore.getOffset(topicName);
       this.logger?.verbose('subscribing to topic with offset value', topicName, offsetValue);
       Object.entries(value.events as { [key: string]: string } ?? {}).forEach(
         ([eventName, handler]) => {

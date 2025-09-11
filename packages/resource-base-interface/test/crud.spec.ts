@@ -1,5 +1,4 @@
-import 'mocha';
-import { ResourcesAPIBase, ServiceBase, toObject } from '../src/index';
+import { ResourcesAPIBase, ServiceBase, toObject } from '../src/index.js';
 import * as chassis from '@restorecommerce/chassis-srv';
 import { Channel, createChannel, createClient } from '@restorecommerce/grpc-client';
 import { Events, registerProtoMeta, Topic } from '@restorecommerce/kafka-client';
@@ -12,13 +11,14 @@ import {
   ReadRequest,
   protoMetadata as resourceProto,
   Sort_SortOrder,
-} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base';
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base.js';
 import {
   protoMetadata as testProto,
   CRUDDefinition,
   CRUDClient
-} from '@restorecommerce/rc-grpc-clients/dist/generated-server/test/test';
-import { FilterOp_Operator } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/filter';
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/test/test.js';
+import { FilterOp_Operator } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/filter.js';
+import { it, describe, beforeAll, afterAll, beforeEach } from 'vitest';
 
 registerProtoMeta(
   resourceProto,
@@ -205,7 +205,7 @@ describe('ServiceBase', () => {
   const today = new Date();
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
-  before(async () => {
+  beforeAll(async () => {
     // Load test config from chassis service config
     cfg = createServiceConfig(process.cwd() + '/test');
 
@@ -277,7 +277,7 @@ describe('ServiceBase', () => {
       logger: server.logger
     }, CRUDDefinition, channel);
   });
-  after(async () => {
+  afterAll(async () => {
     await channel.close();
     await server.stop();
     await bufferedServer.stop();
@@ -530,7 +530,7 @@ describe('ServiceBase', () => {
         }), 'id'));
         result.operation_status!.code!.should.equal(200);
         result.operation_status!.message!.should.equal('success');
-      }).timeout(4000);
+      }, 4000);
       it('should return elements only with field value', async () => {
         const result = await testService.read({
           fields: [{
@@ -599,7 +599,7 @@ describe('ServiceBase', () => {
         result.items![0].payload!.text!.should.equal('first simple sentence for searching');
         result.items![1].payload!.id!.should.equal('test_zy');
         result.items![1].payload!.text!.should.equal('third search data string');
-      }).timeout(5000);
+      }, 5000);
 
       it('fulltext search - should return only matching documents as per search string (default case insensitive)', async () => {
         await new Promise((resolve, reject) => {
@@ -615,7 +615,7 @@ describe('ServiceBase', () => {
         result.items![0].payload!.text!.should.equal('second test data');
         result.items![1].payload!.id!.should.equal('test_zy');
         result.items![1].payload!.text!.should.equal('third search data string');
-      }).timeout(5000);
+      }, 5000);
 
       it('fulltext search - should not return any matching documents as per search string with case sensitive search', async () => {
         await new Promise((resolve, reject) => {
@@ -628,7 +628,7 @@ describe('ServiceBase', () => {
           }
         });
         should.not.exist(result.items);
-      }).timeout(5000);
+      }, 5000);
     });
     describe('create', () => {
       it('should create new documents and validate duplicate element error', async () => {

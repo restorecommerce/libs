@@ -48,9 +48,9 @@ const buildOrQuery = (options: any, name: string): object => {
   if (!_.isArray(options)) {
     opts = [options];
   }
-  const obj = { $or: [] };
-  opts.forEach((item) => {
-    const toInsert = {};
+  const obj: any = { $or: [] };
+  opts.forEach((item: any) => {
+    const toInsert: any = {};
     toInsert[name] = item;
     obj.$or.push(toInsert);
   });
@@ -85,7 +85,7 @@ class NedbProvider {
       _.set(doc, '_id', doc.id);
     }
     return new Promise((resolve, reject) => {
-      collections[collection].insert(docs, (err, newdocs) => {
+      collections[collection].insert(docs, (err: any, newdocs: any) => {
         // docs
         if (err) {
           resolve([{
@@ -124,7 +124,7 @@ class NedbProvider {
     }
 
     const result = new Promise((resolve, reject) => {
-      q.exec((err, docs) => {
+      q.exec((err: any, docs: any) => {
         // docs
         if (err) {
           reject(err);
@@ -157,7 +157,7 @@ class NedbProvider {
     const q = buildOrQuery(ids, 'id');
     const collections = this.collections;
     const result = new Promise((resolve, reject) => {
-      collections[collection].find(q).exec((err, docs) => {
+      collections[collection].find(q).exec((err: any, docs: any) => {
         if (docs) {
           const l = docs.length;
           for (let i = 0; i < l; i += 1) {
@@ -184,7 +184,7 @@ class NedbProvider {
     if (_.isArray(document)) {
       document = document[0];
     }
-    const obj = {
+    const obj: any = {
       $set: {},
     };
     Object.keys(document).forEach((key) => {
@@ -193,7 +193,7 @@ class NedbProvider {
     const filter = { id: document.id }; // construct filter using document ids
     const fil = convertToRegexp(filter || {});
     const updatedDocs = new Promise((resolve, reject) => {
-      collections[collection].update(fil, obj, { multi: true, returnUpdatedDocs: true }, (err, numReplaced, updatedDocs) => {
+      collections[collection].update(fil, obj, { multi: true, returnUpdatedDocs: true }, (err: any, numReplaced: any, updatedDocs: any) => {
         if (err) {
           resolve(err);
         } else {
@@ -234,7 +234,7 @@ class NedbProvider {
         collections[collection].update({ _id: doc._id },
           doc,
           { upsert: true, returnUpdatedDocs: true },
-          (err, numReplaced, upserted) => {
+          (err: any, numReplaced: any, upserted: any) => {
             if (err) {
               reject(err);
             }
@@ -258,9 +258,9 @@ class NedbProvider {
   async delete(collection: string, ids: string[]): Promise<any> {
     const collections = this.collections;
     let fil = {};
-    const deleteResponse = [];
+    const deleteResponse: any[] = [];
     for (const id of ids) {
-      collections[collection].find({ id }, (err, docs) => {
+      collections[collection].find({ id }, (err: any, docs: any) => {
         if (_.isEmpty(docs)) {
           deleteResponse.push({
             error: true,
@@ -277,7 +277,7 @@ class NedbProvider {
       fil = { id: {$in: ids} };
     }
     const numRemoved = await new Promise((resolve, reject) => {
-      collections[collection].remove(fil, { multi: true }, (err, numRemoved) => {
+      collections[collection].remove(fil, { multi: true }, (err: any, numRemoved: any) => {
         if (err) {
           throw new Error(err);
         } else {
@@ -298,7 +298,7 @@ class NedbProvider {
     const collections = this.collections;
     const fil = convertToRegexp(filter || {});
     const result = new Promise((resolve, reject) => {
-      collections[collection].count(fil, (err, count) => {
+      collections[collection].count(fil, (err: any, count: any) => {
         if (err)
           reject(err);
         resolve(count);
@@ -344,7 +344,7 @@ const loadDatastores = async (config: any, logger: Logger): Promise<object> => {
   if (_.isNil(config.collections)) {
     throw new Error('missing collection config value');
   }
-  const collections = {};
+  const collections: any = {};
   const colNames = _.keys(config.collections);
   for (let i = 0; i < colNames.length; i += 1) {
     const name = colNames[i];
@@ -353,7 +353,7 @@ const loadDatastores = async (config: any, logger: Logger): Promise<object> => {
       logger.verbose(`collection ${name} has filename ${conf.filename}`);
       conf.autoload = true;
       const load = () => {
-        return (cb) => {
+        return (cb: any) => {
           conf.onload = cb;
           collections[name] = new Datastore(conf);
         };

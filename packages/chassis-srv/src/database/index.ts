@@ -1,17 +1,17 @@
 import { Logger } from 'winston';
-import { TraversalResponse } from './provider/arango/interface';
+import { TraversalResponse } from './provider/arango/interface.js';
 import {
   Vertices,
   Collection,
   Options as TraversalOptions,
   Filters as GraphFilters,
-} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/graph';
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/graph.js';
 
 /**
  * A key, value map containing database providers.
  * Database providers are registered with the register function.
  */
-const databases = {};
+const databases: any = {};
 
 /**
  * Register a database provider.
@@ -23,8 +23,8 @@ export const register = (name: string, provider: any): any => {
   databases[name] = provider;
 };
 
-import { create as arangodb } from './provider/arango';
-import { create as nedb } from './provider/nedb';
+import { create as arangodb } from './provider/arango/index.js';
+import { create as nedb } from './provider/nedb/index.js';
 
 // Add default providers
 register('arango', arangodb);

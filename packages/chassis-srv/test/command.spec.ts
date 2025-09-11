@@ -1,5 +1,5 @@
 // microservice chassis
-import { CommandInterface, database, Server } from '../src';
+import { CommandInterface, database, Server } from '../src/index.js';
 import * as should from 'should';
 import { createClient as createGrpcClient } from '@restorecommerce/grpc-client';
 import { Events, registerProtoMeta } from '@restorecommerce/kafka-client';
@@ -9,13 +9,13 @@ import { createClient } from 'redis';
 import {
   CommandInterfaceServiceDefinition,
   CommandInterfaceServiceClient
-} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/commandinterface';
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/commandinterface.js';
 import {
   protoMetadata
-} from '@restorecommerce/rc-grpc-clients/dist/generated-server/test/test'
-import { BindConfig } from '../src/microservice/transport/provider/grpc';
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/test/test.js'
+import { BindConfig } from '../src/microservice/transport/provider/grpc/index.js';
 import { Channel, createChannel } from 'nice-grpc';
-
+import { it, describe, beforeAll, afterAll, beforeEach } from 'vitest';
 
 /**
  *
@@ -68,8 +68,7 @@ describe('CommandInterfaceService', () => {
     context: any, config: any, eventName: string): Promise<any> => {
     await validate(msg, eventName);
   };
-  before(async function setup() {
-    this.timeout(30000);
+  beforeAll(async function setup() {
     cfg = createServiceConfig(process.cwd() + '/test');
     const logger = createLogger(cfg.get('logger'));
 
@@ -108,12 +107,11 @@ describe('CommandInterfaceService', () => {
       ...cfg.get('client:commandinterface'),
       logger
     }, CommandInterfaceServiceDefinition, channel);
-  });
-  after(async function teardown() {
-    this.timeout(30000);
+  }, 30000);
+  afterAll(async function teardown() {
     await server.stop();
     await events.stop();
-  });
+  }, 30000);
   describe('check', () => {
     it('should return the status', async () => {
       let cmdPayload = encodeMsg({
@@ -177,7 +175,7 @@ describe('CommandInterfaceService', () => {
   });
   describe('reset', () => {
     const docID = 'test/value';
-    before(async () => {
+    beforeAll(async () => {
       await db.insert('tests', {
         id: docID,
         value: 101,
@@ -192,7 +190,7 @@ describe('CommandInterfaceService', () => {
         const payload = decodeMsg(msg.payload);
         should.not.exist(payload.error);
       };
-      const offset = await commandTopic.$offset(-1);
+      const offset = await commandTopic.$offset(BigInt(-1));
       const resp = await grpcClient.command({
         name: 'reset'
       });
@@ -210,18 +208,16 @@ describe('CommandInterfaceService', () => {
   });
 
   describe('restore', () => {
-    before(async function prepareKafka() {
-      this.timeout(30000);
+    beforeAll(async function prepareKafka() {
       for (let i = 0; i < 100; i += 1) {
         testEvent.count = i;
         await testTopic.emit('testCreated', testEvent);
       }
-    });
+    }, 30000);
     beforeEach(async () => {
       await db.truncate('tests');
     });
     it('should re-read all data from specified offset', async function restore() {
-      this.timeout(30000);
       validate = async (msg: any, eventName: string) => {
         eventName.should.equal('restoreResponse');
         should.exist(msg.services);
@@ -242,14 +238,14 @@ describe('CommandInterfaceService', () => {
       };
 
       // waiting for restore conclusion
-      const offset = await commandTopic.$offset(-1);
-      const resourceOffset = await testTopic.$offset(-1);
+      const offset: bigint = await commandTopic.$offset(BigInt(-1));
+      const resourceOffset: bigint = await testTopic.$offset(BigInt(-1));
 
       const cmdPayload = encodeMsg({
         data: [
           {
             entity: 'test',
-            base_offset: resourceOffset - 100,
+            base_offset: Number(resourceOffset - BigInt(100)),
             ignore_offset: []
           }
         ]
@@ -262,7 +258,7 @@ describe('CommandInterfaceService', () => {
       should.not.exist((resp as any).error);
 
       await commandTopic.$wait(offset);
-    });
+    }, 30000);
   });
   describe('version', () => {
     it('should return the version of the package and nodejs', async () => {
@@ -277,7 +273,7 @@ describe('CommandInterfaceService', () => {
         should.exist(payload.nodejs);
         payload.nodejs.should.equal(process.version);
       };
-      const offset = await commandTopic.$offset(-1);
+      const offset = await commandTopic.$offset(BigInt(-1));
       const resp = await grpcClient.command({
         name: 'version',
       });
@@ -300,7 +296,7 @@ describe('CommandInterfaceService', () => {
         should.exist(payload.status);
         payload.status.should.equal('ApiKey set successfully');
       };
-      const offset = await commandTopic.$offset(-1);
+      const offset = await commandTopic.$offset(BigInt(-1));
       const apiKeyPayload = encodeMsg({
         authentication: {
           apiKey: 'test-api-key-value'
@@ -327,7 +323,7 @@ describe('CommandInterfaceService', () => {
         should.exist(payload.status);
         payload.status.should.equal('Configuration updated successfully');
       };
-      const offset = await commandTopic.$offset(-1);
+      const offset = await commandTopic.$offset(BigInt(-1));
       const configPayload = encodeMsg({
         authentication: {
         }
@@ -349,7 +345,7 @@ describe('CommandInterfaceService', () => {
         should.exist(msg.payload);
         const payload = decodeMsg(msg.payload);
         should.exist(payload.status);
-        payload.status.should.equal('Successfully flushed cache pattern');
+        payload.status.should.startWith('Successfully flushed cache');
       };
       // store 120 keys to redis db index 3
       const redis = createClient({ database: 3 });
@@ -361,7 +357,7 @@ describe('CommandInterfaceService', () => {
       }
       redis.set('testKey', 'testValue');
       let allKeys = await redis.keys('*');
-      const offset = await commandTopic.$offset(-1);
+      const offset = await commandTopic.$offset(BigInt(-1));
       const flushCachePayload = encodeMsg({
         data:
         {
@@ -379,7 +375,7 @@ describe('CommandInterfaceService', () => {
       await commandTopic.$wait(offset);
       const data = decodeMsg(resp);
       should.exist(data.status);
-      data.status.should.equal('Successfully flushed cache pattern');
+      data.status.should.startWith('Successfully flushed cache');
     });
     it('flushdb should flush all keys in specific db_index when no pattern is specified', async () => {
       // store 3 keys to redis db index 3

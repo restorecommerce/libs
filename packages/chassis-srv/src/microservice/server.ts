@@ -1,7 +1,7 @@
 import { type Logger, createLogger } from '@restorecommerce/logger';
 import * as _ from 'lodash';
 import { EventEmitter } from 'events';
-import { BindConfig, grpcServer } from './transport/provider/grpc';
+import { BindConfig, grpcServer } from './transport/provider/grpc/index.js';
 
 const transports: Record<string, any> = {};
 
@@ -25,7 +25,7 @@ registerTransport('grpc', grpcServer);
  * @return {object} Transport
  */
 const setupTransport = (config: any, logger: Logger): any => {
-  const transport = {};
+  const transport: any = {};
   logger.debug('available transport providers',
     Object.keys(transports).join(','));
   for (let i = 0; i < config.length; i += 1) {
@@ -94,7 +94,7 @@ export class Server extends EventEmitter {
     this.logger.debug('setting up transports');
     try {
       this.transport = setupTransport(this.config.transports, this.logger);
-    } catch (error) {
+    } catch (error: any) {
       this.logger.error('setupTransports', { code: error.code, message: error.message, stack: error.stack });
       throw error;
     }

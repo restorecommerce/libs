@@ -1,25 +1,9 @@
 {
+  "extends": "../../node_modules/@restorecommerce/dev/tsconfig.json",
   "compilerOptions": {
-    "target": "ES2021",
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "declaration": true,
-    // "strict": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "noUnusedLocals": false,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "sourceMap": true,
     "outDir": "lib",
-    "typeRoots": [
-      "node_modules/@types"
-    ],
-    "lib": [
-      "es2020.promise",
-      "dom"
-    ]
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true
   },
   "include": [
     "./src/**/*.ts"

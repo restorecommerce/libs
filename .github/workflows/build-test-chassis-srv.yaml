@@ -1,0 +1,31 @@
+name: build-test-chassis-srv
+
+on:
+  workflow_dispatch: {}
+  push:
+    paths:
+      - 'packages/chassis-srv/**'
+      - '.github/workflows/build-test-chassis-srv.yaml'
+      - '.github/workflows/base-build-job.yaml'
+      - '.github/workflows/base-test-job.yaml'
+  pull_request:
+    paths:
+      - 'packages/chassis-srv/**'
+      - '.github/workflows/build-test-chassis-srv.yaml'
+      - '.github/workflows/base-build-job.yaml'
+      - '.github/workflows/base-test-job.yaml'
+
+jobs:
+  build:
+    uses: ./.github/workflows/base-build-job.yaml
+    with:
+      package: chassis-srv
+
+  test:
+    needs: build
+    uses: ./.github/workflows/base-test-job.yaml
+    with:
+      package: chassis-srv
+      coveralls: true
+      system: true
+      backing-only: true

@@ -19,12 +19,12 @@ export type CRUDServiceDefinition = CompatServiceDefinition & {
 };
 
 export class ClientRegister {
-  protected static readonly GLOBAL_REGISTER = new Map<string, Client<any>>();
+  protected static readonly GLOBAL_REGISTER: Map<string, Client<any>> = new Map<string, Client<any>>();
 
   constructor(
     protected readonly cfg: ServiceConfig,
     protected readonly logger: Logger,
-    protected readonly register = ClientRegister.GLOBAL_REGISTER,
+    protected readonly register: Map<string, Client<any>> = ClientRegister.GLOBAL_REGISTER,
   ) {}
 
   public get<T extends CRUDServiceDefinition>(

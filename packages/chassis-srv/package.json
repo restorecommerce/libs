@@ -15,6 +15,7 @@
     "microservice",
     "chassis"
   ],
+  "type": "module",
   "typings": "lib/index.d.ts",
   "dependencies": {
     "@restorecommerce/grpc-client": "^2.2.7",
@@ -42,34 +43,28 @@
     "redis": "^4.7.0"
   },
   "devDependencies": {
+    "@restorecommerce/dev": "^0.0.13",
+    "@types/async": "^3.2.6",
+    "@types/async-retry": "^1.4.9",
     "@types/cache-manager": "^4.0.6",
     "@types/lodash": "^4.17.13",
-    "@types/mocha": "^10.0.10",
     "@types/nedb": "^1.8.16",
     "@types/node": "^22.9.1",
     "@typescript-eslint/parser": "^8.15.0",
+    "@vitest/coverage-v8": "^3.2.4",
     "cross-env": "^7.0.3",
     "eslint": "^9.15.0",
-    "typescript-eslint": "^8.15.0",
-    "mocha": "^11.0.0",
-    "mocha-typescript": "^1.1.17",
     "npm-run-all": "^4.1.5",
-    "nyc": "^17.1.0",
     "rimraf": "^6.0.1",
     "rxjs": "^7.8.1",
     "should": "^13.2.3",
-    "ts-node": "^10.9.2",
     "typescript": "^5.6.3",
-    "@restorecommerce/dev": "^0.0.13"
+    "typescript-eslint": "^8.15.0",
+    "vitest": "^3.2.4"
   },
   "scripts": {
     "lint": "eslint src",
-    "pretest": "npm run build",
-    "test": "npm run lint && nyc npm run mocha",
-    "mochadebug": "cross-env NODE_ENV=test; mocha --full-trace --inspect-brk",
-    "mocha": "cross-env NODE_ENV=test; mocha --full-trace --exit --trace-warnings;",
-    "tsctests": "tsc -d -p tsconfig.test.json",
-    "lcov-report": "nyc report --reporter=lcov",
+    "test": "vitest run",
     "build:tsc": "tsc -d",
     "build:clean": "rimraf lib",
     "build": "npm-run-all lint build:clean build:tsc"

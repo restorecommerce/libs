@@ -1,18 +1,19 @@
 import * as should from 'should';
 import { createLogger } from '@restorecommerce/logger';
-import * as chassis from '../src';
-import { Server, buildReflectionService } from '../src';
+import * as chassis from '../src/index.js';
+import { Server, buildReflectionService } from '../src/index.js';
 import { createClient } from '@restorecommerce/grpc-client';
 import {
   protoMetadata
-} from '@restorecommerce/rc-grpc-clients/dist/generated/test/test';
+} from '@restorecommerce/rc-grpc-clients/dist/generated/test/test.js';
 import { ServerReflectionService } from 'nice-grpc-server-reflection';
 import { Channel, createChannel } from 'nice-grpc';
 import {
   ServerReflectionDefinition,
   ServerReflectionClient,
   DeepPartial,
-} from '@restorecommerce/rc-grpc-clients/dist/generated/grpc/reflection/v1alpha/reflection';
+} from '@restorecommerce/rc-grpc-clients/dist/generated/grpc/reflection/v1alpha/reflection.js';
+import { it, describe, beforeAll, afterAll, beforeEach, afterEach } from 'vitest';
 
 const toAsync = async function* <T>(requests: DeepPartial<T>[]): AsyncIterable<DeepPartial<T>> {
   for (const request of requests) {
@@ -22,7 +23,7 @@ const toAsync = async function* <T>(requests: DeepPartial<T>[]): AsyncIterable<D
 
 describe('binding the grpc.ServerReflection service', () => {
   let server: Server;
-  before(async () => {
+  beforeAll(async () => {
     await chassis.config.load(process.cwd() + '/test');
     const cfg = await chassis.config.get();
     const logger = createLogger(cfg.get('logger'));
@@ -45,13 +46,12 @@ describe('binding the grpc.ServerReflection service', () => {
     });
   });
 
-  after(async function end() {
-    this.timeout(4000);
+  afterAll(async function end() {
     await server.stop();
     await new Promise((resolve, reject) => {
       setTimeout(resolve, 2000);
     });
-  });
+  }, 4000);
   describe('calling endpoint ServerReflectionInfo', () => {
     let client: ServerReflectionClient;
     let channel: Channel;

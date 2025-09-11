@@ -1,5 +1,5 @@
-import { Arango } from './base';
-import { ArangoGraph } from './graph';
+import { Arango } from './base.js';
+import { ArangoGraph } from './graph.js';
 
 import retry from 'async-retry';
 import * as fs from 'fs';
@@ -52,7 +52,7 @@ const connect = async (conf: any, logger: Logger): Promise<any> => {
           db.useBasicAuth(username, password);
         }
         await db.database(dbName).get();
-      } catch (err) {
+      } catch (err: any) {
         if (err.name === 'ArangoError' && err.errorNum === 1228) {
           if (autoCreate) {
             logger?.verbose(`auto creating arango database ${dbName}`);
@@ -68,9 +68,9 @@ const connect = async (conf: any, logger: Logger): Promise<any> => {
       return db.database(dbName);
     }, { retries: attempts, minTimeout: delay });
   }
-  catch (err) {
+  catch (err: any) {
     const safeError = Object.getOwnPropertyNames(Object.getPrototypeOf(err))
-      .reduce((acc, curr) => { return acc[curr] = err[curr], acc; }, {});
+      .reduce((acc: any, curr: any) => { return acc[curr] = err[curr], acc; }, {});
     logger?.error('Database connection error', { err: safeError, dbHost, dbPort, dbName, attempt: i });
     mainError = err;
   }
@@ -93,7 +93,7 @@ export const create = async (conf: any, logger: any, graphName?: string, edgeDef
     try {
       graph = conn.graph(graphName);
       await graph.create(edgeDefConfig);
-    } catch (err) {
+    } catch (err: any) {
       if (err.message !== 'graph already exists') {
         throw err;
       }
@@ -111,7 +111,7 @@ export const create = async (conf: any, logger: any, graphName?: string, edgeDef
         const { collectionName, path } = obj;
         const viewCfg = JSON.parse(fs.readFileSync(path, 'utf8'));
         await db.createAnalyzerAndView(viewCfg, collectionName);
-      } catch (error) {
+      } catch (error: any) {
         logger?.error('Error creating analyzer or view', {
           code: error.code, message: error.message, stack: error.stack
         });
@@ -120,7 +120,7 @@ export const create = async (conf: any, logger: any, graphName?: string, edgeDef
   }
 
   if (conf.customQueries) {
-    conf.customQueries.forEach((obj) => {
+    conf.customQueries.forEach((obj: any) => {
       const { path, name, type } = obj;
       const script = fs.readFileSync(path, 'utf8');
       db.registerCustomQuery(name, script, type);

@@ -1,18 +1,19 @@
 import * as should from 'should';
 import * as _ from 'lodash';
 import { createLogger } from '@restorecommerce/logger';
-import * as chassis from '../src';
+import * as chassis from '../src/index.js';
 import { createClient } from '@restorecommerce/grpc-client';
-import { TestDefinition, TestClient } from '@restorecommerce/rc-grpc-clients/dist/generated/test/test';
-import { TestServiceImplementation, TestDefinition as ServerTestDefinition } from '@restorecommerce/rc-grpc-clients/dist/generated-server/test/test';
-import { BindConfig } from '../src/microservice/transport/provider/grpc';
+import { TestDefinition, TestClient } from '@restorecommerce/rc-grpc-clients/dist/generated/test/test.js';
+import { TestServiceImplementation, TestDefinition as ServerTestDefinition } from '@restorecommerce/rc-grpc-clients/dist/generated-server/test/test.js';
+import { BindConfig } from '../src/microservice/transport/provider/grpc/index.js';
 import {
   StreamDefinition,
   StreamServiceImplementation,
   StreamClient
-} from '@restorecommerce/rc-grpc-clients/dist/generated/test/test';
+} from '@restorecommerce/rc-grpc-clients/dist/generated/test/test.js';
 import { Channel, createChannel } from 'nice-grpc';
-import { DeepPartial } from '@restorecommerce/rc-grpc-clients/dist/generated/grpc/reflection/v1alpha/reflection';
+import { DeepPartial } from '@restorecommerce/rc-grpc-clients/dist/generated/grpc/reflection/v1alpha/reflection.js';
+import { it, describe, beforeAll, afterAll } from 'vitest';
 
 const config = chassis.config;
 const Server = chassis.Server;
@@ -285,8 +286,8 @@ describe('microservice.Client', () => {
         should.exist(client);
       });
   });
-  context('with running server', () => {
-    before(async () => {
+  describe('with running server', () => {
+    beforeAll(async () => {
       await config.load(process.cwd() + '/test');
       const cfg = await config.get();
       const logger = createLogger(cfg.get('logger'));
@@ -300,7 +301,7 @@ describe('microservice.Client', () => {
         setTimeout(resolve, 1000);
       });
     });
-    after(async () => {
+    afterAll(async () => {
       await server.stop();
     });
     describe('connect', () => {
@@ -349,7 +350,7 @@ describe('microservice.Client', () => {
       });
     });
   });
-  context('without a running server', () => {
+  describe('without a running server', () => {
     describe('connect', () => {
       it('Call should not be created from a closed channel ',
         async () => {

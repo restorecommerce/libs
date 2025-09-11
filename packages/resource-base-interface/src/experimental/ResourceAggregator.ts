@@ -7,20 +7,20 @@ import {
   ResourceListResponse,
   Filter_ValueType,
   Filter_Operation,
-} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base';
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base.js';
 import {
   type CallContext,
 } from 'nice-grpc-common';
-import { Subject } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/auth';
+import { Subject } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/auth.js';
 import {
   ResourceMap,
   OnMissingCallback,
   DEFAULT_STRICT_CALLBACK,
-} from './ResourceMap';
+} from './ResourceMap.js';
 import {
   ClientRegister,
   CRUDServiceDefinition
-} from './ClientRegister';
+} from './ClientRegister.js';
 
 export type Aggregation<T extends ResourceListResponse & ResourceList = any, C = any> = T & C;
 export type ResolverParams<T = any, M = ResolverMap<T>> = [string, Map<string, T>, M?, T?];

@@ -2,8 +2,10 @@ import * as should from 'should';
 import * as _ from 'lodash';
 import { createLogger } from '@restorecommerce/logger';
 import { Database } from 'arangojs';
-import * as chassis from '../src';
-import { DatabaseProvider } from '../src/database';
+import * as chassis from '../src/index.js';
+import { DatabaseProvider } from '../src/database/index.js';
+import { it, describe, beforeEach, afterEach } from 'vitest';
+
 const config = chassis.config;
 const database = chassis.database;
 
@@ -158,7 +160,6 @@ const providers = [
       return database.get(cfg.get('database:nedb'), logger);
     },
     drop: async (): Promise<any> => { },
-    custom: () => { return () => { }; }
   }
 ];
 
@@ -271,7 +272,7 @@ const testProvider = (providerCfg) => {
     });
   });
   describe('find', () => {
-    context('with id filter', () => {
+    describe('with id filter', () => {
       it('should return a document', async () => {
         const result = await db.find(collection, {
           id: document.id,
@@ -282,7 +283,7 @@ const testProvider = (providerCfg) => {
     });
 
     describe('find', () => {
-      context('with iLike filter', () => {
+      describe('with iLike filter', () => {
         it('should return one filtering based on iLike', async () => {
 
           const result = await db.find('test', {
@@ -295,7 +296,7 @@ const testProvider = (providerCfg) => {
       });
     });
 
-    context('with sort', () => {
+    describe('with sort', () => {
       it('should return documents sorted in ascending order',
         async () => {
           let sortOrderKey;
@@ -325,7 +326,7 @@ const testProvider = (providerCfg) => {
           result.should.deepEqual([testData[0], testData[4], testData[3]]);
         });
     });
-    context('with field limiting', () => {
+    describe('with field limiting', () => {
       it('should return documents with selected fields', async () => {
         const result = await db.find(collection,
           { include: true },
@@ -346,7 +347,7 @@ const testProvider = (providerCfg) => {
         _.sortBy(result, 'id').should.deepEqual(_.sortBy(compareData, 'id'));
       });
     });
-    context('with limit', () => {
+    describe('with limit', () => {
       it('should return one document', async () => {
         const result: Object = await db.find(collection, {
           id: document.id,
@@ -360,7 +361,7 @@ const testProvider = (providerCfg) => {
       });
     });
   });
-  context('with filter operator', () => {
+  describe('with filter operator', () => {
     it('should return a document', async () => {
       let result = await db.find(collection, {
         $or: [
@@ -543,7 +544,7 @@ const testProvider = (providerCfg) => {
           usersFound[2].id.should.equal('3');
           usersFound[2].first_name.startsWith('Mich').should.equal(true);
           usersFound[2].last_name.endsWith('mith').should.equal(true);
-        }).timeout(5000);
+        }, 5000);
 
         it('should search with default case insensitive based on city name and country name', async () => {
           // delay is added since the index takes a second (since we delete and create users in beforeEach and afterEach)
@@ -556,7 +557,7 @@ const testProvider = (providerCfg) => {
           addressFound[1].city.should.equal('Bern');
           addressFound[2].country.should.equal('Germany'); // match becasue of Country Germany with search string `man`
           addressFound[3].country.should.equal('Germany'); // match becasue of Country Germany with search string `man`
-        }).timeout(5000);
+        }, 5000);
 
         it('should search with case sensitive based on first name and last name', async () => {
           // delay is added since the index takes a second (since we delete and create users in beforeEach and afterEach)
@@ -576,7 +577,7 @@ const testProvider = (providerCfg) => {
           usersFound[2].id.should.equal('3');
           usersFound[2].first_name.startsWith('Mich').should.equal(true);
           usersFound[2].last_name.endsWith('mith').should.equal(true);
-        }).timeout(5000);
+        }, 5000);
 
         it('should search for umlauts', async () => {
           // delay is added since the index takes a second (since we delete and create users in beforeEach and afterEach)
@@ -587,7 +588,7 @@ const testProvider = (providerCfg) => {
           usersFound.length.should.equal(1);
           usersFound[0].first_name.should.equal('David');
           usersFound[0].last_name.should.equal('Müller');
-        }).timeout(5000);
+        }, 5000);
 
         it('should not return any result for any match of the search string', async () => {
           // delay is added since the index takes a second (since we delete and create users in beforeEach and afterEach)
@@ -596,7 +597,7 @@ const testProvider = (providerCfg) => {
           });
           let usersFound = await db.find(userCollection, {}, { search: { search: 'does not exist' } });
           usersFound.length.should.equal(0);
-        }).timeout(5000);
+        }, 5000);
 
         it('should search with filter', async () => {
           // delay is added since the index takes a second (since we delete and create users in beforeEach and afterEach)
@@ -607,7 +608,7 @@ const testProvider = (providerCfg) => {
           usersFound.length.should.equal(1);
           usersFound[0].first_name.should.equal('Michael');
           usersFound[0].last_name.should.equal('Bowden');
-        }).timeout(5000);
+        }, 5000);
 
         it('should return an error deleting analyzer since the view still exists', async () => {
           // delay is added since the index takes a second (since we delete and create users in beforeEach and afterEach)
@@ -622,7 +623,7 @@ const testProvider = (providerCfg) => {
           resp[1].id.should.equal('trigram_norm');
           resp[1].code.should.equal(409);
           resp[1].message.should.equal("analyzer in-use while removing arangosearch analyzer 'chassis-test::trigram_norm'");
-        }).timeout(5000);
+        }, 5000);
 
         it('should return an error dropping view which does not exist', async () => {
           // delay is added since the index takes a second (since we delete and create users in beforeEach and afterEach)
@@ -634,7 +635,7 @@ const testProvider = (providerCfg) => {
           resp[0].id.should.equal('test');
           resp[0].code.should.equal(404);
           resp[0].message.should.equal('collection or view not found');
-        }).timeout(5000);
+        }, 5000);
 
         it('should drop view', async () => {
           // delay is added since the index takes a second (since we delete and create users in beforeEach and afterEach)
@@ -646,7 +647,7 @@ const testProvider = (providerCfg) => {
           resp[0].id.should.equal('users_view');
           resp[0].code.should.equal(200);
           resp[0].message.should.equal('View users_view dropped successfully');
-        }).timeout(5000);
+        }, 5000);
 
         it('should delete analyzers', async () => {
           // delay is added since the index takes a second (since we delete and create users in beforeEach and afterEach)
@@ -663,12 +664,15 @@ const testProvider = (providerCfg) => {
           resp[1].id.should.equal('trigram_norm');
           resp[1].code.should.equal(200);
           resp[1].message.should.equal('Analyzer trigram_norm deleted successfully');
-        }).timeout(5000);
+        } , 5000);
 
       });
     }
   });
-  describe('custom tests', () => providerCfg.custom());
+
+  if (providerCfg.custom) {
+    describe('custom tests', () => providerCfg.custom());
+  }
 };
 
 providers.forEach((providerCfg) => {

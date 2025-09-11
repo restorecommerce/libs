@@ -1,7 +1,8 @@
 import * as should from 'should';
-import * as config from '../src/config';
+import * as config from '../src/config/index.js';
 import { createLogger } from '@restorecommerce/logger';
-import * as cache from '../src/cache';
+import * as cache from '../src/cache/index.js';
+import { it, describe, beforeEach } from 'vitest';
 
 /* global describe it beforeEach */
 

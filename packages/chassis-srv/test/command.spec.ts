@@ -46,6 +46,9 @@ const encodeMsg = (msg: any): any => {
 // register Test proto for emitting TestEvent
 registerProtoMeta(protoMetadata);
 
+const cfg= createServiceConfig(process.cwd() + '/test');
+const logger = createLogger(cfg.get('logger'));
+
 /*
  * Note: Running Kafka and ArangoDB instances are required.
  */
@@ -57,7 +60,6 @@ describe('CommandInterfaceService', () => {
     value: 'a test event',
     count: 0,
   };
-  let cfg;
   let testTopic;
   let commandTopic;
   let validate;
@@ -66,11 +68,10 @@ describe('CommandInterfaceService', () => {
   let grpcClient: CommandInterfaceServiceClient;
   const eventListener = async (msg: any,
     context: any, config: any, eventName: string): Promise<any> => {
+    logger.debug(`[TEST] Received event: ${eventName}`, msg);
     await validate(msg, eventName);
   };
   beforeAll(async function setup() {
-    cfg = createServiceConfig(process.cwd() + '/test');
-    const logger = createLogger(cfg.get('logger'));
 
     events = new Events(cfg.get('events:kafka'), logger);
     await events.start();

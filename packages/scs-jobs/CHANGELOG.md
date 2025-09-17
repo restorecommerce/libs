@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.63...@restorecommerce/scs-jobs@0.2.0) (2025-09-17)
+
+
+### Bug Fixes
+
+* **scs-jobs:** decompose error messages, eliminate lodash ([4cc1444](https://github.com/restorecommerce/libs/commit/4cc14448cc8bf7185b591def937da4ea88102cad))
+
+
+### Features
+
+* rewrite kafka lib to use @platformatic/kafka ([#150](https://github.com/restorecommerce/libs/issues/150)) ([ff52791](https://github.com/restorecommerce/libs/commit/ff5279178c7211af3cafc5cb039bfcc17e5929d6))
+
+
+
+
+
 ## [0.1.63](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.62...@restorecommerce/scs-jobs@0.1.63) (2025-08-21)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs

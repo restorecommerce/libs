@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.1.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/dev@0.0.13...@restorecommerce/dev@0.1.0) (2025-09-17)
+
+
+### Features
+
+* rewrite kafka lib to use @platformatic/kafka ([#150](https://github.com/restorecommerce/libs/issues/150)) ([ff52791](https://github.com/restorecommerce/libs/commit/ff5279178c7211af3cafc5cb039bfcc17e5929d6))
+
+
+
+
+
 ## [0.0.13](https://github.com/restorecommerce/libs/compare/@restorecommerce/dev@0.0.12...@restorecommerce/dev@0.0.13) (2024-11-04)
 
 

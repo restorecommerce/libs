@@ -1,3 +1,19 @@
+# Change Log
+
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+# 1.9.0 (2025-09-17)
+
+
+### Features
+
+* move chassis-srv and resource-base-interface ([c5416f3](https://github.com/restorecommerce/resource-base-interface/commit/c5416f395cf3721a43f0900ccb6590af78c17803))
+
+
+
+
+
 ### 1.7.0 (April 25th, 2025)
 
 - refine meta default behaviour

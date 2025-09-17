@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.2.36...@restorecommerce/kafka-client@1.3.0) (2025-09-17)
+
+
+### Features
+
+* move chassis-srv and resource-base-interface ([c5416f3](https://github.com/restorecommerce/kafka-client/commit/c5416f395cf3721a43f0900ccb6590af78c17803))
+* rewrite kafka lib to use @platformatic/kafka ([#150](https://github.com/restorecommerce/kafka-client/issues/150)) ([ff52791](https://github.com/restorecommerce/kafka-client/commit/ff5279178c7211af3cafc5cb039bfcc17e5929d6))
+
+
+
+
+
 ## [1.2.36](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.2.35...@restorecommerce/kafka-client@1.2.36) (2025-08-21)
 
 **Note:** Version bump only for package @restorecommerce/kafka-client

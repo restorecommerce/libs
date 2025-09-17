@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.1.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@3.0.23...@restorecommerce/acs-client@3.1.0) (2025-09-17)
+
+
+### Features
+
+* rewrite kafka lib to use @platformatic/kafka ([#150](https://github.com/restorecommerce/libs/issues/150)) ([ff52791](https://github.com/restorecommerce/libs/commit/ff5279178c7211af3cafc5cb039bfcc17e5929d6))
+
+
+
+
+
 ## [3.0.23](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@3.0.22...@restorecommerce/acs-client@3.0.23) (2025-08-21)
 
 **Note:** Version bump only for package @restorecommerce/acs-client

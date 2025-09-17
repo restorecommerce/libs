@@ -6,6 +6,7 @@ on:
       - master
   repository_dispatch:
     types: [release_master]
+  workflow_dispatch: {}
 
 jobs:
   release:

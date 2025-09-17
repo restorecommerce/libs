@@ -1,9 +1,8 @@
 import * as _ from 'lodash';
 import { createCache } from 'cache-manager';
-import { Keyv } from 'keyv';
+import Keyv from 'keyv';
 import { LRUCache } from 'lru-cache';
 import { Logger } from 'winston';
-import { ObjectEncodingOptions } from 'fs';
 
 /**
  * A key, value map containing cache providers.
@@ -31,9 +30,9 @@ register('memory', (config: any, logger: any) => {
     allowStale: config?.allowStale,
     ttl: config?.ttl || 5000,
   };
-  const lruCache = new LRUCache(options);
+  const lruCache = new LRUCache<any, any>(options);
   const keyv = new Keyv({ store: lruCache });
-  const cache = createCache({ stores: [keyv] });
+  const cache = createCache({ stores: [keyv as any] });
   return cache;
 });
 

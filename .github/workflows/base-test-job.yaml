@@ -67,6 +67,7 @@ jobs:
       - name: Coveralls
         if: ${{ inputs.coveralls }}
         uses: coverallsapp/github-action@v2
+        continue-on-error: true # Coveralls have random outages, ignore them
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           base-path: packages/${{ inputs.package }}

@@ -1,12 +1,12 @@
 import * as should from 'should';
-import * as _ from 'lodash';
+import {forEach, forEachObj} from 'remeda';
 import { errors } from '../src/index.js';
 import { it, describe } from 'vitest';
 
 /* global describe it */
 
 describe('error', () => {
-  _.forEach(errors, (Error, name) => {
+  forEachObj(errors, (Error, name) => {
     describe(name, () => {
       it('should be an Error', () => {
         const error = new Error(name);

@@ -1,5 +1,5 @@
 import { Database, aql } from 'arangojs';
-import * as _ from 'lodash';
+import {isNullish, isEmptyish, isString, isArray, merge, clone, forEach} from 'remeda';
 import {
   buildFilter, buildSorter, buildLimiter, buildReturn,
   sanitizeInputFields, query, sanitizeOutputFields
@@ -38,8 +38,8 @@ export class Arango implements DatabaseProvider {
    * @return {Promise<any>}  Promise for list of found documents.
    */
   async find(collectionName: string, filter?: any, options?: any): Promise<any> {
-    if (_.isNil(collectionName) || !_.isString(collectionName) ||
-      _.isEmpty(collectionName)) {
+    if (isNullish(collectionName) || !isString(collectionName) ||
+      isEmptyish(collectionName)) {
       this.logger?.error('invalid or missing collection argument for find operation');
       throw new Error('invalid or missing collection argument for find operation');
     }
@@ -51,7 +51,7 @@ export class Arango implements DatabaseProvider {
 
     let customFilter = '';
     // checking if a custom query should be used
-    if (!_.isEmpty(opts.customQueries)) {
+    if (!isEmptyish(opts.customQueries)) {
       for (const queryName of opts.customQueries) {
         if (!this.customQueries.has(queryName)) {
           this.logger?.error(`custom query ${query} not found`);
@@ -69,10 +69,10 @@ export class Arango implements DatabaseProvider {
       }
     }
 
-    if (!_.isArray(filterQuery)) {
+    if (!isArray(filterQuery)) {
       filterQuery = [filterQuery];
     }
-    if (_.isEmpty(filterQuery[0])) {
+    if (isEmptyish(filterQuery[0])) {
       filterQuery = true;
     }
     else {
@@ -85,7 +85,7 @@ export class Arango implements DatabaseProvider {
     const returnResult = buildReturn(opts);
     let returnQuery = returnResult.q;
     // return complete node in case no specific fields are specified
-    if (_.isEmpty(returnQuery)) {
+    if (isEmptyish(returnQuery)) {
       returnQuery = 'RETURN node';
     }
     // if search options are set build search query
@@ -137,7 +137,7 @@ export class Arango implements DatabaseProvider {
     if (searchQuery) {
       queryString = `FOR node in @@collection SEARCH ${searchQuery} FILTER ${filterQuery}`;
     }
-    if (!_.isEmpty(customFilter)) {
+    if (!isEmptyish(customFilter)) {
       queryString += customFilter;
     }
 
@@ -153,23 +153,23 @@ export class Arango implements DatabaseProvider {
       returnArgs = returnResult.bindVarsMap;
     }
     let limitArgs;
-    if (_.isEmpty(limitQuery)) {
+    if (isEmptyish(limitQuery)) {
       limitArgs = {};
     } else {
-      if (!_.isNil(opts.limit)) {
+      if (!isNullish(opts.limit)) {
         limitArgs = { limit: opts.limit };
-        if (!_.isNil(opts.offset)) {
+        if (!isNullish(opts.offset)) {
           limitArgs = { offset: opts.offset, limit: opts.limit };
         }
       }
     }
-    varArgs = _.assign(varArgs, limitArgs);
-    varArgs = _.assign(varArgs, returnArgs);
-    bindVars = _.assign({
+    varArgs = merge(varArgs, limitArgs);
+    varArgs = merge(varArgs, returnArgs);
+    bindVars = merge({
       '@collection': collectionName
     }, varArgs);
-    if (!_.isEmpty(customFilter) && opts.customArguments) {
-      bindVars = _.assign(bindVars, { customArguments: opts.customArguments });
+    if (!isEmptyish(customFilter) && opts.customArguments) {
+      bindVars = merge(bindVars, { customArguments: opts.customArguments });
     }
     let res;
     if (!searchQuery) {
@@ -179,7 +179,7 @@ export class Arango implements DatabaseProvider {
     }
     const docs = await res.all(); // TODO: paginate
 
-    return _.map(docs, sanitizeOutputFields);
+    return docs.map(sanitizeOutputFields);
   }
 
   /**
@@ -190,13 +190,13 @@ export class Arango implements DatabaseProvider {
    * @return {Promise<any>} A list of found documents.
    */
   async findByID(collectionName: string, ids: string | string[]): Promise<any> {
-    if (_.isNil(collectionName) || !_.isString(collectionName) ||
-      _.isEmpty(collectionName)) {
+    if (isNullish(collectionName) || !isString(collectionName) ||
+      isEmptyish(collectionName)) {
       this.logger?.error('invalid or missing collection argument for findByID operation');
       throw new Error('invalid or missing collection argument for findByID operation');
     }
 
-    if (_.isNil(ids)) {
+    if (isNullish(ids)) {
       this.logger?.error('invalid or missing ids argument for findByID operation');
       throw new Error('invalid or missing ids argument for findByID operation');
     }
@@ -216,7 +216,7 @@ export class Arango implements DatabaseProvider {
     }, varArgs);
     const res = await query(this.db, collectionName, queryString, bindVars);
     const docs = await res.all();
-    return _.map(docs, sanitizeOutputFields);
+    return docs.map(sanitizeOutputFields);
   }
 
   /**
@@ -231,7 +231,7 @@ export class Arango implements DatabaseProvider {
   async getDocumentHandlers(collectionName: string, collection: any, documents: any,
     idsArray?: string[]): Promise<any> {
     let ids = [];
-    if (documents && !_.isArray(documents)) {
+    if (documents && !isArray(documents)) {
       documents = [documents];
     }
     if (documents && documents.length > 0) {
@@ -239,7 +239,7 @@ export class Arango implements DatabaseProvider {
         ids.push(doc.id);
       }
     }
-    if (!_.isEmpty(idsArray) && _.isArray(idsArray)) {
+    if (!isEmptyish(idsArray) && isArray(idsArray)) {
       ids = idsArray;
     }
     const queryString = aql`FOR node in ${collection}
@@ -256,14 +256,14 @@ export class Arango implements DatabaseProvider {
    * @param  {Object} updateDocuments  List of documents to update
    */
   async update(collectionName: string, updateDocuments: any): Promise<any> {
-    const documents = _.cloneDeep(updateDocuments);
+    const documents = clone(updateDocuments) as any;
     const updateDocsResponse = [];
-    if (_.isNil(collectionName) ||
-      !_.isString(collectionName) || _.isEmpty(collectionName)) {
+    if (isNullish(collectionName) ||
+      !isString(collectionName) || isEmptyish(collectionName)) {
       this.logger?.error('invalid or missing collection argument for update operation');
       throw new Error('invalid or missing collection argument for update operation');
     }
-    if (_.isNil(documents)) {
+    if (isNullish(documents)) {
       this.logger?.error('invalid or missing document argument for update operation');
       throw new Error('invalid or missing document argument for update operation');
     }
@@ -273,7 +273,7 @@ export class Arango implements DatabaseProvider {
       this.logger?.error(`Collection ${collectionName} does not exist for update operation`);
       throw new Error(`Collection ${collectionName} does not exist for update operation`);
     }
-    if (!_.isArray(documents)) {
+    if (!isArray(documents)) {
       this.logger?.error(`Documents should be list for update operation`);
       throw new Error(`Documents should be list for update operation`);
     }
@@ -283,20 +283,20 @@ export class Arango implements DatabaseProvider {
     for (const document of documents) {
       let foundInDB = false;
       for (const docWithHandler of docsWithHandlers) {
-        if (docWithHandler.id === document.id) {
+        if (docWithHandler.id === (document as any).id) {
           foundInDB = true;
-          document._key = docWithHandler._key;
+          (document as any)._key = docWithHandler._key;
           break;
         }
       }
       if (!foundInDB) {
         // if document is not found in DB use the id itself as _key
         // this key will return an array in response since it does not exist
-        document._key = document.id;
+        (document as any)._key = (document as any).id;
       }
     }
 
-    const updatedDocs = await collection.updateAll(documents, { returnNew: true });
+    const updatedDocs = await collection.updateAll(documents as any, { returnNew: true });
     for (const doc of updatedDocs) {
       if ('new' in doc) {
         updateDocsResponse.push(sanitizeOutputFields(doc?.new));
@@ -315,20 +315,20 @@ export class Arango implements DatabaseProvider {
    * @param {Object|Array.Object} documents
    */
   async upsert(collectionName: string, documents: any): Promise<any> {
-    if (_.isNil(collectionName) ||
-      !_.isString(collectionName) || _.isEmpty(collectionName)) {
+    if (isNullish(collectionName) ||
+      !isString(collectionName) || isEmptyish(collectionName)) {
       this.logger?.error('invalid or missing collection argument for upsert operation');
       throw new Error('invalid or missing collection argument for upsert operation');
     }
-    if (_.isNil(documents)) {
+    if (isNullish(documents)) {
       this.logger?.error('invalid or missing documents argument for upsert operation');
       throw new Error('invalid or missing documents argument for upsert operation');
     }
-    let docs = _.cloneDeep(documents);
-    if (!_.isArray(documents)) {
+    let docs = clone(documents);
+    if (!isArray(documents)) {
       docs = [documents];
     }
-    _.forEach(docs, (document, i) => {
+    forEach(docs, (document, i) => {
       docs[i] = sanitizeInputFields(document);
     });
     const upsertResponse = [];
@@ -339,7 +339,7 @@ export class Arango implements DatabaseProvider {
       throw new Error(`Collection ${collectionName} does not exist for upsert operation`);
     }
     let upsertedDocs = await collection.saveAll(docs, { returnNew: true, overwriteMode: 'update' });
-    if (!_.isArray(upsertedDocs)) {
+    if (!isArray(upsertedDocs)) {
       upsertedDocs = [upsertedDocs];
     }
     for (const doc of upsertedDocs) {
@@ -360,12 +360,12 @@ export class Arango implements DatabaseProvider {
    * @return  {Promise<any>} delete response
    */
   async delete(collectionName: string, ids: string[]): Promise<any> {
-    if (_.isNil(collectionName) ||
-      !_.isString(collectionName) || _.isEmpty(collectionName)) {
+    if (isNullish(collectionName) ||
+      !isString(collectionName) || isEmptyish(collectionName)) {
       this.logger?.error('invalid or missing collection argument');
       throw new Error('invalid or missing collection argument');
     }
-    if (_.isNil(ids) || _.isEmpty(ids)) {
+    if (isNullish(ids) || isEmptyish(ids)) {
       this.logger?.error('invalid or missing document IDs argument for delete operation');
       throw new Error('invalid or missing document IDs argument for delete operation');
     }
@@ -408,18 +408,18 @@ export class Arango implements DatabaseProvider {
    * @param  {Object} filter
    */
   async count(collectionName: string, filter: any): Promise<any> {
-    if (_.isNil(collectionName) ||
-      !_.isString(collectionName) || _.isEmpty(collectionName)) {
+    if (isNullish(collectionName) ||
+      !isString(collectionName) || isEmptyish(collectionName)) {
       this.logger?.error('invalid or missing collection argument for count operation');
       throw new Error('invalid or missing collection argument for count operation');
     }
     let filterQuery: any = filter || {};
     let filterResult: any;
-    if (!_.isArray(filterQuery)) {
+    if (!isArray(filterQuery)) {
       filterQuery = [filterQuery];
     }
 
-    if (_.isEmpty(filterQuery[0])) {
+    if (isEmptyish(filterQuery[0])) {
       filterQuery = true;
     }
     else {
@@ -450,7 +450,7 @@ export class Arango implements DatabaseProvider {
    * @param [string] collection Collection name.
    */
   async truncate(collection: string): Promise<any> {
-    if (_.isNil(collection)) {
+    if (isNullish(collection)) {
       const collections = await this.db.collections();
       for (let i = 0; i < collections.length; i += 1) {
         const c = this.db.collection(collections[i].name);
@@ -515,19 +515,19 @@ export class Arango implements DatabaseProvider {
    * @param  {Object|array.Object} documents  A single or multiple documents.
    */
   async insert(collectionName: string, documents: any): Promise<any> {
-    if (_.isNil(collectionName) || !_.isString(collectionName) || _.isEmpty(collectionName)) {
+    if (isNullish(collectionName) || !isString(collectionName) || isEmptyish(collectionName)) {
       this.logger?.error('invalid or missing collection argument for insert operation');
       throw new Error('invalid or missing collection argument for insert operation');
     }
-    if (_.isNil(documents)) {
+    if (isNullish(documents)) {
       this.logger?.error('invalid or missing documents argument for insert operation');
       throw new Error('invalid or missing documents argument for insert operation');
     }
-    let docs = _.cloneDeep(documents);
-    if (!_.isArray(documents)) {
+    let docs = clone(documents);
+    if (!isArray(documents)) {
       docs = [documents];
     }
-    _.forEach(docs, (document, i) => {
+    forEach(docs, (document, i) => {
       docs[i] = sanitizeInputFields(document);
     });
     const collection = this.db.collection(collectionName);
@@ -537,7 +537,7 @@ export class Arango implements DatabaseProvider {
     }
     const insertResponse = [];
     let createdDocs = await collection.saveAll(docs, { returnNew: true });
-    if (!_.isArray(createdDocs)) {
+    if (!isArray(createdDocs)) {
       createdDocs = [createdDocs];
     }
     for (const doc of createdDocs) {

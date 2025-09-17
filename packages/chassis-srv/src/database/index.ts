@@ -24,11 +24,9 @@ export const register = (name: string, provider: any): any => {
 };
 
 import { create as arangodb } from './provider/arango/index.js';
-import { create as nedb } from './provider/nedb/index.js';
 
 // Add default providers
 register('arango', arangodb);
-register('nedb', nedb);
 
 /**
  * Get a new database connection.

@@ -1,4 +1,9 @@
-import * as _ from 'lodash';
+import {
+  clone, isArray, isString, isDate, isBoolean, isNumber, keys, isNullish, forEach, isEmptyish, startsWith,
+  forEachObj,
+  mapKeys,
+  join
+} from 'remeda';
 import Long from 'long';
 
 /**
@@ -40,21 +45,20 @@ export const idToKey = (id: string): any => {
  * @return {any} Clone of the document with the _key field set.
  */
 const ensureKey = (document: any): any => {
-  const doc = _.clone(document);
-  if (_.has(doc, '_key')) {
+  const doc = clone(document);
+  if ('_key' in doc) {
     return doc;
   }
   const id = (doc as any).id;
   if (id) {
-    _.set(doc, '_key', idToKey(id));
+    doc['_key'] = idToKey(id);
   }
   return doc;
 };
 
 const ensureDatatypes = (document: any): any => {
-  const doc = _.clone(document);
-  const keys = _.keys(doc);
-  for (const key of keys) {
+  const doc = clone(document);
+  for (const key of keys(doc)) {
     if (Long.isLong(doc[key])) {
       doc[key] = (doc[key] as Long).toNumber();
     }
@@ -68,10 +72,10 @@ const ensureDatatypes = (document: any): any => {
  * @return {Object} A clone of the document without arangodb specific fields.
  */
 export const sanitizeOutputFields = (document: object): object => {
-  const doc = _.clone(document);
-  _.unset(doc, '_id');
-  _.unset(doc, '_key');
-  _.unset(doc, '_rev');
+  const doc: any = clone(document);
+  delete doc['_id'];
+  delete doc['_key'];
+  delete doc['_rev'];
   return doc;
 };
 
@@ -88,7 +92,7 @@ export const sanitizeInputFields = (document: any): any => {
  * @return {object} interpreted value
  */
 export const autoCastKey = (key: any, value?: any): any => {
-  if (_.isDate(value)) { // Date
+  if (isDate(value)) { // Date
     return `DATE_TIMESTAMP(node.${key})`;
   }
   return 'node.' + key;
@@ -101,22 +105,22 @@ export const autoCastKey = (key: any, value?: any): any => {
  * @returns {any} interpreted value
  */
 export const autoCastValue = (value: any): any => {
-  if (_.isArray(value)) {
+  if (isArray(value)) {
     return value.map(value => value.toString());
   }
-  if (_.isString(value)) { // String
+  if (isString(value)) { // String
     return value;
   }
-  if (_.isBoolean(value)) { // Boolean
+  if (isBoolean(value)) { // Boolean
     return Boolean(value);
   }
-  if (_.isNumber(value)) {
-    return _.toNumber(value);
+  if (isNumber(value)) {
+    return Number(value);
   }
   if (Long.isLong(value)) {
     return (value as Long).toNumber();
   }
-  if (_.isDate(value)) { // Date
+  if (isDate(value)) { // Date
     return new Date(value);
   }
   return value;
@@ -133,11 +137,11 @@ export const autoCastValue = (value: any): any => {
 
 export const buildComparison = (filter: any, op: string, index: number,
   bindVarsMap: any): any => {
-  const ele = _.map(filter, (e) => {
-    if (!_.isArray(e)) {
+  const ele = filter.map((e: any) => {
+    if (!isArray(e)) {
       e = [e];
     }
-    e = buildFilter(e, index, bindVarsMap);  
+    e = buildFilter(e, index, bindVarsMap);
     index += 1;
     return e.q;
   });
@@ -166,11 +170,11 @@ export const buildComparison = (filter: any, op: string, index: number,
 export const buildField = (key: any, value: any, index: number, bindVarsMap: any): string => {
   const bindValueVar = `@value${index}`;
   const bindValueVarWithOutPrefix = `value${index}`;
-  if (_.isString(value) || _.isBoolean(value) || _.isNumber(value || _.isDate(value))) {
+  if (isString(value) || isBoolean(value) || isNumber(value || isDate(value))) {
     bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(value);
     return autoCastKey(key, value) + ' == ' + bindValueVar;
   }
-  if (!_.isNil(value.$eq)) {
+  if (!isNullish(value.$eq)) {
     bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(value.$eq);
     return autoCastKey(key, value) + ' == ' + bindValueVar;
   }
@@ -190,7 +194,7 @@ export const buildField = (key: any, value: any, index: number, bindVarsMap: any
     bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(value.$lte);
     return autoCastKey(key, value) + ' <= ' + bindValueVar;
   }
-  if (!_.isNil(value.$ne)) {
+  if (!isNullish(value.$ne)) {
     bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(value.$ne);
     return autoCastKey(key, value) + ' != ' + bindValueVar;
   }
@@ -200,7 +204,7 @@ export const buildField = (key: any, value: any, index: number, bindVarsMap: any
   }
   if (value.$in) {
     bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(value.$in);
-    if (_.isString(value.$in)) {
+    if (isString(value.$in)) {
       // if it is a field which should be an array
       // (useful for querying within a document list-like attributen
       return bindValueVar + ' IN ' + autoCastKey(key);
@@ -217,16 +221,16 @@ export const buildField = (key: any, value: any, index: number, bindVarsMap: any
     // @param 'true' is for case insensitive
     return ' LIKE (' + autoCastKey(key, value) + ',' + bindValueVar + ', true)';
   }
-  if (!_.isNil(value.$not)) {
+  if (!isNullish(value.$not)) {
     const temp = buildField(key, value.$not, index, bindVarsMap);
     return `!(${temp})`;
   }
-  if (_.has(value, '$isEmpty')) {
+  if ('$isEmpty' in value) {
     bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue('');
     // will always search for an empty string
     return autoCastKey(key, '') + ' == ' + bindValueVar;
   }
-  if (!_.isNil((value as any).$startswith)) {
+  if (!isNullish((value as any).$startswith)) {
     const bindValueVar1 = `@value${index + 1}`;
     const bindValueVarWithOutPrefix1 = `value${index + 1}`;
     const k = autoCastKey(key);
@@ -235,7 +239,7 @@ export const buildField = (key: any, value: any, index: number, bindVarsMap: any
     bindVarsMap[bindValueVarWithOutPrefix1] = v;
     return `LEFT(${k}, LENGTH(${bindValueVar})) == ${bindValueVar1}`;
   }
-  if (!_.isNil((value as any).$endswith)) {
+  if (!isNullish((value as any).$endswith)) {
     const bindValueVar1 = `@value${index + 1}`;
     const bindValueVarWithOutPrefix1 = `value${index + 1}`;
     const k = autoCastKey(key);
@@ -244,7 +248,7 @@ export const buildField = (key: any, value: any, index: number, bindVarsMap: any
     bindVarsMap[bindValueVarWithOutPrefix1] = v;
     return `RIGHT(${k}, LENGTH(${bindValueVar})) == ${bindValueVar1}`;
   }
-  throw new Error(`unsupported operator ${_.keys(value)} in ${key}`);
+  throw new Error(`unsupported operator ${keys(value)} in ${key}`);
 };
 
 /**
@@ -265,11 +269,11 @@ export const buildFilter = (filter: any, index?: number, bindVarsMap?: any): any
     let q: any = '';
     let multipleFilters = false;
     for (const eachFilter of filter) {
-      _.forEach(eachFilter, (value, key) => {
+      forEachObj(eachFilter, (value, key) => {
         switch (key) {
           case '$or':
             if (!multipleFilters) {
-              if (_.isEmpty(value)) {
+              if (isEmptyish(value)) {
                 q = true;
               } else {
                 q = buildComparison(value, '||', index, bindVarsMap).q;
@@ -285,7 +289,7 @@ export const buildFilter = (filter: any, index?: number, bindVarsMap?: any): any
             break;
           case '$and':
             if (!multipleFilters) {
-              if (_.isEmpty(value)) {
+              if (isEmptyish(value)) {
                 q = false;
               } else {
                 q = buildComparison(value, '&&', index, bindVarsMap).q;
@@ -298,7 +302,7 @@ export const buildFilter = (filter: any, index?: number, bindVarsMap?: any): any
             }
             break;
           default:
-            if (_.startsWith(key, '$')) {
+            if (startsWith(key, '$')) {
               throw new Error(`unsupported query operator ${key}`);
             }
             if (!multipleFilters) {
@@ -325,8 +329,8 @@ export const buildFilter = (filter: any, index?: number, bindVarsMap?: any): any
 export const buildLimiter = (options: any): string => {
   // LIMIT count
   // LIMIT offset, count
-  if (!_.isNil(options.limit)) {
-    if (!_.isNil(options.offset)) {
+  if (!isNullish(options.limit)) {
+    if (!isNullish(options.offset)) {
       return `LIMIT @offset, @limit`;
     }
     return `LIMIT @limit`;
@@ -342,7 +346,7 @@ export const buildLimiter = (options: any): string => {
  * @return {any} template query string and bind variables Object
  */
 export const buildSorter = (options: any, index?: number, bindVarsMap?: any): any => {
-  if (_.isNil(options.sort) || _.isEmpty(options.sort)) {
+  if (isNullish(options.sort) || isEmptyish(options.sort)) {
     return '';
   }
 
@@ -353,7 +357,7 @@ export const buildSorter = (options: any, index?: number, bindVarsMap?: any): an
     bindVarsMap = {};
   }
 
-  const sort = _.mapKeys(options.sort, (value, key) => {
+  const sort = mapKeys(options.sort, (key, value) => {
     return autoCastKey(key);
   });
   let sortKeysOrder = '';
@@ -376,12 +380,12 @@ export const buildReturn = (options: any): any => {
   let includeIndex = 0;
   const bindVarsMap: Record<string, any> = {};
   let q = '';
-  if (_.isNil(options.fields) || _.isEmpty(options.fields)) {
+  if (isNullish(options.fields) || isEmptyish(options.fields)) {
     return { q, bindVarsMap };
   }
   const keep: any[] = [];
   const exclude: any[] = [];
-  _.forEach(options.fields, (value, key) => {
+  forEachObj(options.fields, (value, key) => {
     switch (value) {
       case 0:
         bindVarsMap[`exclude${excludeIndex}`] = key;
@@ -396,12 +400,12 @@ export const buildReturn = (options: any): any => {
     }
   });
   if (keep.length > 0) {
-    const include = _.join(_.map(keep, (e) => { return e; }));
+    const include = join(keep.map((e) => { return e; }), ',');
     q = `RETURN KEEP( node, ${include} )`;
     return { q, bindVarsMap };
   }
   if (exclude.length > 0) {
-    const unset = _.join(_.map(exclude, (e) => { return e; }));
+    const unset = join(exclude.map((e) => { return e; }), ',');
     q = `RETURN UNSET( node, ${unset} )`;
     return { q, bindVarsMap };
   }

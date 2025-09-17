@@ -24,7 +24,7 @@
     "async": "^3.2.6",
     "cls-rtracer": "^2.6.3",
     "events": "^3.3.0",
-    "lodash": "^4.17.21",
+    "remeda": "^2.31.1",
     "protobufjs": "^7.4.0",
     "retry": "^0.13.1"
   },

@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import { forEach } from 'remeda';
 import { Events, registerProtoMeta, Topic } from '../src';
 import { createLogger } from '@restorecommerce/logger';
 import { expect, it, describe, beforeAll, afterAll } from 'vitest';
@@ -40,7 +40,7 @@ const logger = createLogger(loggerConfig.logger);
 
 describe('events', () => {
   const providers = ['kafkaTest'];
-  _.forEach(providers, (providerName: string) => {
+  forEach(providers, (providerName: string) => {
     describe(`testing config ${providerName}`, () => {
       let events: Events;
       const topicName = 'com.example.test';

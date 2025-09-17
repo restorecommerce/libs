@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import { isNullish, forEach, forEachObj, isEmptyish, keys, pick, clone, isIncludedIn, omitBy, intersection, length } from 'remeda';
 import { Server } from './../microservice/server.js';
 import * as database from './../database/index.js';
 import { Events, Topic, registerProtoMeta, Kafka } from '@restorecommerce/kafka-client';
@@ -57,7 +57,7 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
   redisClient: RedisClientType<any, any>;
 
   constructor(server: Server, config: any, logger: Logger, events: Events, redisClient: RedisClientType<any, any>) {
-    if (_.isNil(events)) {
+    if (isNullish(events)) {
       if (logger.error) {
         logger.error('No Kafka client was provided. Disabling all commands.');
         return;
@@ -88,16 +88,16 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
     });
     server.on('serving', (transports) => {
       this.health.status = HealthCheckResponse_ServingStatus.SERVING;
-      _.forEach(transports, (transport, transportName) => {
-        _.forEach(this.service, (srv, serviceName) => {
+      forEachObj(transports, (transport, transportName) => {
+        forEachObj(this.service, (srv, serviceName) => {
           this.service[serviceName].transport[transportName] = HealthCheckResponse_ServingStatus.SERVING;
         });
       });
     });
     server.on('stopped', (transports) => {
       this.health.status = HealthCheckResponse_ServingStatus.NOT_SERVING;
-      _.forEach(transports, (transport, transportName) => {
-        _.forEach(this.service, (srv, serviceName) => {
+      forEachObj(transports, (transport, transportName) => {
+        forEachObj(this.service, (srv, serviceName) => {
           this.service[serviceName].transport[transportName] = HealthCheckResponse_ServingStatus.NOT_SERVING;
         });
       });
@@ -136,7 +136,7 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
    * Generic command operation, which demultiplexes a command by its name and parameters.
    */
   public async command(request: CommandRequest, context: CallContext): Promise<{ typeUrl?: string; value?: Buffer }> {
-    if (_.isNil(request) || _.isNil(request.name)) {
+    if (isNullish(request) || isNullish(request.name)) {
       return this.encodeMsg({
         error: {
           code: 400,
@@ -145,7 +145,7 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
       });
     }
 
-    if (_.isNil(this.commands[request.name])) {
+    if (isNullish(this.commands[request.name])) {
       return this.encodeMsg({
         error: {
           code: 400,
@@ -189,7 +189,7 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
    * @param topics list of Kafka topics to be restored
    */
   async restore(payload: any): Promise<any> {
-    if (_.isEmpty(payload) || _.isEmpty(payload.data)) {
+    if (isEmptyish(payload) || isEmptyish(payload.data)) {
       // throw new errors.InvalidArgument('Invalid payload for restore command');
       return {
         error: {
@@ -205,7 +205,7 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
     // a label with the topic's name
     const kafkaEventsCfg = this.config.get('events:kafka');
     const kafkaCfg = this.config.get('events:kafka:topics');
-    if (_.isNil(kafkaCfg) || kafkaCfg.length == 0) {
+    if (isNullish(kafkaCfg) || kafkaCfg.length == 0) {
       return {
         error: {
           code: 500,
@@ -214,7 +214,7 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
       };
     }
 
-    const topicLabels = _.keys(kafkaCfg).filter((elem, index) => {
+    const topicLabels = keys(kafkaCfg).filter((elem, index) => {
       return elem.includes('.resource');
     }).map((elem) => {
       return elem.replace('.resource', '');
@@ -237,11 +237,11 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
       };
     });
 
-    const restoreCollections = _.keys(restoreSetup);
+    const restoreCollections = keys(restoreSetup);
 
     try {
       const dbCfgs = this.config.get('database');
-      const dbCfgNames = _.keys(dbCfgs);
+      const dbCfgNames = keys(dbCfgs);
       for (let i = 0; i < dbCfgNames.length; i += 1) {
         const dbCfgName = dbCfgNames[i];
         const dbCfg = dbCfgs[dbCfgName];
@@ -253,15 +253,15 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
         }
         const db = await database.get(dbCfg, this.logger, graphName, edgeConfigDefs);
 
-        if (_.isNil(collections)) {
+        if (isNullish(collections)) {
           this.logger.warn('No collections found on DB config');
           return {};
         }
 
-        let intersection: string[] = _.intersection(restoreCollections, collections);
-        if (intersection.length > 0) {
-          intersection = _.intersection(intersection, topicLabels);
-          for (const resource of intersection) {
+        let inter: string[] = intersection(restoreCollections, collections);
+        if (inter.length > 0) {
+          inter = intersection(inter, topicLabels);
+          for (const resource of inter) {
             const topicName = kafkaCfg[`${resource}.resource`].topic;
             restoreEventSetup[topicName] = {
               topic: await this.kafkaEvents.topic(topicName),
@@ -273,7 +273,7 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
         }
       }
 
-      if (_.isEmpty(restoreEventSetup)) {
+      if (isEmptyish(restoreEventSetup)) {
         this.logger.warn('No data was setup for the restore process.');
       } else {
         const logger = this.logger;
@@ -293,7 +293,7 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
 
           // saving listeners for potentially subscribed events on this topic,
           // so they don't get called during the restore process
-          const previousEvents: string[] = _.cloneDeep(restoreTopic.subscribed);
+          const previousEvents: string[] = clone(restoreTopic.subscribed);
           const listenersBackup = new Map<string, object[]>();
           for (const event of previousEvents) {
             listenersBackup.set(event, (restoreTopic.emitter as EventEmitter).listeners(event));
@@ -304,7 +304,7 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
           const baseOffset: number = topicSetup.baseOffset;
           const targetOffset: bigint = (await restoreTopic.$offset(BigInt(-1))) - BigInt(1);
           const ignoreOffsets: number[] = topicSetup.ignoreOffset;
-          const eventNames = _.keys(topicEvents);
+          const eventNames = keys(topicEvents);
 
           this.logger.debug(`topic ${topicName} has current offset ${targetOffset}`);
 
@@ -319,11 +319,11 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
           const drainEvent = (message: any, done: any) => {
             const msg = message.value;
             const eventName = message.key.toString();
-            const context = _.pick(message, ['offset', 'partition', 'topic']);
+            const context = pick(message, ['offset', 'partition', 'topic']);
             const eventListener = topicEvents[message.key];
             // decode protobuf
             let decodedMsg = kafkaEvents.provider.decodeObject(kafkaEventsCfg, eventName, msg);
-            decodedMsg = _.pick(decodedMsg, _.keys(decodedMsg)); // preventing protobuf.js special fields
+            decodedMsg = pick(decodedMsg, keys(decodedMsg)); // preventing protobuf.js special fields
             eventListener(decodedMsg, context, config.get(), eventName).then(() => {
               done();
             }).catch((err: any) => {
@@ -358,7 +358,7 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
                     offset: Number(message.offset)
                   };
                   commandTopic.emit('restoreResponse', {
-                    services: _.keys(service),
+                    services: keys(service),
                     payload: encodeMsg(msg)
                   }).then(() => {
                     logger.info('Restore response emitted');
@@ -399,7 +399,7 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
             messageStream = stream;
 
             stream.on('data', (message) => {
-              if (message.key.toString() in topicEvents && !_.includes(ignoreOffsets, Number(message.offset))) {
+              if (message.key.toString() in topicEvents && !isIncludedIn(Number(message.offset), ignoreOffsets)) {
                 asyncQueue.push(message);
                 logger.debug(`received message ${message.offset}/${targetOffset}`);
               }
@@ -415,7 +415,7 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
     } catch (err: any) {
       this.logger.error('Error occurred while restoring the system', { code: err.code, message: err.message, stack: err.stack });
       await this.commandTopic.emit('restoreResponse', {
-        services: _.keys(this.service),
+        services: keys(this.service),
         payload: this.encodeMsg({
           error: err.message
         })
@@ -462,7 +462,7 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
     let errorMsg = null;
     try {
       const dbCfgs = this.config.get('database');
-      const dbCfgNames = _.keys(dbCfgs);
+      const dbCfgNames = keys(dbCfgs);
       for (let i = 0; i < dbCfgNames.length; i += 1) {
         const dbCfgName = dbCfgNames[i];
         const dbCfg = dbCfgs[dbCfgName];
@@ -484,7 +484,7 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
     }
 
     const eventObject = {
-      services: _.keys(this.service),
+      services: keys(this.service),
       payload: null as any
     };
 
@@ -517,25 +517,25 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
   async check(payload: { service?: string }): Promise<{
     status: HealthCheckResponse_ServingStatus;
   }> {
-    if (_.isNil(payload)) {
+    if (isNullish(payload)) {
       throw new Error('Invalid payload for restore command');
     }
     const serviceName = payload.service;
 
-    if (_.isNil(serviceName) || _.size(serviceName) === 0) {
+    if (isNullish(serviceName) || serviceName?.length === 0) {
       return {
         status: this.health.status,
       };
     }
     const service = this.service[serviceName];
-    if (_.isNil(service)) {
+    if (isNullish(service)) {
       const errorMsg = 'Service ' + serviceName + ' does not exist';
       this.logger.warn(errorMsg);
       throw new Error(errorMsg);
     }
     let status = HealthCheckResponse_ServingStatus.UNKNOWN;
     // If one transports serves the service, set it to SERVING
-    _.forEach(service.transport, (transportStatus) => {
+    forEachObj(service.transport, (transportStatus) => {
       if (transportStatus === HealthCheckResponse_ServingStatus.SERVING) {
         status = transportStatus;
       }
@@ -554,7 +554,7 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
       version: process.env.npm_package_version,
     };
     await this.commandTopic.emit('versionResponse', {
-      services: _.keys(this.service),
+      services: keys(this.service),
       payload: this.encodeMsg(response)
     });
     return response;
@@ -565,7 +565,7 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
    * @param payload JSON object containing key value pairs for configuration
    */
   async configUpdate(payload: any): Promise<any> {
-    if (_.isNil(payload)) {
+    if (isNullish(payload)) {
       return {
         error: {
           code: 400,
@@ -583,7 +583,7 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
         status: 'Configuration updated successfully'
       };
       await this.commandTopic.emit('configUpdateResponse', {
-        services: _.keys(this.service),
+        services: keys(this.service),
         payload: this.encodeMsg(response)
       });
     } catch (error: any) {
@@ -598,7 +598,7 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
    * @param payload JSON object containing key value pairs for authentication apiKey
    */
   async setApiKey(payload: any): Promise<any> {
-    if (_.isNil(payload)) {
+    if (isNullish(payload)) {
       return {
         error: {
           code: 400,
@@ -616,7 +616,7 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
         status: 'ApiKey set successfully'
       };
       await this.commandTopic.emit('setApiKeyResponse', {
-        services: _.keys(this.service),
+        services: keys(this.service),
         payload: this.encodeMsg(response)
       });
     } catch (err: any) {
@@ -690,7 +690,7 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
       response = err.message;
     }
     await this.commandTopic.emit('flushCacheResponse', {
-      services: _.keys(this.service),
+      services: keys(this.service),
       payload: this.encodeMsg(response)
     });
     return response;
@@ -715,7 +715,7 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
       [`${resource}Modified`]: async function restoreModified(message: any,
         ctx: any, config: any, eventName: string): Promise<any> {
         decodeBufferField(message, resource);
-        await db.update(`${resource}s`, { id: message.id }, _.omitBy(message, _.isNil));
+        await db.update(`${resource}s`, { id: message.id }, omitBy(message, isNullish));
 
         return {};
       },

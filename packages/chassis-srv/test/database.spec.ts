@@ -1,5 +1,5 @@
 import * as should from 'should';
-import * as _ from 'lodash';
+import {clone, prop, sortBy} from 'remeda';
 import { createLogger } from '@restorecommerce/logger';
 import { Database } from 'arangojs';
 import * as chassis from '../src/index.js';
@@ -132,7 +132,7 @@ const providers = [
           should.exist(result);
           result.should.have.length(2);
 
-          const sorted = _.sortBy(result, ['id']);
+          const sorted = sortBy(result, prop('id'));
 
           should.exist(sorted[0].id);
           sorted[0].id.should.equal('/test/sort0');
@@ -150,16 +150,6 @@ const providers = [
         });
       });
     }
-  },
-  {
-    name: 'nedb',
-    init: async (): Promise<DatabaseProvider> => {
-      await config.load(process.cwd() + '/test');
-      const cfg = await config.get();
-      const logger = createLogger(cfg.get('logger'));
-      return database.get(cfg.get('database:nedb'), logger);
-    },
-    drop: async (): Promise<any> => { },
   }
 ];
 
@@ -302,8 +292,6 @@ const testProvider = (providerCfg) => {
           let sortOrderKey;
           if (providerCfg.name == 'arango') {
             sortOrderKey = 'ASC';
-          } else if (providerCfg.name == 'nedb') {
-            sortOrderKey = 1;
           }
           const result = await db.find(collection,
             { include: true },
@@ -316,8 +304,6 @@ const testProvider = (providerCfg) => {
           let sortOrderKey;
           if (providerCfg.name == 'arango') {
             sortOrderKey = 'DESC';
-          } else if (providerCfg.name == 'nedb') {
-            sortOrderKey = -1;
           }
           const result = await db.find(collection,
             { include: true },
@@ -339,12 +325,12 @@ const testProvider = (providerCfg) => {
         resultKeep.should.deepEqual(result);
         // Not to modify the original data which is used in next test case
         // to add and delete in beforeEach and afterEach
-        const clonedData = _.cloneDeep([testData[3], testData[4], testData[0]]);
-        const compareData = _.map(clonedData, (e) => {
-          _.unset(e, 'include');
+        const clonedData = clone([testData[3], testData[4], testData[0]]);
+        const compareData = clonedData.map((e) => {
+          delete e['include'];
           return e;
         });
-        _.sortBy(result, 'id').should.deepEqual(_.sortBy(compareData, 'id'));
+        sortBy(result, prop('id')).should.deepEqual(sortBy(compareData, prop('id')));
       });
     });
     describe('with limit', () => {
@@ -457,7 +443,7 @@ const testProvider = (providerCfg) => {
   });
   describe('update', () => {
     it('should update document', async () => {
-      const newDoc = _.clone(document);
+      const newDoc = clone(document);
       newDoc.value = 'new';
       await db.update(collection, [newDoc]);
       let result = await db.findByID(collection, document.id);
@@ -515,7 +501,7 @@ const testProvider = (providerCfg) => {
       result.should.be.Array();
       result.should.be.length(2);
       timeData.splice(2, 1);
-      result = _.sortBy(result, [(o) => { return o.id; }]);
+      result = sortBy(result, (o) => { return o.id; });
       result.should.deepEqual(timeData);
       // truncate test DB
       await db.truncate();

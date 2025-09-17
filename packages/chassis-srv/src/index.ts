@@ -7,8 +7,6 @@ import { DatabaseProvider, GraphDatabaseProvider } from './database/index.js';
 export { database, DatabaseProvider, GraphDatabaseProvider };
 import { create as arango } from './database/provider/arango/index.js';
 export { arango };
-import { create as nedb } from './database/provider/nedb/index.js';
-export { nedb };
 
 import { Server as Server } from './microservice/server.js';
 export { Server };

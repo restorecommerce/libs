@@ -29,12 +29,6 @@
           "path": "test/views/address_view.json"
         }
       ]
-    },
-    "nedb": {
-      "provider": "nedb",
-      "collections": {
-        "test": {}
-      }
     }
   },
   "redis": {

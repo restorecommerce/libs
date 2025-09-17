@@ -1,5 +1,5 @@
 import * as should from 'should';
-import * as _ from 'lodash';
+import {forEach} from 'remeda';
 import { createLogger } from '@restorecommerce/logger';
 import * as chassis from '../src/index.js';
 import { createClient } from '@restorecommerce/grpc-client';
@@ -109,7 +109,7 @@ describe('microservice.Server', () => {
         const levels = [
           'error'
         ];
-        _.forEach(levels, (level) => {
+        forEach(levels, (level) => {
           should.exist(server.logger[level]);
         });
         should.exist(server.transport);

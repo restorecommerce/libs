@@ -4,7 +4,7 @@ import { Channel, createChannel, createClient } from '@restorecommerce/grpc-clie
 import { Events, registerProtoMeta, Topic } from '@restorecommerce/kafka-client';
 import { createServiceConfig } from '@restorecommerce/service-config';
 import * as should from 'should';
-import * as _ from 'lodash';
+import { forEach, drop, sortBy, dropLast, filter, prop } from 'remeda';
 import {
   Filter_Operation,
   Filter_ValueType,
@@ -29,6 +29,23 @@ registerProtoMeta(
  * Note: To run this test, a running ArangoDB and Kafka instance is required.
  * (Kafka is needed only if 'events:enableEvents' config is enabled)
  */
+
+const meta = () => {
+  return {
+    created: new Date(),
+    modified: new Date(),
+    created_by: 'Admin',
+    modified_by: 'Admin',
+    owners: [{
+      id: 'urn:restorecommerce:acs:names:ownerIndicatoryEntity',
+      value: 'urn:restorecommerce:acs:model:user.User',
+      attributes: [{
+        id: 'urn:restorecommerce:acs:names:ownerInstance',
+        value: 'Admin'
+      }]
+    }]
+  };
+}
 
 /* global describe it before after beforeEach */
 describe('converting to filter to object', () => {
@@ -176,22 +193,6 @@ describe('converting to filter to object', () => {
 
 });
 
-let meta = {
-  created: new Date(),
-  modified: new Date(),
-  created_by: 'Admin',
-  modified_by: 'Admin',
-  owners: [{
-    id: 'urn:restorecommerce:acs:names:ownerIndicatoryEntity',
-    value: 'urn:restorecommerce:acs:model:user.User',
-    attributes: [{
-      id: 'urn:restorecommerce:acs:names:ownerInstance',
-      value: 'Admin'
-    }]
-  }]
-};
-
-
 describe('ServiceBase', () => {
   let db: chassis.GraphDatabaseProvider;
   let server: chassis.Server;
@@ -200,7 +201,7 @@ describe('ServiceBase', () => {
   let channel: Channel;
   let testService: CRUDClient;
   let testData: any;
-  let cfg;
+  let cfg: any;
 
   const today = new Date();
   const tomorrow = new Date();
@@ -287,10 +288,11 @@ describe('ServiceBase', () => {
     beforeEach(async () => {
       db = await chassis.database.get(cfg.get('database:testdb'), server.logger) as chassis.GraphDatabaseProvider;
       await db.truncate();
+
       testData = [
-        { id: 'test_xy', meta, value: 1, text: 'first simple sentence for searching', active: true, created: today, status: 'GOOD' },
-        { id: 'test_xyz', meta, value: 3, text: 'second test data', active: false, created: tomorrow, status: 'BAD' },
-        { id: 'test_zy', meta, value: 12, text: 'third search data string', active: false, created: tomorrow, status: 'UNKNOWN' }];
+        { id: 'test_xy', meta: meta(), value: 1, text: 'first simple sentence for searching', active: true, created: today, status: 'GOOD' },
+        { id: 'test_xyz', meta: meta(), value: 3, text: 'second test data', active: false, created: tomorrow, status: 'BAD' },
+        { id: 'test_zy', meta: meta(), value: 12, text: 'third search data string', active: false, created: tomorrow, status: 'UNKNOWN' }];
       // await db.insert('resources', testData);
       await testService.create({ items: testData, subject: { id: 'Admin' } });
     });
@@ -306,7 +308,7 @@ describe('ServiceBase', () => {
         for (let data of testData) {
           delete data?.meta?.modified;
         }
-        _.forEach(result.items, (item) => {
+        forEach(result.items, (item) => {
           // delete modified field as it will be changed when creating
           delete item!.payload!.meta!.modified;
           testData.should.matchAny(item.payload);
@@ -316,7 +318,7 @@ describe('ServiceBase', () => {
         result.operation_status!.message!.should.equal('success');
       });
       it('should return two elements with offset 1', async () => {
-        const compareData = _.drop((await testService.read({})).items, 1);
+        const compareData = drop((await testService.read({})).items, 1);
         const result = await testService.read({
           offset: 1,
         });
@@ -326,12 +328,13 @@ describe('ServiceBase', () => {
         result.total_count!.should.be.equal(compareData.length);
         result.items!.should.be.Array();
         result.items!.should.length(2);
-        _.sortBy(result.items, 'id').should.deepEqual(_.sortBy(compareData, 'id'));
+
+        sortBy(result.items, prop('payload', 'id')).should.deepEqual(sortBy(compareData, prop('payload', 'id')));
         result.operation_status!.code!.should.equal(200);
         result.operation_status!.message!.should.equal('success');
       });
       it('should return two elements with limit 2', async () => {
-        const compareData = _.dropRight((await testService.read({})).items, 1);
+        const compareData = dropLast((await testService.read({})).items, 1);
         const result = await testService.read({
           limit: 2,
         });
@@ -341,7 +344,7 @@ describe('ServiceBase', () => {
         result.total_count!.should.be.equal(compareData.length);
         result.items!.should.be.Array();
         result.items!.should.length(2);
-        _.sortBy(result.items, 'id').should.deepEqual(_.sortBy(compareData, 'id'));
+        sortBy(result.items, prop('payload', 'id')).should.deepEqual(sortBy(compareData, prop('payload', 'id')));
         result.operation_status!.code!.should.equal(200);
         result.operation_status!.message!.should.equal('success');
       });
@@ -358,7 +361,7 @@ describe('ServiceBase', () => {
         result.total_count!.should.be.equal(3);
         result.items!.should.be.Array();
         result.items!.should.length(3);
-        const testDataDescending = testData.sort((a, b) => {
+        const testDataDescending = testData.sort((a: any, b: any) => {
           if (a.value > b.value) {
             return -1;
           }
@@ -370,7 +373,6 @@ describe('ServiceBase', () => {
         });
         // match the descending order
         for (let i = 0; i < result.items!.length; i++) {
-          delete result.items![i].payload!.meta!.modified;
           result.items![i].payload!.should.deepEqual(testDataDescending[i]);
         }
         result.operation_status!.code!.should.equal(200);
@@ -394,7 +396,6 @@ describe('ServiceBase', () => {
         result.total_count!.should.be.equal(1);
         result.items!.should.be.Array();
         result.items!.should.length(1);
-        delete result.items![0].payload!.meta!.modified;
         result.items![0].payload!.should.deepEqual(testData[2]); // testData[2] is object with value > 10
         result.operation_status!.code!.should.equal(200);
         result.operation_status!.message!.should.equal('success');
@@ -416,7 +417,6 @@ describe('ServiceBase', () => {
         result.total_count!.should.be.equal(1);
         result.items!.should.be.Array();
         result.items!.should.length(1);
-        delete result.items![0].payload!.meta!.modified;
         result.items![0].payload!.should.deepEqual(testData[0]); // testData[9] is object with value 'test_xy'
         result.operation_status!.code!.should.equal(200);
         result.operation_status!.message!.should.equal('success');
@@ -439,7 +439,6 @@ describe('ServiceBase', () => {
         result.total_count!.should.be.equal(1);
         result.items!.should.be.Array();
         result.items!.should.length(1);
-        delete result.items![0].payload!.meta!.modified;
         result.items![0].payload!.should.deepEqual(testData[0]);
         result.operation_status!.code!.should.equal(200);
         result.operation_status!.message!.should.equal('success');
@@ -466,9 +465,9 @@ describe('ServiceBase', () => {
         result.items!.should.be.Array();
         result.items!.should.length(1);
         const resultPayload = result.items!.map(item => item.payload);
-        _.sortBy(resultPayload[0]!.id, 'id').should.deepEqual(_.sortBy(_.filter(testData, (data) => {
+        sortBy(resultPayload, prop('id')).should.deepEqual(sortBy(filter(testData, (data) => {
           return data.created <= today.getTime();
-        })[0].id, 'id'));
+        }), prop('id')));
         result.operation_status!.code!.should.equal(200);
         result.operation_status!.message!.should.equal('success');
       });
@@ -494,11 +493,11 @@ describe('ServiceBase', () => {
           delete item.payload!.meta?.modified;
           return item.payload;
         });
-        _.sortBy(resultPayload, 'id').should.deepEqual(_.sortBy(_.filter(testData, (data) => {
+        sortBy(resultPayload, prop('id')).should.deepEqual(sortBy(filter(testData, (data) => {
           // data.created = new Date(data.created);
           delete data.meta!.modified;
           return (data.status === "BAD" || data.status === "UNKNOWN");
-        }), 'id'));
+        }), prop('id')));
         result.operation_status!.code!.should.equal(200);
         result.operation_status!.message!.should.equal('success');
       });
@@ -524,10 +523,10 @@ describe('ServiceBase', () => {
           delete item.payload!.meta?.modified;
           return item.payload;
         });
-        _.sortBy(resultPayload, 'id').should.deepEqual(_.sortBy(_.filter(testData, (data) => {
+        sortBy(resultPayload, prop('id')).should.deepEqual(sortBy(filter(testData, (data) => {
           delete data.meta!.modified;
           return data.id != 'test_xy';
-        }), 'id'));
+        }), prop('id')));
         result.operation_status!.code!.should.equal(200);
         result.operation_status!.message!.should.equal('success');
       }, 4000);
@@ -550,7 +549,7 @@ describe('ServiceBase', () => {
           { value: testData[2].value },
         ];
         const resultPayload = result.items!.map(item => item.payload);
-        _.sortBy(resultPayload, 'value').should.deepEqual(_.sortBy(testDataReduced, 'value'));
+        sortBy(resultPayload, prop('value')).should.deepEqual(sortBy(testDataReduced, prop('value')));
         result.operation_status!.code!.should.equal(200);
         result.operation_status!.message!.should.equal('success');
       });
@@ -581,7 +580,7 @@ describe('ServiceBase', () => {
           delete item.payload!.meta?.modified;
           return item.payload;
         });
-        _.sortBy(resultPayload, 'value').should.deepEqual(_.sortBy(testDataReduced, 'value'));
+        sortBy(resultPayload, prop('value')).should.deepEqual(sortBy(testDataReduced, prop('value')));
         result.operation_status!.code!.should.equal(200);
         result.operation_status!.message!.should.equal('success');
       });
@@ -633,14 +632,14 @@ describe('ServiceBase', () => {
     describe('create', () => {
       it('should create new documents and validate duplicate element error', async () => {
         const meta = {
-          acl: [],
+          acl: [] as any[],
           created_by: 'Admin',
           modified_by: 'Admin',
           owners: [{
             id: 'urn:restorecommerce:acs:names:ownerIndicatoryEntity',
             value: 'urn:restorecommerce:acs:model:user.User',
             attributes: [{
-              attribute: [],
+              attribute: [] as any[],
               id: 'urn:restorecommerce:acs:names:ownerInstance',
               value: 'Admin'
             }]
@@ -688,12 +687,12 @@ describe('ServiceBase', () => {
         // total 5 items should exist (3 from beginning, 2 from this test case)
         allTestData.items!.length.should.equal(5);
 
-        const compareData = _.concat(testData, _.map(result.items, (item) => item.payload));
+        const compareData = [...testData, ...result.items.map((item) => item.payload)];
         // delete modified property from meta data
         for (let data of compareData) {
           delete data?.meta?.modified;
         }
-        _.forEach(allTestData.items, (e) => {
+        forEach(allTestData.items, (e) => {
           delete e.payload?.meta?.modified;
           compareData.should.matchAny(e.payload!);
         });
@@ -741,13 +740,13 @@ describe('ServiceBase', () => {
         // delete modified property for testData[0] and testData[2]
         delete testData[0]?.meta?.modified;
         delete testData[2]?.meta?.modified;
-        _.sortBy(resultPayload, 'id')
-          .should.deepEqual(_.sortBy([testData[0], testData[2]], 'id'));
+        sortBy(resultPayload, prop('id'))
+          .should.deepEqual(sortBy([testData[0], testData[2]], prop('id')));
       });
     });
     describe('update', () => {
       it('should update all specified documents and validate status message', async () => {
-        const patch = _.map(testData, (data) => {
+        const patch = testData.map((data: any) => {
           data.value = 100;
           data.text = 'test-patch';
           return data;
@@ -834,9 +833,9 @@ describe('ServiceBase', () => {
         should.exist(result.operation_status);
         result.operation_status!.code!.should.equal(200);
         const objectMissingField = [
-          { id: 'test_xy', value: 1, meta },
-          { id: 'test_xyz', value: 3, meta },
-          { id: 'test_zy', value: 12, meta }];
+          { id: 'test_xy', value: 1, meta: meta() },
+          { id: 'test_xyz', value: 3, meta: meta() },
+          { id: 'test_zy', value: 12, meta: meta() }];
         const result2 = await testService.create({ items: objectMissingField, subject: { id: 'Admin' } });
         should.exist(result2);
         should.exist(result2.operation_status);
@@ -859,8 +858,8 @@ describe('ServiceBase', () => {
             value: Buffer.from(JSON.stringify({ testkey: 'testValue' }))
           };
           const bufferObjects = [
-            { value: 1, data: bufData, meta, text: 'test1' },
-            { value: 2, data: bufData, meta, text: 'test2' }];
+            { value: 1, data: bufData, meta: meta(), text: 'test1' },
+            { value: 2, data: bufData, meta: meta(), text: 'test2' }];
           let resp = await testService.create({ items: bufferObjects, subject: { id: 'Admin' } });
           // Read directly from DB and compare the JSON data
           // because normal read() operation again encodes and sends the data back.

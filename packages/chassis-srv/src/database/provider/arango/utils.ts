@@ -1,4 +1,19 @@
-import * as _ from 'lodash';
+import {
+  clone,
+  isArray,
+  find,
+  isEmptyish,
+  isDate,
+  isString,
+  isBoolean,
+  isNumber,
+  isNullish,
+  keys,
+  forEach, forEachObj,
+  startsWith,
+  mapKeys,
+  isDeepEqual, intersection
+} from 'remeda';
 import Long from 'long';
 import {
   Filters as GraphFilters,
@@ -31,7 +46,7 @@ const filterOperatorMap = new Map([
  * @param {operatorList} operatorList list of operators from original filter object
  */
 const convertFilterToObject = (filter: any, obj: any, operatorList: any) => {
-  let temp = _.clone(obj);
+  let temp: any[] = obj;
   let value;
   if (!filter.type || filter.type === 'STRING' || filter.type === 0) {
     value = filter.value;
@@ -59,24 +74,24 @@ const convertFilterToObject = (filter: any, obj: any, operatorList: any) => {
   }
 
   for (let i = 0; i < operatorList.length; i++) {
-    if (_.isArray(temp)) {
-      temp = _.find(temp, operatorList[i]);
+    if (isArray(temp)) {
+      temp = find(temp, operatorList[i]);
     } else {
       temp = temp[operatorList[i]];
     }
     if (i === (operatorList.length - 1)) {
       // push for final element in the operatorList array
       if (filter.operation === 'eq' || filter.operation === 0) {
-        if (_.isArray(temp)) {
+        if (isArray(temp)) {
           temp.push({ [filter.field]: value });
         } else {
-          temp[operatorList[i]].push({ [filter.field]: value });
+          (temp[operatorList[i]] as any).push({ [filter.field]: value });
         }
       } else if (filter.operation === 'neq' || filter.operation === 8) {
-        if (_.isArray(temp)) {
+        if (isArray(temp)) {
           temp.push({ [filter.field]: { $not: { $eq: value } } });
         } else {
-          temp[operatorList[i]].push({ [filter.field]: { $not: { $eq: value } } });
+          (temp[operatorList[i]] as any).push({ [filter.field]: { $not: { $eq: value } } });
         }
       } else {
         let opValue;
@@ -86,10 +101,10 @@ const convertFilterToObject = (filter: any, obj: any, operatorList: any) => {
           opValue = filterOperationMap.get(filter.operation);
         }
         const op = `$${opValue}`;
-        if (_.isArray(temp)) {
+        if (isArray(temp)) {
           temp.push({ [filter.field]: { [op]: value } });
         } else {
-          temp[operatorList[i]].push({ [filter.field]: { [op]: value } });
+          (temp[operatorList[i]] as any).push({ [filter.field]: { [op]: value } });
         }
       }
     }
@@ -104,10 +119,10 @@ const convertFilterToObject = (filter: any, obj: any, operatorList: any) => {
  * @param {operatorNew} operatorNew new operator
  */
 const insertNewOpAndUpdateObj = (obj: any, operatorList: any, operatorNew: any) => {
-  let pos = _.clone(obj);
+  let pos = clone(obj);
   for (let i = 0; i < operatorList.length; i++) {
-    if (_.isArray(pos)) {
-      pos = _.find(pos, operatorList[i]);
+    if (isArray(pos)) {
+      pos = find(pos, operatorList[i]);
     } else {
       pos = pos[operatorList[i]];
     }
@@ -129,7 +144,7 @@ const insertNewOpAndUpdateObj = (obj: any, operatorList: any, operatorNew: any) 
 export const toTraversalFilterObject = (input: any, obj?: any, operatorList?: string[]) => {
   // since toObject method is called recursively we are not adding the typing to input parameter
   let filters;
-  if (input && !_.isEmpty(input.filters)) {
+  if (input && !isEmptyish(input.filters)) {
     filters = input.filters;
   } else {
     filters = input;
@@ -139,13 +154,13 @@ export const toTraversalFilterObject = (input: any, obj?: any, operatorList?: st
     filters.operator = input.operator;
   }
   // by default use 'and' operator if no operator is specified
-  if (filters && _.isArray(filters.filters) && !filters.operator) {
+  if (filters && isArray(filters.filters) && !filters.operator) {
     filters.operator = 'and';
   }
   if (!obj) {
     obj = {};
   }
-  if (_.isArray(filters.filters) && filters.filters.length > 0) {
+  if (isArray(filters.filters) && filters.filters.length > 0) {
     let operatorValue;
     if (typeof filters.operator === 'string' || filters.operator instanceof String) {
       operatorValue = filters.operator;
@@ -163,12 +178,12 @@ export const toTraversalFilterObject = (input: any, obj?: any, operatorList?: st
     }
     // pass operatorList and obj recursively
     obj = toTraversalFilterObject(filters.filters, obj, operatorList);
-  } else if (_.isArray(filters)) {
+  } else if (isArray(filters)) {
     if (!operatorList) {
       const operator = input.operator ? `$${input.operator}` : '$and';
       operatorList = [operator];
     }
-    if (_.isEmpty(obj)) {
+    if (isEmptyish(obj)) {
       const operator = input.operator ? `$${input.operator}` : '$and';
       obj = { [operator]: [] };
     }
@@ -181,7 +196,7 @@ export const toTraversalFilterObject = (input: any, obj?: any, operatorList?: st
       const operator = input.operator ? `$${input.operator}` : '$and';
       operatorList = [operator];
     }
-    if (_.isEmpty(obj)) {
+    if (isEmptyish(obj)) {
       const operator = filters.operator ? `$${filters.operator}` : '$and';
       obj = { [operator]: [] };
     }
@@ -198,7 +213,7 @@ export const toTraversalFilterObject = (input: any, obj?: any, operatorList?: st
  * @return {object} interpreted value
  */
 export const autoCastKey = (key: any, value?: any): any => {
-  if (_.isDate(value)) { // Date
+  if (isDate(value)) { // Date
     return `DATE_TIMESTAMP(v.${key})`;
   }
   return 'v.' + key;
@@ -211,22 +226,22 @@ export const autoCastKey = (key: any, value?: any): any => {
  * @returns {any} interpreted value
  */
 export const autoCastValue = (value: any): any => {
-  if (_.isArray(value)) {
+  if (isArray(value)) {
     return value.map(value => value.toString());
   }
-  if (_.isString(value)) { // String
+  if (isString(value)) { // String
     return JSON.stringify(value);
   }
-  if (_.isBoolean(value)) { // Boolean
+  if (isBoolean(value)) { // Boolean
     return Boolean(value);
   }
-  if (_.isNumber(value)) {
-    return _.toNumber(value);
+  if (isNumber(value)) {
+    return Number(value);
   }
   if (Long.isLong(value)) {
     return (value as Long).toNumber();
   }
-  if (_.isDate(value)) { // Date
+  if (isDate(value)) { // Date
     return new Date(value);
   }
   return value;
@@ -240,8 +255,8 @@ export const autoCastValue = (value: any): any => {
  * @return {any} query template string and bind variables
  */
 export const buildComparison = (filter: any, op: string, root?: boolean): any => {
-  const ele = _.map(filter, (e) => {
-    if (!_.isArray(e)) {
+  const ele = filter.map((e: any) => {
+    if (!isArray(e)) {
       e = [e];
     }
     e = buildGraphFilter(e, root);
@@ -267,7 +282,7 @@ export const buildComparison = (filter: any, op: string, root?: boolean): any =>
  * @return {object} interpreted value
  */
 export const autoCastRootKey = (key: any, value?: any): any => {
-  if (_.isDate(value)) { // Date
+  if (isDate(value)) { // Date
     return `DATE_TIMESTAMP(obj.${key})`;
   }
   return 'obj.' + key;
@@ -288,10 +303,10 @@ export const buildGraphField = (key: any, value: any, root?: boolean): string =>
   } else {
     autoCastKeyFunction = autoCastRootKey;
   }
-  if (_.isString(value) || _.isBoolean(value) || _.isNumber(value || _.isDate(value))) {
+  if (isString(value) || isBoolean(value) || isNumber(value || isDate(value))) {
     return autoCastKeyFunction(key, value) + ' == ' + autoCastValue(value);
   }
-  if (!_.isNil(value.$eq)) {
+  if (!isNullish(value.$eq)) {
     return autoCastKeyFunction(key, value) + ' == ' + autoCastValue(value.$eq);
   }
   if (value.$gt) {
@@ -306,14 +321,14 @@ export const buildGraphField = (key: any, value: any, root?: boolean): string =>
   if (value.$lte) {
     return autoCastKeyFunction(key, value) + ' <= ' + autoCastValue(value.$lte);
   }
-  if (!_.isNil(value.$ne)) {
+  if (!isNullish(value.$ne)) {
     return autoCastKeyFunction(key, value) + ' != ' + autoCastValue(value.$ne);
   }
   if (value.$inVal) {
     return autoCastValue(value.$inVal) + ' IN ' + autoCastKeyFunction(key, value);
   }
   if (value.$in) {
-    if (_.isString(value.$in)) {
+    if (isString(value.$in)) {
       // if it is a field which should be an array
       // (useful for querying within a document list-like attributen
       return autoCastValue(value.$in) + ' IN ' + autoCastKeyFunction(key);
@@ -328,15 +343,15 @@ export const buildGraphField = (key: any, value: any, root?: boolean): string =>
     // @param 'true' is for case insensitive
     return 'LOWER(' + autoCastKeyFunction(key, value) + ') LIKE ' + autoCastValue(value.$iLike.toLowerCase());
   }
-  if (!_.isNil(value.$not)) {
+  if (!isNullish(value.$not)) {
     const temp = buildGraphField(key, value.$not, root);
     return `!(${temp})`;
   }
-  if (_.has(value, '$isEmpty')) {
+  if ('$isEmpty' in value) {
     // will always search for an empty string
     return autoCastKeyFunction(key, '') + ' == ' + autoCastValue('');
   }
-  throw new Error(`unsupported operator ${_.keys(value)} in ${key}`);
+  throw new Error(`unsupported operator ${keys(value)} in ${key}`);
 };
 
 /**
@@ -352,11 +367,11 @@ export const buildGraphFilter = (filter: any, root?: boolean): any => {
     let q: any = '';
     let multipleFilters = false;
     for (const eachFilter of filter) {
-      _.forEach(eachFilter, (value, key) => {
+      forEachObj(eachFilter, (value, key) => {
         switch (key) {
           case '$or':
             if (!multipleFilters) {
-              if (_.isEmpty(value)) {
+              if (isEmptyish(value)) {
                 q = true;
               } else {
                 q = buildComparison(value, '||', root).q;
@@ -369,7 +384,7 @@ export const buildGraphFilter = (filter: any, root?: boolean): any => {
             break;
           case '$and':
             if (!multipleFilters) {
-              if (_.isEmpty(value)) {
+              if (isEmptyish(value)) {
                 q = false;
               } else {
                 q = buildComparison(value, '&&', root).q;
@@ -380,7 +395,7 @@ export const buildGraphFilter = (filter: any, root?: boolean): any => {
             }
             break;
           default:
-            if (_.startsWith(key, '$')) {
+            if (startsWith(key, '$')) {
               throw new Error(`unsupported query operator ${key}`);
             }
             if (!multipleFilters) {
@@ -438,8 +453,8 @@ export const buildGraphLimiter = (limit?: number, offset?: number): string => {
   if (!limit) {
     limit = 1000;
   }
-  if (!_.isNil(limit)) {
-    if (!_.isNil(offset)) {
+  if (!isNullish(limit)) {
+    if (!isNullish(offset)) {
       return `LIMIT ${offset}, ${limit}`;
     }
     return `LIMIT ${limit}`;
@@ -453,11 +468,11 @@ export const buildGraphLimiter = (limit?: number, offset?: number): string => {
  * @return {any} template sort string
  */
 export const buildGraphSorter = (sortList: any): any => {
-  if (_.isNil(sortList) || _.isEmpty(sortList)) {
+  if (isNullish(sortList) || isEmptyish(sortList)) {
     return '';
   }
 
-  const sort = _.mapKeys(sortList, (value, key) => {
+  const sort = mapKeys(sortList, (key, value) => {
     return autoCastRootKey(key);
   });
   let sortKeysOrder = '';
@@ -482,8 +497,8 @@ export const createGraphsAssociationFilter = (filters: GraphFilters[],
   let completeEntities = [];
   let rootEntityFilter;
   // convert the filter from proto structure (field, operation, value and operand) to {field: value } mapping
-  if (filters && !_.isEmpty(filters)) {
-    if (!_.isArray(filters)) {
+  if (filters && !isEmptyish(filters)) {
+    if (!isArray(filters)) {
       filters = [filters];
     }
     for (const eachFilter of filters) {
@@ -511,7 +526,7 @@ export const createGraphsAssociationFilter = (filters: GraphFilters[],
     }
   }
 
-  if (!_.isArray(filterObj)) {
+  if (!isArray(filterObj)) {
     filterObj = [filterObj];
   }
 
@@ -558,8 +573,8 @@ export const createGraphsAssociationFilter = (filters: GraphFilters[],
     // add missing entities to FILTER query
     filteredEntities = filteredEntities.sort();
     completeEntities = completeEntities.sort();
-    if (!_.isEqual(filteredEntities, completeEntities)) {
-      for (const removeEntity of _.intersection(filteredEntities, completeEntities)) {
+    if (!isDeepEqual(filteredEntities, completeEntities)) {
+      for (const removeEntity of intersection(filteredEntities, completeEntities)) {
         completeEntities.splice(completeEntities.indexOf(removeEntity), 1);
       }
     }

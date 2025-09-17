@@ -1,5 +1,5 @@
 import { type Logger, createLogger } from '@restorecommerce/logger';
-import * as _ from 'lodash';
+import {isNullish, isString, keys} from 'remeda';
 import { EventEmitter } from 'events';
 import { BindConfig, grpcServer } from './transport/provider/grpc/index.js';
 
@@ -31,15 +31,15 @@ const setupTransport = (config: any, logger: Logger): any => {
   for (let i = 0; i < config.length; i += 1) {
     const transportCfg = config[i];
     const providerName = transportCfg.provider;
-    if (_.isNil(providerName)) {
+    if (isNullish(providerName)) {
       throw new Error('transport configuration without a provider');
     }
     const transportName = transportCfg.name;
-    if (_.isNil(providerName)) {
+    if (isNullish(providerName)) {
       throw new Error('transport configuration without a name');
     }
     const TransportProvider = transports[providerName];
-    if (_.isNil(TransportProvider)) {
+    if (isNullish(TransportProvider)) {
       throw new Error(`transport provider ${providerName} does not exist`);
     }
     const provider = new TransportProvider(transportCfg, logger);
@@ -70,14 +70,14 @@ export class Server extends EventEmitter {
    */
   constructor(config?: any, logger?: Logger) {
     super();
-    if (_.isNil(config)) {
+    if (isNullish(config)) {
       throw new Error('mising argument config');
     }
     this.config = config;
 
     // logger
-    if (_.isNil(logger)) {
-      if (_.isNil(this.config.logger)) {
+    if (isNullish(logger)) {
+      if (isNullish(this.config.logger)) {
         this.logger = createLogger();
       } else {
         const loggerCfg = this.config.logger;
@@ -107,13 +107,13 @@ export class Server extends EventEmitter {
    * @param  {BindConfig} bindConfig A business logic service.
    */
   async bind(name: string, bindConfig: BindConfig<any>): Promise<void> {
-    if (_.isNil(name)) {
+    if (isNullish(name)) {
       throw new Error('missing argument name');
     }
-    if (!_.isString(name)) {
+    if (!isString(name)) {
       throw new Error('argument name is not of type string');
     }
-    if (_.isNil(bindConfig)) {
+    if (isNullish(bindConfig)) {
       throw new Error('missing argument bindConfig');
     }
 
@@ -147,7 +147,7 @@ export class Server extends EventEmitter {
    * Shuts down all transport provider servers.
    */
   async stop(): Promise<any> {
-    const transportNames = _.keys(this.transport);
+    const transportNames = keys(this.transport);
     for (let i = 0; i < transportNames.length; i += 1) {
       const name = transportNames[i];
       if (this.transport[name].end) {

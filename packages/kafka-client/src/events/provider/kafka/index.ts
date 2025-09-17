@@ -1,5 +1,5 @@
 import * as retry from 'retry';
-import * as _ from 'lodash';
+import { isNullish, clone, isIncludedIn, filter, pick, keys } from 'remeda';
 import { EventEmitter } from 'events';
 import * as async from 'async';
 import { Logger } from '@restorecommerce/logger';
@@ -93,7 +93,7 @@ export class Topic {
    * @return {number}           Number of listeners
    */
   listenerCount(eventName: string): number {
-    if (_.isNil(eventName)) {
+    if (isNullish(eventName)) {
       throw new Error('missing argument eventName');
     }
     const listeners = this.emitter.listeners(eventName);
@@ -107,7 +107,7 @@ export class Topic {
    * @return {Boolean}           True when listeners exist, false if not.
    */
   hasListeners(eventName: string): boolean {
-    if (_.isNil(eventName)) {
+    if (isNullish(eventName)) {
       throw new Error('missing argument eventName');
     }
     const listeners = this.emitter.listeners(eventName);
@@ -207,7 +207,7 @@ export class Topic {
     if (eventNames && eventNames.length > 0) {
       // since the consumer is set to undefined only when there is no more subscription
       // need to unsubcribe all eventNames and then resubcribe at once
-      const eventNamesList = _.clone(eventNames);
+      const eventNamesList = clone(eventNames);
       // unsubscribe all events on consumer
       for (const eventName of eventNamesList) {
         await this.$unsubscribe(eventName);
@@ -240,7 +240,7 @@ export class Topic {
    * Unsubscribe from Kafka topic. Does not remove any listeners.
    */
   private async $unsubscribe(eventName: string): Promise<void> {
-    if (!_.includes(this.subscribed, eventName)) {
+    if (!isIncludedIn(eventName, this.subscribed)) {
       return;
     }
     const index = this.subscribed.indexOf(eventName);
@@ -254,7 +254,7 @@ export class Topic {
    */
   private makeDataHandler(context: Message): void {
     const eventName = context.key.toString();
-    if (_.includes(this.subscribed, eventName)) {
+    if (isIncludedIn(eventName, this.subscribed)) {
       const logger = this.provider.logger;
       try {
         this.$receive(eventName, context.value, context);
@@ -275,7 +275,7 @@ export class Topic {
     if (typeof offset === 'object') {
       offset = offset.offset;
     }
-    this.waitQueue = _.filter(this.waitQueue, (w) => {
+    this.waitQueue = filter(this.waitQueue, (w) => {
       if (w.offset <= offset) {
         w.cb();
         return false;
@@ -345,7 +345,7 @@ export class Topic {
   }
 
   private onMessageForQueue(context: Message): void {
-    if (_.includes(this.subscribed, context.key.toString())) {
+    if (isIncludedIn(context.key.toString(), this.subscribed)) {
       this.asyncQueue.push(context);
     }
   }
@@ -453,7 +453,7 @@ export class Topic {
         message
       );
       if (decodedMsg) {
-        decodedMsg = _.pick(decodedMsg, _.keys(decodedMsg)); // hack around messy protobuf.js object
+        decodedMsg = pick(decodedMsg, keys(decodedMsg)); // hack around messy protobuf.js object
         this.provider.logger.debug(`kafka received event with topic ${context.topic} and event name ${eventName} at offset ${context.offset.toString(10)}`, { decodedMsg });
         this.emitter.emit(
           eventName,
@@ -482,7 +482,7 @@ export class Topic {
     let { startingOffset } = opts;
     const { queue, forceOffset } = opts;
     if (!(this.subscribed.indexOf(eventName) > -1)) {
-      if (_.isNil(startingOffset) || (this.config.latestOffset && !forceOffset)) {
+      if (isNullish(startingOffset) || (this.config.latestOffset && !forceOffset)) {
         // override the startingOffset with the latestOffset from Kafka
         // if above config is set
         startingOffset = await this.$offset(BigInt(-1));
@@ -535,7 +535,7 @@ export class Kafka {
    * @param {object} logger
    */
   constructor(config: any, logger: Logger) {
-    this.config = _.cloneDeep(config);
+    this.config = clone(config);
     this.topics = {};
     this.logger = logger;
   }
@@ -780,7 +780,7 @@ export class Kafka {
       });
     }
 
-    const topicNames = _.keys(this.topics);
+    const topicNames = keys(this.topics);
     for (let i = 0; i < topicNames.length; i += 1) {
       const topic: Topic = this.topics[topicNames[i]];
       const eventNames = topic.subscribed;

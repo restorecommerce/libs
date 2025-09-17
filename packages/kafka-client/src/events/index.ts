@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import { isNullish, isString } from 'remeda';
 import { createLogger, Logger } from '@restorecommerce/logger';
 import * as kafka from './provider/kafka/index.js';
 import * as local from './provider/local/index.js';
@@ -36,7 +36,7 @@ export class Events {
    */
   constructor(config?: any, logger?: Logger) {
     // config
-    if (_.isNil(config)) {
+    if (isNullish(config)) {
       throw new Error('missing argument config');
     }
     this.config = config;
@@ -50,8 +50,8 @@ export class Events {
     }
 
     // logger
-    if (_.isNil(logger)) {
-      if (_.isNil(this.config.logger)) {
+    if (isNullish(logger)) {
+      if (isNullish(this.config.logger)) {
         this.logger = createLogger();
       } else {
         this.logger = createLogger(loggerCfg);
@@ -62,12 +62,12 @@ export class Events {
 
     // provider
     const providerName = this.config.provider;
-    if (_.isNil(providerName)) {
+    if (isNullish(providerName)) {
       this.logger.error('config does not have event provider name', this.config);
       throw new Error('config does not have event provider name');
     }
     const Provider = eventProviders[providerName];
-    if (_.isNil(Provider)) {
+    if (isNullish(Provider)) {
       throw new Error(`events provider ${providerName} is not registered`);
     }
     this.provider = new Provider(this.config, this.logger);
@@ -98,10 +98,10 @@ export class Events {
    * @return {Topic}      Topic
    */
   topic(name: string, manualOffsetCommit?: boolean): Promise<Topic> {
-    if (_.isNil(name)) {
+    if (isNullish(name)) {
       throw new Error('missing argument name');
     }
-    if (!_.isString(name)) {
+    if (!isString(name)) {
       throw new Error('argument name is not of type string');
     }
     // topic() api called inside Local / Kafka class - which then

@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import { isEmptyish } from 'remeda';
 import { Filter, FilterOperation, FilterValueType, OperatorType, ReadRequest } from './core/interfaces.js';
 
 /*
@@ -118,7 +118,7 @@ const convertFilterToObject = (object: any, operatorKey: string, filter: Filter)
 export const convertToObject = (input: any, obj?: any, currentOperator?: string) => {
   // since toObject method is called recursively we are not adding the typing to input parameter
   let filters;
-  if (input && !_.isEmpty(input.filters)) {
+  if (input && !isEmptyish(input.filters)) {
     filters = input.filters;
   } else {
     filters = input;

@@ -1,5 +1,5 @@
 import * as should from 'should';
-import * as _ from 'lodash';
+import {sortBy} from 'remeda';
 import { createLogger } from '@restorecommerce/logger';
 import { Database } from 'arangojs';
 import * as chassis from '../src/index.js';
@@ -77,7 +77,7 @@ const testProvider = (providerCfg) => {
       result = await db.createVertex(personCollectionName, personVertices);
       // verify the data from DB
       let insertedVertices = await db.find('person');
-      insertedVertices = _.sortBy(insertedVertices, [(o) => { return o.name; }]);
+      insertedVertices = sortBy(insertedVertices, (o) => { return o.name; });
       should.exist(insertedVertices);
       insertedVertices.should.deepEqual(personVertices);
 
@@ -92,7 +92,7 @@ const testProvider = (providerCfg) => {
       result = await db.createVertex(carsCollectionName, carVertices);
       // verify the data from DB
       insertedVertices = await db.find('car');
-      insertedVertices = _.sortBy(insertedVertices, [(o) => { return o.name; }]);
+      insertedVertices = sortBy(insertedVertices, (o) => { return o.name; });
       should.exist(insertedVertices);
       insertedVertices.should.deepEqual(carVertices);
 
@@ -107,7 +107,7 @@ const testProvider = (providerCfg) => {
       result = await db.createVertex(placeCollectionName, placeVertices);
       // verify the data from DB
       insertedVertices = await db.find('place');
-      insertedVertices = _.sortBy(insertedVertices, [(o) => { return o.name; }]);
+      insertedVertices = sortBy(insertedVertices, (o) => { return o.name; });
       should.exist(insertedVertices);
       insertedVertices.should.deepEqual(placeVertices);
 
@@ -127,7 +127,7 @@ const testProvider = (providerCfg) => {
       result = await db.createVertex(stateCollectionName, stateVertices);
       // verify the data from DB
       insertedVertices = await db.find('state');
-      insertedVertices = _.sortBy(insertedVertices, [(o) => { return o.name; }]);
+      insertedVertices = sortBy(insertedVertices, (o) => { return o.name; });
       should.exist(insertedVertices);
       insertedVertices.should.deepEqual(stateVertices);
     });
@@ -143,8 +143,8 @@ const testProvider = (providerCfg) => {
         edgeResult = await db.createEdge(hasEdgeCollectionName, personCarEdge);
       }
       let insertedEdges: any = await db.find('has');
-      personCarEdges = _.sortBy(personCarEdges, [(o) => { return o.info; }]);
-      insertedEdges = _.sortBy(insertedEdges, [(o) => { return o.info; }]);
+      personCarEdges = sortBy(personCarEdges, (o) => { return o.info; });
+      insertedEdges = sortBy(insertedEdges, (o) => { return o.info; });
       should.exist(insertedEdges);
       insertedEdges.should.deepEqual(personCarEdges);
 
@@ -159,8 +159,8 @@ const testProvider = (providerCfg) => {
         await db.createEdge(belongsEdgeCollectionName, carPlaceEdge);
       }
       insertedEdges = await db.find('belongs');
-      carPlaceEdges = _.sortBy(carPlaceEdges, [(o) => { return o.info; }]);
-      insertedEdges = _.sortBy(insertedEdges, [(o) => { return o.info; }]);
+      carPlaceEdges = sortBy(carPlaceEdges, (o) => { return o.info; });
+      insertedEdges = sortBy(insertedEdges, (o) => { return o.info; });
       should.exist(insertedEdges);
       insertedEdges.should.deepEqual(carPlaceEdges);
 
@@ -175,8 +175,8 @@ const testProvider = (providerCfg) => {
         await db.createEdge(residesEdgeCollectionName, placeStateEdge);
       }
       insertedEdges = await db.find('resides');
-      placeStateEdges = _.sortBy(placeStateEdges, [(o) => { return o.info; }]);
-      insertedEdges = _.sortBy(insertedEdges, [(o) => { return o.info; }]);
+      placeStateEdges = sortBy(placeStateEdges, (o) => { return o.info; });
+      insertedEdges = sortBy(insertedEdges,(o) => { return o.info; });
       should.exist(insertedEdges);
       insertedEdges.should.deepEqual(placeStateEdges);
 
@@ -191,8 +191,8 @@ const testProvider = (providerCfg) => {
         await db.createEdge(livesEdgeCollectionName, personStateEdge);
       }
       insertedEdges = await db.find('lives');
-      personStateEdges = _.sortBy(personStateEdges, [(o) => { return o.info; }]);
-      insertedEdges = _.sortBy(insertedEdges, [(o) => { return o.info; }]);
+      personStateEdges = sortBy(personStateEdges, (o) => { return o.info; });
+      insertedEdges = sortBy(insertedEdges, (o) => { return o.info; });
       should.exist(insertedEdges);
       insertedEdges.should.deepEqual(personStateEdges);
     });

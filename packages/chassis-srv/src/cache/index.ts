@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import { isNullish } from 'remeda';
 import { createCache } from 'cache-manager';
 import Keyv from 'keyv';
 import { LRUCache } from 'lru-cache';
@@ -43,7 +43,7 @@ register('memory', (config: any, logger: any) => {
  * @return Cache instance
  */
 export const get = (config: any, logger: Logger): any => {
-  if (_.isNil(config)) {
+  if (isNullish(config)) {
     throw new Error('missing argument config');
   }
 

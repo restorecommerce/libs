@@ -111,7 +111,6 @@ Such providers are managed with https://github.com/BryanDonovan/node-cache-manag
 The following database providers are implemented:
 
 * https://www.arangodb.com/documentation/[ArangoDB]
-* https://github.com/louischatriot/nedb[NeDB]
 
 Providers include generic database handling operations (find, insert, upsert delete, truncate, etc).
 Query parameter structure for all exposed operations is similar with the structure used in

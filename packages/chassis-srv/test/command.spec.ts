@@ -87,9 +87,6 @@ describe('CommandInterfaceService', () => {
     db = await database.get(cfg.get('database:arango'), logger);
     await db.truncate();
 
-    const config = cfg.get();
-    delete config.database.nedb;  // not supported in default implementation
-
     // init redis client for subject index
     const redisConfig = cfg.get('redis');
     redisConfig.db = cfg.get('redis:db-indexes:db-subject');
@@ -126,9 +123,11 @@ describe('CommandInterfaceService', () => {
 
       // check commandinterface service, should serve
       let resp = await grpcClient.command(msg);
+      console.log(resp);
       should.exist(resp);
       should.not.exist((resp as any).error);
       let data = decodeMsg(resp);
+      console.log(data);
       should.exist(data.status);
       data.status.should.equal('SERVING');
 

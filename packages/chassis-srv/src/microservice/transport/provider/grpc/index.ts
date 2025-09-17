@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import {isNullish} from 'remeda';
 import { type Logger } from '@restorecommerce/logger';
 import type { Server as GRPCServer, ServiceImplementation } from 'nice-grpc';
 import type { CompatServiceDefinition } from 'nice-grpc/lib/service-definitions';
@@ -36,10 +36,10 @@ export class Server {
    * @param {Logger} logger Logger.
    */
   constructor(config: any, logger: Logger) {
-    if (_.isNil(logger)) {
+    if (isNullish(logger)) {
       throw new Error('gRPC server transport provider requires a logger');
     }
-    if (!_.has(config, 'addr')) {
+    if (!('addr' in config)) {
       throw new Error('server is missing addr config field');
     }
     this.config = config;
@@ -67,11 +67,11 @@ export class Server {
    */
   async start(): Promise<void> {
     if (!this.isBound) {
-      if (_.has(this.config, 'credentials.ssl')) {
-        // TODO Re-enable
+      // TODO Re-enable
+      // if (_.has(this.config, 'credentials.ssl')) {
         // credentials = grpc.credentials.createSsl(
         //   this.config.credentials.ssl.certs);
-      }
+      // }
       await this.server.listen(
         this.config.addr
       ).catch(err => {

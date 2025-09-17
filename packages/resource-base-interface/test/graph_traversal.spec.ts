@@ -8,7 +8,7 @@ import { Database } from 'arangojs';
 import { createServiceConfig } from '@restorecommerce/service-config';
 import { createLogger } from '@restorecommerce/logger';
 import * as should from 'should';
-import * as _ from 'lodash';
+import { isEmptyish, omit, sortBy, prop } from 'remeda';
 import {
   GraphServiceDefinition,
   GraphServiceClient,
@@ -27,8 +27,8 @@ import { it, describe, beforeAll, afterAll } from 'vitest';
 registerProtoMeta(protoMetadata);
 
 const database = chassis.database;
-let cfg = createServiceConfig(process.cwd() + '/test');
-let server = new chassis.Server(cfg.get('server'));
+const cfg = createServiceConfig(process.cwd() + '/test');
+const server = new chassis.Server(cfg.get('server'));
 /*
  * Note: To run this test, a running ArangoDB is required.
  */
@@ -36,12 +36,12 @@ let server = new chassis.Server(cfg.get('server'));
 /* global describe it before after beforeEach */
 
 const fetchAndEquals = async (result: AsyncIterable<TraversalResponse>, expectedVertices: any[], pathCount = 0) => {
-  let traversalResponse = { data: new Array<any>(), paths: new Array<any>() };
+  const traversalResponse = { data: new Array<any>(), paths: new Array<any>() };
   for await (const partResp of result) {
     if ((partResp && partResp.data && partResp.data.value)) {
       traversalResponse.data.push(...JSON.parse(partResp.data.value.toString()));
     }
-    if ((partResp && partResp.paths && !_.isEmpty(partResp.paths.value))) {
+    if ((partResp && partResp.paths && !isEmptyish(partResp.paths.value))) {
       traversalResponse.paths.push(...JSON.parse(partResp.paths!.value!.toString()));
     }
   }
@@ -51,32 +51,31 @@ const fetchAndEquals = async (result: AsyncIterable<TraversalResponse>, expected
   should.exist(traversalResponse.data);
   traversalResponse.paths.should.have.size(pathCount);
   traversalResponse.data.should.have.size(expectedVertices.length);
-  for (let eachVertice of traversalResponse.data) {
-    finalVertices.push(_.omit(eachVertice, ['_id', 'meta']));
+  for (const eachVertice of traversalResponse.data) {
+    finalVertices.push(omit(eachVertice, ['_id', 'meta']));
   }
   finalVertices =
-    _.sortBy(finalVertices, [(o) => { return o.id; }]);
+    sortBy(finalVertices, prop('id'));
   finalVertices.should.deepEqual(expectedVertices);
 };
 
-const testProvider = (providerCfg) => {
+const testProvider = (providerCfg: any) => {
   describe('GraphServiceBase', () => {
     let db: any;
     let channel: Channel;
     let testService: GraphServiceClient;
     let testResourceBaseService: GraphServiceClient;
-    let graphCfg;
+    let graphCfg: any;
     let resourcesList;
     beforeAll(async () => {
       db = await providerCfg.init();
       // graph Service
       const graphAPIService = new GraphResourcesServiceBase(db,
         cfg.get('fieldHandlers:bufferFields'), createLogger(cfg.get('server:logger')));
-      let z: chassis.grpc.BindConfig<GraphServiceDefinition> = {
+      await server.bind('graphsTestService', {
         service: GraphServiceDefinition,
         implementation: graphAPIService as any
-      };
-      await server.bind('graphsTestService', z);
+      });
 
       await server.start();
 
@@ -113,7 +112,7 @@ const testProvider = (providerCfg) => {
       let service_1: any, service_2: any, service_3: any, service_4: any;
       let meta: any;
       it('should create a vertex collection and insert data into it', async () => {
-        let meta = {
+        const meta = {
           owner: [{ owner_entity: 'urn:restorecommerce:acs:model:User', owner_id: 'Admin' }]
         };
         const personsVertices = [
@@ -646,9 +645,9 @@ const testProvider = (providerCfg) => {
           path: true
         });
         // traverse graph
-        let result = testService.traversal(traversalRequest);
+        const result = testService.traversal(traversalRequest);
 
-        let traversalResponse = { data: new Array<any>(), paths: new Array<any>() };
+        const traversalResponse = { data: new Array<any>(), paths: new Array<any>() };
         for await (const partResp of result) {
           if ((partResp && partResp.data && partResp.data.value)) {
             traversalResponse.data.push(...JSON.parse(partResp.data.value.toString()));

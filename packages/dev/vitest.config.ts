@@ -10,6 +10,10 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'lcovonly'],
     },
+    reporters: [
+      'verbose',
+      'hanging-process'
+    ]
   },
   resolve: {
     alias: {

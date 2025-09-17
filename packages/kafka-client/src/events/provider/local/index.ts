@@ -1,12 +1,17 @@
-import * as _ from 'lodash';
+import { isNullish, isArray } from 'remeda';
 import { Logger } from '@restorecommerce/logger';
+
+interface EventData {
+  listeners: ((bufferObj: any, context: any, config: any, eventName: string) => void)[];
+  messages: any[];
+}
 
 /**
  * Topic handles listening and sending events to a specific topic.
  */
 export class Topic {
 
-  event: any;
+  event: Record<string, EventData>;
   name: string;
   logger: Logger;
   config: any;
@@ -29,7 +34,7 @@ export class Topic {
    * @param {function} listener Event listener.
    */
   async on(eventName: string, listener: any): Promise<any> {
-    if (_.isNil(this.event[eventName])) {
+    if (isNullish(this.event[eventName])) {
       this.event[eventName] = {
         listeners: [],
         messages: [],
@@ -55,9 +60,9 @@ export class Topic {
    * @param {string} eventName Identification name of the event.
    * @param {object} message Event message which is send to all listeners.
    */
-  async emit(eventName: string, message: any): Promise<any> {
+  async emit(eventName: string, message: any | any[]): Promise<any> {
     let e = this.event[eventName];
-    if (_.isNil(e)) {
+    if (isNullish(e)) {
       e = this.event[eventName] = {
         listeners: [],
         messages: [],
@@ -66,10 +71,10 @@ export class Topic {
     const currentOffset = e.messages.length;
     let messages = message;
     let bufferObj;
-    if (!_.isArray(message)) {
+    if (!isArray(message)) {
       messages = [message];
     }
-    e.message = _.concat(e.message, message);
+    e.messages = [...e.messages, ...messages];
     const listeners = e.listeners;
     const logger = this.logger;
     const messageObject = this.config[eventName].messageObject;
@@ -97,7 +102,7 @@ export class Topic {
    */
   listenerCount(eventName: string): number {
     const e = this.event[eventName];
-    if (_.isNil(e)) {
+    if (isNullish(e)) {
       return 0;
     }
     return e.listeners.length;
@@ -110,10 +115,10 @@ export class Topic {
    */
   hasListeners(eventName: string): boolean {
     const e = this.event[eventName];
-    if (_.isNil(e)) {
+    if (isNullish(e)) {
       return false;
     }
-    return e.listeners > 0;
+    return e.listeners.length > 0;
   }
 
   /**
@@ -123,7 +128,7 @@ export class Topic {
    */
   async removeListener(eventName: string, listener: any): Promise<any> {
     const e = this.event[eventName];
-    if (_.isNil(e)) {
+    if (isNullish(e)) {
       return;
     }
     const index = e.listeners.indexOf(listener);
@@ -136,8 +141,15 @@ export class Topic {
    * Remove all listener listening to eventName event.
    * @param {string} eventName Identification name of the event.
    */
-  async removeAllListeners(eventName: string): Promise<any> {
-    _.unset(this.event, eventName);
+  removeAllListeners(eventName: string) {
+    delete this.event[eventName];
+  }
+
+  /**
+   * Stop everything
+   */
+  stop() {
+    this.event = {};
   }
 }
 
@@ -150,7 +162,7 @@ export class Local {
 
   config: any;
   logger: Logger;
-  topics: any;
+  topics: Record<string, Topic>;
 
   constructor(config: any, logger: Logger) {
     this.topics = {};
@@ -175,7 +187,7 @@ export class Local {
    * Initialize the event provider.
    */
   async start(): Promise<void> {
-    if (_.isNil(this.topics)) {
+    if (isNullish(this.topics)) {
       this.topics = {};
     }
   }
@@ -184,10 +196,9 @@ export class Local {
    * Stop the event provider and all event communication.
    */
   async stop(): Promise<any> {
-    _.forIn(this.topics, async (topic: any, key: any):
-    Promise<any> => {
-      await topic.removeAllListeners();
-    });
+    Object.values(this.topics).forEach((topic) => {
+      topic.stop();
+    })
   }
 }
 

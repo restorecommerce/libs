@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/dev@0.1.0...@restorecommerce/dev@0.1.1) (2025-09-17)
+
+
+### Bug Fixes
+
+* replace lodash with remeda ([155d5e3](https://github.com/restorecommerce/libs/commit/155d5e3e99b1f6fcbe75260acde66d5a504872c6))
+
+
+
+
+
 # [0.1.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/dev@0.0.13...@restorecommerce/dev@0.1.0) (2025-09-17)
 
 

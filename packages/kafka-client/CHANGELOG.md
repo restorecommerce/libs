@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.1](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.3.0...@restorecommerce/kafka-client@1.3.1) (2025-09-17)
+
+
+### Bug Fixes
+
+* replace lodash with remeda ([155d5e3](https://github.com/restorecommerce/kafka-client/commit/155d5e3e99b1f6fcbe75260acde66d5a504872c6))
+
+
+
+
+
 # [1.3.0](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.2.36...@restorecommerce/kafka-client@1.3.0) (2025-09-17)
 
 

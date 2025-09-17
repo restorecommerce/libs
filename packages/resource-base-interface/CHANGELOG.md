@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.9.2](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.1...@restorecommerce/resource-base-interface@1.9.2) (2025-09-17)
+
+
+### Bug Fixes
+
+* replace lodash with remeda ([155d5e3](https://github.com/restorecommerce/resource-base-interface/commit/155d5e3e99b1f6fcbe75260acde66d5a504872c6))
+
+
+
+
+
 ## [1.9.1](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.0...@restorecommerce/resource-base-interface@1.9.1) (2025-09-17)
 
 **Note:** Version bump only for package @restorecommerce/resource-base-interface

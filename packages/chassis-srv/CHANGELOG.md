@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.7.1](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.7.0...@restorecommerce/chassis-srv@1.7.1) (2025-09-17)
+
+
+### Bug Fixes
+
+* use correct imports ([7c65d49](https://github.com/restorecommerce/chassis-srv/commit/7c65d4921956a6479cabca3272a457e5465c083b))
+
+
+
+
+
 # 1.7.0 (2025-09-17)
 
 

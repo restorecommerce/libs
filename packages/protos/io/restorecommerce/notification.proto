@@ -52,4 +52,5 @@ message Notification {
   }
   optional string subject_template = 8;
   optional string body_template = 9;
+  optional bool active = 10;
 }

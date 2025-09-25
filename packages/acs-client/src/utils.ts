@@ -1,6 +1,4 @@
 import lodash from 'lodash';
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-require('deepdash')(lodash);
 export const _ = lodash;
 import {
   PolicySetRQ, PolicySetRQResponse, AttributeTarget, HierarchicalScope,

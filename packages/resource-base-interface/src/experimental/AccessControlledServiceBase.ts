@@ -9,8 +9,8 @@ import {
   ACSClientContext,
   AuthZAction,
   DefaultACSClientContextFactory,
+  DefaultResourceFactoryInstance,
   Operation,
-  ResourceFactory,
   access_controlled_function,
   access_controlled_service,
   injects_meta_data,
@@ -56,19 +56,6 @@ export const ACSContextFactory = async <O extends ResourceListResponse, I extend
     ],
   };
 };
-
-export const DefaultResourceFactory = <T extends ResourceList>(
-  ...resourceNames: string[]
-): ResourceFactory<T> => async (
-  self: any,
-  request: T,
-  context?: CallContext,
-) => (resourceNames?.length ? resourceNames : [self.name])?.map(
-  resourceName => ({
-    resource: resourceName,
-    id: request.items?.map((item: any) => item.id)
-  })
-);
 
 export const AccessControlledServiceBaseOperationStatusCodes = {
   ...ServiceBaseOperationStatusCodes,
@@ -245,7 +232,7 @@ export class AccessControlledServiceBase<O extends ResourceListResponse, I exten
     context?: CallContext,
     bypassACS = false,
   ): Promise<DeepPartial<O>> {
-    ids = [...new Set(ids)].filter(id => id);
+    ids = Array.from(new Set(ids)).filter(id => id);
     if (ids.length > 1000) {
       throw this.operationStatusCodes.LIMIT_EXHAUSTED;
     }
@@ -284,7 +271,7 @@ export class AccessControlledServiceBase<O extends ResourceListResponse, I exten
     action: AuthZAction.CREATE,
     operation: Operation.isAllowed,
     context: ACSContextFactory<O, I>,
-    resource: DefaultResourceFactory(),
+    resource: DefaultResourceFactoryInstance,
     database: 'arangoDB',
     useCache: true,
   })
@@ -299,7 +286,7 @@ export class AccessControlledServiceBase<O extends ResourceListResponse, I exten
     action: AuthZAction.READ,
     operation: Operation.whatIsAllowed,
     context: DefaultACSClientContextFactory,
-    resource: DefaultResourceFactory(),
+    resource: DefaultResourceFactoryInstance,
     database: 'arangoDB',
     useCache: true,
   })
@@ -316,7 +303,7 @@ export class AccessControlledServiceBase<O extends ResourceListResponse, I exten
     action: AuthZAction.MODIFY,
     operation: Operation.isAllowed,
     context: ACSContextFactory<O, I>,
-    resource: DefaultResourceFactory(),
+    resource: DefaultResourceFactoryInstance,
     database: 'arangoDB',
     useCache: true,
   })
@@ -333,7 +320,7 @@ export class AccessControlledServiceBase<O extends ResourceListResponse, I exten
     action: AuthZAction.MODIFY,
     operation: Operation.isAllowed,
     context: ACSContextFactory<O, I>,
-    resource: DefaultResourceFactory(),
+    resource: DefaultResourceFactoryInstance,
     database: 'arangoDB',
     useCache: true,
   })
@@ -349,7 +336,7 @@ export class AccessControlledServiceBase<O extends ResourceListResponse, I exten
     action: AuthZAction.DELETE,
     operation: Operation.isAllowed,
     context: ACSContextFactory<O, I>,
-    resource: DefaultResourceFactory(),
+    resource: DefaultResourceFactoryInstance,
     database: 'arangoDB',
     useCache: true,
   })

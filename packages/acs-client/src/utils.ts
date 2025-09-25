@@ -30,7 +30,7 @@ import { Effect } from '@restorecommerce/rc-grpc-clients/dist/generated-server/i
 export const handleError = (err: string | Error | any): any => {
   let error;
   if (typeof err == 'string') {
-    error = errors[err] || errors.SYSTEM_ERROR;
+    error = (errors as any)[err] ?? errors.SYSTEM_ERROR;
   } else {
     error = errors.SYSTEM_ERROR;
   }
@@ -551,11 +551,8 @@ interface QueryParams {
 }
 
 export const generateOperationStatus = (code?: number, message?: string) => {
-  if (!code) {
-    code = 500; // Internal server error
-  }
   return {
-    code,
+    code: Number.isInteger(code) ? code : 500,
     message
   };
 };

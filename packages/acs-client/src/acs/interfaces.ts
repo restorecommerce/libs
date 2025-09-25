@@ -4,8 +4,10 @@ import {
   Subject,
   DeepPartial
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/auth.js';
-import { Meta } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/meta.js';
-import { FilterOp } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base.js';
+import {
+  FilterOp,
+  Resource,
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base.js';
 import {
   Response_Decision,
   ReverseQuery,
@@ -58,14 +60,7 @@ export interface ACSResource {
   property?: string[];
 }
 
-export interface CtxResource {
-  id: string;
-  meta: {
-    created?: Date;
-    modified?: Date;
-    modified_by?: string;
-    owners: Attribute[]; // id owner is mandatory in resource others are optional
-  };
+export interface CtxResource extends Resource {
   [key: string]: any;
 }
 
@@ -145,11 +140,7 @@ export interface AuthZContext {
   security: any;
 }
 
-export interface ResourceData {
-  id: string;
-  meta: Meta;
-  [key: string]: any; // any other fields
-}
+export { CtxResource as ResourceData };
 
 export interface AuthZRequest extends Request<AuthZTarget, AuthZContext> {
   target: AuthZTarget;

@@ -1,6 +1,7 @@
 import {
   Metadata,
   type CallOptions,
+  type CallContext,
 } from 'nice-grpc';
 import { ServiceConfig } from '@restorecommerce/service-config';
 import { Logger } from '@restorecommerce/logger';
@@ -17,8 +18,9 @@ import {
   Response_Decision
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/access_control.js';
 import {
-  ResourceList,
-  ResourceListResponse,
+  type ResourceList,
+  type ResourceListResponse,
+  type DeleteRequest,
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base.js';
 import {
   initAuthZ,
@@ -33,7 +35,6 @@ import {
   ACSClientContext,
   DecisionResponse,
   PolicySetRQResponse,
-  Obligation,
 } from './interfaces.js';
 import {
   accessRequest,
@@ -45,6 +46,8 @@ import {
   Filter_Operation,
   Filter_ValueType
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/filter.js';
+import { Subject } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/auth.js';
+import { Meta } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/meta.js';
 
 export type DatabaseProvider = 'arangoDB' | 'postgres';
 export type ACSClientContextFactory<T extends ResourceList> = (self: any, request: T, ...args: any) => Promise<ACSClientContext>;
@@ -53,36 +56,62 @@ export type DatabaseSelector<T extends ResourceList> = (self: any, request: T, .
 export type MetaDataInjector<T extends ResourceList> = (self: any, request: T, ...args: any) => Promise<T>;
 export type SubjectResolver<T extends ResourceList> = (self: any, request: T, ...args: any) => Promise<T>;
 
-export interface AccessControlledService {
+export interface AccessControllableService {
+  name: string;
+
+  /**
+   * Get resources by ID.
+   * Required by access controllable services for checking inner state!
+   * 
+   * @param ids - a list of requested resource.id(s)
+   * @param subject - the calling subject
+   * @param context - incomming grpc + http header context
+   * @param bypassACS - set true during inner ACS calles to avoid recursive loops!
+   */
+  get(
+    ids: string[],
+    subject?: Subject,
+    context?: CallContext,
+    bypassACS?: boolean,
+  ): Promise<ResourceListResponse>;
+}
+
+export interface AccessControlledService extends AccessControllableService{
   readonly __userService: Client<UserServiceDefinition>;
   readonly __acsDatabaseProvider: DatabaseProvider;
   readonly logger?: Logger;
 }
 
 export const DefaultACSClientContextFactory = async <T extends ResourceList>(
-  self: any,
-  request: T,
-  context: any,
-): Promise<ACSClientContext> => ({
-  ...context,
-  subject: request.subject,
-  resources: [],
-});
+  self: AccessControllableService,
+  request: T & DeleteRequest,
+  context?: CallContext,
+): Promise<ACSClientContext> => {
+  const ids = request.ids ?? request.items?.map((item: any) => item.id);
+  const resources = await self.get(ids, request.subject, context, true);
+  return {
+    ...context,
+    subject: request.subject,
+    resources: [
+      ...resources.items ?? [],
+      ...request.items ?? [],
+    ],
+  };
+};
 
-export function DefaultResourceFactory<T extends ResourceList>(
+export const DefaultResourceFactory = <T extends ResourceList>(
   ...resourceNames: string[]
-): ResourceFactory<T> {
-  return async (
-    self: any,
-    request: T,
-    context: any,
-  ) => (resourceNames?.length ? resourceNames : [self.name])?.map(
-    resourceName => ({
-      resource: resourceName,
-      id: request.items?.map((item: any) => item.id)
-    })
-  );
-}
+): ResourceFactory<T> => async (
+  self: AccessControllableService,
+  request: T,
+  context?: CallContext,
+) => (resourceNames?.length ? resourceNames : [self.name ?? self.constructor?.name])?.map(
+  resourceName => ({
+    resource: resourceName,
+    id: request.items?.map((item: any) => item.id)
+  })
+);
+export const DefaultResourceFactoryInstance = DefaultResourceFactory();
 
 export const DefaultSubjectResolver = async <T extends ResourceList>(
   self: any,
@@ -108,13 +137,13 @@ export const DefaultMetaDataInjector = async <T extends ResourceList>(
   ...args: any
 ): Promise<T> => {
   const urns = cfg.get('authorization:urns');
-  const ids = [...new Set(
+  const ids = Array.from(new Set(
     request.items?.map(
       (item) => item.id
     ).filter(
       id => id
     ) ?? []
-  ).values()];
+  ).values());
   const meta_map = ids.length ? await self.read({
     filters: [{
       filters: [{
@@ -161,21 +190,7 @@ export const DefaultMetaDataInjector = async <T extends ResourceList>(
   return request;
 };
 
-export enum ByPass {
-  SUBJECT = 'SUBJECT',
-  META = 'META',
-  ACS = 'ACS',
-};
-
-export function setByPass(...args: ByPass[]): CallOptions {
-  return {
-    metadata: new Metadata(
-      args.map(arg => ['bypass', arg.toString()])
-    )
-  }
-}
-
-export function access_controlled_service<T extends { new(...args: any): any }>(baseService: T): T {
+export function access_controlled_service<T extends { new(...args: any): AccessControllableService }>(baseService: T): T {
   return class extends baseService implements AccessControlledService {
     public readonly __userService: Client<UserServiceDefinition>;
     public readonly __acsDatabaseProvider: DatabaseProvider;
@@ -202,62 +217,52 @@ export function access_controlled_service<T extends { new(...args: any): any }>(
 export function access_controlled_function<T extends ResourceList>(kwargs: {
   action: AuthZAction;
   operation: Operation;
+  subject?: SubjectResolver<T> | null;
+  meta?: MetaDataInjector<T> | null;
   context?: ACSClientContext | ACSClientContextFactory<T>;
   resource?: ACSResource[] | ResourceFactory<T>;
   database?: DatabaseProvider | DatabaseSelector<T>;
   useCache?: boolean;
 }) {
   return function (
-    target: any,
-    propertyName: string,
-    descriptor: TypedPropertyDescriptor<any>,
+    target: (request: any, ...args: any[]) => any,
+    context: ClassMethodDecoratorContext,
   ) {
-    const method = descriptor.value!;
-    descriptor.value = async function () {
-      const that = this as AccessControlledService;
-      const request = arguments[0];
-      const context = arguments[1];
-      const args = [...arguments].slice(2);
-
-      if (context?.byPassACS) {
-        return await method.apply(this, arguments);
-      }
-
+    return async function (this: AccessControlledService, request: any, ...args: any[]) {
       try {
-        if (!that.__userService) {
+        if (!this.__userService) {
           throw new Error('An @access_controlled_function must be member of an @access_controlled_service class');
         }
 
+        request = kwargs.subject === undefined
+          ? await DefaultSubjectResolver(this, request, ...args)
+          : await kwargs.subject?.(this, request, ...args) ?? request;
+
+        request = kwargs.meta === undefined
+          ? kwargs.action !== AuthZAction.READ
+            ? await DefaultMetaDataInjector(this, request, ...args)
+            : request
+          : await kwargs.meta?.(this, request, ...args) ?? request;
+
         const acsContext = typeof (kwargs.context) === 'function'
           ? await kwargs.context(this, request, ...args)
-          : kwargs.context;
+          : kwargs.context ?? await DefaultACSClientContextFactory(this, request, ...args);
 
         const resource = typeof (kwargs.resource) === 'function'
           ? await kwargs.resource(this, request, ...args)
-          : kwargs.resource;
+          : kwargs.resource ?? await DefaultResourceFactoryInstance(this, request, ...args);
 
         const database = typeof (kwargs.database) === 'function'
           ? await kwargs.database(this, request, ...args)
-          : kwargs.database;
-
-        const subject = acsContext?.subject;
-        if (subject) {
-          subject.id = null;
-        }
-        if (subject?.token) {
-          const user = await that.__userService.findByToken({ token: subject.token });
-          if (user?.payload?.id) {
-            subject.id = user.payload.id;
-          }
-        }
+          : kwargs.database ?? this.__acsDatabaseProvider ??'arangoDB';
 
         const acsResponse: DecisionResponse & PolicySetRQResponse = await accessRequest(
-          subject,
+          acsContext.subject,
           resource ?? [],
           kwargs.action,
           acsContext,
           {
-            operation: kwargs.operation, database: database ?? that.__acsDatabaseProvider ?? 'arangoDB',
+            operation: kwargs.operation, database: database ?? this.__acsDatabaseProvider ?? 'arangoDB',
             useCache: kwargs.useCache ?? false
           }
         );
@@ -274,24 +279,15 @@ export function access_controlled_function<T extends ResourceList>(kwargs: {
           request.custom_arguments = arg?.custom_arguments;
         }
 
-        const appResponse = await method.apply(this, arguments);
-        const property = acsResponse.obligations?.filter(
-          (o: Obligation) => resource.some((r) => r.resource === o.resource)
-        ).flatMap(
-          o => o.property
-        ).flatMap(
-          p => [p, new RegExp(p)]
-        );
-
-        // @ts-expect-error TS2339
-        return property?.length ? _.omitDeep(appResponse, property) : appResponse;
+        return await target.call(this, request, ...args);
       }
       catch (err: any) {
-        that.logger?.error('Operation Status Error:', err);
+        const { code, message, details, stack } = err;
+        this.logger?.error('Operation Status Error:', { code, message, details, stack });
         return {
           operation_status: {
-            code: Number.isInteger(err.code) ? err.code : 500,
-            message: err.details ?? err.message ?? err,
+            code: Number.isInteger(code) ? code : 500,
+            message: details ?? message ?? err,
           }
         };
       }
@@ -299,36 +295,37 @@ export function access_controlled_function<T extends ResourceList>(kwargs: {
   };
 }
 
+/*
 export function resolves_subject<T extends ResourceList>(
   subjectResolver: SubjectResolver<T> = DefaultSubjectResolver<T>,
 ) {
   return function (
-    target: any,
-    propertyName: string,
-    descriptor: TypedPropertyDescriptor<any>,
+    target: (request: T, ...args: any[]) => Promise<any>,
+    context: ClassMethodDecoratorContext,
+    args?: any,
   ) {
-    const method = descriptor.value!;
-    descriptor.value = async function () {
-      const args = [...arguments].slice(1);
-      const request = await subjectResolver(this, arguments[0], ...args);
-      return await method.apply(this, [request, ...args]);
+    console.log('CONSOLE: params of resolves_subject', target, context, args);
+    target = args;
+    args.value = async function (this: any, request: T, ...args: any[]) {
+      request = await subjectResolver(this, request, ...args);
+      return await target(this, request, ...args);
     };
   };
 };
+*/
 
+/*
 export function injects_meta_data<T extends ResourceList>(
   metaDataInjector: MetaDataInjector<T> = DefaultMetaDataInjector<T>,
 ) {
   return function (
-    target: any,
-    propertyName: string,
-    descriptor: TypedPropertyDescriptor<any>,
+    target: (request: T, ...args: any[]) => Promise<any>,
+    context: ClassMethodDecoratorContext,
   ) {
-    const method = descriptor.value!;
-    descriptor.value = async function () {
-      const args = [...arguments].slice(1);
-      const request = await metaDataInjector(this, arguments[0], ...args);
-      return await method.apply(this, [request, ...args]);
+    return async function (this: any, request: T, ...args: any[]) {
+      request = await metaDataInjector(this, request, ...args);
+      return await target.call(this, request, ...args);
     };
   };
 };
+*/

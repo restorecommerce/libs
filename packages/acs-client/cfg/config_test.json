@@ -2,9 +2,56 @@
   "logger": {
     "console": {
       "handleExceptions": false,
-      "level": "silly",
+      "level": "error",
       "colorize": true,
       "prettyPrint": true
+    }
+  },
+  "authorization": {
+    "urns": {
+      "user": "urn:test:acs:model:user.User",
+      "model": "urn:test:acs:model",
+      "orgScope": "urn:test:acs:model:organization.Organization",
+      "organization": "urn:test:acs:model:organization.Organization",
+      "contact_point": "urn:test:acs:model:contact_point.ContactPoint"
+    },
+    "filterParamKey": [
+      {
+        "scopingEntity": "urn:test:acs:model:organization.Organization",
+        "value": "orgKey"
+      },
+      {
+        "scopingEntity": "urn:test:acs:model:user.User",
+        "value": "userKey"
+      }
+    ]
+  },
+  "client": {
+    "acs-srv": {
+      "address": "localhost:50161",
+      "mock": {
+        "protoPath": "io/restorecommerce/access_control.proto",
+        "packageName": "io.restorecommerce.access_control",
+        "serviceName": "AccessControlService",
+        "protoLoadOptions": {
+          "includeDirs": [
+            "../protos/"
+          ]
+        }
+      }
+    },
+    "user": {
+      "address": "localhost:50162",
+      "mock": {
+        "protoPath": "io/restorecommerce/user.proto",
+        "packageName": "io.restorecommerce.user",
+        "serviceName": "UserService",
+        "protoLoadOptions": {
+          "includeDirs": [
+            "../protos/"
+          ]
+        }
+      }
     }
   }
 }

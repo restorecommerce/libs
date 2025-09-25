@@ -46,9 +46,9 @@
     "npm-run-all": "^4.1.5",
     "rimraf": "^6.0.1",
     "should": "^13.2.3",
-    "ts-node": "^10.9.1",
-    "typescript": "^5.6.2",
-    "typescript-eslint": "8.11.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "8.44.1",
     "vitest": "^2.1.4"
   },
   "scripts": {
@@ -57,7 +57,9 @@
     "build:clean": "rimraf lib",
     "build": "npm-run-all lint build:clean build:tsc",
     "lint": "eslint src",
-    "test": "npm run build && cross-env NODE_ENV=test vitest run && cross-env NODE_ENV=test CACHE_ENABLED=true vitest run"
+    "test:cache:disabled": "cross-env NODE_ENV=test vitest run",
+    "test:cache:enabled": "cross-env NODE_ENV=test CACHE_ENABLED=true vitest run",
+    "test": "npm-run-all build test:cache:disabled test:cache:enabled"
   },
   "nx": {
     "targets": {

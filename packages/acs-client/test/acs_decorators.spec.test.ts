@@ -5,7 +5,8 @@ import { it, describe, beforeAll, afterAll, beforeEach, afterEach } from 'vitest
 import {
   ResourceListResponse,
   ReadRequest,
-  ResourceList
+  ResourceList,
+  DeepPartial
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base';
 import {
   ContactPointList,

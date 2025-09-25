@@ -236,7 +236,7 @@ export function access_controlled_service<T extends { new(...args: any): AccessC
 
 export function access_controlled_function<T extends AccessControlledServiceRequest>(
   kwargs: AccessControlledFunctionOptions<T>,
-) {
+): any {
   return function (
     target: (request: T, ...args: any[]) => Promise<any>,
     context: ClassMethodDecoratorContext,

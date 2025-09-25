@@ -1,6 +1,4 @@
 import {
-  Metadata,
-  type CallOptions,
   type CallContext,
 } from 'nice-grpc';
 import { ServiceConfig } from '@restorecommerce/service-config';
@@ -40,7 +38,7 @@ import {
 import {
   accessRequest,
 } from './resolver.js';
-import { urns } from '../config.js';
+import { cfg, urns } from '../config.js';
 import { _ } from '../utils.js';
 import { randomUUID } from 'crypto';
 import {
@@ -58,8 +56,14 @@ export type DatabaseSelector<T extends AccessControlledServiceRequest> = (self: 
 export type ACSClientContextFactory<T extends AccessControlledServiceRequest> = (self: any, request: T, ...args: any) => Promise<ACSClientContext>;
 
 /**
- * @param action: Target action of that function (required),
- * @param opatation: Target operation [isAllowed | whatIsAllowed] (required),
+ * @param action AuthZAction of that function (required),
+ * @param opatation Operation [isAllowed | whatIsAllowed] (required),
+ * @param subject SubjectResolver should resolve the subject.id by a given token (default: DefaultSubjectResolver)   
+ * @param meta MetaDataInjector should inject meta data to each item of resource (default: DefaultMetaDataInjector)
+ * @param context ACSClientContext | ACSClientContextFactory should provide a static of dynamic ACSContext (default: DefaultACSClientContextFactory)
+ * @param resource ACSResource[] | ResourceFactory should provide a static or dynamic ACSResource (default: DefaultResourceFactory)
+ * @param database DatabaseProvider | DatabaseSelector -  (detault: cfg.get('authorization:database') ?? 'arangoDB')
+ * @param useCache boolean (default: cfg.get('authorization:cache:enabled') ?? false)
  */
 export type AccessControlledFunctionOptions<T> = {
   action: AuthZAction;
@@ -279,7 +283,7 @@ export function access_controlled_function<T extends AccessControlledServiceRequ
           acsContext,
           {
             operation: kwargs.operation, database: database ?? this.__acsDatabaseProvider ?? 'arangoDB',
-            useCache: kwargs.useCache ?? false
+            useCache: kwargs.useCache ?? cfg.get('authorization:cache:enabled') ?? false
           }
         );
 
@@ -322,38 +326,3 @@ export function access_controlled_function<T extends AccessControlledServiceRequ
     }
   };
 }
-
-/*
-export function resolves_subject<T extends ResourceList>(
-  subjectResolver: SubjectResolver<T> = DefaultSubjectResolver<T>,
-) {
-  return function (
-    target: (request: T, ...args: any[]) => Promise<any>,
-    context: ClassMethodDecoratorContext,
-    args?: any,
-  ) {
-    console.log('CONSOLE: params of resolves_subject', target, context, args);
-    target = args;
-    args.value = async function (this: any, request: T, ...args: any[]) {
-      request = await subjectResolver(this, request, ...args);
-      return await target(this, request, ...args);
-    };
-  };
-};
-*/
-
-/*
-export function injects_meta_data<T extends ResourceList>(
-  metaDataInjector: MetaDataInjector<T> = DefaultMetaDataInjector<T>,
-) {
-  return function (
-    target: (request: T, ...args: any[]) => Promise<any>,
-    context: ClassMethodDecoratorContext,
-  ) {
-    return async function (this: any, request: T, ...args: any[]) {
-      request = await metaDataInjector(this, request, ...args);
-      return await target.call(this, request, ...args);
-    };
-  };
-};
-*/

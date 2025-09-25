@@ -19,6 +19,7 @@ import { flushCache, getOrFill } from './cache.js';
 import { Events, registerProtoMeta } from '@restorecommerce/kafka-client';
 import {
   _,
+  formatResourceType,
   mapResourceURNObligationProperties
 } from '../utils.js';
 import {
@@ -90,20 +91,6 @@ export const createSubjectTarget = (subject: DeepPartial<Subject>): Attribute[] 
     );
   }
   return flattened;
-};
-
-export const formatResourceType = (type: string, namespacePrefix?: string): string => {
-  // e.g: contact_point -> contact_point.ContactPoint
-  const prefix = type;
-  const suffixArray = type.split('_').map((word) => {
-    return word.charAt(0).toUpperCase() + word.substring(1);
-  });
-  const suffix = suffixArray.join('');
-  if (namespacePrefix) {
-    return `${namespacePrefix}.${prefix}.${suffix}`;
-  } else {
-    return `${prefix}.${suffix}`;
-  }
 };
 
 export const createResourceTarget = (resource: ACSResource[], action: AuthZAction) => {
@@ -376,8 +363,11 @@ export class ACSAuthZ implements IAuthZ {
   * @returns {PolicySetRQ}
   * @param resource
   */
-  async whatIsAllowed(request: Request<AuthZWhatIsAllowedTarget, AuthZContext>,
-    ctx: ACSClientContext, useCache: boolean): Promise<PolicySetRQResponse> {
+  async whatIsAllowed(
+    request: Request<AuthZWhatIsAllowedTarget, AuthZContext>,
+    ctx: ACSClientContext,
+    useCache: boolean
+  ): Promise<PolicySetRQResponse> {
     const authZRequest = this.prepareRequest(request);
     authZRequest.context = {
       subject: {},
@@ -406,15 +396,13 @@ export class ACSAuthZ implements IAuthZ {
         obligations: mapResourceURNObligationProperties(whatIsAllowed.obligations)
       } as any; // TODO Decision?
     } catch (err: any) {
-      logger?.error('Error invoking access-control-srv whatIsAllowed operation', { code: err.code, message: err.message, stack: err.stack });
-      if (!err.code) {
-        err.code = 500;
-      }
+      const { code, message, details, stack } = err;
+      logger?.error('Error invoking access-control-srv whatIsAllowed operation', { code, message, details, stack });
       response = {
         decision: Response_Decision.DENY,
         operation_status: {
-          code: err.code,
-          message: err.message
+          code: Number.isInteger(code) ? code : 500,
+          message: message
         }
       };
     }

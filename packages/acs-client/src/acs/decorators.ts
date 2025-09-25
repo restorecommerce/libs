@@ -21,6 +21,7 @@ import {
   type ResourceList,
   type ResourceListResponse,
   type DeleteRequest,
+  ReadRequest,
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base.js';
 import {
   initAuthZ,
@@ -39,7 +40,7 @@ import {
 import {
   accessRequest,
 } from './resolver.js';
-import { cfg } from '../config.js';
+import { urns } from '../config.js';
 import { _ } from '../utils.js';
 import { randomUUID } from 'crypto';
 import {
@@ -47,14 +48,29 @@ import {
   Filter_ValueType
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/filter.js';
 import { Subject } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/auth.js';
-import { Meta } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/meta.js';
 
+export type AccessControlledServiceRequest = ResourceList & ReadRequest;
 export type DatabaseProvider = 'arangoDB' | 'postgres';
-export type ACSClientContextFactory<T extends ResourceList> = (self: any, request: T, ...args: any) => Promise<ACSClientContext>;
 export type ResourceFactory<T extends ResourceList> = (self: any, request: T, ...args: any) => Promise<ACSResource[]>;
-export type DatabaseSelector<T extends ResourceList> = (self: any, request: T, ...args: any) => Promise<DatabaseProvider>;
 export type MetaDataInjector<T extends ResourceList> = (self: any, request: T, ...args: any) => Promise<T>;
-export type SubjectResolver<T extends ResourceList> = (self: any, request: T, ...args: any) => Promise<T>;
+export type SubjectResolver<T extends AccessControlledServiceRequest> = (self: any, request: T, ...args: any) => Promise<T>;
+export type DatabaseSelector<T extends AccessControlledServiceRequest> = (self: any, request: T, ...args: any) => Promise<DatabaseProvider>;
+export type ACSClientContextFactory<T extends AccessControlledServiceRequest> = (self: any, request: T, ...args: any) => Promise<ACSClientContext>;
+
+/**
+ * @param action: Target action of that function (required),
+ * @param opatation: Target operation [isAllowed | whatIsAllowed] (required),
+ */
+export type AccessControlledFunctionOptions<T> = {
+  action: AuthZAction;
+  operation: Operation;
+  subject?: SubjectResolver<T> | null;
+  meta?: MetaDataInjector<T> | null;
+  context?: ACSClientContext | ACSClientContextFactory<T>;
+  resource?: ACSResource[] | ResourceFactory<T>;
+  database?: DatabaseProvider | DatabaseSelector<T>;
+  useCache?: boolean;
+}
 
 export interface AccessControllableService {
   name: string;
@@ -82,7 +98,7 @@ export interface AccessControlledService extends AccessControllableService{
   readonly logger?: Logger;
 }
 
-export const DefaultACSClientContextFactory = async <T extends ResourceList>(
+export const DefaultACSClientContextFactory = async <T extends AccessControlledServiceRequest>(
   self: AccessControllableService,
   request: T & DeleteRequest,
   context?: CallContext,
@@ -120,6 +136,7 @@ export const DefaultSubjectResolver = async <T extends ResourceList>(
 ): Promise<T> => {
   const subject = request?.subject;
   if (subject?.id) {
+    // we don't trust incoming subject id!
     delete subject.id;
   }
   if (subject?.token) {
@@ -136,7 +153,6 @@ export const DefaultMetaDataInjector = async <T extends ResourceList>(
   request: T,
   ...args: any
 ): Promise<T> => {
-  const urns = cfg.get('authorization:urns');
   const ids = Array.from(new Set(
     request.items?.map(
       (item) => item.id
@@ -214,21 +230,15 @@ export function access_controlled_service<T extends { new(...args: any): AccessC
   };
 }
 
-export function access_controlled_function<T extends ResourceList>(kwargs: {
-  action: AuthZAction;
-  operation: Operation;
-  subject?: SubjectResolver<T> | null;
-  meta?: MetaDataInjector<T> | null;
-  context?: ACSClientContext | ACSClientContextFactory<T>;
-  resource?: ACSResource[] | ResourceFactory<T>;
-  database?: DatabaseProvider | DatabaseSelector<T>;
-  useCache?: boolean;
-}) {
+export function access_controlled_function<T extends AccessControlledServiceRequest>(
+  kwargs: AccessControlledFunctionOptions<T>,
+) {
   return function (
-    target: (request: any, ...args: any[]) => any,
+    target: (request: T, ...args: any[]) => Promise<any>,
     context: ClassMethodDecoratorContext,
+    fallback?: any,
   ) {
-    return async function (this: AccessControlledService, request: any, ...args: any[]) {
+    const reflection = async function (this: AccessControlledService, request: T, ...args: any[]) {
       try {
         if (!this.__userService) {
           throw new Error('An @access_controlled_function must be member of an @access_controlled_service class');
@@ -238,11 +248,17 @@ export function access_controlled_function<T extends ResourceList>(kwargs: {
           ? await DefaultSubjectResolver(this, request, ...args)
           : await kwargs.subject?.(this, request, ...args) ?? request;
 
-        request = kwargs.meta === undefined
-          ? kwargs.action !== AuthZAction.READ
-            ? await DefaultMetaDataInjector(this, request, ...args)
-            : request
-          : await kwargs.meta?.(this, request, ...args) ?? request;
+        // Read actions should not require Meta from request
+        // use null to disable MetaDataInjector
+        // however, kwargs.meta can still be undefined!
+        if (kwargs.action !== AuthZAction.READ && kwargs.meta !== null) {
+          if (kwargs.meta) {
+            await kwargs.meta(this, request, ...args);
+          }
+          else {
+            await DefaultMetaDataInjector(this, request, ...args);
+          }
+        }
 
         const acsContext = typeof (kwargs.context) === 'function'
           ? await kwargs.context(this, request, ...args)
@@ -292,6 +308,18 @@ export function access_controlled_function<T extends ResourceList>(kwargs: {
         };
       }
     };
+
+    if (fallback) {
+      // A 3rd param?
+      // fallback to decorator stage 1 or 2.
+      // is it a pure function or a stage 2 descriptor? let's guess!
+      target = fallback.value ?? fallback;
+      fallback.value = reflection;
+    }
+    else {
+      // lucky we are on stage 3 - simple:
+      return reflection;
+    }
   };
 }
 

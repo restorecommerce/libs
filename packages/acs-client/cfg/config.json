@@ -97,7 +97,6 @@
       "address": "localhost:50061"
     },
     "user": {
-      "fullName": "io.restorecommerce.user.UserService",
       "address": "localhost:50051"
     },
     "graph-srv": {
@@ -109,6 +108,9 @@
     "enabled": true,
     "enforce": true,
     "urns": {
+      "model": "urn:restorecommerce:acs:model",
+      "user": "urn:restorecommerce:acs:model:user.User",
+      "organization": "urn:restorecommerce:acs:model:organization.Organization",
       "entity": "urn:restorecommerce:acs:names:model:entity",
       "role": "urn:restorecommerce:acs:names:role",
       "roleScopingEntity": "urn:restorecommerce:acs:names:roleScopingEntity",

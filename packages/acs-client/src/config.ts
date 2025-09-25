@@ -25,6 +25,9 @@ export type KnownErrors = typeof errors;
 Object.assign(errors, cfg.get('errors'));
 
 export const urns = {
+  model: 'urn:restorecommerce:acs:model',
+  user: 'urn:restorecommerce:acs:model:user.User',
+  organization: "urn:restorecommerce:acs:model:organization.Organization",
   entity: 'urn:restorecommerce:acs:names:model:entity',
   role: 'urn:restorecommerce:acs:names:role',
   roleScopingEntity: 'urn:restorecommerce:acs:names:roleScopingEntity',
@@ -50,7 +53,6 @@ export const urns = {
   aclInstance: 'urn:restorecommerce:acs:names:aclInstance',
   skipACL: 'urn:restorecommerce:acs:names:skipACL',
   maskedProperty: 'urn:restorecommerce:acs:names:obligation:maskedProperty',
-  model: 'urn:restorecommerce:acs:names:model:entity',
 };
 export type KnownUrns = typeof urns;
 Object.assign(urns, cfg.get('authorization:urns'));

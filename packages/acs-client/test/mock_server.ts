@@ -11,7 +11,8 @@ import {
 import { Meta } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/meta';
 import { UserResponse } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/user';
 import {
-  Response_Decision
+  Response_Decision,
+  ReverseQuery
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/access_control';
 import logger from '../src/logger';
 import {
@@ -20,6 +21,7 @@ import {
 import {
   cfg,
   urns as defaultUrns,
+  notAllowedMessage,
 } from '../src';
 import { HierarchicalScope } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/auth';
 
@@ -29,7 +31,7 @@ export const urns = {
   model: 'urn:test:acs:model',
   orgScope: 'urn:test:acs:model:organization.Organization',
   organization: 'urn:test:acs:model:organization.Organization',
-  contact_point: 'urn:test:acs:model:contactPoint.ContactPoint',
+  contact_point: 'urn:test:acs:model:contact_point.ContactPoint',
 };
 Object.assign(urns, cfg.get('authorization:urns'));
 
@@ -68,10 +70,15 @@ export const operation_status: OperationStatus = {
 };
 
 const hierarchicalScopes: Record<string, HierarchicalScope[]> = {
-  'valid-token': [
+  'valid_token': [
+    {
+      id: 'test_user_id',
+      role: 'user-role',
+      children: []
+    },
     {
       id: 'targetScope',
-      role: 'user-role',
+      role: 'test-role',
       children: [
         {
           id: 'targetSubScope',
@@ -82,10 +89,23 @@ const hierarchicalScopes: Record<string, HierarchicalScope[]> = {
 };
 
 export const users: Record<string, UserResponse> = {
-  'valid-token': {
+  valid_token: {
     payload: {
       id: test_user_id,
       role_associations: [
+        {
+          role: 'user-role',
+          attributes: [
+            {
+              id: urns.roleScopingEntity,
+              value: urns.user,
+              attributes: [{
+                id: urns.roleScopingInstance,
+                value: 'test_user_id'
+              }]
+            }
+          ]
+        },
         {
           role: 'test-role',
           attributes: [
@@ -99,28 +119,22 @@ export const users: Record<string, UserResponse> = {
             }
           ]
         },
-        {
-          role: 'user-role',
-          attributes: [
-            {
-              id: urns.roleScopingEntity,
-              value: urns.user,
-              attributes: [{
-                id: urns.roleScopingInstance,
-                value: 'test_user_id'
-              }]
-            }
-          ]
-        }
       ],
       active: true,
-      tokens: [
-        
-      ],
       meta,
     },
     status,
   },
+};
+
+export const fallbackDeny: RuleRQ = {
+  id: 'fallback_deny_id',
+  target: {
+    actions: [],
+    resources: [],
+    subjects: [],
+  },
+  effect: Effect.DENY,
 };
 
 export const permitRuleOrgScope: RuleRQ = {
@@ -143,7 +157,8 @@ export const permitRuleOrgScope: RuleRQ = {
       {
         id: urns.hierarchicalRoleScoping,
         value: 'true'
-      }]
+      }
+    ]
   },
   effect: Effect.PERMIT
 };
@@ -168,7 +183,8 @@ export const permitRuleUserScope: RuleRQ = {
       {
         id: urns.hierarchicalRoleScoping,
         value: 'false',
-      }]
+      }
+    ]
   },
   effect: Effect.PERMIT
 };
@@ -198,27 +214,11 @@ export const permitRuleNoHrs: RuleRQ = {
   effect: Effect.PERMIT
 };
 
-export const denyRule: RuleRQ = {
-  id: 'deny_rule_id',
-  target: {
-    actions: [],
-    resources: [{
-      id: urns.entity,
-      value: urns.contact_point,
-    }],
-    subjects: [{
-      id: urns.role,
-      value: 'test-role'
-    }],
-  },
-  effect: Effect.DENY
-};
-
 export const PolicySetRQFactory = new class {
   rules: RuleRQ[] = [];
   combiningAlgorithm = urns.permitOverrides;
 
-  public get() {
+  public get(): ReverseQuery {
     return {
       policy_sets: [
         {
@@ -228,14 +228,6 @@ export const PolicySetRQFactory = new class {
             {
               combining_algorithm: this.combiningAlgorithm,
               id: 'test_policy_id',
-              target: {
-                actions: [],
-                resources: [{
-                  id: urns.entity,
-                  value: urns.contact_point,
-                }],
-                subjects: []
-              },
               effect: Effect.PERMIT,
               rules: this.rules,
               has_rules: true
@@ -248,15 +240,14 @@ export const PolicySetRQFactory = new class {
   }
 }
 
-export const expectedError = [
-  'Access not allowed for request with subject:undefined,',
-  'resource:Test, action:CREATE, target_scope:targetSubScope; the response was DENY'
-].join(' ')
-
 export const implementations = {
   'acs-srv': {
     isAllowed: (call: any, callback: any) => {
-      const token = JSON.parse(call?.request?.context?.subject?.value?.toString())?.token;
+      const scope = call?.request?.scope;
+      const action = call?.request?.action;
+      const resource = call?.request?.resource;
+      const subject = JSON.parse(call?.request?.context?.subject?.value?.toString());
+      const { id, token } = subject;
       switch (token) {
         case 'valid_token':
           callback(
@@ -277,15 +268,17 @@ export const implementations = {
               decision: Response_Decision.DENY,
               operation_status: {
                 code: 403,
-                message: expectedError,
+                message: notAllowedMessage(id, resource, action, scope, Response_Decision.DENY),
               }
             }
           );
           break;
       }
     },
-    whatIsAllowed: (call: any, callback: any) => {
-      callback(null, PolicySetRQFactory.get());
+    whatIsAllowed: (call: any, callback: (error: any, response: ReverseQuery) => void) => {
+      const response = PolicySetRQFactory.get();
+      logger?.debug('Mocked Policy Response:', response);
+      callback(null, response);
     },
   },
   user: {
@@ -308,7 +301,7 @@ export const implementations = {
             );
             await client.set(
               `cache:${ subject.payload?.id }:hrScopes`,
-              JSON.stringify(hierarchicalScopes[call.request.token]),
+              JSON.stringify(hierarchicalScopes[call.request.token] ?? {}),
             );
           }
           return subject;
@@ -347,7 +340,7 @@ export async function mockServices(configs: { [key: string]: any }) {
     }
 
     if (!implementations[name]) {
-      throw new Error(`No mocking implementation for ${name} in mocks.ts!`);
+      throw new Error(`No mocking implementation for ${name}`);
     }
 
     return await new GrpcMockServer(
@@ -357,7 +350,14 @@ export async function mockServices(configs: { [key: string]: any }) {
       config.mock.packageName,
       config.mock.serviceName,
       implementations[name],
-      config.mock.protoLoadOptions,
+      {
+        keepCase: true,
+        longs: String,
+        enums: String,
+        defaults: true,
+        oneofs: true,
+        ...config.mock.protoLoadOptions,
+      },
     ).start();
   }).filter(m => !!m)) as GrpcMockServer[];
 };

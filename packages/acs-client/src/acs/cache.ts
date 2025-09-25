@@ -52,8 +52,12 @@ export const initializeCache = async () => {
  * @param filler The function to execute if key is not found in cache
  * @param prefix The prefix to apply to the object key in the cache
  */
-export const getOrFill = async <T, M>(keyData: T, filler: (data: T) => Promise<M>,
-  useCache: boolean, prefix?: string): Promise<M> => {
+export const getOrFill = async <T, M>(
+  keyData: T,
+  filler: (data: T) => Promise<M>,
+  useCache: boolean,
+  prefix?: string
+): Promise<M> => {
   if (!redisInstance || !cacheEnabled) {
     return filler(keyData);
   }
@@ -86,8 +90,8 @@ export const getOrFill = async <T, M>(keyData: T, filler: (data: T) => Promise<M
     return await filler(keyData);
   }
 
-  logger?.debug('Filling cache key: ' + redisKey);
   const acsResponse = await filler(keyData);
+  logger?.debug(`Filling cache key: ${redisKey}`, acsResponse);
   if (acsResponse) {
     if (ttl) {
       await redisInstance.setEx(redisKey, ttl, JSON.stringify(acsResponse));

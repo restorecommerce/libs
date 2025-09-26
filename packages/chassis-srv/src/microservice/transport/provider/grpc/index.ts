@@ -1,7 +1,6 @@
 import {isNullish} from 'remeda';
 import { type Logger } from '@restorecommerce/logger';
-import type { Server as GRPCServer, ServiceImplementation } from 'nice-grpc';
-import type { CompatServiceDefinition } from 'nice-grpc/lib/service-definitions';
+import type { Server as GRPCServer, ServiceImplementation, CompatServiceDefinition } from 'nice-grpc';
 import { createServer } from 'nice-grpc';
 import { loggingMiddleware, metaMiddleware, tracingMiddleware, WithRequestID } from './middlewares.js';
 

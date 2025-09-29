@@ -250,7 +250,7 @@ const updateMetaData = (resourceList: Array<any>): Array<CtxResource> => {
 const PROTO_PATH: string = 'io/restorecommerce/access_control.proto';
 const PKG_NAME: string = 'io.restorecommerce.access_control';
 const SERVICE_NAME: string = 'AccessControlService';
-const mockServer = new GrpcMockServer('localhost:50061');
+const mockServer = new GrpcMockServer('localhost:50161');
 
 const startGrpcMockServer = async () => {
   // create mock implementation based on the method name and output

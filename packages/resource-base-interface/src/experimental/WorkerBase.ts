@@ -1,5 +1,4 @@
-import { type ServiceImplementation } from 'nice-grpc';
-import { type CompatServiceDefinition } from 'nice-grpc/lib/service-definitions';
+import { type ServiceImplementation, type CompatServiceDefinition } from 'nice-grpc';
 import { type RedisClientType, createClient } from 'redis';
 import {
   Server,

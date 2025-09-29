@@ -12,7 +12,6 @@
   ],
   "compilerOptions": {
     "outDir": "lib",
-    "emitDecoratorMetadata": true,
     "experimentalDecorators": true
   },
 }

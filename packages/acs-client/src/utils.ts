@@ -1,6 +1,4 @@
 import lodash from 'lodash';
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-require('deepdash')(lodash);
 export const _ = lodash;
 import {
   PolicySetRQ, PolicySetRQResponse, AttributeTarget, HierarchicalScope,
@@ -8,12 +6,11 @@ import {
   ResolvedSubject, Obligation
 } from './acs/interfaces.js';
 import { QueryArguments, UserQueryArguments } from './acs/resolver.js';
-import { errors, cfg } from './config.js';
+import { errors, cfg, urns } from './config.js';
 // @ts-expect-error TS7016
 import nodeEval from 'node-eval';
 import logger from './logger.js';
 import { get } from './acs/cache.js';
-import { formatResourceType } from './acs/authz.js';
 import {
   Subject,
   DeepPartial
@@ -30,12 +27,27 @@ import { Effect } from '@restorecommerce/rc-grpc-clients/dist/generated-server/i
 export const handleError = (err: string | Error | any): any => {
   let error;
   if (typeof err == 'string') {
-    error = errors[err] || errors.SYSTEM_ERROR;
+    error = (errors as any)[err] ?? errors.SYSTEM_ERROR;
   } else {
     error = errors.SYSTEM_ERROR;
   }
   return error;
 };
+
+export const notAllowedMessage = (
+  subjectID?: string,
+  resourceName?: string,
+  action?: string,
+  targetScope?: string,
+  decision?: string,
+) => [
+  `Access not allowed for request with`,
+  `subject:${ subjectID || 'undefined' },`,
+  `resource:${ resourceName || 'undefined' },`,
+  `action:${ action || 'undefined' },`,
+  `target_scope:${ targetScope || 'undefined' };`,
+  `the response was ${ decision || 'undefined' }`,
+].join(' ');
 
 const reduceUserScope = (
   hrScope: HierarchicalScope,
@@ -85,12 +97,11 @@ const checkSubjectMatch = (
   let hierarchicalRoleScopingCheck = 'true'; // by default HR scoping check is considered
   let ruleRoleValue: string;
   let ruleRoleScopeEntityName: string;
-  const urns = cfg.get('authorization:urns');
   if (ruleSubjectAttributes?.length === 0) {
     return true;
   }
   for (const attribute of ruleSubjectAttributes) {
-    if (attribute?.id === 'urn:restorecommerce:acs:names:unauthenticated-user' && attribute?.value === 'true') {
+    if (attribute?.id === urns.unauthenticated_user && attribute?.value === 'true') {
       return true;
     }
     if (attribute?.id === urns.roleScopingEntity) {
@@ -192,7 +203,7 @@ const buildQueryFromTarget = (
     if (!reqResources) {
       reqResources = [];
     }
-    if (!_.isArray(reqResources)) {
+    if (!Array.isArray(reqResources)) {
       reqResources = [reqResources];
     }
     const request = {
@@ -233,7 +244,7 @@ const buildQueryFromTarget = (
         }
       } else if (typeof filterId === 'object') { // prebuilt filter
         // handle array
-        if (filterId.filters && _.isArray(filterId.filters)) {
+        if (filterId.filters && Array.isArray(filterId.filters)) {
           filter.push(...filterId.filters);
           // map filter operator if its returned from condition
           if (filterId?.operator) {
@@ -368,7 +379,6 @@ export const buildFilterPermissions = async (
     subject.role_associations ??= [];
   }
 
-  const urns = cfg.get('authorization:urns');
   const query: any = {
     filters: []
   };
@@ -511,7 +521,7 @@ export const buildFilterPermissions = async (
     for (const filter of filterList) {
       query.filters.push(filter);
     }
-    if (_.isArray(filterList) && filterList.length > 0) {
+    if (Array.isArray(filterList) && filterList.length > 0) {
       query.filters.operator = key;
       // override the operator if its returned from rule condition
       if (policy?.filters?.operator) {
@@ -551,11 +561,8 @@ interface QueryParams {
 }
 
 export const generateOperationStatus = (code?: number, message?: string) => {
-  if (!code) {
-    code = 500; // Internal server error
-  }
   return {
-    code,
+    code: Number.isInteger(code) ? code : 500,
     message
   };
 };
@@ -631,6 +638,20 @@ export interface FilterMapResponse {
   customQueryArgs: CustomQueryArgs[];
 }
 
+export const formatResourceType = (type: string, namespacePrefix?: string): string => {
+  // e.g: contact_point -> contact_point.ContactPoint
+  const prefix = type;
+  const suffixArray = type.split('_').map((word) => {
+    return word.charAt(0).toUpperCase() + word.substring(1);
+  });
+  const suffix = suffixArray.join('');
+  if (namespacePrefix) {
+    return `${namespacePrefix}.${prefix}.${suffix}`;
+  } else {
+    return `${prefix}.${suffix}`;
+  }
+};
+
 /**
  * creates resource filters and custom query / arguments for the resource list provided
  * It iterates through each resource and filter the applicable policies and
@@ -673,7 +694,6 @@ export const createResourceFilterMap = async (
       resourceName = resourcenameNameSpace;
     }
     const resourceType = formatResourceType(resourceName, resourceNameSpace);
-    const urns = cfg.get('authorization:urns');
     const resourceValueURN = urns?.model + `:${resourceType}`;
     const resourcePolicies = { policy_sets: [{ policies: [] } as PolicySetRQ] };
     const resourceAttributes = [{ id: urns?.entity, value: resourceValueURN }];
@@ -718,7 +738,7 @@ export const createResourceFilterMap = async (
     );
 
     if (permissionArguments) {
-      if (!_.isArray(permissionArguments.filters)) {
+      if (!Array.isArray(permissionArguments.filters)) {
         permissionArguments.filters = [permissionArguments.filters];
       }
       resourceFilterMap.push({ resource: resourceName, filters: permissionArguments.filters });
@@ -731,23 +751,34 @@ export const createResourceFilterMap = async (
       }
     }
     else if (authzEnforced) {
-      const msg = [
-        `Access not allowed for request with subject:${subjectID},`,
-        `resource:${resourceName}, action:${action}, target_scope:${targetScope};`,
-        `the response was ${Response_Decision.DENY}`
-      ].join(' ');
+      const msg = notAllowedMessage(
+        subjectID,
+        resourceName,
+        action,
+        targetScope,
+        Response_Decision.DENY,
+      );
       const details = `Subject:${subjectID} does not have access to target scope ${targetScope}}`;
       logger?.verbose(msg);
       logger?.verbose('Details:', { details });
       return { decision: Response_Decision.DENY, operation_status: generateOperationStatus(Number(errors.ACTION_NOT_ALLOWED.code), msg) };
     }
     else {
-      logger?.verbose([
-        `The Access response was ${Response_Decision.DENY} for a request from subject:${subjectID}`,
-        `resource:${resourceName}, action:${action}, target_scope:${targetScope}`,
-        `but since ACS enforcement config is disabled overriding the ACS result`,
-      ].join(' '));
-      return { decision: Response_Decision.PERMIT, operation_status: { code: 200, message: 'success' } };
+      const msg = notAllowedMessage(
+        subjectID,
+        resourceName,
+        action,
+        targetScope,
+        Response_Decision.DENY,
+      );
+      logger?.verbose(msg);
+      return {
+        decision: Response_Decision.PERMIT,
+        operation_status: {
+          code: 200,
+          message: 'success',
+        }
+      };
     }
   }
   return {
@@ -765,7 +796,6 @@ export const createResourceFilterMap = async (
  */
 export const mapResourceURNObligationProperties = (obligations: Attribute[]): Obligation[] => {
   const mappedResourceObligation: Obligation[] = [];
-  const urns = cfg.get('authorization:urns');
   if (obligations?.length > 0) {
     for (const obligationObj of obligations) {
       if (obligationObj?.id === urns.entity && obligationObj?.value) {

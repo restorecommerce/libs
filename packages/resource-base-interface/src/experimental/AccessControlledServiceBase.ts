@@ -6,15 +6,11 @@ import { type Logger } from '@restorecommerce/logger';
 import { type DatabaseProvider } from '@restorecommerce/chassis-srv';
 import { Topic } from '@restorecommerce/kafka-client';
 import {
-  ACSClientContext,
+  AccessControllableService,
   AuthZAction,
-  DefaultACSClientContextFactory,
   Operation,
-  ResourceFactory,
   access_controlled_function,
   access_controlled_service,
-  injects_meta_data,
-  resolves_subject,
 } from '@restorecommerce/acs-client';
 import {
   DeepPartial,
@@ -40,36 +36,6 @@ import {
   StatusCodes,
 } from '../core/index.js';
 
-export const ACSContextFactory = async <O extends ResourceListResponse, I extends ResourceList>(
-  self: AccessControlledServiceBase<O, I>, 
-  request: I & DeleteRequest,
-  context: any
-): Promise<ACSClientContext> => {
-  const ids = request.ids ?? request.items?.map((item: any) => item.id);
-  const resources = await self.get(ids, request.subject, context);
-  return {
-    ...context,
-    subject: request.subject,
-    resources: [
-      ...resources.items ?? [],
-      ...request.items ?? [],
-    ],
-  };
-};
-
-export const DefaultResourceFactory = <T extends ResourceList>(
-  ...resourceNames: string[]
-): ResourceFactory<T> => async (
-  self: any,
-  request: T,
-  context?: CallContext,
-) => (resourceNames?.length ? resourceNames : [self.name])?.map(
-  resourceName => ({
-    resource: resourceName,
-    id: request.items?.map((item: any) => item.id)
-  })
-);
-
 export const AccessControlledServiceBaseOperationStatusCodes = {
   ...ServiceBaseOperationStatusCodes,
   LIMIT_EXHAUSTED: {
@@ -82,7 +48,7 @@ export type AccessControlledServiceBaseOperationStatusCodes = OperationStatusCod
 @access_controlled_service
 export class AccessControlledServiceBase<O extends ResourceListResponse, I extends ResourceList>
   extends ServiceBase<O, I>
-  implements ServiceImplementation
+  implements ServiceImplementation, AccessControllableService
 {
   protected override get statusCodes(): ServiceBaseStatusCodes {
     return super.statusCodes;
@@ -245,7 +211,7 @@ export class AccessControlledServiceBase<O extends ResourceListResponse, I exten
     context?: CallContext,
     bypassACS = false,
   ): Promise<DeepPartial<O>> {
-    ids = [...new Set(ids)].filter(id => id);
+    ids = Array.from(new Set(ids)).filter(id => id);
     if (ids.length > 1000) {
       throw this.operationStatusCodes.LIMIT_EXHAUSTED;
     }
@@ -278,15 +244,9 @@ export class AccessControlledServiceBase<O extends ResourceListResponse, I exten
     }
   }
 
-  @resolves_subject()
-  @injects_meta_data()
   @access_controlled_function({
     action: AuthZAction.CREATE,
     operation: Operation.isAllowed,
-    context: ACSContextFactory<O, I>,
-    resource: DefaultResourceFactory(),
-    database: 'arangoDB',
-    useCache: true,
   })
   public override async create(
     request: I,
@@ -298,10 +258,6 @@ export class AccessControlledServiceBase<O extends ResourceListResponse, I exten
   @access_controlled_function({
     action: AuthZAction.READ,
     operation: Operation.whatIsAllowed,
-    context: DefaultACSClientContextFactory,
-    resource: DefaultResourceFactory(),
-    database: 'arangoDB',
-    useCache: true,
   })
   public override async read(
     request: ReadRequest,
@@ -310,15 +266,9 @@ export class AccessControlledServiceBase<O extends ResourceListResponse, I exten
     return await this.superRead(request, context);
   }
 
-  @resolves_subject()
-  @injects_meta_data()
   @access_controlled_function({
     action: AuthZAction.MODIFY,
     operation: Operation.isAllowed,
-    context: ACSContextFactory<O, I>,
-    resource: DefaultResourceFactory(),
-    database: 'arangoDB',
-    useCache: true,
   })
   public override async update(
     request: I,
@@ -327,15 +277,9 @@ export class AccessControlledServiceBase<O extends ResourceListResponse, I exten
     return await this.superUpdate(request, context);
   }
 
-  @resolves_subject()
-  @injects_meta_data()
   @access_controlled_function({
     action: AuthZAction.MODIFY,
     operation: Operation.isAllowed,
-    context: ACSContextFactory<O, I>,
-    resource: DefaultResourceFactory(),
-    database: 'arangoDB',
-    useCache: true,
   })
   public override async upsert(
     request: I,
@@ -344,14 +288,9 @@ export class AccessControlledServiceBase<O extends ResourceListResponse, I exten
     return await this.superUpsert(request, context);
   }
 
-  @resolves_subject()
   @access_controlled_function({
     action: AuthZAction.DELETE,
     operation: Operation.isAllowed,
-    context: ACSContextFactory<O, I>,
-    resource: DefaultResourceFactory(),
-    database: 'arangoDB',
-    useCache: true,
   })
   public override async delete(
     request: DeleteRequest,

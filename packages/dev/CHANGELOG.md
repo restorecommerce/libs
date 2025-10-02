@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/dev@0.1.1...@restorecommerce/dev@0.1.2) (2025-10-02)
+
+
+### Bug Fixes
+
+* bump dependencies, fix dependencies ([ce367b7](https://github.com/restorecommerce/libs/commit/ce367b75c3998dd87fc6827dca33f5fcd6a26493))
+
+
+
+
+
 ## [0.1.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/dev@0.1.0...@restorecommerce/dev@0.1.1) (2025-09-17)
 
 

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.11.10](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.11.9...@restorecommerce/protos@6.11.10) (2025-10-02)
+
+
+### Bug Fixes
+
+* up notification proto to include active boolean flag ([ee8f97c](https://github.com/restorecommerce/libs/commit/ee8f97ca137e960541a3aead08478600469d56c3))
+* upgrade vitest, fix reflection ([511e401](https://github.com/restorecommerce/libs/commit/511e4014a088c195ffe50eaff7c26e8654e10f10))
+
+
+
+
+
 ## [6.11.9](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.11.8...@restorecommerce/protos@6.11.9) (2025-08-21)
 
 

@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.9.3](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.2...@restorecommerce/resource-base-interface@1.9.3) (2025-10-02)
+
+
+### Bug Fixes
+
+* bump dependencies ([3570612](https://github.com/restorecommerce/resource-base-interface/commit/35706125e79566107ff575e6d0df0bb62d9add01))
+* bump dependencies, fix dependencies ([ce367b7](https://github.com/restorecommerce/resource-base-interface/commit/ce367b75c3998dd87fc6827dca33f5fcd6a26493))
+* fix broken dependencies ([d152086](https://github.com/restorecommerce/resource-base-interface/commit/d152086a503f45b098474568760947e2dacf081c))
+
+
+
+
+
 ## [1.9.2](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.1...@restorecommerce/resource-base-interface@1.9.2) (2025-09-17)
 
 

@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@3.1.1...@restorecommerce/acs-client@3.1.2) (2025-10-02)
+
+
+### Bug Fixes
+
+* **acs-client:** replace lodash with remeda ([b25cc56](https://github.com/restorecommerce/libs/commit/b25cc560749ff5fb2f85a65a04173665ef2837eb))
+* bump dependencies ([3570612](https://github.com/restorecommerce/libs/commit/35706125e79566107ff575e6d0df0bb62d9add01))
+* bump dependencies, fix dependencies ([ce367b7](https://github.com/restorecommerce/libs/commit/ce367b75c3998dd87fc6827dca33f5fcd6a26493))
+* upgrade vitest, fix reflection ([511e401](https://github.com/restorecommerce/libs/commit/511e4014a088c195ffe50eaff7c26e8654e10f10))
+
+
+
+
+
 ## [3.1.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@3.1.0...@restorecommerce/acs-client@3.1.1) (2025-09-17)
 
 **Note:** Version bump only for package @restorecommerce/acs-client

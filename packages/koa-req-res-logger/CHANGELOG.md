@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.11](https://github.com/restorecommerce/koa-req-res-logger/compare/@restorecommerce/koa-req-res-logger@1.1.10...@restorecommerce/koa-req-res-logger@1.1.11) (2025-10-02)
+
+
+### Bug Fixes
+
+* bump dependencies, fix dependencies ([ce367b7](https://github.com/restorecommerce/koa-req-res-logger/commit/ce367b75c3998dd87fc6827dca33f5fcd6a26493))
+* upgrade vitest, fix reflection ([511e401](https://github.com/restorecommerce/koa-req-res-logger/commit/511e4014a088c195ffe50eaff7c26e8654e10f10))
+
+
+
+
+
 ## [1.1.10](https://github.com/restorecommerce/koa-req-res-logger/compare/@restorecommerce/koa-req-res-logger@1.1.9...@restorecommerce/koa-req-res-logger@1.1.10) (2024-11-04)
 
 

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.12](https://github.com/restorecommerce/libs/compare/@restorecommerce/koa-health-check@1.0.11...@restorecommerce/koa-health-check@1.0.12) (2025-10-02)
+
+
+### Bug Fixes
+
+* bump dependencies, fix dependencies ([ce367b7](https://github.com/restorecommerce/libs/commit/ce367b75c3998dd87fc6827dca33f5fcd6a26493))
+* upgrade vitest, fix reflection ([511e401](https://github.com/restorecommerce/libs/commit/511e4014a088c195ffe50eaff7c26e8654e10f10))
+
+
+
+
+
 ## [1.0.11](https://github.com/restorecommerce/libs/compare/@restorecommerce/koa-health-check@1.0.10...@restorecommerce/koa-health-check@1.0.11) (2025-09-17)
 
 **Note:** Version bump only for package @restorecommerce/koa-health-check

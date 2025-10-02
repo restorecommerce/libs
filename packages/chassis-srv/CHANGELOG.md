@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.7.3](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.7.2...@restorecommerce/chassis-srv@1.7.3) (2025-10-02)
+
+
+### Bug Fixes
+
+* bump dependencies ([3570612](https://github.com/restorecommerce/chassis-srv/commit/35706125e79566107ff575e6d0df0bb62d9add01))
+* bump dependencies, fix dependencies ([ce367b7](https://github.com/restorecommerce/chassis-srv/commit/ce367b75c3998dd87fc6827dca33f5fcd6a26493))
+* fix broken dependencies ([d152086](https://github.com/restorecommerce/chassis-srv/commit/d152086a503f45b098474568760947e2dacf081c))
+* upgrade vitest, fix reflection ([511e401](https://github.com/restorecommerce/chassis-srv/commit/511e4014a088c195ffe50eaff7c26e8654e10f10))
+
+
+
+
+
 ## [1.7.2](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.7.1...@restorecommerce/chassis-srv@1.7.2) (2025-09-17)
 
 

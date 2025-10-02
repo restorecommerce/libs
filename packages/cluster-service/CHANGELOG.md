@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.0.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/cluster-service@1.0.4...@restorecommerce/cluster-service@1.0.5) (2025-10-02)
+
+
+### Bug Fixes
+
+* upgrade vitest, fix reflection ([511e401](https://github.com/restorecommerce/libs/commit/511e4014a088c195ffe50eaff7c26e8654e10f10))
+
+
+
+
+
 ## [1.0.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/cluster-service@1.0.3...@restorecommerce/cluster-service@1.0.4) (2024-11-04)
 
 

@@ -12,7 +12,6 @@ import {
 } from '../src/acs/interfaces';
 import { initAuthZ, ACSAuthZ } from '../src/acs/authz';
 import logger from '../src/logger';
-import * as _ from 'lodash';
 import { cfg } from '../src';
 import {
   Request,
@@ -21,6 +20,7 @@ import {
 import { GrpcMockServer } from '@alenon/grpc-mock-server';
 import { Effect } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/rule';
 import { it, describe, beforeAll, afterAll, beforeEach, afterEach } from 'vitest';
+import {isArray} from "remeda";
 
 let authZ: ACSAuthZ;
 
@@ -216,8 +216,8 @@ const readAction = [
 ];
 
 const encode = (object: any): any => {
-  if (_.isArray(object)) {
-    return _.map(object, encode);
+  if (isArray(object)) {
+    return object.map(encode);
   } else {
     return {
       value: Buffer.from(JSON.stringify(object))
@@ -226,7 +226,7 @@ const encode = (object: any): any => {
 };
 
 const updateMetaData = (resourceList: Array<any>): Array<CtxResource> => {
-  if (!_.isArray(resourceList)) {
+  if (!isArray(resourceList)) {
     resourceList = [resourceList];
   }
   return resourceList.map((resource): any => {

@@ -18,7 +18,6 @@ import logger, { setLogger, getLogger } from '../logger.js';
 import { flushCache, getOrFill } from './cache.js';
 import { Events, registerProtoMeta } from '@restorecommerce/kafka-client';
 import {
-  _,
   formatResourceType,
   mapResourceURNObligationProperties
 } from '../utils.js';
@@ -33,6 +32,7 @@ import { protoMetadata as ruleMeta } from '@restorecommerce/rc-grpc-clients/dist
 import { protoMetadata as policyMeta } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/policy_set.js';
 import { protoMetadata as policySetMeta } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/policy_set.js';
 import { Logger } from '@restorecommerce/logger';
+import { isEmptyish, map } from "remeda";
 
 registerProtoMeta(
   ruleMeta,
@@ -173,7 +173,7 @@ export class UnAuthZ implements IAuthZ {
   private encode(object: any): any {
     if (object) {
       if (Array.isArray(object)) {
-        return _.map(object, this.encode.bind(this));
+        return map(object, this.encode.bind(this));
       } else {
         return {
           value: Buffer.from(JSON.stringify(object))
@@ -226,7 +226,7 @@ export class UnAuthZ implements IAuthZ {
       };
     }
 
-    if (_.isEmpty(response)) {
+    if (isEmptyish(response)) {
       logger?.error('Unexpected empty response from ACS');
     }
 
@@ -276,7 +276,7 @@ export class UnAuthZ implements IAuthZ {
       };
     }
 
-    if (_.isEmpty(response)) {
+    if (isEmptyish(response)) {
       logger?.error('Unexpected empty response from ACS');
     }
 
@@ -351,7 +351,7 @@ export class ACSAuthZ implements IAuthZ {
       };
     }
 
-    if (_.isEmpty(response)) {
+    if (isEmptyish(response)) {
       logger?.error('Unexpected empty response from ACS');
     }
     return response;
@@ -407,7 +407,7 @@ export class ACSAuthZ implements IAuthZ {
       };
     }
 
-    if (_.isEmpty(response)) {
+    if (isEmptyish(response)) {
       logger?.error('Unexpected empty response from ACS');
     }
 
@@ -417,7 +417,7 @@ export class ACSAuthZ implements IAuthZ {
   private encode(object: any): any {
     if (object) {
       if (Array.isArray(object)) {
-        return _.map(object, this.encode.bind(this));
+        return map(object, this.encode.bind(this));
       } else {
         return {
           value: Buffer.from(JSON.stringify(object))

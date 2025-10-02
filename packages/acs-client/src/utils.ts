@@ -1,5 +1,3 @@
-import lodash from 'lodash';
-export const _ = lodash;
 import {
   PolicySetRQ, PolicySetRQResponse, AttributeTarget, HierarchicalScope,
   ResourceFilterMap, CustomQueryArgs, DecisionResponse, ACSResource, AuthZAction,
@@ -23,6 +21,7 @@ import {
   Response_Decision
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/access_control.js';
 import { Effect } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/rule.js';
+import { isEmptyish, isIncludedIn, isNullish } from "remeda";
 
 export const handleError = (err: string | Error | any): any => {
   let error;
@@ -198,7 +197,7 @@ const buildQueryFromTarget = (
     ruleCondition = true;
   }
   // if there is a condition add this to filter
-  if (condition && !_.isEmpty(condition)) {
+  if (condition && !isEmptyish(condition)) {
     condition = condition.replace(/\\n/g, '\n');
     if (!reqResources) {
       reqResources = [];
@@ -342,7 +341,7 @@ const buildQueryFromTarget = (
       query.filters.operator = filterOperator;
     }
     delete query['filter'];
-  } else if (!_.isEmpty(filter) || key == FilterOp_Operator.or) {
+  } else if (!isEmptyish(filter) || key == FilterOp_Operator.or) {
     query['filters'] = filter;
     // override the operator if its returned from rule condition
     if (filterOperator) {
@@ -436,16 +435,16 @@ export const buildFilterPermissions = async (
             database
           );
 
-          if (!_.isEmpty(filterPermissions)) {
+          if (!isEmptyish(filterPermissions)) {
             scopingUpdated = filterPermissions.scopingUpdated;
             delete filterPermissions.scopingUpdated;
           }
-          if (!_.isEmpty(filterPermissions)) {
+          if (!isEmptyish(filterPermissions)) {
             policyFiltersArr.push(filterPermissions);
             // if reducedUserScope is empty - no filters are applied further
             // as this is a rule without scoping and should override the filters
             // from other Rules which have scoping entity
-            if (_.isEmpty(reducedUserScope) && rule.effect === effect) {
+            if (isEmptyish(reducedUserScope) && rule.effect === effect) {
               return { filters: [] } as QueryArguments;
             }
           }
@@ -457,15 +456,15 @@ export const buildFilterPermissions = async (
     }
   }
 
-  if (_.isEmpty(policyEffects)) {
+  if (isEmptyish(policyEffects)) {
     return null;
   }
 
   let applicable: Effect;
   if (pSetAlgorithm == urns.permitOverrides) {
-    applicable = _.includes(policyEffects, Effect.PERMIT) ? Effect.PERMIT : Effect.DENY;
+    applicable = isIncludedIn(Effect.PERMIT, policyEffects) ? Effect.PERMIT : Effect.DENY;
   } else {
-    applicable = _.includes(policyEffects, Effect.DENY) ? Effect.DENY : Effect.PERMIT;
+    applicable = isIncludedIn(Effect.DENY, policyEffects) ? Effect.DENY : Effect.PERMIT;
   }
 
   const key = applicable == Effect.PERMIT ? 'or' : 'and';
@@ -541,7 +540,7 @@ export const buildFilterPermissions = async (
     query.filters = [];
   }
 
-  if (!_.isEmpty(query) && (!_.isNil(query.filters) || !_.isEmpty(query['fields']) || !_.isEmpty(query['custom_query']))) {
+  if (!isEmptyish(query) && (!isNullish(query.filters) || !isEmptyish(query['fields']) || !isEmptyish(query['custom_query']))) {
     if (query['custom_arguments']) {
       query['custom_arguments'] = { value: Buffer.from(JSON.stringify(query['custom_arguments'])) };
     }

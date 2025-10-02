@@ -1,5 +1,4 @@
 import {
-  _,
   generateOperationStatus,
   createResourceFilterMap,
   FilterMapResponse,
@@ -35,6 +34,7 @@ import {
 } from './interfaces.js';
 import logger from '../logger.js';
 import { errors, cfg } from '../config.js';
+import { clone, isEmptyish } from "remeda";
 
 const subjectIsUnauthenticated = (subject: any): subject is UnauthenticatedContext => {
   return subject?.unauthenticated === true;
@@ -120,7 +120,7 @@ export const accessRequest = async (
   ctx: ACSClientContext,
   options?: ACSClientOptions
 ): Promise<DecisionResponse | PolicySetRQResponse> => {
-  if (_.isEmpty(subject) || !subject.token ) {
+  if (isEmptyish(subject) || !subject.token ) {
     // check if unauthenticated user is configured in config.json
     subject = cfg.get('authorization:users:unauthenticated_user')
       // fallback to old configs
@@ -129,7 +129,7 @@ export const accessRequest = async (
       ?? { unauthenticated: true };
   }
 
-  const subClone = _.cloneDeep(subject);
+  const subClone = clone(subject);
 
   // by default if the config for authorization enabling and enforcement is missing
   // enable it by default (true)
@@ -144,7 +144,7 @@ export const accessRequest = async (
     };
   }
 
-  if (_.isEmpty(subject)) {
+  if (isEmptyish(subject)) {
     return {
       decision: Response_Decision.DENY,
       operation_status: generateOperationStatus(
@@ -162,7 +162,7 @@ export const accessRequest = async (
   }
   const resourceName = resource?.map(r => r.resource).join(',');
 
-  if (_.isEmpty(resource)) {
+  if (isEmptyish(resource)) {
     const msg = notAllowedMessage(
       subjectID,
       resourceName,
@@ -221,7 +221,7 @@ export const accessRequest = async (
     }
 
     // handle case if policySet is empty
-    if (authzEnforced && (_.isEmpty(policySetResponse?.policy_sets))) {
+    if (authzEnforced && (isEmptyish(policySetResponse?.policy_sets))) {
       const msg = notAllowedMessage(
         subjectID,
         resourceName,
@@ -241,7 +241,7 @@ export const accessRequest = async (
       };
     }
 
-    if (!authzEnforced && (_.isEmpty(policySetResponse?.policy_sets))) {
+    if (!authzEnforced && (isEmptyish(policySetResponse?.policy_sets))) {
       logger?.verbose([
         `The Access response was INDETERMIATE for a request with subject:${ subjectID ?? 'undefined' },`,
         `resource:${ resourceName ?? 'undefined' }, action:${ action ?? 'undefined' }, target_scope:${ targetScope ?? 'undefined' }`,

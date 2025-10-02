@@ -33,7 +33,7 @@ function createTracerFormat(opts: RestoreLoggerConsoleTransportOptions, precompi
       const sourceSym: any = Object.getOwnPropertySymbols(info).find((s) => {
         return String(s) === 'Symbol(source)';
       });
-      const source = info[sourceSym];
+      const source = info[sourceSym] as any;
       const sourceFile = source.file;
       const sourceLine = source.line;
       ret.push(` ${sourceFile}:${sourceLine}`);

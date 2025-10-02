@@ -16,17 +16,17 @@
     "grpc"
   ],
   "dependencies": {
-    "@grpc/grpc-js": "^1.10.10",
-    "@grpc/proto-loader": "^0.7.13",
+    "@grpc/grpc-js": "^1.14.0",
+    "@grpc/proto-loader": "^0.8.0",
     "@restorecommerce/logger": "^1.3.6",
     "cls-rtracer": "^2.6.3",
     "nice-grpc": "^2.1.13",
     "nice-grpc-client-middleware-deadline": "^2.0.16",
     "nice-grpc-client-middleware-retry": "^3.1.12",
-    "protobufjs": "^7.3.2",
+    "protobufjs": "^7.5.4",
     "retry": "^0.13.1",
-    "rxjs": "^7.8.1",
-    "winston": "^3.13.0"
+    "rxjs": "^7.8.2",
+    "winston": "^3.18.3"
   },
   "devDependencies": {
     "@restorecommerce/dev": "^0.1.1",

@@ -1,5 +1,5 @@
 {
-  "extends": "../../tsconfig-base.json",
+  "extends": "../../node_modules/@restorecommerce/dev/tsconfig.json",
   "compilerOptions": {
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,

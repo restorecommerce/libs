@@ -17,7 +17,7 @@ import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin
 import { createServer } from 'node:http';
 import { WebSocketServer } from 'ws';
 /* eslint-disable */
-import { useServer } from 'graphql-ws/lib/use/ws';
+import { useServer } from 'graphql-ws/use/ws';
 import { type Disposable } from 'graphql-ws';
 import _ from 'lodash';
 import { makeExecutableSchema } from '@graphql-tools/schema';

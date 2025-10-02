@@ -37,7 +37,7 @@
     "arangojs": "^8.7.0",
     "cross-env": "^7.0.3",
     "esbuild": "^0.25.9",
-    "eslint": "^8.57.0",
+    "eslint": "^9.36.0",
     "npm-run-all": "^4.1.5",
     "rimraf": "^6.0.1",
     "should": "^13.2.3",
@@ -52,6 +52,15 @@
     "build:tsc:watch": "tsc -d --watch",
     "build:clean": "rimraf lib",
     "build": "npm-run-all lint build:clean build:tsc"
+  },
+  "nx": {
+    "targets": {
+      "build": {
+        "outputs": [
+          "{projectRoot}/lib"
+        ]
+      }
+    }
   },
   "engines": {
     "node": ">= 20.0.0"

@@ -34,8 +34,8 @@
   },
   "devDependencies": {
     "@types/node": "^22.7.9",
-    "eslint": "9.13.0",
-    "eslint-plugin-prefer-arrow-functions": "^3.2.4",
+    "eslint": "^9.36.0",
+    "eslint-plugin-prefer-arrow-functions": "^3.9.1",
     "is-generator": "^1.0.3",
     "isomorphic-fetch": "^3.0.0",
     "koa": "^2.15.3",

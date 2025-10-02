@@ -22,7 +22,7 @@
     "@restorecommerce/chassis-srv": "^1.7.2",
     "@restorecommerce/grpc-client": "^2.2.11",
     "@restorecommerce/kafka-client": "^1.3.1",
-    "@restorecommerce/rc-grpc-clients": "5.1.55",
+    "@restorecommerce/rc-grpc-clients": "^5.1.60",
     "@restorecommerce/scs-jobs": "^0.2.1",
     "@restorecommerce/service-config": "^1.1.5",
     "nice-grpc-server-reflection": "^3.0.2",

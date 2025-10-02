@@ -1,9 +1,7 @@
 import { ServiceImplementation } from 'nice-grpc';
 import { FileDescriptorSet, FileDescriptorProto } from '@restorecommerce/rc-grpc-clients/dist/generated/google/protobuf/descriptor.js';
 import { ServerReflection, } from 'nice-grpc-server-reflection';
-import {
-  IServerReflectionService
-} from 'nice-grpc-server-reflection/lib/proto/grpc/reflection/v1alpha/reflection_grpc_pb.js';
+import { IServerReflectionService } from "nice-grpc-server-reflection/lib/proto/grpc/reflection/v1/reflection_grpc_pb.js";
 
 export const buildReflectionService = (services: {
   descriptor: any;

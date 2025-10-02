@@ -25,7 +25,7 @@
     "@restorecommerce/rc-grpc-clients": "5.1.55",
     "@restorecommerce/scs-jobs": "^0.2.1",
     "@restorecommerce/service-config": "^1.1.5",
-    "nice-grpc-server-reflection": "^2.0.12",
+    "nice-grpc-server-reflection": "^3.0.2",
     "redis": "^4.7.0",
     "remeda": "^2.31.1"
   },

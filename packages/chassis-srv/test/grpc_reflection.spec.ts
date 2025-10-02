@@ -12,7 +12,7 @@ import {
   ServerReflectionDefinition,
   ServerReflectionClient,
   DeepPartial,
-} from '@restorecommerce/rc-grpc-clients/dist/generated/grpc/reflection/v1alpha/reflection.js';
+} from '@restorecommerce/rc-grpc-clients/dist/generated/grpc/reflection/v1/reflection.js';
 import { it, describe, beforeAll, afterAll, beforeEach, afterEach } from 'vitest';
 
 const toAsync = async function* <T>(requests: DeepPartial<T>[]): AsyncIterable<DeepPartial<T>> {

@@ -22,7 +22,7 @@
   "devDependencies": {
     "is-generator": "^1.0.3",
     "should": "^13.2.3",
-    "vitest": "^2.1.4"
+    "vitest": "^3.2.4"
   },
   "scripts": {
     "test": "vitest run --dangerouslyIgnoreUnhandledErrors",

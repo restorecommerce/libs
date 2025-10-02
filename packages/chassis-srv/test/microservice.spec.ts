@@ -12,7 +12,7 @@ import {
   StreamClient
 } from '@restorecommerce/rc-grpc-clients/dist/generated/test/test.js';
 import { Channel, createChannel } from 'nice-grpc';
-import { DeepPartial } from '@restorecommerce/rc-grpc-clients/dist/generated/grpc/reflection/v1alpha/reflection.js';
+import { DeepPartial } from '@restorecommerce/rc-grpc-clients/dist/generated/grpc/reflection/v1/reflection.js';
 import { it, describe, beforeAll, afterAll } from 'vitest';
 
 const config = chassis.config;

@@ -804,8 +804,8 @@ export class Kafka {
       ...this.commonOptions
     });
 
-    consumer.on('client:broker:connect', (err: any) => {
-      this.logger.info('Consumer is ready.', err);
+    consumer.on('client:broker:connect', (msg: any) => {
+      this.logger.info('Consumer is ready.', msg);
     });
 
     consumer.on('client:broker:disconnect', (err: any) => {
@@ -816,32 +816,32 @@ export class Kafka {
       this.logger.warn('Consumer connection failed:', err);
     });
 
-    consumer.on('client:broker:drain', (err: any) => {
-      this.logger.info('Consumer broker ready for requests:', err);
+    consumer.on('client:broker:drain', (msg: any) => {
+      this.logger.info('Consumer broker ready for requests:', msg);
     });
 
-    consumer.on('client:metadata', (err: any) => {
-      this.logger.info('Consumer broker metadata:', err);
+    consumer.on('client:metadata', (msg: any) => {
+      this.logger.silly('Consumer broker metadata:', msg);
     });
 
-    consumer.on('client:close', (err: any) => {
-      this.logger.warn('Consumer client closed:', err);
+    consumer.on('client:close', (msg: any) => {
+      this.logger.warn('Consumer client closed:', msg);
     });
 
-    consumer.on('consumer:group:join', (err: any) => {
-      this.logger.info('Consumer joining group:', err);
+    consumer.on('consumer:group:join', (msg: any) => {
+      this.logger.info('Consumer joining group:', msg);
     });
 
-    consumer.on('consumer:group:leave', (err: any) => {
-      this.logger.info('Consumer leaving group:', err);
+    consumer.on('consumer:group:leave', (msg: any) => {
+      this.logger.info('Consumer leaving group:', msg);
     });
 
-    consumer.on('consumer:group:rejoin', (err: any) => {
-      this.logger.warn('Consumer re-joining group:', err);
+    consumer.on('consumer:group:rejoin', (msg: any) => {
+      this.logger.warn('Consumer re-joining group:', msg);
     });
 
-    consumer.on('consumer:group:rebalance', (err: any) => {
-      this.logger.warn('Consumer group rebalancing:', err);
+    consumer.on('consumer:group:rebalance', (msg: any) => {
+      this.logger.warn('Consumer group rebalancing:', msg);
     });
 
     consumer.on('consumer:heartbeat:cancel', (err: any) => {

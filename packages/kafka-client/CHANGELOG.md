@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.4](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.3.3...@restorecommerce/kafka-client@1.3.4) (2025-10-06)
+
+
+### Bug Fixes
+
+* **kafka-client:** reduce metadata log level to silly ([4490504](https://github.com/restorecommerce/kafka-client/commit/4490504f57878b23b8406fd4d9fa31665d2bfe79))
+
+
+
+
+
 ## [1.3.3](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.3.2...@restorecommerce/kafka-client@1.3.3) (2025-10-06)
 
 **Note:** Version bump only for package @restorecommerce/kafka-client

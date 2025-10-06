@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.9.5](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.4...@restorecommerce/resource-base-interface@1.9.5) (2025-10-06)
+
+**Note:** Version bump only for package @restorecommerce/resource-base-interface
+
+
+
+
+
 ## [1.9.4](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.3...@restorecommerce/resource-base-interface@1.9.4) (2025-10-06)
 
 **Note:** Version bump only for package @restorecommerce/resource-base-interface

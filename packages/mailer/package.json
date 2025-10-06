@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/mailer",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "description": "Multi transport mailer based on nodemailer",
   "main": "./lib/index.js",
   "typings": "./lib/index.d.ts",
@@ -23,7 +23,7 @@
     "winston": "^3.11.0"
   },
   "devDependencies": {
-    "@restorecommerce/dev": "^0.1.2",
+    "@restorecommerce/dev": "^0.2.0",
     "@types/node": "^22.7.9",
     "@types/nodemailer": "^6.4.16",
     "@types/nodemailer-html-to-text": "^3.1.3",

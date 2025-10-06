@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/dev@0.1.2...@restorecommerce/dev@0.2.0) (2025-10-06)
+
+
+### Features
+
+* **dev:** add commonifier esbuild plugin ([aca6619](https://github.com/restorecommerce/libs/commit/aca66193888f3dd9cf0b569d7fd1ed76eb8a5bd3))
+
+
+
+
+
 ## [0.1.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/dev@0.1.1...@restorecommerce/dev@0.1.2) (2025-10-02)
 
 

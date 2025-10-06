@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/kafka-client",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "Opinionated Kafka Client for Microservices",
   "main": "./lib/index.js",
   "author": "n-fuse GmbH",
@@ -19,8 +19,8 @@
   "typings": "lib/index.d.ts",
   "dependencies": {
     "@platformatic/kafka": "^1.11.0",
-    "@restorecommerce/logger": "^1.3.7",
-    "@restorecommerce/rc-grpc-clients": "^5.1.61",
+    "@restorecommerce/logger": "^1.3.8",
+    "@restorecommerce/rc-grpc-clients": "^5.1.62",
     "async": "^3.2.6",
     "cls-rtracer": "^2.6.3",
     "events": "^3.3.0",
@@ -29,7 +29,7 @@
     "retry": "^0.13.1"
   },
   "devDependencies": {
-    "@restorecommerce/dev": "^0.1.2",
+    "@restorecommerce/dev": "^0.2.0",
     "@types/async": "^3.2.23",
     "@types/node": "^22.7.9",
     "@vitest/coverage-v8": "^3.2.4",

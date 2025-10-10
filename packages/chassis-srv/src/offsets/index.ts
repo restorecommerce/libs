@@ -94,7 +94,7 @@ export class OffsetStore {
     const offsetValue = await this.redisClient.get(redisKey);
     this.logger?.info(
       'The offset value retreived from redis for topic is:',
-      { topicName, offsetValue }
+      { topicName, offsetValue: Number(offsetValue) }
     );
     if (!offsetValue) {
       return BigInt(0);

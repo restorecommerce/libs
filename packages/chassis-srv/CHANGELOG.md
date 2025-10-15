@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.7.6](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.7.5...@restorecommerce/chassis-srv@1.7.6) (2025-10-15)
+
+
+### Bug Fixes
+
+* **chassis-srv:** fix log message convert bigint to number ([c18037a](https://github.com/restorecommerce/chassis-srv/commit/c18037a7373efe6758aab7877bc4ebe4f978f7b7))
+
+
+
+
+
 ## [1.7.5](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.7.4...@restorecommerce/chassis-srv@1.7.5) (2025-10-06)
 
 **Note:** Version bump only for package @restorecommerce/chassis-srv

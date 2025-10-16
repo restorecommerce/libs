@@ -567,7 +567,8 @@ export class Kafka {
               headerValue: noopDeserializer,
             },
             retries: 100,
-            retryDelay: 1000
+            retryDelay: 1000,
+            autocommit: false
           };
 
           // These are kept from migration of KafkaJS to Platformic lib

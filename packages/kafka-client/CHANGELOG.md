@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.5](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.3.4...@restorecommerce/kafka-client@1.3.5) (2025-10-16)
+
+
+### Bug Fixes
+
+* **kafka-client:** set autocommit to false ([d19f875](https://github.com/restorecommerce/kafka-client/commit/d19f87562b1e0819d64374328616dbbe41fe506b))
+
+
+
+
+
 ## [1.3.4](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.3.3...@restorecommerce/kafka-client@1.3.4) (2025-10-06)
 
 

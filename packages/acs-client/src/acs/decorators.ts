@@ -273,7 +273,7 @@ export function access_controlled_function<T extends AccessControlledServiceRequ
 
         const database = typeof (kwargs.database) === 'function'
           ? await kwargs.database(this, request, ...args)
-          : kwargs.database ?? this.__acsDatabaseProvider ??'arangoDB';
+          : kwargs.database ?? this.__acsDatabaseProvider ?? 'arangoDB';
 
         const acsResponse: DecisionResponse & PolicySetRQResponse = await accessRequest(
           acsContext.subject,

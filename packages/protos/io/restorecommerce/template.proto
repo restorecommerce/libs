@@ -49,10 +49,6 @@ enum TemplateUseCase {
   FULFILLMENT_FAILED_EMAIL = 21;
 }
 
-message Deleted {
-  optional string id = 1;
-}
-
 message TemplateList {
   repeated Template items = 1;
   optional uint32 total_count = 2;

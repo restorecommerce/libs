@@ -120,8 +120,12 @@ export interface AuthZ<TSubject, TContext = any, TResource = ACSResource, TActio
   /**
    * Check is the subject is allowed to do an action on a specific resource
    */
-  isAllowed(request: Request<Target<TSubject, TResource, TAction>, TContext>,
-    ctx: ACSClientContext, useCache: boolean, roleScopingEntityURN: string): Promise<DecisionResponse>;
+  isAllowed(
+    request: Request<Target<TSubject, TResource, TAction>, TContext>,
+    ctx: ACSClientContext,
+    useCache: boolean,
+    roleScopingEntityURN: string
+  ): Promise<DecisionResponse>;
 }
 
 export interface Credentials {
@@ -228,4 +232,5 @@ export interface ACSClientOptions {
   operation?: Operation;
   database?: 'arangoDB' | 'postgres';
   useCache?: boolean; // default value is true
+  roleScopingEntityURN?: string;
 }

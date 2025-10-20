@@ -15,24 +15,17 @@ const DB_SYSTEM = '_system';
  * @return active ArangoDB connection
  */
 const connect = async (conf: any, logger: Logger): Promise<any> => {
-  const dbHost = conf.host || '127.0.0.1';
-  const dbPort = conf.port || 8529;
-  const dbName = conf.database || 'arango';
-  const autoCreate = conf.autoCreate || false;
-  const attempts = conf.retries || 3;
-  const delay = conf.delay || 1000;
-  const arangoVersion = conf.version || 30000;
-
-  let url = 'http://';
-
+  const dbProtocol = conf.protocol ?? 'http'
+  const dbHost = conf.host ?? '127.0.0.1';
+  const dbPort = conf.port ?? 8529;
+  const dbName = conf.database ?? 'arango';
+  const autoCreate = conf.autoCreate ?? false;
+  const attempts = conf.retries ?? 3;
+  const delay = conf.delay ?? 1000;
+  const arangoVersion = conf.version ?? 30000;
   const username = conf.username;
   const password = conf.password;
-
-  if (username && password) {
-    url = url + `${username}:${password}@`;
-  }
-
-  url = url + `${dbHost}:${dbPort}`;
+  const url = `${dbProtocol}://${dbHost}:${dbPort}`;
 
   let mainError;
   let i = 1;

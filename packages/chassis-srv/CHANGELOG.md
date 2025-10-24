@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.7.8](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.7.7...@restorecommerce/chassis-srv@1.7.8) (2025-10-24)
+
+
+### Bug Fixes
+
+* **chassis-srv:** url auth nolonger supported! Make protocol configuratable ([23c9e83](https://github.com/restorecommerce/chassis-srv/commit/23c9e83c44565e053d1170111c787e8901ddd5a2))
+
+
+
+
+
 ## [1.7.7](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.7.6...@restorecommerce/chassis-srv@1.7.7) (2025-10-16)
 
 **Note:** Version bump only for package @restorecommerce/chassis-srv

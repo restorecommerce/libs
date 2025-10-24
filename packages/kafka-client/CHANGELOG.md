@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.6](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.3.5...@restorecommerce/kafka-client@1.3.6) (2025-10-24)
+
+
+### Bug Fixes
+
+* bump dependencies ([01384c9](https://github.com/restorecommerce/kafka-client/commit/01384c932260105d441778c7da2b6fce8acfdcb1))
+
+
+
+
+
 ## [1.3.5](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.3.4...@restorecommerce/kafka-client@1.3.5) (2025-10-16)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.6](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@3.1.5...@restorecommerce/acs-client@3.1.6) (2025-10-24)
+
+
+### Bug Fixes
+
+* **chassis-srv:** url auth nolonger supported! Make protocol configuratable ([23c9e83](https://github.com/restorecommerce/libs/commit/23c9e83c44565e053d1170111c787e8901ddd5a2))
+
+
+
+
+
 ## [3.1.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@3.1.4...@restorecommerce/acs-client@3.1.5) (2025-10-16)
 
 **Note:** Version bump only for package @restorecommerce/acs-client

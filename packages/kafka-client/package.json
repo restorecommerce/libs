@@ -18,7 +18,7 @@
   "type": "module",
   "typings": "lib/index.d.ts",
   "dependencies": {
-    "@platformatic/kafka": "^1.11.0",
+    "@platformatic/kafka": "1.18.0",
     "@restorecommerce/logger": "^1.3.8",
     "@restorecommerce/rc-grpc-clients": "^5.1.62",
     "async": "^3.2.6",

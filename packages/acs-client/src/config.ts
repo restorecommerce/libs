@@ -26,10 +26,7 @@ Object.assign(errors, cfg.get('errors'));
 
 export const urns = {
   model: 'urn:restorecommerce:acs:model',
-  user: 'urn:restorecommerce:acs:model:user.User',
-  organization: "urn:restorecommerce:acs:model:organization.Organization",
   entity: 'urn:restorecommerce:acs:names:model:entity',
-  role: 'urn:restorecommerce:acs:names:role',
   roleScopingEntity: 'urn:restorecommerce:acs:names:roleScopingEntity',
   roleScopingInstance: 'urn:restorecommerce:acs:names:roleScopingInstance',
   hierarchicalRoleScoping: 'urn:restorecommerce:acs:names:hierarchicalRoleScoping',
@@ -57,8 +54,16 @@ export const urns = {
 export type KnownUrns = typeof urns;
 Object.assign(urns, cfg.get('authorization:urns'));
 
+export const entities = {
+  user: 'urn:restorecommerce:acs:model:user.User',
+  organization: "urn:restorecommerce:acs:model:organization.Organization",
+};
+export type KnownEntities = typeof entities;
+Object.assign(entities, cfg.get('urns'));
+
 export const updateConfig = (config: any) => {
   cfg = config;
   Object.assign(errors, cfg.get('errors'));
   Object.assign(urns, cfg.get('authorization:urns'));
+  Object.assign(entities, cfg.get('urns'));
 };

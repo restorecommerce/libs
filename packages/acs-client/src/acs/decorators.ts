@@ -38,7 +38,7 @@ import {
 import {
   accessRequest,
 } from './resolver.js';
-import { cfg, urns } from '../config.js';
+import { cfg, entities, urns } from '../config.js';
 import { randomUUID } from 'crypto';
 import {
   Filter_Operation,
@@ -189,7 +189,7 @@ export const DefaultMetaDataInjector = async <T extends ResourceList>(
     item.meta.owners ??= [
       request.subject?.scope ? {
         id: urns.ownerIndicatoryEntity,
-        value: urns.organization,
+        value: entities.organization,
         attributes: [{
           id: urns.ownerInstance,
           value: request.subject.scope
@@ -197,7 +197,7 @@ export const DefaultMetaDataInjector = async <T extends ResourceList>(
       } : undefined,
       request.subject?.id ? {
         id: urns.ownerIndicatoryEntity,
-        value: urns.user,
+        value: entities.user,
         attributes: [{
           id: urns.ownerInstance,
           value: request.subject.id

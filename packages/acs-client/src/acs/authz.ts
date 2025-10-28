@@ -13,7 +13,7 @@ import {
   ACSResource,
 } from './interfaces.js';
 import { createChannel, createClient } from '@restorecommerce/grpc-client';
-import { cfg, updateConfig, urns } from '../config.js';
+import { cfg, entities, updateConfig, urns } from '../config.js';
 import logger, { setLogger, getLogger } from '../logger.js';
 import { flushCache, getOrFill } from './cache.js';
 import { Events, registerProtoMeta } from '@restorecommerce/kafka-client';
@@ -113,7 +113,7 @@ export const createResourceTarget = (resource: ACSResource[], action: AuthZActio
       }
 
       // entity - urn:restorecommerce:acs:names:model:entity
-      const entityName = (urns as any)[resourceName]
+      const entityName = (entities as any)[resourceName]
         ?? `${urns.model}:${formatResourceType(resourceName, resourceNameSpace)}`;
       flattened.push({
         id: urns.entity,

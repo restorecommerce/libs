@@ -103,14 +103,16 @@
       "address": "localhost:50053"
     }
   },
+  "urns": {
+    "user": "urn:restorecommerce:acs:model:user.User",
+    "organization": "urn:restorecommerce:acs:model:organization.Organization"
+  },
   "authorization": {
     "service": "acs-srv",
     "enabled": true,
     "enforce": true,
     "urns": {
       "model": "urn:restorecommerce:acs:model",
-      "user": "urn:restorecommerce:acs:model:user.User",
-      "organization": "urn:restorecommerce:acs:model:organization.Organization",
       "entity": "urn:restorecommerce:acs:names:model:entity",
       "role": "urn:restorecommerce:acs:names:role",
       "roleScopingEntity": "urn:restorecommerce:acs:names:roleScopingEntity",

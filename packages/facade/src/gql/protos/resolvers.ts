@@ -220,11 +220,11 @@ export const getGQLResolverFunctions = <
                     if (!response[bufferField]) {
                       response[bufferField] = { value: [] };
                     }
-                    if (response[bufferField] && response[bufferField].value && !_.isArray(response[bufferField].value)) {
+                    if (response[bufferField] && response[bufferField].value && !Array.isArray(response[bufferField].value)) {
                       response[bufferField].value = [];
                     }
                     let data = JSON.parse(chunkObj[bufferField].value.toString());
-                    if (_.isArray(data)) {
+                    if (Array.isArray(data)) {
                       for (let dataObj of data) {
                         response[bufferField].value.push(dataObj);
                       }

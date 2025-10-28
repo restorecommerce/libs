@@ -1,4 +1,7 @@
-import { type ServiceImplementation, type CompatServiceDefinition } from 'nice-grpc';
+import {
+  type ServiceImplementation,
+  type CompatServiceDefinition,
+} from 'nice-grpc';
 import { type RedisClientType, createClient } from 'redis';
 import {
   Server,
@@ -12,8 +15,11 @@ import {
 import {
   Events,
   Topic,
-  registerProtoMeta
+  registerProtoMeta,
 } from '@restorecommerce/kafka-client';
+import {
+  protoMetadata as ResourceBaseMeta,
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base.js';
 import { Arango } from '@restorecommerce/chassis-srv/lib/database/provider/arango/base.js';
 import { createLogger, type Logger } from '@restorecommerce/logger';
 import { BindConfig } from '@restorecommerce/chassis-srv/lib/microservice/transport/provider/grpc/index.js';
@@ -33,14 +39,20 @@ import {
 } from '@restorecommerce/service-config';
 import { initAuthZ } from '@restorecommerce/acs-client';
 import { runWorker } from '@restorecommerce/scs-jobs';
-import { ServiceBase } from '../index.js';
+import { ServiceBase } from '../core/index.js';
+
+registerProtoMeta(
+  ResourceBaseMeta,
+  CommandInterfaceMeta,
+  JobMeta,
+);
 
 export type ReflectionService = ServiceImplementation<any>;
 export type EventHandler = (msg: any, context?: any, config?: any, eventName?: string) => Promise<any>;
 export interface ServiceBindConfig<T extends CompatServiceDefinition> extends BindConfig<T> {
   name: string;
   meta: ProtoMetadata;
-}
+};
 
 export abstract class WorkerBase {
   private _cfg: ServiceConfig;
@@ -118,6 +130,7 @@ export abstract class WorkerBase {
 
   protected readonly services = new Map<string, ServiceImplementation<any> | ServiceBase<any, any> | CommandInterface>();
   protected readonly topics = new Map<string, Topic>();
+  protected readonly redisClients = new Map<string, RedisClientType>();
   protected readonly eventHandlers = new Map<string, EventHandler>();
   protected readonly jobHandler: ServiceImplementation<any> = {
     handleQueuedJob: (msg: any, context: any, config?: any, eventName?: string) => {
@@ -158,6 +171,22 @@ export abstract class WorkerBase {
     );
   }
 
+  protected async bindRedisClients() {
+    this.logger?.verbose('bind Redis');
+    const redisConfig = this.cfg.get('redis');
+    const indexes = this.cfg.get('redis:db-indexes');
+    await Promise.all(
+      Object.entries(indexes).map(
+        async ([key, index]) => {
+          redisConfig.database = index;
+          const redisClient: RedisClientType = createClient(redisConfig);
+          await redisClient.connect();
+          this.redisClients.set(key, redisClient);
+        }
+      )
+    );
+  }
+
   protected async bindCommandInterface(configs: ServiceBindConfig<any>[]) {
     this.logger?.verbose('bind CommandInterface');
     this.commandInterface = [...this.services.values()].find(
@@ -177,17 +206,12 @@ export abstract class WorkerBase {
       return;
     }
 
-    const redisConfig = this.cfg.get('redis');
-    redisConfig.db = this.cfg.get('redis:db-indexes:db-subject');
-    const redisClient: RedisClientType = createClient(redisConfig);
-    await redisClient.connect();
-
     this.commandInterface = new CommandInterface(
       this.server,
       this.cfg,
       this.logger,
-      this.events as any,
-      redisClient,
+      this.events,
+      this.redisClients.get('db-subject'),
     );
     this.services.set(serviceName, this.commandInterface);
     configs.push(
@@ -313,7 +337,7 @@ export abstract class WorkerBase {
     const kafkaCfg = this.cfg.get('events:kafka');
     this.events = new Events(kafkaCfg, this.logger);
     await this.events.start();
-    this.offsetStore = new OffsetStore(this.events as any, this.cfg, this.logger);
+    this.offsetStore = new OffsetStore(this.events, this.cfg, this.logger);
 
     await Promise.all(Object.entries(kafkaCfg.topics).map(async ([key, value]: any[]) => {
       const topicName = value.topic;
@@ -337,7 +361,6 @@ export abstract class WorkerBase {
       this.topics.set(key, topic);
     }));
   }
-
   protected async bindScheduledJobs() {
     const job_config = this.cfg.get('scs-jobs');
     if (job_config) {
@@ -366,7 +389,6 @@ export abstract class WorkerBase {
       ));
     }
   }
-
   public async start(
     cfg?: ServiceConfig,
     logger?: Logger,
@@ -388,6 +410,7 @@ export abstract class WorkerBase {
     this.server = new Server(this.cfg.get('server'), this.logger);
     this.db = await database.get(this.cfg.get('database:main'), this.logger);
 
+    await this.bindRedisClients();
     await this.bindJobHandler();
     await this.bindEvents();
     const serviceConfigs = await this.initServices();
@@ -396,7 +419,7 @@ export abstract class WorkerBase {
     await this.bindHealthCheck();
     await this.bindRefelctions(serviceConfigs);
     await this.bindScheduledJobs();
-
+    
     // start server
     await initAuthZ(this.cfg);
     await this.server.start();

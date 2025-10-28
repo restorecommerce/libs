@@ -2,7 +2,10 @@ import {
   type ServiceImplementation,
   type CompatServiceDefinition,
 } from 'nice-grpc';
-import { type RedisClientType, createClient } from 'redis';
+import {
+  type RedisClientType,
+  createClient
+} from 'redis';
 import {
   Server,
   OffsetStore,
@@ -52,7 +55,7 @@ export type EventHandler = (msg: any, context?: any, config?: any, eventName?: s
 export interface ServiceBindConfig<T extends CompatServiceDefinition> extends BindConfig<T> {
   name: string;
   meta: ProtoMetadata;
-};
+}
 
 export abstract class WorkerBase {
   private _cfg: ServiceConfig;
@@ -189,7 +192,7 @@ export abstract class WorkerBase {
 
   protected async bindCommandInterface(configs: ServiceBindConfig<any>[]) {
     this.logger?.verbose('bind CommandInterface');
-    this.commandInterface = [...this.services.values()].find(
+    this.commandInterface = Array.from(this.services.values()).find(
       service => service instanceof CommandInterface
     ) as CommandInterface;
 
@@ -419,7 +422,7 @@ export abstract class WorkerBase {
     await this.bindHealthCheck();
     await this.bindRefelctions(serviceConfigs);
     await this.bindScheduledJobs();
-    
+
     // start server
     await initAuthZ(this.cfg);
     await this.server.start();

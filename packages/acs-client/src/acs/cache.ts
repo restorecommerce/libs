@@ -70,7 +70,7 @@ export const getOrFill = async <T, M>(
   }
   const redisKeyResponse = await redisInstance.get(redisKey);
   if (redisKeyResponse && useCache) {
-    const response = JSON.parse(redisKeyResponse) as PolicySetRQResponse & DecisionResponse;
+    const response = JSON.parse(redisKeyResponse?.toString()) as PolicySetRQResponse & DecisionResponse;
     const evaluation_cacheable = response?.evaluation_cacheable || response?.policy_sets?.some(
       policy_set => policy_set?.policies?.some(
         policy => policy?.evaluation_cacheable !== false && policy.rules?.some(
@@ -121,7 +121,7 @@ export const get = async (key: string): Promise<any> => {
   }
   if (redisResponse) {
     logger?.debug('Found key in cache: ' + key);
-    return JSON.parse(redisResponse);
+    return JSON.parse(redisResponse?.toString());
   }
 };
 

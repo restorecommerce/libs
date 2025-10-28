@@ -96,10 +96,7 @@ export class OffsetStore {
       'The offset value retreived from redis for topic is:',
       { topicName, offsetValue: Number(offsetValue) }
     );
-    if (!offsetValue) {
-      return BigInt(0);
-    }
-    return BigInt(offsetValue);
+    return BigInt(Number(offsetValue) || 0);
   }
 
   /**

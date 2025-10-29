@@ -27,6 +27,7 @@ Object.assign(errors, cfg.get('errors'));
 export const urns = {
   model: 'urn:restorecommerce:acs:model',
   entity: 'urn:restorecommerce:acs:names:model:entity',
+  role: 'urn:restorecommerce:acs:names:role',
   roleScopingEntity: 'urn:restorecommerce:acs:names:roleScopingEntity',
   roleScopingInstance: 'urn:restorecommerce:acs:names:roleScopingInstance',
   hierarchicalRoleScoping: 'urn:restorecommerce:acs:names:hierarchicalRoleScoping',

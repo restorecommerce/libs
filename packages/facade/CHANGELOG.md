@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.31](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.2.30...@restorecommerce/facade@2.2.31) (2025-10-30)
+
+
+### Bug Fixes
+
+* **acs-client:** bring back subject_resolver and meta_data_injector, still usefull ([f9a67c7](https://github.com/restorecommerce/libs/commit/f9a67c7cadf76de047308d145d8ab35c8859484e))
+
+
+
+
+
 ## [2.2.30](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.2.29...@restorecommerce/facade@2.2.30) (2025-10-24)
 
 **Note:** Version bump only for package @restorecommerce/facade

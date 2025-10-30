@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.9.9](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.8...@restorecommerce/resource-base-interface@1.9.9) (2025-10-30)
+
+
+### Bug Fixes
+
+* **worker_base:** add redis map that allows to register several redisClients by name ([37b561c](https://github.com/restorecommerce/resource-base-interface/commit/37b561c6ca5212295cd5e8e1c368ca97645e1d59))
+
+
+
+
+
 ## [1.9.8](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.7...@restorecommerce/resource-base-interface@1.9.8) (2025-10-24)
 
 **Note:** Version bump only for package @restorecommerce/resource-base-interface

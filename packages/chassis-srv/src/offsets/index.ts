@@ -37,7 +37,7 @@ export class OffsetStore {
       this.redisClient = createClient(redisConfig);
       this.redisClient.on(
         'error',
-        (err: Error) => logger?.error('Redis Client Error in offsetstore', err)
+        (err: Error) => logger?.error('Redis Client error in offsetstore', err)
       );
       this.redisClient.connect().then(
         () => logger?.info('Redis client connection successful for offsetstore')

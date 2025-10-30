@@ -139,7 +139,7 @@ const checkSubjectMatch = (
       });
       return false;
     } else if (hrScopeExist && user?.scope) {
-      logger?.debug('Target scope set and HR scopes exist, validate target scope from HR scopes', { targetScope: user?.scope });
+      logger?.debug('Target scope set and HR scopes exist, validating target scope from HR scopes', { targetScope: user?.scope });
       return checkTargetScopeExists(
         user?.hierarchical_scopes?.filter((hrScope) => matchingRoleScopedInstance?.includes(hrScope?.id) && hrScope?.role === ruleRoleValue),
         user?.scope,

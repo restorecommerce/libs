@@ -54,7 +54,7 @@ export const handleGetFile = async (bucket: string, key: string, ctx: any, clien
         err.code = 500;
       }
       ctx.response.status = err.code;
-      logger.error('Error streaming request', { message: err.message });
+      logger.error('Error streaming request', { message: err.message, code: err.code });
       ctx.res.end(err.message);
     });
 

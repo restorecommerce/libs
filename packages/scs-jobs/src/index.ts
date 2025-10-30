@@ -95,7 +95,7 @@ export const runWorker = async (
   const reccurTimeCfg = cfg.get('redis');
   reccurTimeCfg.database = cfg.get('redis:db-indexes:db-reccurTime');
   const redisClient = createRedisClient(reccurTimeCfg);
-  redisClient.on('error', (err) => logger.error('Redis client error in recurring time store', decomposeError(err)));
+  redisClient.on('error', (err) => logger.error('Redis client error in recurring time store database', decomposeError(err)));
   await redisClient.connect();
 
   if ('keyPrefix' in redisConfig) {

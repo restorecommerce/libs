@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.8](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@3.1.7...@restorecommerce/acs-client@3.1.8) (2025-10-30)
+
+
+### Bug Fixes
+
+* up log to publish lib ([b1ae492](https://github.com/restorecommerce/libs/commit/b1ae49283fda3e0fe1c18109c6d3c80c28dc77ae))
+
+
+
+
+
 ## [3.1.7](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@3.1.6...@restorecommerce/acs-client@3.1.7) (2025-10-30)
 
 

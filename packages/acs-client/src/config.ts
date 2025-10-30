@@ -60,11 +60,11 @@ export const entities = {
   organization: "urn:restorecommerce:acs:model:organization.Organization",
 };
 export type KnownEntities = typeof entities;
-Object.assign(entities, cfg.get('urns'));
+Object.assign(entities, cfg.get('authorization:urns:entities'));
 
 export const updateConfig = (config: any) => {
   cfg = config;
   Object.assign(errors, cfg.get('errors'));
   Object.assign(urns, cfg.get('authorization:urns'));
-  Object.assign(entities, cfg.get('urns'));
+  Object.assign(entities, cfg.get('authorization:urns:entities'));
 };

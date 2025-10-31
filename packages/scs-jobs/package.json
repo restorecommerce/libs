@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/scs-jobs",
-  "version": "0.2.8",
+  "version": "0.2.6",
   "description": "Restorecommerce scs jobs",
   "main": "lib/index.js",
   "author": "n-fuse GmbH",

@@ -9,6 +9,19 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 ### Bug Fixes
 
 * **acs-client:** bring back subject_resolver and meta_data_injector, still usefull ([f9a67c7](https://github.com/restorecommerce/libs/commit/f9a67c7cadf76de047308d145d8ab35c8859484e))
+* drop version to before failed version ([6a9fb99](https://github.com/restorecommerce/libs/commit/6a9fb994f8284a4a856dace1d058c8cd1221bcbb))
+* up log and indentation ([16cc72f](https://github.com/restorecommerce/libs/commit/16cc72f0fa14c49db61f02f7204172ddd60a06c3))
+
+
+
+
+
+## [2.2.31](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.2.30...@restorecommerce/facade@2.2.31) (2025-11-01)
+
+
+### Bug Fixes
+
+* **acs-client:** bring back subject_resolver and meta_data_injector, still usefull ([f9a67c7](https://github.com/restorecommerce/libs/commit/f9a67c7cadf76de047308d145d8ab35c8859484e))
 * up log to publish lib ([b1ae492](https://github.com/restorecommerce/libs/commit/b1ae49283fda3e0fe1c18109c6d3c80c28dc77ae))
 
 

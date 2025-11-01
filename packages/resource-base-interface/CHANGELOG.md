@@ -8,6 +8,19 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Bug Fixes
 
+* drop version to before failed version ([6a9fb99](https://github.com/restorecommerce/resource-base-interface/commit/6a9fb994f8284a4a856dace1d058c8cd1221bcbb))
+* up log and indentation ([16cc72f](https://github.com/restorecommerce/resource-base-interface/commit/16cc72f0fa14c49db61f02f7204172ddd60a06c3))
+* **worker_base:** add redis map that allows to register several redisClients by name ([37b561c](https://github.com/restorecommerce/resource-base-interface/commit/37b561c6ca5212295cd5e8e1c368ca97645e1d59))
+
+
+
+
+
+## [1.9.9](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.8...@restorecommerce/resource-base-interface@1.9.9) (2025-11-01)
+
+
+### Bug Fixes
+
 * up log to publish lib ([b1ae492](https://github.com/restorecommerce/resource-base-interface/commit/b1ae49283fda3e0fe1c18109c6d3c80c28dc77ae))
 * **worker_base:** add redis map that allows to register several redisClients by name ([37b561c](https://github.com/restorecommerce/resource-base-interface/commit/37b561c6ca5212295cd5e8e1c368ca97645e1d59))
 

@@ -8,6 +8,18 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 ### Bug Fixes
 
+* drop version to before failed version ([6a9fb99](https://github.com/restorecommerce/chassis-srv/commit/6a9fb994f8284a4a856dace1d058c8cd1221bcbb))
+* up log and indentation ([16cc72f](https://github.com/restorecommerce/chassis-srv/commit/16cc72f0fa14c49db61f02f7204172ddd60a06c3))
+
+
+
+
+
+## [1.7.9](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.7.8...@restorecommerce/chassis-srv@1.7.9) (2025-11-01)
+
+
+### Bug Fixes
+
 * up log to publish lib ([b1ae492](https://github.com/restorecommerce/chassis-srv/commit/b1ae49283fda3e0fe1c18109c6d3c80c28dc77ae))
 
 

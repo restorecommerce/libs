@@ -12,6 +12,22 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **acs-client:** bring back subject_resolver and meta_data_injector, still usefull ([f9a67c7](https://github.com/restorecommerce/libs/commit/f9a67c7cadf76de047308d145d8ab35c8859484e))
 * **acs-client:** upgrade node version for ci, restore urn for role ([894af7d](https://github.com/restorecommerce/libs/commit/894af7d681077bbb90846261059ca67dcf6e5584))
 * **config:** separate authorization:urns and entity urns ([c2d20b7](https://github.com/restorecommerce/libs/commit/c2d20b7da79ee1de398dedfadb74b9fbd94e4b59))
+* drop version to before failed version ([6a9fb99](https://github.com/restorecommerce/libs/commit/6a9fb994f8284a4a856dace1d058c8cd1221bcbb))
+* up log and indentation ([16cc72f](https://github.com/restorecommerce/libs/commit/16cc72f0fa14c49db61f02f7204172ddd60a06c3))
+
+
+
+
+
+## [3.1.7](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@3.1.6...@restorecommerce/acs-client@3.1.7) (2025-11-01)
+
+
+### Bug Fixes
+
+* **acs-client:** add known entities under authorization:urns ([2b4587a](https://github.com/restorecommerce/libs/commit/2b4587a1e3e8bef86e95d6e20d56ee3fd168f724))
+* **acs-client:** bring back subject_resolver and meta_data_injector, still usefull ([f9a67c7](https://github.com/restorecommerce/libs/commit/f9a67c7cadf76de047308d145d8ab35c8859484e))
+* **acs-client:** upgrade node version for ci, restore urn for role ([894af7d](https://github.com/restorecommerce/libs/commit/894af7d681077bbb90846261059ca67dcf6e5584))
+* **config:** separate authorization:urns and entity urns ([c2d20b7](https://github.com/restorecommerce/libs/commit/c2d20b7da79ee1de398dedfadb74b9fbd94e4b59))
 * up log to publish lib ([b1ae492](https://github.com/restorecommerce/libs/commit/b1ae49283fda3e0fe1c18109c6d3c80c28dc77ae))
 
 

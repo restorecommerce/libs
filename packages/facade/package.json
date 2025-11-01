@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/facade",
-  "version": "2.2.31",
+  "version": "2.2.30",
   "description": "Facade for Restorecommerce microservices",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",

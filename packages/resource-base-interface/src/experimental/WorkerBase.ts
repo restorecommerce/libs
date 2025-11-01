@@ -352,7 +352,7 @@ export abstract class WorkerBase {
           const i = handler.lastIndexOf('.');
           const name = handler.slice(0, i);
           const serviceName = serviceNames?.[name] ?? name;
-          const functionName = handler.slice(i + 1);
+          const functionName = handler.slice(i+1);
           this.eventHandlers.set(eventName, this.bindHandler(serviceName, functionName));
           topic.on(
             eventName as string,

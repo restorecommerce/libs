@@ -3,10 +3,12 @@ import * as url from 'url';
 import * as fs from 'fs';
 import { ApolloClient } from '@apollo/client/core';
 import { InMemoryCache } from '@apollo/client/cache';
-import { HttpOptions, createHttpLink } from '@apollo/client/link/http';
+import { HttpLink } from '@apollo/client/link/http';
 import * as https from 'https';
 import { processResponse } from './utils.js';
 import {parse} from 'graphql';
+
+type HttpOptions = ConstructorParameters<typeof HttpLink>[0];
 
 const _checkVariableMutation = (mutation: string): boolean => {
   const mutationName = mutation.slice(mutation.indexOf(' '),
@@ -185,10 +187,10 @@ export class Client {
     if (ignoreSelfSigned) {
       apolloLinkOpts.fetchOptions = {
         agent: new https.Agent({rejectUnauthorized: false}),
-      };
+      } as any;
     }
 
-    const apolloLink = createHttpLink(apolloLinkOpts);
+    const apolloLink = new HttpLink(apolloLinkOpts);
 
     const apolloCache = new InMemoryCache();
     const apolloClient = new ApolloClient({

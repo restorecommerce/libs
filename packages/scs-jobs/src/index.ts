@@ -204,6 +204,7 @@ export const runWorker = async (
   return worker;
 };
 
+
 export type RunWorkerFunc = typeof runWorker;
 export type DefaultExportFunc = (
   cfg: ServiceConfig,
@@ -211,4 +212,24 @@ export type DefaultExportFunc = (
   events: Events,
   runWorker: RunWorkerFunc,
 ) => Promise<void>;
+
+const workers = new Array<DefaultExportFunc>();
+export function register(...worker: DefaultExportFunc[]) {
+  workers.push(...worker);
+}
+
+export async function execute(
+  cfg: ServiceConfig,
+  logger: Logger,
+  events: Events,
+  runWorker: RunWorkerFunc,
+) {
+  await Promise.allSettled(
+    workers.map(
+      w => w(cfg, logger, events, runWorker)
+    )
+  );
+}
+
 export * from './types.js';
+export default execute;

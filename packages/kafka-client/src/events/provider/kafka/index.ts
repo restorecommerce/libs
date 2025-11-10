@@ -54,7 +54,7 @@ export class Topic {
     this.provider = provider;
     this.subscribed = [];
     this.waitQueue = [];
-    this.currentOffset = BigInt(0);
+    this.currentOffset = 0n;
     this.config = config;
     this.manualOffsetCommit = manualOffsetCommit;
   }
@@ -150,11 +150,11 @@ export class Topic {
    * @param {bigint} time Use -1 for latest and 0 for earliest.
    * @return {bigint} offset number
    */
-  async $offset(time: bigint = BigInt(-1)): Promise<bigint> {
+  async $offset(time: bigint = -1n): Promise<bigint> {
     await this.initConsumerIfNotExists();
 
     return new Promise<bigint>((resolve, reject) => {
-      if (time < BigInt(0)) {
+      if (time < 0n) {
         this.consumer.listOffsets({
           topics: [this.name],
         }).then((r) => {
@@ -481,13 +481,13 @@ export class Topic {
   async on(eventName: string, listener: any, opts: SubscriptionOptions = {}): Promise<void> {
     let { startingOffset } = opts;
     const { queue, forceOffset } = opts;
-    if (!(this.subscribed.indexOf(eventName) > -1)) {
+    if (!(this.subscribed.includes(eventName))) {
       if (isNullish(startingOffset) || (this.config.latestOffset && !forceOffset)) {
         // override the startingOffset with the latestOffset from Kafka
         // if above config is set
-        startingOffset = await this.$offset(BigInt(-1));
+        startingOffset = await this.$offset(-1n);
       }
-      await this.$subscribe(eventName, startingOffset, queue);
+      await this.$subscribe(eventName, BigInt(startingOffset), queue);
     }
     this.emitter.on(eventName, listener);
   }

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.7](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.3.6...@restorecommerce/kafka-client@1.3.7) (2025-11-11)
+
+
+### Bug Fixes
+
+* **kafka-client:** up platformic kafka client lib for consumer lag issue ([1675c27](https://github.com/restorecommerce/kafka-client/commit/1675c274fb3153230182cb8a85bd928131eec22d))
+
+
+
+
+
 ## [1.3.6](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.3.5...@restorecommerce/kafka-client@1.3.6) (2025-10-24)
 
 

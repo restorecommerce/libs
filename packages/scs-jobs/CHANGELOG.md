@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.8](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.2.7...@restorecommerce/scs-jobs@0.2.8) (2025-11-11)
+
+
+### Bug Fixes
+
+* **scs-jobs:** add register for worker function for guided function export ([c2ab504](https://github.com/restorecommerce/libs/commit/c2ab5042c70edb57809464591154f78ab188e9b8))
+
+
+
+
+
 ## [0.2.7](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.2.6...@restorecommerce/scs-jobs@0.2.7) (2025-11-01)
 
 

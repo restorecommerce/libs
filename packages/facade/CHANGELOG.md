@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.33](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.2.32...@restorecommerce/facade@2.2.33) (2025-11-13)
+
+
+### Bug Fixes
+
+* **facade:** exclude hbs templates from source, templates resolve from configs ([e6ef0ea](https://github.com/restorecommerce/libs/commit/e6ef0eadb81f7cfcc10fc1f0b6d15134fae01d11))
+
+
+
+
+
 ## [2.2.32](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.2.31...@restorecommerce/facade@2.2.32) (2025-11-11)
 
 **Note:** Version bump only for package @restorecommerce/facade

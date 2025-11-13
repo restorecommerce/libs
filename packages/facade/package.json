@@ -103,7 +103,7 @@
     "vitest": "^3.2.4"
   },
   "scripts": {
-    "build": "npm-run-all build:clean generate build:compile build:codegen:clean build:codegen:compile copyhbs",
+    "build": "npm-run-all build:clean generate build:compile build:codegen:clean build:codegen:compile",
     "build:clean": "rimraf -rf ./dist",
     "build:compile": "tsc -p tsconfig.lib.json",
     "build:codegen:clean": "rimraf -rf ./codegen",
@@ -117,7 +117,6 @@
     "generate": "tsx --tsconfig tsconfig.generate.json generate.ts",
     "prepublishOnly": "npm run build",
     "debug-run": "tsx --tsconfig tsconfig.debug.json debug-run.ts",
-    "copyhbs": "sh copy-hbs.sh",
     "lint": "eslint './**/*.ts'"
   },
   "publishConfig": {

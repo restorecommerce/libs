@@ -1,5 +1,4 @@
 import Provider from 'oidc-provider';
-import helmet from 'koa-helmet';
 import { type Logger } from 'winston';
 import { type IdentityContext } from '../interfaces.js';
 import type { OIDCConfig } from './interfaces.js';

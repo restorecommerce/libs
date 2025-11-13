@@ -3,7 +3,7 @@ import { type InteractionResults } from 'oidc-provider';
 import type Provider from 'oidc-provider';
 import { type Logger } from 'winston';
 import { type IdentityContext } from '../interfaces.js';
-import { OIDCTemplateEngine, OIDCTemplateError } from './templates.js';
+import { OIDCTemplateEngine } from './templates.js';
 // import { AuthUser, loginUser } from './user/index.js';
 import { type OIDCError, type OIDCHbsTemplates, type OIDCBodyLoginFn } from './interfaces.js';
 import { koaBody } from 'koa-body';

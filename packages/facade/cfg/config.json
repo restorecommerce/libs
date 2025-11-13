@@ -91,5 +91,12 @@
       "maxFiles": 20
     },
     "endpoint": "os"
+  },
+  "odic": {
+    "templates": {
+      "layout": "./node_modules/@restorecommerce/facade/templates/layout.hbs",
+      "login": "./node_modules/@restorecommerce/facade/templates/login.hbs",
+      "consent": "./node_modules/@restorecommerce/facade/templates/consent.hbs"
+    }
   }
 }

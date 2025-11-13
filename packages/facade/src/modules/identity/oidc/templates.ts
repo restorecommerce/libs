@@ -1,10 +1,7 @@
 import path from 'node:path';
 import fs from 'node:fs';
-import { IdentityContext } from '../interfaces.js';
 import hbs from 'handlebars';
 import { type OIDCHbsTemplates } from './interfaces.js';
-
-const __dirname = import.meta.dirname;
 
 export interface OIDCTemplateError {
   key: string;
@@ -38,51 +35,41 @@ hbs.registerHelper('json', (object) => {
 });
 
 export class OIDCTemplateEngine {
-
   private layoutHbs?: HandlebarsTemplateDelegate<any>;
   private loginHbs?: HandlebarsTemplateDelegate<OIDCTemplateLoginContext>;
   private consentHbs?: HandlebarsTemplateDelegate<OIDCTemplateConsentContext>;
 
   constructor(private templates: OIDCHbsTemplates | undefined) { }
 
-  async layout(context: OIDCTemplateContext & { body: string }) {
-    if (!this.layoutHbs) {
-      const layoutTpl = this.templates?.login ?? await new Promise<string>((resolve, reject) => {
-        fs.readFile(path.resolve(__dirname, 'views/layout.hbs'), (err, data) => err ? reject(err) : resolve(data.toString()));
+  async load(target: string) {
+    const template = this.templates?.[target];
+    if (template) {
+      const layout = await new Promise<string>((resolve, reject) => {
+        fs.readFile(
+          path.resolve(template),
+          (err, data) => err ? reject(err) : resolve(data.toString())
+        );
       });
-      this.layoutHbs = hbs.compile(layoutTpl);
+      return hbs.compile(layout);
     }
+    else {
+      throw new Error(`OIDC 'odic.template.${target}' not configured!`);
+    }
+  }
+
+  async layout(context: OIDCTemplateContext & { body: string }) {
+    this.layoutHbs ??= await this.load('layout');
     return this.layoutHbs(context);
   }
 
-
   async login(context: OIDCTemplateLoginContext) {
-    if (!this.loginHbs) {
-      const loginTpl = this.templates?.login ?? await new Promise<string>((resolve, reject) => {
-        fs.readFile(path.resolve(__dirname, 'views/login.hbs'), (err, data) => err ? reject(err) : resolve(data.toString()));
-      });
-      this.loginHbs = hbs.compile(loginTpl);
-    }
-
-    let html = this.loginHbs(context);
-    return this.layout({
-      ...context,
-      body: html
-    });
+    this.loginHbs ??= await this.load('login');
+    return this.loginHbs(context);
   }
-  async consent(context: OIDCTemplateConsentContext) {
-    if (!this.consentHbs) {
-      const consentTpl = this.templates?.consent ?? await new Promise<string>((resolve, reject) => {
-        fs.readFile(path.resolve(__dirname, 'views/consent.hbs'), (err, data) => err ? reject(err) : resolve(data.toString()));
-      });
-      this.consentHbs = hbs.compile(consentTpl);
-    }
 
-    let html = this.consentHbs(context);
-    return this.layout({
-      ...context,
-      body: html
-    });
+  async consent(context: OIDCTemplateConsentContext) {
+    this.consentHbs ??= await this.load('consent');
+    return this.consentHbs(context);
   }
 
 }

@@ -342,27 +342,25 @@ export abstract class WorkerBase {
     await this.events.start();
     this.offsetStore = new OffsetStore(this.events, this.cfg, this.logger);
 
-    await Promise.all(Object.entries(kafkaCfg.topics).map(async ([key, value]: any[]) => {
+    for (const [key, value] of Object.entries<any>(kafkaCfg.topics ?? {})) {
       const topicName = value.topic;
       const topic = await this.events.topic(topicName);
       const offsetValue = await this.offsetStore.getOffset(topicName);
       this.logger?.verbose('subscribing to topic with offset value', topicName, offsetValue);
-      Object.entries(value.events as { [key: string]: string } ?? {}).forEach(
-        ([eventName, handler]) => {
-          const i = handler.lastIndexOf('.');
-          const name = handler.slice(0, i);
-          const serviceName = serviceNames?.[name] ?? name;
-          const functionName = handler.slice(i + 1);
-          this.eventHandlers.set(eventName, this.bindHandler(serviceName, functionName));
-          topic.on(
-            eventName as string,
-            this.eventHandlers.get(eventName),
-            { startingOffset: offsetValue }
-          );
-        }
-      );
+      for (const [eventName, handler] of Object.entries<string>(value.events ?? {})) {
+        const i = handler.lastIndexOf('.');
+        const name = handler.slice(0, i);
+        const serviceName = serviceNames?.[name] ?? name;
+        const functionName = handler.slice(i + 1);
+        this.eventHandlers.set(eventName, this.bindHandler(serviceName, functionName));
+        await topic.on(
+          eventName as string,
+          this.eventHandlers.get(eventName),
+          { startingOffset: BigInt(offsetValue) }
+        );
+      }
       this.topics.set(key, topic);
-    }));
+    }
   }
   protected async bindScheduledJobs() {
     const job_config = this.cfg.get('scs-jobs');

@@ -323,7 +323,7 @@ export class Topic {
         offsets: [{
           topic: this.name,
           partition: 0,
-          offset: offsetValue
+          offset: BigInt(offsetValue)
         }],
       }).then(stream => {
         this.provider.logger.info(`Consumer for topic '${this.name}' subscribed`);

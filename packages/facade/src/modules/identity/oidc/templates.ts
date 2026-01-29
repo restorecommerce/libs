@@ -2,6 +2,7 @@ import path from 'node:path';
 import fs from 'node:fs';
 import hbs from 'handlebars';
 import { type OIDCHbsTemplates } from './interfaces.js';
+import { Logger } from '@restorecommerce/logger';
 
 export interface OIDCTemplateError {
   key: string;
@@ -39,11 +40,15 @@ export class OIDCTemplateEngine {
   private loginHbs?: HandlebarsTemplateDelegate<OIDCTemplateLoginContext>;
   private consentHbs?: HandlebarsTemplateDelegate<OIDCTemplateConsentContext>;
 
-  constructor(private templates: OIDCHbsTemplates | undefined) { }
+  constructor(
+    private templates?: OIDCHbsTemplates,
+    private logger?: Logger,
+  ) { }
 
   async load(target: string) {
     const template = this.templates?.[target];
     if (template) {
+      this.logger?.info(`OIDC: Loading template ${template}`);
       const layout = await new Promise<string>((resolve, reject) => {
         fs.readFile(
           path.resolve(template),
@@ -53,7 +58,9 @@ export class OIDCTemplateEngine {
       return hbs.compile(layout);
     }
     else {
-      throw new Error(`OIDC 'odic.template.${target}' not configured!`);
+      const msg = `OIDC: 'odic.template.${target}' not configured!`;
+      this.logger?.warn(msg);
+      throw new Error(msg);
     }
   }
 

@@ -1,23 +1,24 @@
-import type Koa from 'koa';
 import {
   type TokenResponseBody,
   InvalidPasswordGrant,
   type OIDCPasswordGrantTypeConfig,
-  type Claims,
-  type LoginFnResponse
+  type LoginFnResponse,
+  Claims
 } from './interfaces.js';
 import { nanoid, epochTime } from './utils.js';
 import { UAParser } from 'ua-parser-js';
-import * as uuid from 'uuid';
 import * as requestIp from 'request-ip';
 import {
   AuthenticationLog,
   AuthenticationLogList
 } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/authentication_log.js';
 import { Subject } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/auth.js';
+import { Logger } from '@restorecommerce/logger';
+import { ClaimsParameter, KoaContextWithOIDC } from 'oidc-provider';
+import { randomUUID } from 'crypto';
 
-export const registerPasswordGrantType = (config: OIDCPasswordGrantTypeConfig) => {
-  const performPasswordGrant = async (ctx: Koa.Context, clientId: string, identifier: string, password: string, key: string): Promise<TokenResponseBody> => {
+export const registerPasswordGrantType = (config: OIDCPasswordGrantTypeConfig, logger?: Logger) => {
+  const performPasswordGrant = async (ctx: KoaContextWithOIDC, clientId: string, identifier: string, password: string, key: string): Promise<TokenResponseBody> => {
     const client = await ctx.oidc.provider.Client.find(clientId);
 
     let account: LoginFnResponse;
@@ -42,12 +43,7 @@ export const registerPasswordGrantType = (config: OIDCPasswordGrantTypeConfig) =
       throw new InvalidPasswordGrant('invalid credentials provided');
     }
 
-    let expiresIn = config.tokenExpiration;
-    if (!expiresIn) {
-      // default value of 1 day expiration when not set in config
-      expiresIn = 86400;
-    }
-
+    const expiresIn = config.tokenExpiration || 86400;
     const claims: Claims = {
       sub: account.user.id,
       data: account.user
@@ -55,51 +51,55 @@ export const registerPasswordGrantType = (config: OIDCPasswordGrantTypeConfig) =
 
     const {AccessToken} = ctx.oidc.provider;
     // for interactive login (to update user data in arangodb with token name)
-    let tokenName = uuid.v4().replace(/-/g, '');
+    const tokenName = randomUUID().replace(/-/g, '');
     claims.token_name = tokenName;
-    let defaultScope = claims.data.defaultScope;
+    const defaultScope = account.user.defaultScope;
 
     const at = new AccessToken({
       gty: 'password',
       scope: 'openid',
       accountId: account.user.id,
-      claims,
+      claims: (claims as any),
       client,
-      grantId: ctx.oidc.uid,
+      grantId: (ctx.oidc as any).uid,
       expiresWithSession: false,
-      expiresIn
+      expiresIn,
     });
     ctx.oidc.entity('AccessToken', at);
+    Object.assign(at, {
+      constructor: {
+        name: 'AccessToken',
+        IN_PAYLOAD: AccessToken.IN_PAYLOAD,
+      }
+    });
     const accessToken = await at.save();
+    const last_access = account.user?.lastAccess ? new Date(account.user.lastAccess) : undefined;
 
-    let last_access;
-    if (claims?.data?.lastAccess) {
-      last_access = new Date(claims.data.lastAccess);
-    }
-
-    if (claims?.data?.tokens) {
+    if (account.user?.tokens) {
       claims.data = {
         ...claims.data,
         tokens: []
       };
     }
 
-    const generateIdToken = async (ctx: Koa.Context, clientId: string, expiresIn: number, claims: Claims): Promise<string> => {
+    const generateIdToken = async (ctx: KoaContextWithOIDC, clientId: string, expiresIn: number, claims: Claims): Promise<string> => {
       const client = await ctx.oidc.provider.Client.find(clientId);
       ctx.oidc.entity('Client', client);
       const {IdToken} = ctx.oidc.provider;
       const jti = nanoid();
       const exp = epochTime() + expiresIn;
-      const token = new IdToken({
-        ...claims,
-      }, {ctx});
+      const token = new IdToken(
+        {...claims},
+        {ctx}
+      );
 
       token.set('jti', jti);
-      token.scope = 'openid profile';
+      token.set('scope', 'openid profile');
       return await token.issue({use: 'idtoken', expiresAt: exp});
     };
 
     const idToken = await generateIdToken(ctx, clientId, expiresIn, claims);
+    logger?.debug('ID Token granted:', idToken);
     return {
       access_token: accessToken,
       id_token: idToken,
@@ -115,7 +115,7 @@ export const registerPasswordGrantType = (config: OIDCPasswordGrantTypeConfig) =
 
   config.provider.registerGrantType(
     'password',
-    async (ctx: any, next: () => Promise<any>) => {
+    async (ctx: KoaContextWithOIDC, next: () => Promise<any>) => {
       try {
         const {body, client} = ctx.oidc;
         ctx.type = 'json';
@@ -128,19 +128,19 @@ export const registerPasswordGrantType = (config: OIDCPasswordGrantTypeConfig) =
           key = 'token';
         }
         const req = ctx.request;
-        let os, agentName;
+        let os: string, agentName: string;
         const agent = new UAParser(req.headers['user-agent']);
         if (agent) {
           os = agent.getOS().toString();
           agentName = agent.getUA();
         }
 
-        ctx.body = await performPasswordGrant(ctx, client.clientId, body.identifier, passwordValue, key);
-
-        const token_name = (ctx.body as TokenResponseBody).token_name;
-        const token = (ctx.body as TokenResponseBody).access_token;
-        const scope = (ctx.body as TokenResponseBody).default_scope;
-        let ipv4_address, ipv6_address;
+        const resp_body = await performPasswordGrant(ctx, client.clientId, (body as any).identifier, passwordValue, key);
+        ctx.body = resp_body;
+        const token_name = resp_body.token_name;
+        const token = resp_body.access_token;
+        const scope = resp_body.default_scope;
+        let ipv4_address: string, ipv6_address: string;
         const clientIP = requestIp.getClientIp(req.req);
         if (clientIP && clientIP.includes('.')) {
           ipv4_address = clientIP;
@@ -158,19 +158,21 @@ export const registerPasswordGrantType = (config: OIDCPasswordGrantTypeConfig) =
           tokenName: token_name
         });
 
-        await config.authLogService.create(AuthenticationLogList.fromPartial({
+        config.authLogService.create(AuthenticationLogList.fromPartial({
           items: [authLogItem],
           subject: Subject.fromPartial({token, scope}) as Subject
         }));
-      } catch (ex) {
+      } catch (ex: any) {
         if (ex instanceof InvalidPasswordGrant) {
           ctx.status = 401;
           ctx.type = 'json';
           ctx.body = {
-            error: ex['error'],
-            error_description: ex['error_description']
+            error: ex.error,
+            error_description: ex.error_description,
           };
         } else {
+          const { code, error, message, error_description, stack } = ex;
+          logger?.error('OIDC:', { code, error, message, error_description, stack });
           ctx.status = 400;
           ctx.body = {
             error: 'bad_request',

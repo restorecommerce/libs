@@ -15,14 +15,14 @@ const createTestFacade = () => {
     facade: serviceConfig.get('facade'),
     resources: serviceConfig.get('resources'),
     identity: serviceConfig.get('identity'),
-    example: {message: 'foo'}
+    example: {message: 'foo'},
+    oidc: serviceConfig.get('oidc')
   };
 
   const logger = createLogger(cfg.logger);
 
   return createFacade({
-    // ...cfg.facade,
-
+    ...cfg.facade,
     env: cfg.env,
     logger
   })
@@ -44,6 +44,7 @@ const createTestFacade = () => {
           'http://localhost:4200'
         ],
         jwks,
+        ...cfg.oidc,
       }
     }))
     .useMiddleware(reqResLogger({logger}));

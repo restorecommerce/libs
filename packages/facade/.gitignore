@@ -1,4 +1,6 @@
+build
 dist
 coverage
 codegen
 *.generated.ts
+*.cjs

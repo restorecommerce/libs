@@ -1,4 +1,4 @@
-import { type Adapter, errors } from 'oidc-provider';
+import { AccountClaims, type Adapter, errors } from 'oidc-provider';
 import type Provider from 'oidc-provider';
 import { type IdentityContext } from '../interfaces.js';
 import { type AuthenticationLogServiceClient as authLogService } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/authentication_log.js';
@@ -95,7 +95,8 @@ export class InvalidPasswordGrant extends errors.InvalidGrant {
   }
 }
 
-export interface Claims {
+
+export interface Claims extends AccountClaims {
   sub: string | undefined;
   data: AuthUser;
   [key: string]: any;

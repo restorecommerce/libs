@@ -1,9 +1,0 @@
-{
-  "odic": {
-    "templates": {
-      "layout": "./templates/layout.hbs",
-      "login": "./templates/login.hbs",
-      "consent": "./templates/consent.hbs"
-    }
-  }
-}

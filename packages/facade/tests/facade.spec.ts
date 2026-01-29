@@ -6,7 +6,6 @@ describe('facade', () => {
     await facade.start();
   });
 
-
   it('should start the facade', () => {
     expect(facade).toBeTruthy();
     expect(facade.listening).toBe(true);

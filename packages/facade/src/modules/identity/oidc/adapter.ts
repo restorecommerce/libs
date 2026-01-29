@@ -1,4 +1,4 @@
-import { type Logger } from 'winston';
+import { Logger } from '@restorecommerce/logger';
 import { type Adapter, type AdapterConstructor, type AdapterPayload } from 'oidc-provider';
 import { marshallProtobufAny, unmarshallProtobufAny } from './utils.js';
 import { Subject } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/auth.js';

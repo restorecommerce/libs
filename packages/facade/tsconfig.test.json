@@ -6,7 +6,6 @@
     "moduleResolution": "Node10"
   },
   "include": [
-    "./tests/**/*.ts",
-    "tests/generate-keys.js"
+    "./tests/**/*.ts"
   ]
 }

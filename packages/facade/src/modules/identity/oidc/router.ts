@@ -1,7 +1,7 @@
 import type KoaRouter from 'koa-router';
 import { type InteractionResults } from 'oidc-provider';
 import type Provider from 'oidc-provider';
-import { type Logger } from 'winston';
+import { type Logger } from '@restorecommerce/logger';
 import { type IdentityContext } from '../interfaces.js';
 import { OIDCTemplateEngine } from './templates.js';
 // import { AuthUser, loginUser } from './user/index.js';
@@ -21,7 +21,7 @@ export const createOIDCRouter = ({logger, loginFn, provider, env, templates }: C
 
   const dev = env === 'development';
 
-  const tplEngine = new OIDCTemplateEngine(templates);
+  const tplEngine = new OIDCTemplateEngine(templates, logger);
 
   const router = new Router() as KoaRouter<{}, IdentityContext>;
 
@@ -47,7 +47,7 @@ export const createOIDCRouter = ({logger, loginFn, provider, env, templates }: C
         return;
       }
       case 'consent': {
-        console.log('consent', prompt.details);
+        logger.debug('consent', prompt.details);
 
         const { prompt: { name, details } } = await provider.interactionDetails(ctx.req, ctx.res);
 
@@ -135,7 +135,7 @@ export const createOIDCRouter = ({logger, loginFn, provider, env, templates }: C
 
       return render();
     }
-    const { error, user, identifier, remember }  = await loginFn(ctx, body);
+    const { error, user, identifier, remember } = await loginFn(ctx, body);
 
     if (error || !user) {
       logger.error('OIDC login callback error', error);

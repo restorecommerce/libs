@@ -22,7 +22,6 @@ export const identityModule = createFacadeModuleFactory<IdentityConfig, Identity
       logger: facade.logger,
       config: config.oidc
     });
-
     facade.koa.use(router.routes());
     facade.koa.use(mount(provider.app));
   }

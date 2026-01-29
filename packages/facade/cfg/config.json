@@ -8,16 +8,8 @@
     }
   },
   "facade": {
-    "keys": [
-      "secret"
-    ],
     "hostname": "0.0.0.0",
-    "port": 5000,
-    "kafka": {
-      "brokers": [
-        "localhost:29092"
-      ]
-    }
+    "port": 5000
   },
   "resources": {
     "client": {
@@ -92,7 +84,7 @@
     },
     "endpoint": "os"
   },
-  "odic": {
+  "oidc": {
     "templates": {
       "layout": "./node_modules/@restorecommerce/facade/templates/layout.hbs",
       "login": "./node_modules/@restorecommerce/facade/templates/login.hbs",

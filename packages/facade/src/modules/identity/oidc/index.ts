@@ -1,5 +1,5 @@
 import Provider from 'oidc-provider';
-import { type Logger } from 'winston';
+import { type Logger } from '@restorecommerce/logger';
 import { type IdentityContext } from '../interfaces.js';
 import type { OIDCConfig } from './interfaces.js';
 import { createOIDCRouter } from './router.js';
@@ -76,12 +76,14 @@ export function createOIDC({
           claims: async (use: any, scope: any) => {
             try {
               const user = await findUserById(userService, id);
+              logger.debug('User found:', user);
               return {
                 sub: id,
                 data: user
               };
-            } catch (error) {
-              logger.error('OIDC findAccount claims error', error);
+            } catch (error: any) {
+              const { code, message, stack } = error;
+              logger.error('OIDC findAccount claims error', { code, message, stack });
               return {
                 sub: id,
                 data: {
@@ -91,8 +93,9 @@ export function createOIDC({
             }
           },
         };
-      } catch (error) {
-        logger.error('OIDC findAccount error', error);
+      } catch (error: any) {
+        const { code, message, stack } = error;
+        logger.error('OIDC findAccount error', { code, message, stack });
       }
     },
     claims: {
@@ -126,8 +129,7 @@ export function createOIDC({
         enabled: true
       },
       devInteractions: {
-        // enabled: dev ?? false
-        enabled: false
+        enabled: false // env === 'development'
       },
     },
     clientBasedCORS: () => true
@@ -148,7 +150,7 @@ export function createOIDC({
     authLogService: identitySrvClient.authentication_log,
     authenticate: loginUserCredentials,
     provider
-  });
+  }, logger);
 
   // Disable forbidding redirect to http/localhost in dev mode
   if (env === 'development') {
@@ -166,6 +168,6 @@ export function createOIDC({
 
   return {
     provider,
-    router
+    router,
   };
 }

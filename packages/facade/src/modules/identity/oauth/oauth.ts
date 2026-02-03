@@ -4,7 +4,6 @@ import { resolve as resolvePath } from 'node:path';
 import * as jose from 'jose';
 import Router from 'koa-router';
 import { koaBody as bodyParser } from 'koa-body';
-import dirname from 'es-dirname';
 import hbs from 'handlebars';
 import {
   RegisterRequest,
@@ -16,7 +15,7 @@ import { type IdentitySrvGrpcClient } from '../grpc/index.js';
 import { marshallProtobufAny } from '../oidc/utils.js';
 import { randomUUID } from 'node:crypto';
 
-const __dirname = dirname();
+const __dirname = import.meta.dirname;
 
 const upsertUserToken = async (ids: IdentitySrvGrpcClient, accountId: string | undefined): Promise<string> => {
   const token = new jose.UnsecuredJWT({})

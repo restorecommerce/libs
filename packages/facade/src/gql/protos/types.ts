@@ -1,6 +1,8 @@
 import { type GrpcClientConfig } from '@restorecommerce/grpc-client';
-import { type FileDescriptorProto } from 'ts-proto-descriptors';
 import { type GraphQLSchema, type GraphQLFieldResolver, type GraphQLScalarType } from 'graphql';
+export {
+  type ProtoMetadata,
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/resource_base.js';
 
 export interface GraphQLResolverMap<TContext = {}> {
   [typeName: string]:
@@ -39,44 +41,6 @@ export type ProtoMetaMessageOptions = {
     [key: string]: ProtoMetaMessageOptions;
   };
 };
-
-export interface ProtoMetadata {
-  fileDescriptor: FileDescriptorProto;
-  references: { [key: string]: any };
-  dependencies?: ProtoMetadata[];
-  options?: {
-    options?: {
-      [key: string]: any;
-    };
-    services?: {
-      [key: string]: {
-        options?: {
-          [key: string]: any;
-        };
-        methods?: {
-          [key: string]: {
-            [key: string]: any;
-          };
-        };
-      };
-    };
-    messages?: {
-      [key: string]: ProtoMetaMessageOptions;
-    };
-    enums?: {
-      [key: string]: {
-        options?: {
-          [key: string]: any;
-        };
-        values?: {
-          [key: string]: {
-            [key: string]: any;
-          };
-        };
-      };
-    };
-  };
-}
 
 export interface BlackListWhiteListConfig {
   whitelist?: string[];

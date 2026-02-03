@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import { type TypingData, scalarTypes, recursiveEnumCheck, getNameSpaceTypeName, getTyping } from './registry.js';
 import { type GraphQLInputObjectType } from 'graphql';
+import { type TypingData, scalarTypes, recursiveEnumCheck, getNameSpaceTypeName, getTyping } from './registry.js';
 
 export const capitalizeProtoName = (name: string): string => {
   return name.replace(/(?:\.|^|_)(\w)/g, v => v.toUpperCase()).replace(/[._]/g, '');

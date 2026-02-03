@@ -1,20 +1,20 @@
 import type KoaRouter from 'koa-router';
-import { type IdentityContext } from '../interfaces.js';
-import { type IdentitySrvGrpcClient } from '../grpc/index.js';
 import { readFile } from 'node:fs';
-import path, { resolve as resolvePath } from 'node:path';
+import { resolve as resolvePath } from 'node:path';
+import * as jose from 'jose';
+import Router from 'koa-router';
+import { koaBody as bodyParser } from 'koa-body';
+import dirname from 'es-dirname';
 import hbs from 'handlebars';
-import { marshallProtobufAny } from '../oidc/utils.js';
-import * as uuid from 'uuid';
 import {
   RegisterRequest,
   type User,
   UserType
 } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/user.js';
-import * as jose from 'jose';
-import Router from 'koa-router';
-import { koaBody as bodyParser } from 'koa-body';
-import dirname from 'es-dirname';
+import { type IdentityContext } from '../interfaces.js';
+import { type IdentitySrvGrpcClient } from '../grpc/index.js';
+import { marshallProtobufAny } from '../oidc/utils.js';
+import { randomUUID } from 'node:crypto';
 
 const __dirname = dirname();
 
@@ -28,7 +28,7 @@ const upsertUserToken = async (ids: IdentitySrvGrpcClient, accountId: string | u
   const expiresIn = new Date(Date.now() + (1000 * 60 * 60 * 24 * 30));
 
   await ids.token.upsert({
-    id: uuid.v4().replace(/-/g, ''),
+    id: randomUUID().replace(/-/g, ''),
     type: 'access_token',
     expiresIn,
     payload: marshallProtobufAny({

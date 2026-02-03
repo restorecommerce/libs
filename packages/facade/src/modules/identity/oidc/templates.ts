@@ -1,8 +1,8 @@
 import path from 'node:path';
 import fs from 'node:fs';
 import hbs from 'handlebars';
-import { type OIDCHbsTemplates } from './interfaces.js';
 import { Logger } from '@restorecommerce/logger';
+import { type OIDCHbsTemplates } from './interfaces.js';
 
 export interface OIDCTemplateError {
   key: string;

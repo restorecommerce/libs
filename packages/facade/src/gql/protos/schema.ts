@@ -11,7 +11,6 @@ import {
   type GraphQLFieldConfigArgumentMap,
   type GraphQLFieldConfigMap
 } from 'graphql';
-import flat from 'array.prototype.flat';
 import { getWhitelistBlacklistConfig, Mutate } from './graphql.js';
 import { capitalize, capitalizeProtoName, useSubscriptions, getServiceName } from './utils.js';
 import { getTyping } from './registry.js';
@@ -270,7 +269,7 @@ export const generateSubServiceSchemas = (subServices: ProtoMetadata[], config: 
   });
 
   if (config.root) {
-    return generateSchema(flat(subServices.map(meta => {
+    return generateSchema(subServices.flatMap(meta => {
       return meta.fileDescriptor.service.map(service => {
         if (service.name) {
           const subName = getServiceName(service.name);
@@ -280,9 +279,9 @@ export const generateSubServiceSchemas = (subServices: ProtoMetadata[], config: 
             namespace: subName
           } as any);
         }
-        return null;
-      }).filter(s => s !== null);
-    })));
+        return undefined;
+      }).filter(Boolean);
+    }));
   }
 
   return generateSchema([{prefix, namespace}]);

@@ -9,9 +9,9 @@ import {
   type GraphQLInputType,
   GraphQLScalarType,
 } from 'graphql';
-import { type ProtoMetadata, type ServiceConfig } from './types.js';
 import { type Readable } from 'node:stream';
 import { type ServiceDescriptorProto } from 'ts-proto-descriptors';
+import { type ProtoMetadata, type ServiceConfig } from './types.js';
 
 export const Mutate = ['Create', 'Update', 'Upsert'];
 

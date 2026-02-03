@@ -1,8 +1,8 @@
+import { Transform } from 'node:stream';
+import intoStream from 'into-stream';
+import pkg from 'lodash';
 import { createServiceConfig } from '@restorecommerce/service-config';
 import { createLogger } from '@restorecommerce/logger';
-import intoStream from 'into-stream';
-import { Transform } from 'node:stream';
-import pkg from 'lodash';
 const { isEmpty } = pkg;
 
 const cfg = createServiceConfig(process.cwd());

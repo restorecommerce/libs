@@ -1,10 +1,10 @@
-import { type OIDCBodyLoginFn, type AuthUserKeyWhitelist, type AuthUser, type OIDCLoginFn, type OIDCBodyLoginCredentials } from './interfaces.js';
 import {
   type UserServiceClient as userService,
   LoginRequest,
   FindRequest,
   type User
 } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/user.js';
+import { type OIDCBodyLoginFn, type AuthUserKeyWhitelist, type AuthUser, type OIDCLoginFn, type OIDCBodyLoginCredentials } from './interfaces.js';
 
 const KEY_WHITELIST: Array<AuthUserKeyWhitelist> = [
   'id',

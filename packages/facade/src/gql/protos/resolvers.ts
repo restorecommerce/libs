@@ -1,3 +1,19 @@
+import { type DescriptorProto, type ServiceDescriptorProto } from 'ts-proto-descriptors';
+import { type GraphQLResolveInfo } from 'graphql';
+import * as stream from 'node:stream';
+import _ from 'lodash';
+import { Metadata } from 'nice-grpc';
+import {
+  type KafkaSubscription,
+  type Resolver
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/options.js';
+import { ReadRequest } from '@restorecommerce/rc-grpc-clients';
+import {
+  Filter_Operation,
+  Filter_ValueType
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/resource_base.js';
+import { Events } from '@restorecommerce/kafka-client';
+import { TenantRequest } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/user.js';
 import {
   authSubjectType,
   type ProtoMetadata,
@@ -5,7 +21,6 @@ import {
   type ServiceConfig,
   type SubSpaceServiceConfig
 } from './types.js';
-import flat from 'array.prototype.flat';
 import { getTyping } from './registry.js';
 import {
   getWhitelistBlacklistConfig,
@@ -22,24 +37,8 @@ import {
   useSubscriptions,
   getServiceName
 } from './utils.js';
-import {
-  type KafkaSubscription,
-  type Resolver
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/options.js';
-import { ReadRequest } from '@restorecommerce/rc-grpc-clients';
-import {
-  Filter_Operation,
-  Filter_ValueType
-} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/resource_base.js';
-import { type DescriptorProto, type ServiceDescriptorProto } from 'ts-proto-descriptors';
-import { type GraphQLResolveInfo } from 'graphql';
-import * as stream from 'node:stream';
-import _ from 'lodash';
-import { Events } from '@restorecommerce/kafka-client';
 import S2A from './stream-to-async-iterator.js';
-import { Metadata } from 'nice-grpc';
 import { IdentitySrvGrpcClient } from '../../modules/identity/grpc/index.js';
-import { TenantRequest } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/user.js';
 
 const inputMethodType = new Map<string, string>();
 
@@ -524,14 +523,11 @@ export const generateSubServiceResolvers = <
   });
 
   if (config.root) {
-    return generateResolver(...flat(subServices.map(meta => {
-      return meta.fileDescriptor.service.map(service => {
-        if (service.name) {
-          return getServiceName(service.name);
-        }
-        return '';
-      }).filter(s => s !== '');
-    })));
+    return generateResolver(...subServices.flatMap(
+      meta => meta.fileDescriptor.service.map(
+        service => service.name ? getServiceName(service.name) : undefined
+      ).filter(Boolean)
+    ));
   }
 
   const finalResolver = generateResolver(namespace);

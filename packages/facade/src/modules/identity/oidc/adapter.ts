@@ -1,9 +1,9 @@
-import { Logger } from '@restorecommerce/logger';
 import { type Adapter, type AdapterConstructor, type AdapterPayload } from 'oidc-provider';
-import { marshallProtobufAny, unmarshallProtobufAny } from './utils.js';
+import { Logger } from '@restorecommerce/logger';
 import { Subject } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/auth.js';
-import { InMemoryAdapter } from './in-memory-adapter.js';
 import { type TokenServiceClient as tokenService } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/token.js';
+import { InMemoryAdapter } from './in-memory-adapter.js';
+import { marshallProtobufAny, unmarshallProtobufAny } from './utils.js';
 
 const delegateToRemoteService = (type: string) => ['AccessToken', 'RefreshToken'].includes(type);
 

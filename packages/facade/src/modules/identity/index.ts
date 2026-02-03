@@ -1,10 +1,10 @@
+import mount from 'koa-mount';
 import { createFacadeModuleFactory } from '../../utils.js';
 import { FederatedResourceSchema } from './gql/federation.js';
 import { createOIDC } from './oidc/index.js';
 import { type IdentityConfig, type IdentityModule } from './interfaces.js';
 import { IdentitySrvGrpcClient } from './grpc/index.js';
 import { createOAuth } from './oauth/oauth.js';
-import mount from 'koa-mount';
 
 export { type OIDCConfig } from './oidc/index.js';
 export type { IdentityModule, IdentityConfig, IdentityContext } from './interfaces.js';

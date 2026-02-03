@@ -30,6 +30,7 @@ import bodyParser from 'koa-bodyparser';
 import cors from '@koa/cors';
 import graphqlUploadKoa from 'graphql-upload/graphqlUploadKoa.mjs';
 import Router from 'koa-router';
+import { decomposeError } from './utils.js';
 
 export * from './modules/index.js';
 export * from './middlewares/index.js';
@@ -91,6 +92,7 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
 
     setUseSubscriptions(!!kafka);
   }
+
   get server() {
     return this._server;
   }
@@ -187,30 +189,35 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
     return await new Promise<void>(async (resolve, reject) => {
       await this.runFnQueue(this.stopFns);
 
-      await this._gqlServer?.stop().catch((err) => {
-        if (err) {
-          this.logger.error(`Error stopping GQLServer`, err);
+      await this._gqlServer?.stop().catch((error) => {
+        if (error) {
+          this.logger.error(`Error stopping GQLServer`, decomposeError(error));
         } else {
           this.logger.info(`GQLServer stopped`);
           this._gqlServer = undefined;
         }
       });
 
-      this._server?.close((err) => {
-        if (err) {
-          this.logger.error(`Error stopping service`, err);
-          reject(err);
-        } else {
-          this.logger.info(`Service stopped`);
-          this._server = undefined;
-          resolve();
-        }
-      });
+      if (this._server?.listening) {
+        this._server?.close((error) => {
+          if (error) {
+            this.logger.error(`Error stopping service`, decomposeError(error));
+            reject(error);
+          } else {
+            this.logger.info(`Service stopped`);
+            this._server = undefined;
+            resolve();
+          }
+        });
+      }
+      else {
+        resolve();
+      }
     });
   }
 
   private async mountApolloServer() {
-    let serviceList = Object.keys(this.apolloServices).map(key => {
+    const serviceList = Object.keys(this.apolloServices).map(key => {
       return {
         name: key,
         url: this.apolloServices[key].url ?? `local`,
@@ -218,11 +225,21 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
     });
 
     if (this.extraServices) {
-      serviceList = [
-        ...serviceList,
-        ...this.extraServices,
-      ];
+      serviceList.push(...this.extraServices);
     }
+
+    const plugin = {
+      disposables: new Array<Disposable>(),
+      async serverWillStart() {
+        return {
+          async drainServer() {
+            await Promise.allSettled(plugin.disposables?.map(
+              d => d?.dispose()
+            ));
+          },
+        };
+      },
+    };
 
     const gateway = new ApolloGateway({
       logger: this.logger,
@@ -261,38 +278,42 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
       path: '/graphql',
     });
 
-    let serverCleanup: Disposable;
     gateway.onSchemaLoadOrUpdate(schemaContext => {
-      const typeDefs = printSchema(new GraphQLSchema({
-        subscription: schemaContext.apiSchema.getSubscriptionType()
-      }));
+      try {
+        const typeDefs = printSchema(new GraphQLSchema({
+          subscription: schemaContext.apiSchema.getSubscriptionType()
+        }));
 
-      let schema = makeExecutableSchema({
-        typeDefs: parse(typeDefs + `
-        type Query { sample: String }
-        `),
-        resolvers: {
-          Subscription: {
-            ...this.allResolvers['Subscription']
+        const schema = makeExecutableSchema({
+          typeDefs: parse(typeDefs + `
+          type Query { sample: String }
+          `),
+          resolvers: {
+            Subscription: {
+              ...this.allResolvers['Subscription']
+            }
           }
+        });
+
+        if ('Subscription' in this.allResolvers) {
+          mergeSubscribeIntoSchema(schema.getSubscriptionType(), this.allResolvers['Subscription']);
         }
-      });
 
-      if ('Subscription' in this.allResolvers) {
-        mergeSubscribeIntoSchema(schema.getSubscriptionType(), this.allResolvers['Subscription']);
+        plugin.disposables.push(useServer({
+          schema,
+          context: async (ctx, message, args) => {
+            const newCtx = this.koa.createContext(ctx.extra.request, new ServerResponse(ctx.extra.request));
+            const fn = await (compose(this.koa.middleware) as any);
+            await fn(newCtx);
+            newCtx.kafkaConfig = this.kafkaConfig;
+            newCtx.logger = this.logger;
+            return newCtx;
+          },
+        }, wsServer));
       }
-
-      serverCleanup = useServer({
-        schema,
-        context: async (ctx, message, args) => {
-          const newCtx = this.koa.createContext(ctx.extra.request, new ServerResponse(ctx.extra.request));
-          const fn = await (compose(this.koa.middleware) as any);
-          await fn(newCtx);
-          newCtx.kafkaConfig = this.kafkaConfig;
-          newCtx.logger = this.logger;
-          return newCtx;
-        },
-      }, wsServer);
+      catch (error) {
+        this.logger?.error('Gateway onSchemaLoadOrUpdate:', decomposeError(error));
+      }
     });
 
     this._gqlServer = new ApolloServer({
@@ -304,15 +325,7 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
         ApolloServerPluginLandingPageLocalDefault({
           embed: true
         }),
-        {
-          async serverWillStart() {
-            return {
-              async drainServer() {
-                await serverCleanup.dispose();
-              },
-            };
-          },
-        },
+        plugin,
       ],
       includeStacktraceInErrorResponses: true,
       formatError: (error) => {

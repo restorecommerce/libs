@@ -1,13 +1,11 @@
 import type KoaRouter from 'koa-router';
-import { type InteractionResults } from 'oidc-provider';
-import type Provider from 'oidc-provider';
+import Router from 'koa-router';
+import { koaBody } from 'koa-body';
+import { type InteractionResults, type Provider  } from 'oidc-provider';
 import { type Logger } from '@restorecommerce/logger';
 import { type IdentityContext } from '../interfaces.js';
 import { OIDCTemplateEngine } from './templates.js';
-// import { AuthUser, loginUser } from './user/index.js';
 import { type OIDCError, type OIDCHbsTemplates, type OIDCBodyLoginFn } from './interfaces.js';
-import { koaBody } from 'koa-body';
-import Router from 'koa-router';
 
 export interface CreateOIDCRouterArgs {
   logger: Logger;

@@ -24,3 +24,8 @@ export const createFacadeModule = <TModule extends FacadeModule = FacadeModule>(
   facadeModule.moduleName = moduleName;
   return facadeModule;
 };
+
+export const decomposeError = (error: any) => {
+  const { name, code, message, details, error_description, stack } = error;
+  return { name, code, message, details, error_description, stack };
+}

@@ -1,34 +1,28 @@
 import { createFacade, reqResLogger, type FacadeContext, identityModule } from '../src/index.js';
-import { createServiceConfig } from '@restorecommerce/service-config';
-import { createLogger } from '@restorecommerce/logger';
-
+import { cfg, logger } from './utils.js';
 import * as fs from 'node:fs';
 
 const jwks = JSON.parse(fs.readFileSync('./tests/jwks.json').toString());
 
 const createTestFacade = () => {
-  const serviceConfig = createServiceConfig(process.cwd());
-
-  const cfg = {
-    env: serviceConfig.get('NODE_ENV'),
-    logger: serviceConfig.get('logger'),
-    facade: serviceConfig.get('facade'),
-    resources: serviceConfig.get('resources'),
-    identity: serviceConfig.get('identity'),
+  const config = {
+    env: cfg.get('NODE_ENV'),
+    logger: cfg.get('logger'),
+    facade: cfg.get('facade'),
+    resources: cfg.get('resources'),
+    identity: cfg.get('identity'),
     example: {message: 'foo'},
-    oidc: serviceConfig.get('oidc')
+    oidc: cfg.get('oidc')
   };
 
-  const logger = createLogger(cfg.logger);
-
   return createFacade({
-    ...cfg.facade,
-    env: cfg.env,
+    ...config.facade,
+    env: config.env,
     logger
   })
     .useModule(identityModule({
-      identitySrvClientConfig: cfg.identity.client,
-      config: cfg.identity,
+      identitySrvClientConfig: config.identity.client,
+      config: config.identity,
       oidc: {
         client_id: 'TEST_CLIENT_ID',
         client_secret: 'TEST_CLIENT_SECRET',
@@ -44,7 +38,7 @@ const createTestFacade = () => {
           'http://localhost:4200'
         ],
         jwks,
-        ...cfg.oidc,
+        ...config.oidc,
       }
     }))
     .useMiddleware(reqResLogger({logger}));

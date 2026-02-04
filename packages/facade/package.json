@@ -59,6 +59,7 @@
     "ws": "^8.19.0"
   },
   "devDependencies": {
+    "@alenon/grpc-mock-server": "^3.2.5",
     "@graphql-codegen/core": "^5.0.0",
     "@graphql-codegen/typescript": "^5.0.7",
     "@graphql-codegen/typescript-resolvers": "^5.1.5",
@@ -85,6 +86,7 @@
     "@types/supertest": "^6.0.3",
     "@types/useragent": "^2.3.4",
     "@types/ws": "^8.18.1",
+    "@vitest/coverage-v8": "^4.0.18",
     "eslint": "^9.39.2",
     "npm-run-all": "^4.1.5",
     "rimraf": "6.1.2",
@@ -92,7 +94,7 @@
     "tsconfig-paths": "^4.2.0",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
-    "vitest": "^3.2.4"
+    "vitest": "^4.0.18"
   },
   "scripts": {
     "build": "npm-run-all build:clean generate build:compile build:codegen:clean build:codegen:compile",
@@ -103,7 +105,7 @@
     "build:es": "npm-run-all build:codegen:clean build:codegen:compile && node esbuild.mjs",
     "dev": "npm-run-all build:clean dev:compile",
     "dev:compile": "tsc -p tsconfig.json",
-    "test": "NODE_OPTIONS=--experimental-vm-modules vitest run",
+    "test": "vitest run",
     "test:watch": "vitest watch",
     "dev:serve": "NODE_OPTIONS=--experimental-vm-modules tsx watch --tsconfig tsconfig.test.json tests/server.ts",
     "dev:serve:es": "npm-run-all build:es && node ./tests/build/server.cjs",

@@ -1,10 +1,13 @@
 import { facade } from './facade.js';
 import { agent } from 'supertest';
 import { it, describe, beforeAll, afterAll, expect } from 'vitest';
+import { mockServices, cfg, GrpcMockServer } from './utils.js';
 
+let mockedServices: GrpcMockServer[];
 describe('extend', () => {
   beforeAll(async () => {
     await facade.start();
+    mockedServices = await mockServices(cfg.get('client'));
   });
 
   it('should start the facade', () => {
@@ -15,7 +18,7 @@ describe('extend', () => {
   it('should request a token', () => {
     const request = agent(facade.server);
     const params = new URLSearchParams({
-      identifier: 'nfuse-root.admin',
+      identifier: 'superadmin',
       password: 'CNQJrH%KAayeDpf3h',
       grant_type: 'password',
       scope: 'openid',
@@ -45,6 +48,9 @@ describe('extend', () => {
   });
 
   afterAll(async () => {
+    await Promise.allSettled(mockedServices.map(
+      (ms) => ms.stop()
+    ));
     await facade.stop();
   });
 });

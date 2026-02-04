@@ -4,7 +4,7 @@ import * as requestIp from 'request-ip';
 import { ClaimsParameter, KoaContextWithOIDC } from 'oidc-provider';
 import {
   AuthenticationLog,
-  AuthenticationLogList
+  AuthenticationLogList,
 } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/authentication_log.js';
 import { Subject } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/auth.js';
 import { Logger } from '@restorecommerce/logger';
@@ -156,7 +156,7 @@ export const registerPasswordGrantType = (config: OIDCPasswordGrantTypeConfig, l
           tokenName: token_name
         });
 
-        config.authLogService.create(AuthenticationLogList.fromPartial({
+        config.authLogService?.create(AuthenticationLogList.fromPartial({
           items: [authLogItem],
           subject: Subject.fromPartial({token, scope}) as Subject
         }));

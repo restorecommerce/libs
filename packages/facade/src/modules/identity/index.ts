@@ -23,7 +23,7 @@ export const identityModule = createFacadeModuleFactory<IdentityConfig, Identity
       config: config.oidc
     });
     facade.koa.use(router.routes());
-    facade.koa.use(mount(provider.app));
+    facade.koa.use(mount(provider));
   }
 
   if (config.oauth) {

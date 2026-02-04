@@ -25,23 +25,23 @@
     "@restorecommerce/rc-grpc-clients": "^5.1.63",
     "@restorecommerce/scs-jobs": "^0.2.8",
     "@restorecommerce/service-config": "^1.1.7",
-    "nice-grpc-server-reflection": "^3.0.2",
-    "redis": "^4.7.0",
-    "remeda": "^2.31.1"
+    "nice-grpc-server-reflection": "^3.0.3",
+    "redis": "^5.10.0",
+    "remeda": "^2.33.4"
   },
   "devDependencies": {
     "@restorecommerce/dev": "^0.2.0",
     "@types/nconf": "^0.10.7",
-    "@vitest/coverage-v8": "^3.2.4",
-    "arangojs": "^8.7.0",
-    "cross-env": "^7.0.3",
-    "esbuild": "^0.25.9",
-    "eslint": "^9.36.0",
+    "@vitest/coverage-v8": "^4.0.18",
+    "arangojs": "^10.2.2",
+    "cross-env": "^10.1.0",
+    "esbuild": "^0.27.2",
+    "eslint": "^9.39.2",
     "npm-run-all": "^4.1.5",
-    "rimraf": "^6.0.1",
+    "rimraf": "^6.1.2",
     "should": "^13.2.3",
-    "typescript": "^5.9.2",
-    "vitest": "^3.2.4"
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18"
   },
   "scripts": {
     "test": "vitest run",

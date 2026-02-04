@@ -1,0 +1,67 @@
+{
+  "facade": {
+    "hostname": "0.0.0.0",
+    "port": 5100
+  },
+  "access_control": {
+    "client": {
+      "address": "localhost:50161"
+    },
+    "root": false
+  },
+  "identity": {
+    "client": {
+      "address": "localhost:50162"
+    }
+  },
+  "client": {
+    "acs-srv": {
+      "address": "localhost:50161",
+      "mocks": [{
+        "name": "acs-srv",
+        "protoPath": "io/restorecommerce/access_control.proto",
+        "packageName": "io.restorecommerce.access_control",
+        "serviceName": "AccessControlService",
+        "protoLoadOptions": {
+          "includeDirs": [
+            "../../node_modules/@restorecommerce/protos/"
+          ]
+        }
+      }]
+    },
+    "identity": {
+      "address": "localhost:50162",
+      "mocks": [{
+        "name": "user",
+        "protoPath": "io/restorecommerce/user.proto",
+        "packageName": "io.restorecommerce.user",
+        "serviceName": "UserService",
+        "protoLoadOptions": {
+          "includeDirs": [
+            "../../node_modules/@restorecommerce/protos/"
+          ]
+        }
+      },{
+        "name": "authentication_log",
+        "protoPath": "io/restorecommerce/authentication_log.proto",
+        "packageName": "io.restorecommerce.authentication_log",
+        "serviceName": "AuthenticationLogService",
+        "protoLoadOptions": {
+          "includeDirs": [
+            "../../node_modules/@restorecommerce/protos/"
+          ]
+        }
+      },{
+        "name": "token",
+        "protoPath": "io/restorecommerce/token.proto",
+        "packageName": "io.restorecommerce.token",
+        "serviceName": "TokenService",
+        "protoLoadOptions": {
+          "includeDirs": [
+            "../../node_modules/@restorecommerce/protos/"
+          ]
+        }
+      }]
+    }
+  }
+}

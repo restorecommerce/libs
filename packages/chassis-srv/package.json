@@ -38,7 +38,7 @@
     "nice-grpc": "^2.1.13",
     "nice-grpc-server-reflection": "^3.0.2",
     "protobufjs": "^7.4.0",
-    "redis": "^4.7.0",
+    "redis": "4.7.0",
     "remeda": "^2.31.1"
   },
   "devDependencies": {

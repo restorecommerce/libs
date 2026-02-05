@@ -228,8 +228,12 @@ export class Arango implements DatabaseProvider {
    * @param  {string[]} idsArray list of document ids
    * @returns  {Promise<any>} A list of documents including the document handlers
    */
-  async getDocumentHandlers(collectionName: string, collection: any, documents: any,
-    idsArray?: string[]): Promise<any> {
+  async getDocumentHandlers(
+    collectionName: string,
+    collection: any,
+    documents: any,
+    idsArray?: string[]
+  ): Promise<any> {
     let ids = [];
     if (documents && !isArray(documents)) {
       documents = [documents];
@@ -393,11 +397,7 @@ export class Arango implements DatabaseProvider {
         docsWithHandlers.push({ _key: id });
       }
     }
-    const deleteHandlerIds = [];
-    for (const doc of docsWithHandlers) {
-      deleteHandlerIds.push(doc._key);
-    }
-
+    const deleteHandlerIds = docsWithHandlers.map((doc: any) => doc._key);
     return collection.removeAll(deleteHandlerIds);
   }
 

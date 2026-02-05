@@ -351,28 +351,12 @@ export const buildSorter = (options: any, index?: number, bindVarsMap?: any): an
     return '';
   }
 
-  if (!index) {
-    index = 0;
-  }
-  if (!bindVarsMap) {
-    bindVarsMap = {};
-  }
-
   const sort = mapKeys(options.sort, (key, value) => {
     return autoCastKey(key);
   });
-  let sortKeysOrder = '';
-  let i = 1;
-  const objLength = Object.keys(sort).length;
-  for (const key in sort) {
-    if (objLength == i) {
-      // Do not append ',' for the last element
-      sortKeysOrder = `${sortKeysOrder} ${key} ${sort[key]} `;
-    } else {
-      sortKeysOrder = `${sortKeysOrder} ${key} ${sort[key]},`;
-    }
-    i += 1;
-  }
+  const sortKeysOrder = Object.entries(sort).map(
+    ([key, value]) => `${key} ${value}`
+  ).join(' ');
   return 'SORT ' + sortKeysOrder;
 };
 

@@ -73,10 +73,6 @@ export class Arango implements DatabaseProvider {
       filterQuery = filterResult.q;
     }
 
-    const limitQuery = buildLimiter(opts);
-    const returnResult = buildReturn(opts);
-    const returnQuery = isEmptyish(returnResult?.q) ? returnResult.q : 'RETURN node';
-
     // if search options are set build search query
     const searchQueries = new Array<string>();
     if (opts?.search?.search && this.collectionNameAnalyzerMap && this.collectionNameAnalyzerMap.get(collectionName)) {
@@ -86,9 +82,9 @@ export class Arango implements DatabaseProvider {
       const viewName = this.collectionNameAnalyzerMap.get(collectionName).viewName;
       const caseSensitive = options?.search?.case_sensitive;
       const analyzerOptions: any[] = this.collectionNameAnalyzerMap.get(collectionName).analyzerOptions;
-      const analyzerName = analyzerOptions.flatMap(
+      const analyzerName = JSON.stringify(analyzerOptions.flatMap(
         (opt: any) => Object.entries<any>(opt)
-      ).find(([k, v]) => caseSensitive ? v?.type === 'ngram' : v?.type === 'pipeline')[0];
+      ).find(([k, v]) => caseSensitive ? v?.type === 'ngram' : v?.type === 'pipeline')[0]);
 
       for (const field of searchFields) {
         searchQueries.push(`NGRAM_MATCH(node.${field}, ${searchString}, ${similarityThreshold}, ${analyzerName})`);
@@ -101,7 +97,10 @@ export class Arango implements DatabaseProvider {
     
     // override sortQuery (to rank based on score for frequency search match - term frequency–inverse document frequency algorithm TF-IDF)
     const sortQuery = isEmptyish(searchQueries) ? buildSorter(opts) : `SORT TFIDF(node) DESC`;
-    const queryStrings = ['FOR node in @@collection'];
+    const limitQuery = buildLimiter(opts);
+    const returnResult = buildReturn(opts);
+    const returnQuery = isEmptyish(returnResult?.q) ? 'RETURN node' : returnResult.q;
+    const queryStrings = ['FOR node IN @@collection'];
     if (!isEmptyish(searchQueries)) {
       queryStrings.push(`SEARCH ${searchQueries.join(' OR ')}`);
     }
@@ -123,7 +122,8 @@ export class Arango implements DatabaseProvider {
     if (!isEmptyish(customFilters) && opts.customArguments) {
       bindVars.customArguments = opts.customArguments;
     }
-    const queryString = queryStrings.join(' ');
+    const queryString = queryStrings.filter(s => !isEmptyish(s)).join(' ');
+    this.logger.info(queryString);
     const res = searchQueries
       ? await this.db.query(queryString, bindVars)
       : await query(this.db, collectionName, queryString, bindVars);
@@ -157,7 +157,7 @@ export class Arango implements DatabaseProvider {
     const filterResult = buildFilter(filter);
     const filterQuery = filterResult.q;
     const varArgs = filterResult.bindVarsMap ?? {};
-    const queryString = `FOR node in @@collection FILTER ${filterQuery} RETURN node`;
+    const queryString = `FOR node IN @@collection FILTER ${filterQuery} RETURN node`;
     const bindVars = Object.assign({
       '@collection': collectionName
     }, varArgs);
@@ -181,9 +181,8 @@ export class Arango implements DatabaseProvider {
     documents: ArangoDocument | ArangoDocument[],
     idsArray?: string[]
   ): Promise<ArangoDocument[]> {
-    const ids = idsArray ?? toArray(documents)?.map(doc => idToKey(doc.id));
-    const queryString = aql`FOR node in ${collection}
-      FILTER node._key IN ${ids} return node`;
+    const ids = idsArray ?? toArray(documents)?.map(doc => doc.id);
+    const queryString = aql`FOR node IN ${collection} FILTER node.id IN ${ids} LIMIT ${ids.length} RETURN node`;
     const res = await query(this.db, collectionName, queryString);
     const docsWithSelector = await res.all();
     return docsWithSelector;
@@ -196,7 +195,7 @@ export class Arango implements DatabaseProvider {
    * @param  {Object} updateDocuments  List of documents to update
    */
   async update(collectionName: string, updateDocuments: any): Promise<any> {
-    const documents = clone(updateDocuments) as any;
+    const documents = clone(updateDocuments) as ArangoDocument;
     const updateDocsResponse = [];
     if (isNullish(collectionName) ||
       !isString(collectionName) || isEmptyish(collectionName)) {
@@ -219,7 +218,7 @@ export class Arango implements DatabaseProvider {
     for (const document of documents) {
       let foundInDB = false;
       for (const docWithHandler of docsWithHandlers) {
-        if (docWithHandler.id === (document as any).id) {
+        if (docWithHandler.id === document.id) {
           foundInDB = true;
           (document as any)._key = docWithHandler._key;
           break;
@@ -228,7 +227,7 @@ export class Arango implements DatabaseProvider {
       if (!foundInDB) {
         // if document is not found in DB use the id itself as _key
         // this key will return an array in response since it does not exist
-        (document as any)._key = (document as any).id;
+        document._key = idToKey(document.id);
       }
     }
 
@@ -307,7 +306,7 @@ export class Arango implements DatabaseProvider {
     }
 
     // retreive _key for the give ids
-    const docsWithHandlers = await this.getDocumentHandlers(collectionName, collection, null, ids);
+    const docsWithHandlers = await this.getDocumentHandlers(collectionName, collection, undefined, ids);
     for (const id of ids) {
       // check if given id is present in docsWithHandlers
       let foundDocInDB = false;
@@ -356,7 +355,7 @@ export class Arango implements DatabaseProvider {
     if (filterResult && filterResult.bindVarsMap) {
       varArgs = filterResult.bindVarsMap;
     }
-    const queryString = `FOR node in @@collection FILTER ${filterQuery} COLLECT WITH COUNT
+    const queryString = `FOR node IN @@collection FILTER ${filterQuery} COLLECT WITH COUNT
       INTO length RETURN length`;
     const bindVars = Object.assign({
       '@collection': collectionName

@@ -183,7 +183,7 @@ describe('CommandInterfaceService', () => {
     });
     it('should clean the database', async () => {
       const validatePromise = new Promise<void>((resolve, reject) => {
-        validate = async (msg: any, eventName: string): void => {
+        validate = async (msg: any, eventName: string): Promise<void> => {
           try {
             eventName.should.equal('resetResponse');
             should.exist(msg.services);
@@ -229,7 +229,7 @@ describe('CommandInterfaceService', () => {
     });
     it('should re-read all data from specified offset', async function restore() {
       const validatePromise = new Promise<void>((resolve, reject) => {
-        validate = async (msg: any, eventName: string): void => {
+        validate = async (msg: any, eventName: string): Promise<void> => {
           try {
             logger.debug(`[RESTORE] Received event: ${eventName}`);
             eventName.should.equal('restoreResponse');
@@ -282,7 +282,7 @@ describe('CommandInterfaceService', () => {
   describe('version', () => {
     it('should return the version of the package and nodejs', async () => {
       const validatePromise = new Promise<void>((resolve, reject) => {
-        validate = async (msg: any, eventName: string): void => {
+        validate = async (msg: any, eventName: string): Promise<void> => {
           try {
             eventName.should.equal('versionResponse');
             should.exist(msg.services);
@@ -315,7 +315,7 @@ describe('CommandInterfaceService', () => {
   describe('setApiKey', () => {
     it('should set the provided authentication api key on configuration', async () => {
       const validatePromise = new Promise<void>((resolve, reject) => {
-        validate = async (msg: any, eventName: string): void => {
+        validate = async (msg: any, eventName: string): Promise<void> => {
           try {
             eventName.should.equal('setApiKeyResponse');
             should.exist(msg.services);
@@ -350,7 +350,7 @@ describe('CommandInterfaceService', () => {
   describe('configUpdate', () => {
     it('should update the provide configuration', async () => {
       const validatePromise = new Promise<void>((resolve, reject) => {
-        validate = async (msg: any, eventName: string): void => {
+        validate = async (msg: any, eventName: string): Promise<void> => {
           try {
             eventName.should.equal('configUpdateResponse');
             should.exist(msg.services);
@@ -384,7 +384,7 @@ describe('CommandInterfaceService', () => {
   describe('flushCache', () => {
     it('should flush with given db_index and pattern', async () => {
       const validatePromise = new Promise<void>((resolve, reject) => {
-        validate = async (msg: any, eventName: string): void => {
+        validate = async (msg: any, eventName: string): Promise<void> => {
           try {
             eventName.should.equal('flushCacheResponse');
             should.exist(msg.payload);

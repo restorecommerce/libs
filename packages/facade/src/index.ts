@@ -22,7 +22,7 @@ import { type Disposable } from 'graphql-ws';
 import _ from 'lodash';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { parse } from 'graphql';
-import { type GraphQLResolverMap, mergeSubscribeIntoSchema } from './gql/protos/index.js';
+import { mergeSubscribeIntoSchema } from './gql/protos/index.js';
 import compose from 'koa-compose';
 import { type KafkaProviderConfig } from '@restorecommerce/kafka-client';
 import { setUseSubscriptions } from './gql/protos/utils.js';
@@ -31,6 +31,7 @@ import cors from '@koa/cors';
 import graphqlUploadKoa from 'graphql-upload/graphqlUploadKoa.mjs';
 import Router from 'koa-router';
 import { decomposeError } from './utils.js';
+import { GraphQLResolverMap } from '@apollo/subgraph/dist/schema-helper/resolverMap.js';
 
 export * from './modules/index.js';
 export * from './middlewares/index.js';
@@ -290,13 +291,13 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
           `),
           resolvers: {
             Subscription: {
-              ...this.allResolvers['Subscription']
+              ...this.allResolvers?.Subscription
             }
           }
         });
 
         if ('Subscription' in this.allResolvers) {
-          mergeSubscribeIntoSchema(schema.getSubscriptionType(), this.allResolvers['Subscription']);
+          mergeSubscribeIntoSchema(schema.getSubscriptionType(), this.allResolvers?.Subscription);
         }
 
         plugin.disposables.push(useServer({
@@ -312,7 +313,7 @@ export class RestoreCommerceFacade<TModules extends FacadeModuleBase[] = []> imp
         }, wsServer));
       }
       catch (error) {
-        this.logger?.error('Gateway onSchemaLoadOrUpdate:', decomposeError(error));
+        this.logger?.warn('Gateway onSchemaLoadOrUpdate:', decomposeError(error));
       }
     });
 

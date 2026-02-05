@@ -1,6 +1,5 @@
 import {
   clone,
-  isArray,
   find,
   isEmptyish,
   isDate,
@@ -9,7 +8,7 @@ import {
   isNumber,
   isNullish,
   keys,
-  forEach, forEachObj,
+  forEachObj,
   startsWith,
   mapKeys,
   isDeepEqual, intersection
@@ -20,6 +19,7 @@ import {
   Options_Direction,
   Options_Direction as Direction,
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/graph.js';
+import { Logger } from '@restorecommerce/logger';
 
 const filterOperationMap = new Map([
   [0, 'eq'],
@@ -74,7 +74,7 @@ const convertFilterToObject = (filter: any, obj: any, operatorList: any) => {
   }
 
   for (let i = 0; i < operatorList.length; i++) {
-    if (isArray(temp)) {
+    if (Array.isArray(temp)) {
       temp = find(temp, operatorList[i]);
     } else {
       temp = temp[operatorList[i]];
@@ -82,13 +82,13 @@ const convertFilterToObject = (filter: any, obj: any, operatorList: any) => {
     if (i === (operatorList.length - 1)) {
       // push for final element in the operatorList array
       if (filter.operation === 'eq' || filter.operation === 0) {
-        if (isArray(temp)) {
+        if (Array.isArray(temp)) {
           temp.push({ [filter.field]: value });
         } else {
           (temp[operatorList[i]] as any).push({ [filter.field]: value });
         }
       } else if (filter.operation === 'neq' || filter.operation === 8) {
-        if (isArray(temp)) {
+        if (Array.isArray(temp)) {
           temp.push({ [filter.field]: { $not: { $eq: value } } });
         } else {
           (temp[operatorList[i]] as any).push({ [filter.field]: { $not: { $eq: value } } });
@@ -101,7 +101,7 @@ const convertFilterToObject = (filter: any, obj: any, operatorList: any) => {
           opValue = filterOperationMap.get(filter.operation);
         }
         const op = `$${opValue}`;
-        if (isArray(temp)) {
+        if (Array.isArray(temp)) {
           temp.push({ [filter.field]: { [op]: value } });
         } else {
           (temp[operatorList[i]] as any).push({ [filter.field]: { [op]: value } });
@@ -121,7 +121,7 @@ const convertFilterToObject = (filter: any, obj: any, operatorList: any) => {
 const insertNewOpAndUpdateObj = (obj: any, operatorList: any, operatorNew: any) => {
   let pos = clone(obj);
   for (let i = 0; i < operatorList.length; i++) {
-    if (isArray(pos)) {
+    if (Array.isArray(pos)) {
       pos = find(pos, operatorList[i]);
     } else {
       pos = pos[operatorList[i]];
@@ -154,13 +154,13 @@ export const toTraversalFilterObject = (input: any, obj?: any, operatorList?: st
     filters.operator = input.operator;
   }
   // by default use 'and' operator if no operator is specified
-  if (filters && isArray(filters.filters) && !filters.operator) {
+  if (filters && Array.isArray(filters.filters) && !filters.operator) {
     filters.operator = 'and';
   }
   if (!obj) {
     obj = {};
   }
-  if (isArray(filters.filters) && filters.filters.length > 0) {
+  if (Array.isArray(filters.filters) && filters.filters.length > 0) {
     let operatorValue;
     if (typeof filters.operator === 'string' || filters.operator instanceof String) {
       operatorValue = filters.operator;
@@ -178,7 +178,7 @@ export const toTraversalFilterObject = (input: any, obj?: any, operatorList?: st
     }
     // pass operatorList and obj recursively
     obj = toTraversalFilterObject(filters.filters, obj, operatorList);
-  } else if (isArray(filters)) {
+  } else if (Array.isArray(filters)) {
     if (!operatorList) {
       const operator = input.operator ? `$${input.operator}` : '$and';
       operatorList = [operator];
@@ -226,7 +226,7 @@ export const autoCastKey = (key: any, value?: any): any => {
  * @returns {any} interpreted value
  */
 export const autoCastValue = (value: any): any => {
-  if (isArray(value)) {
+  if (Array.isArray(value)) {
     return value.map(value => value.toString());
   }
   if (isString(value)) { // String
@@ -256,7 +256,7 @@ export const autoCastValue = (value: any): any => {
  */
 export const buildComparison = (filter: any, op: string, root?: boolean): any => {
   const ele = filter.map((e: any) => {
-    if (!isArray(e)) {
+    if (!Array.isArray(e)) {
       e = [e];
     }
     e = buildGraphFilter(e, root);
@@ -498,7 +498,7 @@ export const createGraphsAssociationFilter = (filters: GraphFilters[],
   let rootEntityFilter;
   // convert the filter from proto structure (field, operation, value and operand) to {field: value } mapping
   if (filters && !isEmptyish(filters)) {
-    if (!isArray(filters)) {
+    if (!Array.isArray(filters)) {
       filters = [filters];
     }
     for (const eachFilter of filters) {
@@ -526,7 +526,7 @@ export const createGraphsAssociationFilter = (filters: GraphFilters[],
     }
   }
 
-  if (!isArray(filterObj)) {
+  if (!Array.isArray(filterObj)) {
     filterObj = [filterObj];
   }
 
@@ -587,3 +587,12 @@ export const createGraphsAssociationFilter = (filters: GraphFilters[],
   }
   return { rootEntityFilter, associationFilter: filter };
 };
+
+export const toArray = <T>(t: T | T[]) => Array.isArray(t) || isNullish(t) ? t : [t];
+
+export class LoggedError extends Error {
+  constructor(logger?: Logger, msg?: string, ...meta: any[]) {
+    logger?.error(msg, ...meta);
+    super(msg);
+  }
+}

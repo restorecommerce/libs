@@ -9,12 +9,18 @@
   },
   "facade": {
     "hostname": "0.0.0.0",
-    "port": 5000
+    "port": 5000,
+    "kafka": {
+      "brokers": [
+        "127.0.0.1:29092"
+      ]
+    }
   },
   "resources": {
     "client": {
       "address": "127.0.0.1:50053"
-    }
+    },
+    "root": false
   },
   "identity": {
     "client": {
@@ -83,6 +89,26 @@
       "maxFiles": 20
     },
     "endpoint": "os"
+  },
+  "events": {
+    "kafka": {
+      "provider": "kafka",
+      "groupId": "restore-facade-srv",
+      "kafka": {
+        "clientId": "restore-facade-srv",
+        "brokers": [
+          "localhost:29092"
+        ]
+      },
+      "latestOffset": false,
+      "configUpdateCommand": {
+        "messageObject": "io.restorecommerce.commandinterface.CommandRequest"
+      },
+      "configUpdateResponse": {
+        "messageObject": "io.restorecommerce.commandinterface.CommandResponse"
+      }
+    },
+    "enableEvents": "true"
   },
   "oidc": {
     "templates": {

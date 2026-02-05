@@ -22,6 +22,8 @@ message Resolver {
   string target_sub_service = 3;
   string target_method = 4;
   string field_name = 5;
+  optional uint32 limit = 6;
+  optional uint32 latency = 7;
 }
 
 extend google.protobuf.MessageOptions {

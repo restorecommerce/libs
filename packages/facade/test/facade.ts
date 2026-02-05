@@ -2,7 +2,7 @@ import { createFacade, reqResLogger, type FacadeContext, identityModule } from '
 import { cfg, logger } from './utils.js';
 import * as fs from 'node:fs';
 
-const jwks = JSON.parse(fs.readFileSync('./tests/jwks.json').toString());
+const jwks = JSON.parse(fs.readFileSync('./test/jwks.json').toString());
 
 const createTestFacade = () => {
   const config = {

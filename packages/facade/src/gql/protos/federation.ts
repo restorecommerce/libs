@@ -1,6 +1,5 @@
 import {
   type FederatedSchemaWithResolvers,
-  type GraphQLResolverMap,
   type ProtoMetadata,
   type ServiceClient,
   type SubSpaceServiceConfig
@@ -9,6 +8,7 @@ import { buildSubgraphSchema } from '@apollo/subgraph';
 import { parse } from 'graphql';
 import { type GraphQLSchema, printSchema, GraphQLObjectType, GraphQLList, GraphQLScalarType } from 'graphql';
 import { generateSubServiceResolvers } from './resolvers.js';
+import { GraphQLResolverMap } from '@apollo/subgraph/dist/schema-helper/resolverMap.js';
 
 export const buildFederatedSubscriptionSchema = <T, M extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, M>>(subServices: ProtoMetadata[], config: SubSpaceServiceConfig, namespace: string, schema: GraphQLSchema): FederatedSchemaWithResolvers => {
   const resolvers: GraphQLResolverMap<any> = generateSubServiceResolvers(subServices, config, namespace);

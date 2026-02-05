@@ -17,7 +17,7 @@ import {
   schedulingModule
 } from './src/index.js';
 
-import jwks from './tests/jwks.json' with { type: 'json' };
+import jwks from './test/jwks.json' with { type: 'json' };
 
 const createTestFacade = () => {
   const serviceConfig = createServiceConfig(process.cwd());

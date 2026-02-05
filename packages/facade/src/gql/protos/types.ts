@@ -1,25 +1,9 @@
+import { GraphQLResolverMap } from '@apollo/subgraph/dist/schema-helper/resolverMap.js';
 import { type GrpcClientConfig } from '@restorecommerce/grpc-client';
 import { type GraphQLSchema, type GraphQLFieldResolver, type GraphQLScalarType } from 'graphql';
 export {
   type ProtoMetadata,
 } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/resource_base.js';
-
-export interface GraphQLResolverMap<TContext = {}> {
-  [typeName: string]:
-  | {
-    [fieldName: string]:
-    | GraphQLFieldResolver<any, TContext, any>
-    | {
-      requires?: string;
-      resolve: GraphQLFieldResolver<any, TContext, any>;
-    };
-  }
-  | GraphQLScalarType
-  | {
-    [enumValue: string]: string | number;
-  };
-}
-
 
 export const authSubjectType = '.io.restorecommerce.auth.Subject';
 

@@ -1,19 +1,15 @@
 import { Database, aql } from 'arangojs';
-import {isNullish, isEmptyish, isString, isArray, merge, clone, forEach} from 'remeda';
+import {isNullish, isEmptyish, isString, merge, clone, forEach} from 'remeda';
 import {
   buildFilter, buildSorter, buildLimiter, buildReturn,
-  sanitizeInputFields, query, sanitizeOutputFields
+  sanitizeInputFields, query, sanitizeOutputFields,
+  idToKey
 } from './common.js';
 import { DatabaseProvider } from '../../index.js';
-import { ViewAnalyzerOptions, ViewMap } from './interface.js';
+import { ArangoDocument, CustomQuery, ViewAnalyzerOptions, ViewMap } from './interface.js';
 import { type Logger } from '@restorecommerce/logger';
+import { LoggedError, toArray } from './utils.js';
 
-export interface CustomQuery {
-  code: string; // AQL code
-  // filter - combinable with the generic `find` query
-  // query - standalone
-  type: 'filter' | 'query';
-}
 /**
  * ArangoDB database provider.
  */
@@ -38,147 +34,100 @@ export class Arango implements DatabaseProvider {
    * @return {Promise<any>}  Promise for list of found documents.
    */
   async find(collectionName: string, filter?: any, options?: any): Promise<any> {
-    if (isNullish(collectionName) || !isString(collectionName) ||
-      isEmptyish(collectionName)) {
-      this.logger?.error('invalid or missing collection argument for find operation');
-      throw new Error('invalid or missing collection argument for find operation');
+    if (isNullish(collectionName)
+      || !isString(collectionName)
+      || isEmptyish(collectionName)
+    ) {
+      throw new LoggedError(this.logger, 'invalid or missing collection argument for find operation');
     }
 
     let filterQuery: any = filter ?? {};
     const opts = options ?? {};
     let filterResult: any;
-    let bindVars: any;
 
-    let customFilter = '';
+    const customFilters = new Array<string>();
     // checking if a custom query should be used
     if (!isEmptyish(opts.customQueries)) {
       for (const queryName of opts.customQueries) {
         if (!this.customQueries.has(queryName)) {
-          this.logger?.error(`custom query ${query} not found`);
-          throw new Error(`custom query ${query} not found`);
+          throw new LoggedError(this.logger, `custom query ${query} not found`);
         }
         const customQuery = this.customQueries.get(queryName);
-        if (customQuery.type == 'query') {
+        if (customQuery.type === 'query') {
           // standalone query
           const result = await query(this.db, collectionName, customQuery.code, opts.customArguments || {}); // Cursor object
           return result.all(); // TODO: paginate
         } else {
           // filter
-          customFilter += ` ${customQuery.code} `;
+          customFilters.push(customQuery.code);
         }
       }
     }
 
-    if (!isArray(filterQuery)) {
-      filterQuery = [filterQuery];
-    }
-    if (isEmptyish(filterQuery[0])) {
+    if (isEmptyish(filterQuery)) {
       filterQuery = true;
     }
     else {
+      filterQuery = toArray(filterQuery);
       filterResult = buildFilter(filterQuery);
       filterQuery = filterResult.q;
     }
 
-    let sortQuery = buildSorter(opts);
     const limitQuery = buildLimiter(opts);
     const returnResult = buildReturn(opts);
-    let returnQuery = returnResult.q;
-    // return complete node in case no specific fields are specified
-    if (isEmptyish(returnQuery)) {
-      returnQuery = 'RETURN node';
-    }
+    const returnQuery = isEmptyish(returnResult?.q) ? returnResult.q : 'RETURN node';
+
     // if search options are set build search query
-    let searchQuery;
-    if (opts?.search?.search) {
+    const searchQueries = new Array<string>();
+    if (opts?.search?.search && this.collectionNameAnalyzerMap && this.collectionNameAnalyzerMap.get(collectionName)) {
       const searchString = JSON.stringify(options.search.search);
-      if (this.collectionNameAnalyzerMap && this.collectionNameAnalyzerMap.get(collectionName)) {
-        const searchFields = (options?.search?.fields?.length > 0) ? options.search.fields : this.collectionNameAnalyzerMap.get(collectionName).fields;
-        const similarityThreshold = this.collectionNameAnalyzerMap.get(collectionName).similarityThreshold;
-        const viewName = this.collectionNameAnalyzerMap.get(collectionName).viewName;
+      const searchFields = (options?.search?.fields?.length > 0) ? options.search.fields : this.collectionNameAnalyzerMap.get(collectionName).fields;
+      const similarityThreshold = this.collectionNameAnalyzerMap.get(collectionName).similarityThreshold;
+      const viewName = this.collectionNameAnalyzerMap.get(collectionName).viewName;
+      const caseSensitive = options?.search?.case_sensitive;
+      const analyzerOptions: any[] = this.collectionNameAnalyzerMap.get(collectionName).analyzerOptions;
+      const analyzerName = analyzerOptions.flatMap(
+        (opt: any) => Object.entries<any>(opt)
+      ).find(([k, v]) => caseSensitive ? v?.type === 'ngram' : v?.type === 'pipeline')[0];
 
-        const caseSensitive = options?.search?.case_sensitive;
-        const analyzerOptions: any = this.collectionNameAnalyzerMap.get(collectionName).analyzerOptions;
-        let analyzerName;
-        if (caseSensitive) {
-          // for casesensitive search use "ngram" analayzer type
-          analyzerOptions.forEach((optionObj: any) => {
-            const keyName = Object.keys(optionObj)[0];
-            if (optionObj[keyName].type === 'ngram') {
-              analyzerName = JSON.stringify(keyName);
-            }
-          });
-        } else {
-          // for case-insensitive search use "pipleline" type (ngram + norm)
-          analyzerOptions.forEach((optionObj: any) => {
-            const keyName = Object.keys(optionObj)[0];
-            if (optionObj[keyName].type === 'pipeline') {
-              analyzerName = JSON.stringify(keyName);
-            }
-          });
-        }
-        for (const field of searchFields) {
-          if (!searchQuery) {
-            searchQuery = `NGRAM_MATCH(node.${field}, ${searchString}, ${similarityThreshold}, ${analyzerName}) `;
-          } else {
-            searchQuery = searchQuery + `OR NGRAM_MATCH(node.${field}, ${searchString}, ${similarityThreshold}, ${analyzerName}) `;
-          }
-        }
-        // override collection name with view name
-        collectionName = viewName;
-        // override sortQuery (to rank based on score for frequency search match - term frequency–inverse document frequency algorithm TF-IDF)
-        sortQuery = `SORT TFIDF(node) DESC`;
-      } else {
-        this.logger?.info(`View and analyzer configuration data not set for ${collectionName} and hence ignoring search string`);
+      for (const field of searchFields) {
+        searchQueries.push(`NGRAM_MATCH(node.${field}, ${searchString}, ${similarityThreshold}, ${analyzerName})`);
       }
-    }
-
-    let queryString = `FOR node in @@collection FILTER ${filterQuery}`;
-    if (searchQuery) {
-      queryString = `FOR node in @@collection SEARCH ${searchQuery} FILTER ${filterQuery}`;
-    }
-    if (!isEmptyish(customFilter)) {
-      queryString += customFilter;
-    }
-
-    queryString += ` ${sortQuery}
-      ${limitQuery} ${returnQuery}`;
-
-    let varArgs = {};
-    if (filterResult && filterResult.bindVarsMap) {
-      varArgs = filterResult.bindVarsMap;
-    }
-    let returnArgs = {};
-    if (returnResult && returnResult.bindVarsMap) {
-      returnArgs = returnResult.bindVarsMap;
-    }
-    let limitArgs;
-    if (isEmptyish(limitQuery)) {
-      limitArgs = {};
+      // override collection name with view name
+      collectionName = viewName;
     } else {
-      if (!isNullish(opts.limit)) {
-        limitArgs = { limit: opts.limit };
-        if (!isNullish(opts.offset)) {
-          limitArgs = { offset: opts.offset, limit: opts.limit };
-        }
-      }
+      this.logger?.info(`View and analyzer configuration data not set for ${collectionName} and hence ignoring search string`);
     }
-    varArgs = merge(varArgs, limitArgs);
-    varArgs = merge(varArgs, returnArgs);
-    bindVars = merge({
-      '@collection': collectionName
-    }, varArgs);
-    if (!isEmptyish(customFilter) && opts.customArguments) {
-      bindVars = merge(bindVars, { customArguments: opts.customArguments });
+    
+    // override sortQuery (to rank based on score for frequency search match - term frequency–inverse document frequency algorithm TF-IDF)
+    const sortQuery = isEmptyish(searchQueries) ? buildSorter(opts) : `SORT TFIDF(node) DESC`;
+    const queryStrings = ['FOR node in @@collection'];
+    if (!isEmptyish(searchQueries)) {
+      queryStrings.push(`SEARCH ${searchQueries.join(' OR ')}`);
     }
-    let res;
-    if (!searchQuery) {
-      res = await query(this.db, collectionName, queryString, bindVars);
-    } else {
-      res = await this.db.query(queryString, bindVars);
+    queryStrings.push(`FILTER ${filterQuery}`);
+    queryStrings.push(...customFilters);
+    queryStrings.push(sortQuery, limitQuery, returnQuery);
+
+    const bindVars = {
+      '@collection': collectionName,
+      ...filterResult?.bindVarsMap,
+      ...returnResult?.bindVarsMap,
     }
+    if (!isNullish(opts.limit)) {
+      bindVars.limit = opts.limit;
+    }
+    if (!isNullish(opts.offset)) {
+      bindVars.offset = opts.offset;
+    }
+    if (!isEmptyish(customFilters) && opts.customArguments) {
+      bindVars.customArguments = opts.customArguments;
+    }
+    const queryString = queryStrings.join(' ');
+    const res = searchQueries
+      ? await this.db.query(queryString, bindVars)
+      : await query(this.db, collectionName, queryString, bindVars);
     const docs = await res.all(); // TODO: paginate
-
     return docs.map(sanitizeOutputFields);
   }
 
@@ -192,13 +141,11 @@ export class Arango implements DatabaseProvider {
   async findByID(collectionName: string, ids: string | string[]): Promise<any> {
     if (isNullish(collectionName) || !isString(collectionName) ||
       isEmptyish(collectionName)) {
-      this.logger?.error('invalid or missing collection argument for findByID operation');
-      throw new Error('invalid or missing collection argument for findByID operation');
+      throw new LoggedError(this.logger, 'invalid or missing collection argument for findByID operation');
     }
 
     if (isNullish(ids)) {
-      this.logger?.error('invalid or missing ids argument for findByID operation');
-      throw new Error('invalid or missing ids argument for findByID operation');
+      throw new LoggedError(this.logger, 'invalid or missing ids argument for findByID operation');
     }
     if (!Array.isArray(ids)) {
       ids = [ids as string];
@@ -224,30 +171,19 @@ export class Arango implements DatabaseProvider {
    *
    * @param  {String} collectionName Collection name
    * @param  {any} collection Collection Object
-   * @param  {any} documents list of documents
+   * @param  {ArangoDocument | ArangoDocument[]} documents list of documents
    * @param  {string[]} idsArray list of document ids
-   * @returns  {Promise<any>} A list of documents including the document handlers
+   * @returns  {Promise<ArangoDocument[]>} A list of documents including the document handlers
    */
   async getDocumentHandlers(
     collectionName: string,
     collection: any,
-    documents: any,
+    documents: ArangoDocument | ArangoDocument[],
     idsArray?: string[]
-  ): Promise<any> {
-    let ids = [];
-    if (documents && !isArray(documents)) {
-      documents = [documents];
-    }
-    if (documents && documents.length > 0) {
-      for (const doc of documents) {
-        ids.push(doc.id);
-      }
-    }
-    if (!isEmptyish(idsArray) && isArray(idsArray)) {
-      ids = idsArray;
-    }
+  ): Promise<ArangoDocument[]> {
+    const ids = idsArray ?? toArray(documents)?.map(doc => idToKey(doc.id));
     const queryString = aql`FOR node in ${collection}
-      FILTER node.id IN ${ids} return node`;
+      FILTER node._key IN ${ids} return node`;
     const res = await query(this.db, collectionName, queryString);
     const docsWithSelector = await res.all();
     return docsWithSelector;
@@ -264,22 +200,18 @@ export class Arango implements DatabaseProvider {
     const updateDocsResponse = [];
     if (isNullish(collectionName) ||
       !isString(collectionName) || isEmptyish(collectionName)) {
-      this.logger?.error('invalid or missing collection argument for update operation');
-      throw new Error('invalid or missing collection argument for update operation');
+      throw new LoggedError(this.logger, 'invalid or missing collection argument for update operation');
     }
     if (isNullish(documents)) {
-      this.logger?.error('invalid or missing document argument for update operation');
-      throw new Error('invalid or missing document argument for update operation');
+      throw new LoggedError(this.logger, 'invalid or missing document argument for update operation');
     }
     const collection = this.db.collection(collectionName);
     const collectionExists = await collection.exists();
     if (!collectionExists) {
-      this.logger?.error(`Collection ${collectionName} does not exist for update operation`);
-      throw new Error(`Collection ${collectionName} does not exist for update operation`);
+      throw new LoggedError(this.logger, `Collection ${collectionName} does not exist for update operation`);
     }
-    if (!isArray(documents)) {
-      this.logger?.error(`Documents should be list for update operation`);
-      throw new Error(`Documents should be list for update operation`);
+    if (!Array.isArray(documents)) {
+      throw new LoggedError(this.logger, `Documents should be list for update operation`);
     }
     const docsWithHandlers = await this.getDocumentHandlers(collectionName, collection, documents);
 
@@ -321,15 +253,13 @@ export class Arango implements DatabaseProvider {
   async upsert(collectionName: string, documents: any): Promise<any> {
     if (isNullish(collectionName) ||
       !isString(collectionName) || isEmptyish(collectionName)) {
-      this.logger?.error('invalid or missing collection argument for upsert operation');
-      throw new Error('invalid or missing collection argument for upsert operation');
+      throw new LoggedError(this.logger, 'invalid or missing collection argument for upsert operation');
     }
     if (isNullish(documents)) {
-      this.logger?.error('invalid or missing documents argument for upsert operation');
-      throw new Error('invalid or missing documents argument for upsert operation');
+      throw new LoggedError(this.logger, 'invalid or missing documents argument for upsert operation');
     }
     let docs = clone(documents);
-    if (!isArray(documents)) {
+    if (!Array.isArray(documents)) {
       docs = [documents];
     }
     forEach(docs, (document, i) => {
@@ -339,11 +269,10 @@ export class Arango implements DatabaseProvider {
     const collection = this.db.collection(collectionName);
     const collectionExists = await collection.exists();
     if (!collectionExists) {
-      this.logger?.error(`Collection ${collectionName} does not exist for upsert operation`);
-      throw new Error(`Collection ${collectionName} does not exist for upsert operation`);
+      throw new LoggedError(this.logger, `Collection ${collectionName} does not exist for upsert operation`);
     }
     let upsertedDocs = await collection.saveAll(docs, { returnNew: true, overwriteMode: 'update' });
-    if (!isArray(upsertedDocs)) {
+    if (!Array.isArray(upsertedDocs)) {
       upsertedDocs = [upsertedDocs];
     }
     for (const doc of upsertedDocs) {
@@ -366,18 +295,15 @@ export class Arango implements DatabaseProvider {
   async delete(collectionName: string, ids: string[]): Promise<any> {
     if (isNullish(collectionName) ||
       !isString(collectionName) || isEmptyish(collectionName)) {
-      this.logger?.error('invalid or missing collection argument');
-      throw new Error('invalid or missing collection argument');
+      throw new LoggedError(this.logger, 'invalid or missing collection argument');
     }
     if (isNullish(ids) || isEmptyish(ids)) {
-      this.logger?.error('invalid or missing document IDs argument for delete operation');
-      throw new Error('invalid or missing document IDs argument for delete operation');
+      throw new LoggedError(this.logger, 'invalid or missing document IDs argument for delete operation');
     }
     const collection = this.db.collection(collectionName);
     const collectionExists = await collection.exists();
     if (!collectionExists) {
-      this.logger?.error(`Collection ${collectionName} does not exist for delete operation`);
-      throw new Error(`Collection ${collectionName} does not exist for delete operation`);
+      throw new LoggedError(this.logger, `Collection ${collectionName} does not exist for delete operation`);
     }
 
     // retreive _key for the give ids
@@ -410,12 +336,11 @@ export class Arango implements DatabaseProvider {
   async count(collectionName: string, filter: any): Promise<any> {
     if (isNullish(collectionName) ||
       !isString(collectionName) || isEmptyish(collectionName)) {
-      this.logger?.error('invalid or missing collection argument for count operation');
-      throw new Error('invalid or missing collection argument for count operation');
+      throw new LoggedError(this.logger, 'invalid or missing collection argument for count operation');
     }
     let filterQuery: any = filter || {};
     let filterResult: any;
-    if (!isArray(filterQuery)) {
+    if (!Array.isArray(filterQuery)) {
       filterQuery = [filterQuery];
     }
 
@@ -516,15 +441,13 @@ export class Arango implements DatabaseProvider {
    */
   async insert(collectionName: string, documents: any): Promise<any> {
     if (isNullish(collectionName) || !isString(collectionName) || isEmptyish(collectionName)) {
-      this.logger?.error('invalid or missing collection argument for insert operation');
-      throw new Error('invalid or missing collection argument for insert operation');
+      throw new LoggedError(this.logger, 'invalid or missing collection argument for insert operation');
     }
     if (isNullish(documents)) {
-      this.logger?.error('invalid or missing documents argument for insert operation');
-      throw new Error('invalid or missing documents argument for insert operation');
+      throw new LoggedError(this.logger, 'invalid or missing documents argument for insert operation');
     }
     let docs = clone(documents);
-    if (!isArray(documents)) {
+    if (!Array.isArray(documents)) {
       docs = [documents];
     }
     forEach(docs, (document, i) => {
@@ -537,7 +460,7 @@ export class Arango implements DatabaseProvider {
     }
     const insertResponse = [];
     let createdDocs = await collection.saveAll(docs, { returnNew: true });
-    if (!isArray(createdDocs)) {
+    if (!Array.isArray(createdDocs)) {
       createdDocs = [createdDocs];
     }
     for (const doc of createdDocs) {
@@ -570,8 +493,7 @@ export class Arango implements DatabaseProvider {
    */
   unregisterCustomQuery(name: string): void {
     if (!this.customQueries.has(name)) {
-      this.logger?.error('custom function not found');
-      throw new Error('custom function not found');
+      throw new LoggedError(this.logger, 'custom function not found');
     }
     this.customQueries.delete(name);
   }
@@ -582,12 +504,10 @@ export class Arango implements DatabaseProvider {
 
   async createAnalyzerAndView(viewConfig: ViewAnalyzerOptions, collectionName: string): Promise<void> {
     if (!viewConfig.view.viewName || !viewConfig?.view?.options) {
-      this.logger?.error(`View name or view configuration missing for ${collectionName}`);
-      throw new Error(`View name or view configuration missing for ${collectionName}`);
+      throw new LoggedError(this.logger, `View name or view configuration missing for ${collectionName}`);
     }
     if ((!viewConfig?.analyzers) || (viewConfig.analyzers.length === 0) || !(viewConfig.analyzerOptions)) {
-      this.logger?.error(`Analyzer options or configuration missing for ${collectionName}`);
-      throw new Error(`Analyzer options or configuration missing for ${collectionName}`);
+      throw new LoggedError(this.logger, `Analyzer options or configuration missing for ${collectionName}`);
     }
     // create analyzer if it does not exist
     for (const analyzerName of viewConfig.analyzers) {

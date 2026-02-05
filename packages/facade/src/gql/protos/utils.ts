@@ -1,6 +1,8 @@
 import _ from 'lodash';
 import { type GraphQLInputObjectType } from 'graphql';
 import { type TypingData, scalarTypes, recursiveEnumCheck, getNameSpaceTypeName, getTyping } from './registry.js';
+import { Resource } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/resource_base.js';
+import { Subject } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/auth.js';
 
 export const capitalizeProtoName = (name: string): string => {
   return name.replace(/(?:\.|^|_)(\w)/g, v => v.toUpperCase()).replace(/[._]/g, '');
@@ -139,6 +141,41 @@ export const getServiceName = (serviceName: string) => {
 
 export const camelCase = (s: string): string => s.substring(0, 1).toLowerCase() + s.substring(1);
 
-export let useSubscriptions = false;
-
+let useSubscriptions = false;
 export const setUseSubscriptions = (value: boolean) => useSubscriptions = value;
+export const getUseSubscriptions = () => useSubscriptions;
+
+export class LatentBuffer<T, TResult> {
+  private buffer?: Array<T>;
+  private promise?: Promise<TResult>;
+  private timeout?: NodeJS.Timeout;
+  constructor(
+    private readonly callback?: (buffer: Array<T>) => TResult,
+  ) {}
+
+  push(...items: T[]) {
+    this.buffer ??= [];
+    this.timeout?.refresh();
+    return this.buffer.push(...items);
+  }
+  
+  async await(latency = 50) {
+    this.promise ??= new Promise((resolve: (buffer: Array<T>) => void) => {
+      this.timeout ??= setTimeout(() => resolve(this.buffer), latency);
+    }).then(this.callback);
+    return await this.promise;
+  }
+
+  reset() {
+    this.buffer = undefined;
+    this.promise = undefined;
+    this.timeout = undefined;
+  }
+}
+
+export class LatentResourceMapBuffer extends LatentBuffer<string, Promise<Map<string, Resource>>>{};
+export interface ResolverContext {
+  subject: Subject,
+  latent: Record<string, LatentResourceMapBuffer>;
+  [key: string]: any;
+}

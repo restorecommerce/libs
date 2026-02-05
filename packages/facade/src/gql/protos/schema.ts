@@ -12,7 +12,7 @@ import {
   type GraphQLFieldConfigMap
 } from 'graphql';
 import { getWhitelistBlacklistConfig, Mutate } from './graphql.js';
-import { capitalize, capitalizeProtoName, useSubscriptions, getServiceName } from './utils.js';
+import { capitalize, capitalizeProtoName, getUseSubscriptions, getServiceName } from './utils.js';
 import { getTyping } from './registry.js';
 
 const typeCache = new Map<string, GraphQLObjectType>();
@@ -245,7 +245,7 @@ export const generateSubServiceSchemas = (subServices: ProtoMetadata[], config: 
       }
     });
 
-    if (useSubscriptions) {
+    if (getUseSubscriptions()) {
       Object.entries(meta.options?.messages || {}).forEach(([messageName, option]) => {
         if (option.options && 'kafka_subscriber' in option.options) {
           const fieldName = namespace + capitalize(option.options.kafka_subscriber.plural);

@@ -28,3 +28,16 @@ export interface ViewMap {
   similarityThreshold: number;
   analyzerOptions: AnalyzerOptions[];
 }
+
+export interface CustomQuery {
+  code: string; // AQL code
+  // filter - combinable with the generic `find` query
+  // query - standalone
+  type: 'filter' | 'query';
+}
+
+export interface ArangoDocument {
+  _key?: string;
+  id?: string;
+  [key: string]: any;
+}

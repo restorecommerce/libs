@@ -15,8 +15,6 @@ import { type IdentitySrvGrpcClient } from '../grpc/index.js';
 import { marshallProtobufAny } from '../oidc/utils.js';
 import { randomUUID } from 'node:crypto';
 
-const __dirname = import.meta.dirname;
-
 const upsertUserToken = async (ids: IdentitySrvGrpcClient, accountId: string | undefined): Promise<string> => {
   const token = new jose.UnsecuredJWT({})
     .setIssuedAt()

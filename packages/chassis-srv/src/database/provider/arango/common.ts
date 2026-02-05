@@ -1,5 +1,5 @@
 import {
-  clone, isArray, isString, isDate, isBoolean, isNumber, keys, isNullish, forEach, isEmptyish, startsWith,
+  clone, isArray, isString, isDate, isBoolean, isNumber, keys, isNullish, isEmptyish, startsWith,
   forEachObj,
   mapKeys,
   join
@@ -14,18 +14,16 @@ import Long from 'long';
  * @param {Object} args list of arguments, optional
  * @return {Promise} arangojs query result
  */
-export const query = async (db: any, collectionName: string, query: string | any,
-  args?: object): Promise<any> => {
+export const query = async (
+  db: any,
+  collectionName: string,
+  query: string | any,
+  args?: object
+): Promise<any> => {
   const collection = db.collection(collectionName);
   const collectionExists = await collection.exists();
-  try {
-    if (!collectionExists) {
-      await collection.create();
-    }
-  } catch(err: any) {
-    if (err.message && err.message.indexOf('duplicate name') == -1) {
-      throw err;
-    }
+  if (!collectionExists) {
+    await collection.create();
   }
   return await db.query(query, args);
 };
@@ -95,7 +93,10 @@ export const autoCastKey = (key: any, value?: any): any => {
   if (isDate(value)) { // Date
     return `DATE_TIMESTAMP(node.${key})`;
   }
-  return 'node.' + key;
+  else if (key === 'id') {
+    return `node._key`;
+  }
+  return `node.${key}`;
 };
 
 /**
@@ -104,12 +105,12 @@ export const autoCastKey = (key: any, value?: any): any => {
  * @param {object} value - raw value
  * @returns {any} interpreted value
  */
-export const autoCastValue = (value: any): any => {
+export const autoCastValue = (key: string, value: any): any => {
   if (isArray(value)) {
-    return value.map(value => value.toString());
+    return value.map((value: any) => key === 'id' ? idToKey(value) : value?.toString());
   }
   if (isString(value)) { // String
-    return value;
+    return key === 'id' ? idToKey(value) : value?.toString();
   }
   if (isBoolean(value)) { // Boolean
     return Boolean(value);
@@ -118,7 +119,7 @@ export const autoCastValue = (value: any): any => {
     return Number(value);
   }
   if (Long.isLong(value)) {
-    return (value as Long).toNumber();
+    return (value as Long)?.toNumber();
   }
   if (isDate(value)) { // Date
     return new Date(value);
@@ -171,39 +172,39 @@ export const buildField = (key: any, value: any, index: number, bindVarsMap: any
   const bindValueVar = `@value${index}`;
   const bindValueVarWithOutPrefix = `value${index}`;
   if (isString(value) || isBoolean(value) || isNumber(value || isDate(value))) {
-    bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(value);
+    bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(key, value);
     return autoCastKey(key, value) + ' == ' + bindValueVar;
   }
   if (!isNullish(value.$eq)) {
-    bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(value.$eq);
+    bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(key, value.$eq);
     return autoCastKey(key, value) + ' == ' + bindValueVar;
   }
   if (value.$gt) {
-    bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(value.$gt);
+    bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(key, value.$gt);
     return autoCastKey(key, value) + ' > ' + bindValueVar;
   }
   if (value.$gte) {
-    bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(value.$gte);
+    bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(key, value.$gte);
     return autoCastKey(key, value) + ' >= ' + bindValueVar;
   }
   if (value.$lt) {
-    bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(value.$lt);
+    bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(key, value.$lt);
     return autoCastKey(key, value) + ' < ' + bindValueVar;
   }
   if (value.$lte) {
-    bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(value.$lte);
+    bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(key, value.$lte);
     return autoCastKey(key, value) + ' <= ' + bindValueVar;
   }
   if (!isNullish(value.$ne)) {
-    bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(value.$ne);
+    bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(key, value.$ne);
     return autoCastKey(key, value) + ' != ' + bindValueVar;
   }
   if (value.$inVal) {
-    bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(value.$inVal);
+    bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(key, value.$inVal);
     return bindValueVar + ' IN ' + autoCastKey(key, value);
   }
   if (value.$in) {
-    bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(value.$in);
+    bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(key, value.$in);
     if (isString(value.$in)) {
       // if it is a field which should be an array
       // (useful for querying within a document list-like attributen
@@ -213,11 +214,11 @@ export const buildField = (key: any, value: any, index: number, bindVarsMap: any
     return autoCastKey(key, value) + ' IN ' + bindValueVar;
   }
   if (value.$nin) {
-    bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(value.$nin);
+    bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(key, value.$nin);
     return autoCastKey(key, value) + ' NOT IN ' + bindValueVar;
   }
   if (value.$iLike) {
-    bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(value.$iLike);
+    bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(key, value.$iLike);
     // @param 'true' is for case insensitive
     return ' LIKE (' + autoCastKey(key, value) + ',' + bindValueVar + ', true)';
   }
@@ -226,7 +227,7 @@ export const buildField = (key: any, value: any, index: number, bindVarsMap: any
     return `!(${temp})`;
   }
   if ('$isEmpty' in value) {
-    bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue('');
+    bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(key, '');
     // will always search for an empty string
     return autoCastKey(key, '') + ' == ' + bindValueVar;
   }
@@ -234,7 +235,7 @@ export const buildField = (key: any, value: any, index: number, bindVarsMap: any
     const bindValueVar1 = `@value${index + 1}`;
     const bindValueVarWithOutPrefix1 = `value${index + 1}`;
     const k = autoCastKey(key);
-    const v = autoCastValue((value as any).$startswith);
+    const v = autoCastValue(key, (value as any).$startswith);
     bindVarsMap[bindValueVarWithOutPrefix] = v;
     bindVarsMap[bindValueVarWithOutPrefix1] = v;
     return `LEFT(${k}, LENGTH(${bindValueVar})) == ${bindValueVar1}`;
@@ -243,7 +244,7 @@ export const buildField = (key: any, value: any, index: number, bindVarsMap: any
     const bindValueVar1 = `@value${index + 1}`;
     const bindValueVarWithOutPrefix1 = `value${index + 1}`;
     const k = autoCastKey(key);
-    const v = autoCastValue((value as any).$endswith);
+    const v = autoCastValue(key, (value as any).$endswith);
     bindVarsMap[bindValueVarWithOutPrefix] = v;
     bindVarsMap[bindValueVarWithOutPrefix1] = v;
     return `RIGHT(${k}, LENGTH(${bindValueVar})) == ${bindValueVar1}`;

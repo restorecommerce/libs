@@ -2,10 +2,10 @@ import * as esbuild from 'esbuild'
 import { commonifierPlugin } from '@restorecommerce/dev'
 
 await esbuild.build({
-  entryPoints: ['./tests/server.ts'],
+  entryPoints: ['./debug.ts'],
   bundle: true,
   platform: 'node',
-  outfile: './tests/build/server.cjs',
+  outfile: './build/debug.cjs',
   minify: true,
   keepNames: true,
   treeShaking: true,

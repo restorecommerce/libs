@@ -1,5 +1,5 @@
 import { type DescriptorProto, type ServiceDescriptorProto } from 'ts-proto-descriptors';
-import { type GraphQLResolveInfo } from 'graphql';
+import { GraphQLFieldResolver, type GraphQLResolveInfo } from 'graphql';
 import * as stream from 'node:stream';
 import _ from 'lodash';
 import { Metadata } from 'nice-grpc';
@@ -14,6 +14,10 @@ import {
 } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/resource_base.js';
 import { Events } from '@restorecommerce/kafka-client';
 import { TenantRequest } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/user.js';
+import {
+  Resource,
+  ResourceListResponse,
+} from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/resource_base.js';
 import {
   authSubjectType,
   type ProtoMetadata,
@@ -34,11 +38,15 @@ import {
   decodeBufferFields,
   getKeys,
   snakeToCamel,
-  useSubscriptions,
-  getServiceName
+  getUseSubscriptions,
+  getServiceName,
+  LatentResourceMapBuffer,
+  ResolverContext
 } from './utils.js';
 import S2A from './stream-to-async-iterator.js';
 import { IdentitySrvGrpcClient } from '../../modules/identity/grpc/index.js';
+import { Subject } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/auth.js';
+import { GraphQLResolverMap } from '@apollo/subgraph/dist/schema-helper/resolverMap.js';
 
 const inputMethodType = new Map<string, string>();
 
@@ -293,9 +301,14 @@ const subscriptionResolvers: Record<string, Record<string, {
   subscribe: ResolverFn<any, any, any, any>;
 }>> = {};
 
-export const registerResolverFunction = <T extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, T>>
-(namespace: string, name: string, func: ResolverFn<any, any, ServiceClient<CTX, keyof CTX, T>, any>,
-  mutation = false, subspace: string | undefined = undefined, service?: ServiceDescriptorProto) => {
+export const registerResolverFunction = <T extends Record<string, any>, CTX extends ServiceClient<CTX, keyof CTX, T>> (
+  namespace: string,
+  name: string,
+  func: ResolverFn<any, any, ServiceClient<CTX, keyof CTX, T>, any>,
+  mutation = false,
+  subspace: string | undefined = undefined,
+  service?: ServiceDescriptorProto
+) => {
   if (!namespaceResolverRegistry.has(namespace)) {
     namespaceResolverRegistry.set(namespace, new Map());
   }
@@ -337,7 +350,7 @@ export const registerResolverFunction = <T extends Record<string, any>, CTX exte
   space.set(name, func);
 };
 
-export const generateResolver = (...namespaces: string[]) => {
+export const generateResolver = (...namespaces: string[]): GraphQLResolverMap<any> => {
   const queryResolvers: any = {};
   const mutationResolvers: any = {};
   const subResolvers: any = {};
@@ -382,7 +395,7 @@ export const generateResolver = (...namespaces: string[]) => {
     }
   });
 
-  const resolvers: any = {};
+  const resolvers: GraphQLResolverMap<any> = {};
 
   if (Object.keys(queryResolvers).length > 0) {
     resolvers.Query = queryResolvers;
@@ -400,14 +413,13 @@ export const generateResolver = (...namespaces: string[]) => {
 };
 
 export const generateSubServiceResolvers = <
-  T,
   M extends Record<string, any>,
   CTX extends ServiceClient<CTX, keyof CTX, M>
 >(
   subServices: ProtoMetadata[],
   config: SubSpaceServiceConfig,
   namespace: string,
-): T => {
+): GraphQLResolverMap<any> => {
   subServices.forEach((meta) => {
     meta.fileDescriptor.service.forEach(service => {
       if (service.name) {
@@ -415,7 +427,7 @@ export const generateSubServiceResolvers = <
         const subName = getServiceName(service.name);
         const { mutations, queries } = getWhitelistBlacklistConfig(service, config, meta, subName);
 
-        const func = getGQLResolverFunctions<M, CTX>(service, namespace, subName || namespace, config);
+        const func = getGQLResolverFunctions<M, CTX>(service, namespace, subName ?? namespace, config);
 
         Object.keys(func).forEach(k => {
           const regNamespace = config.root ? subName : namespace;
@@ -425,7 +437,7 @@ export const generateSubServiceResolvers = <
       }
     });
 
-    if (useSubscriptions) {
+    if (getUseSubscriptions()) {
       Object.entries(meta.options?.messages || {}).forEach(([messageName, option]) => {
         if (option.options && 'kafka_subscriber' in option.options) {
           const kafkaSubscriber: KafkaSubscription = option.options.kafka_subscriber;
@@ -439,21 +451,6 @@ export const generateSubServiceResolvers = <
             }
 
             subscriptionResolvers[namespace][fieldName] = {
-              // resolve: (parent, args, context, info) => {
-              //   const obj = parent[fieldName];
-              //   let missing = false;
-              //   for (const selection of info.operation.selectionSet.selections) {
-              //     if ('name' in selection && !(selection.name.value in obj)) {
-              //       missing = true;
-              //       break;
-              //     }
-              //   }
-              //   if (!missing) {
-              //     return obj;
-              //   }
-              //   // TODO Implement user lookup
-              //   return obj;
-              // },
               subscribe: async (parent, args, context, info) => {
                 const action = args.action || 'CREATED';
 
@@ -533,71 +530,83 @@ export const generateSubServiceResolvers = <
   const finalResolver = generateResolver(namespace);
 
   subServices.forEach((meta) => {
-    meta.fileDescriptor.service.forEach(service => {
+    meta.fileDescriptor.service.forEach(() => {
       if (meta.options && meta.options.messages) {
         for (const key of Object.keys(meta.options.messages)) {
           const message = meta.options.messages[key];
           if (message.fields) {
             const typing = getTyping(`.${meta.fileDescriptor.package}.${key}`);
             if (typing) {
-              const result: any = {};
-              for (const fieldName of Object.keys(message.fields)) {
-                const field = message.fields[fieldName];
+              const result: Record<string, GraphQLFieldResolver<any, ResolverContext, any, any>> = {};
+              for (const [fieldName, field] of Object.entries(message.fields)) {
                 if ('resolver' in field) {
                   const fieldJsonName = snakeToCamel(fieldName);
-                  const resolver = field['resolver'] as Resolver;
+                  const resolver = field.resolver; // as Resolver;
+                  const limit = resolver.limit ?? 1000;
+                  const latency = resolver.latency ?? 50;
+                  resolver.targetService = config?.namespace ?? resolver.targetService;
 
                   // TODO This creates an N+1 problem!
-                  result[resolver.fieldName] = async (parent: any, _: any, ctx: any) => {
+                  result[resolver.fieldName] = async (parent: any, args: any, ctx: ResolverContext, info: any) => {
                     if (!parent || !(fieldJsonName in parent) || parent[fieldJsonName] === undefined) {
                       return undefined;
                     }
 
-                    resolver.targetService = config?.namespace ?? resolver.targetService
-                    const client = ctx[resolver.targetService].client;
-                    const service = client[resolver.targetSubService];
-                    const ids: string[] = Array.isArray(parent[fieldJsonName]) ? parent[fieldJsonName] : [parent[fieldJsonName]];
-
-                    // TODO Support custom input messages
-                    const req = ReadRequest.fromPartial({
-                      filters: [{
-                        filters: [{
-                          field: 'id',
-                          operation: Filter_Operation.in,
-                          value: JSON.stringify(ids),
-                          type: Filter_ValueType.ARRAY
-                        }],
-                      }],
-                      limit: ids.length
-                    } as ReadRequest);
-
-                    req.subject = getTyping(authSubjectType)!.processor.fromPartial({});
-
-                    const authToken = ctx.request!.req.headers['authorization'];
-                    if (authToken && authToken.startsWith('Bearer ')) {
-                      req.subject!.token = authToken.split(' ')[1];
-                    }
-
-                    if (
-                      config?.disableUnauthenticatedUserTenant?.toString() !== 'true'
-                      && !req.subject!.token
-                      && 'origin' in (ctx as any).request!.req.headers
-                    ) {
-                      req.subject!.token = await fetchUnauthenticatedUserToken(ctx, (ctx as any).request!.req.headers['origin']);
-                    }
-
-                    const methodFunc = service[camelCase(resolver.targetMethod)] || service[resolver.targetMethod];
-                    const result = await methodFunc(req);
-
-                    if (result?.items?.length) {
-                      if (Array.isArray(parent[fieldJsonName])) {
-                        return result.items.map((item: any) => item.payload);
-                      } else {
-                        return result.items[0].payload;
+                    if (!ctx.subject) {
+                      ctx.subject = Subject.fromPartial({});
+                      const authToken = ctx.request!.req.headers.authorization;
+                      if (authToken?.startsWith('Bearer ')) {
+                        ctx.subject!.token = authToken.split(' ')[1];
+                      }
+                      else if (
+                        config?.disableUnauthenticatedUserTenant?.toString() !== 'true'
+                        && 'origin' in ctx.request!.req.headers
+                      ) {
+                        ctx.subject!.token = await fetchUnauthenticatedUserToken(ctx, ctx.request!.req.headers.origin);
                       }
                     }
 
-                    return undefined;
+                    const client = ctx[resolver.targetService].client;
+                    const service = client[resolver.targetSubService];
+                    const ids: string[] = Array.isArray(parent[fieldJsonName]) ? parent[fieldJsonName] : [parent[fieldJsonName]];
+                    ctx.latent ??= {};
+                    ctx.latent[resolver.targetSubService] ??= new LatentResourceMapBuffer(
+                      async (ids) => {
+                        const map = new Map<string, Resource>();
+                        ids = Array.from(new Set(ids));
+                        // TODO Support custom input messages
+                        for (let i = 0; i < ids.length; i+=limit) {
+                          const slice = ids.slice(i, i+limit);
+                          const req = ReadRequest.fromPartial({
+                            filters: [{
+                              filters: [{
+                                field: 'id',
+                                operation: Filter_Operation.in,
+                                value: JSON.stringify(slice),
+                                type: Filter_ValueType.ARRAY
+                              }],
+                            }],
+                            limit: slice.length,
+                            subject: ctx.subject,
+                          } as ReadRequest);
+                          const methodFunc = service[camelCase(resolver.targetMethod)] ?? service[resolver.targetMethod];
+                          const resp: ResourceListResponse = await methodFunc(req);
+                          resp.items?.forEach(item => map.set(item.payload.id, item.payload));
+                        }
+                        return map;
+                      }
+                    );
+                    ctx.latent[resolver.targetSubService].push(...ids);
+                    const map = await ctx.latent[resolver.targetSubService].await(latency);
+                    if (Array.isArray(parent[fieldJsonName])) {
+                      return ids.map(id => map.get(id));
+                    }
+                    else if (ids.length) {
+                      return map.get(ids[0]);
+                    }
+                    else {
+                      return undefined;
+                    }
                   };
                 }
               }

@@ -3,17 +3,6 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [0.2.9](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.2.8...@restorecommerce/scs-jobs@0.2.9) (2026-02-06)
-
-
-### Reverts
-
-* Revert "chore(release): publish" ([8db759f](https://github.com/restorecommerce/libs/commit/8db759fd05eef801dd6ae60727ef1b763f5baafb))
-
-
-
-
-
 ## [0.2.8](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.2.7...@restorecommerce/scs-jobs@0.2.8) (2025-11-11)
 
 

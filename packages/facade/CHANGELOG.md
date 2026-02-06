@@ -3,31 +3,6 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [2.3.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.2.33...@restorecommerce/facade@2.3.0) (2026-02-06)
-
-
-### Bug Fixes
-
-* **facade:** fix test, await authLog ([c272ab4](https://github.com/restorecommerce/libs/commit/c272ab4fcb5de301316cbf98e3bff5a88eb4da04))
-* **facade:** hotfix for oidc login. TODO: Find alternative for oidc-provider ([4de2019](https://github.com/restorecommerce/libs/commit/4de20192fbd011341e41cfcb25a5c819eb2cd4b5))
-* **facade:** upgarde deps, add oidc test, mock services ([bc86afb](https://github.com/restorecommerce/libs/commit/bc86afb14f5ae9ae1931c1250697656f16e2041b))
-* **facade:** upgrade all dependencies ([0fe6b0b](https://github.com/restorecommerce/libs/commit/0fe6b0ba27c15a58a10ebcf0d4fc482240cf0cd0))
-
-
-### Features
-
-* **facade:** performance upgrade via latent id buffering ([579d4b9](https://github.com/restorecommerce/libs/commit/579d4b947585848c48414989ca91446315d607b3))
-* **facade:** upgrade oidc-provider to 9.6.0, runnable ([a2b45f7](https://github.com/restorecommerce/libs/commit/a2b45f7f1f939973aa6b7153ef96d56f9ff1c562))
-
-
-### Reverts
-
-* Revert "chore(release): publish" ([8db759f](https://github.com/restorecommerce/libs/commit/8db759fd05eef801dd6ae60727ef1b763f5baafb))
-
-
-
-
-
 ## [2.2.33](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.2.32...@restorecommerce/facade@2.2.33) (2025-11-13)
 
 

@@ -26,5 +26,5 @@ jobs:
     uses: ./.github/workflows/base-test-job.yaml
     with:
       package: facade
-      system: true
+      system: false
       shutdown: facade-srv

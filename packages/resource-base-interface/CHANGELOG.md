@@ -3,19 +3,6 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [1.9.11](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.10...@restorecommerce/resource-base-interface@1.9.11) (2026-02-06)
-
-
-### Bug Fixes
-
-* **facade:** upgarde deps, add oidc test, mock services ([bc86afb](https://github.com/restorecommerce/resource-base-interface/commit/bc86afb14f5ae9ae1931c1250697656f16e2041b))
-* **resource-base-interface:** experimental WorkerBase init topics sequential ([2d85d41](https://github.com/restorecommerce/resource-base-interface/commit/2d85d41f6b980f80847fbc3b1d597f1d979e7730))
-* **resource-base-interface:** roleback to redis 4.7! ([f92809f](https://github.com/restorecommerce/resource-base-interface/commit/f92809f459320797404815a95ce4c0e844ba9d35))
-
-
-
-
-
 ## [1.9.10](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.9...@restorecommerce/resource-base-interface@1.9.10) (2025-11-11)
 
 **Note:** Version bump only for package @restorecommerce/resource-base-interface

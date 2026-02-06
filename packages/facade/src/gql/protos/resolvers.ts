@@ -541,9 +541,9 @@ export const generateSubServiceResolvers = <
               for (const [fieldName, field] of Object.entries(message.fields)) {
                 if ('resolver' in field) {
                   const fieldJsonName = snakeToCamel(fieldName);
-                  const resolver = field.resolver; // as Resolver;
-                  const limit = resolver.limit ?? 1000;
-                  const latency = resolver.latency ?? 50;
+                  const resolver = field.resolver as Resolver;
+                  const limit = resolver.limit ?? config.limit ?? 1000;
+                  const latency = resolver.latency ?? config.latency ?? 100;
                   resolver.targetService = config?.namespace ?? resolver.targetService;
 
                   // TODO This creates an N+1 problem!

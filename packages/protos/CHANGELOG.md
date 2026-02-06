@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.12.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.11.11...@restorecommerce/protos@6.12.0) (2026-02-06)
+
+
+### Features
+
+* **facade:** performance upgrade via latent id buffering ([579d4b9](https://github.com/restorecommerce/libs/commit/579d4b947585848c48414989ca91446315d607b3))
+
+
+### Reverts
+
+* Revert "chore(release): publish" ([8db759f](https://github.com/restorecommerce/libs/commit/8db759fd05eef801dd6ae60727ef1b763f5baafb))
+
+
+
+
+
 ## [6.11.11](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.11.10...@restorecommerce/protos@6.11.11) (2025-10-24)
 
 **Note:** Version bump only for package @restorecommerce/protos

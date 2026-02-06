@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.8.0](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.7.10...@restorecommerce/chassis-srv@1.8.0) (2026-02-06)
+
+
+### Bug Fixes
+
+* **chassis:** node._key conflicts with graph edge key ([e42c31b](https://github.com/restorecommerce/chassis-srv/commit/e42c31b95d9b661a906971f42123a01883de1a13))
+* **resource-base-interface:** roleback to redis 4.7! ([f92809f](https://github.com/restorecommerce/chassis-srv/commit/f92809f459320797404815a95ce4c0e844ba9d35))
+
+
+### Features
+
+* **facade:** performance upgrade via latent id buffering ([579d4b9](https://github.com/restorecommerce/chassis-srv/commit/579d4b947585848c48414989ca91446315d607b3))
+
+
+### Reverts
+
+* Revert "chore(release): publish" ([8db759f](https://github.com/restorecommerce/chassis-srv/commit/8db759fd05eef801dd6ae60727ef1b763f5baafb))
+
+
+
+
+
 ## [1.7.10](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.7.9...@restorecommerce/chassis-srv@1.7.10) (2025-11-11)
 
 **Note:** Version bump only for package @restorecommerce/chassis-srv

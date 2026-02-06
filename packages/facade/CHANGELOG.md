@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.3.0...@restorecommerce/facade@2.3.1) (2026-02-06)
+
+
+### Bug Fixes
+
+* **facade:** make buffer latency and limit configurable by config file ([0097bff](https://github.com/restorecommerce/libs/commit/0097bff2cfd0a7a5aee5558afe710cf4317142b3))
+
+
+
+
+
 # [2.3.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.2.33...@restorecommerce/facade@2.3.0) (2026-02-06)
 
 

@@ -387,7 +387,7 @@ export class ResourcesAPIBase {
       await this.db.find(
         this.collectionName,
         {
-          _key: {
+          id: {
             $in: [...new Set(documents?.map(doc => doc.id).filter(id => id))],
           },
         },

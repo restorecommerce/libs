@@ -59,6 +59,7 @@ const insertFilterFieldOpValue = (filter: Filter, object: any, key: string) => {
   if (!Array.isArray(object)) {
     throw new Error('Filter object has to be of type Array');
   }
+  console.log('HELLOO:',filter.operation);
   filter.operation ??= FilterOperation.eq; // defaults to eq if undefined;
   switch (filter.operation) {
     case FilterOperation.eq:
@@ -147,10 +148,12 @@ export const convertToObject = (input: any, obj?: any, currentOperator?: string)
       }
       convertToObject(filterObj, obj, newOperator);
     }
-  } else if (filters.field && (filters.operation || filters.operation === 0) && filters.value !== undefined) {
+  }
+  if (filters.field && filters.value !== undefined) {
     // object contains field, operation and value, update it on obj using convertFilterToObject()
     obj = convertFilterToObject(obj, currentOperator, filters);
-  } else if (Array.isArray(filters?.filters)) {
+  }
+  if (Array.isArray(filters?.filters)) {
     for (const filterObj of filters.filters) {
       const operator = filters.operator ? filters.operator : 'and';
       convertToObject(filterObj, obj, operator);

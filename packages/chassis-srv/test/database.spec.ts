@@ -31,14 +31,14 @@ const providers = [
       const dbName: string = cfg.get('database:arango:database');
 
       const db = new Database('http://' + dbHost + ':' + dbPort);
-      await db.dropDatabase(dbName);
+      await db!.dropDatabase(dbName);
     },
     custom: () => {
       describe('testing custom queries', () => {
         it('should register a custom query', () => {
           const script = 'return "Hello World"';
-          db.registerCustomQuery('helloWorld', script, 'query');
-          const queries = db.listCustomQueries();
+          db!.registerCustomQuery!('helloWorld', script, 'query');
+          const queries = db!.listCustomQueries!();
           should.exist(queries);
           queries.should.have.length(1);
           should.exist(queries[0][0]);
@@ -52,20 +52,20 @@ const providers = [
         });
         it('should unregister a custom query', async () => {
           const script = 'return "Hello World";';
-          db.registerCustomQuery('helloWorld', script, 'query');
-          let functions = db.listCustomQueries();
+          db!.registerCustomQuery!('helloWorld', script, 'query');
+          let functions = db!.listCustomQueries!();
           should.exist(functions);
           functions.should.have.length(1);
 
-          db.unregisterCustomQuery('helloWorld');
-          functions = db.listCustomQueries();
+          db!.unregisterCustomQuery!('helloWorld');
+          functions = db!.listCustomQueries!();
           should.exist(functions);
           functions.should.have.length(0);
         });
         it('should execute a custom query', async () => {
           const script = `return "Hello World"`;
-          await db.registerCustomQuery('helloWorld', script, 'query');
-          const result = await db.find('test', {}, {
+          await db!.registerCustomQuery!('helloWorld', script, 'query');
+          const result = await db!.find('test', {}, {
             customQueries: ['helloWorld']
           });
           should.exist(result);
@@ -74,8 +74,8 @@ const providers = [
         });
         it('should execute a custom query with custom parameters', async () => {
           const script = `return @param`;
-          await db.registerCustomQuery('helloWorld', script, 'query');
-          const result = await db.find('test', {}, {
+          await db!.registerCustomQuery!('helloWorld', script, 'query');
+          const result = await db!.find('test', {}, {
             customQueries: ['helloWorld'],
             customArguments: {
               param: 'Hello World'
@@ -87,8 +87,8 @@ const providers = [
         });
         it('should execute a custom query which accesses the database', async () => {
           const script = `for t in test return t`;
-          await db.registerCustomQuery('script', script, 'query');
-          const result = await db.find('test', {}, {
+          await db!.registerCustomQuery!('script', script, 'query');
+          const result = await db!.find('test', {}, {
             customQueries: ['script']
           });
           should.exist(result);
@@ -96,8 +96,8 @@ const providers = [
         });
         it('should apply a custom filter within a `find` query', async () => {
           const script = `filter node.id == @customArguments.param`;
-          await db.registerCustomQuery('script', script, 'filter');
-          const result = await db.find('test', {}, {
+          await db!.registerCustomQuery!('script', script, 'filter');
+          const result = await db!.find('test', {}, {
             customQueries: ['script'],
             customArguments: {
               param: '/test/sort0'
@@ -116,8 +116,8 @@ const providers = [
         });
         it('should combine a custom filter with normal filters', async () => {
           const script = `filter node.value != @customArguments.param`;
-          await db.registerCustomQuery('script', script, 'filter');
-          const result = await db.find('test', {
+          await db!.registerCustomQuery!('script', script, 'filter');
+          const result = await db!.find('test', {
             include: {
               $eq: true
             }
@@ -190,13 +190,13 @@ const testProvider = (providerCfg) => {
   ];
   beforeEach(async () => {
     db = await providerCfg.init();
-    await db.insert(collection, testData);
+    await db!.insert(collection, testData);
     should.exist(db);
-    const result = await db.count(collection, {});
+    const result = await db!.count(collection, {});
     // insert user collection for full text search testcase
     if (providerCfg.name === 'arango') {
-      await db.insert(userCollection, userData);
-      await db.insert(addressCollection, addressData);
+      await db!.insert(userCollection, userData);
+      await db!.insert(addressCollection, addressData);
     }
   });
 
@@ -209,11 +209,11 @@ const testProvider = (providerCfg) => {
         id: '/test/testupsert',
         name: 'test',
       };
-      let result = await db.upsert(collection, newDoc);
+      let result = await db!.upsert(collection, newDoc);
       should.exist(result);
       result.should.deepEqual([newDoc]);
       newDoc.name = 'changed';
-      result = await db.upsert(collection, newDoc);
+      result = await db!.upsert(collection, newDoc);
       result.should.deepEqual([newDoc]);
     });
     it('should update existing document with upsert operation', async () => {
@@ -221,7 +221,7 @@ const testProvider = (providerCfg) => {
         id: '/test/testupsert',
         name: 'changedAgain',
       };
-      let result = await db.upsert(collection, newDoc);
+      let result = await db!.upsert(collection, newDoc);
       should.exist(result);
       result.should.deepEqual([newDoc]);
     });
@@ -229,33 +229,33 @@ const testProvider = (providerCfg) => {
   describe('count', () => {
     it(`should return the number of documents
     in the collection with blank filter`, async () => {
-      const result = await db.count(collection, {});
+      const result = await db!.count(collection, {});
       should.exist(result);
       result.should.equal(testData.length);
     });
     it('should return one for filtering based on id', async () => {
-      const result = await db.count(collection, { id: testData[0].id });
+      const result = await db!.count(collection, { id: testData[0].id });
       should.exist(result);
       result.should.equal(1);
     });
   });
   describe('truncate', () => {
     it('should delete all collection', async () => {
-      await db.truncate();
-      const result = await db.count(collection, {});
+      await db!.truncate();
+      const result = await db!.count(collection, {});
       should.exist(result);
       result.should.equal(0);
     });
     it('should delete all documents in provided collection', async () => {
-      await db.truncate(collection);
-      const result = await db.count(collection, {});
+      await db!.truncate(collection);
+      const result = await db!.count(collection, {});
       should.exist(result);
       result.should.equal(0);
     });
   });
   describe('findByID', () => {
     it('should find documents', async () => {
-      const result = await db.findByID(collection, document.id);
+      const result = await db!.findByID(collection, document.id);
       should.exist(result);
       result.should.be.length(1);
       result[0].should.deepEqual(document);
@@ -264,7 +264,7 @@ const testProvider = (providerCfg) => {
   describe('find', () => {
     describe('with id filter', () => {
       it('should return a document', async () => {
-        const result = await db.find(collection, {
+        const result = await db!.find(collection, {
           id: document.id,
         });
         result.should.be.length(1);
@@ -276,7 +276,7 @@ const testProvider = (providerCfg) => {
       describe('with iLike filter', () => {
         it('should return one filtering based on iLike', async () => {
 
-          const result = await db.find('test', {
+          const result = await db!.find('test', {
             id: {
               $iLike: '%sOrT%'
             }
@@ -293,7 +293,7 @@ const testProvider = (providerCfg) => {
           if (providerCfg.name == 'arango') {
             sortOrderKey = 'ASC';
           }
-          const result = await db.find(collection,
+          const result = await db!.find(collection,
             { include: true },
             { sort: { value: sortOrderKey } }); // sort ascending
           should.exist(result);
@@ -305,7 +305,7 @@ const testProvider = (providerCfg) => {
           if (providerCfg.name == 'arango') {
             sortOrderKey = 'DESC';
           }
-          const result = await db.find(collection,
+          const result = await db!.find(collection,
             { include: true },
             { sort: { value: sortOrderKey } }); // sort descending
           should.exist(result);
@@ -314,20 +314,20 @@ const testProvider = (providerCfg) => {
     });
     describe('with field limiting', () => {
       it('should return documents with selected fields', async () => {
-        const result = await db.find(collection,
+        const result = await db!.find(collection,
           { include: true },
           // 0 is exclude and 1 is to include that particular key
           { fields: { include: 0 } }); // exclude field 'include'
         should.exist(result);
-        const resultKeep = await db.find(collection,
+        const resultKeep = await db!.find(collection,
           { include: true },
           { fields: { id: 1, value: 1 } }); // include only id and value fields
         resultKeep.should.deepEqual(result);
         // Not to modify the original data which is used in next test case
         // to add and delete in beforeEach and afterEach
         const clonedData = clone([testData[3], testData[4], testData[0]]);
-        const compareData = clonedData.map((e) => {
-          delete e['include'];
+        const compareData = clonedData.map((e: any) => {
+          delete e.include;
           return e;
         });
         sortBy(result, prop('id')).should.deepEqual(sortBy(compareData, prop('id')));
@@ -335,7 +335,7 @@ const testProvider = (providerCfg) => {
     });
     describe('with limit', () => {
       it('should return one document', async () => {
-        const result: Object = await db.find(collection, {
+        const result: Object = await db!.find(collection, {
           id: document.id,
         },
           {
@@ -349,7 +349,7 @@ const testProvider = (providerCfg) => {
   });
   describe('with filter operator', () => {
     it('should return a document', async () => {
-      let result = await db.find(collection, {
+      let result = await db!.find(collection, {
         $or: [
           { id: document.id },
           { value: 'new' }
@@ -359,7 +359,7 @@ const testProvider = (providerCfg) => {
       result.should.be.length(1);
       result[0].should.deepEqual(document);
 
-      result = await db.find(collection, {
+      result = await db!.find(collection, {
         $or: [
           {
             id: document.id,
@@ -386,7 +386,7 @@ const testProvider = (providerCfg) => {
       result.should.be.length(1);
       result[0].should.deepEqual(document);
 
-      result = await db.find(collection, {
+      result = await db!.find(collection, {
         id: document.id,
       },
         {
@@ -395,14 +395,14 @@ const testProvider = (providerCfg) => {
         });
       result.should.be.empty();
 
-      result = await db.find(collection, {
+      result = await db!.find(collection, {
         id: {
           $startswith: '/test',
         },
       });
       result.should.be.length(testData.length);
 
-      result = await db.find(collection, {
+      result = await db!.find(collection, {
         id: {
           $endswith: '0',
         },
@@ -410,7 +410,7 @@ const testProvider = (providerCfg) => {
       result.should.be.length(1);
       result[0].should.deepEqual(testData[0]);
 
-      result = await db.find(collection, {
+      result = await db!.find(collection, {
         value: {
           $isEmpty: null,
         },
@@ -425,7 +425,7 @@ const testProvider = (providerCfg) => {
         id: 'testnew',
         name: 'test',
       };
-      let insertResp = await db.insert(collection, newDoc);
+      let insertResp = await db!.insert(collection, newDoc);
       insertResp[0].should.deepEqual(newDoc);
     });
     it('should return an error response when inserting same document twice', async () => {
@@ -434,9 +434,9 @@ const testProvider = (providerCfg) => {
         id: 'testnew',
         name: 'test',
       };
-      let insertResp = await db.insert(collection, newDoc);
+      let insertResp = await db!.insert(collection, newDoc);
       insertResp[0].should.deepEqual(newDoc);
-      insertResp = await db.insert(collection, newDoc);
+      insertResp = await db!.insert(collection, newDoc);
       should.exist(insertResp);
       insertResp[0].error.should.equal(true);
     });
@@ -445,14 +445,14 @@ const testProvider = (providerCfg) => {
     it('should update document', async () => {
       const newDoc = clone(document);
       newDoc.value = 'new';
-      await db.update(collection, [newDoc]);
-      let result = await db.findByID(collection, document.id);
+      await db!.update(collection, [newDoc]);
+      let result = await db!.findByID(collection, document.id);
       result = result[0];
       result.should.deepEqual(newDoc);
     });
     it('should return error response when updating document which does not exist', async () => {
       const invalidDoc = { id: 'invlaid', include: false };
-      let updateResp = await db.update(collection, [invalidDoc]);
+      let updateResp = await db!.update(collection, [invalidDoc]);
       should.exist(updateResp);
       updateResp[0].error.should.equal(true);
       updateResp[0].errorMessage.should.equal('document not found');
@@ -460,12 +460,12 @@ const testProvider = (providerCfg) => {
   });
   describe('delete', () => {
     it('should delete document and also return a response for missing / invalid doc ID', async () => {
-      let deleteResp = await db.delete(collection, [document.id, 'invalid']);
+      let deleteResp = await db!.delete(collection, [document.id, 'invalid']);
       should.exist(deleteResp);
       deleteResp.should.be.length(2);
       should.exist(deleteResp[0]._id);
       deleteResp[1].error.should.equal(true);
-      const result = await db.findByID(collection, document.id);
+      const result = await db!.findByID(collection, document.id);
       result.should.be.Array();
       result.should.be.length(0);
     });
@@ -481,9 +481,9 @@ const testProvider = (providerCfg) => {
         { id: 'b', created: timeStamp2 },
         { id: 'c', created: timeStamp3 }
       ];
-      await db.insert(collection, timeData);
+      await db!.insert(collection, timeData);
       // should return first two documents
-      let result = await db.find(collection, {
+      let result = await db!.find(collection, {
         $and: [
           {
             created: {
@@ -504,13 +504,13 @@ const testProvider = (providerCfg) => {
       result = sortBy(result, (o) => { return o.id; });
       result.should.deepEqual(timeData);
       // truncate test DB
-      await db.truncate();
+      await db!.truncate();
     });
 
     if (providerCfg.name === 'arango') {
       describe('full text search', () => {
         it('should return all test docs ignorning search string when analayzer or view config not set', async () => {
-          let testDocs = await db.find(collection, {}, { search: { search: 'test' } });
+          let testDocs = await db!.find(collection, {}, { search: { search: 'test' } });
           testDocs.length.should.equal(8);
         });
 
@@ -519,7 +519,7 @@ const testProvider = (providerCfg) => {
           await new Promise((resolve, reject) => {
             setTimeout(resolve, 2000);
           });
-          let usersFound = await db.find(userCollection, {}, { search: { search: 'Ich oWd' } });
+          let usersFound = await db!.find(userCollection, {}, { search: { search: 'Ich oWd' } });
           usersFound.length.should.equal(3);
           usersFound[0].id.should.equal('4');
           usersFound[0].first_name.should.equal('Michael');
@@ -537,7 +537,7 @@ const testProvider = (providerCfg) => {
           await new Promise((resolve, reject) => {
             setTimeout(resolve, 2000);
           });
-          let addressFound = await db.find(addressCollection, {}, { search: { search: 'ber man' } });
+          let addressFound = await db!.find(addressCollection, {}, { search: { search: 'ber man' } });
           addressFound.length.should.equal(4);
           addressFound[0].city.should.equal('Berlin'); // Berlin, Germany (both terms match)
           addressFound[1].city.should.equal('Bern');
@@ -550,9 +550,9 @@ const testProvider = (providerCfg) => {
           await new Promise((resolve, reject) => {
             setTimeout(resolve, 2000);
           });
-          let usersFound = await db.find(userCollection, {}, { search: { search: 'Ich oWd', case_sensitive: true } });
+          let usersFound = await db!.find(userCollection, {}, { search: { search: 'Ich oWd', case_sensitive: true } });
           usersFound.length.should.equal(0);
-          usersFound = await db.find(userCollection, {}, { search: { search: 'Mic Bow', case_sensitive: true } });
+          usersFound = await db!.find(userCollection, {}, { search: { search: 'Mic Bow', case_sensitive: true } });
           usersFound.length.should.equal(3);
           usersFound[0].id.should.equal('4');
           usersFound[0].first_name.should.equal('Michael');
@@ -570,7 +570,7 @@ const testProvider = (providerCfg) => {
           await new Promise((resolve, reject) => {
             setTimeout(resolve, 2000);
           });
-          let usersFound = await db.find(userCollection, {}, { search: { search: 'müll' } });
+          let usersFound = await db!.find(userCollection, {}, { search: { search: 'müll' } });
           usersFound.length.should.equal(1);
           usersFound[0].first_name.should.equal('David');
           usersFound[0].last_name.should.equal('Müller');
@@ -581,7 +581,7 @@ const testProvider = (providerCfg) => {
           await new Promise((resolve, reject) => {
             setTimeout(resolve, 2000);
           });
-          let usersFound = await db.find(userCollection, {}, { search: { search: 'does not exist' } });
+          let usersFound = await db!.find(userCollection, {}, { search: { search: 'does not exist' } });
           usersFound.length.should.equal(0);
         }, 5000);
 
@@ -590,7 +590,7 @@ const testProvider = (providerCfg) => {
           await new Promise((resolve, reject) => {
             setTimeout(resolve, 2000);
           });
-          let usersFound = await db.find(userCollection, { last_name: { $iLike: '%bow%' } }, { search: { search: 'mic' } });
+          let usersFound = await db!.find(userCollection, { last_name: { $iLike: '%bow%' } }, { search: { search: 'mic' } });
           usersFound.length.should.equal(1);
           usersFound[0].first_name.should.equal('Michael');
           usersFound[0].last_name.should.equal('Bowden');
@@ -601,7 +601,7 @@ const testProvider = (providerCfg) => {
           await new Promise((resolve, reject) => {
             setTimeout(resolve, 2000);
           });
-          let resp = await db.deleteAnalyzer(['trigram', 'trigram_norm']);
+          let resp = await db!.deleteAnalyzer(['trigram', 'trigram_norm']);
           resp.length.should.equal(2);
           resp[0].id.should.equal('trigram');
           resp[0].code.should.equal(409);
@@ -616,7 +616,7 @@ const testProvider = (providerCfg) => {
           await new Promise((resolve, reject) => {
             setTimeout(resolve, 2000);
           });
-          let resp = await db.dropView(['test']);
+          let resp = await db!.dropView(['test']);
           resp.length.should.equal(1);
           resp[0].id.should.equal('test');
           resp[0].code.should.equal(404);
@@ -628,7 +628,7 @@ const testProvider = (providerCfg) => {
           await new Promise((resolve, reject) => {
             setTimeout(resolve, 2000);
           });
-          let resp = await db.dropView(['users_view']);
+          let resp = await db!.dropView(['users_view']);
           resp.length.should.equal(1);
           resp[0].id.should.equal('users_view');
           resp[0].code.should.equal(200);
@@ -641,8 +641,8 @@ const testProvider = (providerCfg) => {
             setTimeout(resolve, 2000);
           });
           // drop view and then analyzer
-          await db.dropView(['users_view', 'addresss_view']);
-          let resp = await db.deleteAnalyzer(['trigram', 'trigram_norm']);
+          await db!.dropView(['users_view', 'addresss_view']);
+          let resp = await db!.deleteAnalyzer(['trigram', 'trigram_norm']);
           resp.length.should.equal(2);
           resp[0].id.should.equal('trigram');
           resp[0].code.should.equal(200);

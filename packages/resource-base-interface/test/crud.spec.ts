@@ -404,7 +404,7 @@ describe('ServiceBase', () => {
         const filters = [{
           filters: [{
             field: 'id',
-            operation: Filter_Operation.eq,
+            // operation: Filter_Operation.eq,
             value: 'test_xy'
           }]
         }];

@@ -171,39 +171,39 @@ export const buildComparison = (filter: any, op: string, index: number,
 export const buildField = (key: any, value: any, index: number, bindVarsMap: any): string => {
   const bindValueVar = `@value${index}`;
   const bindValueVarWithOutPrefix = `value${index}`;
-  if (isString(value) || isBoolean(value) || isNumber(value || isDate(value))) {
+  if (isString(value) || isBoolean(value) || isNumber(value) || isDate(value)) {
     bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(key, value);
     return autoCastKey(key, value) + ' == ' + bindValueVar;
   }
-  if (!isNullish(value.$eq)) {
+  if (value?.$eq) {
     bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(key, value.$eq);
     return autoCastKey(key, value) + ' == ' + bindValueVar;
   }
-  if (value.$gt) {
+  if (value?.$gt) {
     bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(key, value.$gt);
     return autoCastKey(key, value) + ' > ' + bindValueVar;
   }
-  if (value.$gte) {
+  if (value?.$gte) {
     bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(key, value.$gte);
     return autoCastKey(key, value) + ' >= ' + bindValueVar;
   }
-  if (value.$lt) {
+  if (value?.$lt) {
     bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(key, value.$lt);
     return autoCastKey(key, value) + ' < ' + bindValueVar;
   }
-  if (value.$lte) {
+  if (value?.$lte) {
     bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(key, value.$lte);
     return autoCastKey(key, value) + ' <= ' + bindValueVar;
   }
-  if (!isNullish(value.$ne)) {
+  if (value?.$ne) {
     bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(key, value.$ne);
     return autoCastKey(key, value) + ' != ' + bindValueVar;
   }
-  if (value.$inVal) {
+  if (value?.$inVal) {
     bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(key, value.$inVal);
     return bindValueVar + ' IN ' + autoCastKey(key, value);
   }
-  if (value.$in) {
+  if (value?.$in) {
     bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(key, value.$in);
     if (isString(value.$in)) {
       // if it is a field which should be an array
@@ -213,16 +213,16 @@ export const buildField = (key: any, value: any, index: number, bindVarsMap: any
     // assuming it is a list of provided values
     return autoCastKey(key, value) + ' IN ' + bindValueVar;
   }
-  if (value.$nin) {
+  if (value?.$nin) {
     bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(key, value.$nin);
     return autoCastKey(key, value) + ' NOT IN ' + bindValueVar;
   }
-  if (value.$iLike) {
+  if (value?.$iLike) {
     bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(key, value.$iLike);
     // @param 'true' is for case insensitive
     return ' LIKE (' + autoCastKey(key, value) + ',' + bindValueVar + ', true)';
   }
-  if (!isNullish(value.$not)) {
+  if (value?.$not) {
     const temp = buildField(key, value.$not, index, bindVarsMap);
     return `!(${temp})`;
   }
@@ -231,7 +231,7 @@ export const buildField = (key: any, value: any, index: number, bindVarsMap: any
     // will always search for an empty string
     return autoCastKey(key, '') + ' == ' + bindValueVar;
   }
-  if (!isNullish((value as any).$startswith)) {
+  if (value?.$startswith) {
     const bindValueVar1 = `@value${index + 1}`;
     const bindValueVarWithOutPrefix1 = `value${index + 1}`;
     const k = autoCastKey(key);
@@ -240,7 +240,7 @@ export const buildField = (key: any, value: any, index: number, bindVarsMap: any
     bindVarsMap[bindValueVarWithOutPrefix1] = v;
     return `LEFT(${k}, LENGTH(${bindValueVar})) == ${bindValueVar1}`;
   }
-  if (!isNullish((value as any).$endswith)) {
+  if (value?.$endswith) {
     const bindValueVar1 = `@value${index + 1}`;
     const bindValueVarWithOutPrefix1 = `value${index + 1}`;
     const k = autoCastKey(key);

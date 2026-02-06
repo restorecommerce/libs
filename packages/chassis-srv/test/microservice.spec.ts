@@ -26,7 +26,7 @@ const status = {
 
 export const testService: TestServiceImplementation = {
   test: async (request) => {
-    request.value.should.be.equal('hello');
+    request!.value!.should.be.equal('hello');
     return {
       result: 'welcome',
       status
@@ -34,11 +34,11 @@ export const testService: TestServiceImplementation = {
   },
   create: async (request) => {
     return {
-      items: request.items.map(item => ({
+      items: request!.items!.map(item => ({
         payload: item,
         status
       })),
-      total_count: request.items.length,
+      total_count: request!.items!.length,
       operation_status: status
     };
   },
@@ -72,8 +72,8 @@ const streamService: StreamServiceImplementation = {
   },
   async* responseStream(request) {
     should.exist(request);
-    should.exist(request.value);
-    request.value.should.equal('ping');
+    should.exist(request?.value);
+    request!.value!.should.equal('ping');
     for (let i = 0; i < 3; i += 1) {
       yield {result: `${i}`};
     }
@@ -82,7 +82,7 @@ const streamService: StreamServiceImplementation = {
     for await (const item of request) {
       should.exist(item);
       should.exist(item.value);
-      item.value.should.equal('ping');
+      item!.value!.should.equal('ping');
     }
     yield {result: 'pong'};
   }
@@ -154,10 +154,10 @@ describe('microservice.Server', () => {
         // --- 'test' endpoint ---
         const testResult = await testClient.test({value: 'hello'});
         should.exist(testResult.status);
-        testResult.status.code.should.equal(200);
-        testResult.status.message.should.equal('success');
+        testResult.status!.code!.should.equal(200);
+        testResult.status!.message!.should.equal('success');
         should.exist(testResult.result);
-        testResult.result.should.be.equal('welcome');
+        testResult.result!.should.be.equal('welcome');
 
         // --- 'testCreate' endpoint ---
         const msg: any = {
@@ -171,26 +171,26 @@ describe('microservice.Server', () => {
           }]
         });
         should.exist(createResult.operationStatus);
-        createResult.operationStatus.code.should.equal(200);
-        createResult.operationStatus.message.should.equal('success');
+        createResult.operationStatus!.code!.should.equal(200);
+        createResult.operationStatus!.message!.should.equal('success');
         should.exist(createResult.items);
         // verify decoded google.protobuf.any buffered response
-        createResult.items[0].payload.value.should.equal('helloWorld123');
-        const decodedBuffResp = JSON.parse(createResult.items[0].payload.data.value.toString());
+        createResult.items![0].payload!.value!.should.equal('helloWorld123');
+        const decodedBuffResp = JSON.parse(createResult.items![0].payload!.data!.value!.toString());
         decodedBuffResp.testKey.should.equal('testVal');
 
         // --- 'throw' endpoint ---
         const throwResult = await testClient.throw({value: 'hello'});
         should.exist(throwResult.status);
-        throwResult.status.code.should.equal(500);
-        throwResult.status.message.should.equal('forced error');
+        throwResult.status!.code!.should.equal(500);
+        throwResult.status!.message!.should.equal('forced error');
         should.not.exist(throwResult.result);
 
         // --- 'notFound' endpoint ---
         const notFoundResult = await testClient.notFound({value: 'hello'});
         should.exist(notFoundResult.status);
-        notFoundResult.status.code.should.equal(404);
-        notFoundResult.status.message.should.equal('test not found');
+        notFoundResult.status!.code!.should.equal(404);
+        notFoundResult.status!.message!.should.equal('test not found');
         should.not.exist(notFoundResult.result);
 
         // 'requestStream'
@@ -203,11 +203,11 @@ describe('microservice.Server', () => {
           value: 'ping'
         }]));
         should.exist(streamResult.status);
-        streamResult.status.code.should.equal(200);
-        streamResult.status.message.should.equal('success');
+        streamResult.status!.code!.should.equal(200);
+        streamResult.status!.message!.should.equal('success');
         should.exist(streamResult);
         should.exist(streamResult.result);
-        streamResult.result.should.be.equal('pong');
+        streamResult.result!.should.be.equal('pong');
 
         // 'responseStream'
         const responseStreamRequest = streamClient.responseStream({
@@ -215,7 +215,7 @@ describe('microservice.Server', () => {
         });
         let concatDataResp = [];
         for await (const response of responseStreamRequest) {
-          concatDataResp.push(response.result);
+          concatDataResp.push(response.result!);
         }
         concatDataResp.should.deepEqual(['0', '1', '2']);
 
@@ -224,7 +224,7 @@ describe('microservice.Server', () => {
           value: 'ping'
         }]));
         for await (const response of biStreamRequest) {
-          response.result.should.be.equal('pong');
+          response.result!.should.be.equal('pong');
         }
       });
   });
@@ -252,12 +252,12 @@ describe('microservice.Server', () => {
 
       const resps = await Promise.all(reqs);
       for (let i = 0; i < resps.length; i += 1) {
-        const response = await resps[i];
+        const response: any = await resps[i];
         should.exist(response.status);
-        response.status.code.should.equal(200);
-        response.status.message.should.equal('success');
+        response.status!.code!.should.equal(200);
+        response.status!.message!.should.equal('success');
         should.exist(response.result);
-        response.result.should.be.equal('welcome');
+        response.result!.should.be.equal('welcome');
       }
     });
   });
@@ -319,10 +319,10 @@ describe('microservice.Client', () => {
           });
           should.exist(result);
           should.exist(result.status);
-          result.status.code.should.equal(200);
-          result.status.message.should.equal('success');
+          result.status!.code!.should.equal(200);
+          result.status!.message!.should.equal('success');
           should.exist(result.result);
-          result.result.should.equal('welcome');
+          result.result!.should.equal('welcome');
 
           // test with timeout
           await config.load(process.cwd() + '/test');
@@ -338,10 +338,10 @@ describe('microservice.Client', () => {
           });
           should.exist(result);
           should.exist(result.status);
-          result.status.code.should.equal(200);
-          result.status.message.should.equal('success');
+          result.status!.code!.should.equal(200);
+          result.status!.message!.should.equal('success');
           should.exist(result.result);
-          result.result.should.equal('welcome');
+          result.result!.should.equal('welcome');
         });
     });
     describe('end', () => {
@@ -374,7 +374,7 @@ describe('microservice.Client', () => {
             });
           } catch (err) {
             should.exist(err);
-            err.message.should.equal('/test.Test/Test DEADLINE_EXCEEDED: Deadline exceeded');
+            err.message!.should.equal('/test.Test/Test DEADLINE_EXCEEDED: Deadline exceeded');
           }
         });
     });

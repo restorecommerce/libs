@@ -64,13 +64,13 @@ export class Arango implements DatabaseProvider {
       }
     }
 
-    if (isEmptyish(filterQuery)) {
-      filterQuery = true;
+    if (isNullish(filterQuery) || isEmptyish(filterQuery)) {
+      filterQuery = '';
     }
     else {
       filterQuery = toArray(filterQuery);
       filterResult = buildFilter(filterQuery);
-      filterQuery = filterResult.q;
+      filterQuery = `FILTER ${filterResult.q}`;
     }
 
     // if search options are set build search query
@@ -104,7 +104,7 @@ export class Arango implements DatabaseProvider {
     if (!isEmptyish(searchQueries)) {
       queryStrings.push(`SEARCH ${searchQueries.join(' OR ')}`);
     }
-    queryStrings.push(`FILTER ${filterQuery}`);
+    queryStrings.push(filterQuery);
     queryStrings.push(...customFilters);
     queryStrings.push(sortQuery, limitQuery, returnQuery);
 
@@ -122,7 +122,7 @@ export class Arango implements DatabaseProvider {
     if (!isEmptyish(customFilters) && opts.customArguments) {
       bindVars.customArguments = opts.customArguments;
     }
-    const queryString = queryStrings.filter(s => !isEmptyish(s)).join(' ');
+    const queryString = queryStrings.filter(s => !isNullish(s) && !isEmptyish(s)).join(' ');
     this.logger.info(queryString);
     const res = searchQueries
       ? await this.db.query(queryString, bindVars)
@@ -197,8 +197,11 @@ export class Arango implements DatabaseProvider {
   async update(collectionName: string, updateDocuments: any): Promise<any> {
     const documents = clone(updateDocuments) as ArangoDocument;
     const updateDocsResponse = [];
-    if (isNullish(collectionName) ||
-      !isString(collectionName) || isEmptyish(collectionName)) {
+    if (
+      isNullish(collectionName)
+      || !isString(collectionName)
+      || isEmptyish(collectionName)
+    ) {
       throw new LoggedError(this.logger, 'invalid or missing collection argument for update operation');
     }
     if (isNullish(documents)) {
@@ -250,8 +253,10 @@ export class Arango implements DatabaseProvider {
    * @param {Object|Array.Object} documents
    */
   async upsert(collectionName: string, documents: any): Promise<any> {
-    if (isNullish(collectionName) ||
-      !isString(collectionName) || isEmptyish(collectionName)) {
+    if (isNullish(collectionName)
+      || !isString(collectionName)
+      || isEmptyish(collectionName)
+    ) {
       throw new LoggedError(this.logger, 'invalid or missing collection argument for upsert operation');
     }
     if (isNullish(documents)) {

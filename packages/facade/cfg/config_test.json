@@ -1,7 +1,8 @@
 {
   "facade": {
     "hostname": "0.0.0.0",
-    "port": 5100
+    "port": 5100,
+    "kafka": null
   },
   "access_control": {
     "client": {
@@ -11,7 +12,7 @@
   },
   "identity": {
     "client": {
-      "address": "localhost:50162"
+      "address": "localhost:50163"
     }
   },
   "client": {
@@ -30,7 +31,7 @@
       }]
     },
     "identity": {
-      "address": "localhost:50162",
+      "address": "localhost:50163",
       "mocks": [{
         "name": "user",
         "protoPath": "io/restorecommerce/user.proto",

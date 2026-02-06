@@ -47,6 +47,7 @@ export async function mockServices(configs: { [key: string]: any }) {
         rules[name],
         mock.protoLoadOptions,
       );
+      logger.info(`Mock Service: ${name} added.`);
     }
 
     return await mockServer.start();

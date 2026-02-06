@@ -598,6 +598,7 @@ export const generateSubServiceResolvers = <
                     );
                     ctx.latent[resolver.targetSubService].push(...ids);
                     const map = await ctx.latent[resolver.targetSubService].await(latency);
+                    ctx.latent[resolver.targetSubService].reset();
                     if (Array.isArray(parent[fieldJsonName])) {
                       return ids.map(id => map.get(id));
                     }

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.8](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.3.7...@restorecommerce/kafka-client@1.3.8) (2026-02-06)
+
+
+### Bug Fixes
+
+* **kafka-client:** ensure bigint at all cost ([f213317](https://github.com/restorecommerce/kafka-client/commit/f2133176b57189a0840e04ec222d774568f5a8f0))
+
+
+
+
+
 ## [1.3.7](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.3.6...@restorecommerce/kafka-client@1.3.7) (2025-11-11)
 
 

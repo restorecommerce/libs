@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.9.12](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.11...@restorecommerce/resource-base-interface@1.9.12) (2026-02-09)
+
+
+### Bug Fixes
+
+* **resource-base-interface:** make equal operator optional again ([4388e6d](https://github.com/restorecommerce/resource-base-interface/commit/4388e6d610566f7023be91afb46f05ae96fada23))
+
+
+
+
+
 ## [1.9.11](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.10...@restorecommerce/resource-base-interface@1.9.11) (2026-02-06)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.8.1](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.8.0...@restorecommerce/chassis-srv@1.8.1) (2026-02-09)
+
+
+### Bug Fixes
+
+* **resource-base-interface:** make equal operator optional again ([4388e6d](https://github.com/restorecommerce/chassis-srv/commit/4388e6d610566f7023be91afb46f05ae96fada23))
+
+
+
+
+
 # [1.8.0](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.7.10...@restorecommerce/chassis-srv@1.8.0) (2026-02-06)
 
 

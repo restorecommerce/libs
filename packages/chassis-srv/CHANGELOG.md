@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.8.2](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.8.1...@restorecommerce/chassis-srv@1.8.2) (2026-02-09)
+
+
+### Bug Fixes
+
+* **chassis-srv:** fix query for multy sort ([e90c306](https://github.com/restorecommerce/chassis-srv/commit/e90c3060bcdc7af1bcb03dd8dd5fe4030a48b28d))
+* **chassis-srv:** strenghen value check for query string ([e9c78ef](https://github.com/restorecommerce/chassis-srv/commit/e9c78efa09ead9326a4bf4bf154d8ed1f5f6ca14))
+
+
+
+
+
 ## [1.8.1](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.8.0...@restorecommerce/chassis-srv@1.8.1) (2026-02-09)
 
 

@@ -356,8 +356,8 @@ export const buildSorter = (options: any, index?: number, bindVarsMap?: any): an
   });
   const sortKeysOrder = Object.entries(sort).map(
     ([key, value]) => `${key} ${value}`
-  ).join(' ');
-  return 'SORT ' + sortKeysOrder;
+  ).join(', ');
+  return `SORT ${sortKeysOrder}`;
 };
 
 export const buildReturn = (options: any): any => {

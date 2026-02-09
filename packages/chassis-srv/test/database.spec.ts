@@ -293,9 +293,10 @@ const testProvider = (providerCfg) => {
           if (providerCfg.name == 'arango') {
             sortOrderKey = 'ASC';
           }
-          const result = await db!.find(collection,
+          const result = await db!.find(
+            collection,
             { include: true },
-            { sort: { value: sortOrderKey } }); // sort ascending
+            { sort: { include: sortOrderKey, value: sortOrderKey } }); // sort ascending
           should.exist(result);
           result.should.deepEqual([testData[3], testData[4], testData[0]]);
         });

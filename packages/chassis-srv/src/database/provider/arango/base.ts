@@ -92,11 +92,11 @@ export class Arango implements DatabaseProvider {
       // override collection name with view name
       collectionName = viewName;
     } else {
-      this.logger?.info(`View and analyzer configuration data not set for ${collectionName} and hence ignoring search string`);
+      this.logger?.warn(`View and analyzer configuration data not set for ${collectionName} and hence ignoring search string`);
     }
     
     // override sortQuery (to rank based on score for frequency search match - term frequency–inverse document frequency algorithm TF-IDF)
-    const sortQuery = isEmptyish(searchQueries) ? buildSorter(opts) : `SORT TFIDF(node) DESC`;
+    const sortQuery = isEmptyish(searchQueries) ? buildSorter(opts) : 'SORT TFIDF(node) DESC';
     const limitQuery = buildLimiter(opts);
     const returnResult = buildReturn(opts);
     const returnQuery = isEmptyish(returnResult?.q) ? 'RETURN node' : returnResult.q;
@@ -123,12 +123,17 @@ export class Arango implements DatabaseProvider {
       bindVars.customArguments = opts.customArguments;
     }
     const queryString = queryStrings.filter(s => !isNullish(s) && !isEmptyish(s)).join(' ');
-    this.logger.info(queryString);
-    const res = searchQueries
-      ? await this.db.query(queryString, bindVars)
-      : await query(this.db, collectionName, queryString, bindVars);
-    const docs = await res.all(); // TODO: paginate
-    return docs.map(sanitizeOutputFields);
+    try {
+      const res = searchQueries
+        ? await this.db.query(queryString, bindVars)
+        : await query(this.db, collectionName, queryString, bindVars);
+      const docs = await res.all(); // TODO: paginate
+      return docs.map(sanitizeOutputFields);
+    }
+    catch (error: any) {
+      const { message, stack } = error;
+      throw new LoggedError(this.logger, 'ArangoDB:', { message, stack, queryString });
+    }
   }
 
   /**

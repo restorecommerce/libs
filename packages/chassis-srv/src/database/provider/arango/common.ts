@@ -173,65 +173,70 @@ export const buildField = (key: any, value: any, index: number, bindVarsMap: any
   const bindValueVarWithOutPrefix = `value${index}`;
   if (isString(value) || isBoolean(value) || isNumber(value) || isDate(value)) {
     bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(key, value);
-    return autoCastKey(key, value) + ' == ' + bindValueVar;
+    return `${autoCastKey(key, value)} == ${bindValueVar}`;
   }
-  if (value?.$eq) {
+  if (value?.$eq !== undefined) {
     bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(key, value.$eq);
-    return autoCastKey(key, value) + ' == ' + bindValueVar;
+    return `${autoCastKey(key, value)} == ${bindValueVar}`;
   }
-  if (value?.$gt) {
+  if (value?.$gt !== undefined) {
     bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(key, value.$gt);
-    return autoCastKey(key, value) + ' > ' + bindValueVar;
+    return `${autoCastKey(key, value)} > ${bindValueVar}`;
   }
-  if (value?.$gte) {
+  if (value?.$gte !== undefined) {
     bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(key, value.$gte);
-    return autoCastKey(key, value) + ' >= ' + bindValueVar;
+    return `${autoCastKey(key, value)} >= ${bindValueVar}`;
   }
-  if (value?.$lt) {
+  if (value?.$lt !== undefined) {
     bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(key, value.$lt);
-    return autoCastKey(key, value) + ' < ' + bindValueVar;
+    return `${autoCastKey(key, value)} < ${bindValueVar}`;
   }
-  if (value?.$lte) {
+  if (value?.$lte !== undefined) {
     bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(key, value.$lte);
-    return autoCastKey(key, value) + ' <= ' + bindValueVar;
+    return `${autoCastKey(key, value)} <= ${bindValueVar}`;
   }
-  if (value?.$ne) {
+  if (value?.$ne !== undefined) {
     bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(key, value.$ne);
-    return autoCastKey(key, value) + ' != ' + bindValueVar;
+    return `${autoCastKey(key, value)} != ${bindValueVar}`;
   }
-  if (value?.$inVal) {
+  if (value?.$inVal !== undefined) {
     bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(key, value.$inVal);
-    return bindValueVar + ' IN ' + autoCastKey(key, value);
+    return `${bindValueVar} IN ${autoCastKey(key, value)}`;
   }
-  if (value?.$in) {
+  if (value?.$in !== undefined) {
     bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(key, value.$in);
     if (isString(value.$in)) {
       // if it is a field which should be an array
       // (useful for querying within a document list-like attributen
-      return bindValueVar + ' IN ' + autoCastKey(key);
+      return `${bindValueVar} IN ${autoCastKey(key)}`;
     }
     // assuming it is a list of provided values
-    return autoCastKey(key, value) + ' IN ' + bindValueVar;
+    return `${autoCastKey(key, value)} IN ${bindValueVar}`;
   }
-  if (value?.$nin) {
+  if (value?.$nin !== undefined) {
     bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(key, value.$nin);
-    return autoCastKey(key, value) + ' NOT IN ' + bindValueVar;
+    if (isString(value.$nin)) {
+      // if it is a field which should be an array
+      // (useful for querying within a document list-like attributen
+      return `${bindValueVar} NOT IN ${autoCastKey(key)}`;
+    }
+    return `${autoCastKey(key, value)} NOT IN ${bindValueVar}`;
   }
-  if (value?.$iLike) {
+  if (isString(value?.$iLike)) {
     bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(key, value.$iLike);
     // @param 'true' is for case insensitive
-    return ' LIKE (' + autoCastKey(key, value) + ',' + bindValueVar + ', true)';
+    return `LIKE (${autoCastKey(key, value)}, ${bindValueVar}, true)`;
   }
-  if (value?.$not) {
+  if (value?.$not !== undefined) {
     const temp = buildField(key, value.$not, index, bindVarsMap);
     return `!(${temp})`;
   }
   if ('$isEmpty' in value) {
     bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(key, '');
     // will always search for an empty string
-    return autoCastKey(key, '') + ' == ' + bindValueVar;
+    return `${autoCastKey(key, '')} == ${bindValueVar}`;
   }
-  if (value?.$startswith) {
+  if (isString(value?.$startswith)) {
     const bindValueVar1 = `@value${index + 1}`;
     const bindValueVarWithOutPrefix1 = `value${index + 1}`;
     const k = autoCastKey(key);
@@ -240,7 +245,7 @@ export const buildField = (key: any, value: any, index: number, bindVarsMap: any
     bindVarsMap[bindValueVarWithOutPrefix1] = v;
     return `LEFT(${k}, LENGTH(${bindValueVar})) == ${bindValueVar1}`;
   }
-  if (value?.$endswith) {
+  if (isString(value?.$endswith)) {
     const bindValueVar1 = `@value${index + 1}`;
     const bindValueVarWithOutPrefix1 = `value${index + 1}`;
     const k = autoCastKey(key);
@@ -249,7 +254,7 @@ export const buildField = (key: any, value: any, index: number, bindVarsMap: any
     bindVarsMap[bindValueVarWithOutPrefix1] = v;
     return `RIGHT(${k}, LENGTH(${bindValueVar})) == ${bindValueVar1}`;
   }
-  throw new Error(`unsupported operator ${keys(value)} in ${key}`);
+  throw new Error(`Unsupported operator ${keys(value)} in ${key}!`);
 };
 
 /**

@@ -26,8 +26,6 @@ const updateObject = (
 ) => {
   if (value !== undefined) {
     const stringPath = stringToPath(path);
-    // console.log(obj);
-    // console.log(fieldHandlerType, path, '->', stringPath, '=', value);
     let finalValue;
     switch (fieldHandlerType) {
       case 'encode':
@@ -53,8 +51,6 @@ const updateObject = (
     if (finalValue) {
       recursiveSetValue(obj, stringPath, finalValue);
     }
-
-    // console.log('AFTER', finalValue, obj);
   }
 };
 

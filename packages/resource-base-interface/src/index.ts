@@ -59,7 +59,6 @@ const insertFilterFieldOpValue = (filter: Filter, object: any, key: string) => {
   if (!Array.isArray(object)) {
     throw new Error('Filter object has to be of type Array');
   }
-  console.log('HELLOO:',filter.operation);
   filter.operation ??= FilterOperation.eq; // defaults to eq if undefined;
   switch (filter.operation) {
     case FilterOperation.eq:

@@ -30,7 +30,7 @@ export class Topic {
   consumer: Consumer;
   config: any;
   // message sync throttling attributes
-  asyncQueue: async.AsyncQueue<any>;
+  asyncQueue: async.QueueObject<any>;
   drainEvent: (context: Message, done: (err: any) => void) => void;
   // default process one message at a time
   asyncLimit = 1;
@@ -314,8 +314,7 @@ export class Topic {
       this.subscribedToTopic = true;
 
       await this.initConsumerIfNotExists(queue);
-
-      this.consumer.consume({
+      await this.consumer.consume({
         sessionTimeout: 10000,
         heartbeatInterval: 500,
         topics: [this.name],

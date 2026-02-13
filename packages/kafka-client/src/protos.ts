@@ -1,23 +1,5 @@
 import { Writer, Reader } from 'protobufjs';
-
-type Builtin =
-  | Date
-  | object
-  | Uint8Array
-  | string
-  | number
-  | boolean
-  | undefined;
-
-export type DeepPartial<T> = T extends Builtin
-  ? T
-  : T extends Array<infer U>
-    ? Array<DeepPartial<U>>
-    : T extends ReadonlyArray<infer U>
-      ? ReadonlyArray<DeepPartial<U>>
-      : T extends object
-        ? { [K in keyof T]?: DeepPartial<T[K]> }
-        : Partial<T>;
+import { DeepPartial } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/resource_base.js';
 
 type MessageType<T = any> = {
   encode(message: T, writer?: Writer): Writer;
@@ -60,3 +42,5 @@ export const encodeMessage = <T = any>(message: T, messageObject: string): Uint8
 export const decodeMessage = <T = any>(message: Reader | Uint8Array, messageObject: string): T => {
   return getMessage(messageObject).decode(message);
 };
+
+export { DeepPartial };

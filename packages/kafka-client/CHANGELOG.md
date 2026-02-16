@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.9](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.3.8...@restorecommerce/kafka-client@1.3.9) (2026-02-16)
+
+
+### Bug Fixes
+
+* **kafka-client:** consumer subscription should be awaited, otherwise kafka suffers overload ([3611996](https://github.com/restorecommerce/kafka-client/commit/3611996d25649813d2fb094f012cb05cfa9bb387))
+
+
+
+
+
 ## [1.3.8](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.3.7...@restorecommerce/kafka-client@1.3.8) (2026-02-06)
 
 

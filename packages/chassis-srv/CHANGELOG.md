@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.8.4](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.8.3...@restorecommerce/chassis-srv@1.8.4) (2026-02-17)
+
+
+### Bug Fixes
+
+* **kafka-client:** allow to bypass abstraction ([f5474a2](https://github.com/restorecommerce/chassis-srv/commit/f5474a2a30d3983c05e82552bf588b4b1e356bd0))
+
+
+
+
+
 ## [1.8.3](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.8.2...@restorecommerce/chassis-srv@1.8.3) (2026-02-16)
 
 **Note:** Version bump only for package @restorecommerce/chassis-srv

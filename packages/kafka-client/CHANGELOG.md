@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.10](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.3.9...@restorecommerce/kafka-client@1.3.10) (2026-02-17)
+
+
+### Bug Fixes
+
+* **kafka-client:** add interface abstraction, add stess test, refactoring ([5a91915](https://github.com/restorecommerce/kafka-client/commit/5a91915b6265e2676171cbd6fdaca1c8a5c77816))
+* **kafka-client:** allow to bypass abstraction ([f5474a2](https://github.com/restorecommerce/kafka-client/commit/f5474a2a30d3983c05e82552bf588b4b1e356bd0))
+
+
+
+
+
 ## [1.3.9](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.3.8...@restorecommerce/kafka-client@1.3.9) (2026-02-16)
 
 

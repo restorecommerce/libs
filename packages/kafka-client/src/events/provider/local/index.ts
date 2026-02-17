@@ -1,20 +1,21 @@
 import { isNullish, isArray } from 'remeda';
 import { Logger } from '@restorecommerce/logger';
+import { EventProvider, Topic } from '../../interface.js';
 
 interface EventData {
-  listeners: ((bufferObj: any, context: any, config: any, eventName: string) => void)[];
+  listeners: ((bufferObj: any, context: any, config: any, eventName: string) => Promise<void>)[];
   messages: any[];
 }
 
 /**
  * Topic handles listening and sending events to a specific topic.
  */
-export class Topic {
-
+export class LocalTopic implements Topic {
   event: Record<string, EventData>;
   name: string;
   logger: Logger;
   config: any;
+  subscribed: any;
 
   /**
    * @param {string} topicName
@@ -25,6 +26,21 @@ export class Topic {
     this.name = topicName;
     this.logger = logger;
     this.config = config;
+  }
+  $reset(eventName: string, offset: bigint): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+  $resetConsumer(eventNames: string[], offset: bigint): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+  commitCurrentOffsets(): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+  $wait(arg0: bigint): Promise<void> {
+    throw new Error('Method not implemented.');
+  }
+  $offset(arg0: bigint): Promise<bigint> {
+    throw new Error('Method not implemented.');
   }
 
   /**
@@ -60,26 +76,19 @@ export class Topic {
    * @param {string} eventName Identification name of the event.
    * @param {object} message Event message which is send to all listeners.
    */
-  async emit(eventName: string, message: any | any[]): Promise<any> {
-    let e = this.event[eventName];
+  async emit(eventName: string, message: any | any[]): Promise<void> {
+    const e = this.event[eventName];
     if (isNullish(e)) {
-      e = this.event[eventName] = {
-        listeners: [],
-        messages: [],
-      };
+      return;
     }
+    e.messages ??= [];
     const currentOffset = e.messages.length;
-    let messages = message;
-    let bufferObj;
-    if (!isArray(message)) {
-      messages = [message];
-    }
-    e.messages = [...e.messages, ...messages];
-    const listeners = e.listeners;
+    const messages = isArray(message) ? message : [message];
+    e.messages.push(...messages);
+    const listeners = e.listeners ?? [];
     const logger = this.logger;
     const messageObject = this.config[eventName].messageObject;
-    for (let i = 0; i < listeners.length; i += 1) {
-      const listener = listeners[i];
+    for (const listener of listeners) {
       for (let j = 0; j < messages.length; j += 1) {
         const context = {
           offset: currentOffset + j,
@@ -88,7 +97,7 @@ export class Topic {
         };
 
         const msg = messages[j];
-        bufferObj = await this.encodeObject(msg, messageObject);
+        const bufferObj = await this.encodeObject(msg, messageObject);
 
         await listener(bufferObj, context, this.config, eventName);
       }
@@ -100,7 +109,7 @@ export class Topic {
    * @param {string} eventName Identification name of the event.
    * @return {number} Number of listeners.
    */
-  listenerCount(eventName: string): number {
+  async listenerCount(eventName: string): Promise<number> {
     const e = this.event[eventName];
     if (isNullish(e)) {
       return 0;
@@ -113,7 +122,7 @@ export class Topic {
    * @param {string} eventName Identification name of the event.
    * @return {boolean} True if any listener is listening, otherwise false.
    */
-  hasListeners(eventName: string): boolean {
+  async hasListeners(eventName: string): Promise<boolean> {
     const e = this.event[eventName];
     if (isNullish(e)) {
       return false;
@@ -141,14 +150,14 @@ export class Topic {
    * Remove all listener listening to eventName event.
    * @param {string} eventName Identification name of the event.
    */
-  removeAllListeners(eventName: string) {
+  async removeAllListeners(eventName: string) {
     delete this.event[eventName];
   }
 
   /**
    * Stop everything
    */
-  stop() {
+  async stop() {
     this.event = {};
   }
 }
@@ -158,8 +167,7 @@ export class Topic {
  * It uses in-process communication
  * and does not support sending events to other processes or hosts.
  */
-export class Local {
-
+export class Local implements EventProvider {
   config: any;
   logger: Logger;
   topics: Record<string, Topic>;
@@ -179,7 +187,7 @@ export class Local {
     if (this.topics[topicName]) {
       return this.topics[topicName];
     }
-    this.topics[topicName] = new Topic(topicName, this.logger, config);
+    this.topics[topicName] = new LocalTopic(topicName, this.logger, config);
     return this.topics[topicName];
   }
 
@@ -195,10 +203,22 @@ export class Local {
   /**
    * Stop the event provider and all event communication.
    */
-  async stop(): Promise<any> {
-    Object.values(this.topics).forEach((topic) => {
-      topic.stop();
-    })
+  async stop(): Promise<void> {
+    await Promise.allSettled(
+      Object.values(this.topics).map((topic) => {
+        topic.stop();
+      })
+    )
+  };
+
+  async delete(topics: string[]): Promise<void> {
+    for (const topic of topics) {
+      delete this.topics[topic];
+    }
+  }
+
+  async deleteAll(): Promise<void> {
+    this.topics = {};
   }
 }
 

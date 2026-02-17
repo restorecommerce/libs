@@ -6,7 +6,7 @@ import { protoMetadata } from '@restorecommerce/rc-grpc-clients/dist/generated/t
 
 registerProtoMeta(protoMetadata);
 
-const kafkaConfig = {
+const providerConfig = {
   events: {
     kafkaTest: {
       provider: 'kafka',
@@ -44,24 +44,23 @@ const logger = createLogger(loggerConfig.logger);
 
 /* global describe it before after */
 
-describe('events', () => {
-  describe('without a provider', () => {
+describe('EventProviders:', () => {
+  describe('without provider config:', () => {
     const topicName = 'test';
-    describe('awaiting subscribe', () => {
-      it('should throw an error', async () => {
-        try {
-          const events: Events = new Events();
-          await events.topic(topicName);
-        } catch (err) {
-          expect(err).not.toBe(undefined);
-          expect(err.message).to.equal('missing argument config');
-        }
-      });
+    it('should throw an error', async () => {
+      try {
+        const events: Events = new Events();
+        await events.topic(topicName);
+      } catch (err) {
+        expect(err).not.toBe(undefined);
+        expect(err.message).to.equal('missing argument config');
+      }
     });
   });
-  const providers = ['kafkaTest', 'localTest'];
+
+  const providers = ['localTest', 'kafkaTest'];
   forEach(providers, (providerName: string) => {
-    describe(`testing config ${providerName}`, () => {
+    describe(`with provider config ${providerName}:`, () => {
       let events: Events;
       const topicName = 'com.example.test';
       let topic: Topic;
@@ -69,17 +68,15 @@ describe('events', () => {
       const testMessage = {value: 'testValue', count: 1};
 
       beforeAll(async function () {
-        events = new Events(kafkaConfig.events[providerName], logger);
+        events = new Events(providerConfig.events[providerName], logger);
         await events.start();
-
-        await new Promise(resolve => setTimeout(resolve, 5000));
       }, 10000);
 
       afterAll(async function () {
         await events.stop();
       }, 10000);
 
-      describe('creating a topic', () => {
+      describe('creating topics', () => {
         it('should return a topic', async () => {
           topic = await (events.topic(topicName));
           expect(topic).not.toBe(undefined);
@@ -90,15 +87,22 @@ describe('events', () => {
           expect(topic.removeListener).not.toBe(undefined);
           expect(topic.removeAllListeners).not.toBe(undefined);
         });
+
+        const burst = 20;
+        it(`should manage a burst of ${burst} subscribed topics at a time`, async () => {
+          for (let i = 0; i < burst; ++i) {
+            await events.topic(topicName+i).then(
+              topic => topic.on(eventName, () => {})
+            );
+          }
+        });
       });
 
       describe('subscribing', function startKafka(): void {
         it('should allow listening to events', async () => {
-          topic = await (events.topic(topicName));
+          topic = await events.topic(topicName);
 
-          const listener = () => {
-            // void listener
-          };
+          const listener = async (...args: any[]) => {};
           const count: number = await topic.listenerCount(eventName);
           expect(count).not.toBe(undefined);
           await topic.on(eventName, listener);
@@ -106,23 +110,51 @@ describe('events', () => {
           const countAfter = await topic.listenerCount(eventName);
           expect(countAfter).to.equal(count + 1);
         });
+
         it('should allow emitting and receiving a message', async function () {
           topic = await (events.topic(topicName));
 
-          let returnedMessage;
-          const listener = (message, context, config, eventName) => returnedMessage = message;
+          let returnedMessage: any;
+          const listener = async (message: any, ...args: any[]) => returnedMessage = message;
           await topic.on(eventName, listener);
 
           await topic.emit(eventName, testMessage);
 
-          while (returnedMessage == undefined) {
+          while (returnedMessage === undefined) {
             await new Promise((r) => setTimeout(r, 10));
           }
 
           expect(returnedMessage.value).to.equal(testMessage.value);
           expect(returnedMessage.count).to.equal(testMessage.count);
         }, 20000);
-      }, 5000);
+      }, 20000);
+
+      describe('removing listener', () => {
+        it('should allow removing all the subscribed listeners from topic', async function() {
+          await topic.removeAllListeners(eventName);
+          const count: number = await topic.listenerCount(eventName);
+          logger.info('Count of listeners after removing :', count);
+          expect(count).to.equal(0);
+        }, 20000);
+
+        it(
+          'should allow removing the subscribed listener from topic',
+          async () => {
+            const listener = async () => {};
+            await topic.on(eventName, listener);
+            await topic.on(eventName, async () => {});
+            await topic.removeListener(eventName, listener);
+            const count: number = await topic.listenerCount(eventName);
+            logger.info('Count of listeners after removing :', count);
+            expect(count).to.equal(1);
+            await topic.removeAllListeners(eventName);
+          }
+        );
+
+        it('should delete all topics', async function() {
+          await events.deleteAll();
+        });
+      });
     });
   });
 });

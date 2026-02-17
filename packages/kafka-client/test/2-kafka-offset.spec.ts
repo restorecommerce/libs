@@ -43,16 +43,20 @@ describe('Kafka provider test', () => {
   const topicName = 'com.example.test';
   const eventName = 'exampleEvent';
   let initialOffset: bigint;
+
   beforeAll(async () => {
     // start the client
     await client.start();
     const topic = await client.topic(topicName);
     initialOffset = await topic.$offset(BigInt(-1));
   });
+
   afterAll(async function() {
     // stop the client
+    await client.deleteAll();
     await client.stop();
   }, 10000);
+  
   describe('topic.wait', function testWait(): void {
     it('should wait until the event message is processed',
       async () => {
@@ -63,12 +67,12 @@ describe('Kafka provider test', () => {
 
         await new Promise<void>(async (resolve) => {
           // subscribe to topic for example-event with listener as call back.
-          await topic.on(eventName, (message, context) => {
+          await topic.on(eventName, async (message) => {
             expect(message).not.toBe(undefined);
             expect(testMessage.value).toBe(message.value);
             expect(testMessage.count).toBe(message.count);
             logger.info('Received message :', message);
-            topic.removeAllListeners(eventName).then(resolve);
+            await topic.removeAllListeners(eventName).then(resolve);
           });
           // emit the message to Kafka (message is encoded and sent to Kafka)
           await topic.emit(eventName, testMessage)
@@ -80,15 +84,19 @@ describe('Kafka provider test', () => {
       async () => {
         // create topic object
         const topic: Topic = await client.topic(topicName);
-        // order of count should be preserved
-        const expectedCountArr = [1, 2, 3, 4, 5];
         const countArr = new Array<number>;
         // subscribe to topic for example-event with listener as call back.
-        await topic.on(eventName, (message: any, context, config, eventName) => {
-          console.log('received message:', message)
-          expect(message).not.toBe(undefined);
-          countArr.push(message.count);
-        }, { queue: true });
+        await topic.on(
+          eventName,
+          (message: any, context, config, eventName) => {
+            console.log('received message:', message)
+            expect(message).not.toBe(undefined);
+            countArr.push(message.count);
+          },
+          {
+            queue: true
+          },
+        );
 
         // get the current offset
         const offset = await topic.$offset(BigInt(-1));

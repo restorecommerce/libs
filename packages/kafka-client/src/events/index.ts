@@ -2,13 +2,15 @@ import { isNullish, isString } from 'remeda';
 import { createLogger, Logger } from '@restorecommerce/logger';
 import * as kafka from './provider/kafka/index.js';
 import * as local from './provider/local/index.js';
-import { Topic } from './provider/kafka/index.js';
+import { EventProvider, Topic } from './interface.js';
+
+type EventProvicerClass = new (config: any, logger: Logger, ...args: any[]) => EventProvider;
 
 /**
  * A key, value map containing event providers.
  * Event providers are registered with the register function.
  */
-const eventProviders: any = {};
+const eventProviders = {} as Record<string, EventProvicerClass>;
 
 /**
  * Register a event provider.
@@ -16,7 +18,7 @@ const eventProviders: any = {};
  * @param  {string} name     Event provider identifier
  * @param  {constructor} provider Event provider constructor function
  */
-export const registerEventProvider = (name: string, provider: any): void => {
+export const registerEventProvider = (name: string, provider: EventProvicerClass): void => {
   eventProviders[name] = provider;
 };
 
@@ -28,8 +30,8 @@ registerEventProvider(local.Name, local.Local);
  */
 export class Events {
   config: any;
-  logger: Logger;
-  provider: any;
+  logger?: Logger;
+  provider: EventProvider;
   /**
    * @param [Object] config Event configuration.
    * @param [Logger] logger
@@ -41,7 +43,7 @@ export class Events {
     }
     this.config = config;
 
-    const loggerCfg = this.config.logger;
+    const loggerCfg = this.config?.logger;
     if (loggerCfg) {
       loggerCfg.esTransformer = (msg: any) => {
         msg.fields = JSON.stringify(msg.fields);
@@ -63,7 +65,7 @@ export class Events {
     // provider
     const providerName = this.config.provider;
     if (isNullish(providerName)) {
-      this.logger.error('config does not have event provider name', this.config);
+      this.logger?.error('config does not have event provider name', this.config);
       throw new Error('config does not have event provider name');
     }
     const Provider = eventProviders[providerName];
@@ -87,8 +89,16 @@ export class Events {
    * No events will be received or can be send after this call.
    * Suspends the function until the provider is stopped.
    */
-  async stop(): Promise<any> {
+  async stop(): Promise<void> {
     return await this.provider.stop();
+  }
+
+  async delete(topics: string[]): Promise<void> {
+    return await this.provider.delete(topics);
+  }
+
+  async deleteAll(): Promise<void> {
+    return await this.provider.deleteAll();
   }
 
   /**
@@ -102,10 +112,8 @@ export class Events {
       throw new Error('missing argument name');
     }
     if (!isString(name)) {
-      throw new Error('argument name is not of type string');
+      throw new Error('argument name is not type of string');
     }
-    // topic() api called inside Local / Kafka class - which then
-    // invokes the actual topic constructor
     return this.provider.topic(name, this.config, manualOffsetCommit || false);
   }
 }

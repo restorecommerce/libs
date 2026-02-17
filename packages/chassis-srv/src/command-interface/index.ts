@@ -1,7 +1,7 @@
-import { isNullish, forEach, forEachObj, isEmptyish, keys, pick, clone, isIncludedIn, omitBy, intersection, length } from 'remeda';
+import { isNullish, forEachObj, isEmptyish, keys, pick, clone, isIncludedIn, omitBy, intersection } from 'remeda';
 import { Server } from './../microservice/server.js';
 import * as database from './../database/index.js';
-import { Events, Topic, registerProtoMeta, Kafka } from '@restorecommerce/kafka-client';
+import { Events, Topic, registerProtoMeta, Kafka, Listener } from '@restorecommerce/kafka-client';
 import { EventEmitter } from 'events';
 import * as async from 'async';
 import { Logger } from 'winston';
@@ -294,7 +294,7 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
           // saving listeners for potentially subscribed events on this topic,
           // so they don't get called during the restore process
           const previousEvents: string[] = clone(restoreTopic.subscribed);
-          const listenersBackup = new Map<string, object[]>();
+          const listenersBackup = new Map<string, any>();
           for (const event of previousEvents) {
             listenersBackup.set(event, (restoreTopic.emitter as EventEmitter).listeners(event));
             await restoreTopic.removeAllListeners(event);
@@ -322,7 +322,7 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
             const context = pick(message, ['offset', 'partition', 'topic']);
             const eventListener = topicEvents[message.key];
             // decode protobuf
-            let decodedMsg = kafkaEvents.provider.decodeObject(kafkaEventsCfg, eventName, msg);
+            let decodedMsg = (kafkaEvents.provider as Kafka).decodeObject(kafkaEventsCfg, eventName, msg);
             decodedMsg = pick(decodedMsg, keys(decodedMsg)); // preventing protobuf.js special fields
             eventListener(decodedMsg, context, config.get(), eventName).then(() => {
               done();
@@ -333,14 +333,14 @@ export class CommandInterface implements CommandInterfaceServiceImplementation {
 
             if (message.offset >= targetOffset) {
               for (const event of eventNames) {
-                restoreTopic.removeAllListeners(event).then(() => { }).catch((err) => {
+                restoreTopic.removeAllListeners(event).catch((err) => {
                   logger.error('Error removing listeners after restore', { code: err.code, message: err.message, stack: err.stack });
                 });
               }
               for (const event of previousEvents) {
                 const listeners = listenersBackup.get(event);
                 for (const listener of listeners) {
-                  restoreTopic.on(event, listener).then(() => { }).catch((err) => {
+                  restoreTopic.on(event, listener as Listener).catch((err) => {
                     logger.error('Error subscribing to listeners after restore', { code: err.code, message: err.message, stack: err.stack });
                   });
                 }

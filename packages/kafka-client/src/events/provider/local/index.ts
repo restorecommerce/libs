@@ -16,6 +16,8 @@ export class LocalTopic implements Topic {
   logger: Logger;
   config: any;
   subscribed: any;
+  emitter: any;
+  provider: any;
 
   /**
    * @param {string} topicName
@@ -171,6 +173,7 @@ export class Local implements EventProvider {
   config: any;
   logger: Logger;
   topics: Record<string, Topic>;
+  admin: any;
 
   constructor(config: any, logger: Logger) {
     this.topics = {};

@@ -1,3 +1,4 @@
+import EventEmitter from "events";
 
 export type Listener = (message?: any, context?: any, config?: any, eventName?: any) => void | Promise<void>;
 
@@ -15,6 +16,8 @@ export interface Topic {
   stop(): Promise<void>;
   hasListeners(eventName?: string): Promise<boolean>;
   get subscribed(): string[];
+  get emitter(): EventEmitter;
+  get provider(): EventProvider;
 }
 
 export interface EventProvider {
@@ -23,4 +26,5 @@ export interface EventProvider {
   start(): Promise<void>;
   delete(topics: string[]): Promise<void>;
   deleteAll(): Promise<void>;
+  get admin(): any;
 }

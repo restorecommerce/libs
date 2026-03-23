@@ -91,7 +91,7 @@ export class Arango implements DatabaseProvider {
       }
       // override collection name with view name
       collectionName = viewName;
-    } else {
+    } else if (opts?.search?.search) {
       this.logger?.warn(`View and analyzer configuration data not set for ${collectionName} and hence ignoring search string`);
     }
     
@@ -124,7 +124,7 @@ export class Arango implements DatabaseProvider {
     }
     const queryString = queryStrings.filter(s => !isNullish(s) && !isEmptyish(s)).join(' ');
     try {
-      const res = searchQueries
+      const res = !isEmptyish(searchQueries)
         ? await this.db.query(queryString, bindVars)
         : await query(this.db, collectionName, queryString, bindVars);
       const docs = await res.all(); // TODO: paginate
@@ -465,7 +465,16 @@ export class Arango implements DatabaseProvider {
     const collection = this.db.collection(collectionName);
     const collectionExists = await collection.exists();
     if (!collectionExists) {
-      await collection.create();
+      await collection.create().catch(
+        error => {
+          const { code, message, details, stack } = error;
+          throw new LoggedError(
+            this.logger,
+            'collection not created!',
+            { code, message, details, stack }
+          );
+        }
+      );
     }
     const insertResponse = [];
     let createdDocs = await collection.saveAll(docs, { returnNew: true });
@@ -529,7 +538,8 @@ export class Arango implements DatabaseProvider {
             this.logger?.info(`Analyzer ${analyzerName} created successfully`);
           }
         } catch (err: any) {
-          this.logger?.error(`Error creating analyzer ${analyzerName}`, { code: err.code, message: err.message, stack: err.stack });
+          const { code, message, details, stack } = err;
+          this.logger?.error(`Error creating analyzer ${analyzerName}`, { code, message, details, stack });
         }
       } else {
         this.logger?.info(`Analyzer ${analyzerName} already exists`);
@@ -545,8 +555,12 @@ export class Arango implements DatabaseProvider {
         this.logger?.info(`Collection ${collectionName} created successfully`);
       }
     } catch (err: any) {
-      if (err.message && err.message.indexOf('duplicate name') == -1) {
-        this.logger?.error(`Error creating collection ${collectionName}`, { code: err.code, message: err.message, stack: err.stack });
+      if (err?.message?.includes('duplicate name')) {
+        this.logger?.warn(err.message);
+      }
+      else {
+        const { code, message, details, stack } = err;
+        this.logger?.error(`Error creating collection ${collectionName}`, { code, message, details, stack });
         throw err;
       }
     }

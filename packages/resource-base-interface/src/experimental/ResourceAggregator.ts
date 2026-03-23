@@ -116,7 +116,7 @@ export class ResourceAggregator {
     sources: {
       service: CRUDServiceDefinition;
       map_by_ids: (target: T) => string[];
-      container: string;
+      container: keyof C;
       entity?: string;
     }[],
     template?: C,
@@ -142,7 +142,7 @@ export class ResourceAggregator {
       ...sources.map((source, i) => ({
         [source.container]: new ResourceMap(
           source_map[i].getMany(
-            ids[i]?.flatMap(ids => ids) ?? [],
+            ids[i] ?? [],
             strict
           ),
           source.entity

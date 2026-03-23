@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.9.17](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.16...@restorecommerce/resource-base-interface@1.9.17) (2026-03-23)
+
+
+### Bug Fixes
+
+* **chassis-srv:** find() confused with search query, not auto creating collections ([ef26087](https://github.com/restorecommerce/resource-base-interface/commit/ef26087962ef6741e6a1b58709deec412616b033))
+
+
+
+
+
 ## [1.9.16](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.15...@restorecommerce/resource-base-interface@1.9.16) (2026-02-17)
 
 **Note:** Version bump only for package @restorecommerce/resource-base-interface

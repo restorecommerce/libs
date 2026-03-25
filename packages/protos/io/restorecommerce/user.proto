@@ -73,8 +73,8 @@ message LoginRequest {
 }
 
 message ImpersonateRequest {
-  optional string identifier = 1; // Username
-  optional io.restorecommerce.auth.Subject subject = 2;
+  optional string identifier = 1; // Username to impersonate
+  optional io.restorecommerce.auth.Subject subject = 2; // Impersonator's subject
 }
 
 message EndImpersonationRequest {

@@ -58,8 +58,8 @@ service UserService {
   rpc ResetTOTP (ResetTOTPRequest) returns (io.restorecommerce.status.OperationStatusObj);
   rpc MfaStatus (MfaStatusRequest) returns (MfaStatusResponse);
   rpc GetUnauthenticatedSubjectTokenForTenant(TenantRequest) returns (TenantResponse);
-  rpc Impersonate (ImpersonateRequest) returns (LoginResponse);
-  rpc EndImpersonation (EndImpersonationRequest) returns (LoginResponse);
+  rpc Impersonate (ImpersonateRequest) returns (ImpersonateResponse);
+  rpc EndImpersonation (EndImpersonationRequest) returns (EndImpersonateResponse);
 }
 
 /**
@@ -77,8 +77,27 @@ message ImpersonateRequest {
   optional io.restorecommerce.auth.Subject subject = 2; // Impersonator's subject
 }
 
+message AccessTokenData {
+  optional string access_token = 1;
+  optional google.protobuf.Timestamp expires_in = 2;
+  optional string token_type = 3;
+  optional string scope = 4;
+  optional string token_name = 5;
+}
+
+message ImpersonateResponse {
+  optional io.restorecommerce.status.Status status = 1;
+  optional AccessTokenData payload = 2;
+}
+
 message EndImpersonationRequest {
   optional io.restorecommerce.auth.Subject subject = 1;
+  optional AccessTokenData payload = 2;
+}
+
+message EndImpersonateResponse {
+  optional io.restorecommerce.status.Status status = 1;
+  optional AccessTokenData payload = 2;
 }
 
 message LoginResponse {
@@ -391,7 +410,6 @@ message User {
   repeated string totp_session_tokens = 29; /// TOTP Login session tokens
   repeated string password_hash_history = 30; // List of historical password hashes
   repeated string totp_recovery_codes = 31; // List of TOTP recovery codes
-  optional string impoersonated_by = 32; // ID of the impersonator
 }
 
 /**

@@ -23,6 +23,7 @@ message Tokens {
   optional bool interactive = 6;
   optional google.protobuf.Timestamp last_login = 7;
   optional string client_id = 8;
+  optional string impersonated_by = 9; // ID of the impersonator
 }
 
 message HierarchicalScope {

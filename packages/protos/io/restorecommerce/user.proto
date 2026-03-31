@@ -58,6 +58,8 @@ service UserService {
   rpc ResetTOTP (ResetTOTPRequest) returns (io.restorecommerce.status.OperationStatusObj);
   rpc MfaStatus (MfaStatusRequest) returns (MfaStatusResponse);
   rpc GetUnauthenticatedSubjectTokenForTenant(TenantRequest) returns (TenantResponse);
+  rpc Impersonate (ImpersonateRequest) returns (ImpersonateResponse);
+  rpc EndImpersonation (EndImpersonationRequest) returns (EndImpersonateResponse);
 }
 
 /**
@@ -68,6 +70,33 @@ message LoginRequest {
   optional string identifier = 1; // User name or email
   optional string password = 2; // Raw password
   optional string token = 3;
+}
+
+message ImpersonateRequest {
+  optional string identifier = 1; // Username to impersonate
+  optional io.restorecommerce.auth.Subject subject = 2; // Impersonator's subject
+}
+
+message AccessTokenData {
+  optional string access_token = 1;
+  optional google.protobuf.Timestamp expires_in = 2;
+  optional string token_type = 3;
+  optional string scope = 4;
+  optional string token_name = 5;
+}
+
+message ImpersonateResponse {
+  optional io.restorecommerce.status.Status status = 1;
+  optional AccessTokenData payload = 2;
+}
+
+message EndImpersonationRequest {
+  optional io.restorecommerce.auth.Subject subject = 1;
+}
+
+message EndImpersonateResponse {
+  optional io.restorecommerce.status.Status status = 1;
+  optional AccessTokenData payload = 2;
 }
 
 message LoginResponse {

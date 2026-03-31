@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.13.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.12.0...@restorecommerce/protos@6.13.0) (2026-03-31)
+
+
+### Features
+
+* 418 Impersonation ([#181](https://github.com/restorecommerce/libs/issues/181)) ([45c04ca](https://github.com/restorecommerce/libs/commit/45c04ca17965e330754355393e91b28d1b0f7d8e))
+
+
+
+
+
 # [6.12.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.11.11...@restorecommerce/protos@6.12.0) (2026-02-06)
 
 

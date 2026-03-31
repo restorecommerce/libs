@@ -92,7 +92,6 @@ message ImpersonateResponse {
 
 message EndImpersonationRequest {
   optional io.restorecommerce.auth.Subject subject = 1;
-  optional AccessTokenData payload = 2;
 }
 
 message EndImpersonateResponse {

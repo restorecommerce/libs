@@ -75,6 +75,7 @@ message LoginRequest {
 message ImpersonateRequest {
   optional string identifier = 1; // Username to impersonate
   optional io.restorecommerce.auth.Subject subject = 2; // Impersonator's subject
+  optional uint32 token_ttl = 3; // Token time to live in seconds
 }
 
 message AccessTokenData {

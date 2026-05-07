@@ -410,6 +410,7 @@ message User {
   repeated string totp_session_tokens = 29; /// TOTP Login session tokens
   repeated string password_hash_history = 30; // List of historical password hashes
   repeated string totp_recovery_codes = 31; // List of TOTP recovery codes
+  optional google.protobuf.Timestamp invited_at = 32;
 }
 
 /**
@@ -459,4 +460,5 @@ message UserRole {
   repeated io.restorecommerce.attribute.Attribute properties = 25; // additional properties
   optional google.protobuf.Any data = 26; // additional data
   repeated io.restorecommerce.role.Role roles = 27;
+  optional google.protobuf.Timestamp invited_at = 28;
 }

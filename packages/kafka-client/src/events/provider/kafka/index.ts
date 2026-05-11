@@ -23,20 +23,16 @@ import { decomposeError } from '../../../utils.js';
  * A Kafka topic.
  */
 export class KafkaTopic implements Topic {
-  name: string;
-  emitter: EventEmitter;
-  provider: Kafka;
-  subscribed: string[];
+  readonly emitter: EventEmitter;
+  readonly subscribed: string[];
   waitQueue: any[];
   currentOffset: bigint;
   consumer: Consumer;
-  config: any;
   // message sync throttling attributes
   asyncQueue: async.QueueObject<any>;
   drainEvent: (context: Message, done: (err: any) => void) => void;
   // default process one message at a time
   asyncLimit = 1;
-  manualOffsetCommit: boolean;
   private subscribedToTopic: boolean;
 
   /**
@@ -50,22 +46,25 @@ export class KafkaTopic implements Topic {
    * @param provider
    * @param config
    */
-  constructor(name: string, provider: Kafka, config: any, manualOffsetCommit = false) {
-    this.name = name;
+  constructor(
+    readonly name: string,
+    readonly provider: Kafka,
+    readonly config: KafkaProviderConfig,
+    readonly manualOffsetCommit = false,
+  ) {
     this.emitter = new EventEmitter();
-    this.provider = provider;
     this.subscribed = [];
     this.waitQueue = [];
     this.currentOffset = 0n;
-    this.config = config;
-    this.manualOffsetCommit = manualOffsetCommit;
   }
 
   async createIfNotExists(): Promise<void> {
     const topics = await this.provider.admin.listTopics();
     if (!topics.includes(this.name)) {
       return await new Promise((resolve, reject) => {
-        const operation = retry.operation();
+        const operation = retry.operation({
+          retries: Number(this.config?.kafka?.retries ?? 10)
+        });
         operation.attempt(async (attemptNo) => {
           try {
             await this.provider.admin.createTopics({
@@ -513,13 +512,13 @@ export interface KafkaProviderConfig {
     & AdminOptions;
   timeout: number;
   groupId: string;
+  [key: string]: any;
 }
 
 /**
  * Events provider.
  */
 export class Kafka implements EventProvider {
-  readonly config: KafkaProviderConfig;
   readonly topics: Record<string, KafkaTopic> = {};
   private producer: Producer;
   
@@ -537,7 +536,7 @@ export class Kafka implements EventProvider {
    * @param {object} logger
    */
   constructor(
-    config: any,
+    readonly config: KafkaProviderConfig,
     readonly logger: Logger
   ) {
     this.config = clone(config);
@@ -551,12 +550,12 @@ export class Kafka implements EventProvider {
     const operation = retry.operation({
       forever: true,
       maxTimeout: this.config?.timeout ?? 60000,
+      retries: Number(this.config?.kafka?.retries ?? 10),
     });
     return new Promise<void>((resolveRetry) => {
-      operation.attempt(async () => {
+      operation.attempt(async (attemptNo) => {
         try {
           this.commonOptions = {
-            ...this.config.kafka,
             serializers: {
               key: noopSerializer,
               value: noopSerializer,
@@ -571,7 +570,8 @@ export class Kafka implements EventProvider {
             },
             retries: 100,
             retryDelay: 1000,
-            autocommit: false
+            autocommit: false,
+            ...this.config.kafka,
           };
 
           // These are kept from migration of KafkaJS to Platformic lib
@@ -579,7 +579,7 @@ export class Kafka implements EventProvider {
             this.commonOptions['bootstrapBrokers'] = this.commonOptions['brokers'] as string[];
           }
 
-          this.logger?.info(`[kafka-client] Connecting - attempt No: ${operation.attempts()}`);
+          this.logger?.info(`[kafka-client] Connecting - attempt No: ${attemptNo}`);
 
           this.producer = new Producer(this.commonOptions);
           this.admin = new Admin(this.commonOptions);
@@ -636,7 +636,6 @@ export class Kafka implements EventProvider {
         }
         catch (err: any) {
           operation.retry(err);
-          const attemptNo = operation.attempts();
           this.producer?.close();
           this.logger?.info(`Retry initialize the Producer, attempt No: ${attemptNo}`);
         }
@@ -661,7 +660,7 @@ export class Kafka implements EventProvider {
    * @param eventName
    * @param msg
    */
-  decodeObject(config: any, eventName: string, msg: any): any {
+  decodeObject(config: KafkaProviderConfig, eventName: string, msg: any): any {
     try {
       return decodeMessage(msg, config[eventName].messageObject);
     } catch (error: any) {
@@ -683,7 +682,7 @@ export class Kafka implements EventProvider {
   async $send(topicName: string, eventName: string, message: any): Promise<ProduceResult> {
     try {
       const messages = Array.isArray(message) ? message : [message];
-      const config: any = this.config;
+      const config = this.config;
       const messageObject = config[eventName]?.messageObject;
       if (!messageObject) {
         throw new Error(`messageObject for event ${eventName} not configured!`);
@@ -752,7 +751,7 @@ export class Kafka implements EventProvider {
    * @param config
    * @return {Topic} Kafka topic
    */
-  async topic(topicName: string, config: any): Promise<Topic> {
+  async topic(topicName: string, config: KafkaProviderConfig): Promise<Topic> {
     this.topics[topicName] ??= new KafkaTopic(topicName, this, config);
     await this.topics[topicName].createIfNotExists();
     return this.topics[topicName];

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.14.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.13.1...@restorecommerce/protos@6.14.0) (2026-05-11)
+
+
+### Features
+
+* extend user proto with invitedAt ([#186](https://github.com/restorecommerce/libs/issues/186)) ([c3bba3b](https://github.com/restorecommerce/libs/commit/c3bba3be0a1014c9df20fda6e05128a5e0a7383c))
+* trigger new build ([#189](https://github.com/restorecommerce/libs/issues/189)) ([8a95f92](https://github.com/restorecommerce/libs/commit/8a95f92f33ad41b4cec085351c54e1209d4f7b1f))
+
+
+
+
+
 ## [6.13.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.13.0...@restorecommerce/protos@6.13.1) (2026-04-07)
 
 

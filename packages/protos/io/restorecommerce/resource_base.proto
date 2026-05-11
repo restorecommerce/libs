@@ -96,6 +96,34 @@ message ReadRequest {
   optional google.protobuf.Any custom_arguments = 9;
   optional io.restorecommerce.auth.Subject subject = 10;
   optional Search search = 11;
+  optional Group group = 12;
+}
+
+message Selector {
+  enum Operator {
+    eq = 0;
+    lt = 1;
+    lte = 2;
+    gt = 3;
+    gte = 4;
+  }
+  optional string name = 1; // name for recapture (by default same as field, if no conflict)
+  optional string field = 2;
+  optional string value = 3;
+  optional Operator operator = 4; // group selectors can have complex conditions like splitting two groups of greater lesser the indicator
+}
+
+message Group {
+  enum Operator {
+    aggreagation = 0;
+    count = 1;
+    sum = 2;
+    average = 3;
+    min = 4;
+    max = 5;
+  }
+  repeated Selector selectors = 1; // selector to group by. Groups can have many selectors, the combi of all defines their "primary key"
+  optional Operator operator = 2;
 }
 
 message DeleteRequest {
@@ -125,6 +153,20 @@ message ResourceListResponse {
   repeated ResourceResponse items = 1;
   optional uint32 total_count = 2;
   optional io.restorecommerce.status.OperationStatus operation_status = 3;
+  repeated GroupResponse groups = 4; // either groups or items is filled depending on ReadRequest
+}
+
+// Group Response
+message GroupResponse {
+  repeated Selector selectors = 1; // selector value
+  repeated string ids = 2; // list of ids if aggregation (list all ids that belongs to a matching group)
+  oneof result {
+    int32 count = 3;
+    double sum = 4;
+    double average = 5;
+    double max = 6;
+    double min = 7;
+  }
 }
 
 // resource read response

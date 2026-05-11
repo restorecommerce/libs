@@ -15,7 +15,8 @@ import {
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/status.js';
 import {
   DeepPartial,
-  Search
+  Search,
+  Group
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base.js';
 import { Subject } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/auth.js';
 import { fieldHandler, FieldHandlerType } from './utils.js';
@@ -180,7 +181,8 @@ export class ResourcesAPIBase {
     fields: any = {},
     customQueries: string[] = [],
     customArgs: any = {},
-    search: DeepPartial<Search>
+    search: DeepPartial<Search>,
+    group: Group,
   ): Promise<T[]> {
     const options = {
       limit: Math.min(limit, 1000),
@@ -189,7 +191,8 @@ export class ResourcesAPIBase {
       fields,
       customQueries,
       customArguments: customArgs?.value ? JSON.parse(customArgs.value.toString()) : {},
-      search
+      search,
+      group
     };
     let entities: T[] = await this.db.find(this.collectionName, filter, options);
     entities = this.encodeOrDecode(entities, this.bufferFields, 'encode');

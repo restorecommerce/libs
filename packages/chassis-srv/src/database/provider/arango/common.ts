@@ -257,6 +257,47 @@ export const buildField = (key: any, value: any, index: number, bindVarsMap: any
   throw new Error(`Unsupported operator ${keys(value)} in ${key}!`);
 };
 
+export const buildGroup = (options: any): any => {
+  // queryStrings.push("...COLLECT [selector.name] = node[selector.field] WITH COUNT INTO count");
+  // if selector.value exist this should gointo Selector Filter and not COLLECT
+  // FOR u IN users
+  // FILTER "schulleiter-r-id" IN u.role_associations[*].role
+  // FILTER u.default_scope == "schule_303256"
+  // COLLECT default_scope = u.default_scope WITH COUNT INTO groupCount
+  // RETURN {
+  //   "grouping" : default_scope,
+  //   "count" : groupCount
+  // }
+  let collectFilter = '';
+
+  options.group.selectors.forEach((selector) => {
+    if(selector?.operator === 'eq') {
+       if (!collectFilter.length) {
+        collectFilter = `node[${selector.field}] == ${selector.field}`
+      } else {
+        collectFilter = collectFilter + `, node[${selector.field}] == ${selector.field}`
+      }
+    } else {
+      throw new Error(`unsupported query operator ${selector?.operator}`);
+    }
+  });
+
+  // for (const selector of options.group.selectors || []) {
+  //   console.log('Selector is......', selector);
+  //   if (selector?.operator === 'eq') {
+  //     if (!collectFilter.length) {
+  //       collectFilter = `node[${selector.field}] == ${selector.field}`
+  //     } else {
+  //       collectFilter = collectFilter + `, node[${selector.field}] == ${selector.field}`
+  //     }
+  //   }
+  // }
+  if (collectFilter.length) {
+    // return `COLLECT ${collectFilter} WITH COUNT INTO count RETURN { node[${options.group.selectors[0].field}], count }`;
+    return `COLLECT ${collectFilter} WITH COUNT INTO count RETURN { count }`;
+  }
+};
+
 /**
  * Build ArangoDB query based on filter.
  * @param {Object} filter key, value tree object.

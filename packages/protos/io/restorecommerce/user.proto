@@ -321,6 +321,7 @@ message UserListWithRoleResponse {
   repeated UserRoleResponse items = 1;
   optional uint32 total_count = 2;
   optional io.restorecommerce.status.OperationStatus operation_status = 3;
+  repeated io.restorecommerce.resourcebase.GroupResponse groups = 4; // either groups or items is filled depending on ReadRequest
 }
 
 message UserRoleResponse {

@@ -3,7 +3,8 @@ import {isNullish, isEmptyish, isString, merge, clone, forEach} from 'remeda';
 import {
   buildFilter, buildSorter, buildLimiter, buildReturn,
   sanitizeInputFields, query, sanitizeOutputFields,
-  idToKey
+  idToKey,
+  buildGroup
 } from './common.js';
 import { DatabaseProvider } from '../../index.js';
 import { ArangoDocument, CustomQuery, ViewAnalyzerOptions, ViewMap } from './interface.js';
@@ -44,6 +45,7 @@ export class Arango implements DatabaseProvider {
     let filterQuery: any = filter ?? {};
     const opts = options ?? {};
     let filterResult: any;
+    const has_groups = opts?.group?.selectors?.length ? true : false;
 
     const customFilters = new Array<string>();
     // checking if a custom query should be used
@@ -106,7 +108,14 @@ export class Arango implements DatabaseProvider {
     }
     queryStrings.push(filterQuery);
     queryStrings.push(...customFilters);
-    queryStrings.push(sortQuery, limitQuery, returnQuery);
+    queryStrings.push(sortQuery);
+    // COLLECT default_scope = u.default_scope WITH COUNT INTO groupCount
+    let returnGroup;
+    if (has_groups) {
+      returnGroup = buildGroup(opts);
+      // queryStrings.push("...COLLECT [selector.name] = node[selector.field] WITH COUNT INTO count");
+    }
+    queryStrings.push(limitQuery, has_groups && returnGroup ? returnGroup : returnQuery);
 
     const bindVars = {
       '@collection': collectionName,

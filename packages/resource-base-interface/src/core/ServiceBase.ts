@@ -136,6 +136,7 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
       const customQueries = request.custom_queries;
       const customArgs = request.custom_arguments;
       const search = request?.search;
+      const group = request?.group;
       const objectEntities = (await this.resourceapi.read<ElementOf<T['items']>['payload']>(
         filter,
         limit,
@@ -144,7 +145,8 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
         field,
         customQueries,
         customArgs,
-        search
+        search,
+        group
       )) ?? [];
 
       const readResponseWithStatus = objectEntities.map((object) => ({
@@ -159,6 +161,7 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
         items: readResponseWithStatus,
         total_count: readResponseWithStatus.length,
         operation_status: this.operationStatusCodes.SUCCESS
+        // TODO add GroupResonse here
       } as DeepPartial<T>;
     }
     catch ({ code, message, details, stack, name, cause }: any) {

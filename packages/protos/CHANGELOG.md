@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.15.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.14.0...@restorecommerce/protos@6.15.0) (2026-05-12)
+
+
+### Features
+
+* remove not needed optional in Deleted message ([#191](https://github.com/restorecommerce/libs/issues/191)) ([4251d6a](https://github.com/restorecommerce/libs/commit/4251d6a59d3d58f85366fc2459f2a6f0b805711d))
+
+
+
+
+
 # [6.14.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.13.1...@restorecommerce/protos@6.14.0) (2026-05-11)
 
 

@@ -276,7 +276,6 @@ message SendActivationEmailRequest {
  */
 message Deleted {
   optional string id = 1;
-  optional string default_scope = 2; // default hierarchical scope
 }
 
 /**

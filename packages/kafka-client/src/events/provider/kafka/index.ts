@@ -56,6 +56,7 @@ export class KafkaTopic implements Topic {
     this.subscribed = [];
     this.waitQueue = [];
     this.currentOffset = 0n;
+    this.emitter.setMaxListeners(0);
   }
 
   async createIfNotExists(): Promise<void> {

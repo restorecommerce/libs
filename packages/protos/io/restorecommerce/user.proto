@@ -92,7 +92,8 @@ message ImpersonateResponse {
 }
 
 message EndImpersonationRequest {
-  optional io.restorecommerce.auth.Subject subject = 1;
+  optional string identifier = 1;
+  optional io.restorecommerce.auth.Subject subject = 2;
 }
 
 message EndImpersonateResponse {

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.8.11](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.8.9...@restorecommerce/chassis-srv@1.8.11) (2026-05-21)
+
+
+### Bug Fixes
+
+* **arango:** restore collection auto create on upsert ([e143908](https://github.com/restorecommerce/chassis-srv/commit/e143908c7823aaea107fcc31d5453539fa028e3c))
+
+
+
+
+
 ## [1.8.10](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.8.9...@restorecommerce/chassis-srv@1.8.10) (2026-05-21)
 
 

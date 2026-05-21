@@ -278,7 +278,16 @@ export class Arango implements DatabaseProvider {
     const collection = this.db.collection(collectionName);
     const collectionExists = await collection.exists();
     if (!collectionExists) {
-      throw new LoggedError(this.logger, `Collection ${collectionName} does not exist for upsert operation`);
+      await collection.create().catch(
+        error => {
+          const { code, message, details, stack } = error;
+          throw new LoggedError(
+            this.logger,
+            `Collection ${collectionName} not created!`,
+            { code, message, details, stack }
+          );
+        }
+      );
     }
     let upsertedDocs = await collection.saveAll(docs, { returnNew: true, overwriteMode: 'update' });
     if (!Array.isArray(upsertedDocs)) {
@@ -470,7 +479,7 @@ export class Arango implements DatabaseProvider {
           const { code, message, details, stack } = error;
           throw new LoggedError(
             this.logger,
-            'collection not created!',
+            `Collection ${collectionName} not created!`,
             { code, message, details, stack }
           );
         }

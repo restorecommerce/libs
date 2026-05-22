@@ -92,8 +92,8 @@ message ImpersonateResponse {
 }
 
 message EndImpersonationRequest {
-  optional string identifier = 1;
-  optional io.restorecommerce.auth.Subject subject = 2;
+  optional io.restorecommerce.auth.Subject subject = 1;
+  optional google.protobuf.Any options = 2;
 }
 
 message EndImpersonateResponse {

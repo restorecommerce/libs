@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.16](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@3.1.15...@restorecommerce/acs-client@3.1.16) (2026-05-22)
+
+
+### Reverts
+
+* Revert "chore(release): publish" ([8e2001d](https://github.com/restorecommerce/libs/commit/8e2001d2151fd217ddea103ff2b1bb5d5f0d5c6c))
+
+
+
+
+
 ## [3.1.15](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@3.1.14...@restorecommerce/acs-client@3.1.15) (2026-05-12)
 
 **Note:** Version bump only for package @restorecommerce/acs-client

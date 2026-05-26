@@ -53,7 +53,7 @@ const reduceUserScope = (
   reducedUserScope: string[],
   hierarchicalRoleScoping: string
 ) => {
-  reducedUserScope.push(hrScope.id);
+  reducedUserScope?.push(hrScope.id);
   if (hrScope?.children?.length > 0 && hierarchicalRoleScoping === 'true') {
     for (const childNode of hrScope.children) {
       reduceUserScope(childNode, reducedUserScope, hierarchicalRoleScoping);
@@ -96,6 +96,7 @@ const checkSubjectMatch = (
   let hierarchicalRoleScopingCheck = 'true'; // by default HR scoping check is considered
   let ruleRoleValue: string;
   let ruleRoleScopeEntityName: string;
+  reducedUserScope ??= [];
   if (ruleSubjectAttributes?.length === 0) {
     return true;
   }
@@ -105,10 +106,12 @@ const checkSubjectMatch = (
     }
     if (attribute?.id === urns.roleScopingEntity) {
       ruleRoleScopeEntityName = attribute.value;
-    } else if (attribute.id === urns.role) { // urns.role -> urn:restorecommerce:acs:names:role
+    }
+    else if (attribute.id === urns.role) { // urns.role -> urn:restorecommerce:acs:names:role
       ruleRoleValue = attribute.value;
       logger?.debug(`Found Rule's Subject role ${ruleRoleValue}`);
-    } else if (attribute?.id === urns.hierarchicalRoleScoping) {
+    }
+    else if (attribute?.id === urns.hierarchicalRoleScoping) {
       hierarchicalRoleScopingCheck = attribute.value;
       logger?.debug('HR Scoping URN set on rule', { hierarchicalRoleScopingCheck });
     }
@@ -146,7 +149,7 @@ const checkSubjectMatch = (
         reducedUserScope,
         hierarchicalRoleScopingCheck
       );
-    } else if (hrScopeExist && !user.scope) {
+    } else if (hrScopeExist && !user?.scope) {
       // HR scope match exist but user has not provided scope so still a match is considered
       logger?.debug('Target scope not provided using full HR tree for matched role', { role: ruleRoleValue });
       // if no scope is provided then use the complete HR tree for user scopes
@@ -156,7 +159,7 @@ const checkSubjectMatch = (
       ).forEach((eachHRScope) => {
         reduceUserScope(eachHRScope, reducedUserScope, hierarchicalRoleScopingCheck);
       });
-      return reducedUserScope?.length > 0;
+      return reducedUserScope.length > 0;
     }
   } else if (ruleRoleValue) {
     return user?.role_associations?.some(

@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.1.69](https://github.com/restorecommerce/libs/compare/@restorecommerce/rc-grpc-clients@5.1.68...@restorecommerce/rc-grpc-clients@5.1.69) (2026-05-27)
+
+
+### Reverts
+
+* Revert "chore(release): publish" ([a5b5a46](https://github.com/restorecommerce/libs/commit/a5b5a46b191c4b885a97f427210000d9d6608fc3))
+* Revert "chore(release): publish" ([3742433](https://github.com/restorecommerce/libs/commit/37424334499eab0b3eeef9954eea402a70ec8bef))
+
+
+
+
+
 ## [5.1.68](https://github.com/restorecommerce/libs/compare/@restorecommerce/rc-grpc-clients@5.1.67...@restorecommerce/rc-grpc-clients@5.1.68) (2026-05-12)
 
 **Note:** Version bump only for package @restorecommerce/rc-grpc-clients

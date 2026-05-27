@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.15](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.3.14...@restorecommerce/kafka-client@1.3.15) (2026-05-27)
+
+
+### Bug Fixes
+
+* **kafka:** set max listeners to infinity ([96a7324](https://github.com/restorecommerce/kafka-client/commit/96a73244fc705aa8c6d54716f5ba7e12500bb94a))
+
+
+### Reverts
+
+* Revert "chore(release): publish" ([a5b5a46](https://github.com/restorecommerce/kafka-client/commit/a5b5a46b191c4b885a97f427210000d9d6608fc3))
+* Revert "chore(release): publish" ([3742433](https://github.com/restorecommerce/kafka-client/commit/37424334499eab0b3eeef9954eea402a70ec8bef))
+* Revert "chore(release): publish" ([8e2001d](https://github.com/restorecommerce/kafka-client/commit/8e2001d2151fd217ddea103ff2b1bb5d5f0d5c6c))
+
+
+
+
+
 ## [1.3.14](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.3.13...@restorecommerce/kafka-client@1.3.14) (2026-05-12)
 
 **Note:** Version bump only for package @restorecommerce/kafka-client

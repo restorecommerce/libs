@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.2.14](https://github.com/restorecommerce/libs/compare/@restorecommerce/grpc-client@2.2.13...@restorecommerce/grpc-client@2.2.14) (2026-05-27)
+
+
+### Bug Fixes
+
+* **grpc-client:** remove unrequired deps ([92652c0](https://github.com/restorecommerce/libs/commit/92652c0c1deefda5cd730bfd0e18ada1bf328a8e))
+
+
+### Reverts
+
+* Revert "chore(release): publish" ([a5b5a46](https://github.com/restorecommerce/libs/commit/a5b5a46b191c4b885a97f427210000d9d6608fc3))
+
+
+
+
+
 ## [2.2.13](https://github.com/restorecommerce/libs/compare/@restorecommerce/grpc-client@2.2.12...@restorecommerce/grpc-client@2.2.13) (2025-10-06)
 
 **Note:** Version bump only for package @restorecommerce/grpc-client

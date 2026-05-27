@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.2.16](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.2.15...@restorecommerce/scs-jobs@0.2.16) (2026-05-27)
+
+
+### Reverts
+
+* Revert "chore(release): publish" ([a5b5a46](https://github.com/restorecommerce/libs/commit/a5b5a46b191c4b885a97f427210000d9d6608fc3))
+* Revert "chore(release): publish" ([3742433](https://github.com/restorecommerce/libs/commit/37424334499eab0b3eeef9954eea402a70ec8bef))
+* Revert "chore(release): publish" ([8e2001d](https://github.com/restorecommerce/libs/commit/8e2001d2151fd217ddea103ff2b1bb5d5f0d5c6c))
+
+
+
+
+
 ## [0.2.15](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.2.14...@restorecommerce/scs-jobs@0.2.15) (2026-05-12)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs

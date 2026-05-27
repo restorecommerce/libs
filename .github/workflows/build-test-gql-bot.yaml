@@ -27,3 +27,4 @@ jobs:
     with:
       package: gql-bot
       coveralls: true
+      backing-only: true

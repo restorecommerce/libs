@@ -27,3 +27,4 @@ jobs:
     with:
       package: grpc-client
       system: true
+      backing-only: true

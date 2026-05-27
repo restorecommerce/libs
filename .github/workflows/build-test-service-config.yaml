@@ -27,3 +27,4 @@ jobs:
     with:
       package: service-config
       system: true
+      backing-only: true

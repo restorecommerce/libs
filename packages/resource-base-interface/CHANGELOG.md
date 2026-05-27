@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.9.22](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.21...@restorecommerce/resource-base-interface@1.9.22) (2026-05-27)
+
+
+### Reverts
+
+* Revert "chore(release): publish" ([3742433](https://github.com/restorecommerce/resource-base-interface/commit/37424334499eab0b3eeef9954eea402a70ec8bef))
+* Revert "chore(release): publish" ([8e2001d](https://github.com/restorecommerce/resource-base-interface/commit/8e2001d2151fd217ddea103ff2b1bb5d5f0d5c6c))
+
+
+
+
+
 ## [1.9.21](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.20...@restorecommerce/resource-base-interface@1.9.21) (2026-05-12)
 
 **Note:** Version bump only for package @restorecommerce/resource-base-interface

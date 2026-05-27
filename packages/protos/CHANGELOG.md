@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.15.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.15.0...@restorecommerce/protos@6.15.1) (2026-05-27)
+
+
+### Bug Fixes
+
+* **facade:** add options as fake field for EndImpersonation, compily with grpc specs for no emtpy ob ([edb6e57](https://github.com/restorecommerce/libs/commit/edb6e5743caa505443d7866e09b50652c493599b))
+* **facade:** can't build schema with empty messages ([db884a2](https://github.com/restorecommerce/libs/commit/db884a26812736685abc20e93582dfcd0245ef44))
+
+
+### Reverts
+
+* Revert "chore(release): publish" ([3742433](https://github.com/restorecommerce/libs/commit/37424334499eab0b3eeef9954eea402a70ec8bef))
+
+
+
+
+
 # [6.15.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.14.0...@restorecommerce/protos@6.15.0) (2026-05-12)
 
 

@@ -551,7 +551,7 @@ export class Kafka implements EventProvider {
     const operation = retry.operation({
       forever: true,
       maxTimeout: this.config?.timeout ?? 60000,
-      retries: Number(this.config?.kafka?.retries ?? 10),
+      retries: Number(this.config?.retries ?? this.config?.kafka?.retries ?? 5),
     });
     return new Promise<void>((resolveRetry) => {
       operation.attempt(async (attemptNo) => {
@@ -569,7 +569,7 @@ export class Kafka implements EventProvider {
               headerKey: noopDeserializer,
               headerValue: noopDeserializer,
             },
-            retries: 100,
+            retries: 5,
             retryDelay: 1000,
             autocommit: false,
             ...this.config.kafka,

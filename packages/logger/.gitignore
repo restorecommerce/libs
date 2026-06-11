@@ -9,7 +9,7 @@ npm-debug.log
 .idea
 
 coverage
-lib/*/**
+lib
 *.js.map
 *.js
 *.d.ts

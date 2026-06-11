@@ -5,7 +5,7 @@
     "declaration": true,
     "declarationMap": true,
     "esModuleInterop": true,
-    "incremental": true,
+    "incremental": false,
     "lib": [
       "ES2018",
       "ES2019.Object",
@@ -19,13 +19,13 @@
     "sourceMap": true,
     "strict": true,
     "strictNullChecks": false,
-    "target": "ES2025"
+    "target": "ES2025",
   },
   "ts-node": {
     "experimentalResolver": true,
     "files": true,
     "transpileOnly": true,
     "esm": true,
-    "experimentalSpecifierResolution": "node"
+    "experimentalSpecifierResolution": "node",
   }
 }

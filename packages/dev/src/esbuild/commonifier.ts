@@ -1,4 +1,4 @@
-import * as fs from 'fs'
+import fs from 'node:fs';
 
 export const commonifierPlugin = {
   name: 'commonifier',

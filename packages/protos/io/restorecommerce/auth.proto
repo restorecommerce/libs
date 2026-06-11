@@ -21,9 +21,10 @@ message Tokens {
   repeated string scopes = 4; // identifier for role_association
   optional string type = 5; // type of token eg: access_token, refresh_token
   optional bool interactive = 6;
-  optional google.protobuf.Timestamp last_login = 7;
+  optional google.protobuf.Timestamp last_use = 7;
   optional string client_id = 8;
   optional string impersonated_by = 9; // ID of the impersonator
+  optional google.protobuf.Timestamp created_at = 10;
 }
 
 message HierarchicalScope {

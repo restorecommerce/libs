@@ -1,12 +1,16 @@
 {
-  "extends": "../../node_modules/@restorecommerce/dev/tsconfig.json",
+  "extends": "../dev/tsconfig.json",
   "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "baseUrl": "./",
     "paths": {
       "@modules": ["src/modules/index"],
       "@modules/*": ["src/modules/*"],
       "@gql": ["src/gql/index"],
       "@gql/*": ["src/gql/*"]
     },
-    "rootDirs": ["src"]
+    "types": ["node"],
+    "ignoreDeprecations": "6.0"
   }
 }

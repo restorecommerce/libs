@@ -9,6 +9,9 @@
     },
     {
       "path": "tsconfig.generate.json"
+    },
+    {
+      "path": "tsconfig.build.json"
     }
   ]
 }

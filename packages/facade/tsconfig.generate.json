@@ -1,4 +1,8 @@
 {
+  "compilerOptions": {
+    "rootDirs": ["./src", "./generate.ts"],
+    "outDir": "./codegen"
+  },
   "extends": "./tsconfig-base.json",
   "files": [
     "generate.ts"

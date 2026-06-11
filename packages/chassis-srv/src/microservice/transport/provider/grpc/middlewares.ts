@@ -78,6 +78,9 @@ function bindAsyncGenerator<T = any, TReturn = any, TNext = any>(
     [Symbol.asyncIterator]() {
       return this;
     },
+    [Symbol.asyncDispose]() {
+      return null;
+    }
   };
 }
 

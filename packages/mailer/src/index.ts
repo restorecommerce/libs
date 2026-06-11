@@ -1,7 +1,7 @@
 import { htmlToText } from 'nodemailer-html-to-text';
 import nodemailer from 'nodemailer';
 import stubTransport from 'nodemailer-stub-transport';
-import winston from 'winston';
+import { Logger } from '@restorecommerce/logger';
 
 class Mailer {
   /**
@@ -12,7 +12,7 @@ class Mailer {
 
   constructor(opts: any, htmlToTextOptions?: any) {
     const defaultOpts = {
-      logger: winston,
+      logger: Logger,
       pool: true
     } as any;
 

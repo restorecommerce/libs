@@ -149,7 +149,7 @@ export class ResourcesAPIBase {
               break;
             }
             case Strategies.TIMESTAMP:
-                o[field] = (await this.redisClient.time()).getTime();
+                o[field] = new Date(await this.redisClient.time()).getTime();
                 break;
             default:
             case Strategies.UUID:

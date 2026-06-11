@@ -99,7 +99,7 @@ export class JobProcessor {
       objectMode: true
     }, tasks);
 
-    inputTaskStream.pipe(through2.obj(async (task: any, enc: any, cb: any) => {
+    inputTaskStream.pipe(through2.objectTransform(async (task: any, enc: any, cb: any) => {
       const operation = task.operation;
       await this[operation as keyof JobProcessor].apply(this, [task, job]);
       cb();

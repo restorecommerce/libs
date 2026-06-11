@@ -1,5 +1,5 @@
 {
-  "extends": "../../node_modules/@restorecommerce/dev/tsconfig.json",
+  "extends": "../dev/tsconfig.json",
   "include": [
     "./src/core/*.ts",
     "./src/experimental/*.ts",
@@ -11,7 +11,9 @@
     "doc"
   ],
   "compilerOptions": {
+    "rootDir": "./src",
     "outDir": "lib",
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "types": ["node"]
   },
 }

@@ -31,6 +31,7 @@
     "@restorecommerce/logger": "^1.3.8",
     "@restorecommerce/rc-grpc-clients": "^5.1.69",
     "@restorecommerce/service-config": "^1.1.7",
+    "@types/debug": "^4.1.13",
     "co": "^4.6.0",
     "debug": "^4.4.3",
     "graphql": "^16.14.2",
@@ -67,7 +68,6 @@
     "@restorecommerce/protos": "^6.15.1",
     "@types/array.prototype.flat": "^1.2.5",
     "@types/co": "^4.6.6",
-    "@types/debug": "^4.1.13",
     "@types/ejs": "^3.1.5",
     "@types/express": "5.0.6",
     "@types/express-serve-static-core": "5.1.1",
@@ -101,9 +101,9 @@
     "vitest": "^4.1.8"
   },
   "scripts": {
-    "build": "npm-run-all build:clean generate build:compile build:codegen:clean build:codegen:compile",
+    "build": "npm-run-all build:clean generate build:codegen:clean build:codegen:compile build:tsc",
     "build:clean": "rimraf -rf ./dist ./test/build/",
-    "build:compile": "tsc -p tsconfig.lib.json",
+    "build:tsc": "tsc -p tsconfig.lib.json",
     "build:codegen:clean": "rimraf -rf ./codegen",
     "build:codegen:compile": "tsc -p tsconfig.codegen.json",
     "build:es": "node esbuild.mjs",

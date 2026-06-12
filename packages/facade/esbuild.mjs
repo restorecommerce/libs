@@ -11,5 +11,6 @@ await esbuild.build({
   treeShaking: true,
   sourcemap: 'linked',
   plugins: [commonifierPlugin],
+  target: 'es2023',
   tsconfig: './tsconfig.build.json',
 });

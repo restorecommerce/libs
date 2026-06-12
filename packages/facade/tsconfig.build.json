@@ -4,7 +4,12 @@
     "outDir": "./build",
     "noImplicitAny": false,
     "baseUrl": "./",
-    "ignoreDeprecations": "6.0"
+    "ignoreDeprecations": "6.0",
+    "target": "es2023",
+    "typeRoots": [
+      "./node_modules/@types",
+      "../../node_modules/@types"
+    ]
   },
   "include": ["./src/**/*.ts", "./src/**/*.d.ts"]
 }

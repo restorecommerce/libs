@@ -41,7 +41,6 @@
     "build:clean": "rimraf lib",
     "build": "npm-run-all lint build:clean build:tsc",
     "lint": "eslint src",
-    "pretest": "npm run build",
     "test": "vitest run",
     "prepublishOnly": "npm run build"
   },

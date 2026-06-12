@@ -23,7 +23,6 @@
     "build:tsc": "tsc -p ./tsconfig.lib.json",
     "build:clean": "rimraf ./lib",
     "build": "npm-run-all lint build:clean build:tsc",
-    "pretest": "npm run build",
     "test": "vitest run",
     "lcov-report": "nyc report --reporter=lcov",
     "coveralls": "nyc --reporter text --reporter lcov npm test"

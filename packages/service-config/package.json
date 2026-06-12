@@ -33,7 +33,6 @@
     "build": "npm-run-all build:clean build:compile",
     "build:clean": "rimraf -rf ./lib",
     "build:compile": "tsc -p tsconfig.lib.json",
-    "pretest": "npm run build",
     "test": "cross-env NODE_ENV=development obj__objectParamA=envparam vitest run",
     "prepublishOnly": "npm run build"
   },

@@ -42,7 +42,6 @@
     "build": "npm-run-all lint build:clean build:tsc",
     "build:clean": "rimraf lib",
     "build:tsc": "tsc -p ./tsconfig.lib.json",
-    "pretest": "npm run build",
     "test": "vitest run"
   },
   "engines": {

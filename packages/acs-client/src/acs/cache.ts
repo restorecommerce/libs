@@ -116,7 +116,7 @@ export const get = async (key: string): Promise<any> => {
   }
   const redisResponse = await redisSubjectInstance.get(key);
   if (!redisResponse) {
-    logger?.info('Key does not exist', { key });
+    logger?.debug('Key does not exist', { key });
     return;
   }
   if (redisResponse) {

@@ -3,14 +3,12 @@
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist",
-    "baseUrl": "./",
     "paths": {
       "@modules": ["src/modules/index"],
       "@modules/*": ["src/modules/*"],
       "@gql": ["src/gql/index"],
       "@gql/*": ["src/gql/*"]
     },
-    "types": ["node"],
-    "ignoreDeprecations": "6.0"
+    "types": ["node"]
   }
 }

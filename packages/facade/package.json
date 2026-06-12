@@ -56,7 +56,8 @@
     "rxjs": "^7.8.2",
     "ts-proto-descriptors": "^2.1.0",
     "ua-parser-js": "^2.0.10",
-    "ws": "^8.21.0"
+    "ws": "^8.21.0",
+    "redis": "4.7.0"
   },
   "devDependencies": {
     "@alenon/grpc-mock-server": "^3.2.9",
@@ -87,6 +88,7 @@
     "@types/supertest": "^7.2.0",
     "@types/useragent": "^2.3.4",
     "@types/ws": "^8.18.1",
+    "@types/redis": "4.0.2",
     "@vitest/coverage-v8": "^4.1.8",
     "esbuild": "^0.25.11",
     "eslint": "^10.4.1",

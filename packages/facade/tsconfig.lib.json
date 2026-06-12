@@ -1,8 +1,11 @@
 {
   "extends": "./tsconfig-base.json",
   "compilerOptions": {
+    "rootDir": "./src",
     "outDir": "./dist",
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "baseUrl": "./",
+    "ignoreDeprecations": "6.0"
   },
   "include": ["./src/**/*.ts", "./src/**/*.d.ts"]
 }

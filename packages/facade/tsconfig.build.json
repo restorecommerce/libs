@@ -2,7 +2,9 @@
   "extends": "./tsconfig-base.json",
   "compilerOptions": {
     "outDir": "./build",
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "baseUrl": "./",
+    "ignoreDeprecations": "6.0"
   },
   "include": ["./src/**/*.ts", "./src/**/*.d.ts"]
 }

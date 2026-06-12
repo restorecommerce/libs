@@ -8,19 +8,19 @@ export const commonifierPlugin = {
       let commonified = source;
 
       // Convert directory lookups
-      commonified = commonified.replaceAll('import.meta.dir', '__dirname');
-      commonified = commonified.replaceAll('import.meta.dirname', '__dirname');
+      commonified = commonified.replace(/import.meta.dir/g, '__dirname');
+      commonified = commonified.replace(/import.meta.dirname/g, '__dirname');
 
       // Convert file lookups
-      commonified = commonified.replaceAll('import.meta.path', '__filename');
-      commonified = commonified.replaceAll('import.meta.filename', '__filename');
-      commonified = commonified.replaceAll('import.meta.url', '"file://" + __filename');
+      commonified = commonified.replace(/import.meta.path/g, '__filename');
+      commonified = commonified.replace(/import.meta.filename/g, '__filename');
+      commonified = commonified.replace(/import.meta.url/g, '"file://" + __filename');
 
       // Pass through environment variables
-      commonified = commonified.replaceAll('import.meta.env', 'process.env');
+      commonified = commonified.replace(/import.meta.env/g, 'process.env');
 
       // Bundles are always the entrypoint
-      commonified = commonified.replaceAll('import.meta.main', 'true');
+      commonified = commonified.replace(/import.meta.main/g, 'true');
 
       return { contents: commonified }
     });

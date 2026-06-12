@@ -8,7 +8,8 @@
     "publish": "lerna publish --conventional-commits",
     "changed": "lerna changed",
     "test": "nx run-many -t test",
-    "build": "nx run-many -t build"
+    "build": "nx run-many -t build",
+    "build:clean": "nx run-many -t build:clean"
   },
   "repository": {
     "type": "git",

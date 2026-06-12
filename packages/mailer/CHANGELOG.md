@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/mailer@1.0.16...@restorecommerce/mailer@1.1.0) (2026-06-12)
+
+
+### Bug Fixes
+
+* **deps:** upgrade all to ES2025, intermediate ([df43aa5](https://github.com/restorecommerce/libs/commit/df43aa566a05f4fc3e883dfe5bc088192cda7883))
+* **packages:** remove all pretest builds ([d16ada1](https://github.com/restorecommerce/libs/commit/d16ada199f057403bed2a99fa6762c95962919cd))
+
+
+### Features
+
+* **es2025:** upgrade all to es2025, unify all tsconfigs ([d8371fd](https://github.com/restorecommerce/libs/commit/d8371fdaac384ca13aa7dfb64ef309c7a263dada))
+* upgrade deps ([848e400](https://github.com/restorecommerce/libs/commit/848e400bd0719877502302a00c14cae412b6db6a))
+
+
+
+
+
 ## [1.0.16](https://github.com/restorecommerce/libs/compare/@restorecommerce/mailer@1.0.15...@restorecommerce/mailer@1.0.16) (2025-10-06)
 
 **Note:** Version bump only for package @restorecommerce/mailer

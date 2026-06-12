@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.1.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/gql-bot@1.0.14...@restorecommerce/gql-bot@1.1.0) (2026-06-12)
+
+
+### Bug Fixes
+
+* **deps:** upgrade all to ES2025, intermediate ([df43aa5](https://github.com/restorecommerce/libs/commit/df43aa566a05f4fc3e883dfe5bc088192cda7883))
+* **gql-bot:** vitest ignoreUnhandledErrors has no effect ([cd48083](https://github.com/restorecommerce/libs/commit/cd480832d626abfb0046da94f22acf08723f9c47))
+
+
+### Features
+
+* **es2025:** upgrade all to es2025, unify all tsconfigs ([d8371fd](https://github.com/restorecommerce/libs/commit/d8371fdaac384ca13aa7dfb64ef309c7a263dada))
+
+
+
+
+
 ## [1.0.14](https://github.com/restorecommerce/libs/compare/@restorecommerce/gql-bot@1.0.13...@restorecommerce/gql-bot@1.0.14) (2025-11-11)
 
 **Note:** Version bump only for package @restorecommerce/gql-bot

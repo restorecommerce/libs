@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.9.0](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.8.10...@restorecommerce/chassis-srv@1.9.0) (2026-06-12)
+
+
+### Bug Fixes
+
+* **chassis:** import grpc-client as dist ([9e82d21](https://github.com/restorecommerce/chassis-srv/commit/9e82d214cf21d4c8b2ef7ef108e19e1c00727e05))
+* **chassis:** wrong script commands ([2a1a011](https://github.com/restorecommerce/chassis-srv/commit/2a1a0112260cc5da65f3dcb198874ee179aa3e42))
+* **deps:** upgrade all to ES2025, intermediate ([df43aa5](https://github.com/restorecommerce/chassis-srv/commit/df43aa566a05f4fc3e883dfe5bc088192cda7883))
+* **packages:** remove all pretest builds ([d16ada1](https://github.com/restorecommerce/chassis-srv/commit/d16ada199f057403bed2a99fa6762c95962919cd))
+
+
+### Features
+
+* **es2025:** upgrade all to es2025, unify all tsconfigs ([d8371fd](https://github.com/restorecommerce/chassis-srv/commit/d8371fdaac384ca13aa7dfb64ef309c7a263dada))
+
+
+
+
+
 ## [1.8.10](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.8.9...@restorecommerce/chassis-srv@1.8.10) (2026-05-27)
 
 

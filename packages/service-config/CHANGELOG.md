@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/service-config@1.1.7...@restorecommerce/service-config@1.2.0) (2026-06-12)
+
+
+### Bug Fixes
+
+* **chassis:** import grpc-client as dist ([9e82d21](https://github.com/restorecommerce/libs/commit/9e82d214cf21d4c8b2ef7ef108e19e1c00727e05))
+* **deps:** upgrade all to ES2025, intermediate ([df43aa5](https://github.com/restorecommerce/libs/commit/df43aa566a05f4fc3e883dfe5bc088192cda7883))
+* **packages:** remove all pretest builds ([d16ada1](https://github.com/restorecommerce/libs/commit/d16ada199f057403bed2a99fa6762c95962919cd))
+
+
+### Features
+
+* **es2025:** upgrade all to es2025, unify all tsconfigs ([d8371fd](https://github.com/restorecommerce/libs/commit/d8371fdaac384ca13aa7dfb64ef309c7a263dada))
+
+
+
+
+
 ## [1.1.7](https://github.com/restorecommerce/libs/compare/@restorecommerce/service-config@1.1.6...@restorecommerce/service-config@1.1.7) (2025-10-06)
 
 **Note:** Version bump only for package @restorecommerce/service-config

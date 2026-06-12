@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.4.0](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.3.15...@restorecommerce/kafka-client@1.4.0) (2026-06-12)
+
+
+### Bug Fixes
+
+* **deps:** upgrade all to ES2025, intermediate ([df43aa5](https://github.com/restorecommerce/kafka-client/commit/df43aa566a05f4fc3e883dfe5bc088192cda7883))
+* **kafka:** make retries configurable, lower retries, fallback rule ([354b280](https://github.com/restorecommerce/kafka-client/commit/354b280881cc9032860827f0755aa10ba037a4b7))
+* **packages:** remove all pretest builds ([d16ada1](https://github.com/restorecommerce/kafka-client/commit/d16ada199f057403bed2a99fa6762c95962919cd))
+
+
+### Features
+
+* **es2025:** upgrade all to es2025, unify all tsconfigs ([d8371fd](https://github.com/restorecommerce/kafka-client/commit/d8371fdaac384ca13aa7dfb64ef309c7a263dada))
+* upgrade deps ([848e400](https://github.com/restorecommerce/kafka-client/commit/848e400bd0719877502302a00c14cae412b6db6a))
+
+
+
+
+
 ## [1.3.15](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.3.14...@restorecommerce/kafka-client@1.3.15) (2026-05-27)
 
 

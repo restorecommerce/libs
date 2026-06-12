@@ -60,7 +60,7 @@
   },
   "scripts": {
     "lint": "eslint src",
-    "preinstall": "npm run build",
+    "pretest": "npm run build",
     "test": "vitest run",
     "build:tsc": "tsc -p ./tsconfig.lib.json",
     "build:clean": "rimraf lib",

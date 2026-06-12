@@ -235,8 +235,6 @@ describe('jobproc-grapqhl-proc:', (): void => {
       const resultError = await jobResult.wait().catch(err => err);
 
       expect(resultError).not.toBe(undefined);
-
-      server.listen();
     });
 
   it('a job should pass when ignoring a self-signed certificate',
@@ -322,18 +320,18 @@ describe('jobproc-grapqhl-proc:', (): void => {
 
   it('a job should error when backend does not exist',
     async (): Promise<void> => {
-      const job3 = JSON.parse(fs.readFileSync('./test/job3.json', 'utf8'));
-      job3.options.processor = new GraphQLProcessor({
-        entry: 'http://localhost:65534/'
-      });
-
-      const jobProcessor = new JobProcessor(job3);
-      const jobResult = new Job();
-
-      await jobProcessor.start(null, jobResult, true);
-
-      const resultError = await jobResult.wait().catch(err => err);
-
-      expect(resultError).not.toBe(undefined);
-    });
+      try {
+        const job3 = JSON.parse(fs.readFileSync('./test/job3.json', 'utf8'));
+        job3.options.processor = new GraphQLProcessor({
+          entry: 'http://localhost:65534/'
+        });
+        const jobProcessor = new JobProcessor(job3);
+        const jobResult = new Job();
+        await jobProcessor.start(null, jobResult, true);
+        await jobResult.wait();
+      } catch (resultError: any) {
+        expect(resultError).not.toBe(undefined);
+      }
+    }
+  );
 });

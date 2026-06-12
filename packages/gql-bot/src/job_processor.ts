@@ -102,7 +102,9 @@ export class JobProcessor {
     inputTaskStream.pipe(through2.objectTransform(async (task: any, enc: any, cb: any) => {
       const operation = task.operation;
       await this[operation as keyof JobProcessor].apply(this, [task, job]);
-      cb();
+      if (typeof cb === 'function') {
+        cb();
+      }
     }));
 
     await ps.wait(inputTaskStream);

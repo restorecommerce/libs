@@ -6,7 +6,7 @@ import { InMemoryCache } from '@apollo/client/cache';
 import { HttpLink } from '@apollo/client/link/http';
 import * as https from 'https';
 import { processResponse } from './utils.js';
-import {parse} from 'graphql';
+import { parse } from 'graphql';
 
 type HttpOptions = ConstructorParameters<typeof HttpLink>[0];
 

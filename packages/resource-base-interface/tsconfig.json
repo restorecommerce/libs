@@ -1,19 +1,11 @@
 {
-  "extends": "../dev/tsconfig.json",
-  "include": [
-    "./src/core/*.ts",
-    "./src/experimental/*.ts",
-    "./src/*.ts",
-  ],
-  "exclude": [
-    "node_modules",
-    "lib",
-    "doc"
-  ],
-  "compilerOptions": {
-    "rootDir": "./src",
-    "outDir": "lib",
-    "experimentalDecorators": true,
-    "types": ["node"]
-  },
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.test.json"
+    },
+    {
+      "path": "./tsconfig.lib.json"
+    }
+  ]
 }

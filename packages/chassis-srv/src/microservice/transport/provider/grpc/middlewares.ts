@@ -1,9 +1,9 @@
 import { CallContext, ServerError, ServerMiddlewareCall } from 'nice-grpc';
 import { isAbortError } from 'abort-controller-x';
 import { type Logger } from '@restorecommerce/logger';
-import { metadataPassThrough } from '@restorecommerce/grpc-client/dist/middleware.js';
+import { metadataPassThrough } from '@restorecommerce/grpc-client/lib/middleware.js';
 import { AsyncLocalStorage } from 'async_hooks';
-import { randomUUID } from 'crypto';
+import { randomUUID } from 'node:crypto';
 
 const tracingHeader = 'x-request-id';
 

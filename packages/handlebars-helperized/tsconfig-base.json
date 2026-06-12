@@ -1,7 +1,6 @@
 {
   "extends": "../dev/tsconfig.json",
   "compilerOptions": {
-    "rootDir": "./src",
     "outDir": "./lib",
     "types": ["node"],
   },

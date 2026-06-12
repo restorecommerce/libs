@@ -40,11 +40,11 @@
   },
   "scripts": {
     "lint": "eslint src",
-    "pretest": "npm run build",
-    "test": "vitest run",
-    "build:tsc": "tsc -d",
+    "build:tsc": "tsc -p ./tsconfig.lib.json",
     "build:clean": "rimraf lib",
-    "build": "npm-run-all lint build:clean build:tsc"
+    "build": "npm-run-all lint build:clean build:tsc",
+    "pretest": "npm run build",
+    "test": "vitest run"
   },
   "engines": {
     "node": ">= 20.0.0"

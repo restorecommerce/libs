@@ -1,3 +1,12 @@
 {
   "extends": "../dev/tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "types": ["node"],
+  },
+  "exclude": [
+    "node_modules",
+    "lib",
+    "doc"
+  ]
 }

@@ -13,11 +13,11 @@ export default defineConfig({
     reporters: [
       'verbose',
       'hanging-process'
-    ]
+    ],
   },
   resolve: {
     alias: {
       graphql: 'graphql/index.js'
     }
-  }
+  },
 });

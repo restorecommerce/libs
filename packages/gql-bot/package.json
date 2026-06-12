@@ -48,11 +48,11 @@
     "vitest": "^4.1.8"
   },
   "scripts": {
-    "pretest": "npm run lint",
-    "test": "vitest run --dangerouslyIgnoreUnhandledErrors",
+    "pretest": "npm run build",
+    "test": "vitest run",
     "lint": "eslint src",
-    "build:tsc": "tsc -d",
-    "build:clean": "rimraf lib",
+    "build:tsc": "tsc -p ./tsconfig.lib.json",
+    "build:clean": "rimraf ./lib",
     "build": "npm-run-all lint build:clean build:tsc"
   },
   "engines": {

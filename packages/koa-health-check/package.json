@@ -29,6 +29,7 @@
     "@types/koa": "^3.0.3",
     "@types/node": "^25.9.3",
     "@types/sinon": "^21.0.1",
+    "@vitest/coverage-v8": "^4.1.8",
     "eslint": "^10.4.1",
     "eslint-plugin-prefer-arrow-functions": "^3.9.1",
     "source-map-support": "^0.5.21",
@@ -38,11 +39,10 @@
   },
   "scripts": {
     "lint": "eslint src",
-    "pretest": "npm run build && npm run tsctests",
-    "tsctests": "tsc -d -p tsconfig.test.json",
     "build": "npm-run-all lint build:clean build:tsc",
     "build:clean": "rimraf lib",
-    "build:tsc": "tsc -d",
+    "build:tsc": "tsc -p ./tsconfig.lib.json",
+    "pretest": "npm run build",
     "test": "vitest run"
   },
   "engines": {

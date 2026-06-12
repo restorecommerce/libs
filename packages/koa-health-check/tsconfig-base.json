@@ -1,9 +1,8 @@
 {
   "extends": "../dev/tsconfig.json",
   "compilerOptions": {
-    "rootDir": "./src",
     "outDir": "./lib",
-    "types": ["node"]
+    "types": ["node"],
   },
   "exclude": [
     "node_modules",

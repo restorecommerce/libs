@@ -17,6 +17,7 @@
   ],
   "type": "module",
   "main": "./lib/index.js",
+  "typings": "./lib/index.d.ts",
   "dependencies": {
     "@restorecommerce/grpc-client": "2.2.14",
     "@restorecommerce/kafka-client": "1.3.15",
@@ -34,6 +35,7 @@
     "@restorecommerce/protos": "^6.15.1",
     "@types/node": "^25.9.3",
     "@types/redis": "4.0.2",
+    "@vitest/coverage-v8": "^4.1.8",
     "cross-env": "^10.1.0",
     "eslint": "^10.4.1",
     "eslint-plugin-prefer-arrow-functions": "^3.9.1",
@@ -48,9 +50,9 @@
     "vitest": "^4.1.8"
   },
   "scripts": {
-    "build:tsc": "tsc -d",
+    "build:tsc": "tsc -p ./tsconfig.lib.json",
     "build:tsc:watch": "tsc -d --watch",
-    "build:clean": "rimraf lib",
+    "build:clean": "rimraf ./lib",
     "build": "npm-run-all lint build:clean build:tsc",
     "lint": "eslint src",
     "test:cache:disabled": "cross-env NODE_ENV=test vitest run",

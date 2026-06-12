@@ -30,6 +30,7 @@
     "@restorecommerce/dev": "^0.2.0",
     "@restorecommerce/protos": "^6.15.1",
     "@types/node": "^25.9.3",
+    "@vitest/coverage-v8": "^4.1.8",
     "npm-run-all": "^4.1.5",
     "protoc": "^25.9.0",
     "rimraf": "6.1.3",
@@ -41,14 +42,14 @@
     "prebuild": "npm run generate",
     "lint": "eslint src",
     "build": "npm-run-all build:clean build:compile",
-    "build:clean": "rimraf -rf ./dist",
+    "build:clean": "rimraf ./dist",
     "build:compile": "tsc -p tsconfig.lib.json",
     "prepublishOnly": "npm run build",
     "generate": "npm-run-all generate:client generate:server",
     "generate:client": "protoc --experimental_allow_proto3_optional --ts_proto_opt=stringEnums=true,outputClientImpl=false,env=node,useOptionals=all,initializeFieldsAsUndefined=false,outputJsonMethods=true,outputSchema=true,useExactTypes=false,outputServices=nice-grpc,outputServices=generic-definitions --proto_path=../../node_modules/@restorecommerce/protos/ --plugin=../../node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=./src/generated $(find ../../node_modules/@restorecommerce/protos/ -name *.proto -type f)",
     "generate:server": "protoc --experimental_allow_proto3_optional --ts_proto_opt=stringEnums=true,outputClientImpl=false,env=node,useOptionals=all,initializeFieldsAsUndefined=false,outputJsonMethods=true,outputSchema=true,useExactTypes=false,outputServices=nice-grpc,outputServices=generic-definitions,snakeToCamel=false --proto_path=../../node_modules/@restorecommerce/protos/ --plugin=../../node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=./src/generated-server $(find ../../node_modules/@restorecommerce/protos/ -name *.proto -type f)",
-    "test": "vitest run",
-    "pretest": "run-s prebuild"
+    "pretest": "npm run build",
+    "test": "vitest run"
   },
   "engines": {
     "node": ">= 12.18.0"

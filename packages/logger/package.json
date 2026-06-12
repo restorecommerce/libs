@@ -37,11 +37,11 @@
     "vitest": "^4.1.8"
   },
   "scripts": {
-    "build:tsc": "tsc -d",
-    "build:tsc:watch": "tsc -d --watch",
+    "build:tsc": "tsc -p ./tsconfig.lib.json",
     "build:clean": "rimraf lib",
     "build": "npm-run-all lint build:clean build:tsc",
     "lint": "eslint src",
+    "pretest": "npm run build",
     "test": "vitest run",
     "prepublishOnly": "npm run build"
   },

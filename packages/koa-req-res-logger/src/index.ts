@@ -1,4 +1,4 @@
-import winston from 'winston';
+import { Logger, createLogger } from '@restorecommerce/logger';
 import debug from 'debug';
 
 const getGraphQLData = (options: any, body: any) => {
@@ -21,8 +21,8 @@ const getGraphQLData = (options: any, body: any) => {
  @returns {Middleware}
  */
 const reqResLogger = (options: any) => {
-  const opts = options || {};
-  const logger = opts.logger || winston;
+  const opts = options ?? {};
+  const logger: Logger = opts.logger ?? createLogger(opts);
 
   const koaReqResLogger = async (ctx: any, next: any) => {
     debug('yield middleware: %s ' + koaReqResLogger.name);

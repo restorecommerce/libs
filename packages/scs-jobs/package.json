@@ -3,6 +3,7 @@
   "version": "0.2.16",
   "description": "Restorecommerce scs jobs",
   "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
   "author": "n-fuse GmbH",
   "repository": {
     "type": "git",
@@ -37,8 +38,8 @@
     "test-debug": "true",
     "lcov-report": "nyc report --reporter=lcov",
     "coveralls": "nyc --reporter text --reporter lcov npm test",
-    "build:tsc": "tsc -d",
-    "build:clean": "rimraf lib",
+    "build:tsc": "tsc -p ./tsconfig.lib.json",
+    "build:clean": "rimraf ./lib",
     "build": "npm-run-all lint build:clean build:tsc"
   },
   "nx": {

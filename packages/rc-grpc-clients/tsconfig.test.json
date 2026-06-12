@@ -1,6 +1,11 @@
 {
   "extends": "./tsconfig-base.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "target": "es2023",
+  },
   "include": [
-    "./tests/**/*.spec.ts"
+    "./src/**/*.ts",
+    "./tests/**/*.ts"
   ]
 }

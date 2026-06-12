@@ -1,2 +1,2 @@
-import config from '../../node_modules/@restorecommerce/dev/vitest.config.js';
+import config from '../dev/vitest.config.js';
 export default config;

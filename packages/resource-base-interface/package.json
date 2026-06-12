@@ -3,6 +3,7 @@
   "version": "1.9.22",
   "description": "Restorecommerce Resource Base Interface",
   "main": "lib/index.js",
+  "typings": "./lib/index.d.ts",
   "author": "n-fuse GmbH",
   "repository": {
     "type": "git",
@@ -45,13 +46,13 @@
     "vitest": "^4.1.8"
   },
   "scripts": {
-    "test": "vitest run",
     "lint": "eslint src --fix",
     "build:es": "esbuild ./src/index.ts --bundle --platform=node --outfile=lib/index.cjs --minify --tree-shaking=true --sourcemap=inline",
-    "build:tsc": "tsc -d",
-    "build:tsc:watch": "tsc -d --watch",
-    "build:clean": "rimraf lib",
-    "build": "npm-run-all lint build:clean build:tsc"
+    "build:tsc": "tsc -p ./tsconfig.lib.json",
+    "build:clean": "rimraf ./lib",
+    "build": "npm-run-all lint build:clean build:tsc",
+    "pretest": "npm run build",
+    "test": "vitest run"
   },
   "nx": {
     "targets": {

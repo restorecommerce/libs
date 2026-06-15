@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.9](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.3.8...@restorecommerce/facade@2.3.9) (2026-06-12)
+
+
+### Bug Fixes
+
+* **deps:** upgrade all to ES2025, intermediate ([df43aa5](https://github.com/restorecommerce/libs/commit/df43aa566a05f4fc3e883dfe5bc088192cda7883))
+* **facade:** exceptional usade of baseUrl ([a9554cf](https://github.com/restorecommerce/libs/commit/a9554cfc39f3f8674f9401cacda05016b0b3c0d3))
+* **facade:** strip esBuild test ([e0a0a91](https://github.com/restorecommerce/libs/commit/e0a0a917981625b9e2a714173ddc2688ae4a13cc))
+
+
+
+
+
 ## [2.3.8](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.3.7...@restorecommerce/facade@2.3.8) (2026-05-27)
 
 

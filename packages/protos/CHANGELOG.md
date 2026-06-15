@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.16.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.15.1...@restorecommerce/protos@6.16.0) (2026-06-12)
+
+
+### Features
+
+* rename token last_login to last_use and add created_at timestamp ([2f86971](https://github.com/restorecommerce/libs/commit/2f869715a36b669cff31d0bd19a3e498579e1694))
+
+
+
+
+
 ## [6.15.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.15.0...@restorecommerce/protos@6.15.1) (2026-05-27)
 
 

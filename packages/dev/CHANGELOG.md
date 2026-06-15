@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/dev@0.2.0...@restorecommerce/dev@0.3.0) (2026-06-12)
+
+
+### Bug Fixes
+
+* Change TypeScript target to ES2025 ([c99b48e](https://github.com/restorecommerce/libs/commit/c99b48e4b1e14cfb251486cffa4b0b4db4ccd83c))
+* **deps:** upgrade all to support ES2025, intermediate ([f43819c](https://github.com/restorecommerce/libs/commit/f43819c8b6353fe34d15ee2a811e2018b6230b11))
+* **dev:** add es2025 to libs ([cdb5d91](https://github.com/restorecommerce/libs/commit/cdb5d91938752290cd108563862c618e15ff80c4))
+* **facade:** exceptional usade of baseUrl ([a9554cf](https://github.com/restorecommerce/libs/commit/a9554cfc39f3f8674f9401cacda05016b0b3c0d3))
+
+
+### Features
+
+* **es2025:** upgrade all to es2025, unify all tsconfigs ([d8371fd](https://github.com/restorecommerce/libs/commit/d8371fdaac384ca13aa7dfb64ef309c7a263dada))
+
+
+
+
+
 # [0.2.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/dev@0.1.2...@restorecommerce/dev@0.2.0) (2025-10-06)
 
 

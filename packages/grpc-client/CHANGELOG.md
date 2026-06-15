@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.3.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/grpc-client@2.2.14...@restorecommerce/grpc-client@2.3.0) (2026-06-12)
+
+
+### Bug Fixes
+
+* **chassis:** wrong script commands ([2a1a011](https://github.com/restorecommerce/libs/commit/2a1a0112260cc5da65f3dcb198874ee179aa3e42))
+* **deps:** upgrade all to support ES2025, intermediate ([f43819c](https://github.com/restorecommerce/libs/commit/f43819c8b6353fe34d15ee2a811e2018b6230b11))
+* **packages:** remove all pretest builds ([d16ada1](https://github.com/restorecommerce/libs/commit/d16ada199f057403bed2a99fa6762c95962919cd))
+
+
+### Features
+
+* **es2025:** upgrade all to es2025, unify all tsconfigs ([d8371fd](https://github.com/restorecommerce/libs/commit/d8371fdaac384ca13aa7dfb64ef309c7a263dada))
+* upgrade deps ([848e400](https://github.com/restorecommerce/libs/commit/848e400bd0719877502302a00c14cae412b6db6a))
+
+
+
+
+
 ## [2.2.14](https://github.com/restorecommerce/libs/compare/@restorecommerce/grpc-client@2.2.13...@restorecommerce/grpc-client@2.2.14) (2026-05-27)
 
 

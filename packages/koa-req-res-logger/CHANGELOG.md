@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/restorecommerce/koa-req-res-logger/compare/@restorecommerce/koa-req-res-logger@1.1.11...@restorecommerce/koa-req-res-logger@1.2.0) (2026-06-12)
+
+
+### Bug Fixes
+
+* **packages:** remove all pretest builds ([d16ada1](https://github.com/restorecommerce/koa-req-res-logger/commit/d16ada199f057403bed2a99fa6762c95962919cd))
+
+
+### Features
+
+* **es2025:** upgrade all to es2025, unify all tsconfigs ([d8371fd](https://github.com/restorecommerce/koa-req-res-logger/commit/d8371fdaac384ca13aa7dfb64ef309c7a263dada))
+
+
+
+
+
 ## [1.1.11](https://github.com/restorecommerce/koa-req-res-logger/compare/@restorecommerce/koa-req-res-logger@1.1.10...@restorecommerce/koa-req-res-logger@1.1.11) (2025-10-02)
 
 

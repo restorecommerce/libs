@@ -3,7 +3,7 @@
   "description": "GraphQL Client Automated Task Processor",
   "main": "lib/index.js",
   "typings": "dist/index.d.ts",
-  "version": "1.0.14",
+  "version": "1.1.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/restorecommerce/libs.git"

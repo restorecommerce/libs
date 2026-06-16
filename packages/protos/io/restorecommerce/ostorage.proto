@@ -22,6 +22,7 @@ service ObjectService {
   };
   rpc Copy (CopyRequestList) returns (CopyResponseList);
   rpc Move (MoveRequestList) returns (MoveResponseList);
+  rpc UpdateACL (UpdateACLRequestList) returns (UpdateACLResponseList);
 }
 
 message CopyRequestList {
@@ -190,4 +191,31 @@ message MoveResponseItem {
   optional string key = 3;
   optional io.restorecommerce.meta.Meta meta = 4;
   optional Options options = 5;
+}
+
+message UpdateACLRequestList {
+  repeated UpdateACLRequestItem items = 1;
+  optional io.restorecommerce.auth.Subject subject = 2;
+}
+
+message UpdateACLRequestItem {
+  optional string bucket = 1; // bucket name
+  optional string key = 2; // key name
+  repeated io.restorecommerce.attribute.Attribute acls = 3;
+}
+
+message UpdateACLResponseList {
+  repeated UpdateACLResponsePayloadWithStatus responses = 1;
+  optional io.restorecommerce.status.OperationStatus operation_status = 2;
+}
+
+message UpdateACLResponsePayloadWithStatus {
+  optional UpdateACLResponseItem payload = 1;
+  optional io.restorecommerce.status.Status status = 2;
+}
+
+message UpdateACLResponseItem {
+  optional string bucket = 1;
+  optional string key = 2;
+  repeated io.restorecommerce.attribute.Attribute acls = 3;
 }

@@ -1,7 +1,6 @@
 // @ts-check
 
 import eslint from '@eslint/js';
-import { RuleTester } from 'eslint';
 import tseslint from 'typescript-eslint';
 
 const rules = tseslint.config(

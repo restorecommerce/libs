@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/scs-jobs",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Restorecommerce scs jobs",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -19,10 +19,10 @@
   ],
   "type": "module",
   "dependencies": {
-    "@restorecommerce/grpc-client": "^2.3.0",
-    "@restorecommerce/kafka-client": "^1.4.0",
-    "@restorecommerce/logger": "^1.4.0",
-    "@restorecommerce/rc-grpc-clients": "^5.2.0",
+    "@restorecommerce/grpc-client": "^2.3.1",
+    "@restorecommerce/kafka-client": "^1.4.1",
+    "@restorecommerce/logger": "^1.4.1",
+    "@restorecommerce/rc-grpc-clients": "^5.2.1",
     "bullmq": "^5.78.0",
     "redis": "4.7.0"
   },

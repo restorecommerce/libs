@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.10.1](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.10.0...@restorecommerce/resource-base-interface@1.10.1) (2026-06-16)
+
+
+### Bug Fixes
+
+* **protos:** update ostorage-srv to include new endpoint for modifying ACL ([a926db7](https://github.com/restorecommerce/resource-base-interface/commit/a926db76b7f96168dbb0ba227364137c07418e8b))
+
+
+
+
+
 # [1.10.0](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.22...@restorecommerce/resource-base-interface@1.10.0) (2026-06-12)
 
 

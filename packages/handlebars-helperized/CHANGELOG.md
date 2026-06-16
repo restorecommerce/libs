@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.1](https://github.com/restorecommerce/handlebars-helperized/compare/@restorecommerce/handlebars-helperized@2.1.0...@restorecommerce/handlebars-helperized@2.1.1) (2026-06-16)
+
+
+### Bug Fixes
+
+* **protos:** update ostorage-srv to include new endpoint for modifying ACL ([a926db7](https://github.com/restorecommerce/handlebars-helperized/commit/a926db76b7f96168dbb0ba227364137c07418e8b))
+
+
+
+
+
 # [2.1.0](https://github.com/restorecommerce/handlebars-helperized/compare/@restorecommerce/handlebars-helperized@2.0.4...@restorecommerce/handlebars-helperized@2.1.0) (2026-06-12)
 
 

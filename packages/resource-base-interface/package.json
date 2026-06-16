@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/resource-base-interface",
-  "version": "1.10.0",
+  "version": "1.10.1",
   "description": "Restorecommerce Resource Base Interface",
   "main": "lib/index.js",
   "typings": "./lib/index.d.ts",
@@ -19,13 +19,13 @@
   ],
   "type": "module",
   "dependencies": {
-    "@restorecommerce/acs-client": "^3.2.0",
-    "@restorecommerce/chassis-srv": "^1.9.0",
-    "@restorecommerce/grpc-client": "^2.3.0",
-    "@restorecommerce/kafka-client": "^1.4.0",
-    "@restorecommerce/rc-grpc-clients": "^5.2.0",
-    "@restorecommerce/scs-jobs": "^0.3.0",
-    "@restorecommerce/service-config": "^1.2.0",
+    "@restorecommerce/acs-client": "^3.2.1",
+    "@restorecommerce/chassis-srv": "^1.9.1",
+    "@restorecommerce/grpc-client": "^2.3.1",
+    "@restorecommerce/kafka-client": "^1.4.1",
+    "@restorecommerce/rc-grpc-clients": "^5.2.1",
+    "@restorecommerce/scs-jobs": "^0.3.1",
+    "@restorecommerce/service-config": "^1.2.1",
     "nice-grpc-server-reflection": "^3.0.5",
     "redis": "4.7.0",
     "remeda": "^2.39.0"

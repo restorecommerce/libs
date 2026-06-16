@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.2.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@3.2.0...@restorecommerce/acs-client@3.2.1) (2026-06-16)
+
+
+### Bug Fixes
+
+* **protos:** update ostorage-srv to include new endpoint for modifying ACL ([a926db7](https://github.com/restorecommerce/libs/commit/a926db76b7f96168dbb0ba227364137c07418e8b))
+
+
+
+
+
 # [3.2.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@3.1.16...@restorecommerce/acs-client@3.2.0) (2026-06-12)
 
 

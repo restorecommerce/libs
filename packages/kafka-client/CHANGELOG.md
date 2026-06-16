@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.4.1](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.4.0...@restorecommerce/kafka-client@1.4.1) (2026-06-16)
+
+
+### Bug Fixes
+
+* **protos:** update ostorage-srv to include new endpoint for modifying ACL ([a926db7](https://github.com/restorecommerce/kafka-client/commit/a926db76b7f96168dbb0ba227364137c07418e8b))
+
+
+
+
+
 # [1.4.0](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.3.15...@restorecommerce/kafka-client@1.4.0) (2026-06-12)
 
 

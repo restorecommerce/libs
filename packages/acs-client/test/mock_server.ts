@@ -309,8 +309,7 @@ export const implementations = {
       ).then(
         subject => callback(null, subject),
         err => {
-          const { code, message, details, stack } = err;
-          logger.error('Redis Client Error',  { code, message, details, stack, err });
+          logger.error('Redis Client Error',  err);
         },
       );
     }

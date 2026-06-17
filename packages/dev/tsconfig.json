@@ -6,6 +6,8 @@
     "declarationMap": true,
     "esModuleInterop": true,
     "incremental": false,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "lib": [
       "ES2025",
       "dom"

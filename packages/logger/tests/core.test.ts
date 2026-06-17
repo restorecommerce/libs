@@ -78,8 +78,8 @@ describe('a logger', () => {
       try {
         throw new Error('Generic Error!');
       }
-      catch (error) {
-        logger.error(error?.message, error?.stack);
+      catch (error: any) {
+        logger.error('Error occured:', error);
       }
     });
     it('a circular object', () => {

@@ -5,11 +5,13 @@
   "main": "index.js",
   "author": "n-fuse GmbH",
   "scripts": {
+    "bootstrap": "npm i --legacy-peer-deps",
     "publish": "lerna publish --conventional-commits",
     "changed": "lerna changed",
     "test": "nx run-many -t test",
     "build": "nx run-many -t build",
-    "build:clean": "nx run-many -t build:clean"
+    "build:clean": "nx run-many -t build:clean",
+    "clean": "rimraf -g **/node_modules/ package-lock.json"
   },
   "repository": {
     "type": "git",
@@ -24,7 +26,14 @@
     "cz-conventional-changelog": "^3.3.0",
     "lerna": "^8.1.8",
     "nx": "20.0.8",
-    "tar": "^7.4.3"
+    "rimraf": "^6.1.3",
+    "tar": "^7.4.3",
+    "@types/node": "^25.9.3",
+    "typescript": "^6.0.3",
+    "vite": "7.3.5"
+  },
+  "overrides": {
+    "vite": "7.3.5"
   },
   "workspaces": [
     "packages/*"

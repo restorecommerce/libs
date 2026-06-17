@@ -1,5 +1,5 @@
 {
-  "extends": "../dev/tsconfig.json",
+  "extends": "@restorecommerce/dev/tsconfig.json",
   "compilerOptions": {
     "outDir": "./dist",
     "types": ["node"],

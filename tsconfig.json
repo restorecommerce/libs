@@ -1,9 +1,21 @@
 {
   "files": [],
   "references": [
-    { "path": "./packages/logger/tsconfig.json" },
-    { "path": "./packages/grpc-client/tsconfig.json" },
-    { "path": "./packages/service-config/tsconfig.json" },
-    { "path": "./packages/facade/tsconfig.json" }
+    { "path": "./packages/acs-client"},
+    { "path": "./packages/chassis-srv"},
+    { "path": "./packages/dev"},
+    { "path": "./packages/facade" },
+    { "path": "./packages/gql-bot"},
+    { "path": "./packages/grpc-client" },
+    { "path": "./packages/handlebars-helperized" },
+    { "path": "./packages/kafka-client" },
+    { "path": "./packages/koa-health-check" },
+    { "path": "./packages/koa-req-res-logger" },
+    { "path": "./packages/logger" },
+    { "path": "./packages/protos" },
+    { "path": "./packages/rc-grpc-client" },
+    { "path": "./packages/resource-base-interface" },
+    { "path": "./packages/scs-jobs" },
+    { "path": "./packages/service-config" },
   ]
 }

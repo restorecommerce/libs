@@ -204,7 +204,7 @@ export const DefaultMetaDataInjector = async <T extends ResourceList>(
         }],
       } : undefined,
     ].filter(Boolean);
-    item.id ??= randomUUID().replaceAll('-', '');
+    item.id ??= randomUUID().replace(/-/g, '');
   });
   return request;
 };

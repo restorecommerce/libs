@@ -1,6 +1,12 @@
 import { format, transports } from 'winston';
 import * as rTracer from 'cls-rtracer';
-import { getCircularReplacer, globalLoggerCtxKey, traceFormatter, logFieldsHandler, PrecompiledFieldOptions } from './utils';
+import {
+  getCircularReplacer,
+  globalLoggerCtxKey,
+  traceFormatter,
+  logFieldsHandler,
+  PrecompiledFieldOptions
+} from './utils';
 import { RestoreFieldsOptions } from './index';
 
 export interface RestoreLoggerConsoleTransportOptions extends transports.ConsoleTransportOptions {
@@ -11,7 +17,10 @@ export interface RestoreLoggerConsoleTransportOptions extends transports.Console
 }
 
 // a custom format that outputs request id
-function createTracerFormat(opts: RestoreLoggerConsoleTransportOptions, precompiled?: PrecompiledFieldOptions) {
+function createTracerFormat(
+  opts: RestoreLoggerConsoleTransportOptions,
+  precompiled?: PrecompiledFieldOptions
+) {
   return format.printf((info) => {
     const rid = rTracer.id();
     const time = info.timestamp;
@@ -23,9 +32,9 @@ function createTracerFormat(opts: RestoreLoggerConsoleTransportOptions, precompi
     const splat = info[splatSym];
 
     delete info.timestamp;
-    const object = splat ? JSON.stringify(logFieldsHandler(splat, precompiled), getCircularReplacer()) : {};
-    if (message && Object.entries(message).length !== 0 && message.constructor === Object) {
-      message = JSON.stringify(logFieldsHandler(message, precompiled), getCircularReplacer());
+    const object = JSON.stringify(logFieldsHandler(splat ?? {}, precompiled), getCircularReplacer());
+    if (typeof message !== 'string') {
+      message = JSON.stringify(logFieldsHandler(message ?? {}, precompiled), getCircularReplacer());
     }
     const ret: string[] = [];
     ret.push(`${level}: ${time}`);

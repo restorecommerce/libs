@@ -405,7 +405,7 @@ export abstract class WorkerBase {
         msg.fields = JSON.stringify(msg.fields);
         return msg;
       };
-      this.logger = logger = createLogger(logger_cfg);
+      this.logger = createLogger(logger_cfg);
     }
 
     this.server = new Server(this.cfg.get('server'), this.logger);

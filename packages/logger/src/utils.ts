@@ -259,9 +259,23 @@ const setIfExists = (
 };
 
 export const logFieldsHandler = (object: any, precompiled?: PrecompiledFieldOptions) => {
+  if (Array.isArray(object)) {
+    object = object.map((obj) => {
+      if (obj instanceof Error) {
+        const { code, message, details, stack } = obj as any; 
+        return { code, message, details, stack };
+      }
+      else if (obj instanceof BigInt) {
+        return Number(obj);
+      }
+      else return obj;
+    });
+  }
+
   if (!precompiled) {
     return object;
   }
+
   // if none of bufferFields or maskFields or omitFields are set then do not proceed further
   if (
     _.isEmpty(precompiled?.maskFields)
@@ -270,7 +284,7 @@ export const logFieldsHandler = (object: any, precompiled?: PrecompiledFieldOpti
   ) {
     return object;
   }
-  let objectFieldsMod;
+  let objectFieldsMod: any;
   try {
     objectFieldsMod = JSON.parse(JSON.stringify(object, getCircularReplacer()));
   } catch (error) {

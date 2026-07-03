@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/grpc-client@2.3.1...@restorecommerce/grpc-client@2.3.2) (2026-07-03)
+
+
+### Bug Fixes
+
+* **deps:** downgrade vite@7 due to breaking support of decorators in vitest ([183701d](https://github.com/restorecommerce/libs/commit/183701d5927d39ffda75f33f0dc162e1f3490183))
+* **lint:** fix new strict lint errors ([c6bc716](https://github.com/restorecommerce/libs/commit/c6bc7161eaf68a7253bd34ca7f38b14502c2eefe))
+
+
+
+
+
 ## [2.3.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/grpc-client@2.3.0...@restorecommerce/grpc-client@2.3.1) (2026-06-16)
 
 **Note:** Version bump only for package @restorecommerce/grpc-client

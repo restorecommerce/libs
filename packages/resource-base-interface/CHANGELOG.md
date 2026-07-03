@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.10.2](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.10.1...@restorecommerce/resource-base-interface@1.10.2) (2026-07-03)
+
+
+### Bug Fixes
+
+* **deps:** downgrade vite@7 due to breaking support of decorators in vitest ([183701d](https://github.com/restorecommerce/resource-base-interface/commit/183701d5927d39ffda75f33f0dc162e1f3490183))
+* fix serialization error when collection is deleted ([0da7cba](https://github.com/restorecommerce/resource-base-interface/commit/0da7cbae0560725db9c0e9f720bc083b853cb555))
+* **lint:** fix new strict lint errors ([c6bc716](https://github.com/restorecommerce/resource-base-interface/commit/c6bc7161eaf68a7253bd34ca7f38b14502c2eefe))
+* **ServiceBase:** id must be a string for collection deletion ([7c7382a](https://github.com/restorecommerce/resource-base-interface/commit/7c7382a5202d34261074292fd1a517b98cabddc4))
+
+
+### Reverts
+
+* Revert "fix(ServiceBase): id must be a string for collection deletion" ([10a7cef](https://github.com/restorecommerce/resource-base-interface/commit/10a7cefd269c1525c3d924c66152f334c55f2a7f))
+
+
+
+
+
 ## [1.10.1](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.10.0...@restorecommerce/resource-base-interface@1.10.1) (2026-06-16)
 
 

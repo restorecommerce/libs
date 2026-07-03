@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/cluster-service@1.1.0...@restorecommerce/cluster-service@1.1.1) (2026-07-03)
+
+
+### Bug Fixes
+
+* **deps:** downgrade vite@7 due to breaking support of decorators in vitest ([183701d](https://github.com/restorecommerce/libs/commit/183701d5927d39ffda75f33f0dc162e1f3490183))
+
+
+
+
+
 # [1.1.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/cluster-service@1.0.5...@restorecommerce/cluster-service@1.1.0) (2026-06-12)
 
 

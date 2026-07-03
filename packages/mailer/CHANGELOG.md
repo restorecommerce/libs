@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.1.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/mailer@1.1.1...@restorecommerce/mailer@1.1.2) (2026-07-03)
+
+
+### Bug Fixes
+
+* **deps:** downgrade vite@7 due to breaking support of decorators in vitest ([183701d](https://github.com/restorecommerce/libs/commit/183701d5927d39ffda75f33f0dc162e1f3490183))
+* **lint:** fix new strict lint errors ([c6bc716](https://github.com/restorecommerce/libs/commit/c6bc7161eaf68a7253bd34ca7f38b14502c2eefe))
+
+
+
+
+
 ## [1.1.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/mailer@1.1.0...@restorecommerce/mailer@1.1.1) (2026-06-16)
 
 

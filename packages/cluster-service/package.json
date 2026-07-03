@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/cluster-service",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Launch clustered services using node clustering and monitor them",
   "main": "index",
   "author": "n-fuse GmbH",
@@ -20,7 +20,7 @@
     "recluster": "^1.0.0"
   },
   "devDependencies": {
-    "@restorecommerce/dev": "^0.3.0",
+    "@restorecommerce/dev": "^0.3.1",
     "@vitest/coverage-v8": "^4.1.8",
     "is-generator": "^1.0.3",
     "should": "^13.2.3"

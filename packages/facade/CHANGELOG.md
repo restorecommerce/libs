@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.11](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.3.10...@restorecommerce/facade@2.3.11) (2026-07-03)
+
+
+### Bug Fixes
+
+* **lint:** fix new strict lint errors ([c6bc716](https://github.com/restorecommerce/libs/commit/c6bc7161eaf68a7253bd34ca7f38b14502c2eefe))
+
+
+
+
+
 ## [2.3.10](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.3.9...@restorecommerce/facade@2.3.10) (2026-06-16)
 
 **Note:** Version bump only for package @restorecommerce/facade

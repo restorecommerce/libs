@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/chassis-srv",
-  "version": "1.9.1",
+  "version": "1.9.2",
   "description": "Restore Commerce microservice chassis",
   "main": "./lib/index.js",
   "typings": "lib/index.d.ts",
@@ -18,11 +18,11 @@
   ],
   "type": "module",
   "dependencies": {
-    "@restorecommerce/grpc-client": "^2.3.1",
-    "@restorecommerce/kafka-client": "^1.4.1",
-    "@restorecommerce/logger": "^1.4.1",
-    "@restorecommerce/rc-grpc-clients": "^5.2.1",
-    "@restorecommerce/service-config": "^1.2.1",
+    "@restorecommerce/grpc-client": "^2.3.2",
+    "@restorecommerce/kafka-client": "^1.4.2",
+    "@restorecommerce/logger": "^1.4.2",
+    "@restorecommerce/rc-grpc-clients": "^5.2.2",
+    "@restorecommerce/service-config": "^1.2.2",
     "abort-controller-x": "^0.5.0",
     "arangojs": "9.1.0",
     "async": "3.2.6",
@@ -42,7 +42,7 @@
     "remeda": "^2.39.0"
   },
   "devDependencies": {
-    "@restorecommerce/dev": "^0.3.0",
+    "@restorecommerce/dev": "^0.3.1",
     "@types/async": "^3.2.25",
     "@types/async-retry": "^1.4.9",
     "cross-env": "^10.1.0",

@@ -66,7 +66,7 @@ export type ServiceBaseOperationStatusCodes = OperationStatusCodes<typeof Servic
 export class ServiceBase<T extends ResourceListResponse, M extends ResourceList> implements ServiceImplementation {
   private status_codes: StatusCodes<any>;
   private operation_status_codes: OperationStatusCodes<any>;
-
+  
   protected get statusCodes(): ServiceBaseStatusCodes {
     this.status_codes ??= { ...ServiceBaseStatusCodes };
     return this.status_codes;
@@ -280,8 +280,8 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
         await this.resourceapi.deleteCollection(this.isEventsEnabled && this.events);
         this.logger?.info(`${this.name} deleted`);
         docs = [{
-          id: `${this.name}-collection`,
-        }];
+          id: request.collection,
+        }]
       } else {
         docs = await this.resourceapi.delete(request.ids, this.isEventsEnabled && this.events);
       }
@@ -302,7 +302,7 @@ export class ServiceBase<T extends ResourceListResponse, M extends ResourceList>
         ? this.operationStatusCodes.MULTI_STATUS
         : this.operationStatusCodes.SUCCESS
       };
-    }
+    } 
     catch ({ code, message, details, stack, name, cause }: any) {
       this.logger?.error('Error caught while processing delete request:', { code, message, details, stack, name, cause });
       return {

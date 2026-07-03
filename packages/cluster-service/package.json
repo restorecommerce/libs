@@ -20,10 +20,10 @@
     "recluster": "^1.0.0"
   },
   "devDependencies": {
+    "@restorecommerce/dev": "^0.3.0",
     "@vitest/coverage-v8": "^4.1.8",
     "is-generator": "^1.0.3",
-    "should": "^13.2.3",
-    "vitest": "^4.1.8"
+    "should": "^13.2.3"
   },
   "scripts": {
     "test": "vitest run --dangerouslyIgnoreUnhandledErrors",

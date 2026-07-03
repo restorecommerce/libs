@@ -1,16 +1,4 @@
+// @ts-nocheck
 import * as esbuild from 'esbuild'
-import { commonifierPlugin } from '@restorecommerce/dev'
-
-await esbuild.build({
-  entryPoints: ['./debug.ts'],
-  bundle: true,
-  platform: 'node',
-  outfile: './build/debug.cjs',
-  minify: true,
-  keepNames: true,
-  treeShaking: true,
-  sourcemap: 'linked',
-  plugins: [commonifierPlugin],
-  target: 'es2023',
-  tsconfig: './tsconfig.build.json',
-});
+import config from '@restorecommerce/dev/esbuild.config.mjs'
+await esbuild.build(config);

@@ -1,3 +1,3 @@
-// @ts-check
-import { rc_lint_config } from '@restorecommerce/dev';
-export default rc_lint_config;
+// @ts-nocheck
+import { rules } from '@restorecommerce/dev/eslint.config.mjs';
+export default rules;

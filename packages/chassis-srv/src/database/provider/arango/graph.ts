@@ -208,7 +208,7 @@ export class ArangoGraph extends Arango implements GraphDatabaseProvider {
       if (err.message.indexOf('collection already used in edge def') > -1 || err.message.indexOf('collection used in orphans') > -1) {
         return collection;
       }
-      throw new Error(err.message);
+      throw err;
     }
     return collection;
   }
@@ -407,7 +407,6 @@ export class ArangoGraph extends Arango implements GraphDatabaseProvider {
     let defaultOptions: any = { uniqueVertices: 'global', bfs: true, uniqueEdges: 'path' };
     let filter = '';
     let rootFilter = '';
-    let limitFilter = '';
     let sortFilter = '';
     // include vertices in options if specified
     if (opts.include_vertexs) {
@@ -456,7 +455,7 @@ export class ArangoGraph extends Arango implements GraphDatabaseProvider {
       rootFilter = `FILTER ${rootFilter}`;
     }
 
-    limitFilter = buildGraphLimiter(limit, offset);
+    const limitFilter = buildGraphLimiter(limit, offset);
 
     if (sort) {
       sortFilter = buildGraphSorter(sort);

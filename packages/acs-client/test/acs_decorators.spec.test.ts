@@ -6,7 +6,6 @@ import {
   ResourceListResponse,
   ReadRequest,
   ResourceList,
-  DeepPartial
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base';
 import {
   ContactPointList,
@@ -150,6 +149,7 @@ const decoratedTestService = new DecoratedTestService<ContactPointList, ContactP
 
 describe('Testing acs-client decorators', () => {
   beforeAll(async () => {
+    console.log('--- GOT HERE ---');
     if (cacheEnabled) {
       await initializeCache();
     }

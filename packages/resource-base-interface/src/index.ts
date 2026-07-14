@@ -79,7 +79,7 @@ const insertFilterFieldOpValue = (filter: Filter, object: any, key: string) => {
  * object with operator style understandable by chassis-srv for later to be used for
  * AQL conversion
  * @param object converted filter object
- * @param originalKey operator value
+ * @param operatorKey operator value
  * @param filter object containing field, operation, value and type
  * @returns object
  */
@@ -167,17 +167,19 @@ export const convertToObject = (input: any, obj?: any, currentOperator?: string)
  * @returns json object understandable by chassis-srv for AQL conversion
  */
 export const toObject = (input: ReadRequest) => {
-  const filters = input.filters ?? [];
-  const result: Record<string, any>[] = filters.map(
-    filter => {
-      const obj = filter.filters.map((sf) => convertToObject(sf, {}));
-      const operatorValue = filter?.operator ?? OperatorType.and; // defaults to `and`
-      return {
-        [`$${operatorValue}`]: obj
-      };
-    }
-  );
-  
+  const filters = input?.filters ?? [];
+  const result: Record<string, any>[] = filters
+    .filter(filter => Array.isArray(filter?.filters) && filter.filters.length > 0)
+    .map(
+      filter => {
+        const obj = filter.filters.map((sf) => convertToObject(sf, {}));
+        const operatorValue = filter?.operator ?? OperatorType.and; // defaults to `and`
+        return {
+          [`$${operatorValue}`]: obj
+        };
+      }
+    );
+
   return result.length === 1 ? result[0] : result;
 };
 

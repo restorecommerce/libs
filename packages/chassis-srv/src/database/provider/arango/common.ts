@@ -233,8 +233,10 @@ export const buildField = (key: any, value: any, index: number, bindVarsMap: any
   }
   if ('$isEmpty' in value) {
     bindVarsMap[bindValueVarWithOutPrefix] = autoCastValue(key, '');
-    // will always search for an empty string
-    return `${autoCastKey(key, '')} == ${bindValueVar}`;
+    // Match missing/null attributes as well as empty string.
+    // In AQL, accessing a missing attribute yields null.
+    const fieldKey = autoCastKey(key, '');
+    return `(${fieldKey} == null || ${fieldKey} == ${bindValueVar})`;
   }
   if (isString(value?.$startswith)) {
     const bindValueVar1 = `@value${index + 1}`;

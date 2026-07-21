@@ -348,8 +348,10 @@ export const buildGraphField = (key: any, value: any, root?: boolean): string =>
     return `!(${temp})`;
   }
   if ('$isEmpty' in value) {
-    // will always search for an empty string
-    return autoCastKeyFunction(key, '') + ' == ' + autoCastValue('');
+    // Match missing/null attributes as well as empty string.
+    // In AQL, accessing a missing attribute yields null.
+    const fieldKey = autoCastKeyFunction(key, '');
+    return `(${fieldKey} == null || ${fieldKey} == ${autoCastValue('')})`;
   }
   throw new Error(`unsupported operator ${keys(value)} in ${key}`);
 };

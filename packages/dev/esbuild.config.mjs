@@ -12,8 +12,7 @@ const config = {
   sourcemap: 'linked',
   plugins: [commonifierPlugin],
   target: 'es2025',
-  tsconfig: './tsconfig.build.json',
-  external: ['@platformatic'],
+  tsconfig: './tsconfig.build.json'
 };
 
 export default config;

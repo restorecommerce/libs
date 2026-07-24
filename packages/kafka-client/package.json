@@ -3,8 +3,8 @@
   "version": "1.4.2",
   "description": "Opinionated Kafka Client for Microservices",
   "author": "n-fuse GmbH",
-  "main": "./lib/index.js",
-  "typings": "lib/index.d.ts",
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/restorecommerce/kafka-client.git"
@@ -39,8 +39,9 @@
     "test": "npm run lint && vitest run",
     "lint": "eslint src",
     "build:tsc": "tsc -p ./tsconfig.lib.json",
-    "build:clean": "rimraf lib/",
-    "build": "npm-run-all lint build:clean build:tsc"
+    "build:clean": "rimraf dist/",
+    "build": "npm-run-all lint build:clean build:tsc",
+    "postbuild": "cp ../../node_modules/@platformatic/wasm-utils/dist/native.wasm dist/"
   },
   "engines": {
     "node": ">= 12.0.0"
@@ -49,7 +50,7 @@
     "targets": {
       "build": {
         "outputs": [
-          "{projectRoot}/lib"
+          "{projectRoot}/dist"
         ]
       }
     }

@@ -9,6 +9,7 @@ export default defineConfig({
       enabled: true,
       provider: 'v8',
       reporter: ['text', 'lcovonly'],
+      excludeAfterRemap: true,
     },
     reporters: [
       'verbose',

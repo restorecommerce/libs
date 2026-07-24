@@ -265,7 +265,7 @@ export const logFieldsHandler = (object: any, precompiled?: PrecompiledFieldOpti
         const { code, message, details, stack } = obj as any; 
         return { code, message, details, stack };
       }
-      else if (obj instanceof BigInt) {
+      else if (typeof(obj) === 'bigint') {
         return Number(obj);
       }
       else return obj;

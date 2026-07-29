@@ -23,6 +23,11 @@ import {
 import { Effect } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/rule.js';
 import { isEmptyish, isIncludedIn, isNullish } from "remeda";
 
+export type FilterParamKey = {
+  scopingEntity?: string,
+  value: string
+};
+
 export const handleError = (err: string | Error | any): any => {
   let error;
   if (typeof err == 'string') {
@@ -282,15 +287,19 @@ const buildQueryFromTarget = (
     scopingUpdated = true;
   } else if (database && database === 'postgres' && effect == Effect.PERMIT) {
     query['filters'] = [];
-    const filterKeyMapArray = cfg?.get('authorization:filterParamKey');
-    let filterParamKey;
-    if (Array.isArray(filterKeyMapArray)) {
-      filterParamKey = filterKeyMapArray?.find((obj) => obj?.scopingEntity === scopingAttribute?.value)?.value;
+    let filterParamKey = cfg?.get('authorization:filterParamKey');
+    if (Array.isArray(filterParamKey)) {
+      filterParamKey = filterParamKey?.find(
+        (obj) => obj?.scopingEntity === scopingAttribute?.value
+      )?.value;
     }
-    if (!filterParamKey) {
-      // default filter Paramkey for PostgresDB
-      filterParamKey = 'orgKey';
+    else if (typeof filterParamKey === 'object') {
+      filterParamKey = Array.from<FilterParamKey>(Object.values(filterParamKey))?.find(
+        (obj: any) => obj?.scopingEntity === scopingAttribute?.value
+      )?.value;
     }
+    // default filter Paramkey for PostgresDB
+    filterParamKey ??= 'orgKey';
     logger?.debug('Filter paramter key for Postgres DB', { filterParamKey });
     for (const eachScope of userTotalScope) {
       query['filters'].push({ field: filterParamKey, operation: 'eq', value: eachScope });

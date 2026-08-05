@@ -18,22 +18,22 @@
   ],
   "type": "module",
   "dependencies": {
-    "@platformatic/kafka": "^2.3.0",
-    "@restorecommerce/logger": "^1.4.2",
-    "@restorecommerce/rc-grpc-clients": "^5.2.2",
-    "async": "^3.2.6",
-    "cls-rtracer": "^2.6.4",
-    "events": "^3.3.0",
-    "protobufjs": "^8.6.3",
-    "remeda": "^2.39.0",
-    "retry": "^0.13.1"
+    "@platformatic/kafka": "2.3.0",
+    "@restorecommerce/logger": "1.4.2",
+    "@restorecommerce/rc-grpc-clients": "5.2.2",
+    "async": "3.2.6",
+    "cls-rtracer": "2.6.4",
+    "events": "3.3.0",
+    "protobufjs": "8.6.3",
+    "remeda": "2.39.0",
+    "retry": "0.13.1"
   },
   "devDependencies": {
-    "@restorecommerce/dev": "^0.3.1",
-    "@types/async": "^3.2.25",
-    "cross-env": "^10.1.0",
-    "npm-run-all": "^4.1.5",
-    "rimraf": "^6.1.3"
+    "@restorecommerce/dev": "0.3.1",
+    "@types/async": "3.2.25",
+    "cross-env": "10.1.0",
+    "npm-run-all": "4.1.5",
+    "rimraf": "6.1.3"
   },
   "scripts": {
     "test": "npm run lint && vitest run",

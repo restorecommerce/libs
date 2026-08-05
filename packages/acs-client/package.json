@@ -19,26 +19,26 @@
   "main": "./lib/index.js",
   "typings": "./lib/index.d.ts",
   "dependencies": {
-    "@restorecommerce/grpc-client": "^2.3.2",
-    "@restorecommerce/kafka-client": "^1.4.2",
-    "@restorecommerce/logger": "^1.4.2",
-    "@restorecommerce/rc-grpc-clients": "^5.2.2",
-    "@restorecommerce/service-config": "^1.2.2",
-    "node-eval": "^2.0.0",
+    "@restorecommerce/grpc-client": "2.3.2",
+    "@restorecommerce/kafka-client": "1.4.2",
+    "@restorecommerce/logger": "1.4.2",
+    "@restorecommerce/rc-grpc-clients": "5.2.2",
+    "@restorecommerce/service-config": "1.2.2",
+    "node-eval": "2.0.0",
     "redis": "4.7.0",
-    "remeda": "^2.39.0"
+    "remeda": "2.39.0"
   },
   "devDependencies": {
-    "@alenon/grpc-mock-server": "^3.2.9",
-    "@restorecommerce/dev": "^0.3.1",
-    "@restorecommerce/protos": "^6.16.1",
+    "@alenon/grpc-mock-server": "3.2.9",
+    "@restorecommerce/dev": "0.3.1",
+    "@restorecommerce/protos": "6.16.1",
     "@types/redis": "4.0.2",
-    "cross-env": "^10.1.0",
-    "nice-grpc": "^2.1.16",
-    "nodemon": "^3.1.14",
-    "npm-run-all": "^4.1.5",
-    "rimraf": "^6.1.3",
-    "should": "^13.2.3"
+    "cross-env": "10.1.0",
+    "nice-grpc": "2.1.16",
+    "nodemon": "3.1.14",
+    "npm-run-all": "4.1.5",
+    "rimraf": "6.1.3",
+    "should": "13.2.3"
   },
   "scripts": {
     "build:tsc": "tsc -p ./tsconfig.lib.json",

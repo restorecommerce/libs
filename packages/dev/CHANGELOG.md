@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/dev@0.3.1...@restorecommerce/dev@0.3.2) (2026-08-05)
+
+
+### Bug Fixes
+
+* **deps:** avoid flexible dependencies ([c2504b9](https://github.com/restorecommerce/libs/commit/c2504b91ad0022c1bacd398d02fefdcdbec10865))
+* **logger:** logger should now handle bigint, kafka should build to dist due to native lib ([06c19a2](https://github.com/restorecommerce/libs/commit/06c19a2f044eb4b706522d3be9581a5cdb9a4df2))
+
+
+
+
+
 ## [0.3.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/dev@0.3.0...@restorecommerce/dev@0.3.1) (2026-07-03)
 
 

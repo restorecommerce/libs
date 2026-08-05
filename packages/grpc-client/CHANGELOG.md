@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/grpc-client@2.3.2...@restorecommerce/grpc-client@2.3.3) (2026-08-05)
+
+
+### Bug Fixes
+
+* **deps:** avoid flexible dependencies ([c2504b9](https://github.com/restorecommerce/libs/commit/c2504b91ad0022c1bacd398d02fefdcdbec10865))
+
+
+
+
+
 ## [2.3.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/grpc-client@2.3.1...@restorecommerce/grpc-client@2.3.2) (2026-07-03)
 
 

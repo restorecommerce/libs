@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.4.3](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.4.2...@restorecommerce/kafka-client@1.4.3) (2026-08-05)
+
+
+### Bug Fixes
+
+* **deps:** avoid flexible dependencies ([c2504b9](https://github.com/restorecommerce/kafka-client/commit/c2504b91ad0022c1bacd398d02fefdcdbec10865))
+* **logger:** logger should now handle bigint, kafka should build to dist due to native lib ([06c19a2](https://github.com/restorecommerce/kafka-client/commit/06c19a2f044eb4b706522d3be9581a5cdb9a4df2))
+
+
+
+
+
 ## [1.4.2](https://github.com/restorecommerce/kafka-client/compare/@restorecommerce/kafka-client@1.4.1...@restorecommerce/kafka-client@1.4.2) (2026-07-03)
 
 

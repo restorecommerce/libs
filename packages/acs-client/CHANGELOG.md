@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.2.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@3.2.2...@restorecommerce/acs-client@3.2.3) (2026-08-05)
+
+
+### Bug Fixes
+
+* **acs-client:** filterParamKey, supporting: single string, list and key:value object ([5f4ce62](https://github.com/restorecommerce/libs/commit/5f4ce62039a98833715d0d02718fa28372a162fe))
+* **deps:** avoid flexible dependencies ([c2504b9](https://github.com/restorecommerce/libs/commit/c2504b91ad0022c1bacd398d02fefdcdbec10865))
+
+
+
+
+
 ## [3.2.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/acs-client@3.2.1...@restorecommerce/acs-client@3.2.2) (2026-07-03)
 
 

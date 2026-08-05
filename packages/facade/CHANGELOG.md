@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.12](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.3.11...@restorecommerce/facade@2.3.12) (2026-08-05)
+
+
+### Bug Fixes
+
+* **deps:** avoid flexible dependencies ([c2504b9](https://github.com/restorecommerce/libs/commit/c2504b91ad0022c1bacd398d02fefdcdbec10865))
+
+
+
+
+
 ## [2.3.11](https://github.com/restorecommerce/libs/compare/@restorecommerce/facade@2.3.10...@restorecommerce/facade@2.3.11) (2026-07-03)
 
 

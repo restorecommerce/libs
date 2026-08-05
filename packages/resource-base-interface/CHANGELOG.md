@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.10.3](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.10.2...@restorecommerce/resource-base-interface@1.10.3) (2026-08-05)
+
+
+### Bug Fixes
+
+* **deps:** avoid flexible dependencies ([c2504b9](https://github.com/restorecommerce/resource-base-interface/commit/c2504b91ad0022c1bacd398d02fefdcdbec10865))
+* ignore malformed/empty filter entries that carry no nested filters ([#200](https://github.com/restorecommerce/resource-base-interface/issues/200)) ([067b68d](https://github.com/restorecommerce/resource-base-interface/commit/067b68dc37d02551ca63c0b6b7db5bb692bfb245))
+
+
+
+
+
 ## [1.10.2](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.10.1...@restorecommerce/resource-base-interface@1.10.2) (2026-07-03)
 
 

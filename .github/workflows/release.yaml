@@ -51,7 +51,7 @@ jobs:
       - name: Release
         run: |
           git status
-          npx lerna publish --no-verify-access --no-private --conventional-commits --yes --loglevel debug
+          npx lerna publish --stage --no-verify-access --no-private --conventional-commits --yes --loglevel debug
 
       - name: Sync next branch
         run: |

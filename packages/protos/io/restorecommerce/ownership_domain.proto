@@ -10,40 +10,35 @@ import "io/restorecommerce/status.proto";
 import "io/restorecommerce/options.proto";
 
 
-message OwnerShipDomain {
+message OwnershipDomain {
     optional string id = 1;
-    optional string context = 2; // what context is covered by this ownership declaration (e.g. all personal data - should be unique!)
+    optional string domain = 2; // what context is covered by this ownership declaration (e.g. all personal data - should be unique!)
     repeated io.restorecommerce.attribute.Attribute attributes = 3; // instanceType and instanceId of owners
     optional io.restorecommerce.meta.Meta meta = 4; // Yes, even the OwnerContext is owned! Required during read what context is avaiable for current subject
 }
 
-message OwnerShipDomainList {
-    repeated OwnerShipDomain items = 1;
+message OwnershipDomainList {
+    repeated OwnershipDomain items = 1;
     optional uint32 total_count = 2;
     optional io.restorecommerce.auth.Subject subject = 3;
 }
 
-message OwnerShipDomainResponse {
-    optional OwnerShipDomain payload = 1;
+message OwnershipDomainResponse {
+    optional OwnershipDomain payload = 1;
     optional io.restorecommerce.status.Status status = 2;
 }
 
-message OwnerShipDomainListResponse {
-    repeated OwnerShipDomainResponse items = 1;
+message OwnershipDomainListResponse {
+    repeated OwnershipDomainResponse items = 1;
     optional uint32 total_count = 2;
     optional io.restorecommerce.status.OperationStatus operation_status = 3;
 }
 
-message Deleted {
-  optional string id = 1;
-}
-
 service OwnershipDomainService {
-    rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (OwnerShipDomainListResponse) {
+    rpc Read (io.restorecommerce.resourcebase.ReadRequest) returns (OwnershipDomainListResponse) {
         option (io.restorecommerce.options.is_query) = true;
     };
-    rpc Create (OwnerShipDomainList) returns (OwnerShipDomainListResponse);
-    rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (Deleted);
-    rpc Update (OwnerShipDomainList) returns (OwnerShipDomainListResponse);
-    rpc Upsert (OwnerShipDomainList) returns (OwnerShipDomainListResponse);
+    rpc Create (OwnershipDomainList) returns (OwnershipDomainListResponse);
+    rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);    rpc Update (OwnershipDomainList) returns (OwnershipDomainListResponse);
+    rpc Upsert (OwnershipDomainList) returns (OwnershipDomainListResponse);
 }

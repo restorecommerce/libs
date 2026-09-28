@@ -44,15 +44,10 @@ jobs:
 
       - name: Release
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} 
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           git status
-          npx lerna-lite publish from-package --stage --no-verify-access --no-private --conventional-commits --yes --loglevel debug
-
-      - name: Release
-        run: |
-          git status
-          npx lerna-lite publish from-package --stage --no-verify-access --no-private --conventional-commits --yes --loglevel debug
+          npx lerna publish from-package --stage --no-verify-access --no-private --yes --loglevel debug
 
       - name: Sync next branch
         run: |

@@ -3,18 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [1.10.4](https://github.com/restorecommerce/resource-base-interface/compare/%40restorecommerce%2Fresource-base-interface%401.10.3...%40restorecommerce%2Fresource-base-interface%401.10.4) (2026-09-29)
-
-**Note:** Version bump only for package @restorecommerce/resource-base-interface
-
 ## [1.10.3](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.10.2...@restorecommerce/resource-base-interface@1.10.3) (2026-08-05)
+
 
 ### Bug Fixes
 
 * **deps:** avoid flexible dependencies ([c2504b9](https://github.com/restorecommerce/resource-base-interface/commit/c2504b91ad0022c1bacd398d02fefdcdbec10865))
 * ignore malformed/empty filter entries that carry no nested filters ([#200](https://github.com/restorecommerce/resource-base-interface/issues/200)) ([067b68d](https://github.com/restorecommerce/resource-base-interface/commit/067b68dc37d02551ca63c0b6b7db5bb692bfb245))
 
+
+
+
+
 ## [1.10.2](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.10.1...@restorecommerce/resource-base-interface@1.10.2) (2026-07-03)
+
 
 ### Bug Fixes
 
@@ -23,28 +25,45 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **lint:** fix new strict lint errors ([c6bc716](https://github.com/restorecommerce/resource-base-interface/commit/c6bc7161eaf68a7253bd34ca7f38b14502c2eefe))
 * **ServiceBase:** id must be a string for collection deletion ([7c7382a](https://github.com/restorecommerce/resource-base-interface/commit/7c7382a5202d34261074292fd1a517b98cabddc4))
 
+
 ### Reverts
 
 * Revert "fix(ServiceBase): id must be a string for collection deletion" ([10a7cef](https://github.com/restorecommerce/resource-base-interface/commit/10a7cefd269c1525c3d924c66152f334c55f2a7f))
 
+
+
+
+
 ## [1.10.1](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.10.0...@restorecommerce/resource-base-interface@1.10.1) (2026-06-16)
+
 
 ### Bug Fixes
 
 * **protos:** update ostorage-srv to include new endpoint for modifying ACL ([a926db7](https://github.com/restorecommerce/resource-base-interface/commit/a926db76b7f96168dbb0ba227364137c07418e8b))
 
+
+
+
+
 # [1.10.0](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.22...@restorecommerce/resource-base-interface@1.10.0) (2026-06-12)
+
 
 ### Bug Fixes
 
 * **deps:** upgrade all to ES2025, intermediate ([df43aa5](https://github.com/restorecommerce/resource-base-interface/commit/df43aa566a05f4fc3e883dfe5bc088192cda7883))
 * **packages:** remove all pretest builds ([d16ada1](https://github.com/restorecommerce/resource-base-interface/commit/d16ada199f057403bed2a99fa6762c95962919cd))
 
+
 ### Features
 
 * **es2025:** upgrade all to es2025, unify all tsconfigs ([d8371fd](https://github.com/restorecommerce/resource-base-interface/commit/d8371fdaac384ca13aa7dfb64ef309c7a263dada))
 
+
+
+
+
 ## [1.9.22](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.21...@restorecommerce/resource-base-interface@1.9.22) (2026-05-27)
+
 
 ### Reverts
 
@@ -52,53 +71,101 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * Revert "chore(release): publish" ([3742433](https://github.com/restorecommerce/resource-base-interface/commit/37424334499eab0b3eeef9954eea402a70ec8bef))
 * Revert "chore(release): publish" ([8e2001d](https://github.com/restorecommerce/resource-base-interface/commit/8e2001d2151fd217ddea103ff2b1bb5d5f0d5c6c))
 
+
+
+
+
 ## [1.9.21](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.20...@restorecommerce/resource-base-interface@1.9.21) (2026-05-12)
 
 **Note:** Version bump only for package @restorecommerce/resource-base-interface
+
+
+
+
 
 ## [1.9.20](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.19...@restorecommerce/resource-base-interface@1.9.20) (2026-05-11)
 
 **Note:** Version bump only for package @restorecommerce/resource-base-interface
 
+
+
+
+
 ## [1.9.19](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.18...@restorecommerce/resource-base-interface@1.9.19) (2026-04-07)
 
 **Note:** Version bump only for package @restorecommerce/resource-base-interface
+
+
+
+
 
 ## [1.9.18](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.17...@restorecommerce/resource-base-interface@1.9.18) (2026-03-31)
 
 **Note:** Version bump only for package @restorecommerce/resource-base-interface
 
+
+
+
+
 ## [1.9.17](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.16...@restorecommerce/resource-base-interface@1.9.17) (2026-03-23)
+
 
 ### Bug Fixes
 
 * **chassis-srv:** find() confused with search query, not auto creating collections ([ef26087](https://github.com/restorecommerce/resource-base-interface/commit/ef26087962ef6741e6a1b58709deec412616b033))
 
+
+
+
+
 ## [1.9.16](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.15...@restorecommerce/resource-base-interface@1.9.16) (2026-02-17)
 
 **Note:** Version bump only for package @restorecommerce/resource-base-interface
+
+
+
+
 
 ## [1.9.15](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.14...@restorecommerce/resource-base-interface@1.9.15) (2026-02-16)
 
 **Note:** Version bump only for package @restorecommerce/resource-base-interface
 
+
+
+
+
 ## [1.9.14](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.13...@restorecommerce/resource-base-interface@1.9.14) (2026-02-12)
+
 
 ### Bug Fixes
 
 * **resource-base-interface:** remove clutter ([0ca06f7](https://github.com/restorecommerce/resource-base-interface/commit/0ca06f765a0dde72cbad9b539e4b5ead52d3a424))
 
+
+
+
+
 ## [1.9.13](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.12...@restorecommerce/resource-base-interface@1.9.13) (2026-02-09)
 
 **Note:** Version bump only for package @restorecommerce/resource-base-interface
 
+
+
+
+
 ## [1.9.12](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.11...@restorecommerce/resource-base-interface@1.9.12) (2026-02-09)
+
 
 ### Bug Fixes
 
 * **resource-base-interface:** make equal operator optional again ([4388e6d](https://github.com/restorecommerce/resource-base-interface/commit/4388e6d610566f7023be91afb46f05ae96fada23))
 
+
+
+
+
 ## [1.9.11](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.10...@restorecommerce/resource-base-interface@1.9.11) (2026-02-06)
+
 
 ### Bug Fixes
 
@@ -106,16 +173,26 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **resource-base-interface:** experimental WorkerBase init topics sequential ([2d85d41](https://github.com/restorecommerce/resource-base-interface/commit/2d85d41f6b980f80847fbc3b1d597f1d979e7730))
 * **resource-base-interface:** roleback to redis 4.7! ([f92809f](https://github.com/restorecommerce/resource-base-interface/commit/f92809f459320797404815a95ce4c0e844ba9d35))
 
+
 ### Reverts
 
 * Revert "chore(release): publish" ([d508e8a](https://github.com/restorecommerce/resource-base-interface/commit/d508e8af9803a4a182d244f48172c5881b11ebd5))
 * Revert "chore(release): publish" ([8db759f](https://github.com/restorecommerce/resource-base-interface/commit/8db759fd05eef801dd6ae60727ef1b763f5baafb))
 
+
+
+
+
 ## [1.9.10](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.9...@restorecommerce/resource-base-interface@1.9.10) (2025-11-11)
 
 **Note:** Version bump only for package @restorecommerce/resource-base-interface
 
+
+
+
+
 ## [1.9.9](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.8...@restorecommerce/resource-base-interface@1.9.9) (2025-11-01)
+
 
 ### Bug Fixes
 
@@ -123,46 +200,86 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * up log and indentation ([16cc72f](https://github.com/restorecommerce/resource-base-interface/commit/16cc72f0fa14c49db61f02f7204172ddd60a06c3))
 * **worker_base:** add redis map that allows to register several redisClients by name ([37b561c](https://github.com/restorecommerce/resource-base-interface/commit/37b561c6ca5212295cd5e8e1c368ca97645e1d59))
 
+
+
+
+
 ## [1.9.9](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.8...@restorecommerce/resource-base-interface@1.9.9) (2025-11-01)
+
 
 ### Bug Fixes
 
 * up log to publish lib ([b1ae492](https://github.com/restorecommerce/resource-base-interface/commit/b1ae49283fda3e0fe1c18109c6d3c80c28dc77ae))
 * **worker_base:** add redis map that allows to register several redisClients by name ([37b561c](https://github.com/restorecommerce/resource-base-interface/commit/37b561c6ca5212295cd5e8e1c368ca97645e1d59))
+
+
+
+
 
 ## [1.9.10](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.9...@restorecommerce/resource-base-interface@1.9.10) (2025-10-30)
 
+
 ### Bug Fixes
 
 * up log to publish lib ([b1ae492](https://github.com/restorecommerce/resource-base-interface/commit/b1ae49283fda3e0fe1c18109c6d3c80c28dc77ae))
 
+
+
+
+
 ## [1.9.9](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.8...@restorecommerce/resource-base-interface@1.9.9) (2025-10-30)
+
 
 ### Bug Fixes
 
 * **worker_base:** add redis map that allows to register several redisClients by name ([37b561c](https://github.com/restorecommerce/resource-base-interface/commit/37b561c6ca5212295cd5e8e1c368ca97645e1d59))
+
+
+
+
 
 ## [1.9.8](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.7...@restorecommerce/resource-base-interface@1.9.8) (2025-10-24)
 
 **Note:** Version bump only for package @restorecommerce/resource-base-interface
 
+
+
+
+
 ## [1.9.7](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.6...@restorecommerce/resource-base-interface@1.9.7) (2025-10-16)
 
 **Note:** Version bump only for package @restorecommerce/resource-base-interface
+
+
+
+
 
 ## [1.9.6](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.5...@restorecommerce/resource-base-interface@1.9.6) (2025-10-15)
 
 **Note:** Version bump only for package @restorecommerce/resource-base-interface
 
+
+
+
+
 ## [1.9.5](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.4...@restorecommerce/resource-base-interface@1.9.5) (2025-10-06)
 
 **Note:** Version bump only for package @restorecommerce/resource-base-interface
+
+
+
+
 
 ## [1.9.4](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.3...@restorecommerce/resource-base-interface@1.9.4) (2025-10-06)
 
 **Note:** Version bump only for package @restorecommerce/resource-base-interface
 
+
+
+
+
 ## [1.9.3](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.2...@restorecommerce/resource-base-interface@1.9.3) (2025-10-02)
+
 
 ### Bug Fixes
 
@@ -170,21 +287,39 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * bump dependencies, fix dependencies ([ce367b7](https://github.com/restorecommerce/resource-base-interface/commit/ce367b75c3998dd87fc6827dca33f5fcd6a26493))
 * fix broken dependencies ([d152086](https://github.com/restorecommerce/resource-base-interface/commit/d152086a503f45b098474568760947e2dacf081c))
 
+
+
+
+
 ## [1.9.2](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.1...@restorecommerce/resource-base-interface@1.9.2) (2025-09-17)
+
 
 ### Bug Fixes
 
 * replace lodash with remeda ([155d5e3](https://github.com/restorecommerce/resource-base-interface/commit/155d5e3e99b1f6fcbe75260acde66d5a504872c6))
 
+
+
+
+
 ## [1.9.1](https://github.com/restorecommerce/resource-base-interface/compare/@restorecommerce/resource-base-interface@1.9.0...@restorecommerce/resource-base-interface@1.9.1) (2025-09-17)
 
 **Note:** Version bump only for package @restorecommerce/resource-base-interface
 
+
+
+
+
 # 1.9.0 (2025-09-17)
+
 
 ### Features
 
 * move chassis-srv and resource-base-interface ([c5416f3](https://github.com/restorecommerce/resource-base-interface/commit/c5416f395cf3721a43f0900ccb6590af78c17803))
+
+
+
+
 
 ### 1.7.0 (April 25th, 2025)
 

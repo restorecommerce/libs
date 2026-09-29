@@ -3,40 +3,58 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [0.3.4](https://github.com/restorecommerce/libs/compare/%40restorecommerce%2Fscs-jobs%400.3.3...%40restorecommerce%2Fscs-jobs%400.3.4) (2026-09-29)
-
-**Note:** Version bump only for package @restorecommerce/scs-jobs
-
 ## [0.3.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.3.2...@restorecommerce/scs-jobs@0.3.3) (2026-08-05)
+
 
 ### Bug Fixes
 
 * **deps:** avoid flexible dependencies ([c2504b9](https://github.com/restorecommerce/libs/commit/c2504b91ad0022c1bacd398d02fefdcdbec10865))
 
+
+
+
+
 ## [0.3.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.3.1...@restorecommerce/scs-jobs@0.3.2) (2026-07-03)
+
 
 ### Bug Fixes
 
 * **deps:** downgrade vite@7 due to breaking support of decorators in vitest ([183701d](https://github.com/restorecommerce/libs/commit/183701d5927d39ffda75f33f0dc162e1f3490183))
 * **lint:** fix new strict lint errors ([c6bc716](https://github.com/restorecommerce/libs/commit/c6bc7161eaf68a7253bd34ca7f38b14502c2eefe))
 
+
+
+
+
 ## [0.3.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.3.0...@restorecommerce/scs-jobs@0.3.1) (2026-06-16)
+
 
 ### Bug Fixes
 
 * **protos:** update ostorage-srv to include new endpoint for modifying ACL ([a926db7](https://github.com/restorecommerce/libs/commit/a926db76b7f96168dbb0ba227364137c07418e8b))
 
+
+
+
+
 # [0.3.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.2.16...@restorecommerce/scs-jobs@0.3.0) (2026-06-12)
+
 
 ### Bug Fixes
 
 * **deps:** upgrade all to ES2025, intermediate ([df43aa5](https://github.com/restorecommerce/libs/commit/df43aa566a05f4fc3e883dfe5bc088192cda7883))
 
+
 ### Features
 
 * **es2025:** upgrade all to es2025, unify all tsconfigs ([d8371fd](https://github.com/restorecommerce/libs/commit/d8371fdaac384ca13aa7dfb64ef309c7a263dada))
 
+
+
+
+
 ## [0.2.16](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.2.15...@restorecommerce/scs-jobs@0.2.16) (2026-05-27)
+
 
 ### Reverts
 
@@ -44,187 +62,360 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * Revert "chore(release): publish" ([3742433](https://github.com/restorecommerce/libs/commit/37424334499eab0b3eeef9954eea402a70ec8bef))
 * Revert "chore(release): publish" ([8e2001d](https://github.com/restorecommerce/libs/commit/8e2001d2151fd217ddea103ff2b1bb5d5f0d5c6c))
 
+
+
+
+
 ## [0.2.15](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.2.14...@restorecommerce/scs-jobs@0.2.15) (2026-05-12)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
+
+
+
+
 
 ## [0.2.14](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.2.13...@restorecommerce/scs-jobs@0.2.14) (2026-05-11)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
 
+
+
+
+
 ## [0.2.13](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.2.12...@restorecommerce/scs-jobs@0.2.13) (2026-04-07)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
+
+
+
+
 
 ## [0.2.12](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.2.11...@restorecommerce/scs-jobs@0.2.12) (2026-03-31)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
 
+
+
+
+
 ## [0.2.11](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.2.10...@restorecommerce/scs-jobs@0.2.11) (2026-02-17)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
+
+
+
+
 
 ## [0.2.10](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.2.9...@restorecommerce/scs-jobs@0.2.10) (2026-02-16)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
 
+
+
+
+
 ## [0.2.9](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.2.8...@restorecommerce/scs-jobs@0.2.9) (2026-02-06)
+
 
 ### Reverts
 
 * Revert "chore(release): publish" ([d508e8a](https://github.com/restorecommerce/libs/commit/d508e8af9803a4a182d244f48172c5881b11ebd5))
 * Revert "chore(release): publish" ([8db759f](https://github.com/restorecommerce/libs/commit/8db759fd05eef801dd6ae60727ef1b763f5baafb))
 
+
+
+
+
 ## [0.2.8](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.2.7...@restorecommerce/scs-jobs@0.2.8) (2025-11-11)
+
 
 ### Bug Fixes
 
 * **scs-jobs:** add register for worker function for guided function export ([c2ab504](https://github.com/restorecommerce/libs/commit/c2ab5042c70edb57809464591154f78ab188e9b8))
 
+
+
+
+
 ## [0.2.7](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.2.6...@restorecommerce/scs-jobs@0.2.7) (2025-11-01)
+
 
 ### Bug Fixes
 
 * drop version to before failed version ([6a9fb99](https://github.com/restorecommerce/libs/commit/6a9fb994f8284a4a856dace1d058c8cd1221bcbb))
 * up log and indentation ([16cc72f](https://github.com/restorecommerce/libs/commit/16cc72f0fa14c49db61f02f7204172ddd60a06c3))
 
+
+
+
+
 ## [0.2.7](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.2.6...@restorecommerce/scs-jobs@0.2.7) (2025-11-01)
+
 
 ### Bug Fixes
 
 * up log to publish lib ([b1ae492](https://github.com/restorecommerce/libs/commit/b1ae49283fda3e0fe1c18109c6d3c80c28dc77ae))
+
+
+
+
 
 ## [0.2.8](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.2.7...@restorecommerce/scs-jobs@0.2.8) (2025-10-30)
 
+
 ### Bug Fixes
 
 * up log to publish lib ([b1ae492](https://github.com/restorecommerce/libs/commit/b1ae49283fda3e0fe1c18109c6d3c80c28dc77ae))
+
+
+
+
 
 ## [0.2.7](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.2.6...@restorecommerce/scs-jobs@0.2.7) (2025-10-30)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
 
+
+
+
+
 ## [0.2.6](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.2.5...@restorecommerce/scs-jobs@0.2.6) (2025-10-24)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
+
+
+
+
 
 ## [0.2.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.2.4...@restorecommerce/scs-jobs@0.2.5) (2025-10-16)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
 
+
+
+
+
 ## [0.2.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.2.3...@restorecommerce/scs-jobs@0.2.4) (2025-10-06)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
+
+
+
+
 
 ## [0.2.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.2.2...@restorecommerce/scs-jobs@0.2.3) (2025-10-06)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
 
+
+
+
+
 ## [0.2.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.2.1...@restorecommerce/scs-jobs@0.2.2) (2025-10-02)
+
 
 ### Bug Fixes
 
 * bump dependencies, fix dependencies ([ce367b7](https://github.com/restorecommerce/libs/commit/ce367b75c3998dd87fc6827dca33f5fcd6a26493))
 
+
+
+
+
 ## [0.2.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.2.0...@restorecommerce/scs-jobs@0.2.1) (2025-09-17)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
 
+
+
+
+
 # [0.2.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.63...@restorecommerce/scs-jobs@0.2.0) (2025-09-17)
+
 
 ### Bug Fixes
 
 * **scs-jobs:** decompose error messages, eliminate lodash ([4cc1444](https://github.com/restorecommerce/libs/commit/4cc14448cc8bf7185b591def937da4ea88102cad))
 
+
 ### Features
 
 * rewrite kafka lib to use @platformatic/kafka ([#150](https://github.com/restorecommerce/libs/issues/150)) ([ff52791](https://github.com/restorecommerce/libs/commit/ff5279178c7211af3cafc5cb039bfcc17e5929d6))
+
+
+
+
 
 ## [0.1.63](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.62...@restorecommerce/scs-jobs@0.1.63) (2025-08-21)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
 
+
+
+
+
 ## [0.1.62](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.61...@restorecommerce/scs-jobs@0.1.62) (2025-08-12)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
+
+
+
+
 
 ## [0.1.61](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.60...@restorecommerce/scs-jobs@0.1.61) (2025-06-12)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
 
+
+
+
+
 ## [0.1.60](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.59...@restorecommerce/scs-jobs@0.1.60) (2025-06-04)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
+
+
+
+
 
 ## [0.1.59](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.58...@restorecommerce/scs-jobs@0.1.59) (2025-06-02)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
 
+
+
+
+
 ## [0.1.58](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.57...@restorecommerce/scs-jobs@0.1.58) (2025-05-27)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
+
+
+
+
 
 ## [0.1.57](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.56...@restorecommerce/scs-jobs@0.1.57) (2025-05-23)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
 
+
+
+
+
 ## [0.1.56](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.55...@restorecommerce/scs-jobs@0.1.56) (2025-05-23)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
+
+
+
+
 
 ## [0.1.55](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.54...@restorecommerce/scs-jobs@0.1.55) (2025-05-19)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
 
+
+
+
+
 ## [0.1.54](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.53...@restorecommerce/scs-jobs@0.1.54) (2025-05-14)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
+
+
+
+
 
 ## [0.1.53](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.52...@restorecommerce/scs-jobs@0.1.53) (2025-03-31)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
 
+
+
+
+
 ## [0.1.52](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.51...@restorecommerce/scs-jobs@0.1.52) (2025-03-28)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
+
+
+
+
 
 ## [0.1.51](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.50...@restorecommerce/scs-jobs@0.1.51) (2025-01-21)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
 
+
+
+
+
 ## [0.1.50](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.49...@restorecommerce/scs-jobs@0.1.50) (2025-01-10)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
+
+
+
+
 
 ## [0.1.49](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.48...@restorecommerce/scs-jobs@0.1.49) (2024-11-20)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
 
+
+
+
+
 ## [0.1.48](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.47...@restorecommerce/scs-jobs@0.1.48) (2024-11-19)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
+
+
+
+
 
 ## [0.1.47](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.46...@restorecommerce/scs-jobs@0.1.47) (2024-11-13)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
 
+
+
+
+
 ## [0.1.46](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.45...@restorecommerce/scs-jobs@0.1.46) (2024-11-12)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
+
+
+
+
 
 ## [0.1.45](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.44...@restorecommerce/scs-jobs@0.1.45) (2024-11-08)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
 
+
+
+
+
 ## [0.1.44](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.43...@restorecommerce/scs-jobs@0.1.44) (2024-11-06)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
+
+
+
+
 
 ## [0.1.43](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.42...@restorecommerce/scs-jobs@0.1.43) (2024-11-05)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
 
+
+
+
+
 ## [0.1.42](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.41...@restorecommerce/scs-jobs@0.1.42) (2024-11-04)
+
 
 ### Bug Fixes
 
@@ -232,188 +423,365 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **various:** Upgrade eslint to use typescript-eslint ([62e3439](https://github.com/restorecommerce/libs/commit/62e34393bf633012bc8def8586959dd9e5c6b2a4))
 * **various:** Upgrade eslint to use typescript-eslint ([8a9ce59](https://github.com/restorecommerce/libs/commit/8a9ce59edc0f8619bc13745462f9c59e4bb6c6ab))
 
+
+
+
+
 ## [0.1.41](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.40...@restorecommerce/scs-jobs@0.1.41) (2024-10-11)
+
 
 ### Bug Fixes
 
 * **scs-job:** revert to lodash.Pick for _filterQueuedJob ([bde6d4a](https://github.com/restorecommerce/libs/commit/bde6d4aa3161a32f9a70cfce17775e2275917c3b))
 
+
+
+
+
 ## [0.1.40](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.39...@restorecommerce/scs-jobs@0.1.40) (2024-10-09)
+
 
 ### Bug Fixes
 
 * **scs-jobs:** extend maxListeners to 100, defaults to 10 and is already exceeded by our defaults ([efc5444](https://github.com/restorecommerce/libs/commit/efc5444bc1d2cde62b93a56cd2239e1a55ad2406))
 
+
+
+
+
 ## [0.1.39](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.38...@restorecommerce/scs-jobs@0.1.39) (2024-10-02)
+
 
 ### Bug Fixes
 
 * **scs-jobs:** typo about Events ([916a34b](https://github.com/restorecommerce/libs/commit/916a34b768c97b276741de96b07174cbaf1efbb2))
 
+
+
+
+
 ## [0.1.38](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.37...@restorecommerce/scs-jobs@0.1.38) (2024-09-23)
+
 
 ### Bug Fixes
 
 * **scs-jobs:** user prototypes, export relevant types ([6f69ac6](https://github.com/restorecommerce/libs/commit/6f69ac62e18188933eb27a4931e2beaa72a19d1a))
 
+
+
+
+
 ## [0.1.37](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.36...@restorecommerce/scs-jobs@0.1.37) (2024-08-26)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
+
+
+
+
 
 ## [0.1.36](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.35...@restorecommerce/scs-jobs@0.1.36) (2024-08-14)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
 
+
+
+
+
 ## [0.1.35](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.34...@restorecommerce/scs-jobs@0.1.35) (2024-07-24)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
+
+
+
+
 
 ## [0.1.34](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.33...@restorecommerce/scs-jobs@0.1.34) (2024-06-26)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
 
+
+
+
+
 ## [0.1.33](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.32...@restorecommerce/scs-jobs@0.1.33) (2024-06-26)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
 
+
+
+
+
 ## [0.1.32](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.31...@restorecommerce/scs-jobs@0.1.32) (2024-06-19)
+
 
 ### Bug Fixes
 
 * **scs-jobs:** marshall result ([13e92e1](https://github.com/restorecommerce/libs/commit/13e92e1485c2ebe3108b8a15bacb3868cbbfa00b))
 
+
+
+
+
 ## [0.1.31](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.30...@restorecommerce/scs-jobs@0.1.31) (2024-06-19)
+
 
 ### Bug Fixes
 
 * **scs-jobs:** marshall jobDone result ([21a7c26](https://github.com/restorecommerce/libs/commit/21a7c269aed1cadf3d00baa3df97586b0d336a3d))
 
+
+
+
+
 ## [0.1.30](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.29...@restorecommerce/scs-jobs@0.1.30) (2024-06-07)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
+
+
+
+
 
 ## [0.1.29](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.28...@restorecommerce/scs-jobs@0.1.29) (2024-05-10)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
 
+
+
+
+
 ## [0.1.28](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.27...@restorecommerce/scs-jobs@0.1.28) (2024-05-07)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
+
+
+
+
 
 ## [0.1.27](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.26...@restorecommerce/scs-jobs@0.1.27) (2024-04-26)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
 
+
+
+
+
 ## [0.1.26](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.25...@restorecommerce/scs-jobs@0.1.26) (2024-04-25)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
+
+
+
+
 
 ## [0.1.25](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.23...@restorecommerce/scs-jobs@0.1.25) (2024-04-23)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
 
+
+
+
+
 ## [0.1.24](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.23...@restorecommerce/scs-jobs@0.1.24) (2024-04-23)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
+
+
+
+
 
 ## [0.1.23](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.22...@restorecommerce/scs-jobs@0.1.23) (2024-04-15)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
 
+
+
+
+
 ## [0.1.22](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.21...@restorecommerce/scs-jobs@0.1.22) (2024-04-15)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
+
+
+
+
 
 ## [0.1.21](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.20...@restorecommerce/scs-jobs@0.1.21) (2024-03-20)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
 
+
+
+
+
 ## [0.1.20](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.19...@restorecommerce/scs-jobs@0.1.20) (2024-03-18)
+
 
 ### Bug Fixes
 
 * **scs-jobs:** emit job failed error to kafka as well ([ffd61e7](https://github.com/restorecommerce/libs/commit/ffd61e7008e92252e33b6d074000639a081033fa))
 
+
+
+
+
 ## [0.1.19](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.18...@restorecommerce/scs-jobs@0.1.19) (2024-03-05)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
+
+
+
+
 
 ## [0.1.18](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.17...@restorecommerce/scs-jobs@0.1.18) (2024-02-27)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
 
+
+
+
+
 ## [0.1.17](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.16...@restorecommerce/scs-jobs@0.1.17) (2024-02-18)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
+
+
+
+
 
 ## [0.1.16](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.15...@restorecommerce/scs-jobs@0.1.16) (2024-02-01)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
 
+
+
+
+
 ## [0.1.15](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.14...@restorecommerce/scs-jobs@0.1.15) (2024-01-24)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
+
+
+
+
 
 ## [0.1.14](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.13...@restorecommerce/scs-jobs@0.1.14) (2024-01-15)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
 
+
+
+
+
 ## [0.1.13](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.11...@restorecommerce/scs-jobs@0.1.13) (2024-01-10)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
+
+
+
+
 
 ## [0.1.12](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.11...@restorecommerce/scs-jobs@0.1.12) (2023-12-22)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
 
+
+
+
+
 ## [0.1.11](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.10...@restorecommerce/scs-jobs@0.1.11) (2023-12-09)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
+
+
+
+
 
 ## [0.1.10](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.9...@restorecommerce/scs-jobs@0.1.10) (2023-11-25)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
 
+
+
+
+
 ## [0.1.9](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.8...@restorecommerce/scs-jobs@0.1.9) (2023-11-22)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
+
+
+
+
 
 ## [0.1.8](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.7...@restorecommerce/scs-jobs@0.1.8) (2023-11-22)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
 
+
+
+
+
 ## [0.1.7](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.6...@restorecommerce/scs-jobs@0.1.7) (2023-11-20)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
+
+
+
+
 
 ## [0.1.6](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.5...@restorecommerce/scs-jobs@0.1.6) (2023-11-15)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
 
+
+
+
+
 ## [0.1.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.4...@restorecommerce/scs-jobs@0.1.5) (2023-11-14)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
+
+
+
+
 
 ## [0.1.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.3...@restorecommerce/scs-jobs@0.1.4) (2023-11-01)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
 
+
+
+
+
 ## [0.1.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.2...@restorecommerce/scs-jobs@0.1.3) (2023-10-24)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
+
+
+
+
 
 ## [0.1.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.1...@restorecommerce/scs-jobs@0.1.2) (2023-10-14)
 
 **Note:** Version bump only for package @restorecommerce/scs-jobs
 
+
+
+
+
 ## [0.1.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/scs-jobs@0.1.0...@restorecommerce/scs-jobs@0.1.1) (2023-10-07)
+
 
 ### Bug Fixes
 
 * **scs-jobs:** add true to test as currently no tests exist, the unit tests for worker are found in SCS repo ([3a10919](https://github.com/restorecommerce/libs/commit/3a109197d948e1c53630d8044e5b9ef6e8f739aa))
 * **scs-jobs:** run missed schedules ([53305d1](https://github.com/restorecommerce/libs/commit/53305d1c335494d841543c4f07665df0f878e545))
 
+
+
+
+
 # 0.1.0 (2023-10-05)
+
 
 ### Bug Fixes
 
@@ -422,9 +790,14 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * scs-jobs package.json ([bc0c4a0](https://github.com/restorecommerce/libs/commit/bc0c4a05649419ef52ebd038153fada9bb0c0b18))
 * scs-jobs package.json and add required files ([474676e](https://github.com/restorecommerce/libs/commit/474676e163ba222bfc6ee3331398a749a1fc0308))
 
+
 ### Features
 
 * add scs-jobs ([d2249e4](https://github.com/restorecommerce/libs/commit/d2249e496ac97faafaec260168976a2972dc2a43))
+
+
+
+
 
 ### 0.0.1 (October 04th, 2023)
 

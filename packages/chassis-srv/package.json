@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/chassis-srv",
-  "version": "1.9.4",
+  "version": "1.9.3",
   "description": "Restore Commerce microservice chassis",
   "main": "./lib/index.js",
   "typings": "lib/index.d.ts",
@@ -19,9 +19,9 @@
   "type": "module",
   "dependencies": {
     "@restorecommerce/grpc-client": "^2.3.3",
-    "@restorecommerce/kafka-client": "^1.4.4",
+    "@restorecommerce/kafka-client": "^1.4.3",
     "@restorecommerce/logger": "^1.4.3",
-    "@restorecommerce/rc-grpc-clients": "^5.2.4",
+    "@restorecommerce/rc-grpc-clients": "^5.2.3",
     "@restorecommerce/service-config": "^1.2.3",
     "abort-controller-x": "0.5.0",
     "arangojs": "9.1.0",

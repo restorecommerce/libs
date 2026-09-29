@@ -41,10 +41,14 @@ jobs:
 
       - name: Build
         run: npm run build -- --verbose
-
-      - name: Release
+      
+      - name: NPM Token
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          echo "//registry.npmjs.org/:_authToken=$NODE_AUTH_TOKEN" > .npmrc
+
+      - name: Release
         run: |
           git status
           npx lerna publish from-package --stage --no-verify-access --no-private --yes --loglevel debug

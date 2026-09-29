@@ -3,209 +3,137 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [6.16.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.16.0...@restorecommerce/protos@6.16.1) (2026-06-16)
+# [6.17.0](https://github.com/restorecommerce/libs/compare/%40restorecommerce%2Fprotos%406.16.1...%40restorecommerce%2Fprotos%406.17.0) (2026-09-29)
 
+### Bug Fixes
+
+* **ci:** revert fake change ([d2bfe6d](https://github.com/restorecommerce/libs/commit/d2bfe6d3057e5a011a22f49fa9f2f7a69eb1c0df))
+* **lerna:** init lerna lite, fake a change ([af5c3ca](https://github.com/restorecommerce/libs/commit/af5c3ca756416dae5589e2d77ae3cff9d90f530f))
+
+### Features
+
+* **protos:** add new ownerShipDomain Proto ([#203](https://github.com/restorecommerce/libs/issues/203)) ([#204](https://github.com/restorecommerce/libs/issues/204)) ([db01dc8](https://github.com/restorecommerce/libs/commit/db01dc865526806aba951be9ce725a05580d3468))
+
+### Reverts
+
+* Revert "chore(release): publish" ([9448862](https://github.com/restorecommerce/libs/commit/9448862f5937a8181ea7c0904445452ef5a426c5))
+
+## [6.16.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.16.0...@restorecommerce/protos@6.16.1) (2026-06-16)
 
 ### Bug Fixes
 
 * **protos:** update ostorage-srv to include new endpoint for modifying ACL ([a926db7](https://github.com/restorecommerce/libs/commit/a926db76b7f96168dbb0ba227364137c07418e8b))
 
-
-
-
-
 # [6.16.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.15.1...@restorecommerce/protos@6.16.0) (2026-06-12)
-
 
 ### Features
 
 * rename token last_login to last_use and add created_at timestamp ([2f86971](https://github.com/restorecommerce/libs/commit/2f869715a36b669cff31d0bd19a3e498579e1694))
 
-
-
-
-
 ## [6.15.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.15.0...@restorecommerce/protos@6.15.1) (2026-05-27)
-
 
 ### Bug Fixes
 
 * **facade:** add options as fake field for EndImpersonation, compily with grpc specs for no emtpy ob ([edb6e57](https://github.com/restorecommerce/libs/commit/edb6e5743caa505443d7866e09b50652c493599b))
 * **facade:** can't build schema with empty messages ([db884a2](https://github.com/restorecommerce/libs/commit/db884a26812736685abc20e93582dfcd0245ef44))
 
-
 ### Reverts
 
 * Revert "chore(release): publish" ([a5b5a46](https://github.com/restorecommerce/libs/commit/a5b5a46b191c4b885a97f427210000d9d6608fc3))
 * Revert "chore(release): publish" ([3742433](https://github.com/restorecommerce/libs/commit/37424334499eab0b3eeef9954eea402a70ec8bef))
 
-
-
-
-
 # [6.15.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.14.0...@restorecommerce/protos@6.15.0) (2026-05-12)
-
 
 ### Features
 
 * remove not needed optional in Deleted message ([#191](https://github.com/restorecommerce/libs/issues/191)) ([4251d6a](https://github.com/restorecommerce/libs/commit/4251d6a59d3d58f85366fc2459f2a6f0b805711d))
 
-
-
-
-
 # [6.14.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.13.1...@restorecommerce/protos@6.14.0) (2026-05-11)
-
 
 ### Features
 
 * extend user proto with invitedAt ([#186](https://github.com/restorecommerce/libs/issues/186)) ([c3bba3b](https://github.com/restorecommerce/libs/commit/c3bba3be0a1014c9df20fda6e05128a5e0a7383c))
 * trigger new build ([#189](https://github.com/restorecommerce/libs/issues/189)) ([8a95f92](https://github.com/restorecommerce/libs/commit/8a95f92f33ad41b4cec085351c54e1209d4f7b1f))
 
-
-
-
-
 ## [6.13.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.13.0...@restorecommerce/protos@6.13.1) (2026-04-07)
-
 
 ### Bug Fixes
 
 * 418 optional expire date, token infinite by default ([#183](https://github.com/restorecommerce/libs/issues/183)) ([bb478a0](https://github.com/restorecommerce/libs/commit/bb478a0a1edfab129244b6c90c4d5ccfd0835b64))
 
-
-
-
-
 # [6.13.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.12.0...@restorecommerce/protos@6.13.0) (2026-03-31)
-
 
 ### Features
 
 * 418 Impersonation ([#181](https://github.com/restorecommerce/libs/issues/181)) ([45c04ca](https://github.com/restorecommerce/libs/commit/45c04ca17965e330754355393e91b28d1b0f7d8e))
 
-
-
-
-
 # [6.12.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.11.11...@restorecommerce/protos@6.12.0) (2026-02-06)
-
 
 ### Features
 
 * **facade:** performance upgrade via latent id buffering ([579d4b9](https://github.com/restorecommerce/libs/commit/579d4b947585848c48414989ca91446315d607b3))
-
 
 ### Reverts
 
 * Revert "chore(release): publish" ([d508e8a](https://github.com/restorecommerce/libs/commit/d508e8af9803a4a182d244f48172c5881b11ebd5))
 * Revert "chore(release): publish" ([8db759f](https://github.com/restorecommerce/libs/commit/8db759fd05eef801dd6ae60727ef1b763f5baafb))
 
-
-
-
-
 ## [6.11.11](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.11.10...@restorecommerce/protos@6.11.11) (2025-10-24)
 
 **Note:** Version bump only for package @restorecommerce/protos
 
-
-
-
-
 ## [6.11.10](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.11.9...@restorecommerce/protos@6.11.10) (2025-10-02)
-
 
 ### Bug Fixes
 
 * up notification proto to include active boolean flag ([ee8f97c](https://github.com/restorecommerce/libs/commit/ee8f97ca137e960541a3aead08478600469d56c3))
 * upgrade vitest, fix reflection ([511e401](https://github.com/restorecommerce/libs/commit/511e4014a088c195ffe50eaff7c26e8654e10f10))
 
-
-
-
-
 ## [6.11.9](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.11.8...@restorecommerce/protos@6.11.9) (2025-08-21)
-
 
 ### Bug Fixes
 
 * **protos:** add name and descrp to customer ([3a496d1](https://github.com/restorecommerce/libs/commit/3a496d1dd49d82fd5c65881966272973c2dbc7d3))
 
-
-
-
-
 ## [6.11.8](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.11.7...@restorecommerce/protos@6.11.8) (2025-08-12)
-
 
 ### Bug Fixes
 
 * **protos:** add customer-vat-id to invoice ([716b724](https://github.com/restorecommerce/libs/commit/716b724d54591c64cd16b7fcd540e3df6271a1bf))
 * **protos:** fulfillment add render func, invoice needs shipping address ([87ea330](https://github.com/restorecommerce/libs/commit/87ea330a27c3486058a9c515f89a40f227261941))
 
-
-
-
-
 ## [6.11.7](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.11.6...@restorecommerce/protos@6.11.7) (2025-06-04)
-
 
 ### Bug Fixes
 
 * **proto:** invoice position with valid time frame as timestamp ([e913f69](https://github.com/restorecommerce/libs/commit/e913f69e32d7aff550eae3cf7d5120092d883aa5))
 
-
-
-
-
 ## [6.11.6](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.11.5...@restorecommerce/protos@6.11.6) (2025-06-02)
-
 
 ### Bug Fixes
 
 * **proto:** add currency code ([069d9cb](https://github.com/restorecommerce/libs/commit/069d9cb4c7c738d648d6f4aaf769db448ed7f904))
 
-
-
-
-
 ## [6.11.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.11.4...@restorecommerce/protos@6.11.5) (2025-05-23)
-
 
 ### Bug Fixes
 
 * **protos:** fix typos ([1432953](https://github.com/restorecommerce/libs/commit/1432953e3fd80488f90b8b71c7c5dfe9cb3e24ee))
 
-
-
-
-
 ## [6.11.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.11.3...@restorecommerce/protos@6.11.4) (2025-05-23)
-
 
 ### Bug Fixes
 
 * **protos:** bundle product should have valid time frame too ([8670be0](https://github.com/restorecommerce/libs/commit/8670be0354b8bb0bfe239c14db81a6eb494b60a8))
 * **protos:** link data nodes: country, localization, timezones ([fc5f226](https://github.com/restorecommerce/libs/commit/fc5f22616dedc403c170f1fd531542e19b64a78f))
 
-
-
-
-
 ## [6.11.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.11.2...@restorecommerce/protos@6.11.3) (2025-05-19)
-
 
 ### Bug Fixes
 
 * **protos:** add persistent export information ([680ff84](https://github.com/restorecommerce/libs/commit/680ff8499f927812dd906304137b6d7be493e058))
 
-
-
-
-
 ## [6.11.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.11.1...@restorecommerce/protos@6.11.2) (2025-05-14)
-
 
 ### Bug Fixes
 
@@ -213,12 +141,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **protos:** add costums declaration to fulfillment ([0797faa](https://github.com/restorecommerce/libs/commit/0797faa53388cbc81340203d58c92340f7443514))
 * **protos:** fix typos in proto, load meta in acs decorater, refactor logger filePath detector ([8f02eee](https://github.com/restorecommerce/libs/commit/8f02eee6460b9c48f2f8416b08017f6ba11caf4e))
 
-
-
-
-
 ## [6.11.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.11.0...@restorecommerce/protos@6.11.1) (2025-03-31)
-
 
 ### Bug Fixes
 
@@ -227,12 +150,7 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **protos:** render response with repeated bodies ([a2f4df9](https://github.com/restorecommerce/libs/commit/a2f4df979155721ba50af264648c41e99e5a2224))
 * **protos:** resolve enum error ([22b33a1](https://github.com/restorecommerce/libs/commit/22b33a18e5504ef5a0f00a653dadcbc69ad81277))
 
-
-
-
-
 # [6.11.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.10.5...@restorecommerce/protos@6.11.0) (2025-03-28)
-
 
 ### Bug Fixes
 
@@ -241,62 +159,36 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **proto:** generic string for template.use_case ([7163625](https://github.com/restorecommerce/libs/commit/71636251c1f40a447b2dde72a26b0abcbca56709))
 * **protos:** add history to orders ([e1991c8](https://github.com/restorecommerce/libs/commit/e1991c8024d7248863676bff12b6f4eedbf5f666))
 
-
 ### Features
 
 * **protos:** adjust rendering to comply with RC message pattern ([abf6d2c](https://github.com/restorecommerce/libs/commit/abf6d2c8ad1a5331a5793b5d25c74590b45c1210))
 
-
-
-
-
 ## [6.10.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.10.4...@restorecommerce/protos@6.10.5) (2025-01-21)
-
 
 ### Bug Fixes
 
 * add mfa status endpoint for users ([5583877](https://github.com/restorecommerce/libs/commit/5583877eac9150b0768ca00f8978bf2a13c1b074))
 
-
-
-
-
 ## [6.10.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.10.3...@restorecommerce/protos@6.10.4) (2025-01-10)
-
 
 ### Bug Fixes
 
 * **protos:** add backup and reset for totp ([5a680c9](https://github.com/restorecommerce/libs/commit/5a680c930140e4f06f57038848f512844f3e2603))
 * **proto:** template more use-cases ([e17251f](https://github.com/restorecommerce/libs/commit/e17251fcbe21d04842e0638721683ee90c2ecfff))
 
-
-
-
-
 ## [6.10.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.10.2...@restorecommerce/protos@6.10.3) (2024-11-20)
-
 
 ### Bug Fixes
 
 * **protos:** mark ordering EvaluateFulfillment and QueryFulfillmentSolution as Query ([4ab2e7e](https://github.com/restorecommerce/libs/commit/4ab2e7ed2eb3ecb520a669772a835b05482bcce0))
 
-
-
-
-
 ## [6.10.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.10.1...@restorecommerce/protos@6.10.2) (2024-11-19)
-
 
 ### Bug Fixes
 
 * **proto:** add auto-resolver options to currency ([bb20527](https://github.com/restorecommerce/libs/commit/bb20527e30726f2be86f2c93ab9e166cb40c341d))
 
-
-
-
-
 ## [6.10.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.10.0...@restorecommerce/protos@6.10.1) (2024-11-13)
-
 
 ### Bug Fixes
 
@@ -305,34 +197,19 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **protos:** fix typo ([fc450a0](https://github.com/restorecommerce/libs/commit/fc450a07fe222c5b6d9b56f6b4b1c86ca1a2dbfe))
 * **protos:** taxes add round_mode, some taxes may have special rules for rounding ([3f89136](https://github.com/restorecommerce/libs/commit/3f891361f5725bad95be88381b7eb4e5aa4a565e))
 
-
-
-
-
 # [6.10.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.9.2...@restorecommerce/protos@6.10.0) (2024-11-12)
-
 
 ### Features
 
 * **protos:** add password hash history to user ([f7443ab](https://github.com/restorecommerce/libs/commit/f7443abdda1b8616d22df53edb5197234d390cb6))
 
-
-
-
-
 ## [6.9.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.9.1...@restorecommerce/protos@6.9.2) (2024-11-08)
-
 
 ### Bug Fixes
 
 * **protos:** functions besides CRUD are not allowed in standard resources ([da2c384](https://github.com/restorecommerce/libs/commit/da2c3844798c8f3f2cf1ed53bbb6f867b7e3f194))
 
-
-
-
-
 ## [6.9.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.9.0...@restorecommerce/protos@6.9.1) (2024-11-06)
-
 
 ### Bug Fixes
 
@@ -342,34 +219,19 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **protos:** selectable document_ids for send ([bcb2910](https://github.com/restorecommerce/libs/commit/bcb2910fe67bcd2142a86a4a41647bc4b8a28585))
 * **protos:** shop settings intermediate ([1ddefcc](https://github.com/restorecommerce/libs/commit/1ddefcc5e7594cefbc9b97694715f76e85718704))
 
-
-
-
-
 # [6.9.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.8.12...@restorecommerce/protos@6.9.0) (2024-11-05)
-
 
 ### Features
 
 * **protos:** add totp to users ([ce20a36](https://github.com/restorecommerce/libs/commit/ce20a36775b0a82aaa14e5762c97fe3c19d09ab3))
 
-
-
-
-
 ## [6.8.12](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.8.11...@restorecommerce/protos@6.8.12) (2024-11-04)
-
 
 ### Bug Fixes
 
 * **protos:** rename Packing --> Fulfillment ([9f87591](https://github.com/restorecommerce/libs/commit/9f87591bd8549028ab57cf3aaf5bc1c26bd12f9b))
 
-
-
-
-
 ## [6.8.11](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.8.10...@restorecommerce/protos@6.8.11) (2024-09-23)
-
 
 ### Bug Fixes
 
@@ -377,35 +239,20 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **protos:** health check should have query flag ([58117a3](https://github.com/restorecommerce/libs/commit/58117a3ae596e347a7de5e7f19101bd877fbce86))
 * **ptotos:** add currency.precision i.e (-2) ==> 1.00 ([ca84487](https://github.com/restorecommerce/libs/commit/ca844877909249584f795163812cc5bbebc16d07))
 
-
-
-
-
 ## [6.8.10](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.8.9...@restorecommerce/protos@6.8.10) (2024-08-26)
-
 
 ### Bug Fixes
 
 * **decorator:** add decorator subject resolver, add query flag to odering.evaluate ([3e1064d](https://github.com/restorecommerce/libs/commit/3e1064d0aaf61ec3e149511b756f7f037ab2bc70))
 * **protos:** flag graph traversal as query ([2359c1a](https://github.com/restorecommerce/libs/commit/2359c1a2be5b9bcf832d635ea18fc89a9c880eeb))
 
-
-
-
-
 ## [6.8.9](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.8.8...@restorecommerce/protos@6.8.9) (2024-08-14)
-
 
 ### Bug Fixes
 
 * **oauth:** flag oauth queries, make shop domain repeatable ([7d3eaac](https://github.com/restorecommerce/libs/commit/7d3eaac1037729adf2ba5dc1bbef2021ca56fac6))
 
-
-
-
-
 ## [6.8.8](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.8.7...@restorecommerce/protos@6.8.8) (2024-07-24)
-
 
 ### Bug Fixes
 
@@ -413,46 +260,26 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **order.proto:** add customer_type and customer_vat_id ([0885d85](https://github.com/restorecommerce/libs/commit/0885d8598b766e4088fc40b8075a860c647a5993))
 * **order.proto:** add payment_method_id ([5517842](https://github.com/restorecommerce/libs/commit/5517842726f197d1f39ea6f93908db27f663a600))
 
-
-
-
-
 ## [6.8.7](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.8.6...@restorecommerce/protos@6.8.7) (2024-05-10)
-
 
 ### Bug Fixes
 
 * **read:** set missing query flag for facade ([f82bbc9](https://github.com/restorecommerce/libs/commit/f82bbc986f5b8cf4e69f0e55ca83be7d7f45e2e9))
 
-
-
-
-
 ## [6.8.6](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.8.5...@restorecommerce/protos@6.8.6) (2024-05-07)
-
 
 ### Bug Fixes
 
 * **fulfillment_courier:** add credential_id ([f9a4608](https://github.com/restorecommerce/libs/commit/f9a4608289d2ae6b7b76346e39c550a05b2b7eb4))
 * **protos:** notification and notification_channel proto files ([a98ad17](https://github.com/restorecommerce/libs/commit/a98ad17181c1dd69779be37c1250f4ad336f9a43))
 
-
-
-
-
 ## [6.8.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.8.4...@restorecommerce/protos@6.8.5) (2024-04-26)
-
 
 ### Bug Fixes
 
 * **facade:** add templates, fix rc-grpc-client generate command ([a029445](https://github.com/restorecommerce/libs/commit/a029445c2a91226bfc1453a41913f7a95c9264fa))
 
-
-
-
-
 ## [6.8.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.8.3...@restorecommerce/protos@6.8.4) (2024-04-25)
-
 
 ### Bug Fixes
 
@@ -460,35 +287,20 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **template:** fix imports ([a981ad3](https://github.com/restorecommerce/libs/commit/a981ad343e5003f184edeff5863ea1d2631dd4c6))
 * **templates:** fix templates, add settings to customer ([e726970](https://github.com/restorecommerce/libs/commit/e726970c27ec8b323e667fff37d90f76b0ed0365))
 
-
-
-
-
 ## [6.8.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.8.2...@restorecommerce/protos@6.8.3) (2024-04-23)
-
 
 ### Bug Fixes
 
 * **acs-client:** add obligations and custom-query to decorators, add pdf-rendering.proto ([d84995d](https://github.com/restorecommerce/libs/commit/d84995d965136ffde44afe9f42b962f61bcd2173))
 
-
-
-
-
 ## [6.8.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.8.1...@restorecommerce/protos@6.8.2) (2024-04-19)
-
 
 ### Bug Fixes
 
 * **ordering:** remove fulfillment state and payment state from order ([73ab259](https://github.com/restorecommerce/libs/commit/73ab25928fb7ce3cc9b19e7ac06cda31b2f0f78e))
 * **protos:** rename State to FulfillmentState ([4debc8b](https://github.com/restorecommerce/libs/commit/4debc8bfcb7e870ca827826cb3d58c2f6aa20840))
 
-
-
-
-
 ## [6.8.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.8.0...@restorecommerce/protos@6.8.1) (2024-04-15)
-
 
 ### Bug Fixes
 
@@ -496,166 +308,95 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **product:** add missing imports for resolver ([be68bdf](https://github.com/restorecommerce/libs/commit/be68bdfa5a281454a641808895bd227cdbc6e605))
 * **timezone:** more information in timezone, fix invalid resolver on product.taxIds ([106ef81](https://github.com/restorecommerce/libs/commit/106ef81533ce279129c5d8be89f7070382a705da))
 
-
-
-
-
 # [6.8.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.7.0...@restorecommerce/protos@6.8.0) (2024-03-05)
-
 
 ### Features
 
 * **protos:** add tax_ids to Product.Variant, parenting in Order.Items ([2d66f4a](https://github.com/restorecommerce/libs/commit/2d66f4ac8831c84fd624d38c6a8e190f69a85703))
 
-
-
-
-
 # [6.7.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.6.0...@restorecommerce/protos@6.7.0) (2024-01-24)
-
 
 ### Features
 
 * unauthenticated tokens ([fe89507](https://github.com/restorecommerce/libs/commit/fe895071c137bf15c68c03f1c5545612f2614bdc))
 
-
-
-
-
 # [6.6.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.4.1...@restorecommerce/protos@6.6.0) (2024-01-10)
-
 
 ### Features
 
 * **user.proto:** add properties to UserRole ([82b408c](https://github.com/restorecommerce/libs/commit/82b408ca4ba2c673d58b32a99e0705b3d0ad87c1))
-
-
-
-
 
 # [6.5.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.4.1...@restorecommerce/protos@6.5.0) (2023-12-22)
 
-
 ### Features
 
 * **user.proto:** add properties to UserRole ([82b408c](https://github.com/restorecommerce/libs/commit/82b408ca4ba2c673d58b32a99e0705b3d0ad87c1))
 
-
-
-
-
 ## [6.4.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.4.0...@restorecommerce/protos@6.4.1) (2023-11-25)
-
 
 ### Bug Fixes
 
 * **facade:** fix to send client_id in token find response(this will be persisted to DB from token payload on identity-srv) ([0ebf12f](https://github.com/restorecommerce/libs/commit/0ebf12f4b7bb82e00ef878dc76c26576ad95ea76))
 * **fulfillment.proto:** references should be list ([d9af066](https://github.com/restorecommerce/libs/commit/d9af0667024cc9356bfa3e786a2a4bf610c7c4db))
 
-
-
-
-
 # [6.4.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.3.0...@restorecommerce/protos@6.4.0) (2023-11-22)
-
 
 ### Features
 
 * **proto:** add queue name to job protos ([0c09086](https://github.com/restorecommerce/libs/commit/0c09086c7e41a7759a62970ad182d9816c30e773))
 
-
-
-
-
 # [6.3.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.2.3...@restorecommerce/protos@6.3.0) (2023-11-22)
-
 
 ### Bug Fixes
 
 * added created_by field to meta of proto ([3896a40](https://github.com/restorecommerce/libs/commit/3896a407365e8ae7ca4f37fab1369b31861a9aa9))
 
-
 ### Features
 
 * **proto:** ordering-srv submit response now includes fulfillments and invoices ([146dc70](https://github.com/restorecommerce/libs/commit/146dc70bef2c8a87fded0caff4816b0f428c878b))
 
-
-
-
-
 ## [6.2.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.2.2...@restorecommerce/protos@6.2.3) (2023-11-15)
-
 
 ### Bug Fixes
 
 * **protos:** changed expries_in to timestamp and regenerated schema ([b519d8d](https://github.com/restorecommerce/libs/commit/b519d8d54cc39ecd9804401698fd452c219336a5))
 
-
-
-
-
 ## [6.2.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.2.1...@restorecommerce/protos@6.2.2) (2023-11-14)
-
 
 ### Bug Fixes
 
 * **proto:** changed expires_in and last_access on token and user proto respectively to google.protobuf.Time and regenrated types and schema. ([c3c4701](https://github.com/restorecommerce/libs/commit/c3c4701c01d9243cc26c20f52298ef9ee56e511e))
 
-
-
-
-
 ## [6.2.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.2.0...@restorecommerce/protos@6.2.1) (2023-11-01)
-
 
 ### Bug Fixes
 
 * **protos:** update order kafka topic ([d302554](https://github.com/restorecommerce/libs/commit/d30255408bfc4246478457fbd780fbcbb6d8aa5b))
 
-
-
-
-
 # [6.2.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.1.2...@restorecommerce/protos@6.2.0) (2023-10-14)
-
 
 ### Bug Fixes
 
 * **proto:** fix user proto ([edbcd77](https://github.com/restorecommerce/libs/commit/edbcd77af9db0de1f1fab90148740983b42a6b3a))
 * **proto:** update user proto to provide google protobuf any data for register request ([3b2e871](https://github.com/restorecommerce/libs/commit/3b2e871f839dd1cffb6ff1cea037911d3ae0aa9c))
 
-
 ### Features
 
 * **acs-decorators:** add decorators for simple access control ([713a464](https://github.com/restorecommerce/libs/commit/713a46409c79371d7b0940cb4aa448cbe8abaf5a))
-
 
 ### Reverts
 
 * **access_control.proto:** revert enum order ([8aaa4e6](https://github.com/restorecommerce/libs/commit/8aaa4e63675ec2bd040602236ff82b0fe80e6d14))
 
-
-
-
-
 ## [6.1.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.1.1...@restorecommerce/protos@6.1.2) (2023-09-28)
 
 **Note:** Version bump only for package @restorecommerce/protos
-
-
-
-
 
 ## [6.1.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.1.0...@restorecommerce/protos@6.1.1) (2023-09-18)
 
 **Note:** Version bump only for package @restorecommerce/protos
 
-
-
-
-
 # [6.1.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@6.0.0...@restorecommerce/protos@6.1.0) (2023-09-18)
-
 
 ### Bug Fixes
 
@@ -663,62 +404,39 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **fulfillment:** fix fulfillment protos ([8c2ed99](https://github.com/restorecommerce/libs/commit/8c2ed99168ff7bb14b61657cd1264a8a1d6760a4))
 * **product.proto:** add missing optional modifiers in product.proto ([9b85ee5](https://github.com/restorecommerce/libs/commit/9b85ee5eb7efd98a5c1a7f9d540702f11908f8c1))
 
-
 ### Features
 
 * **protos:** made all fields optional ([09e6f94](https://github.com/restorecommerce/libs/commit/09e6f9440a44160b6f5b3fd548d6a289b1ab7004))
 * regenrate rc-grpc-clients with initializeFieldsAsUndefined as false and fixed facade typings ([685d9b5](https://github.com/restorecommerce/libs/commit/685d9b5be92833ba475f46c6b0d4234ac7125211))
 
-
-
-
-
 # [6.0.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@5.0.1...@restorecommerce/protos@6.0.0) (2023-08-01)
-
 
 ### Bug Fixes
 
 * **fulfillment, order, price, product, shop:** fix missing resolvers, enum style guide, naming ([103172c](https://github.com/restorecommerce/libs/commit/103172c9b2e1544a88257cededc1b39a2731fd8c))
 
-
 ### BREAKING CHANGES
 
 * **fulfillment, order, price, product, shop:** changes in product require adjustments in example data
 
-
-
-
-
 ## [5.0.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@5.0.0...@restorecommerce/protos@5.0.1) (2023-07-25)
-
 
 ### Bug Fixes
 
 * **fulfillment_product:** productQueryList uses reference_id:string instead of reference:Reference ([278afa8](https://github.com/restorecommerce/libs/commit/278afa89b5359765420744e1debca2387e366e15))
 
-
-
-
-
 # [5.0.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@4.2.0...@restorecommerce/protos@5.0.0) (2023-07-21)
-
 
 ### Bug Fixes
 
 * **invoice:** fix misstyped import, regenerate types ([88fe1fd](https://github.com/restorecommerce/libs/commit/88fe1fd55cec8f488d17bb8c60f9a34fa07455fe))
 * **product, invoice:** add and use Properties in Product and Invoice ([ecd5a01](https://github.com/restorecommerce/libs/commit/ecd5a013f742761c2aa5944318c6f9e2450dce81))
 
-
 ### BREAKING CHANGES
 
 * **product, invoice:** Code and data regarding to Attibutes in Product and Invoice must be fixed
 
-
-
-
-
 # [4.2.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@4.1.1...@restorecommerce/protos@4.2.0) (2023-07-21)
-
 
 ### Features
 
@@ -726,50 +444,29 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **protos:** updated property proto for capital case and removed unused proto messages ([c185814](https://github.com/restorecommerce/libs/commit/c18581474ea98e45bf91e9029a701117aeb72a11))
 * **rc-grpc-clients, facade:** regnerated typings due to changes in proto files ([df3f100](https://github.com/restorecommerce/libs/commit/df3f10038e10842b77e8fa6cd523d4870dfa2683))
 
-
-
-
-
 ## [4.1.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@4.1.0...@restorecommerce/protos@4.1.1) (2023-07-12)
-
 
 ### Bug Fixes
 
 * **fulfillment, invoice, organization.proto:** fix typos in invoice, fulfillment and organization ([8d64222](https://github.com/restorecommerce/libs/commit/8d64222d3cbca44a0c9d4e265431d26aaac20223))
 
-
-
-
-
 # [4.1.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@4.0.1...@restorecommerce/protos@4.1.0) (2023-07-11)
-
 
 ### Bug Fixes
 
 * **timestamps:** fix invoice date type by timestamp, add payment_details to invoice trigger request ([139ab69](https://github.com/restorecommerce/libs/commit/139ab69ba1d4739386ac2844d1e1f98c2046b98e))
 
-
 ### Features
 
 * **invoicing:** invoicing supports FulfillmentProducts ([d0684cf](https://github.com/restorecommerce/libs/commit/d0684cf4773ecc2aa0f807bb8c4be1a21a62caab))
 
-
-
-
-
 ## [4.0.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@4.0.0...@restorecommerce/protos@4.0.1) (2023-06-29)
-
 
 ### Bug Fixes
 
 * **protos:** Make name, email and password mandatory for register request ([64165c1](https://github.com/restorecommerce/libs/commit/64165c1875fe1c9ccd319513671334b625dce20c))
 
-
-
-
-
 # [4.0.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@3.1.2...@restorecommerce/protos@4.0.0) (2023-06-28)
-
 
 ### Bug Fixes
 
@@ -778,14 +475,12 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **fulfillment.proto:** use Price everywhere ([c2a2cb5](https://github.com/restorecommerce/libs/commit/c2a2cb57cb84eac9e046413fc5f41dec7efc1132))
 * **fulfillment:** fix type errors ([615ab2c](https://github.com/restorecommerce/libs/commit/615ab2cf738708d8dffd20343ebf0953a0da7a78))
 
-
 ### Features
 
 * **currency.proto:** add currency proto, update invoice.proto ([988d161](https://github.com/restorecommerce/libs/commit/988d161913d01fc88d383810a2bd963e9c75a2f8))
 * **invoice.proto:** adjust invoice.proto to ordering-srv and fulfillment-srv ([71ee108](https://github.com/restorecommerce/libs/commit/71ee1088eec9fc54b61ab189e988504180687902))
 * **invoice:** support multiple orders and fulfillments per invoice ([e2092a0](https://github.com/restorecommerce/libs/commit/e2092a081d886722fc7112a760b9a3a3fa434519))
 * **shop.proto:** add shop.proto, remove double addresses and more ([a872677](https://github.com/restorecommerce/libs/commit/a8726777447cf443809f3d7eba7d808e7339bbba))
-
 
 ### BREAKING CHANGES
 
@@ -796,50 +491,27 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **shop.proto:** significant changes in product.proto, order, organization, invoice, tax_type,
 fulfillment, customer, contact_point
 
-
-
-
-
 ## [3.1.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@3.1.1...@restorecommerce/protos@3.1.2) (2023-06-16)
 
 **Note:** Version bump only for package @restorecommerce/protos
-
-
-
-
 
 ## [3.1.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@3.1.0...@restorecommerce/protos@3.1.1) (2023-06-14)
 
 **Note:** Version bump only for package @restorecommerce/protos
 
-
-
-
-
 # [3.1.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@3.0.1...@restorecommerce/protos@3.1.0) (2023-06-02)
-
 
 ### Features
 
 * add unit codes ([95b4d36](https://github.com/restorecommerce/libs/commit/95b4d3635a4ef8670f3400271a9ccfb92b7fcf98))
 
-
-
-
-
 ## [3.0.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@3.0.0...@restorecommerce/protos@3.0.1) (2023-05-29)
-
 
 ### Bug Fixes
 
 * **protos:** pluralize rendering proto ([f1f2afa](https://github.com/restorecommerce/libs/commit/f1f2afaa47755be6ba34fafda157ee797d2cb9fb))
 
-
-
-
-
 # [3.0.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@2.0.2...@restorecommerce/protos@3.0.0) (2023-05-22)
-
 
 ### Bug Fixes
 
@@ -852,10 +524,8 @@ fulfillment, customer, contact_point
 * **protos:** restore nested attribute as its referenced in obligation masked properties in ACS ([d6536f9](https://github.com/restorecommerce/libs/commit/d6536f96dfc30eb1905c899af519d50778e2edee))
 * **rc-grpc-clients, facade:** WIP optional fields ([98f0977](https://github.com/restorecommerce/libs/commit/98f097730503bd0fa021bc886ba55d477dafb89f))
 
-
 * Feature/product appendix (#48) ([cb00636](https://github.com/restorecommerce/libs/commit/cb00636d6c98286e2fd923b229ab950f6201c760)), closes [#48](https://github.com/restorecommerce/libs/issues/48)
 * Integration (rebased) (#47) ([718fa5f](https://github.com/restorecommerce/libs/commit/718fa5f8edfc56e2968c0cb3704eda2855fdee0c)), closes [#47](https://github.com/restorecommerce/libs/issues/47)
-
 
 ### BREAKING CHANGES
 
@@ -1159,189 +829,108 @@ all services.
 
 * fix package.json typo
 
-
-
-
-
 ## [2.0.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@2.0.1...@restorecommerce/protos@2.0.2) (2022-11-16)
-
 
 ### Bug Fixes
 
 * command import ([fcbb6c1](https://github.com/restorecommerce/libs/commit/fcbb6c15b708fc63bf38d0dfa65946731cef3e79))
 
-
-
-
-
 ## [2.0.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@2.0.0...@restorecommerce/protos@2.0.1) (2022-10-14)
-
 
 ### Bug Fixes
 
 * **protos:** fix fullfillment product for missing import and commented address (does not exist) ([5780cb2](https://github.com/restorecommerce/libs/commit/5780cb245ad3f0955ba27d1b6b60659cc7e4b8d0))
 
-
-
-
-
 # [2.0.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@1.1.0...@restorecommerce/protos@2.0.0) (2022-10-12)
-
 
 ### Code Refactoring
 
 * **protos:** refactor protos for fulfillment-srv, ordering-srv, ready for migration tests ([bf8bfd3](https://github.com/restorecommerce/libs/commit/bf8bfd3a00e614857f6f4be35fb00224634ed066))
 
-
 ### BREAKING CHANGES
 
 * **protos:** Address has new fields. Compatiblity must be checked.
 
-
-
-
-
 # [1.1.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@1.0.0...@restorecommerce/protos@1.1.0) (2022-10-04)
-
 
 ### Bug Fixes
 
 * **protos:** added timezone on Job cron repeat options. ([d25a5c0](https://github.com/restorecommerce/libs/commit/d25a5c0740d8f04102691a5eb3b4c5745fbb75ad))
 * **protos:** restore subject id for auth subject ([150e663](https://github.com/restorecommerce/libs/commit/150e663c0c090721da9b7ce028714d5df7994972))
 
-
 ### Features
 
 * **facade:** add subscriptions ([d9006e9](https://github.com/restorecommerce/libs/commit/d9006e9ebcd1522a67373f8ca8bfa751c551b36f))
 
-
-
-
-
 # [1.0.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.7.2...@restorecommerce/protos@1.0.0) (2022-08-25)
-
 
 ### Features
 
 * move to fully typed grpc client and server ([aeee2f2](https://github.com/restorecommerce/libs/commit/aeee2f2b7ca470223d7bc42fd7cafd4bb8387796))
 
-
-
-
-
 ## [0.7.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.7.1...@restorecommerce/protos@0.7.2) (2022-06-14)
-
 
 ### Bug Fixes
 
 * remove optional from protos ([dee7264](https://github.com/restorecommerce/libs/commit/dee7264ec862bbe7fa5ada55dcb3fd9227e06ef8))
 
-
-
-
-
 ## [0.7.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.7.0...@restorecommerce/protos@0.7.1) (2022-06-14)
-
 
 ### Bug Fixes
 
 * change semicolon to comma in options ([9e4b9e1](https://github.com/restorecommerce/libs/commit/9e4b9e190c31edadc414dba6b5311fe931e2f372))
 
-
-
-
-
 # [0.7.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.6.9...@restorecommerce/protos@0.7.0) (2022-06-10)
-
 
 ### Bug Fixes
 
 * fix merge issues ([cc37d83](https://github.com/restorecommerce/libs/commit/cc37d8356df3b494af8c6af9e39304a49073301c))
 * **protos:** include resolved fields in imports ([a2289e6](https://github.com/restorecommerce/libs/commit/a2289e64d3d383c0031c0a6006b20f494c69d0cb))
 
-
 ### Features
 
 * **facade:** support nested resolvers from proto options ([d319a5b](https://github.com/restorecommerce/libs/commit/d319a5bbf0066d9200d1c6bf38303461496bfa3a))
 
-
-
-
-
 ## [0.6.9](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.6.8...@restorecommerce/protos@0.6.9) (2022-05-09)
-
 
 ### Bug Fixes
 
 * **protos:** add get token grpc endpoint to oauth ([965701b](https://github.com/restorecommerce/libs/commit/965701b5192c73060bf0377bc2f81d33a2ea4bd8))
 
-
-
-
-
 ## [0.6.8](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.6.7...@restorecommerce/protos@0.6.8) (2022-04-25)
-
 
 ### Bug Fixes
 
 * **protos:** updated user proto read rpc to return the Roles associated with the user ([ce87ee1](https://github.com/restorecommerce/libs/commit/ce87ee1998061d0addaa9f191174a18138fc2a05))
 
-
-
-
-
 ## [0.6.7](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.6.6...@restorecommerce/protos@0.6.7) (2022-04-20)
 
 **Note:** Version bump only for package @restorecommerce/protos
-
-
-
-
 
 ## [0.6.6](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.6.5...@restorecommerce/protos@0.6.6) (2022-04-05)
 
 **Note:** Version bump only for package @restorecommerce/protos
 
-
-
-
-
 ## [0.6.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.6.4...@restorecommerce/protos@0.6.5) (2022-03-29)
-
 
 ### Bug Fixes
 
 * **protos:** updated invoice proto ([c927dae](https://github.com/restorecommerce/libs/commit/c927dae3ee9a4b8f47b0844feaa615a15a7f1afd))
 
-
-
-
-
 ## [0.6.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.6.3...@restorecommerce/protos@0.6.4) (2022-02-22)
-
 
 ### Bug Fixes
 
 * **protos:** add token to code exchange ([9c17cb6](https://github.com/restorecommerce/libs/commit/9c17cb6e3a16761a85a4b9379c3c6996cc5422e8))
 
-
-
-
-
 ## [0.6.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.6.0...@restorecommerce/protos@0.6.3) (2022-02-14)
-
 
 ### Bug Fixes
 
 * **protos:** added data field for user and created time stamp for role associations ([cf14968](https://github.com/restorecommerce/libs/commit/cf14968aa1575ef83fde4b73780ba80fd3bf0188))
 * **protos:** fix auth proto ([b5e7f41](https://github.com/restorecommerce/libs/commit/b5e7f410bad2c1786e69186555584f591cd0c48b))
 
-
-
-
-
 # [0.6.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.5.0...@restorecommerce/protos@0.6.0) (2022-02-09)
-
 
 ### Bug Fixes
 
@@ -1349,129 +938,76 @@ all services.
 * **protos:** removed children_ids for location proto ([4908e7c](https://github.com/restorecommerce/libs/commit/4908e7c36312bb2a45e9402c357be8f0e0a5ffd0))
 * **protos:** up organization proto to remove children_ids ([b0b8741](https://github.com/restorecommerce/libs/commit/b0b8741e2ad3b0cbec605ebbfdca75e50e7c0f61))
 
-
 ### Features
 
 * add oauth ([3e7798e](https://github.com/restorecommerce/libs/commit/3e7798e3aa10ef092872928f5254cd5fbb125f3b))
 
-
-
-
-
 # [0.5.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.4.11...@restorecommerce/protos@0.5.0) (2022-01-28)
-
 
 ### Bug Fixes
 
 * **fix generated interfaces: convert snake_case to camelcase:** snake_case to camelCase ([bf78c27](https://github.com/restorecommerce/libs/commit/bf78c27a1e776d716c711c0b633acd7609ca4561))
 
-
 ### Features
 
 * **add protos for fulfillment-product solution proposals:** packsol ([ce6f78f](https://github.com/restorecommerce/libs/commit/ce6f78f34a39924aa30c50857ad751b9ac3be396))
-
 
 ### BREAKING CHANGES
 
 * **add protos for fulfillment-product solution proposals:** fulfillment.proto, fulfillment-courier.proto and fulfillment-product.proto have
 changed completely
 
-
-
-
-
 ## [0.4.11](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.4.10...@restorecommerce/protos@0.4.11) (2021-12-09)
-
 
 ### Bug Fixes
 
 * **protos:** updated access_control proto to include `obligation` in isAllowed and whatIsAllowed response. ([c2af601](https://github.com/restorecommerce/libs/commit/c2af60104bf8cbcde9296ee99a374b6bdddb132a))
 
-
-
-
-
 ## [0.4.10](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.4.9...@restorecommerce/protos@0.4.10) (2021-12-06)
-
 
 ### Bug Fixes
 
 * **protos:** fixed import and reference errors ([6efb6b1](https://github.com/restorecommerce/libs/commit/6efb6b1954bf6449f8c58e267f959b22c45e8066))
 * **protos:** updated graph proto to include operation status ([dcf0a39](https://github.com/restorecommerce/libs/commit/dcf0a3920bcfd098efdd42d6186864359025b1fd))
 
-
-
-
-
 ## [0.4.9](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.4.8...@restorecommerce/protos@0.4.9) (2021-11-08)
-
 
 ### Bug Fixes
 
 * **protos:** rename sourcePath to sourceObject for Move api ([11c5049](https://github.com/restorecommerce/libs/commit/11c504939fc22005c22dc28b3b6886684a1224c3))
 
-
-
-
-
 ## [0.4.8](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.4.7...@restorecommerce/protos@0.4.8) (2021-11-05)
-
 
 ### Bug Fixes
 
 * **protos:** fix move response ([c6c16c1](https://github.com/restorecommerce/libs/commit/c6c16c1b0f86656fc29a240876fde9207debd335))
 * **protos:** updated ostorage protos listRequest adding max_keys and prefix, added move api ([9854365](https://github.com/restorecommerce/libs/commit/9854365e7ba486edce922704af7539a5ba9a1095))
 
-
-
-
-
 ## [0.4.7](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.4.6...@restorecommerce/protos@0.4.7) (2021-10-25)
-
 
 ### Bug Fixes
 
 * **protos:** restructured payment proto ([b5a8703](https://github.com/restorecommerce/libs/commit/b5a8703a7818cc233e579fa9bb0e5f0bba8b0492))
 
-
-
-
-
 ## [0.4.6](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.4.5...@restorecommerce/protos@0.4.6) (2021-10-19)
-
 
 ### Bug Fixes
 
 * **protos:** updated context query filters ([0ae3bd8](https://github.com/restorecommerce/libs/commit/0ae3bd8e385c1f3dedb2be1587c678ada7151ec5))
 
-
-
-
-
 ## [0.4.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.4.4...@restorecommerce/protos@0.4.5) (2021-10-07)
-
 
 ### Bug Fixes
 
 * **protos:** Added ACL property for meta object and subject for OStorage Message ([d97b2f3](https://github.com/restorecommerce/libs/commit/d97b2f37f741d70bb808b93571e5088cf8ebddd7))
 
-
-
-
-
 ## [0.4.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.4.3...@restorecommerce/protos@0.4.4) (2021-08-23)
-
 
 ### Bug Fixes
 
 * **protos:** updated ostorage protos with status and operation_status ([cc48214](https://github.com/restorecommerce/libs/commit/cc48214f21b83d42fb9cd1f1e9713c8fa6005ac2))
 
-
-
-
-
 ## [0.4.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.4.2...@restorecommerce/protos@0.4.3) (2021-08-03)
-
 
 ### Bug Fixes
 
@@ -1480,13 +1016,7 @@ changed completely
 * up version to detech changes ([b8c0517](https://github.com/restorecommerce/libs/commit/b8c05170241cfe0d3c84e08ce35ddb7dce2ba00a))
 * updated githead ([2904d30](https://github.com/restorecommerce/libs/commit/2904d30e5773dc8a87c01a08ff6481f99d692354))
 
-
-
-
-
-
 ## [0.4.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.4.1...@restorecommerce/protos@0.4.2) (2021-08-03)
-
 
 ### Bug Fixes
 
@@ -1497,67 +1027,37 @@ changed completely
 * **protos:** up IDS RPC's to include status response and added statusObj ([5b525ab](https://github.com/restorecommerce/libs/commit/5b525ab4b5c04913f153ae3fc666936b593e520a))
 * **rc-grpc-clients:** generated grpc-clients for updated protos ([0fdf4bb](https://github.com/restorecommerce/libs/commit/0fdf4bb627fe2ebaf53f19041ebf7ae522e6cc2a))
 
-
-
-
-
 ## [0.4.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.4.0...@restorecommerce/protos@0.4.1) (2021-05-31)
 
 **Note:** Version bump only for package @restorecommerce/protos
 
-
-
-
-
 # [0.4.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.3.3...@restorecommerce/protos@0.4.0) (2021-05-28)
-
 
 ### chore
 
 * updated protos ([bb8674a](https://github.com/restorecommerce/libs/commit/bb8674aa5b561441790276081469e66d52e8d5c7))
 
-
 ### BREAKING CHANGES
 
 * Filter migration
-
-
-
-
 
 ## [0.3.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.3.2...@restorecommerce/protos@0.3.3) (2021-05-25)
 
 **Note:** Version bump only for package @restorecommerce/protos
 
-
-
-
-
 ## [0.3.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.3.1...@restorecommerce/protos@0.3.2) (2021-05-24)
 
 **Note:** Version bump only for package @restorecommerce/protos
-
-
-
-
 
 ## [0.3.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/protos@0.3.0...@restorecommerce/protos@0.3.1) (2021-02-24)
 
 **Note:** Version bump only for package @restorecommerce/protos
 
-
-
-
-
 # 0.3.0 (2021-02-24)
-
 
 ### Features
 
 * introduce facade/grpc-client/rc-grpc-clients/gen-gql-schema + migrate logger/service-config ([99a5375](https://github.com/restorecommerce/libs/commit/99a53754c7a4b27c77f81c6560a3c2aa26a03b2e))
-
-
-
 
 ### 0.0.22 (March 4th, 2021)
 

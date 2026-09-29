@@ -3,42 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [1.9.3](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.9.2...@restorecommerce/chassis-srv@1.9.3) (2026-08-05)
+## [1.9.4](https://github.com/restorecommerce/chassis-srv/compare/%40restorecommerce%2Fchassis-srv%401.9.3...%40restorecommerce%2Fchassis-srv%401.9.4) (2026-09-29)
 
+### Reverts
+
+* Revert "chore(release): publish" ([9448862](https://github.com/restorecommerce/chassis-srv/commit/9448862f5937a8181ea7c0904445452ef5a426c5))
+
+## [1.9.3](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.9.2...@restorecommerce/chassis-srv@1.9.3) (2026-08-05)
 
 ### Bug Fixes
 
 * **deps:** avoid flexible dependencies ([c2504b9](https://github.com/restorecommerce/chassis-srv/commit/c2504b91ad0022c1bacd398d02fefdcdbec10865))
 
-
-
-
-
 ## [1.9.2](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.9.1...@restorecommerce/chassis-srv@1.9.2) (2026-07-03)
-
 
 ### Bug Fixes
 
 * **deps:** downgrade vite@7 due to breaking support of decorators in vitest ([183701d](https://github.com/restorecommerce/chassis-srv/commit/183701d5927d39ffda75f33f0dc162e1f3490183))
 * **lint:** fix new strict lint errors ([c6bc716](https://github.com/restorecommerce/chassis-srv/commit/c6bc7161eaf68a7253bd34ca7f38b14502c2eefe))
 
-
-
-
-
 ## [1.9.1](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.9.0...@restorecommerce/chassis-srv@1.9.1) (2026-06-16)
-
 
 ### Bug Fixes
 
 * **protos:** update ostorage-srv to include new endpoint for modifying ACL ([a926db7](https://github.com/restorecommerce/chassis-srv/commit/a926db76b7f96168dbb0ba227364137c07418e8b))
 
-
-
-
-
 # [1.9.0](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.8.10...@restorecommerce/chassis-srv@1.9.0) (2026-06-12)
-
 
 ### Bug Fixes
 
@@ -47,22 +37,15 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **deps:** upgrade all to ES2025, intermediate ([df43aa5](https://github.com/restorecommerce/chassis-srv/commit/df43aa566a05f4fc3e883dfe5bc088192cda7883))
 * **packages:** remove all pretest builds ([d16ada1](https://github.com/restorecommerce/chassis-srv/commit/d16ada199f057403bed2a99fa6762c95962919cd))
 
-
 ### Features
 
 * **es2025:** upgrade all to es2025, unify all tsconfigs ([d8371fd](https://github.com/restorecommerce/chassis-srv/commit/d8371fdaac384ca13aa7dfb64ef309c7a263dada))
 
-
-
-
-
 ## [1.8.10](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.8.9...@restorecommerce/chassis-srv@1.8.10) (2026-05-27)
-
 
 ### Bug Fixes
 
 * **arango:** restore collection auto create on upsert ([e143908](https://github.com/restorecommerce/chassis-srv/commit/e143908c7823aaea107fcc31d5453539fa028e3c))
-
 
 ### Reverts
 
@@ -70,216 +53,119 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * Revert "chore(release): publish" ([3742433](https://github.com/restorecommerce/chassis-srv/commit/37424334499eab0b3eeef9954eea402a70ec8bef))
 * Revert "chore(release): publish" ([8e2001d](https://github.com/restorecommerce/chassis-srv/commit/8e2001d2151fd217ddea103ff2b1bb5d5f0d5c6c))
 
-
-
-
-
 ## [1.8.9](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.8.8...@restorecommerce/chassis-srv@1.8.9) (2026-05-12)
 
 **Note:** Version bump only for package @restorecommerce/chassis-srv
-
-
-
-
 
 ## [1.8.8](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.8.7...@restorecommerce/chassis-srv@1.8.8) (2026-05-11)
 
 **Note:** Version bump only for package @restorecommerce/chassis-srv
 
-
-
-
-
 ## [1.8.7](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.8.6...@restorecommerce/chassis-srv@1.8.7) (2026-04-07)
 
 **Note:** Version bump only for package @restorecommerce/chassis-srv
-
-
-
-
 
 ## [1.8.6](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.8.5...@restorecommerce/chassis-srv@1.8.6) (2026-03-31)
 
 **Note:** Version bump only for package @restorecommerce/chassis-srv
 
-
-
-
-
 ## [1.8.5](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.8.4...@restorecommerce/chassis-srv@1.8.5) (2026-03-23)
-
 
 ### Bug Fixes
 
 * **chassis-srv:** find() confused with search query, not auto creating collections ([ef26087](https://github.com/restorecommerce/chassis-srv/commit/ef26087962ef6741e6a1b58709deec412616b033))
 
-
-
-
-
 ## [1.8.4](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.8.3...@restorecommerce/chassis-srv@1.8.4) (2026-02-17)
-
 
 ### Bug Fixes
 
 * **kafka-client:** allow to bypass abstraction ([f5474a2](https://github.com/restorecommerce/chassis-srv/commit/f5474a2a30d3983c05e82552bf588b4b1e356bd0))
 
-
-
-
-
 ## [1.8.3](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.8.2...@restorecommerce/chassis-srv@1.8.3) (2026-02-16)
 
 **Note:** Version bump only for package @restorecommerce/chassis-srv
 
-
-
-
-
 ## [1.8.2](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.8.1...@restorecommerce/chassis-srv@1.8.2) (2026-02-09)
-
 
 ### Bug Fixes
 
 * **chassis-srv:** fix query for multy sort ([e90c306](https://github.com/restorecommerce/chassis-srv/commit/e90c3060bcdc7af1bcb03dd8dd5fe4030a48b28d))
 * **chassis-srv:** strenghen value check for query string ([e9c78ef](https://github.com/restorecommerce/chassis-srv/commit/e9c78efa09ead9326a4bf4bf154d8ed1f5f6ca14))
 
-
-
-
-
 ## [1.8.1](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.8.0...@restorecommerce/chassis-srv@1.8.1) (2026-02-09)
-
 
 ### Bug Fixes
 
 * **resource-base-interface:** make equal operator optional again ([4388e6d](https://github.com/restorecommerce/chassis-srv/commit/4388e6d610566f7023be91afb46f05ae96fada23))
 
-
-
-
-
 # [1.8.0](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.7.10...@restorecommerce/chassis-srv@1.8.0) (2026-02-06)
-
 
 ### Bug Fixes
 
 * **chassis:** node._key conflicts with graph edge key ([e42c31b](https://github.com/restorecommerce/chassis-srv/commit/e42c31b95d9b661a906971f42123a01883de1a13))
 * **resource-base-interface:** roleback to redis 4.7! ([f92809f](https://github.com/restorecommerce/chassis-srv/commit/f92809f459320797404815a95ce4c0e844ba9d35))
 
-
 ### Features
 
 * **facade:** performance upgrade via latent id buffering ([579d4b9](https://github.com/restorecommerce/chassis-srv/commit/579d4b947585848c48414989ca91446315d607b3))
-
 
 ### Reverts
 
 * Revert "chore(release): publish" ([d508e8a](https://github.com/restorecommerce/chassis-srv/commit/d508e8af9803a4a182d244f48172c5881b11ebd5))
 * Revert "chore(release): publish" ([8db759f](https://github.com/restorecommerce/chassis-srv/commit/8db759fd05eef801dd6ae60727ef1b763f5baafb))
 
-
-
-
-
 ## [1.7.10](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.7.9...@restorecommerce/chassis-srv@1.7.10) (2025-11-11)
 
 **Note:** Version bump only for package @restorecommerce/chassis-srv
 
-
-
-
-
 ## [1.7.9](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.7.8...@restorecommerce/chassis-srv@1.7.9) (2025-11-01)
-
 
 ### Bug Fixes
 
 * drop version to before failed version ([6a9fb99](https://github.com/restorecommerce/chassis-srv/commit/6a9fb994f8284a4a856dace1d058c8cd1221bcbb))
 * up log and indentation ([16cc72f](https://github.com/restorecommerce/chassis-srv/commit/16cc72f0fa14c49db61f02f7204172ddd60a06c3))
 
-
-
-
-
 ## [1.7.9](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.7.8...@restorecommerce/chassis-srv@1.7.9) (2025-11-01)
-
 
 ### Bug Fixes
 
 * up log to publish lib ([b1ae492](https://github.com/restorecommerce/chassis-srv/commit/b1ae49283fda3e0fe1c18109c6d3c80c28dc77ae))
-
-
-
-
 
 ## [1.7.10](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.7.9...@restorecommerce/chassis-srv@1.7.10) (2025-10-30)
 
-
 ### Bug Fixes
 
 * up log to publish lib ([b1ae492](https://github.com/restorecommerce/chassis-srv/commit/b1ae49283fda3e0fe1c18109c6d3c80c28dc77ae))
-
-
-
-
 
 ## [1.7.9](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.7.8...@restorecommerce/chassis-srv@1.7.9) (2025-10-30)
 
 **Note:** Version bump only for package @restorecommerce/chassis-srv
 
-
-
-
-
 ## [1.7.8](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.7.7...@restorecommerce/chassis-srv@1.7.8) (2025-10-24)
-
 
 ### Bug Fixes
 
 * **chassis-srv:** url auth nolonger supported! Make protocol configuratable ([23c9e83](https://github.com/restorecommerce/chassis-srv/commit/23c9e83c44565e053d1170111c787e8901ddd5a2))
 
-
-
-
-
 ## [1.7.7](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.7.6...@restorecommerce/chassis-srv@1.7.7) (2025-10-16)
 
 **Note:** Version bump only for package @restorecommerce/chassis-srv
 
-
-
-
-
 ## [1.7.6](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.7.5...@restorecommerce/chassis-srv@1.7.6) (2025-10-15)
-
 
 ### Bug Fixes
 
 * **chassis-srv:** fix log message convert bigint to number ([c18037a](https://github.com/restorecommerce/chassis-srv/commit/c18037a7373efe6758aab7877bc4ebe4f978f7b7))
 
-
-
-
-
 ## [1.7.5](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.7.4...@restorecommerce/chassis-srv@1.7.5) (2025-10-06)
 
 **Note:** Version bump only for package @restorecommerce/chassis-srv
-
-
-
-
 
 ## [1.7.4](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.7.3...@restorecommerce/chassis-srv@1.7.4) (2025-10-06)
 
 **Note:** Version bump only for package @restorecommerce/chassis-srv
 
-
-
-
-
 ## [1.7.3](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.7.2...@restorecommerce/chassis-srv@1.7.3) (2025-10-02)
-
 
 ### Bug Fixes
 
@@ -288,42 +174,23 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * fix broken dependencies ([d152086](https://github.com/restorecommerce/chassis-srv/commit/d152086a503f45b098474568760947e2dacf081c))
 * upgrade vitest, fix reflection ([511e401](https://github.com/restorecommerce/chassis-srv/commit/511e4014a088c195ffe50eaff7c26e8654e10f10))
 
-
-
-
-
 ## [1.7.2](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.7.1...@restorecommerce/chassis-srv@1.7.2) (2025-09-17)
-
 
 ### Bug Fixes
 
 * replace lodash with remeda ([155d5e3](https://github.com/restorecommerce/chassis-srv/commit/155d5e3e99b1f6fcbe75260acde66d5a504872c6))
 
-
-
-
-
 ## [1.7.1](https://github.com/restorecommerce/chassis-srv/compare/@restorecommerce/chassis-srv@1.7.0...@restorecommerce/chassis-srv@1.7.1) (2025-09-17)
-
 
 ### Bug Fixes
 
 * use correct imports ([7c65d49](https://github.com/restorecommerce/chassis-srv/commit/7c65d4921956a6479cabca3272a457e5465c083b))
 
-
-
-
-
 # 1.7.0 (2025-09-17)
-
 
 ### Features
 
 * move chassis-srv and resource-base-interface ([c5416f3](https://github.com/restorecommerce/chassis-srv/commit/c5416f395cf3721a43f0900ccb6590af78c17803))
-
-
-
-
 
 ### 1.6.1 (May 14th, 2024)
 

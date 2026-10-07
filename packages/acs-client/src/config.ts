@@ -51,6 +51,7 @@ export const urns = {
   aclInstance: 'urn:restorecommerce:acs:names:aclInstance',
   skipACL: 'urn:restorecommerce:acs:names:skipACL',
   maskedProperty: 'urn:restorecommerce:acs:names:obligation:maskedProperty',
+  ownershipDomain: "urn:restorecommerce:acs:names:ownershipDomain",
 };
 export type KnownUrns = typeof urns;
 Object.assign(urns, cfg.get('authorization:urns'));

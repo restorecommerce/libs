@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/resource-base-interface",
-  "version": "1.10.4",
+  "version": "1.10.5",
   "description": "Restorecommerce Resource Base Interface",
   "main": "lib/index.js",
   "typings": "./lib/index.d.ts",
@@ -20,7 +20,7 @@
   "type": "module",
   "dependencies": {
     "@restorecommerce/acs-client": "^3.2.4",
-    "@restorecommerce/chassis-srv": "^1.9.4",
+    "@restorecommerce/chassis-srv": "^1.10.0",
     "@restorecommerce/grpc-client": "^2.3.3",
     "@restorecommerce/kafka-client": "^1.4.4",
     "@restorecommerce/rc-grpc-clients": "^5.2.4",

@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.10.0](https://github.com/restorecommerce/chassis-srv/compare/%40restorecommerce%2Fchassis-srv%401.9.4...%40restorecommerce%2Fchassis-srv%401.10.0) (2026-10-09)
+
+### Features
+
+* **offsets:** add GracefulOffsetStore for improved offset management ([#216](https://github.com/restorecommerce/chassis-srv/issues/216)) ([22cfcde](https://github.com/restorecommerce/chassis-srv/commit/22cfcdedde215f57985d77fcb5f682844d87fcf9))
+
 ## [1.9.4](https://github.com/restorecommerce/chassis-srv/compare/%40restorecommerce%2Fchassis-srv%401.9.3...%40restorecommerce%2Fchassis-srv%401.9.4) (2026-09-29)
 
 ### Reverts

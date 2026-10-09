@@ -23,8 +23,8 @@ export { buildReflectionService };
 import { CommandInterface as CommandInterface } from './command-interface/index.js';
 export { CommandInterface };
 
-import { OffsetStore } from './offsets/index.js';
-export { OffsetStore };
+import { OffsetStore, GracefulOffsetStore } from './offsets/index.js';
+export { OffsetStore, GracefulOffsetStore };
 
 import { Health } from './health/index.js';
 export { Health };

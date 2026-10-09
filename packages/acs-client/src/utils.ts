@@ -48,11 +48,11 @@ export const notAllowedMessage = (
   decision?: string,
 ) => [
   `Access not allowed for request with`,
-  `subject:${ subjectID || 'undefined' },`,
-  `resource:${ resourceName || 'undefined' },`,
-  `action:${ action || 'undefined' },`,
-  `target_scope:${ targetScope || 'undefined' };`,
-  `the response was ${ decision || 'undefined' }`,
+  `subject:${subjectID || 'undefined'},`,
+  `resource:${resourceName || 'undefined'},`,
+  `action:${action || 'undefined'},`,
+  `target_scope:${targetScope || 'undefined'};`,
+  `the response was ${decision || 'undefined'}`,
 ].join(' ');
 
 const reduceUserScope = (
@@ -95,7 +95,7 @@ const checkSubjectMatch = async (
   user: ResolvedSubject,
   ruleSubjectAttributes: Attribute[],
   reducedUserScope?: string[]
-): boolean => {
+): Promise<boolean> => {
   // 1) Iterate through ruleSubjectAttributes and check if the roleScopingEntity URN and
   // role URN exists
   // 2) Now check if the subject rule role value matches with one of the users ctx role_associations
@@ -146,32 +146,43 @@ const checkSubjectMatch = async (
     let matchingRoleScopedInstance: string[] = [];
     // resolve the matched instance value from ownershipDomain entity in ACS
     if (ruleOwnershipDomain) {
-      logger.info('OwnershipDomain instance values', { matchingRoleScopedInstance });
+      logger.info('OwnershipDomain instance values', { resolveRoleScopedInstance });
       // Make request to acs-srv and get attribute values for each of the matching role scoped instance
       const ownershipReadResponse = await authZ.readOwnershipDomain({
         filters: [{
           filters: [{
             field: 'id',
             operation: Filter_Operation.in,
-            value: JSON.stringify(matchingRoleScopedInstance),
+            value: JSON.stringify(resolveRoleScopedInstance),
             type: Filter_ValueType.ARRAY
           }]
         }],
-        // TODO use technical user to read
+        limit: resolveRoleScopedInstance.length,
+        // use caller subject
         subject: {
-          id: '',
-          token: ''
+          id: user.id,
+          token: user.token
         },
       }, {}, true);
-      // const domainAttributes = ownershipReadResponse?.items?.[0]?.payload?.attributes ?? [];
-      matchingRoleScopedInstance = ownershipReadResponse?.items?.flatMap((item) => item?.payload?.attributes?.map((o) => o?.value));
+
+      matchingRoleScopedInstance = resolveRoleScopedInstance.concat(
+        ownershipReadResponse?.items?.flatMap(ra => ra?.payload?.attributes)?.filter(
+          a => a?.id === urns.ownerIndicatoryEntity
+        ).flatMap(
+          a => a?.attributes
+        ).filter(
+          aa => aa?.id === urns?.ownerInstance
+        ).map(
+          aa => aa?.value
+        ).filter(Boolean)
+      );
     } else {
       matchingRoleScopedInstance = resolveRoleScopedInstance;
     }
 
-    logger?.debug('Role scoped instances for matching entity', { id: user?.id, ruleRoleScopeEntityName, matchingRoleScopedInstance });
+    logger?.debug('Role scoped instances for matching entity', { subjectId: user?.id, ruleRoleScopeEntityName, matchingRoleScopedInstance });
     // validate HR scope root ID contains the role scope instances
-    const hrScopeExist = user?.hierarchical_scopes?.some((hrScope) => matchingRoleScopedInstance.includes(hrScope.id));
+    const hrScopeExist = user?.hierarchical_scopes?.some((hrScope) => matchingRoleScopedInstance?.includes(hrScope.id));
     if (!hrScopeExist) {
       logger?.info('Hierarchial scopes for matching role does not exist', {
         role: ruleRoleValue,
@@ -180,7 +191,7 @@ const checkSubjectMatch = async (
       });
       return false;
     } else if (hrScopeExist && user?.scope) {
-      logger?.debug('Target scope set and HR scopes exist, validating target scope from HR scopes', { targetScope: user?.scope });
+      logger?.debug('Target scope set and HR scopes exist, validating target scope from HR scopes', { targetScope: user?.scope, userHrScopes: user?.hierarchical_scopes });
       return checkTargetScopeExists(
         user?.hierarchical_scopes?.filter((hrScope) => matchingRoleScopedInstance?.includes(hrScope?.id) && hrScope?.role === ruleRoleValue),
         user?.scope,

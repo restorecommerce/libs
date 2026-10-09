@@ -20,7 +20,7 @@ import {
 import { GrpcMockServer } from '@alenon/grpc-mock-server';
 import { Effect } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/rule';
 import { it, describe, beforeAll, afterAll, beforeEach, afterEach } from 'vitest';
-import {isArray} from "remeda";
+import { isArray } from "remeda";
 
 let authZ: ACSAuthZ;
 
@@ -57,6 +57,31 @@ const permitRuleOrgScope: RuleRQ = {
       {
         id: 'urn:restorecommerce:acs:names:roleScopingEntity',
         value: 'urn:test:acs:model:organization.Organization'
+      },
+      {
+        id: 'urn:restorecommerce:acs:names:hierarchicalRoleScoping',
+        value: 'true'
+      }]
+  },
+  effect: Effect.PERMIT
+};
+
+const permitRuleDomainScope: RuleRQ = {
+  id: 'permit_domain_rule_id',
+  target: {
+    actions: [],
+    resources: [{
+      id: 'urn:restorecommerce:acs:names:model:entity',
+      value: 'urn:test:acs:model:Test.Test'
+    }],
+    subjects: [
+      {
+        id: 'urn:restorecommerce:acs:names:role',
+        value: 'test-role'
+      },
+      {
+        id: 'urn:restorecommerce:acs:names:roleScopingEntity',
+        value: 'urn:restorecommerce:acs:model:ownership_domain.ownershipDomain'
       },
       {
         id: 'urn:restorecommerce:acs:names:hierarchicalRoleScoping',
@@ -252,6 +277,11 @@ const PKG_NAME: string = 'io.restorecommerce.access_control';
 const SERVICE_NAME: string = 'AccessControlService';
 const mockServer = new GrpcMockServer('localhost:50161');
 
+const OWNERSHIP_DOMAIN_PROTO_PATH: string = 'io/restorecommerce/ownership_domain.proto';
+const OWNERSHIP_DOMAIN_PKG_NAME: string = 'io.restorecommerce.ownership_domain';
+const OWNERSHIP_DOMAIN_SERVICE_NAME: string = 'OwnershipDomainService';
+
+
 const startGrpcMockServer = async () => {
   // create mock implementation based on the method name and output
   const implementations = {
@@ -288,8 +318,50 @@ const startGrpcMockServer = async () => {
       callback(null, PolicySetRQFactory.get());
     }
   };
+  const ownershipDomainImplementation = {
+    read: (call: any, callback: any) => {
+      callback(null, {
+        items: [
+          {
+            payload: {
+              id: 'domainInstanceId',
+              domain: 'testDataDomain',
+              attributes: [
+                {
+                  id: "urn:restorecommerce:acs:names:ownerIndicatoryEntity",
+                  value: "urn:restorecommerce:acs:model:Test.Test",
+                  attributes: [
+                    {
+                      id: "urn:restorecommerce:acs:names:ownerInstance",
+                      value: "targetScope"
+                    }
+                  ]
+                }
+              ]
+            },
+            status: {
+              code: 200,
+              message: 'success'
+            }
+          }],
+        operation_status: {
+          code: 200,
+          message: 'success'
+        }
+      });
+    }
+  };
   try {
     mockServer.addService(PROTO_PATH, PKG_NAME, SERVICE_NAME, implementations, {
+      includeDirs: ['../protos/'],
+      keepCase: true,
+      longs: String,
+      enums: String,
+      defaults: true,
+      oneofs: true
+    });
+    mockServer.addService(OWNERSHIP_DOMAIN_PROTO_PATH, OWNERSHIP_DOMAIN_PKG_NAME,
+      OWNERSHIP_DOMAIN_SERVICE_NAME, ownershipDomainImplementation, {
       includeDirs: ['../protos/'],
       keepCase: true,
       longs: String,
@@ -610,6 +682,163 @@ describe('Testing acs-client', () => {
         const filters = filterEntityMap?.[0].filters;
         should.deepEqual(filters?.[0]?.filters?.[0], expectedFilterResponse[0]);
         should.deepEqual(filters?.[0]?.filters?.[1], expectedFilterResponse[1]);
+      }
+    );
+
+    it('Should PERMIT reading Test resource (PERMIT rule with domain scoping) and verify input filter ' +
+      'is extended to enforce applicable policies for targetScope',
+      async () => {
+        // PolicySet contains PERMIT rule
+        PolicySetRQFactory.rules = [permitRuleDomainScope];
+
+        // test resource to be read of type 'ReadRequest'
+        const resources: CtxResource[] = [{
+          id: 'test_id',
+          meta: {
+            owners: []
+          }
+        }];
+
+        // user ctx data updated in session
+        const subject = {
+          id: 'test_user_id',
+          scope: 'targetScope',
+          token: 'valid_token',
+          role_associations: [
+            {
+              role: 'test-role',
+              attributes: [
+                {
+                  id: 'urn:restorecommerce:acs:names:roleScopingEntity',
+                  value: 'urn:restorecommerce:acs:model:ownership_domain.ownershipDomain',
+                  attributes: [{
+                    id: 'urn:restorecommerce:acs:names:roleScopingInstance',
+                    value: 'domainInstanceId'
+                  }]
+                }
+              ]
+            }
+          ],
+          hierarchical_scopes: [{
+            id: 'targetScope',
+            role: 'test-role',
+            children: [{
+              id: 'targetSubScope'
+            }]
+          }]
+        };
+
+        const ctx: ACSClientContext = {
+          subject,
+          resources,
+        };
+
+        // call accessRequest(), the response is from mock ACS
+        const readResponse = await accessRequest(
+          subject,
+          [{ resource: 'Test', id: resources[0].id }],
+          AuthZAction.READ,
+          ctx, { operation: Operation.whatIsAllowed, database: 'postgres' }
+        ) as PolicySetRQResponse;
+
+        should.exist(readResponse.decision);
+        should.equal(readResponse.decision, Response_Decision.PERMIT);
+        should.equal(readResponse.operation_status?.code, 200);
+        should.equal(readResponse.operation_status?.message, 'success');
+        // verify input is modified to enforce the applicapble poilicies
+        const filterParamKey = cfg.get('authorization:filterParamKey')[0].value;
+        const expectedFilterResponse = [{
+          field: filterParamKey,
+          operation: 'eq',
+          value: 'targetScope'
+        }, {
+          field: filterParamKey,
+          operation: 'eq',
+          value: 'targetSubScope'
+        }];
+        should.equal(readResponse.filters?.[0]?.resource, 'Test');
+        const filterEntityMap = readResponse.filters;
+        const filters = filterEntityMap?.[0].filters;
+        should.deepEqual(filters?.[0]?.filters?.[0], expectedFilterResponse[0]);
+        should.deepEqual(filters?.[0]?.filters?.[1], expectedFilterResponse[1]);
+      }
+    );
+
+    it('Should PERMIT reading Test resource (PERMIT rule with domain scoping) and verify input filter ' +
+      'is extended to enforce applicable policies for targetSubScope',
+      async () => {
+        // PolicySet contains PERMIT rule
+        PolicySetRQFactory.rules = [permitRuleDomainScope];
+
+        // test resource to be read of type 'ReadRequest'
+        const resources: CtxResource[] = [{
+          id: 'test_id',
+          meta: {
+            owners: []
+          }
+        }];
+
+        // user ctx data updated in session
+        const subject = {
+          id: 'test_user_id',
+          scope: 'targetSubScope',
+          token: 'valid_token',
+          role_associations: [
+            {
+              role: 'test-role',
+              attributes: [
+                {
+                  id: 'urn:restorecommerce:acs:names:roleScopingEntity',
+                  value: 'urn:restorecommerce:acs:model:ownership_domain.ownershipDomain',
+                  attributes: [{
+                    id: 'urn:restorecommerce:acs:names:roleScopingInstance',
+                    value: 'domainInstanceId'
+                  }]
+                }
+              ]
+            }
+          ],
+          hierarchical_scopes: [{
+            id: 'domainInstanceId',
+            role: 'test-role',
+            children: [{
+              id: 'targetScope',
+              // this is not currently resolvable by acs-srv
+              children: [{
+                id: 'targetSubScope'
+              }]
+            }]
+          }]
+        };
+
+        const ctx: ACSClientContext = {
+          subject,
+          resources,
+        };
+
+        // call accessRequest(), the response is from mock ACS
+        const readResponse = await accessRequest(
+          subject,
+          [{ resource: 'Test', id: resources[0].id }],
+          AuthZAction.READ,
+          ctx, { operation: Operation.whatIsAllowed, database: 'postgres' }
+        ) as PolicySetRQResponse;
+
+        should.exist(readResponse.decision);
+        should.equal(readResponse.decision, Response_Decision.PERMIT);
+        should.equal(readResponse.operation_status?.code, 200);
+        should.equal(readResponse.operation_status?.message, 'success');
+        // verify input is modified to enforce the applicapble poilicies
+        const filterParamKey = cfg.get('authorization:filterParamKey')[0].value;
+        const expectedFilterResponse = [{
+          field: filterParamKey,
+          operation: 'eq',
+          value: 'targetSubScope'
+        }];
+        should.equal(readResponse.filters?.[0]?.resource, 'Test');
+        const filterEntityMap = readResponse.filters;
+        const filters = filterEntityMap?.[0].filters;
+        should.deepEqual(filters?.[0]?.filters?.[0], expectedFilterResponse[0]);
       }
     );
 

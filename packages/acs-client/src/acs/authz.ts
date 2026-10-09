@@ -533,7 +533,14 @@ export const initAuthZ = async (config?: any, logger?: Logger): Promise<void | A
         }, AccessControlServiceDefinition,
         createChannel(grpcACSConfig.address),
       );
-      authZ = new ACSAuthZ(acsClient);
+      const ownerhsipDomainClient: OwnershipDomainServiceClient = createClient(
+        {
+          ...grpcACSConfig,
+          logger
+        }, OwnershipDomainServiceDefinition,
+        createChannel(grpcACSConfig.address),
+      );
+      authZ = new ACSAuthZ(acsClient, ownerhsipDomainClient);
       unauthZ = new UnAuthZ(acsClient);
       // listeners for rules / policies / policySets modified, so as to
       // delete the Cache as it would be invalid if ACS resources are modified

@@ -25,6 +25,14 @@ import {
   AccessControlServiceClient,
   AccessControlServiceDefinition
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/access_control.js';
+import {
+  OwnershipDomainServiceClient,
+  OwnershipDomainServiceDefinition,
+  OwnershipDomainListResponse
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/ownership_domain.js';
+import { 
+  ReadRequest,
+} from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base.js';
 import { Response_Decision } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/access_control.js';
 import { Attribute } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/attribute.js';
 import { Subject, DeepPartial } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/auth.js';
@@ -289,12 +297,14 @@ export class UnAuthZ implements IAuthZ {
  */
 export class ACSAuthZ implements IAuthZ {
   acs: AccessControlServiceClient;
+  ownershipDomain: OwnershipDomainServiceClient;
   /**
    *
    * @param acs Access Control Service definition (gRPC)
    */
-  constructor(acs: AccessControlServiceClient, ids?: any) {
+  constructor(acs: AccessControlServiceClient, ownernshipDomain: OwnershipDomainServiceClient) {
     this.acs = acs;
+    this.ownershipDomain = ownernshipDomain;
   }
 
   /**
@@ -414,6 +424,42 @@ export class ACSAuthZ implements IAuthZ {
     return response;
   }
 
+   /**
+  * Perform request to access-control-srv
+  * @param request - authZRequest containing subject, resource and action
+  * @returns {OwnershipDomainListResponse}
+  * @param resource
+  */
+  async readOwnershipDomain(
+    request: ReadRequest,
+    ctx: ACSClientContext,
+    useCache: boolean
+  ): Promise<OwnershipDomainListResponse> {
+    let response: OwnershipDomainListResponse;
+    const cachePrefix = 'ACSAuthZ';
+    try {
+      response = await getOrFill(request, async (req) => {
+        return await this.ownershipDomain.read(request);
+      }, useCache, cachePrefix + ':ownershipDomain');
+    } catch (err: any) {
+      const { code, message, details, stack } = err;
+      logger?.error('Error invoking access-control-srv whatIsAllowed operation', { code, message, details, stack });
+      response = {
+        items:[],
+        operation_status: {
+          code: Number.isInteger(code) ? code : 500,
+          message: message
+        }
+      };
+    }
+
+    if (isEmptyish(response)) {
+      logger?.error('Unexpected empty response from ACS');
+    }
+
+    return response;
+  }
+
   private encode(object: any): any {
     if (object) {
       if (Array.isArray(object)) {
@@ -487,7 +533,14 @@ export const initAuthZ = async (config?: any, logger?: Logger): Promise<void | A
         }, AccessControlServiceDefinition,
         createChannel(grpcACSConfig.address),
       );
-      authZ = new ACSAuthZ(acsClient);
+      const ownerhsipDomainClient: OwnershipDomainServiceClient = createClient(
+        {
+          ...grpcACSConfig,
+          logger
+        }, OwnershipDomainServiceDefinition,
+        createChannel(grpcACSConfig.address),
+      );
+      authZ = new ACSAuthZ(acsClient, ownerhsipDomainClient);
       unauthZ = new UnAuthZ(acsClient);
       // listeners for rules / policies / policySets modified, so as to
       // delete the Cache as it would be invalid if ACS resources are modified

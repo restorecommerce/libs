@@ -15,13 +15,15 @@ import {
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/auth.js';
 import { Attribute } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/attribute.js';
 import {
-  Filter_Operation, FilterOp_Operator, FieldFilter
+  Filter_Operation, FilterOp_Operator, FieldFilter,
+  Filter_ValueType
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/resource_base.js';
 import {
   Response_Decision
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/access_control.js';
 import { Effect } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/rule.js';
 import { isEmptyish, isIncludedIn, isNullish } from "remeda";
+import { authZ } from './acs/authz.js';
 
 export type FilterParamKey = {
   scopingEntity?: string,
@@ -46,11 +48,11 @@ export const notAllowedMessage = (
   decision?: string,
 ) => [
   `Access not allowed for request with`,
-  `subject:${ subjectID || 'undefined' },`,
-  `resource:${ resourceName || 'undefined' },`,
-  `action:${ action || 'undefined' },`,
-  `target_scope:${ targetScope || 'undefined' };`,
-  `the response was ${ decision || 'undefined' }`,
+  `subject:${subjectID || 'undefined'},`,
+  `resource:${resourceName || 'undefined'},`,
+  `action:${action || 'undefined'},`,
+  `target_scope:${targetScope || 'undefined'};`,
+  `the response was ${decision || 'undefined'}`,
 ].join(' ');
 
 const reduceUserScope = (
@@ -89,11 +91,11 @@ const checkTargetScopeExists = (
   });
 };
 
-const checkSubjectMatch = (
+const checkSubjectMatch = async (
   user: ResolvedSubject,
   ruleSubjectAttributes: Attribute[],
   reducedUserScope?: string[]
-): boolean => {
+): Promise<boolean> => {
   // 1) Iterate through ruleSubjectAttributes and check if the roleScopingEntity URN and
   // role URN exists
   // 2) Now check if the subject rule role value matches with one of the users ctx role_associations
@@ -101,6 +103,7 @@ const checkSubjectMatch = (
   let hierarchicalRoleScopingCheck = 'true'; // by default HR scoping check is considered
   let ruleRoleValue: string;
   let ruleRoleScopeEntityName: string;
+  let ruleOwnershipDomain = false;
   reducedUserScope ??= [];
   if (ruleSubjectAttributes?.length === 0) {
     return true;
@@ -109,8 +112,11 @@ const checkSubjectMatch = (
     if (attribute?.id === urns.unauthenticated_user && attribute?.value === 'true') {
       return true;
     }
+    // Rule Subject value ie attribute.value can be either orgURN / userURN / ownershipDomainURN
     if (attribute?.id === urns.roleScopingEntity) {
       ruleRoleScopeEntityName = attribute.value;
+      if (attribute.value === urns.ownershipDomain)
+        ruleOwnershipDomain = true;
     }
     else if (attribute.id === urns.role) { // urns.role -> urn:restorecommerce:acs:names:role
       ruleRoleValue = attribute.value;
@@ -123,7 +129,8 @@ const checkSubjectMatch = (
   }
 
   if (ruleRoleValue && ruleRoleScopeEntityName) {
-    const matchingRoleScopedInstance: string[] = user?.role_associations?.flatMap(
+    // RuleAssociation's roleScopingEntity name can be either orgURN / userURN / ownershipDomainURN
+    const resolveRoleScopedInstance: string[] = user?.role_associations?.flatMap(
       ra => ra.attributes
     ).filter(
       a => a?.id === urns?.roleScopingEntity
@@ -136,9 +143,46 @@ const checkSubjectMatch = (
       aa => aa.value
     );
 
-    logger?.debug('Role scoped instances for matching entity', { id: user?.id, ruleRoleScopeEntityName, matchingRoleScopedInstance });
+    let matchingRoleScopedInstance: string[] = [];
+    // resolve the matched instance value from ownershipDomain entity in ACS
+    if (ruleOwnershipDomain) {
+      logger.info('OwnershipDomain instance values', { resolveRoleScopedInstance });
+      // Make request to acs-srv and get attribute values for each of the matching role scoped instance
+      const ownershipReadResponse = await authZ.readOwnershipDomain({
+        filters: [{
+          filters: [{
+            field: 'id',
+            operation: Filter_Operation.in,
+            value: JSON.stringify(resolveRoleScopedInstance),
+            type: Filter_ValueType.ARRAY
+          }]
+        }],
+        limit: resolveRoleScopedInstance.length,
+        // use caller subject
+        subject: {
+          id: user.id,
+          token: user.token
+        },
+      }, {}, true);
+
+      matchingRoleScopedInstance = resolveRoleScopedInstance.concat(
+        ownershipReadResponse?.items?.flatMap(ra => ra?.payload?.attributes)?.filter(
+          a => a?.id === urns.ownerIndicatoryEntity
+        ).flatMap(
+          a => a?.attributes
+        ).filter(
+          aa => aa?.id === urns?.ownerInstance
+        ).map(
+          aa => aa?.value
+        ).filter(Boolean)
+      );
+    } else {
+      matchingRoleScopedInstance = resolveRoleScopedInstance;
+    }
+
+    logger?.debug('Role scoped instances for matching entity', { subjectId: user?.id, ruleRoleScopeEntityName, matchingRoleScopedInstance });
     // validate HR scope root ID contains the role scope instances
-    const hrScopeExist = user?.hierarchical_scopes?.some((hrScope) => matchingRoleScopedInstance.includes(hrScope.id));
+    const hrScopeExist = user?.hierarchical_scopes?.some((hrScope) => matchingRoleScopedInstance?.includes(hrScope.id));
     if (!hrScopeExist) {
       logger?.info('Hierarchial scopes for matching role does not exist', {
         role: ruleRoleValue,
@@ -147,7 +191,7 @@ const checkSubjectMatch = (
       });
       return false;
     } else if (hrScopeExist && user?.scope) {
-      logger?.debug('Target scope set and HR scopes exist, validating target scope from HR scopes', { targetScope: user?.scope });
+      logger?.debug('Target scope set and HR scopes exist, validating target scope from HR scopes', { targetScope: user?.scope, userHrScopes: user?.hierarchical_scopes });
       return checkTargetScopeExists(
         user?.hierarchical_scopes?.filter((hrScope) => matchingRoleScopedInstance?.includes(hrScope?.id) && hrScope?.role === ruleRoleValue),
         user?.scope,
@@ -404,7 +448,7 @@ export const buildFilterPermissions = async (
         const algorithm = policy.combining_algorithm;
         // iterate through policy_set and check subject in policy and Rule:
         if (policy?.target?.subjects) {
-          const userSubjectMatched = checkSubjectMatch(subject, policy.target.subjects);
+          const userSubjectMatched = await checkSubjectMatch(subject, policy.target.subjects);
           if (!userSubjectMatched) {
             logger?.debug(`Skipping policy as policy subject and user subject don't match`);
             continue;
@@ -428,7 +472,7 @@ export const buildFilterPermissions = async (
         for (const rule of policy?.rules || []) {
           const reducedUserScope: string[] = [];
           if (rule?.target?.subjects) {
-            const userSubjectMatched = checkSubjectMatch(subject, rule.target.subjects, reducedUserScope);
+            const userSubjectMatched = await checkSubjectMatch(subject, rule.target.subjects, reducedUserScope);
             if (!userSubjectMatched) {
               logger?.debug(`Skipping rule as user subject and rule subject don't match`);
               continue;
@@ -741,6 +785,7 @@ export const createResourceFilterMap = async (
         }
       });
     }
+    // Filter permissions are built here
     const permissionArguments = await buildFilterPermissions(
       resourcePolicies.policy_sets[0],
       subject as ResolvedSubject,

@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.3.0](https://github.com/restorecommerce/libs/compare/%40restorecommerce%2Facs-client%403.2.4...%40restorecommerce%2Facs-client%403.3.0) (2026-10-12)
+
+### Features
+
+* add unit tests for permit and deny based on resource ownershipDomain ([e9f6e7d](https://github.com/restorecommerce/libs/commit/e9f6e7dfd772a0761a2baf830df31340eebb1522))
+* support to resolve ownership domain role association instance value for HR scope check in whatIsAllowed response evaluation ([c98a9ce](https://github.com/restorecommerce/libs/commit/c98a9ceb4fe5a58184bfa32584a682e776dc56ee))
+
 ## [3.2.4](https://github.com/restorecommerce/libs/compare/%40restorecommerce%2Facs-client%403.2.3...%40restorecommerce%2Facs-client%403.2.4) (2026-09-29)
 
 ### Reverts

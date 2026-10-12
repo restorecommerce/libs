@@ -14,6 +14,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Configure Git
+        run: |
+          git config --global user.email "bot@restorecommerce.io"
+          git config --global user.name "Restorecommerce Bot"
+
       - name: Merge PR
         run: |
           git checkout master

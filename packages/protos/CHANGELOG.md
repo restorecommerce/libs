@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.18.0](https://github.com/restorecommerce/libs/compare/%40restorecommerce%2Fprotos%406.17.0...%40restorecommerce%2Fprotos%406.18.0) (2026-10-20)
+
+### Features
+
+* e-invoice request support ([#263](https://github.com/restorecommerce/libs/issues/263)) ([95d5c26](https://github.com/restorecommerce/libs/commit/95d5c269c3ce915433f83cc259ccf3b511bd4fad))
+
 # [6.17.0](https://github.com/restorecommerce/libs/compare/%40restorecommerce%2Fprotos%406.16.1...%40restorecommerce%2Fprotos%406.17.0) (2026-09-29)
 
 ### Bug Fixes

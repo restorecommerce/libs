@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.1](https://github.com/restorecommerce/libs/compare/%40restorecommerce%2Facs-client%403.3.0...%40restorecommerce%2Facs-client%403.3.1) (2026-10-20)
+
+**Note:** Version bump only for package @restorecommerce/acs-client
+
 # [3.3.0](https://github.com/restorecommerce/libs/compare/%40restorecommerce%2Facs-client%403.2.4...%40restorecommerce%2Facs-client%403.3.0) (2026-10-12)
 
 ### Features

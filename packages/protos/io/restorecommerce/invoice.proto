@@ -37,7 +37,8 @@ service InvoiceService {
   rpc Delete (io.restorecommerce.resourcebase.DeleteRequest) returns (io.restorecommerce.resourcebase.DeleteResponse);
 
   /*
-  * Evaluates and (re-)Renders invoices as PDF to ostorage. (creates if not exist, updates if id is given)
+  * Evaluates and (re-)Renders invoices to ostorage. (creates if not exist, updates if id is given)
+  * The optional export_format selects the output; omitting it renders an ordinary PDF.
   */
   rpc Render (InvoiceList) returns (InvoiceListResponse);
   
@@ -77,10 +78,21 @@ message Deleted {
   optional string id = 1;
 }
 
+// Output selection for InvoiceService.Render.
+enum InvoiceExportFormat {
+  PDF = 0; // Ordinary PDF without invoice XML (existing behavior).
+  ZUGFERD_XML = 1; // Separate invoice XML file.
+  ZUGFERD_PDF = 2; // PDF/A with embedded invoice XML.
+  ZUGFERD_BOTH = 3; // Both files, using identical invoice XML content.
+}
+
 message InvoiceList {
   repeated Invoice items = 1;
   optional uint32 total_count = 2;
   optional io.restorecommerce.auth.Subject subject = 3;
+  // Only used by Render. If export_format is omitted or set to PDF,
+  // generate an ordinary PDF without invoice XML.
+  optional InvoiceExportFormat export_format = 4;
 }
 
 message InvoiceListResponse {
@@ -166,6 +178,12 @@ message Invoice {
   optional string customer_order_number = 20;
   optional string customer_vat_id = 21;
   optional io.restorecommerce.address.BillingAddress billing_address = 22;
+  // E-invoice payment due date. Existing payment_hints can also supply payment terms.
+  optional google.protobuf.Timestamp due_date = 23;
+  // E-invoice seller VAT ID. Falls back to the shop organization's vat_id.
+  optional string seller_vat_id = 24;
+  // Seller tax registration ID (BT-32), distinct from a VAT ID.
+  optional string seller_tax_registration_id = 25;
 }
 
 message Section {
@@ -188,6 +206,15 @@ message Position {
   optional google.protobuf.Timestamp from_date = 8; // value performance from date
   optional google.protobuf.Timestamp to_date = 9; // value performance to date
   repeated io.restorecommerce.attribute.Attribute attributes = 10;
+  // UNECE Recommendation 20/21 unit code, for example C62 (one) or HUR (hour).
+  optional string quantity_unit_code = 11;
+  // UNCL5305 VAT category. Positive VAT rates default to S; zero VAT requires an explicit category.
+  optional string vat_category_code = 12;
+  // VAT exemption explanation or VATEX code where required by the category.
+  optional string vat_exemption_reason = 13;
+  optional string vat_exemption_reason_code = 14;
+  // Net price per quantity unit for e-invoice export. When omitted, derive it from unit_price and VAT rate.
+  optional double net_unit_price = 15;
 }
 
 message ProductItem {

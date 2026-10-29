@@ -50,7 +50,7 @@ export class Arango implements DatabaseProvider {
     if (!isEmptyish(opts.customQueries)) {
       for (const queryName of opts.customQueries) {
         if (!this.customQueries.has(queryName)) {
-          throw new LoggedError(this.logger, `custom query ${query} not found`);
+          throw new LoggedError(this.logger, `custom query ${queryName} not found`);
         }
         const customQuery = this.customQueries.get(queryName);
         if (customQuery.type === 'query') {

@@ -211,7 +211,7 @@ export class AccessControlledServiceBase<O extends ResourceListResponse, I exten
     context?: CallContext,
     bypassACS = false,
   ): Promise<DeepPartial<O>> {
-    ids = Array.from(new Set(ids)).filter(id => id);
+    ids = Array.from(new Set(ids)).filter(Boolean);
     if (ids.length > 1000) {
       throw this.operationStatusCodes.LIMIT_EXHAUSTED;
     }

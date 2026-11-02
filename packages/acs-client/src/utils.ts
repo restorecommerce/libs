@@ -57,13 +57,19 @@ export const notAllowedMessage = (
 
 const reduceUserScope = (
   hrScope: HierarchicalScope,
-  reducedUserScope: string[],
-  hierarchicalRoleScoping: string
+  reducedUserScope: ScopeURNMap[],
+  hierarchicalRoleScoping: string,
+  rolescopingEntityWithInstance: Map<string, string[]>
 ) => {
-  reducedUserScope?.push(hrScope.id);
+  const matchingEntity = Array.from(rolescopingEntityWithInstance?.entries())
+    .find(([, instances]) => instances?.includes(hrScope.id))?.[0];
+  reducedUserScope.push({
+    scope: hrScope.id,
+    urn: matchingEntity
+  });
   if (hrScope?.children?.length > 0 && hierarchicalRoleScoping === 'true') {
     for (const childNode of hrScope.children) {
-      reduceUserScope(childNode, reducedUserScope, hierarchicalRoleScoping);
+      reduceUserScope(childNode, reducedUserScope, hierarchicalRoleScoping, rolescopingEntityWithInstance);
     }
   }
 };
@@ -71,18 +77,19 @@ const reduceUserScope = (
 const checkTargetScopeExists = (
   hrScopes: HierarchicalScope[],
   targetScope: string,
-  reducedUserScope: string[],
-  hierarchicalRoleScopingCheck: string
+  reducedUserScope: ScopeURNMap[],
+  hierarchicalRoleScopingCheck: string,
+  rolescopingEntityWithInstance: Map<string, string[]>
 ): boolean => {
   return hrScopes.some((hrScope) => {
     if (hrScope?.id === targetScope) {
       // found the target scope object, iterate and put the orgs in reducedUserScope array
       logger?.debug(`Target entity match found in the user's hierarchical scope`);
-      reduceUserScope(hrScope, reducedUserScope, hierarchicalRoleScopingCheck);
+      reduceUserScope(hrScope, reducedUserScope, hierarchicalRoleScopingCheck, rolescopingEntityWithInstance);
       return true;
     } else if (hrScope?.children?.length > 0 && hierarchicalRoleScopingCheck === 'true') {
       for (const childNode of hrScope.children) {
-        if (checkTargetScopeExists([childNode], targetScope, reducedUserScope, hierarchicalRoleScopingCheck)) {
+        if (checkTargetScopeExists([childNode], targetScope, reducedUserScope, hierarchicalRoleScopingCheck, rolescopingEntityWithInstance)) {
           return true;
         }
       }
@@ -94,7 +101,7 @@ const checkTargetScopeExists = (
 const checkSubjectMatch = async (
   user: ResolvedSubject,
   ruleSubjectAttributes: Attribute[],
-  reducedUserScope?: string[]
+  reducedUserScope?: ScopeURNMap[]
 ): Promise<boolean> => {
   // 1) Iterate through ruleSubjectAttributes and check if the roleScopingEntity URN and
   // role URN exists
@@ -128,6 +135,8 @@ const checkSubjectMatch = async (
     }
   }
 
+  // need to map nested ownership attributes entities back to flterParamKey based on entity URN
+  const rolescopingEntityWithInstance = new Map<string, string[]>();
   if (ruleRoleValue && ruleRoleScopeEntityName) {
     // RuleAssociation's roleScopingEntity name can be either orgURN / userURN / ownershipDomainURN
     const resolveRoleScopedInstance: string[] = user?.role_associations?.flatMap(
@@ -140,7 +149,16 @@ const checkSubjectMatch = async (
     ).filter(
       aa => aa?.id === urns?.roleScopingInstance
     ).map(
-      aa => aa.value
+      (aa) => {
+        if (!rolescopingEntityWithInstance.get(ruleRoleScopeEntityName)) {
+          rolescopingEntityWithInstance.set(ruleRoleScopeEntityName, [aa.value]);
+        } else {
+          const existingInstances = rolescopingEntityWithInstance.get(ruleRoleScopeEntityName);
+          existingInstances.push(aa.value);
+          rolescopingEntityWithInstance.set(ruleRoleScopeEntityName, existingInstances);
+        }
+        return aa.value;
+      }
     );
 
     let matchingRoleScopedInstance: string[] = [];
@@ -166,16 +184,17 @@ const checkSubjectMatch = async (
       }, {}, true);
 
       matchingRoleScopedInstance = resolveRoleScopedInstance.concat(
-        ownershipReadResponse?.items?.flatMap(ra => ra?.payload?.attributes)?.filter(
-          a => a?.id === urns.ownerIndicatoryEntity
-        ).flatMap(
-          a => a?.attributes
-        ).filter(
-          aa => aa?.id === urns?.ownerInstance
-        ).map(
-          aa => aa?.value
-        ).filter(Boolean)
-      );
+        ownershipReadResponse.items.flatMap((od) => od.payload.attributes)
+          .filter((attribute) => attribute?.id === urns.ownerIndicatoryEntity || attribute?.id === urns.ownerIndicatoryEntity)
+          .flatMap((entityAttribute) => entityAttribute?.attributes
+            ?.filter((attribute) => attribute?.id === urns.ownerInstance || attribute?.id === urns.aclInstance)
+            .map((instanceAttribute) => {
+              const instances = rolescopingEntityWithInstance.get(entityAttribute.value) ?? [];
+              instances.push(instanceAttribute.value);
+              rolescopingEntityWithInstance.set(entityAttribute.value, instances);
+              return instanceAttribute.value;
+            }) ?? [])
+      ).filter(Boolean);
     } else {
       matchingRoleScopedInstance = resolveRoleScopedInstance;
     }
@@ -191,22 +210,24 @@ const checkSubjectMatch = async (
       });
       return false;
     } else if (hrScopeExist && user?.scope) {
-      logger?.debug('Target scope set and HR scopes exist, validating target scope from HR scopes', { targetScope: user?.scope, userHrScopes: user?.hierarchical_scopes });
+      logger?.debug('Target scope set and HR scopes exist, validating target scope from HR scopes',
+        { targetScope: user?.scope, userHrScopes: user?.hierarchical_scopes, rolescopingEntityWithInstance });
       return checkTargetScopeExists(
         user?.hierarchical_scopes?.filter((hrScope) => matchingRoleScopedInstance?.includes(hrScope?.id) && hrScope?.role === ruleRoleValue),
         user?.scope,
         reducedUserScope,
-        hierarchicalRoleScopingCheck
+        hierarchicalRoleScopingCheck,
+        rolescopingEntityWithInstance
       );
     } else if (hrScopeExist && !user?.scope) {
       // HR scope match exist but user has not provided scope so still a match is considered
-      logger?.debug('Target scope not provided using full HR tree for matched role', { role: ruleRoleValue });
+      logger?.debug('Target scope not provided using full HR tree for matched role', { role: ruleRoleValue, rolescopingEntityWithInstance });
       // if no scope is provided then use the complete HR tree for user scopes
       user?.hierarchical_scopes?.filter(
         (hrScope) => matchingRoleScopedInstance?.includes(hrScope?.id)
           && hrScope?.role === ruleRoleValue
       ).forEach((eachHRScope) => {
-        reduceUserScope(eachHRScope, reducedUserScope, hierarchicalRoleScopingCheck);
+        reduceUserScope(eachHRScope, reducedUserScope, hierarchicalRoleScopingCheck, rolescopingEntityWithInstance);
       });
       return reducedUserScope.length > 0;
     }
@@ -230,7 +251,7 @@ const validateCondition = (condition: string, request: any): any => {
 const buildQueryFromTarget = (
   target: AttributeTarget,
   effect: Effect,
-  userTotalScope: string[],
+  userTotalScope: ScopeURNMap[],
   urns: any,
   scopingUpdated: any,
   reqResources: any,
@@ -325,12 +346,13 @@ const buildQueryFromTarget = (
       custom_arguments: {
         // value: Buffer.from(JSON.stringify({
         entity: scopingAttribute.value,
-        instance: userTotalScope
+        instance: userTotalScope.map((obj) => obj.scope)
       }
     };
     scopingUpdated = true;
   } else if (database && database === 'postgres' && effect == Effect.PERMIT) {
     query['filters'] = [];
+    const filterParamKeyConfig = cfg?.get('authorization:filterParamKey');
     let filterParamKey = cfg?.get('authorization:filterParamKey');
     if (Array.isArray(filterParamKey)) {
       filterParamKey = filterParamKey?.find(
@@ -345,8 +367,15 @@ const buildQueryFromTarget = (
     // default filter Paramkey for PostgresDB
     filterParamKey ??= 'orgKey';
     logger?.debug('Filter paramter key for Postgres DB', { filterParamKey });
+    // map each of the userTotalScope with respective filterParamKey
     for (const eachScope of userTotalScope) {
-      query['filters'].push({ field: filterParamKey, operation: 'eq', value: eachScope });
+      if (scopingAttribute.value === urns.ownershipDomain) {
+        const odsScopingEntity = filterParamKeyConfig?.find(
+          (obj: any) => obj?.scopingEntity === eachScope.urn
+        )?.value;
+        filterParamKey = odsScopingEntity ? odsScopingEntity : filterParamKey;
+      }
+      query['filters'].push({ field: filterParamKey, operation: 'eq', value: eachScope.scope });
     }
     // apply filter from condition
     for (const eachFilter of filter) {
@@ -406,6 +435,11 @@ const buildQueryFromTarget = (
   }
   query.scopingUpdated = scopingUpdated;
   return query;
+};
+
+interface ScopeURNMap {
+  scope: string;
+  urn?: string
 };
 
 export const buildFilterPermissions = async (
@@ -470,7 +504,7 @@ export const buildFilterPermissions = async (
 
         let scopingUpdated = false;
         for (const rule of policy?.rules || []) {
-          const reducedUserScope: string[] = [];
+          const reducedUserScope: ScopeURNMap[] = [];
           if (rule?.target?.subjects) {
             const userSubjectMatched = await checkSubjectMatch(subject, rule.target.subjects, reducedUserScope);
             if (!userSubjectMatched) {

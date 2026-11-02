@@ -720,10 +720,13 @@ describe('Testing acs-client', () => {
             }
           ],
           hierarchical_scopes: [{
-            id: 'targetScope',
+            id: 'domainInstanceId',
             role: 'test-role',
             children: [{
-              id: 'targetSubScope'
+              id: 'targetScope',
+              children: [{
+                id: 'targetSubScope'
+              }]
             }]
           }]
         };
@@ -803,7 +806,6 @@ describe('Testing acs-client', () => {
             role: 'test-role',
             children: [{
               id: 'targetScope',
-              // this is not currently resolvable by acs-srv
               children: [{
                 id: 'targetSubScope'
               }]

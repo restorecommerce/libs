@@ -149,7 +149,6 @@ const decoratedTestService = new DecoratedTestService<ContactPointList, ContactP
 
 describe('Testing acs-client decorators', () => {
   beforeAll(async () => {
-    console.log('--- GOT HERE ---');
     if (cacheEnabled) {
       await initializeCache();
     }

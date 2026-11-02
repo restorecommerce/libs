@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.10.8](https://github.com/restorecommerce/resource-base-interface/compare/%40restorecommerce%2Fresource-base-interface%401.10.7...%40restorecommerce%2Fresource-base-interface%401.10.8) (2026-11-02)
+
+### Bug Fixes
+
+* **chassis:** missung custom query should be logged by name ([815f747](https://github.com/restorecommerce/resource-base-interface/commit/815f747c6cf7d5bc69fd19dd7e1066305c1bca2c))
+
 ## [1.10.7](https://github.com/restorecommerce/resource-base-interface/compare/%40restorecommerce%2Fresource-base-interface%401.10.6...%40restorecommerce%2Fresource-base-interface%401.10.7) (2026-10-20)
 
 **Note:** Version bump only for package @restorecommerce/resource-base-interface

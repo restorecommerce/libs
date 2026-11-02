@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.4.0](https://github.com/restorecommerce/libs/compare/%40restorecommerce%2Facs-client%403.3.1...%40restorecommerce%2Facs-client%403.4.0) (2026-11-02)
+
+### Bug Fixes
+
+* **acs-clint:** HR scope for unit test ([8f6a926](https://github.com/restorecommerce/libs/commit/8f6a926a537289f2128101204d0406b94c69b023))
+
+### Features
+
+* **acs-client:** map ownership domain entity attributes based on filterparamkey config ([5286a11](https://github.com/restorecommerce/libs/commit/5286a11edd6986724c4e40a9a470e4cd7e68b0e6))
+
 ## [3.3.1](https://github.com/restorecommerce/libs/compare/%40restorecommerce%2Facs-client%403.3.0...%40restorecommerce%2Facs-client%403.3.1) (2026-10-20)
 
 **Note:** Version bump only for package @restorecommerce/acs-client

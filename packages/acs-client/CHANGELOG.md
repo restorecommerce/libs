@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.5.0](https://github.com/restorecommerce/libs/compare/%40restorecommerce%2Facs-client%403.4.0...%40restorecommerce%2Facs-client%403.5.0) (2026-11-03)
+
+### Features
+
+* read ownershipDomain based on token and apply the instances to reducedUserScope array ([d4d8fde](https://github.com/restorecommerce/libs/commit/d4d8fde0e300c072cc7be5d25edc94658a49b880))
+
 # [3.4.0](https://github.com/restorecommerce/libs/compare/%40restorecommerce%2Facs-client%403.3.1...%40restorecommerce%2Facs-client%403.4.0) (2026-11-02)
 
 ### Bug Fixes

@@ -165,17 +165,7 @@ const checkSubjectMatch = async (
     // resolve the matched instance value from ownershipDomain entity in ACS
     if (ruleOwnershipDomain) {
       logger.info('OwnershipDomain instance values', { resolveRoleScopedInstance });
-      // Make request to acs-srv and get attribute values for each of the matching role scoped instance
       const ownershipReadResponse = await authZ.readOwnershipDomain({
-        filters: [{
-          filters: [{
-            field: 'id',
-            operation: Filter_Operation.in,
-            value: JSON.stringify(resolveRoleScopedInstance),
-            type: Filter_ValueType.ARRAY
-          }]
-        }],
-        limit: resolveRoleScopedInstance.length,
         // use caller subject
         subject: {
           id: user.id,
@@ -183,14 +173,22 @@ const checkSubjectMatch = async (
         },
       }, {}, true);
 
+      for (const od of ownershipReadResponse?.items || []) {
+        if (od?.payload?.id)
+          reducedUserScope.push({
+            scope: od.payload.id,
+            urn: urns.ownershipDomain
+          });
+      }
+
       matchingRoleScopedInstance = resolveRoleScopedInstance.concat(
-        ownershipReadResponse.items.flatMap((od) => od.payload.attributes)
+        ownershipReadResponse?.items?.flatMap((od) => od?.payload?.attributes)
           .filter((attribute) => attribute?.id === urns.ownerIndicatoryEntity || attribute?.id === urns.ownerIndicatoryEntity)
           .flatMap((entityAttribute) => entityAttribute?.attributes
             ?.filter((attribute) => attribute?.id === urns.ownerInstance || attribute?.id === urns.aclInstance)
             .map((instanceAttribute) => {
-              const instances = rolescopingEntityWithInstance.get(entityAttribute.value) ?? [];
-              instances.push(instanceAttribute.value);
+              const instances = rolescopingEntityWithInstance?.get(entityAttribute.value) ?? [];
+              instances.push(instanceAttribute?.value);
               rolescopingEntityWithInstance.set(entityAttribute.value, instances);
               return instanceAttribute.value;
             }) ?? [])

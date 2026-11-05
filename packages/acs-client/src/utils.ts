@@ -403,7 +403,7 @@ const buildQueryFromTarget = (
         // add ID filter
       } else if (attribute.id == urns.property) {
         // add fields filter
-        query.fields ??= [];
+        query.fields ||= [];
         query.fields.push({
           name: attribute.value.split('#')[1],
           include: effect == Effect.PERMIT
@@ -421,7 +421,7 @@ const buildQueryFromTarget = (
     if (filterOperator) {
       query.filters.operator = filterOperator;
     }
-    delete query.filters;
+    delete query.filter; // for lagecy filters?
   } else if (!isEmptyish(filter) || key == FilterOp_Operator.or) {
     query.filters = filter;
     // override the operator if its returned from rule condition
@@ -521,7 +521,7 @@ export const buildFilterPermissions = async (
             database
           );
 
-          if (filterPermissions.scopingUpdated !== undefined) {
+          if (!isEmptyish(filterPermissions)) {
             scopingUpdated = filterPermissions.scopingUpdated;
             delete filterPermissions.scopingUpdated;
           }
@@ -564,9 +564,7 @@ export const buildFilterPermissions = async (
     // fix to override the AQL query filters with ACS policy filters if they exist for ArangoDB
     // TODO remove this once the AQL filterByOwnership is removed and ACS policy filters are returned
     if (policy?.scope && applicable == Effect.PERMIT && !query['custom_query']) {
-      if (!query['custom_queries']) {
-        query['custom_queries'] = [];
-      }
+      query.custom_queries ||= [];
 
       // example Policy
       // {"scope":{"custom_query":"filterByOwnership",
@@ -574,24 +572,21 @@ export const buildFilterPermissions = async (
       // }, "filters":[],"scopingUpdated":true}
       if (policy?.scope?.custom_query && policy?.scope?.custom_arguments?.instance?.length > 0) {
         let customQueryExist = false;
-        if (query['custom_queries']?.length > 0) {
-          customQueryExist = query['custom_queries'].some((obj: any) => obj === policy.scope.custom_query);
+        if (query.custom_queries?.length > 0) {
+          customQueryExist = query.custom_queries.some((obj: any) => obj === policy.scope.custom_query);
         }
         // policy.scope.custom_query -> filterByOwnerShip does not exist or is a different AQL query
         if (!customQueryExist) {
-          query['custom_queries'].push(policy.scope.custom_query);
+          query.custom_queries.push(policy.scope.custom_query);
         }
-
-        if (!query['custom_arguments']) {
-          query['custom_arguments'] = [];
-        }
-
-        const customArgEntityExist = query['custom_arguments']?.find((obj: any) => obj?.entity === policy?.scope?.custom_arguments?.entity);
+        
+        query.custom_arguments ||= [];
+        const customArgEntityExist = query.custom_arguments?.find((obj: any) => obj?.entity === policy?.scope?.custom_arguments?.entity);
         if (!customArgEntityExist) {
-          query['custom_arguments']?.push(policy?.scope?.custom_arguments);
+          query.custom_arguments?.push(policy?.scope?.custom_arguments);
         } else {
           // same entity already exists, update instances on this object
-          query['custom_arguments']?.forEach((obj: any) => {
+          query.custom_arguments?.forEach((obj: any) => {
             if (obj?.entity === policy?.scope?.custom_arguments?.entity) {
               obj?.instance?.push(...policy?.scope?.custom_arguments?.instance || []);
             }
@@ -627,8 +622,8 @@ export const buildFilterPermissions = async (
   }
 
   if (!isEmptyish(query) && (!isNullish(query.filters) || !isEmptyish(query['fields']) || !isEmptyish(query['custom_query']))) {
-    if (query['custom_arguments']) {
-      query['custom_arguments'] = { value: Buffer.from(JSON.stringify(query['custom_arguments'])) };
+    if (query.custom_arguments) {
+      query.custom_arguments = { value: Buffer.from(JSON.stringify(query.custom_arguments)) };
     }
     query.filters = [{ filters: query.filters }];
     return query;

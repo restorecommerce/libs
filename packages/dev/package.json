@@ -38,8 +38,8 @@
   "peerDependencies": {
     "commitizen": "^4.3.2",
     "esbuild": "^0.28.1",
-    "eslint": "^10.6.0",
-    "vitest": "^4.1.9"
+    "eslint": "^10.8.0",
+    "vitest": "^4.1.10"
   },
   "overrides": {
     "vite": "7.3.5"

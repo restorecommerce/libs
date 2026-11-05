@@ -70,7 +70,7 @@ export class AccessControlledServiceBase<O extends ResourceListResponse, I exten
     resourceName: string,
     topic: Topic,
     db: DatabaseProvider,
-    cfg: ServiceConfig,
+    public readonly cfg: ServiceConfig,
     logger?: Logger,
     enableEvents?: boolean,
     collectionName?: string,

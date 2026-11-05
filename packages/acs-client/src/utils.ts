@@ -257,7 +257,7 @@ const buildQueryFromTarget = (
   reqSubject?: DeepPartial<Subject>,
   database?: string
 ): QueryParams => {
-  const { subjects, resources } = target;
+  const { subjects, resources } = target ?? {};
   let ruleCondition = false;
   let filter = [];
   const query: QueryParams = {};
@@ -339,7 +339,7 @@ const buildQueryFromTarget = (
   );
   if (!!scopingAttribute && effect == Effect.PERMIT && database === 'arangoDB' && !ruleCondition) { // note: there is currently no query to exclude scopes
     // userTotalScope is an array accumulated scopes for each rule
-    query['scope'] = {
+    query.scope = {
       custom_query: cfg.get('authorization:custom_query_name') ?? 'filterByOwnership',
       custom_arguments: {
         // value: Buffer.from(JSON.stringify({
@@ -349,7 +349,7 @@ const buildQueryFromTarget = (
     };
     scopingUpdated = true;
   } else if (database && database === 'postgres' && effect == Effect.PERMIT) {
-    query['filters'] = [];
+    query.filters = [];
     const filterParamKeyConfig = cfg?.get('authorization:filterParamKey');
     let filterParamKey = cfg?.get('authorization:filterParamKey');
     if (Array.isArray(filterParamKey)) {
@@ -373,12 +373,12 @@ const buildQueryFromTarget = (
         )?.value;
         filterParamKey = odsScopingEntity ? odsScopingEntity : filterParamKey;
       }
-      query['filters'].push({ field: filterParamKey, operation: 'eq', value: eachScope.scope });
+      query.filters.push({ field: filterParamKey, operation: 'eq', value: eachScope.scope });
     }
     // apply filter from condition
     for (const eachFilter of filter) {
       if (eachFilter && eachFilter.value) {
-        query['filters'].push({ field: filterParamKey, operation: 'eq', value: eachFilter.value });
+        query.filters.push({ field: filterParamKey, operation: 'eq', value: eachFilter.value });
         filter = [];
       }
     }
@@ -403,10 +403,8 @@ const buildQueryFromTarget = (
         // add ID filter
       } else if (attribute.id == urns.property) {
         // add fields filter
-        if (!query['fields']) {
-          query['fields'] = [];
-        }
-        query['fields'].push({
+        query.fields ??= [];
+        query.fields.push({
           name: attribute.value.split('#')[1],
           include: effect == Effect.PERMIT
         });
@@ -423,9 +421,9 @@ const buildQueryFromTarget = (
     if (filterOperator) {
       query.filters.operator = filterOperator;
     }
-    delete query['filter'];
+    delete query.filters;
   } else if (!isEmptyish(filter) || key == FilterOp_Operator.or) {
-    query['filters'] = filter;
+    query.filters = filter;
     // override the operator if its returned from rule condition
     if (filterOperator) {
       query.filters.operator = filterOperator;
@@ -523,7 +521,7 @@ export const buildFilterPermissions = async (
             database
           );
 
-          if (!isEmptyish(filterPermissions)) {
+          if (filterPermissions.scopingUpdated !== undefined) {
             scopingUpdated = filterPermissions.scopingUpdated;
             delete filterPermissions.scopingUpdated;
           }

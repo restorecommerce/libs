@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.5.1](https://github.com/restorecommerce/libs/compare/%40restorecommerce%2Facs-client%403.5.0...%40restorecommerce%2Facs-client%403.5.1) (2026-11-05)
+
+### Bug Fixes
+
+* **acs-client:** decompose from undefined target in buildQueryFromTarget ([8107d3a](https://github.com/restorecommerce/libs/commit/8107d3afa23bf2d977d31c0fceedfd966b9098f2))
+* **acs-client:** minor refactoring ([913960d](https://github.com/restorecommerce/libs/commit/913960df531c1aefeb246afb676d984c59fd4fbc))
+
 # [3.5.0](https://github.com/restorecommerce/libs/compare/%40restorecommerce%2Facs-client%403.4.0...%40restorecommerce%2Facs-client%403.5.0) (2026-11-03)
 
 ### Features

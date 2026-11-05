@@ -3,120 +3,75 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [1.4.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@1.4.2...@restorecommerce/logger@1.4.3) (2026-08-05)
+## [1.4.4](https://github.com/restorecommerce/libs/compare/%40restorecommerce%2Flogger%401.4.3...%40restorecommerce%2Flogger%401.4.4) (2026-11-05)
 
+**Note:** Version bump only for package @restorecommerce/logger
+
+## [1.4.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@1.4.2...@restorecommerce/logger@1.4.3) (2026-08-05)
 
 ### Bug Fixes
 
 * **deps:** avoid flexible dependencies ([c2504b9](https://github.com/restorecommerce/libs/commit/c2504b91ad0022c1bacd398d02fefdcdbec10865))
 * **logger:** logger should now handle bigint, kafka should build to dist due to native lib ([06c19a2](https://github.com/restorecommerce/libs/commit/06c19a2f044eb4b706522d3be9581a5cdb9a4df2))
 
-
-
-
-
 ## [1.4.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@1.4.1...@restorecommerce/logger@1.4.2) (2026-07-03)
-
 
 ### Bug Fixes
 
 * **deps:** downgrade vite@7 due to breaking support of decorators in vitest ([183701d](https://github.com/restorecommerce/libs/commit/183701d5927d39ffda75f33f0dc162e1f3490183))
 * **lint:** fix new strict lint errors ([c6bc716](https://github.com/restorecommerce/libs/commit/c6bc7161eaf68a7253bd34ca7f38b14502c2eefe))
 
-
-
-
-
 ## [1.4.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@1.4.0...@restorecommerce/logger@1.4.1) (2026-06-16)
-
 
 ### Bug Fixes
 
 * **protos:** update ostorage-srv to include new endpoint for modifying ACL ([a926db7](https://github.com/restorecommerce/libs/commit/a926db76b7f96168dbb0ba227364137c07418e8b))
 
-
-
-
-
 # [1.4.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@1.3.8...@restorecommerce/logger@1.4.0) (2026-06-12)
-
 
 ### Bug Fixes
 
 * **deps:** upgrade all to support ES2025, intermediate ([f43819c](https://github.com/restorecommerce/libs/commit/f43819c8b6353fe34d15ee2a811e2018b6230b11))
 * **packages:** remove all pretest builds ([d16ada1](https://github.com/restorecommerce/libs/commit/d16ada199f057403bed2a99fa6762c95962919cd))
 
-
 ### Features
 
 * **es2025:** upgrade all to es2025, unify all tsconfigs ([d8371fd](https://github.com/restorecommerce/libs/commit/d8371fdaac384ca13aa7dfb64ef309c7a263dada))
 * upgrade deps ([848e400](https://github.com/restorecommerce/libs/commit/848e400bd0719877502302a00c14cae412b6db6a))
 
-
-
-
-
 ## [1.3.8](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@1.3.7...@restorecommerce/logger@1.3.8) (2025-10-06)
 
 **Note:** Version bump only for package @restorecommerce/logger
 
-
-
-
-
 ## [1.3.7](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@1.3.6...@restorecommerce/logger@1.3.7) (2025-10-02)
-
 
 ### Bug Fixes
 
 * bump dependencies, fix dependencies ([ce367b7](https://github.com/restorecommerce/libs/commit/ce367b75c3998dd87fc6827dca33f5fcd6a26493))
 * upgrade vitest, fix reflection ([511e401](https://github.com/restorecommerce/libs/commit/511e4014a088c195ffe50eaff7c26e8654e10f10))
 
-
-
-
-
 ## [1.3.6](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@1.3.5...@restorecommerce/logger@1.3.6) (2025-09-17)
 
 **Note:** Version bump only for package @restorecommerce/logger
-
-
-
-
 
 ## [1.3.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@1.3.4...@restorecommerce/logger@1.3.5) (2025-09-17)
 
 **Note:** Version bump only for package @restorecommerce/logger
 
-
-
-
-
 ## [1.3.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@1.3.3...@restorecommerce/logger@1.3.4) (2025-05-27)
-
 
 ### Bug Fixes
 
 * **logger:** add deep test for omitFields ([6c7692d](https://github.com/restorecommerce/libs/commit/6c7692de198b14b9ce78135930fd8d251d1691bd))
 * **logger:** correct regex for array detection, tolerant buffer handler ([c92a443](https://github.com/restorecommerce/libs/commit/c92a4439aa0a082bbe4b0ca2d5d53e3bd128cad4))
 
-
-
-
-
 ## [1.3.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@1.3.2...@restorecommerce/logger@1.3.3) (2025-05-14)
-
 
 ### Bug Fixes
 
 * **protos:** fix typos in proto, load meta in acs decorater, refactor logger filePath detector ([8f02eee](https://github.com/restorecommerce/libs/commit/8f02eee6460b9c48f2f8416b08017f6ba11caf4e))
 
-
-
-
-
 ## [1.3.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@1.3.1...@restorecommerce/logger@1.3.2) (2024-11-04)
-
 
 ### Bug Fixes
 
@@ -124,133 +79,71 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * **logger:** use common tsconfig, fix style errors ([4917199](https://github.com/restorecommerce/libs/commit/49171991d356c01adf0ebf8f9b31985b3a488056))
 * **various:** Upgrade eslint to use typescript-eslint ([b580f00](https://github.com/restorecommerce/libs/commit/b580f00d5bd1d67c8fc1caabcb75ca3b6d12a83e))
 
-
-
-
-
 ## [1.3.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@1.3.0...@restorecommerce/logger@1.3.1) (2024-06-26)
-
 
 ### Bug Fixes
 
 * **logger:** Defaulting of stringifyMeta option ([28b92f3](https://github.com/restorecommerce/libs/commit/28b92f3ad78674a818809b19d918237fbba6a119))
 
-
-
-
-
 # [1.3.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@1.2.11...@restorecommerce/logger@1.3.0) (2024-06-26)
-
 
 ### Bug Fixes
 
 * **logger:** Fix ts error ([157704f](https://github.com/restorecommerce/libs/commit/157704f03b0d26d4ec138be563c121a08d80087b))
 
-
 ### Features
 
 * **logger:** stringify meta data for ES transport by default ([21361a9](https://github.com/restorecommerce/libs/commit/21361a94a8779d3d87005811465c136fb9d54a84))
-
-
-
-
 
 ## [1.2.11](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@1.2.10...@restorecommerce/logger@1.2.11) (2024-06-07)
 
 **Note:** Version bump only for package @restorecommerce/logger
 
-
-
-
-
 ## [1.2.10](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@1.2.9...@restorecommerce/logger@1.2.10) (2024-03-05)
 
 **Note:** Version bump only for package @restorecommerce/logger
-
-
-
-
 
 ## [1.2.9](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@1.2.8...@restorecommerce/logger@1.2.9) (2024-01-15)
 
 **Note:** Version bump only for package @restorecommerce/logger
 
-
-
-
-
 ## [1.2.8](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@1.2.7...@restorecommerce/logger@1.2.8) (2023-11-20)
 
 **Note:** Version bump only for package @restorecommerce/logger
 
-
-
-
-
 ## [1.2.7](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@1.2.6...@restorecommerce/logger@1.2.7) (2023-10-24)
-
 
 ### Bug Fixes
 
 * **logger:** replace cloneDeep with JSON stringify and parse (as lodash clonedeep spits an error logging context object) ([c22626a](https://github.com/restorecommerce/libs/commit/c22626a52c63153fa421fd75c22f4b63c265df21))
 
-
-
-
-
 ## [1.2.6](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@1.2.5...@restorecommerce/logger@1.2.6) (2023-10-14)
-
 
 ### Bug Fixes
 
 * **logger, service-config:** fix export statements ([e6a4d24](https://github.com/restorecommerce/libs/commit/e6a4d24fb61afc7820ccab95a852b13df32c048e))
 
-
-
-
-
 ## [1.2.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@1.2.4...@restorecommerce/logger@1.2.5) (2023-10-07)
 
 **Note:** Version bump only for package @restorecommerce/logger
-
-
-
-
 
 ## [1.2.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@1.2.3...@restorecommerce/logger@1.2.4) (2023-07-11)
 
 **Note:** Version bump only for package @restorecommerce/logger
 
-
-
-
-
 ## [1.2.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@1.2.2...@restorecommerce/logger@1.2.3) (2023-05-29)
 
 **Note:** Version bump only for package @restorecommerce/logger
-
-
-
-
 
 ## [1.2.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@1.2.1...@restorecommerce/logger@1.2.2) (2023-05-22)
 
 **Note:** Version bump only for package @restorecommerce/logger
 
-
-
-
-
 ## [1.2.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@1.2.0...@restorecommerce/logger@1.2.1) (2022-10-14)
 
 **Note:** Version bump only for package @restorecommerce/logger
 
-
-
-
-
 # [1.2.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@1.1.0...@restorecommerce/logger@1.2.0) (2022-10-12)
-
 
 ### Bug Fixes
 
@@ -262,430 +155,237 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 * rename variables and return modified object from logFieldsHandler ([546097f](https://github.com/restorecommerce/libs/commit/546097f99c1de7ad21449b4a857706122c019486))
 * typing issues ([da052aa](https://github.com/restorecommerce/libs/commit/da052aa4955e296c4d1e9a3384c35c4a60178526))
 
-
 ### Features
 
 * add centralized support for maskFields, bufferFields and omitFields ([7179197](https://github.com/restorecommerce/libs/commit/717919704a5f3fd9228ef59f9475b0b7d3469a2e))
 
-
-
-
-
 # [1.1.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@1.0.0...@restorecommerce/logger@1.1.0) (2022-10-04)
-
 
 ### Features
 
 * **facade:** add subscriptions ([d9006e9](https://github.com/restorecommerce/libs/commit/d9006e9ebcd1522a67373f8ca8bfa751c551b36f))
 
-
-
-
-
 # [1.0.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.13.1...@restorecommerce/logger@1.0.0) (2022-08-25)
-
 
 ### Features
 
 * move to fully typed grpc client and server ([ec9be2d](https://github.com/restorecommerce/libs/commit/ec9be2daff0823e9ba440a2845b7b1a7f2d74b50))
 
-
 ### Reverts
 
 * Revert "BREAKING CHANGE: move to fully typed grpc client and server" ([2d584a7](https://github.com/restorecommerce/libs/commit/2d584a709632ae608f595a2c836deabd34f671d9))
-
 
 ### BREAKING CHANGES
 
 * move to fully typed grpc client and server
 
-
-
-
-
 ## [0.13.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.13.0...@restorecommerce/logger@0.13.1) (2022-08-10)
-
 
 ### Bug Fixes
 
 * **logger:** do not crash on circular json ([3fdd200](https://github.com/restorecommerce/libs/commit/3fdd200e986d69768dc60825ef64e7cf64300a82))
 
-
-
-
-
 # [0.13.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.12.2...@restorecommerce/logger@0.13.0) (2022-06-10)
-
 
 ### Bug Fixes
 
 * fix merge issues ([cc37d83](https://github.com/restorecommerce/libs/commit/cc37d8356df3b494af8c6af9e39304a49073301c))
 
-
 ### Features
 
 * **facade:** support nested resolvers from proto options ([d319a5b](https://github.com/restorecommerce/libs/commit/d319a5bbf0066d9200d1c6bf38303461496bfa3a))
-
-
-
-
 
 ## [0.12.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.12.1...@restorecommerce/logger@0.12.2) (2022-05-16)
 
 **Note:** Version bump only for package @restorecommerce/logger
 
-
-
-
-
 ## [0.12.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.12.0...@restorecommerce/logger@0.12.1) (2022-02-14)
 
 **Note:** Version bump only for package @restorecommerce/logger
 
-
-
-
-
 # [0.12.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.11.3...@restorecommerce/logger@0.12.0) (2022-02-09)
-
 
 ### Features
 
 * add oauth ([3e7798e](https://github.com/restorecommerce/libs/commit/3e7798e3aa10ef092872928f5254cd5fbb125f3b))
 
-
-
-
-
 ## [0.11.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.11.2...@restorecommerce/logger@0.11.3) (2021-12-22)
-
 
 ### Bug Fixes
 
 * **logger:** to build all packages and make new release ([51819f5](https://github.com/restorecommerce/libs/commit/51819f5d191e9e04b2b46654332d33c805bdbe40))
 
-
-
-
-
 ## [0.11.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.11.1...@restorecommerce/logger@0.11.2) (2021-12-21)
 
 **Note:** Version bump only for package @restorecommerce/logger
-
-
-
-
 
 ## [0.11.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.10.9...@restorecommerce/logger@0.11.1) (2021-12-09)
 
 **Note:** Version bump only for package @restorecommerce/logger
 
-
-
-
-
 ## [0.10.9](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.10.8...@restorecommerce/logger@0.10.9) (2021-12-06)
 
 **Note:** Version bump only for package @restorecommerce/logger
 
-
-
-
-
 ## [0.10.8](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.10.7...@restorecommerce/logger@0.10.8) (2021-09-15)
-
 
 ### Bug Fixes
 
 * **logger:** check if filtered trace exists ([4292b04](https://github.com/restorecommerce/libs/commit/4292b04eaa3664f940e43f5bed44fb19260b0d69))
 
-
-
-
-
 ## [0.10.7](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.10.6...@restorecommerce/logger@0.10.7) (2021-09-09)
 
 **Note:** Version bump only for package @restorecommerce/logger
 
-
-
-
-
 ## [0.10.6](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.10.5...@restorecommerce/logger@0.10.6) (2021-09-09)
-
 
 ### Bug Fixes
 
 * **logger:** check if file exists on trace line ([059b1cd](https://github.com/restorecommerce/libs/commit/059b1cd51ad1d1dba5a82898e93de58573ab2986))
 
-
-
-
-
 ## [0.10.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.10.4...@restorecommerce/logger@0.10.5) (2021-08-23)
-
 
 ### Bug Fixes
 
 * **version:** up version to be in sync in package-lock ([b8f22c1](https://github.com/restorecommerce/libs/commit/b8f22c1268ee2af4beff7d88bda30f197896e3d2))
 
-
-
-
-
 ## [0.10.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.10.3...@restorecommerce/logger@0.10.4) (2021-08-03)
-
 
 ### Bug Fixes
 
 * up pkg locks ([8ed92d6](https://github.com/restorecommerce/libs/commit/8ed92d613b9a095e4b5066056ac566e5dbcf1472))
 * updated githead ([2904d30](https://github.com/restorecommerce/libs/commit/2904d30e5773dc8a87c01a08ff6481f99d692354))
 
-
-
-
-
 ## [0.10.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.10.2...@restorecommerce/logger@0.10.3) (2021-08-03)
-
 
 ### Bug Fixes
 
 * **koa-health-check:** added missing .eslintrc.js ([45af632](https://github.com/restorecommerce/libs/commit/45af632955d2dd448e7a27f4e8c4b971412cd004))
 
-
-
-
-
 ## [0.10.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.10.1...@restorecommerce/logger@0.10.2) (2021-07-29)
 
 **Note:** Version bump only for package @restorecommerce/logger
 
-
-
-
-
 ## [0.10.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.10.0...@restorecommerce/logger@0.10.1) (2021-07-29)
-
 
 ### Bug Fixes
 
 * **logger:** make sure stack trace is available when logging ([b59f940](https://github.com/restorecommerce/libs/commit/b59f9402c828b3b81d1c2eac5e3c55a9b33e3df0))
 
-
-
-
-
 # [0.10.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.9.1...@restorecommerce/logger@0.10.0) (2021-07-25)
-
 
 ### Bug Fixes
 
 * **logger:** package.json ([917b7e5](https://github.com/restorecommerce/libs/commit/917b7e5ba8112e64d740e88d19cf94cf54ea68ff))
 
-
 ### Features
 
 * **logger:** new feature esTransformer ([682c118](https://github.com/restorecommerce/libs/commit/682c11853185e441d41eb6483f62b3987191c16d))
-
-
-
-
 
 ## [0.9.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.9.0...@restorecommerce/logger@0.9.1) (2021-07-15)
 
 **Note:** Version bump only for package @restorecommerce/logger
 
-
-
-
-
 # [0.9.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.8.1...@restorecommerce/logger@0.9.0) (2021-07-01)
-
 
 ### Features
 
 * **logger:** support asynclocalstorage logger context ([d71b30e](https://github.com/restorecommerce/libs/commit/d71b30e7b9321ad4d43a8f66c010cf108380b7b5))
 
-
-
-
-
 ## [0.8.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.8.0...@restorecommerce/logger@0.8.1) (2021-06-26)
 
 **Note:** Version bump only for package @restorecommerce/logger
 
-
-
-
-
 # [0.8.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.7.3...@restorecommerce/logger@0.8.0) (2021-06-02)
-
 
 ### Features
 
 * **logger:** support typescript sourcemaps ([dcd702e](https://github.com/restorecommerce/libs/commit/dcd702ef5d73295d46dd7173618eeeec27260d18))
 
-
-
-
-
 ## [0.7.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.7.2...@restorecommerce/logger@0.7.3) (2021-06-02)
-
 
 ### Bug Fixes
 
 * **logger:** make object not log if not present ([413567c](https://github.com/restorecommerce/libs/commit/413567cba2e52ecc1a818568b9820fd00cc62697))
 
-
-
-
-
 ## [0.7.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.7.1...@restorecommerce/logger@0.7.2) (2021-05-26)
 
 **Note:** Version bump only for package @restorecommerce/logger
-
-
-
-
 
 ## [0.7.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.7.0...@restorecommerce/logger@0.7.1) (2021-05-25)
 
 **Note:** Version bump only for package @restorecommerce/logger
 
-
-
-
-
 # [0.7.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.6.4...@restorecommerce/logger@0.7.0) (2021-05-24)
-
 
 ### Bug Fixes
 
 * **logger:** more trace exclusions ([956e17d](https://github.com/restorecommerce/libs/commit/956e17d9ae05583e481f0fe521f137fdadc1e465))
-
 
 ### Features
 
 * **logger:** Add possibility to log source code reference ([77f728a](https://github.com/restorecommerce/libs/commit/77f728a242ba112b3bc70c12a8d9d91259192c86))
 * **logger:** add source trace of error ([b311658](https://github.com/restorecommerce/libs/commit/b311658f69a23dca94390e1bb9605671923b62f6))
 
-
-
-
-
 ## [0.6.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.6.3...@restorecommerce/logger@0.6.4) (2021-03-03)
 
 **Note:** Version bump only for package @restorecommerce/logger
 
-
-
-
-
 ## [0.6.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.6.1...@restorecommerce/logger@0.6.3) (2021-03-01)
-
 
 ### Bug Fixes
 
 * rename level to severity in maping ([660071e](https://github.com/restorecommerce/libs/commit/660071e7a2f2b6030e0732bf282fc906071622fd))
 
-
-
-
-
 ## [0.6.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.6.0...@restorecommerce/logger@0.6.1) (2021-02-24)
 
 **Note:** Version bump only for package @restorecommerce/logger
 
-
-
-
-
 # [0.6.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.5.4...@restorecommerce/logger@0.6.0) (2021-02-24)
-
 
 ### Features
 
 * introduce facade/grpc-client/rc-grpc-clients/gen-gql-schema + migrate logger/service-config ([99a5375](https://github.com/restorecommerce/libs/commit/99a53754c7a4b27c77f81c6560a3c2aa26a03b2e))
 
-
-
-
-
 ## [0.5.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.4.3...@restorecommerce/logger@0.5.4) (2021-02-13)
 
 **Note:** Version bump only for package @restorecommerce/logger
-
-
-
-
 
 ## [0.4.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.4.1...@restorecommerce/logger@0.4.3) (2020-12-07)
 
 **Note:** Version bump only for package @restorecommerce/logger
 
-
-
-
-
 ## [0.4.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.4.0...@restorecommerce/logger@0.4.1) (2020-11-25)
-
 
 ### Bug Fixes
 
 * remove console.log ([80541bb](https://github.com/restorecommerce/libs/commit/80541bbd48b543825fbad3d2af67206d77a7e6e9))
 
-
-
-
-
 # [0.4.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.3.5...@restorecommerce/logger@0.4.0) (2020-11-09)
-
 
 ### Features
 
 * Log objects even if they are the first parameter to the log() function ([cf3b61f](https://github.com/restorecommerce/libs/commit/cf3b61f9bbf112050725c6e01ef69e328bafeab1))
 
-
-
-
-
 ## [0.3.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.3.4...@restorecommerce/logger@0.3.5) (2020-10-09)
 
 **Note:** Version bump only for package @restorecommerce/logger
 
-
-
-
-
 ## [0.3.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.3.3...@restorecommerce/logger@0.3.4) (2020-10-08)
-
 
 ### Bug Fixes
 
 * **logger:** add missing export ([72955a3](https://github.com/restorecommerce/libs/commit/72955a387e1742a843f1f6011f7e16b2384d69bd))
 
-
-
-
-
 ## [0.3.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/logger@0.3.2...@restorecommerce/logger@0.3.3) (2020-10-08)
-
 
 ### Bug Fixes
 
 * **logger:** add missing dependency ([3150b96](https://github.com/restorecommerce/libs/commit/3150b962f3a153618aa84a5b1013e664e250c98c))
 
-
-
-
-
 ## 0.3.2 (2020-10-08)
 
 **Note:** Version bump only for package @restorecommerce/logger
-
-
-
-
 
 ## 0.3.0 (October 8th, 2020)
 

@@ -3,324 +3,183 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [1.1.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/mailer@1.1.2...@restorecommerce/mailer@1.1.3) (2026-08-05)
+## [1.1.4](https://github.com/restorecommerce/libs/compare/%40restorecommerce%2Fmailer%401.1.3...%40restorecommerce%2Fmailer%401.1.4) (2026-11-05)
 
+**Note:** Version bump only for package @restorecommerce/mailer
+
+## [1.1.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/mailer@1.1.2...@restorecommerce/mailer@1.1.3) (2026-08-05)
 
 ### Bug Fixes
 
 * **deps:** avoid flexible dependencies ([c2504b9](https://github.com/restorecommerce/libs/commit/c2504b91ad0022c1bacd398d02fefdcdbec10865))
 
-
-
-
-
 ## [1.1.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/mailer@1.1.1...@restorecommerce/mailer@1.1.2) (2026-07-03)
-
 
 ### Bug Fixes
 
 * **deps:** downgrade vite@7 due to breaking support of decorators in vitest ([183701d](https://github.com/restorecommerce/libs/commit/183701d5927d39ffda75f33f0dc162e1f3490183))
 * **lint:** fix new strict lint errors ([c6bc716](https://github.com/restorecommerce/libs/commit/c6bc7161eaf68a7253bd34ca7f38b14502c2eefe))
 
-
-
-
-
 ## [1.1.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/mailer@1.1.0...@restorecommerce/mailer@1.1.1) (2026-06-16)
-
 
 ### Bug Fixes
 
 * **protos:** update ostorage-srv to include new endpoint for modifying ACL ([a926db7](https://github.com/restorecommerce/libs/commit/a926db76b7f96168dbb0ba227364137c07418e8b))
 
-
-
-
-
 # [1.1.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/mailer@1.0.16...@restorecommerce/mailer@1.1.0) (2026-06-12)
-
 
 ### Bug Fixes
 
 * **deps:** upgrade all to ES2025, intermediate ([df43aa5](https://github.com/restorecommerce/libs/commit/df43aa566a05f4fc3e883dfe5bc088192cda7883))
 * **packages:** remove all pretest builds ([d16ada1](https://github.com/restorecommerce/libs/commit/d16ada199f057403bed2a99fa6762c95962919cd))
 
-
 ### Features
 
 * **es2025:** upgrade all to es2025, unify all tsconfigs ([d8371fd](https://github.com/restorecommerce/libs/commit/d8371fdaac384ca13aa7dfb64ef309c7a263dada))
 * upgrade deps ([848e400](https://github.com/restorecommerce/libs/commit/848e400bd0719877502302a00c14cae412b6db6a))
 
-
-
-
-
 ## [1.0.16](https://github.com/restorecommerce/libs/compare/@restorecommerce/mailer@1.0.15...@restorecommerce/mailer@1.0.16) (2025-10-06)
 
 **Note:** Version bump only for package @restorecommerce/mailer
 
-
-
-
-
 ## [1.0.15](https://github.com/restorecommerce/libs/compare/@restorecommerce/mailer@1.0.14...@restorecommerce/mailer@1.0.15) (2025-10-02)
-
 
 ### Bug Fixes
 
 * bump dependencies, fix dependencies ([ce367b7](https://github.com/restorecommerce/libs/commit/ce367b75c3998dd87fc6827dca33f5fcd6a26493))
 * upgrade vitest, fix reflection ([511e401](https://github.com/restorecommerce/libs/commit/511e4014a088c195ffe50eaff7c26e8654e10f10))
 
-
-
-
-
 ## [1.0.14](https://github.com/restorecommerce/libs/compare/@restorecommerce/mailer@1.0.13...@restorecommerce/mailer@1.0.14) (2025-09-17)
 
 **Note:** Version bump only for package @restorecommerce/mailer
-
-
-
-
 
 ## [1.0.13](https://github.com/restorecommerce/libs/compare/@restorecommerce/mailer@1.0.12...@restorecommerce/mailer@1.0.13) (2025-09-17)
 
 **Note:** Version bump only for package @restorecommerce/mailer
 
-
-
-
-
 ## [1.0.12](https://github.com/restorecommerce/libs/compare/@restorecommerce/mailer@1.0.11...@restorecommerce/mailer@1.0.12) (2024-11-04)
-
 
 ### Bug Fixes
 
 * **various:** Upgrade eslint to use typescript-eslint ([b580f00](https://github.com/restorecommerce/libs/commit/b580f00d5bd1d67c8fc1caabcb75ca3b6d12a83e))
 * **various:** Upgrade eslint to use typescript-eslint ([8a9ce59](https://github.com/restorecommerce/libs/commit/8a9ce59edc0f8619bc13745462f9c59e4bb6c6ab))
 
-
-
-
-
 ## [1.0.11](https://github.com/restorecommerce/libs/compare/@restorecommerce/mailer@1.0.10...@restorecommerce/mailer@1.0.11) (2024-06-26)
-
 
 ### Bug Fixes
 
 * **mailer:** upgrade deps ([b6ed1cb](https://github.com/restorecommerce/libs/commit/b6ed1cba08b2f41e9f8f79618c43cedf5b2ad66e))
 
-
-
-
-
 ## [1.0.10](https://github.com/restorecommerce/libs/compare/@restorecommerce/mailer@1.0.9...@restorecommerce/mailer@1.0.10) (2024-06-07)
 
 **Note:** Version bump only for package @restorecommerce/mailer
-
-
-
-
 
 ## [1.0.9](https://github.com/restorecommerce/libs/compare/@restorecommerce/mailer@1.0.8...@restorecommerce/mailer@1.0.9) (2024-03-05)
 
 **Note:** Version bump only for package @restorecommerce/mailer
 
-
-
-
-
 ## [1.0.8](https://github.com/restorecommerce/libs/compare/@restorecommerce/mailer@1.0.7...@restorecommerce/mailer@1.0.8) (2024-02-21)
-
 
 ### Bug Fixes
 
 * mailer unit test ([f16fed6](https://github.com/restorecommerce/libs/commit/f16fed621816dd02244ebe0c76d735de358eaf9a))
 
-
-
-
-
 ## [1.0.7](https://github.com/restorecommerce/libs/compare/@restorecommerce/mailer@1.0.6...@restorecommerce/mailer@1.0.7) (2024-02-21)
-
 
 ### Bug Fixes
 
 * handlebars-helperized and mailer module ([ed596c4](https://github.com/restorecommerce/libs/commit/ed596c487c3d750c50ad0f628650317fc00920a3))
 
-
-
-
-
 ## [1.0.6](https://github.com/restorecommerce/libs/compare/@restorecommerce/mailer@1.0.5...@restorecommerce/mailer@1.0.6) (2023-11-20)
 
 **Note:** Version bump only for package @restorecommerce/mailer
-
-
-
-
 
 ## [1.0.5](https://github.com/restorecommerce/libs/compare/@restorecommerce/mailer@1.0.4...@restorecommerce/mailer@1.0.5) (2023-10-07)
 
 **Note:** Version bump only for package @restorecommerce/mailer
 
-
-
-
-
 ## [1.0.4](https://github.com/restorecommerce/libs/compare/@restorecommerce/mailer@1.0.3...@restorecommerce/mailer@1.0.4) (2023-07-11)
 
 **Note:** Version bump only for package @restorecommerce/mailer
-
-
-
-
 
 ## [1.0.3](https://github.com/restorecommerce/libs/compare/@restorecommerce/mailer@1.0.2...@restorecommerce/mailer@1.0.3) (2023-05-29)
 
 **Note:** Version bump only for package @restorecommerce/mailer
 
-
-
-
-
 ## [1.0.2](https://github.com/restorecommerce/libs/compare/@restorecommerce/mailer@1.0.1...@restorecommerce/mailer@1.0.2) (2023-05-22)
 
 **Note:** Version bump only for package @restorecommerce/mailer
-
-
-
-
 
 ## [1.0.1](https://github.com/restorecommerce/libs/compare/@restorecommerce/mailer@1.0.0...@restorecommerce/mailer@1.0.1) (2022-10-14)
 
 **Note:** Version bump only for package @restorecommerce/mailer
 
-
-
-
-
 # [1.0.0](https://github.com/restorecommerce/libs/compare/@restorecommerce/mailer@0.1.21...@restorecommerce/mailer@1.0.0) (2022-08-25)
-
 
 ### Features
 
 * move to fully typed grpc client and server ([ec9be2d](https://github.com/restorecommerce/libs/commit/ec9be2daff0823e9ba440a2845b7b1a7f2d74b50))
 
-
 ### Reverts
 
 * Revert "BREAKING CHANGE: move to fully typed grpc client and server" ([2d584a7](https://github.com/restorecommerce/libs/commit/2d584a709632ae608f595a2c836deabd34f671d9))
-
 
 ### BREAKING CHANGES
 
 * move to fully typed grpc client and server
 
-
-
-
-
 ## [0.1.21](https://github.com/restorecommerce/libs/compare/@restorecommerce/mailer@0.1.20...@restorecommerce/mailer@0.1.21) (2022-06-10)
-
 
 ### Bug Fixes
 
 * fix merge issues ([cc37d83](https://github.com/restorecommerce/libs/commit/cc37d8356df3b494af8c6af9e39304a49073301c))
 
-
-
-
-
 ## [0.1.20](https://github.com/restorecommerce/libs/compare/@restorecommerce/mailer@0.1.19...@restorecommerce/mailer@0.1.20) (2022-05-16)
 
 **Note:** Version bump only for package @restorecommerce/mailer
-
-
-
-
 
 ## [0.1.19](https://github.com/restorecommerce/libs/compare/@restorecommerce/mailer@0.1.18...@restorecommerce/mailer@0.1.19) (2022-02-22)
 
 **Note:** Version bump only for package @restorecommerce/mailer
 
-
-
-
-
 ## [0.1.18](https://github.com/restorecommerce/libs/compare/@restorecommerce/mailer@0.1.17...@restorecommerce/mailer@0.1.18) (2022-02-15)
 
 **Note:** Version bump only for package @restorecommerce/mailer
-
-
-
-
 
 ## [0.1.17](https://github.com/restorecommerce/libs/compare/@restorecommerce/mailer@0.1.16...@restorecommerce/mailer@0.1.17) (2022-02-14)
 
 **Note:** Version bump only for package @restorecommerce/mailer
 
-
-
-
-
 ## [0.1.16](https://github.com/restorecommerce/libs/compare/@restorecommerce/mailer@0.1.15...@restorecommerce/mailer@0.1.16) (2022-02-14)
 
 **Note:** Version bump only for package @restorecommerce/mailer
 
-
-
-
-
 ## [0.1.15](https://github.com/restorecommerce/libs/compare/@restorecommerce/mailer@0.1.14...@restorecommerce/mailer@0.1.15) (2021-08-23)
-
 
 ### Bug Fixes
 
 * **version:** up version to be in sync in package-lock ([b8f22c1](https://github.com/restorecommerce/libs/commit/b8f22c1268ee2af4beff7d88bda30f197896e3d2))
 
-
-
-
-
 ## [0.1.14](https://github.com/restorecommerce/libs/compare/@restorecommerce/mailer@0.1.13...@restorecommerce/mailer@0.1.14) (2021-08-03)
-
 
 ### Bug Fixes
 
 * up pkg locks ([8ed92d6](https://github.com/restorecommerce/libs/commit/8ed92d613b9a095e4b5066056ac566e5dbcf1472))
 * updated githead ([2904d30](https://github.com/restorecommerce/libs/commit/2904d30e5773dc8a87c01a08ff6481f99d692354))
 
-
-
-
-
 ## [0.1.13](https://github.com/restorecommerce/libs/compare/@restorecommerce/mailer@0.1.12...@restorecommerce/mailer@0.1.13) (2021-08-03)
-
 
 ### Bug Fixes
 
 * **koa-health-check:** added missing .eslintrc.js ([45af632](https://github.com/restorecommerce/libs/commit/45af632955d2dd448e7a27f4e8c4b971412cd004))
 
-
-
-
-
 ## [0.1.12](https://github.com/restorecommerce/mailer/compare/@restorecommerce/mailer@0.1.11...@restorecommerce/mailer@0.1.12) (2021-05-25)
 
 **Note:** Version bump only for package @restorecommerce/mailer
 
-
-
-
-
 ## 0.1.11 (2021-05-24)
 
 **Note:** Version bump only for package @restorecommerce/mailer
-
-
-
-
 
 ### 0.1.10 (April 15th, 2021)
 

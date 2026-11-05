@@ -1,6 +1,6 @@
 {
   "name": "@restorecommerce/dev",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Collection of development tools",
   "author": "n-fuse GmbH",
   "main": "dist/index.js",

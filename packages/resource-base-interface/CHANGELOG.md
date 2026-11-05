@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.10.10](https://github.com/restorecommerce/resource-base-interface/compare/%40restorecommerce%2Fresource-base-interface%401.10.9...%40restorecommerce%2Fresource-base-interface%401.10.10) (2026-11-05)
+
+### Bug Fixes
+
+* **acs-client:** save delete of probs ([0603afe](https://github.com/restorecommerce/resource-base-interface/commit/0603afebea8b679be024095b61eb5bb4c2d4916a))
+
 ## [1.10.9](https://github.com/restorecommerce/resource-base-interface/compare/%40restorecommerce%2Fresource-base-interface%401.10.8...%40restorecommerce%2Fresource-base-interface%401.10.9) (2026-11-03)
 
 **Note:** Version bump only for package @restorecommerce/resource-base-interface

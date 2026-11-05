@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.10.3](https://github.com/restorecommerce/chassis-srv/compare/%40restorecommerce%2Fchassis-srv%401.10.2...%40restorecommerce%2Fchassis-srv%401.10.3) (2026-11-05)
+
+**Note:** Version bump only for package @restorecommerce/chassis-srv
+
 ## [1.10.2](https://github.com/restorecommerce/chassis-srv/compare/%40restorecommerce%2Fchassis-srv%401.10.1...%40restorecommerce%2Fchassis-srv%401.10.2) (2026-11-02)
 
 ### Bug Fixes

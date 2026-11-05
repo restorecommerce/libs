@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.18.1](https://github.com/restorecommerce/libs/compare/%40restorecommerce%2Fprotos%406.18.0...%40restorecommerce%2Fprotos%406.18.1) (2026-11-05)
+
+### Bug Fixes
+
+* **acs-client:** save delete of probs ([0603afe](https://github.com/restorecommerce/libs/commit/0603afebea8b679be024095b61eb5bb4c2d4916a))
+
 # [6.18.0](https://github.com/restorecommerce/libs/compare/%40restorecommerce%2Fprotos%406.17.0...%40restorecommerce%2Fprotos%406.18.0) (2026-10-20)
 
 ### Features

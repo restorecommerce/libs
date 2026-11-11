@@ -105,7 +105,8 @@
   },
   "urns": {
     "user": "urn:restorecommerce:acs:model:user.User",
-    "organization": "urn:restorecommerce:acs:model:organization.Organization"
+    "organization": "urn:restorecommerce:acs:model:organization.Organization",
+    "ownershipDomain": "urn:restorecommerce:acs:model:ownership_domain.OwnershipDomain"
   },
   "authorization": {
     "service": "acs-srv",
@@ -137,7 +138,8 @@
       "aclIndicatoryEntity": "urn:restorecommerce:acs:names:aclIndicatoryEntity",
       "aclInstance": "urn:restorecommerce:acs:names:aclInstance",
       "skipACL": "urn:restorecommerce:acs:names:skipACL",
-      "maskedProperty": "urn:restorecommerce:acs:names:obligation:maskedProperty"
+      "maskedProperty": "urn:restorecommerce:acs:names:obligation:maskedProperty",
+      "ownershipDomain": "urn:restorecommerce:acs:model:ownership_domain.OwnershipDomain"
     },
     "hierarchicalResources": [
       {

@@ -125,7 +125,7 @@ export const DefaultResourceFactory = <T extends ResourceList>(
   request: T,
   context?: CallContext,
 ) => (resourceNames?.length ? resourceNames : [self.name ?? self.constructor?.name])?.map(
-  resourceName => ({
+  (resourceName): ACSResource => ({
     resource: resourceName,
     id: request.items?.map((item: any) => item.id)
   })
@@ -281,7 +281,8 @@ export function access_controlled_function<T extends AccessControlledServiceRequ
           kwargs.action,
           acsContext,
           {
-            operation: kwargs.operation, database: database ?? this.__acsDatabaseProvider ?? 'arangoDB',
+            operation: kwargs.operation,
+            database: database ?? this.__acsDatabaseProvider ?? 'arangoDB',
             useCache: kwargs.useCache ?? cfg.get('authorization:cache:enabled') ?? false
           }
         );

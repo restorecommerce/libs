@@ -53,14 +53,15 @@ export const urns = {
   maskedProperty: 'urn:restorecommerce:acs:names:obligation:maskedProperty',
   ownershipDomain: "urn:restorecommerce:acs:model:ownership_domain.OwnershipDomain",
 };
-export type KnownUrns = typeof urns;
+export type KnownUrns = typeof urns & Record<string, string>;
 Object.assign(urns, cfg.get('authorization:urns'));
 
 export const entities = {
   user: 'urn:restorecommerce:acs:model:user.User',
   organization: "urn:restorecommerce:acs:model:organization.Organization",
+  ownershipDomain: "urn:restorecommerce:acs:model:ownership_domain.OwnershipDomain"
 };
-export type KnownEntities = typeof entities;
+export type KnownEntities = typeof entities & Record<string, string>;
 Object.assign(entities, cfg.get('authorization:urns:entities'));
 
 export const updateConfig = (config: any) => {

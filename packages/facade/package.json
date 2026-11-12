@@ -2,8 +2,8 @@
   "name": "@restorecommerce/facade",
   "version": "2.3.15",
   "description": "Facade for Restorecommerce microservices",
-  "main": "dist/index.js",
-  "typings": "dist/index.d.ts",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
   "author": "n-fuse GmbH",
   "repository": {
     "type": "git",
@@ -31,9 +31,7 @@
     "@restorecommerce/logger": "^1.4.4",
     "@restorecommerce/rc-grpc-clients": "^5.2.6",
     "@restorecommerce/service-config": "^1.2.4",
-    "@types/debug": "4.1.13",
     "co": "4.6.0",
-    "debug": "4.4.3",
     "graphql": "16.14.2",
     "graphql-upload": "17.0.0",
     "graphql-ws": "6.0.8",
@@ -96,11 +94,10 @@
     "tsx": "4.22.4"
   },
   "scripts": {
-    "build": "npm-run-all build:clean generate build:codegen:clean build:codegen:compile build:tsc",
-    "build:clean": "rimraf -rf ./dist ./test/build/",
+    "build": "npm-run-all build:clean generate build:codegen build:tsc",
+    "build:clean": "rimraf -rf ./lib ./dist ./test/build/ ./codegen ./coverage",
     "build:tsc": "tsc -p tsconfig.lib.json",
-    "build:codegen:clean": "rimraf -rf ./codegen",
-    "build:codegen:compile": "tsc -p tsconfig.codegen.json",
+    "build:codegen": "tsc -p tsconfig.codegen.json",
     "build:es": "node esbuild.mjs",
     "dev": "npm-run-all build:clean dev:compile dev:serve",
     "dev:compile": "tsc -p tsconfig.json",
@@ -120,7 +117,7 @@
     "targets": {
       "build": {
         "outputs": [
-          "{projectRoot}/dist"
+          "{projectRoot}/lib"
         ]
       }
     }

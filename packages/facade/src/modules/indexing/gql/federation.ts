@@ -2,7 +2,7 @@ import { schema } from './schema.js';
 import {
   buildFederatedSubscriptionSchema,
   type SubSpaceServiceConfig
-} from '../../../gql/protos/index.js';
+} from '../../../gql/index.js';
 import { namespace } from '../interfaces.js';
 import { subServices } from '../../access-control/gql/types.js';
 

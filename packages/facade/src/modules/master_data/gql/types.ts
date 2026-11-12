@@ -16,7 +16,7 @@ import { protoMetadata as metaPackageIoRestorecommerceTemplate } from '@restorec
 import { protoMetadata as metaPackageIoRestorecommerceSetting } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/setting.js';
 import { protoMetadata as metaPackageIoRestorecommerceCommand } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/command.js';
 import { protoMetadata as metaPackageIoRestorecommerceCurrency } from '@restorecommerce/rc-grpc-clients/dist/generated/io/restorecommerce/currency.js';
-import { type ProtoMetadata, registerPackagesRecursive } from '../../../gql/protos/index.js';
+import { type ProtoMetadata, registerPackagesRecursive } from '../../../gql/index.js';
 import { registerProtoMeta } from '@restorecommerce/kafka-client';
 
 export const subServices: ProtoMetadata[] = [

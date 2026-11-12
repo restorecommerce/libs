@@ -1,8 +1,5 @@
-import _debug from 'debug';
 import type * as koa from 'koa';
 import { type Logger, createLogger } from '@restorecommerce/logger';
-
-const debug = _debug('@restorecommerce/koa-req-res-logger');
 
 export interface ReqResLoggerOptions {
   logger?: Logger;
@@ -50,8 +47,7 @@ export const reqResLogger = (opts: ReqResLoggerOptions) => {
   const fn: koa.Middleware = async (ctx, next) => {
 
     const request = ctx.request as koa.Request & {body: any};
-
-    debug('yield middleware: %s', reqResLogger.name);
+    logger.debug('yield middleware:', reqResLogger.name);
 
     const start = Date.now();
     const reqLog = {

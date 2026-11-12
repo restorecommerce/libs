@@ -115,16 +115,9 @@ export const registerPasswordGrantType = (config: OIDCPasswordGrantTypeConfig, l
     'password',
     async (ctx: KoaContextWithOIDC, next: () => Promise<any>) => {
       try {
-        const {body, client} = ctx.oidc;
+        const {body, client} = ctx.oidc as any;
         ctx.type = 'json';
-        let passwordValue;
-        let key = 'password';
-        if (body.password) {
-          passwordValue = body.password;
-        } else if (body.token) {
-          passwordValue = body.token;
-          key = 'token';
-        }
+        const [key, passwordValue] = Object.entries<string>(body).find(([k, v]) => ['password', 'token'].includes(k));
         const req = ctx.request;
         let os: string, agentName: string;
         const agent = new UAParser(req.headers['user-agent']);

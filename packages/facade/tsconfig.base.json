@@ -1,14 +1,20 @@
 {
   "extends": "../dev/tsconfig.json",
   "compilerOptions": {
-    "rootDir": "./src",
-    "outDir": "./dist",
+    "ignoreDeprecations": "6.0",
+    "baseUrl": "./",
+    "outDir": "./lib",
+    "types": ["node"],
     "paths": {
       "@modules": ["src/modules/index"],
       "@modules/*": ["src/modules/*"],
       "@gql": ["src/gql/index"],
       "@gql/*": ["src/gql/*"]
     },
-    "types": ["node"]
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "lib",
+    "doc"
+  ]
 }

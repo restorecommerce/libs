@@ -9,6 +9,7 @@ export interface OIDCHbsTemplates {
   login?: string;
   layout?: string;
   consent?: string;
+  [key: string]: string;
 }
 
 export interface OIDCConfig {

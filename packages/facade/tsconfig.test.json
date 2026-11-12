@@ -1,16 +1,10 @@
 {
-  "extends": "./tsconfig-base.json",
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "rootDir": ".",
-    "types": ["node"],
-    "target": "es2023",
-    "module": "ESNext",
-    "moduleResolution": "Node10",
-    "baseUrl": "./",
-    "ignoreDeprecations": "6.0"
+    "rootDir": "."
   },
   "include": [
     "./src/**/*.ts",
-    "./test/**/*.ts"
+    "./tests/**/*.ts"
   ]
 }

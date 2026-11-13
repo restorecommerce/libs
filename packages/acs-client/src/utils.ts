@@ -25,11 +25,6 @@ import { Effect } from '@restorecommerce/rc-grpc-clients/dist/generated-server/i
 import { isEmptyish, isIncludedIn, isNullish, isDeepEqual } from "remeda";
 import { authZ } from './acs/authz.js';
 
-export type FilterParamKey = {
-  scopingEntity?: string,
-  value: string
-};
-
 export const handleError = (err: string | Error | any): any => {
   let error;
   if (typeof err == 'string') {
@@ -364,7 +359,7 @@ const buildQueryFromTarget = (
         )?.value ?? filterParamKey;
       }
       const b = { field: filterParamKey, operation: 'eq', value: eachScope.scope };
-      if (query.filters?.some((a: any) => isDeepEqual(a, b))) {
+      if (!query.filters?.some((a: any) => isDeepEqual(a, b))) {
         query.filters.push(b);
       }
     }
@@ -372,10 +367,9 @@ const buildQueryFromTarget = (
     for (const eachFilter of filter) {
       if (eachFilter && eachFilter.value) {
         const b = { field: filterParamKey, operation: 'eq', value: eachFilter.value };
-        if (query.filters?.some((a: any) => isDeepEqual(a, b))) {
+        if (!query.filters?.some((a: any) => isDeepEqual(a, b))) {
           query.filters.push(b);
         }
-        query.filters.push();
         filter = [];
       }
     }
@@ -384,27 +378,25 @@ const buildQueryFromTarget = (
   if (resources?.length > 0) {
     for (const attribute of resources) {
       if (attribute.id == urns.resourceID) {
-        if (effect == Effect.PERMIT) {
-          filter.push({
-            field: 'id',
-            operation: Filter_Operation.eq,
-            value: attribute.value
-          });
-        } else {
-          filter.push({
-            field: 'id',
-            operation: Filter_Operation.neq,
-            value: attribute.value
-          });
+        const b = {
+          field: 'id',
+          operation: effect == Effect.PERMIT ? Filter_Operation.eq : Filter_Operation.neq,
+          value: attribute.value
+        };
+        if (!filter.some((a: any) => isDeepEqual(b))) {
+          filter.push(b);
         }
         // add ID filter
       } else if (attribute.id == urns.property) {
         // add fields filter
-        query.fields ||= [];
-        query.fields.push({
+        const b = {
           name: attribute.value.split('#')[1],
           include: effect == Effect.PERMIT
-        });
+        };
+        query.fields ??= [];
+        if (!query.fields?.some((a: any) => isDeepEqual(a, b))) {
+          query.fields.push(b);
+        }
       }
     }
   }

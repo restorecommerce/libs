@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.4.0](https://github.com/restorecommerce/libs/compare/%40restorecommerce%2Ffacade%402.3.15...%40restorecommerce%2Ffacade%402.4.0) (2026-11-13)
+
+### Features
+
+* **facade:** expose ownership_domain ([e95d017](https://github.com/restorecommerce/libs/commit/e95d01707c7b307ab2b0fea9b1477ed43320cf59))
+
 ## [2.3.15](https://github.com/restorecommerce/libs/compare/%40restorecommerce%2Ffacade%402.3.14...%40restorecommerce%2Ffacade%402.3.15) (2026-11-05)
 
 **Note:** Version bump only for package @restorecommerce/facade

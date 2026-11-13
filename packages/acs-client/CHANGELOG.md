@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.5.2](https://github.com/restorecommerce/libs/compare/%40restorecommerce%2Facs-client%403.5.1...%40restorecommerce%2Facs-client%403.5.2) (2026-11-13)
+
+### Bug Fixes
+
+* **acs-client:** clean up utils ([084364e](https://github.com/restorecommerce/libs/commit/084364ee377f2e65a31ff1324b6ead0645f25ca3))
+* **acs-client:** ensure uniqueness on postgres filters. use filterParamKey as object ([59886d8](https://github.com/restorecommerce/libs/commit/59886d8e029ee17765eefe2f124384aaa7d2b693))
+* **config:** add ODs to collection of auth.entities ([a54f119](https://github.com/restorecommerce/libs/commit/a54f1192316e92bc9b656ba3369e1572aac8f74b))
+
 ## [3.5.1](https://github.com/restorecommerce/libs/compare/%40restorecommerce%2Facs-client%403.5.0...%40restorecommerce%2Facs-client%403.5.1) (2026-11-05)
 
 ### Bug Fixes

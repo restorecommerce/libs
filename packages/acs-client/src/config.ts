@@ -70,3 +70,25 @@ export const updateConfig = (config: any) => {
   Object.assign(urns, cfg.get('authorization:urns'));
   Object.assign(entities, cfg.get('authorization:urns:entities'));
 };
+
+export type FilterParamKey = {
+  scopingEntity: string,
+  value: string,
+};
+
+export const OwnerIndicatoryEntity: Record<string, FilterParamKey> = {
+  owner_key: {
+    scopingEntity: 'urn:restorecommerce:acs:model:ownership_domain.OwnershipDomain',
+    value: 'ownerKey'
+  },
+  org_key: {
+    scopingEntity: 'urn:bmslsa:acs:model:organization.Organization',
+    value: 'orgKey'
+  },
+  user_key: {
+    scopingEntity: 'urn:restorecommerce:acs:model:user.User',
+    value: 'userKey'
+  }
+};
+export type OwnerIndicatoryEntity = typeof OwnerIndicatoryEntity;
+Object.assign(OwnerIndicatoryEntity, cfg.get('authorization:filterParamKey'));

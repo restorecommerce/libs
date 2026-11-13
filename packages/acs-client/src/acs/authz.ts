@@ -503,7 +503,7 @@ const eventListener = async (
   config: any,
   eventName: string
 ): Promise<any> => {
-  if (acsEvents.indexOf(eventName) > -1) {
+  if (acsEvents.includes(eventName)) {
     // no prefix provided, flush complete cache
     logger?.info(`Received event ${eventName} and hence evicting ACS cache`);
     await flushCache();

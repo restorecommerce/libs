@@ -4,7 +4,7 @@ import {
   ResolvedSubject, Obligation
 } from './acs/interfaces.js';
 import { QueryArguments, UserQueryArguments } from './acs/resolver.js';
-import { errors, cfg, urns } from './config.js';
+import { errors, cfg, urns, OwnerIndicatoryEntity } from './config.js';
 // @ts-expect-error TS7016
 import nodeEval from 'node-eval';
 import logger from './logger.js';
@@ -22,7 +22,7 @@ import {
   Response_Decision
 } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/access_control.js';
 import { Effect } from '@restorecommerce/rc-grpc-clients/dist/generated-server/io/restorecommerce/rule.js';
-import { isEmptyish, isIncludedIn, isNullish } from "remeda";
+import { isEmptyish, isIncludedIn, isNullish, isDeepEqual } from "remeda";
 import { authZ } from './acs/authz.js';
 
 export type FilterParamKey = {
@@ -259,7 +259,7 @@ const buildQueryFromTarget = (
 ): QueryParams => {
   const { subjects, resources } = target ?? {};
   let ruleCondition = false;
-  let filter = [];
+  let filter = new Array<any>();
   const query: QueryParams = {};
   let filterId;
   let filterOperator;
@@ -350,35 +350,32 @@ const buildQueryFromTarget = (
     scopingUpdated = true;
   } else if (database && database === 'postgres' && effect == Effect.PERMIT) {
     query.filters = [];
-    const filterParamKeyConfig = cfg?.get('authorization:filterParamKey');
-    let filterParamKey = cfg?.get('authorization:filterParamKey');
-    if (Array.isArray(filterParamKey)) {
-      filterParamKey = filterParamKey?.find(
-        (obj) => obj?.scopingEntity === scopingAttribute?.value
-      )?.value;
-    }
-    else if (typeof filterParamKey === 'object') {
-      filterParamKey = Array.from<FilterParamKey>(Object.values(filterParamKey))?.find(
-        (obj: any) => obj?.scopingEntity === scopingAttribute?.value
-      )?.value;
-    }
-    // default filter Paramkey for PostgresDB
-    filterParamKey ??= 'orgKey';
+    const filterParamKeyConfig = OwnerIndicatoryEntity;
+    let filterParamKey = Array.from(Object.values(filterParamKeyConfig))?.find(
+      (obj: any) => obj?.scopingEntity === scopingAttribute?.value
+    )?.value ?? 'orgKey'; // default filter Paramkey for PostgresDB
+
     logger?.debug('Filter paramter key for Postgres DB', { filterParamKey });
     // map each of the userTotalScope with respective filterParamKey
     for (const eachScope of userTotalScope) {
       if (scopingAttribute.value === urns.ownershipDomain) {
-        const odsScopingEntity = filterParamKeyConfig?.find(
+        filterParamKey = Object.values(filterParamKeyConfig)?.find(
           (obj: any) => obj?.scopingEntity === eachScope.urn
-        )?.value;
-        filterParamKey = odsScopingEntity ? odsScopingEntity : filterParamKey;
+        )?.value ?? filterParamKey;
       }
-      query.filters.push({ field: filterParamKey, operation: 'eq', value: eachScope.scope });
+      const b = { field: filterParamKey, operation: 'eq', value: eachScope.scope };
+      if (query.filters?.some((a: any) => isDeepEqual(a, b))) {
+        query.filters.push(b);
+      }
     }
     // apply filter from condition
     for (const eachFilter of filter) {
       if (eachFilter && eachFilter.value) {
-        query.filters.push({ field: filterParamKey, operation: 'eq', value: eachFilter.value });
+        const b = { field: filterParamKey, operation: 'eq', value: eachFilter.value };
+        if (query.filters?.some((a: any) => isDeepEqual(a, b))) {
+          query.filters.push(b);
+        }
+        query.filters.push();
         filter = [];
       }
     }

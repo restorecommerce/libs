@@ -296,16 +296,15 @@ export class UnAuthZ implements IAuthZ {
  * General authorizer. Marshalls data and requests access to the Access Control Service (ACS).
  */
 export class ACSAuthZ implements IAuthZ {
-  acs: AccessControlServiceClient;
-  ownershipDomain: OwnershipDomainServiceClient;
   /**
    *
    * @param acs Access Control Service definition (gRPC)
+   * @param ownershipDomain 
    */
-  constructor(acs: AccessControlServiceClient, ownernshipDomain: OwnershipDomainServiceClient) {
-    this.acs = acs;
-    this.ownershipDomain = ownernshipDomain;
-  }
+  constructor(
+    public readonly acs: AccessControlServiceClient,
+    public readonly ownershipDomain: OwnershipDomainServiceClient
+  ) {}
 
   /**
    * Perform request to access-control-srv

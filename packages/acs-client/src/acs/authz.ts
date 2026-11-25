@@ -524,7 +524,8 @@ export const initAuthZ = async (config?: any, logger?: Logger): Promise<void | A
     if (cfg.get('authorization:enabled')) {
       const kafkaCfg = cfg.get('authorization:events:kafka') ?? cfg.get('events:kafka');
       const acsName = cfg.get('authorization:service') ?? 'acs-srv';
-      const grpcACSConfig = cfg.get('authorization:client')?.[acsName] ?? cfg.get('client')?.[acsName];
+      const grpcACSConfig = cfg.get(`authorization:client:${acsName}`) ?? cfg.get(`client:${acsName}`);
+      const grpcODConfig = cfg.get('authorization:client:ownership-domain') ?? cfg.get('client:ownership-domain') ?? grpcACSConfig;
       const acsClient: AccessControlServiceClient = createClient(
         {
           ...grpcACSConfig,
@@ -534,10 +535,10 @@ export const initAuthZ = async (config?: any, logger?: Logger): Promise<void | A
       );
       const ownerhsipDomainClient: OwnershipDomainServiceClient = createClient(
         {
-          ...grpcACSConfig,
+          ...grpcODConfig,
           logger
         }, OwnershipDomainServiceDefinition,
-        createChannel(grpcACSConfig.address),
+        createChannel(grpcODConfig.address),
       );
       authZ = new ACSAuthZ(acsClient, ownerhsipDomainClient);
       unauthZ = new UnAuthZ(acsClient);

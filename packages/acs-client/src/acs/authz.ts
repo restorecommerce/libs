@@ -296,16 +296,15 @@ export class UnAuthZ implements IAuthZ {
  * General authorizer. Marshalls data and requests access to the Access Control Service (ACS).
  */
 export class ACSAuthZ implements IAuthZ {
-  acs: AccessControlServiceClient;
-  ownershipDomain: OwnershipDomainServiceClient;
   /**
    *
    * @param acs Access Control Service definition (gRPC)
+   * @param ownershipDomain 
    */
-  constructor(acs: AccessControlServiceClient, ownernshipDomain: OwnershipDomainServiceClient) {
-    this.acs = acs;
-    this.ownershipDomain = ownernshipDomain;
-  }
+  constructor(
+    public readonly acs: AccessControlServiceClient,
+    public readonly ownershipDomain: OwnershipDomainServiceClient
+  ) {}
 
   /**
    * Perform request to access-control-srv
@@ -525,7 +524,8 @@ export const initAuthZ = async (config?: any, logger?: Logger): Promise<void | A
     if (cfg.get('authorization:enabled')) {
       const kafkaCfg = cfg.get('authorization:events:kafka') ?? cfg.get('events:kafka');
       const acsName = cfg.get('authorization:service') ?? 'acs-srv';
-      const grpcACSConfig = cfg.get('authorization:client')?.[acsName] ?? cfg.get('client')?.[acsName];
+      const grpcACSConfig = cfg.get(`authorization:client:${acsName}`) ?? cfg.get(`client:${acsName}`);
+      const grpcODConfig = cfg.get('authorization:client:ownership-domain') ?? cfg.get('client:ownership-domain') ?? grpcACSConfig;
       const acsClient: AccessControlServiceClient = createClient(
         {
           ...grpcACSConfig,
@@ -535,10 +535,10 @@ export const initAuthZ = async (config?: any, logger?: Logger): Promise<void | A
       );
       const ownerhsipDomainClient: OwnershipDomainServiceClient = createClient(
         {
-          ...grpcACSConfig,
+          ...grpcODConfig,
           logger
         }, OwnershipDomainServiceDefinition,
-        createChannel(grpcACSConfig.address),
+        createChannel(grpcODConfig.address),
       );
       authZ = new ACSAuthZ(acsClient, ownerhsipDomainClient);
       unauthZ = new UnAuthZ(acsClient);
